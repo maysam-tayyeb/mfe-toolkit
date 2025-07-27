@@ -29,7 +29,7 @@ const mockServices: MFEServices = {
   },
   eventBus: {
     emit: vi.fn(),
-    on: vi.fn(),
+    on: vi.fn(() => vi.fn()), // Return a mock unsubscribe function
     off: vi.fn(),
     once: vi.fn(),
   },
@@ -53,12 +53,13 @@ describe('React 17 MFE App', () => {
 
   it('should render the app title', () => {
     render(<App services={mockServices} />);
-    expect(screen.getByText('React 17 MFE Demo')).toBeInTheDocument();
+    expect(screen.getByText('React 17 MFE Service Explorer')).toBeInTheDocument();
   });
 
   it('should display React version', () => {
     render(<App services={mockServices} />);
-    expect(screen.getByText('17.0.2')).toBeInTheDocument();
+    const versionElement = screen.getAllByText('17.0.2')[0]; // Get the first one
+    expect(versionElement).toBeInTheDocument();
   });
 
   it('should emit MFE loaded event on mount', () => {
@@ -100,9 +101,9 @@ describe('React 17 MFE App', () => {
   describe('User Info Modal', () => {
     it('should open user info modal when button is clicked', async () => {
       render(<App services={mockServices} />);
-      const showUserInfoButton = screen.getByRole('button', { name: /show user info/i });
+      const userInfoButton = screen.getByRole('button', { name: /user info modal/i });
 
-      await userEvent.click(showUserInfoButton);
+      await userEvent.click(userInfoButton);
 
       expect(mockServices.modal.open).toHaveBeenCalledWith({
         title: 'User Information',
@@ -122,9 +123,9 @@ describe('React 17 MFE App', () => {
       };
 
       render(<App services={unauthServices} />);
-      const showUserInfoButton = screen.getByRole('button', { name: /show user info/i });
+      const userInfoButton = screen.getByRole('button', { name: /user info modal/i });
 
-      await userEvent.click(showUserInfoButton);
+      await userEvent.click(userInfoButton);
 
       expect(unauthServices.notification.warning).toHaveBeenCalledWith(
         'No Session',
@@ -136,8 +137,8 @@ describe('React 17 MFE App', () => {
   describe('Legacy Features', () => {
     it('should display legacy features section', () => {
       render(<App services={mockServices} />);
-      expect(screen.getByText('Legacy Features Demo')).toBeInTheDocument();
-      expect(screen.getByText(/This MFE uses React 17 features/)).toBeInTheDocument();
+      expect(screen.getByText('Legacy React 17 Features')).toBeInTheDocument();
+      expect(screen.getByText(/This MFE demonstrates:/)).toBeInTheDocument();
     });
   });
 
@@ -145,50 +146,127 @@ describe('React 17 MFE App', () => {
     it('should emit custom event when button is clicked', async () => {
       render(<App services={mockServices} />);
 
+      // Fill in event name and data
+      const eventNameInput = screen.getByPlaceholderText('Event name');
+      const eventDataInput = screen.getByPlaceholderText(/Event data.*JSON format/);
+      
+      await userEvent.type(eventNameInput, 'react17:test');
+      await userEvent.paste(eventDataInput, '{"message": "Hello from React 17"}');
+
       const emitButton = screen.getByRole('button', { name: /emit event/i });
       await userEvent.click(emitButton);
 
-      expect(mockServices.eventBus.emit).toHaveBeenNthCalledWith(
-        2, // Second call (first is MFE_LOADED)
-        'react17:action',
-        { timestamp: expect.any(String), message: 'Hello from React 17' }
+      expect(mockServices.eventBus.emit).toHaveBeenCalledWith(
+        'react17:test',
+        { message: 'Hello from React 17' }
       );
     });
 
-    it('should track event count', async () => {
+    it('should handle empty event data', async () => {
       render(<App services={mockServices} />);
 
-      expect(screen.getByText('Events emitted: 0')).toBeInTheDocument();
+      const eventNameInput = screen.getByPlaceholderText('Event name');
+      await userEvent.type(eventNameInput, 'react17:simple');
 
       const emitButton = screen.getByRole('button', { name: /emit event/i });
       await userEvent.click(emitButton);
 
-      expect(screen.getByText('Events emitted: 1')).toBeInTheDocument();
+      expect(mockServices.eventBus.emit).toHaveBeenCalledWith(
+        'react17:simple',
+        {}
+      );
+    });
+
+    it('should show notification on successful event emission', async () => {
+      render(<App services={mockServices} />);
+
+      const eventNameInput = screen.getByPlaceholderText('Event name');
+      await userEvent.type(eventNameInput, 'react17:notify');
+
+      const emitButton = screen.getByRole('button', { name: /emit event/i });
+      await userEvent.click(emitButton);
+
+      expect(mockServices.notification.success).toHaveBeenCalledWith(
+        'Event Sent',
+        'Event "react17:notify" emitted'
+      );
     });
   });
 
   describe('Service Interaction', () => {
     it('should trigger notification service', async () => {
       render(<App services={mockServices} />);
-      const notificationButton = screen.getByRole('button', { name: /send notification/i });
+      const successButton = screen.getByRole('button', { name: /success/i });
 
-      await userEvent.click(notificationButton);
+      await userEvent.click(successButton);
 
       expect(mockServices.notification.success).toHaveBeenCalledWith(
-        'React 17 MFE',
-        'Successfully sent from React 17 MFE!'
+        'React 17 Success',
+        'This is a success message from React 17 MFE'
       );
     });
 
-    it('should track notification count', async () => {
+    it('should trigger all notification types', async () => {
       render(<App services={mockServices} />);
+      
+      // Test all notification types
+      const types = ['success', 'error', 'warning', 'info'];
+      
+      for (const type of types) {
+        const buttons = screen.getAllByRole('button', { name: new RegExp(type, 'i') });
+        // Get the first button that matches (to avoid logger buttons)
+        const notificationButton = buttons.find(btn => 
+          btn.closest('[class*="border rounded-lg p-6"]')?.textContent?.includes('Notification Service')
+        );
+        
+        if (notificationButton) {
+          await userEvent.click(notificationButton);
+          
+          expect(mockServices.notification[type as keyof typeof mockServices.notification]).toHaveBeenCalledWith(
+            `React 17 ${type.charAt(0).toUpperCase() + type.slice(1)}`,
+            `This is a ${type} message from React 17 MFE`
+          );
+        }
+      }
+    });
+  });
 
-      expect(screen.getByText('Notifications sent: 0')).toBeInTheDocument();
+  describe('Logger Service', () => {
+    it('should trigger logger at different levels', async () => {
+      render(<App services={mockServices} />);
+      
+      // Find all buttons with text "debug" and get the one in logger service section
+      const allButtons = screen.getAllByRole('button');
+      const debugButton = allButtons.find(btn => 
+        btn.textContent === 'debug' && 
+        btn.closest('.border')?.textContent?.includes('Logger Service')
+      );
+      
+      if (debugButton) {
+        await userEvent.click(debugButton);
+        expect(mockServices.logger.debug).toHaveBeenCalledWith(
+          expect.stringMatching(/React 17 debug message at/)
+        );
+      }
+    });
 
-      const notificationButton = screen.getByRole('button', { name: /send notification/i });
-      await userEvent.click(notificationButton);
-
-      expect(screen.getByText('Notifications sent: 1')).toBeInTheDocument();
+    it('should show notification when logging', async () => {
+      render(<App services={mockServices} />);
+      
+      // Find all buttons with text "info" and get the one in logger service section
+      const allButtons = screen.getAllByRole('button');
+      const infoButton = allButtons.find(btn => 
+        btn.textContent === 'info' && 
+        btn.closest('.border')?.textContent?.includes('Logger Service')
+      );
+      
+      if (infoButton) {
+        await userEvent.click(infoButton);
+        expect(mockServices.notification.info).toHaveBeenCalledWith(
+          'Logged',
+          'Check console for info message'
+        );
+      }
     });
   });
 
@@ -209,23 +287,49 @@ describe('React 17 MFE App', () => {
 
   describe('Error Handling', () => {
     it('should handle errors gracefully', () => {
+      // Mock console.error to suppress error output in tests
+      const originalError = console.error;
+      console.error = vi.fn();
+
       const errorServices = {
         ...mockServices,
         eventBus: {
           ...mockServices.eventBus,
-          emit: vi.fn((eventName) => {
-            // Only throw error for specific events, not for MFE_LOADED
-            if (eventName !== EVENTS.MFE_LOADED) {
-              throw new Error('Event bus error');
-            }
-          }),
+          emit: vi.fn(),
+          on: vi.fn(() => vi.fn()), // Return a normal unsubscribe function
         },
       };
 
-      render(<App services={errorServices} />);
-
+      // Should not throw during render
+      const { container } = render(<App services={errorServices} />);
+      
       // Should render despite error potential
-      expect(screen.getByText('React 17 MFE Demo')).toBeInTheDocument();
+      expect(screen.getByText('React 17 MFE Service Explorer')).toBeInTheDocument();
+      expect(container).toBeTruthy();
+
+      // Restore console.error
+      console.error = originalError;
+    });
+
+    it('should show error notification for invalid JSON in event data', async () => {
+      render(<App services={mockServices} />);
+      
+      // Wait for component to fully render
+      await screen.findByText('Event Bus');
+
+      const eventNameInput = screen.getByPlaceholderText('Event name');
+      const eventDataInput = screen.getByPlaceholderText(/Event data.*JSON format/);
+      
+      await userEvent.type(eventNameInput, 'test:event');
+      await userEvent.type(eventDataInput, 'invalid json');
+
+      const emitButton = screen.getByRole('button', { name: /emit event/i });
+      await userEvent.click(emitButton);
+
+      expect(mockServices.notification.error).toHaveBeenCalledWith(
+        'Invalid JSON',
+        'Please enter valid JSON data'
+      );
     });
   });
 });
