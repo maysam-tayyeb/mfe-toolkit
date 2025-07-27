@@ -39,7 +39,8 @@ When working on any task in this codebase, ALWAYS follow this TDD workflow:
    - `pnpm e2e` - Run E2E tests with Playwright
    - `pnpm format` - Format code with Prettier
    - `pnpm lint` - Check code with ESLint
-   - `pnpm type-check` - Verify TypeScript types
+   - `pnpm type-check` - Verify TypeScript types and compilation
+   - `pnpm build` - Ensure code compiles without errors after linting
 
 7. **⏸️ WAIT FOR REVIEW** - DO NOT commit or push
    - Present the completed changes with passing tests

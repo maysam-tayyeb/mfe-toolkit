@@ -1,5 +1,6 @@
 // Test setup for mfe-example
 import '@testing-library/jest-dom';
+import { vi } from 'vitest';
 
 // Mock console methods to avoid noise in tests
 global.console = {

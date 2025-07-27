@@ -14,7 +14,6 @@ export const NotificationManager: React.FC = () => {
       const variant = notification.type === 'error' ? 'destructive' : 'default';
 
       toast({
-        id: notification.id,
         title: notification.title,
         description: notification.message,
         variant,

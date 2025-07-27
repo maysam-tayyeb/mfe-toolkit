@@ -1,6 +1,6 @@
 import { defineConfig, mergeConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
-import path from 'path';
+import * as path from 'path';
 
 export function createVitestConfig(options: { root: string }) {
   return defineConfig({

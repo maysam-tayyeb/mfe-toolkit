@@ -1,5 +1,6 @@
 // Test setup for container app
 import '@testing-library/jest-dom';
+import { vi } from 'vitest';
 
 // Mock console methods to avoid noise in tests
 global.console = {

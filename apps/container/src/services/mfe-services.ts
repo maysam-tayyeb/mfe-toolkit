@@ -3,6 +3,7 @@ import {
   AuthService,
   ModalService,
   NotificationService,
+  NotificationConfig,
   createLogger,
   createEventBus,
 } from '@mfe/dev-kit';
@@ -43,7 +44,7 @@ const createModalServiceImpl = (): ModalService => {
 };
 
 const createNotificationServiceImpl = (): NotificationService => {
-  const show = (config) => {
+  const show = (config: NotificationConfig) => {
     store.dispatch(addNotification(config));
   };
 
