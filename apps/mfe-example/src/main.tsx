@@ -62,34 +62,32 @@ const ExampleMFE: MFEModule = {
   mount: (element: HTMLElement, services: MFEServices) => {
     console.log('MFE mounting to element:', element);
     
-    // The key fix: use legacy ReactDOM.render instead of createRoot
-    // This avoids conflicts with React 19's stricter root management
-    const React = (window as any).React;
-    const ReactDOM = (window as any).ReactDOM;
-    
-    if (ReactDOM.render) {
-      // Use legacy render method
-      ReactDOM.render(
-        React.createElement(App, { services }),
-        element
-      );
-    } else {
-      // Fallback to createRoot but on a child element
+    try {
+      // Use the bundled React directly - no window dependency
       const mountPoint = document.createElement('div');
       element.appendChild(mountPoint);
       
+      // Use createRoot with the child element
       reactRoot = ReactDOM.createRoot(mountPoint);
       reactRoot.render(
         React.createElement(App, { services })
       );
+      
+      console.log('MFE mounted successfully');
+    } catch (error) {
+      console.error('Error during MFE mount:', error);
+      throw error;
     }
-    
-    console.log('MFE mounted successfully');
   },
   unmount: () => {
     if (reactRoot) {
-      reactRoot.unmount();
-      reactRoot = null;
+      try {
+        reactRoot.unmount();
+        reactRoot = null;
+        console.log('MFE unmounted successfully');
+      } catch (error) {
+        console.error('Error during MFE unmount:', error);
+      }
     }
   },
 };

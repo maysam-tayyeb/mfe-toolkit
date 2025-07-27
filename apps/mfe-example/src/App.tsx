@@ -7,6 +7,7 @@ interface AppProps {
 }
 
 export const App: React.FC<AppProps> = ({ services }) => {
+  
   const [eventLog, setEventLog] = useState<string[]>([]);
 
   const handleTestModal = () => {
@@ -173,7 +174,7 @@ export const App: React.FC<AppProps> = ({ services }) => {
           </div>
           <div>
             <dt className="inline font-medium">Build Format:</dt>
-            <dd className="inline ml-2 text-gray-600">UMD</dd>
+            <dd className="inline ml-2 text-gray-600">ESM</dd>
           </div>
         </dl>
       </div>

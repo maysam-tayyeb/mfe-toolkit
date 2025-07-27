@@ -14,18 +14,15 @@ export default defineConfig(({ command }) => {
           formats: ['es'],
         },
         rollupOptions: {
-          external: [
-            'react',
-            'react-dom',
-            'react/jsx-runtime',
-            'react-dom/client',
-            '@reduxjs/toolkit',
-            'react-redux'
-          ],
           output: {
             entryFileNames: 'mfe-example.js',
           },
         },
+      },
+      define: {
+        'process.env.NODE_ENV': '"production"',
+        'process.env': '{}',
+        'global': 'globalThis',
       },
       resolve: {
         alias: {
