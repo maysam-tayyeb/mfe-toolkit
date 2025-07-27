@@ -3,8 +3,11 @@ import ReactDOM from 'react-dom/client';
 import { App } from './App';
 import { MFEModule, MFEServices, getMFEServices } from '@mfe/dev-kit';
 
-// Development mode - render directly (only when accessing the page directly)
-const isDev = typeof document !== 'undefined' && document.getElementById('root') !== null;
+// Development mode - render directly (only when accessing the page directly, not when loaded as ES module)
+const isDev = typeof document !== 'undefined' && 
+             document.getElementById('root') !== null && 
+             typeof window !== 'undefined' && 
+             window.location.port === '3001';
 if (isDev) {
   const mockServices = getMFEServices() || {
     logger: console,
@@ -53,19 +56,42 @@ if (isDev) {
 }
 
 // ES Module export - the MFE interface for dynamic imports
+let reactRoot: any = null;
+
 const ExampleMFE: MFEModule = {
   mount: (element: HTMLElement, services: MFEServices) => {
-    const root = ReactDOM.createRoot(element);
-    root.render(
-      <React.StrictMode>
-        <App services={services} />
-      </React.StrictMode>
-    );
+    console.log('MFE mounting to element:', element);
+    
+    // The key fix: use legacy ReactDOM.render instead of createRoot
+    // This avoids conflicts with React 19's stricter root management
+    const React = (window as any).React;
+    const ReactDOM = (window as any).ReactDOM;
+    
+    if (ReactDOM.render) {
+      // Use legacy render method
+      ReactDOM.render(
+        React.createElement(App, { services }),
+        element
+      );
+    } else {
+      // Fallback to createRoot but on a child element
+      const mountPoint = document.createElement('div');
+      element.appendChild(mountPoint);
+      
+      reactRoot = ReactDOM.createRoot(mountPoint);
+      reactRoot.render(
+        React.createElement(App, { services })
+      );
+    }
+    
+    console.log('MFE mounted successfully');
   },
   unmount: () => {
-    // Unmounting is handled by React
+    if (reactRoot) {
+      reactRoot.unmount();
+      reactRoot = null;
+    }
   },
 };
 
-// Export as default for ES module dynamic imports
 export default ExampleMFE;

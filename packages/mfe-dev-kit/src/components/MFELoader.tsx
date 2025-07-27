@@ -30,24 +30,39 @@ export const MFELoader: React.FC<MFELoaderProps> = ({
         // Set services on window for MFE to access
         (window as MFEWindow).__MFE_SERVICES__ = services;
 
-        // Use dynamic import to load the MFE ES module
+        console.log('Loading MFE from URL:', url);
         const mfeModule = await import(/* @vite-ignore */ url);
+        console.log('MFE module loaded:', mfeModule);
         
-        // The MFE should export a default object with mount/unmount methods
         const mfe = mfeModule.default as MFEModule;
+        console.log('MFE default export:', mfe);
         
         if (!mfe || typeof mfe.mount !== 'function') {
           throw new Error(`MFE ${name} does not export a valid module with mount function`);
         }
 
         mfeRef.current = mfe;
-
-        // Mount MFE
-        if (containerRef.current && mfe.mount) {
-          mfe.mount(containerRef.current, services);
-        }
-
-        setLoading(false);
+        
+        // Wait for container to be ready, then mount
+        setTimeout(() => {
+          if (containerRef.current && mfeRef.current) {
+            console.log('Mounting MFE to container element');
+            try {
+              mfeRef.current.mount(containerRef.current, services);
+              setLoading(false);
+              console.log('MFE mounted successfully');
+            } catch (mountError) {
+              console.error('Error mounting MFE:', mountError);
+              setError(new Error(`Failed to mount MFE: ${mountError}`));
+              setLoading(false);
+            }
+          } else {
+            console.error('Container or MFE not ready for mounting');
+            setError(new Error('Container or MFE not ready for mounting'));
+            setLoading(false);
+          }
+        }, 100);
+        
       } catch (err) {
         const error = err instanceof Error ? err : new Error('Unknown error loading MFE');
         setError(error);
@@ -69,8 +84,9 @@ export const MFELoader: React.FC<MFELoaderProps> = ({
           console.error('Error unmounting MFE:', err);
         }
       }
+      mfeRef.current = null;
     };
-  }, [name, url]);
+  }, [name, url, services]);
 
   if (error) {
     return (
@@ -81,9 +97,9 @@ export const MFELoader: React.FC<MFELoaderProps> = ({
     );
   }
 
-  if (loading) {
-    return <>{fallback}</>;
-  }
-
-  return <div ref={containerRef} className="mfe-container" />;
+  return (
+    <div ref={containerRef} className="mfe-container">
+      {loading && fallback}
+    </div>
+  );
 };
