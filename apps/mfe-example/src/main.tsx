@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { App } from './App';
 import { MFEModule, MFEServices, getMFEServices } from '@mfe/dev-kit';
 
-// Development mode - render directly (only when accessing the page directly, not when loaded as UMD)
+// Development mode - render directly (only when accessing the page directly)
 const isDev = typeof document !== 'undefined' && document.getElementById('root') !== null;
 if (isDev) {
   const mockServices = getMFEServices() || {
@@ -52,7 +52,7 @@ if (isDev) {
   }
 }
 
-// Production mode - expose as MFE module
+// ES Module export - the MFE interface for dynamic imports
 const ExampleMFE: MFEModule = {
   mount: (element: HTMLElement, services: MFEServices) => {
     const root = ReactDOM.createRoot(element);
@@ -67,14 +67,5 @@ const ExampleMFE: MFEModule = {
   },
 };
 
-// Register MFE on window
-declare global {
-  interface Window {
-    example: MFEModule;
-  }
-}
-
-window.example = ExampleMFE;
-
-// Export for testing
+// Export as default for ES module dynamic imports
 export default ExampleMFE;

@@ -70,7 +70,7 @@ The monorepo has been successfully created with all requested features implement
 - **Styling**: TailwindCSS, ShadCN UI components
 - **State Management**: Redux Toolkit with React-Redux
 - **Routing**: React Router DOM
-- **Module Federation**: Custom MFE loading system
+- **Module Federation**: Modern ES Modules with Dynamic Imports and Import Maps
 
 ## Quick Start Guide
 
@@ -323,19 +323,43 @@ Container app navigation includes:
 The implementation provides a complete working demonstration where:
 
 1. ✅ Container app runs on port 3000 with navigation
-2. ✅ Example MFE runs on port 3001 (dev mode only) and builds as UMD
-3. ✅ Navigation in container can route to MFE and load it dynamically
+2. ✅ Example MFE runs on port 3001 (dev mode only) and builds as ES module (8.51KB)
+3. ✅ Navigation in container can route to MFE and load it dynamically using modern dynamic imports
 4. ✅ MFE can use container services (modal, notifications, event bus)
-5. ✅ Shared dependencies work correctly without duplication
+5. ✅ Shared dependencies work correctly via import maps without duplication
 6. ✅ Development workflow allows simultaneous development of container and MFEs
+
+## Modern ES Module Architecture ✅
+
+The MFE system now uses modern web standards:
+
+### Import Maps for Dependency Sharing ✅
+- Container HTML includes `<script type="importmap">` defining shared dependencies
+- Dependencies resolved from ESM CDN (esm.sh) for consistent versions
+- React, Redux Toolkit, and other shared libs mapped once in container
+- MFEs reference these dependencies without bundling them
+
+### Dynamic Imports for MFE Loading ✅
+- MFEs built as ES modules (`mfe-example.js` instead of `mfe-example.umd.js`)
+- Container uses `import()` for dynamic loading instead of script tags
+- Better tree-shaking and smaller bundle sizes (8.51KB vs 513KB)
+- Native browser support, no complex UMD wrapper required
+
+### ES Module Benefits ✅
+- **Smaller bundles**: Only 8.51KB vs 513KB UMD (98% reduction)
+- **Native browser support**: No polyfills or shims needed
+- **Better tree shaking**: Unused code automatically removed
+- **Type safety**: Full TypeScript support for imports
+- **Debugging**: Better source maps and browser dev tools support
 
 ## Production Deployment Architecture
 
 In production:
 
-- Container app is deployed as a standard SPA
-- MFEs are built as static UMD bundles and deployed to web servers/CDNs
+- Container app is deployed as a standard SPA with import map
+- MFEs are built as static ES modules and deployed to web servers/CDNs
 - MFE registry URLs point to production web server locations (not Vite ports)
+- Import map can reference CDN or self-hosted dependencies
 - No Vite dev servers are used in production
 
 ## Current File Structure

@@ -63,7 +63,7 @@ test.describe('MFE Loading', () => {
     await expect(modal).not.toBeVisible();
 
     // Test notification service
-    const showNotificationButton = page.getByRole('button', { name: 'Show Success' });
+    const showNotificationButton = page.getByRole('button', { name: 'Show Notifications' });
     await showNotificationButton.click();
 
     const notification = page.locator('[role="alert"]');

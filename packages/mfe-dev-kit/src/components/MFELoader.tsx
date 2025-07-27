@@ -30,45 +30,16 @@ export const MFELoader: React.FC<MFELoaderProps> = ({
         // Set services on window for MFE to access
         (window as MFEWindow).__MFE_SERVICES__ = services;
 
-        // Check if script already exists
-        const existingScript = document.querySelector(`script[data-mfe="${name}"]`);
-        if (existingScript) {
-          existingScript.remove();
+        // Use dynamic import to load the MFE ES module
+        const mfeModule = await import(/* @vite-ignore */ url);
+        
+        // The MFE should export a default object with mount/unmount methods
+        const mfe = mfeModule.default as MFEModule;
+        
+        if (!mfe || typeof mfe.mount !== 'function') {
+          throw new Error(`MFE ${name} does not export a valid module with mount function`);
         }
 
-        // Create and load script
-        const script = document.createElement('script');
-        script.src = url;
-        script.async = true;
-        script.setAttribute('data-mfe', name);
-
-        await new Promise<void>((resolve, reject) => {
-          script.onload = () => resolve();
-          script.onerror = () => reject(new Error(`Failed to load MFE script: ${url}`));
-          document.body.appendChild(script);
-        });
-
-        // Wait for MFE to register itself
-        const mfeWindow = window as MFEWindow;
-        const checkMFE = () => {
-          return new Promise<MFEModule>((resolve, reject) => {
-            let attempts = 0;
-            const maxAttempts = 50; // 5 seconds
-
-            const interval = setInterval(() => {
-              if (mfeWindow[name]) {
-                clearInterval(interval);
-                resolve(mfeWindow[name] as MFEModule);
-              } else if (attempts >= maxAttempts) {
-                clearInterval(interval);
-                reject(new Error(`MFE ${name} did not register within timeout`));
-              }
-              attempts++;
-            }, 100);
-          });
-        };
-
-        const mfe = await checkMFE();
         mfeRef.current = mfe;
 
         // Mount MFE
@@ -98,22 +69,12 @@ export const MFELoader: React.FC<MFELoaderProps> = ({
           console.error('Error unmounting MFE:', err);
         }
       }
-
-      // Remove script
-      const script = document.querySelector(`script[data-mfe="${name}"]`);
-      if (script) {
-        script.remove();
-      }
-
-      // Clean up window reference
-      const mfeWindow = window as MFEWindow;
-      delete mfeWindow[name];
     };
   }, [name, url]);
 
   if (error) {
     return (
-      <div className="mfe-error p-4 bg-red-50 border border-red-200 rounded">
+      <div className="mfe-error p-4 bg-red-50 border border-red-200 rounded" data-testid="mfe-error">
         <h3 className="text-red-800 font-semibold">Failed to load MFE: {name}</h3>
         <p className="text-red-600 text-sm mt-1">{error.message}</p>
       </div>

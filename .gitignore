@@ -30,3 +30,8 @@ apps/*/dist
 # Cache
 .turbo
 .cache
+
+# Test outputs
+test-results/
+playwright-report/
+coverage/

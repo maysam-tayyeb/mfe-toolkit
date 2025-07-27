@@ -4,24 +4,26 @@ import path from 'path';
 
 export default defineConfig(({ command }) => {
   if (command === 'build') {
-    // Production build configuration for UMD
+    // Production build configuration for ES modules
     return {
       plugins: [react()],
       build: {
         lib: {
           entry: path.resolve(__dirname, 'src/main.tsx'),
-          name: 'ExampleMFE',
           fileName: 'mfe-example',
-          formats: ['umd'],
+          formats: ['es'],
         },
         rollupOptions: {
-          external: ['react', 'react-dom'],
+          external: [
+            'react',
+            'react-dom',
+            'react/jsx-runtime',
+            'react-dom/client',
+            '@reduxjs/toolkit',
+            'react-redux'
+          ],
           output: {
-            globals: {
-              react: 'React',
-              'react-dom': 'ReactDOM',
-            },
-            entryFileNames: 'mfe-example.umd.js',
+            entryFileNames: 'mfe-example.js',
           },
         },
       },

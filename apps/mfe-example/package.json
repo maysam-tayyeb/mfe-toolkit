@@ -7,7 +7,7 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "serve:static": "npx http-server dist -p 8080 --cors -c-1",
-    "serve": "npx http-server dist -p 3001 --cors -c-1",
+    "serve": "npx http-server dist -p 3001 --cors -c-1 -o",
     "type-check": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
@@ -25,8 +25,6 @@
     "@types/react": "^18.2.48",
     "@types/react-dom": "^18.2.18",
     "@vitejs/plugin-react": "^4.2.1",
-    "react": "^19.0.0-rc",
-    "react-dom": "^19.0.0-rc",
     "typescript": "^5.3.3",
     "vite": "^5.0.12"
   },

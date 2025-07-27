@@ -9,9 +9,9 @@ export class ContainerPage {
 
   constructor(page: Page) {
     this.page = page;
-    this.navHome = page.getByRole('link', { name: 'Home' });
-    this.navDashboard = page.getByRole('link', { name: 'Dashboard' });
-    this.navExampleMFE = page.getByRole('link', { name: 'Example MFE' });
+    this.navHome = page.locator('nav').getByRole('link', { name: 'Home' });
+    this.navDashboard = page.locator('nav').getByRole('link', { name: 'Dashboard' });
+    this.navExampleMFE = page.locator('nav').getByRole('link', { name: 'Example MFE' });
     this.pageTitle = page.getByRole('heading', { level: 1 });
   }
 
