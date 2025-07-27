@@ -1,33 +1,50 @@
 # MFE Monorepo Setup Instructions for Claude Code
 
-## 🔄 IMPORTANT: Development Workflow
+## 🔄 IMPORTANT: Test-Driven Development Workflow
 
-When working on any task in this codebase, ALWAYS follow this workflow:
+When working on any task in this codebase, ALWAYS follow this TDD workflow:
 
 1. **📊 ANALYZE** - First understand the current state
-   - Read relevant files
+   - Read relevant files and existing tests
    - Search for related code
    - Understand dependencies and impacts
+   - Review test coverage reports
 
-2. **📝 PLAN** - Present a clear plan before making changes
+2. **🧪 WRITE TESTS FIRST** - TDD approach (RED phase)
+   - Write failing unit tests for new functionality
+   - Write integration tests for component interactions
+   - Update E2E tests if user-facing behavior changes
+   - Ensure tests fail for the right reasons
+
+3. **📝 PLAN** - Present a clear plan before making changes
    - List specific files to be modified
    - Describe the changes to be made
+   - Show the failing tests that will guide implementation
    - Identify potential impacts
 
-3. **⚡ ACTION** - Execute the planned changes
-   - Make the modifications
-   - Test if applicable
-   - Verify the changes work
+4. **⚡ IMPLEMENT** - Make tests pass (GREEN phase)
+   - Write minimal code to make tests pass
+   - Focus on functionality, not optimization
+   - Ensure all tests are green
+   - Add more tests if edge cases are discovered
 
-4. **✅ QUALITY CHECK** - Before review, always run:
+5. **♻️ REFACTOR** - Improve code quality (REFACTOR phase)
+   - Refactor implementation while keeping tests green
+   - Improve code readability and maintainability
+   - Ensure no regression by running all tests
+
+6. **✅ QUALITY CHECK** - Before review, always run:
+   - `pnpm test` - Run all unit and integration tests
+   - `pnpm test:coverage` - Ensure test coverage meets requirements (>80%)
+   - `pnpm e2e` - Run E2E tests with Playwright
    - `pnpm format` - Format code with Prettier
    - `pnpm lint` - Check code with ESLint
-   - `pnpm test` - Run tests if applicable
    - `pnpm type-check` - Verify TypeScript types
 
-5. **⏸️ WAIT FOR REVIEW** - DO NOT commit or push
-   - Present the completed changes
-   - Show results of quality checks
+7. **⏸️ WAIT FOR REVIEW** - DO NOT commit or push
+   - Present the completed changes with passing tests
+   - Show test coverage reports
+   - Show results of all quality checks
    - Wait for user review and approval
    - Only commit/push when explicitly asked
 
@@ -43,7 +60,9 @@ The monorepo has been successfully created with all requested features implement
 
 - **Package Manager**: pnpm with workspaces
 - **Build Tool**: Vite
-- **Testing**: Vitest
+- **Unit/Integration Testing**: Vitest with React Testing Library
+- **E2E Testing**: Playwright
+- **Test Coverage**: Vitest coverage reporter (c8)
 - **Code Formatting**: Prettier
 - **Linting**: ESLint with TypeScript support
 - **Frontend**: React 19, TypeScript
@@ -190,6 +209,35 @@ The Vite dev server (port 3001) is only for development. In production, update t
 - ✅ Path mapping for workspace packages
 - ✅ Proper module resolution for monorepo structure
 
+### Testing Configuration 🧪
+
+#### Unit & Integration Testing
+- **Framework**: Vitest with React Testing Library
+- **Config**: Shared `vitest.config.base.ts` at root level
+- **Coverage Requirements**: Minimum 80% for all packages
+- **Test Structure**:
+  - Unit tests: `*.test.ts(x)` alongside source files
+  - Integration tests: `*.integration.test.ts(x)`
+  - Test utilities: `__tests__/utils/` directories
+
+#### E2E Testing
+- **Framework**: Playwright
+- **Config**: `playwright.config.ts` at root level
+- **Test Location**: `e2e/` directory at root
+- **Environments**: Chrome, Firefox, Safari, and mobile viewports
+- **Test Structure**:
+  - Page objects: `e2e/pages/`
+  - Test specs: `e2e/specs/`
+  - Test fixtures: `e2e/fixtures/`
+
+#### Testing Best Practices
+- **TDD Approach**: Write tests before implementation
+- **Test Isolation**: Each test should be independent
+- **Mock External Dependencies**: Use MSW for API mocking
+- **Component Testing**: Test behavior, not implementation
+- **Redux Testing**: Test slices, selectors, and connected components separately
+- **MFE Testing**: Test MFE loading, communication, and isolation
+
 ## Implementation Details ✅
 
 ### Navigation Structure ✅
@@ -228,16 +276,32 @@ Container app navigation includes:
 
 ## Development Scripts ✅
 
+### Development
 - ✅ `pnpm dev` - Start all apps in parallel
 - ✅ `pnpm dev:container` - Start only container app
 - ✅ `pnpm dev:mfe` - Start only example MFE
 - ✅ `pnpm build` - Build all packages
+
+### Testing (TDD Workflow)
+- ✅ `pnpm test` - Run all unit and integration tests
+- ✅ `pnpm test:watch` - Run tests in watch mode (for TDD)
+- ✅ `pnpm test:coverage` - Run tests with coverage report
+- ✅ `pnpm test:ui` - Open Vitest UI for interactive testing
+- ✅ `pnpm e2e` - Run Playwright E2E tests
+- ✅ `pnpm e2e:headed` - Run E2E tests with browser visible
+- ✅ `pnpm e2e:debug` - Debug E2E tests interactively
+- ✅ `pnpm e2e:report` - Open Playwright test report
+
+### Code Quality
 - ✅ `pnpm type-check` - TypeScript checking
 - ✅ `pnpm format` - Format code with Prettier
-- ✅ `pnpm lint` - Run ESLint on all packages
-- ✅ `pnpm test` - Run tests with Vitest
 - ✅ `pnpm format:check` - Check formatting without fixing
+- ✅ `pnpm lint` - Run ESLint on all packages
 - ✅ `pnpm lint:fix` - Auto-fix ESLint issues
+
+### Combined Commands
+- ✅ `pnpm validate` - Run all checks (format, lint, type-check, test)
+- ✅ `pnpm precommit` - Run validation before committing
 
 ## ShadCN Integration ✅
 
@@ -303,3 +367,47 @@ mfe-made-easy/
 │       └── package.json
 └── README.md (generated)
 ```
+
+## Testing Requirements 🧪
+
+### Every Change Must Include Tests
+
+When modifying any code in this monorepo, you MUST:
+
+1. **Write tests FIRST** (TDD approach)
+   - Unit tests for functions and utilities
+   - Component tests for React components
+   - Integration tests for feature flows
+   - E2E tests for user journeys
+
+2. **Maintain Test Coverage**
+   - Minimum 80% coverage for all packages
+   - 100% coverage for critical business logic
+   - Coverage reports must be reviewed before merge
+
+3. **Test File Structure**
+   ```
+   src/
+   ├── components/
+   │   ├── Button.tsx
+   │   ├── Button.test.tsx          # Unit tests
+   │   └── Button.integration.test.tsx  # Integration tests
+   ├── services/
+   │   ├── auth.ts
+   │   └── auth.test.ts
+   └── __tests__/
+       └── utils/                    # Test utilities
+   ```
+
+4. **Package-Specific Testing**
+   - **Container App**: Test navigation, MFE loading, service provision
+   - **MFEs**: Test isolation, service consumption, event handling
+   - **Dev Kit**: Test all exported utilities and components
+   - **Shared**: Test all utilities with edge cases
+
+5. **E2E Test Scenarios**
+   - MFE loading and unloading
+   - Inter-MFE communication via event bus
+   - Service integration (modals, notifications)
+   - Error handling and fallbacks
+   - Production build verification
