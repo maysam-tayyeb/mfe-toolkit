@@ -30,12 +30,12 @@ pnpm install
 # Build all packages (required first time)
 pnpm -r build
 
-# Start all apps in parallel
+# Start all apps in parallel (development mode)
 pnpm dev
 
-# Or start individual apps
+# Or start individual apps (development mode)
 pnpm dev:container   # Container app on http://localhost:3000
-pnpm dev:mfe        # Example MFE on http://localhost:3001
+pnpm dev:mfe        # Example MFE on http://localhost:3001 (Vite dev server)
 ```
 
 ### Testing the MFE Integration
@@ -43,6 +43,14 @@ pnpm dev:mfe        # Example MFE on http://localhost:3001
 2. Navigate to http://localhost:3000
 3. Click on "Example MFE" in the navigation or go to http://localhost:3000/mfe/example
 4. The example MFE will be dynamically loaded and you can test all the services
+
+### Production Deployment
+**Important**: In production, MFEs should be:
+1. Built using `pnpm build` to create UMD bundles
+2. Served from a separate web server (e.g., nginx, Apache, CDN)
+3. NOT served via Vite dev server
+
+The Vite dev server (port 3001) is only for development. In production, update the MFE registry URLs to point to your web server.
 
 ## Project Structure
 
@@ -68,14 +76,15 @@ pnpm dev:mfe        # Example MFE on http://localhost:3001
 
 #### Example MFE (`apps/mfe-example/`) ✅
 - **Purpose**: Demonstration microfrontend
-- **Port**: 3001
+- **Port**: 3001 (development only via Vite)
 - **Features**:
   - ✅ Builds as UMD module for dynamic loading
   - ✅ Uses shared React and Redux from container
   - ✅ Demonstrates service usage (modal, notifications, event bus)
   - ✅ Shows auth session integration
   - ✅ Interactive testing interface for all services
-  - ✅ Development mode with mock services
+  - ✅ Development mode with mock services via Vite dev server
+  - ✅ Production build creates static UMD bundle for web server deployment
 
 ### Packages Directory ✅
 
@@ -174,11 +183,18 @@ Container app navigation includes:
 ## Working Demonstration ✅
 The implementation provides a complete working demonstration where:
 1. ✅ Container app runs on port 3000 with navigation
-2. ✅ Example MFE runs on port 3001 and builds as UMD
+2. ✅ Example MFE runs on port 3001 (dev mode only) and builds as UMD
 3. ✅ Navigation in container can route to MFE and load it dynamically
 4. ✅ MFE can use container services (modal, notifications, event bus)
 5. ✅ Shared dependencies work correctly without duplication
 6. ✅ Development workflow allows simultaneous development of container and MFEs
+
+## Production Deployment Architecture
+In production:
+- Container app is deployed as a standard SPA
+- MFEs are built as static UMD bundles and deployed to web servers/CDNs
+- MFE registry URLs point to production web server locations (not Vite ports)
+- No Vite dev servers are used in production
 
 ## Current File Structure
 ```
