@@ -10,7 +10,12 @@ const isDev = typeof document !== 'undefined' &&
              window.location.port === '3001';
 if (isDev) {
   const mockServices = getMFEServices() || {
-    logger: console,
+    logger: {
+      debug: (message: string, ...args: any[]) => console.debug(`[MFE-DEV] ${message}`, ...args),
+      info: (message: string, ...args: any[]) => console.info(`[MFE-DEV] ${message}`, ...args),
+      warn: (message: string, ...args: any[]) => console.warn(`[MFE-DEV] ${message}`, ...args),
+      error: (message: string, ...args: any[]) => console.error(`[MFE-DEV] ${message}`, ...args),
+    },
     auth: {
       getSession: () => ({
         userId: 'dev-user',
@@ -60,7 +65,7 @@ let reactRoot: any = null;
 
 const ExampleMFE: MFEModule = {
   mount: (element: HTMLElement, services: MFEServices) => {
-    console.log('MFE mounting to element:', element);
+    services.logger.info('MFE mounting to element');
     
     try {
       // Use the bundled React directly - no window dependency
@@ -73,14 +78,15 @@ const ExampleMFE: MFEModule = {
         React.createElement(App, { services })
       );
       
-      console.log('MFE mounted successfully');
+      services.logger.info('MFE mounted successfully');
     } catch (error) {
-      console.error('Error during MFE mount:', error);
+      services.logger.error('Error during MFE mount', error);
       throw error;
     }
   },
   unmount: () => {
     if (reactRoot) {
+      // Note: services not available in unmount, using console for now
       try {
         reactRoot.unmount();
         reactRoot = null;
