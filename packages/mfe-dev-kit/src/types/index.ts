@@ -71,7 +71,7 @@ export interface AuthService {
 export interface EventBus {
   emit: <T = any>(event: string, payload: T) => void;
   on: <T = any>(event: string, handler: (payload: EventPayload<T>) => void) => () => void;
-  off: (event: string, handler: Function) => void;
+  off: (event: string, handler: (payload: EventPayload<any>) => void) => void;
   once: <T = any>(event: string, handler: (payload: EventPayload<T>) => void) => void;
 }
 

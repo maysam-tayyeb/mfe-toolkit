@@ -9,6 +9,7 @@ export const ROUTES = {
 export const EVENTS = {
   AUTH_CHANGED: 'auth:changed',
   MFE_LOADED: 'mfe:loaded',
+  MFE_UNLOADED: 'mfe:unloaded',
   MFE_ERROR: 'mfe:error',
   NAVIGATION: 'navigation:change',
 } as const;

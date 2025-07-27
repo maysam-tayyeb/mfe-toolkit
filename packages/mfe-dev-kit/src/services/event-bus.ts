@@ -1,7 +1,7 @@
 import { EventBus, EventPayload } from '../types';
 
 export class EventBusImpl implements EventBus {
-  private events: Map<string, Set<Function>> = new Map();
+  private events: Map<string, Set<(payload: EventPayload<any>) => void>> = new Map();
 
   emit<T = any>(event: string, data: T): void {
     const payload: EventPayload<T> = {
@@ -33,7 +33,7 @@ export class EventBusImpl implements EventBus {
     return () => this.off(event, handler);
   }
 
-  off(event: string, handler: Function): void {
+  off(event: string, handler: (payload: EventPayload<any>) => void): void {
     const handlers = this.events.get(event);
     if (handlers) {
       handlers.delete(handler);

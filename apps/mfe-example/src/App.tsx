@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MFEServices } from '@mfe/dev-kit';
 import { EVENTS } from '@mfe/shared';
 
@@ -6,176 +6,448 @@ interface AppProps {
   services: MFEServices;
 }
 
+interface EventLogEntry {
+  id: string;
+  timestamp: Date;
+  type: 'sent' | 'received';
+  event: string;
+  data?: any;
+}
+
 export const App: React.FC<AppProps> = ({ services }) => {
-  const [eventLog, setEventLog] = useState<string[]>([]);
+  const [eventLog, setEventLog] = useState<EventLogEntry[]>([]);
+  const [isListening, setIsListening] = useState(true);
+  const [customEventName, setCustomEventName] = useState('');
+  const [customEventData, setCustomEventData] = useState('');
 
-  const handleTestModal = () => {
-    services.modal.open({
-      title: 'MFE Modal Example',
-      content: (
-        <div>
-          <p>This modal was triggered from the Example MFE!</p>
-          <p className="text-sm text-gray-600 mt-2">
-            It demonstrates cross-app communication using the modal service.
-          </p>
-        </div>
-      ),
-      size: 'md',
-      onConfirm: () => {
-        services.notification.success('Modal Confirmed', 'Action completed from MFE');
+  const addToEventLog = (type: 'sent' | 'received', event: string, data?: any) => {
+    setEventLog((prev) =>
+      [
+        ...prev,
+        {
+          id: `${Date.now()}-${Math.random()}`,
+          timestamp: new Date(),
+          type,
+          event,
+          data,
+        },
+      ].slice(-10)
+    ); // Keep last 10 events
+  };
+
+  // Modal Examples
+  const modalExamples = [
+    {
+      title: 'Simple Modal',
+      action: () => {
+        services.modal.open({
+          title: 'Simple Modal Example',
+          content: <p>This is a basic modal with text content.</p>,
+          size: 'sm',
+        });
       },
-    });
-  };
+    },
+    {
+      title: 'Confirmation Modal',
+      action: () => {
+        services.modal.open({
+          title: 'Confirm Action',
+          content: (
+            <div className="space-y-2">
+              <p>Are you sure you want to proceed?</p>
+              <p className="text-sm text-muted-foreground">This action cannot be undone.</p>
+            </div>
+          ),
+          size: 'md',
+          onConfirm: () => {
+            services.notification.success('Confirmed', 'Action completed successfully');
+          },
+        });
+      },
+    },
+    {
+      title: 'Form Modal',
+      action: () => {
+        services.modal.open({
+          title: 'User Input',
+          content: (
+            <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+              <div>
+                <label className="block text-sm font-medium mb-1">Name</label>
+                <input
+                  type="text"
+                  className="w-full px-3 py-2 border rounded-md"
+                  placeholder="Enter your name"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Email</label>
+                <input
+                  type="email"
+                  className="w-full px-3 py-2 border rounded-md"
+                  placeholder="Enter your email"
+                />
+              </div>
+            </form>
+          ),
+          size: 'lg',
+          onConfirm: () => {
+            services.notification.success('Form Submitted', 'Data saved successfully');
+          },
+        });
+      },
+    },
+  ];
 
-  const handleTestNotifications = () => {
-    services.notification.info('MFE Notification', 'This is from the Example MFE');
+  // Notification Types
+  const notificationTypes = [
+    { type: 'success', method: services.notification.success },
+    { type: 'error', method: services.notification.error },
+    { type: 'warning', method: services.notification.warning },
+    { type: 'info', method: services.notification.info },
+  ];
 
-    setTimeout(() => {
-      services.notification.success('Success!', 'MFE loaded successfully');
-    }, 1000);
-  };
-
-  const handleTestEventBus = () => {
-    const message = `Event from MFE at ${new Date().toLocaleTimeString()}`;
-    services.eventBus.emit(EVENTS.MFE_LOADED, { message });
-    setEventLog([...eventLog, `Sent: ${message}`]);
-  };
-
-  const handleTestAuth = () => {
-    const session = services.auth.getSession();
-    if (session) {
-      services.notification.info(
-        'Auth Info',
-        `Logged in as ${session.username} (${session.email})`
-      );
-    } else {
-      services.notification.warning('Not Authenticated', 'No active session');
+  // Event Bus Functions
+  const sendCustomEvent = () => {
+    if (customEventName.trim()) {
+      try {
+        const data = customEventData ? JSON.parse(customEventData) : {};
+        services.eventBus.emit(customEventName as any, data);
+        addToEventLog('sent', customEventName, data);
+        services.notification.success('Event Sent', `Event "${customEventName}" emitted`);
+      } catch {
+        services.notification.error('Invalid JSON', 'Please enter valid JSON data');
+      }
     }
   };
 
-  const handleTestLogger = () => {
-    services.logger.debug('Debug message from MFE');
-    services.logger.info('Info message from MFE');
-    services.logger.warn('Warning message from MFE');
-    services.logger.error('Error message from MFE');
-    services.notification.info('Logger Test', 'Check the console for log messages');
+  const clearEventLog = () => {
+    setEventLog([]);
+    services.notification.info('Event Log Cleared', 'All events have been removed');
   };
 
-  React.useEffect(() => {
-    // Subscribe to events
-    const unsubscribe = services.eventBus.on(EVENTS.AUTH_CHANGED, (payload) => {
-      setEventLog((prev) => [...prev, `Received: Auth changed - ${JSON.stringify(payload.data)}`]);
-    });
+  // Auth & Session
+  const checkSession = () => {
+    const session = services.auth.getSession();
+    if (session) {
+      services.modal.open({
+        title: 'Session Information',
+        content: (
+          <div className="space-y-3">
+            <div className="grid grid-cols-2 gap-2 text-sm">
+              <span className="font-medium">User ID:</span>
+              <span>{session.userId}</span>
+              <span className="font-medium">Username:</span>
+              <span>{session.username}</span>
+              <span className="font-medium">Email:</span>
+              <span>{session.email}</span>
+              <span className="font-medium">Authenticated:</span>
+              <span className={session.isAuthenticated ? 'text-green-600' : 'text-red-600'}>
+                {session.isAuthenticated ? 'Yes' : 'No'}
+              </span>
+            </div>
+            <div className="pt-2 border-t">
+              <p className="text-sm font-medium mb-1">Roles:</p>
+              <div className="flex gap-2">
+                {session.roles.map((role) => (
+                  <span
+                    key={role}
+                    className="px-2 py-1 bg-primary/10 text-primary rounded-md text-xs"
+                  >
+                    {role}
+                  </span>
+                ))}
+              </div>
+            </div>
+            <div className="pt-2">
+              <p className="text-sm font-medium mb-1">Permissions:</p>
+              <div className="flex gap-2 flex-wrap">
+                {session.permissions.map((perm) => (
+                  <span
+                    key={perm}
+                    className="px-2 py-1 bg-secondary text-secondary-foreground rounded-md text-xs"
+                  >
+                    {perm}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+        ),
+        size: 'lg',
+      });
+    } else {
+      services.notification.warning('No Session', 'No active session found');
+    }
+  };
 
-    // Log MFE loaded
+  // Logger Functions
+  const loggerLevels = [
+    { level: 'debug' },
+    { level: 'info' },
+    { level: 'warn' },
+    { level: 'error' },
+  ];
+
+  useEffect(() => {
+    if (!isListening) return;
+
+    // Subscribe to common events
+    const unsubscribes = [
+      services.eventBus.on(EVENTS.AUTH_CHANGED, (payload) => {
+        addToEventLog('received', EVENTS.AUTH_CHANGED, payload.data);
+      }),
+      services.eventBus.on(EVENTS.MFE_LOADED, (payload) => {
+        addToEventLog('received', EVENTS.MFE_LOADED, payload.data);
+      }),
+      services.eventBus.on(EVENTS.MFE_UNLOADED, (payload) => {
+        addToEventLog('received', EVENTS.MFE_UNLOADED, payload.data);
+      }),
+    ];
+
+    // Initial load event
     services.logger.info('Example MFE mounted successfully');
     services.eventBus.emit(EVENTS.MFE_LOADED, { name: 'example', version: '1.0.0' });
+    addToEventLog('sent', EVENTS.MFE_LOADED, { name: 'example', version: '1.0.0' });
 
     return () => {
-      unsubscribe();
+      unsubscribes.forEach((fn) => fn());
       services.logger.info('Example MFE unmounting');
+      services.eventBus.emit(EVENTS.MFE_UNLOADED, { name: 'example' });
     };
-  }, [services]);
+  }, [services, isListening]);
 
   return (
-    <div className="space-y-6" data-testid="mfe-content">
+    <div className="space-y-8" data-testid="mfe-content">
+      {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold">Example Microfrontend</h1>
-        <p className="text-gray-600 mt-2">
-          This MFE demonstrates integration with container services.
+        <h1 className="text-3xl font-bold tracking-tight">MFE Service Explorer</h1>
+        <p className="text-muted-foreground mt-2">
+          Interactive demonstration of all available MFE services and capabilities
         </p>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        <div className="border rounded-lg p-4">
-          <h3 className="font-semibold mb-2">Modal Service</h3>
-          <p className="text-sm text-gray-600 mb-3">Trigger modals in the container app</p>
-          <button
-            onClick={handleTestModal}
-            className="w-full px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
-          >
-            Open Modal
-          </button>
+      {/* Service Cards */}
+      <div className="grid gap-6 lg:grid-cols-2">
+        {/* Modal Service */}
+        <div className="border rounded-lg p-6 space-y-4">
+          <h2 className="text-xl font-semibold">Modal Service</h2>
+          <p className="text-sm text-muted-foreground">
+            Display modals in the container application with different configurations
+          </p>
+          <div className="flex flex-col gap-2">
+            {modalExamples.map((example) => (
+              <button
+                key={example.title}
+                onClick={example.action}
+                className="px-3 py-1.5 bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/80 transition-colors text-sm text-left"
+              >
+                {example.title}
+              </button>
+            ))}
+          </div>
         </div>
 
-        <div className="border rounded-lg p-4">
-          <h3 className="font-semibold mb-2">Notification Service</h3>
-          <p className="text-sm text-gray-600 mb-3">Show notifications in the container</p>
-          <button
-            onClick={handleTestNotifications}
-            className="w-full px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
-          >
-            Show Notifications
-          </button>
+        {/* Notification Service */}
+        <div className="border rounded-lg p-6 space-y-4">
+          <h2 className="text-xl font-semibold">Notification Service</h2>
+          <p className="text-sm text-muted-foreground">
+            Show different types of notifications in the container
+          </p>
+          <div className="grid grid-cols-2 gap-2">
+            {notificationTypes.map(({ type, method }) => (
+              <button
+                key={type}
+                onClick={() =>
+                  method(
+                    `${type.charAt(0).toUpperCase() + type.slice(1)} Notification`,
+                    `This is a ${type} message from the MFE`
+                  )
+                }
+                className="px-3 py-1.5 bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/80 transition-colors text-sm capitalize"
+              >
+                {type}
+              </button>
+            ))}
+          </div>
         </div>
 
-        <div className="border rounded-lg p-4">
-          <h3 className="font-semibold mb-2">Event Bus</h3>
-          <p className="text-sm text-gray-600 mb-3">Send events to other components</p>
-          <button
-            onClick={handleTestEventBus}
-            className="w-full px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600 transition-colors"
-          >
-            Send Event
-          </button>
+        {/* Event Bus */}
+        <div className="border rounded-lg p-6 space-y-4">
+          <h2 className="text-xl font-semibold">Event Bus</h2>
+          <p className="text-sm text-muted-foreground">
+            Send and receive events between MFEs and the container
+          </p>
+          <div className="space-y-3">
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={customEventName}
+                onChange={(e) => setCustomEventName(e.target.value)}
+                placeholder="Event name"
+                className="flex-1 px-3 py-2 border rounded-md text-sm"
+              />
+              <button
+                onClick={() => setIsListening(!isListening)}
+                className={`px-3 py-1.5 rounded-md text-sm transition-colors ${
+                  isListening
+                    ? 'bg-primary text-primary-foreground hover:bg-primary/90'
+                    : 'bg-muted text-muted-foreground hover:bg-muted/80'
+                }`}
+              >
+                {isListening ? 'Listening' : 'Paused'}
+              </button>
+            </div>
+            <textarea
+              value={customEventData}
+              onChange={(e) => setCustomEventData(e.target.value)}
+              placeholder='Event data (JSON format, e.g., {"key": "value"})'
+              className="w-full px-3 py-2 border rounded-md text-sm h-20"
+            />
+            <div className="flex gap-2">
+              <button
+                onClick={sendCustomEvent}
+                className="px-3 py-1.5 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors text-sm"
+              >
+                Send Event
+              </button>
+              <button
+                onClick={clearEventLog}
+                className="px-3 py-1.5 bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/80 transition-colors text-sm"
+              >
+                Clear Log
+              </button>
+            </div>
+          </div>
         </div>
 
-        <div className="border rounded-lg p-4">
-          <h3 className="font-semibold mb-2">Auth Service</h3>
-          <p className="text-sm text-gray-600 mb-3">Check authentication status</p>
-          <button
-            onClick={handleTestAuth}
-            className="w-full px-4 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600 transition-colors"
-          >
-            Check Auth
-          </button>
+        {/* Auth Service */}
+        <div className="border rounded-lg p-6 space-y-4">
+          <h2 className="text-xl font-semibold">Auth Service</h2>
+          <p className="text-sm text-muted-foreground">
+            Access authentication state and user information
+          </p>
+          <div className="flex flex-col gap-2">
+            <button
+              onClick={checkSession}
+              className="px-3 py-1.5 bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/80 transition-colors text-sm text-left"
+            >
+              View Session Details
+            </button>
+            <button
+              onClick={() => {
+                const hasPermission = services.auth.hasPermission('write');
+                services.notification.info(
+                  'Permission Check',
+                  `Has "write" permission: ${hasPermission ? 'Yes' : 'No'}`
+                );
+              }}
+              className="px-3 py-1.5 bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/80 transition-colors text-sm text-left"
+            >
+              Check Write Permission
+            </button>
+          </div>
         </div>
 
-        <div className="border rounded-lg p-4">
-          <h3 className="font-semibold mb-2">Logger Service</h3>
-          <p className="text-sm text-gray-600 mb-3">Log messages to console</p>
-          <button
-            onClick={handleTestLogger}
-            className="w-full px-4 py-2 bg-orange-500 text-white rounded hover:bg-orange-600 transition-colors"
-          >
-            Test Logger
-          </button>
+        {/* Logger Service */}
+        <div className="border rounded-lg p-6 space-y-4 lg:col-span-2">
+          <h2 className="text-xl font-semibold">Logger Service</h2>
+          <p className="text-sm text-muted-foreground">
+            Log messages at different levels (check browser console)
+          </p>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+            {loggerLevels.map(({ level }) => (
+              <button
+                key={level}
+                onClick={() => {
+                  services.logger[level as keyof typeof services.logger](
+                    `Test ${level} message from MFE at ${new Date().toLocaleTimeString()}`
+                  );
+                  services.notification.info('Logged', `Check console for ${level} message`);
+                }}
+                className="px-3 py-1.5 border border-input bg-background hover:bg-accent hover:text-accent-foreground rounded-md transition-colors text-sm capitalize"
+              >
+                {level}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
+      {/* Event Log */}
       {eventLog.length > 0 && (
-        <div className="border rounded-lg p-4">
-          <h3 className="font-semibold mb-2">Event Log</h3>
-          <div className="space-y-1 text-sm font-mono">
-            {eventLog.map((log, index) => (
-              <div key={index} className="text-gray-600">
-                {log}
+        <div className="border rounded-lg p-6 space-y-4">
+          <h2 className="text-xl font-semibold">Event Log</h2>
+          <div className="space-y-2 max-h-60 overflow-y-auto">
+            {eventLog.map((entry) => (
+              <div key={entry.id} className="p-3 bg-muted rounded-md text-sm">
+                <div className="flex justify-between items-start">
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2">
+                      <span className="font-medium">
+                        {entry.type === 'sent' ? 'Sent' : 'Received'}
+                      </span>
+                      <code className="px-2 py-0.5 bg-background rounded text-xs">
+                        {entry.event}
+                      </code>
+                    </div>
+                    {entry.data && (
+                      <pre className="text-xs text-muted-foreground overflow-x-auto">
+                        {JSON.stringify(entry.data, null, 2)}
+                      </pre>
+                    )}
+                  </div>
+                  <span className="text-xs text-muted-foreground">
+                    {entry.timestamp.toLocaleTimeString()}
+                  </span>
+                </div>
               </div>
             ))}
           </div>
         </div>
       )}
 
-      <div className="bg-gray-100 rounded-lg p-4">
-        <h3 className="font-semibold mb-2">MFE Information</h3>
-        <dl className="space-y-1 text-sm">
+      {/* MFE Info */}
+      <div className="bg-muted/50 rounded-lg p-6">
+        <h3 className="font-semibold mb-3">MFE Configuration</h3>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
           <div>
-            <dt className="inline font-medium">Name:</dt>
-            <dd className="inline ml-2 text-gray-600">Example MFE</dd>
+            <span className="text-muted-foreground">Name:</span>
+            <p className="font-medium">Example MFE</p>
           </div>
           <div>
-            <dt className="inline font-medium">Version:</dt>
-            <dd className="inline ml-2 text-gray-600">1.0.0</dd>
+            <span className="text-muted-foreground">Version:</span>
+            <p className="font-medium">1.0.0</p>
           </div>
           <div>
-            <dt className="inline font-medium">Port:</dt>
-            <dd className="inline ml-2 text-gray-600">3001</dd>
+            <span className="text-muted-foreground">Dev Port:</span>
+            <p className="font-medium">3001</p>
           </div>
           <div>
-            <dt className="inline font-medium">Build Format:</dt>
-            <dd className="inline ml-2 text-gray-600">ESM</dd>
+            <span className="text-muted-foreground">Format:</span>
+            <p className="font-medium">ESM Module</p>
           </div>
-        </dl>
+          <div>
+            <span className="text-muted-foreground">React Version:</span>
+            <p className="font-medium">{React.version || '19.1.0'}</p>
+          </div>
+          <div>
+            <span className="text-muted-foreground">Redux Toolkit:</span>
+            <p className="font-medium">^2.0.1</p>
+          </div>
+          <div>
+            <span className="text-muted-foreground">Tailwind CSS:</span>
+            <p className="font-medium">^4.1.11</p>
+          </div>
+          <div>
+            <span className="text-muted-foreground">TypeScript:</span>
+            <p className="font-medium">^5.3.3</p>
+          </div>
+          <div>
+            <span className="text-muted-foreground">Import Map:</span>
+            <p className="font-medium">ESM CDN</p>
+          </div>
+        </div>
       </div>
     </div>
   );
