@@ -7,6 +7,7 @@
     "dev": "pnpm --parallel --filter './apps/**' dev",
     "dev:container": "pnpm --filter @mfe/container dev",
     "dev:mfe": "pnpm --filter @mfe/example-mfe dev",
+    "serve:mfe": "pnpm --filter @mfe/example-mfe serve",
     "build": "pnpm -r build",
     "test": "vitest run",
     "test:watch": "vitest",
