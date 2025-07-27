@@ -107,8 +107,8 @@ pnpm dev:mfe        # Example MFE on http://localhost:3001 (Vite dev server)
 
 **Important**: In production, MFEs should be:
 
-1. Built using `pnpm build` to create UMD bundles
-2. Served from a separate web server (e.g., nginx, Apache, CDN)
+1. Built using `pnpm build` to create ES module bundles
+2. Served from a static web server or CDN
 3. NOT served via Vite dev server
 
 The Vite dev server (port 3001) is only for development. In production, update the MFE registry URLs to point to your web server.

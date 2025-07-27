@@ -14,20 +14,20 @@ During development, the MFE runs on Vite's dev server with hot module replacemen
 ## Production Build
 
 ```bash
-# Build the MFE as a UMD bundle
+# Build the MFE as an ES module bundle
 pnpm build
 ```
 
-This creates a production-ready UMD bundle in the `dist/` directory:
+This creates a production-ready ES module bundle in the `dist/` directory:
 
-- `mfe-example.umd.js` - The main MFE bundle
+- `mfe-example.js` - The main MFE bundle (23.7KB with externalized dependencies)
 - `style.css` - Any extracted styles (if applicable)
 
 ## Production Deployment
 
 ### Important: MFEs should NOT use Vite in production!
 
-In production, MFEs should be served as static files from a web server. Here are several deployment options:
+In production, MFEs should be served as static files from a web server. Here are deployment options:
 
 ### Option 1: Simple HTTP Server (for testing)
 
@@ -36,22 +36,7 @@ In production, MFEs should be served as static files from a web server. Here are
 pnpm serve:static
 ```
 
-### Option 2: Nginx Configuration
-
-```nginx
-server {
-    listen 80;
-    server_name mfe.example.com;
-
-    location / {
-        root /var/www/mfe-example/dist;
-        add_header Access-Control-Allow-Origin *;
-        add_header Cache-Control "public, max-age=3600";
-    }
-}
-```
-
-### Option 3: CDN Deployment
+### Option 2: CDN Deployment
 
 Upload the contents of `dist/` to your CDN:
 
@@ -60,13 +45,7 @@ Upload the contents of `dist/` to your CDN:
 - Netlify
 - Vercel (static hosting)
 
-### Option 4: Docker + Nginx
-
-```dockerfile
-FROM nginx:alpine
-COPY dist/ /usr/share/nginx/html/
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-```
+The MFE uses externalized dependencies via import map, so ensure the container's import map is available.
 
 ## Updating the Container's MFE Registry
 
@@ -77,7 +56,7 @@ After deploying your MFE, update the container app's MFE registry to point to th
 {
   name: 'example',
   version: '1.0.0',
-  url: 'https://mfe.example.com/mfe-example.umd.js', // Production URL
+  url: 'https://mfe.example.com/mfe-example.js', // Production URL
   // url: 'http://localhost:3001/src/main.tsx', // Development URL
 }
 ```
@@ -86,5 +65,5 @@ After deploying your MFE, update the container app's MFE registry to point to th
 
 1. Build the MFE: `pnpm build`
 2. Serve it statically: `pnpm serve:static`
-3. Update the container's registry to point to `http://localhost:8080/mfe-example.umd.js`
+3. Update the container's registry to point to `http://localhost:8080/mfe-example.js`
 4. Start the container app and test the integration
