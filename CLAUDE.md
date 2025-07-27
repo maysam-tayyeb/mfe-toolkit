@@ -334,18 +334,21 @@ The implementation provides a complete working demonstration where:
 The MFE system now uses modern web standards:
 
 ### Import Maps for Dependency Sharing ✅
+
 - Container HTML includes `<script type="importmap">` defining shared dependencies
 - Dependencies resolved from ESM CDN (esm.sh) for consistent versions
 - React, Redux Toolkit, and other shared libs mapped once in container
 - MFEs reference these dependencies without bundling them
 
 ### Dynamic Imports for MFE Loading ✅
+
 - MFEs built as ES modules (`mfe-example.js` instead of `mfe-example.umd.js`)
 - Container uses `import()` for dynamic loading instead of script tags
 - Better tree-shaking and smaller bundle sizes (8.51KB vs 513KB)
 - Native browser support, no complex UMD wrapper required
 
 ### ES Module Benefits ✅
+
 - **Smaller bundles**: Only 8.51KB vs 513KB UMD (98% reduction)
 - **Native browser support**: No polyfills or shims needed
 - **Better tree shaking**: Unused code automatically removed

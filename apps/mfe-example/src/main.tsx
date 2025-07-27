@@ -4,10 +4,11 @@ import { App } from './App';
 import { MFEModule, MFEServices, getMFEServices } from '@mfe/dev-kit';
 
 // Development mode - render directly (only when accessing the page directly, not when loaded as ES module)
-const isDev = typeof document !== 'undefined' && 
-             document.getElementById('root') !== null && 
-             typeof window !== 'undefined' && 
-             window.location.port === '3001';
+const isDev =
+  typeof document !== 'undefined' &&
+  document.getElementById('root') !== null &&
+  typeof window !== 'undefined' &&
+  window.location.port === '3001';
 if (isDev) {
   const mockServices = getMFEServices() || {
     logger: {
@@ -62,22 +63,42 @@ if (isDev) {
 
 // ES Module export - the MFE interface for dynamic imports
 let reactRoot: any = null;
+let mountPoint: HTMLDivElement | null = null;
 
 const ExampleMFE: MFEModule = {
   mount: (element: HTMLElement, services: MFEServices) => {
     services.logger.info('MFE mounting to element');
-    
+
     try {
+      // Check if already mounted
+      if (reactRoot && mountPoint && element.contains(mountPoint)) {
+        services.logger.info('MFE already mounted, skipping duplicate mount');
+        return;
+      }
+
+      // Clean up any existing mount
+      if (reactRoot) {
+        try {
+          reactRoot.unmount();
+          reactRoot = null;
+        } catch (e) {
+          services.logger.warn('Error cleaning up previous mount', e);
+        }
+      }
+
+      if (mountPoint && mountPoint.parentNode) {
+        mountPoint.parentNode.removeChild(mountPoint);
+      }
+
       // Use the bundled React directly - no window dependency
-      const mountPoint = document.createElement('div');
+      mountPoint = document.createElement('div');
+      mountPoint.setAttribute('data-mfe', 'example');
       element.appendChild(mountPoint);
-      
+
       // Use createRoot with the child element
       reactRoot = ReactDOM.createRoot(mountPoint);
-      reactRoot.render(
-        React.createElement(App, { services })
-      );
-      
+      reactRoot.render(React.createElement(App, { services }));
+
       services.logger.info('MFE mounted successfully');
     } catch (error) {
       services.logger.error('Error during MFE mount', error);
@@ -90,6 +111,12 @@ const ExampleMFE: MFEModule = {
       try {
         reactRoot.unmount();
         reactRoot = null;
+
+        if (mountPoint && mountPoint.parentNode) {
+          mountPoint.parentNode.removeChild(mountPoint);
+        }
+        mountPoint = null;
+
         console.log('MFE unmounted successfully');
       } catch (error) {
         console.error('Error during MFE unmount:', error);

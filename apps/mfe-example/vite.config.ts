@@ -22,7 +22,7 @@ export default defineConfig(({ command }) => {
       define: {
         'process.env.NODE_ENV': '"production"',
         'process.env': '{}',
-        'global': 'globalThis',
+        global: 'globalThis',
       },
       resolve: {
         alias: {

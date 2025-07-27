@@ -7,7 +7,6 @@ interface AppProps {
 }
 
 export const App: React.FC<AppProps> = ({ services }) => {
-  
   const [eventLog, setEventLog] = useState<string[]>([]);
 
   const handleTestModal = () => {
