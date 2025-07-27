@@ -16,7 +16,12 @@ function App() {
     registry.register({
       name: 'example',
       version: '1.0.0',
+      // Development: Vite dev server
       url: 'http://localhost:3001/mfe-example.umd.js',
+      // Production examples:
+      // url: 'https://cdn.example.com/mfes/example/1.0.0/mfe-example.umd.js',
+      // url: 'https://mfe-example.example.com/mfe-example.umd.js',
+      // url: '/mfes/example/mfe-example.umd.js', // Same origin
       dependencies: ['react', 'react-dom'],
       sharedLibs: ['@reduxjs/toolkit', 'react-redux'],
     });
