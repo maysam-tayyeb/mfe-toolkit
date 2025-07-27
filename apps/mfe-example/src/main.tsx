@@ -3,9 +3,9 @@ import ReactDOM from 'react-dom/client';
 import { App } from './App';
 import { MFEModule, MFEServices, getMFEServices } from '@mfe/dev-kit';
 
-// Development mode - render directly
-const isDev = typeof process !== 'undefined' && process.env.NODE_ENV === 'development';
-if (isDev || (typeof window !== 'undefined' && window.location.port === '3001')) {
+// Development mode - render directly (only when accessing the page directly, not when loaded as UMD)
+const isDev = typeof document !== 'undefined' && document.getElementById('root') !== null;
+if (isDev) {
   const mockServices = getMFEServices() || {
     logger: console,
     auth: {
