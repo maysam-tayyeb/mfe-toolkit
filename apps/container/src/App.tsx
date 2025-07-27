@@ -5,6 +5,7 @@ import { store } from '@/store';
 import { Layout } from '@/components/Layout';
 import { HomePage } from '@/pages/HomePage';
 import { DashboardPage } from '@/pages/DashboardPage';
+import { MFECommunicationPage } from '@/pages/MFECommunicationPage';
 import { MFEPage, createMFERegistry } from '@mfe/dev-kit';
 import { createMFEServices } from '@/services/mfe-services';
 
@@ -47,6 +48,7 @@ function App() {
           <Route path="/" element={<Layout />}>
             <Route index element={<HomePage />} />
             <Route path="dashboard" element={<DashboardPage />} />
+            <Route path="mfe-communication" element={<MFECommunicationPage />} />
             <Route
               path="mfe/:mfeName"
               element={

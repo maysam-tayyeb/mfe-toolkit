@@ -62,7 +62,7 @@ describe('Container App Integration Tests', () => {
   describe('Navigation Integration', () => {
     it('should render navigation with all menu items', () => {
       renderApp();
-      
+
       expect(screen.getByText('MFE Platform')).toBeInTheDocument();
       expect(screen.getByRole('link', { name: /home/i })).toBeInTheDocument();
       expect(screen.getByRole('link', { name: /dashboard/i })).toBeInTheDocument();
@@ -71,22 +71,22 @@ describe('Container App Integration Tests', () => {
 
     it('should navigate between pages', async () => {
       renderApp();
-      
+
       // Start at home
       expect(screen.getByText('Welcome to MFE Platform')).toBeInTheDocument();
-      
+
       // Navigate to dashboard
       const dashboardLink = screen.getByRole('link', { name: /dashboard/i });
       await userEvent.click(dashboardLink);
-      
+
       await waitFor(() => {
         expect(screen.getByText('Platform Dashboard')).toBeInTheDocument();
       });
-      
+
       // Navigate to MFE
       const mfeLink = screen.getByRole('link', { name: /example mfe/i });
       await userEvent.click(mfeLink);
-      
+
       await waitFor(() => {
         expect(screen.getByTestId('mfe-page')).toBeInTheDocument();
       });
@@ -96,25 +96,25 @@ describe('Container App Integration Tests', () => {
   describe('Modal Integration', () => {
     it('should open and close modals from navigation', async () => {
       renderApp('/dashboard');
-      
+
       // Wait for dashboard to load
       await waitFor(() => {
         expect(screen.getByText('Platform Dashboard')).toBeInTheDocument();
       });
-      
+
       // Click on View Full Status button
       const statusButton = screen.getByRole('button', { name: /view full status/i });
       await userEvent.click(statusButton);
-      
+
       // Modal should appear
       await waitFor(() => {
         expect(screen.getByText('Platform Health Check')).toBeInTheDocument();
       });
-      
+
       // Close modal
       const closeButton = screen.getByRole('button', { name: /close/i });
       await userEvent.click(closeButton);
-      
+
       // Modal should disappear
       await waitFor(() => {
         expect(screen.queryByText('Platform Health Check')).not.toBeInTheDocument();
@@ -125,45 +125,51 @@ describe('Container App Integration Tests', () => {
   describe('Notification Integration', () => {
     it('should show notifications when triggered', async () => {
       renderApp('/dashboard');
-      
+
       await waitFor(() => {
         expect(screen.getByText('Platform Dashboard')).toBeInTheDocument();
       });
-      
+
       // Click reload registry button
       const reloadButton = screen.getByRole('button', { name: /reload mfe registry/i });
       await userEvent.click(reloadButton);
-      
+
       // Should show info notification
       await waitFor(() => {
         expect(screen.getByText('Registry Reloading')).toBeInTheDocument();
       });
-      
+
       // Wait for success notification
-      await waitFor(() => {
-        expect(screen.getByText('Registry Updated')).toBeInTheDocument();
-      }, { timeout: 2000 });
+      await waitFor(
+        () => {
+          expect(screen.getByText('Registry Updated')).toBeInTheDocument();
+        },
+        { timeout: 2000 }
+      );
     });
 
     it('should auto-dismiss notifications', async () => {
       renderApp('/dashboard');
-      
+
       await waitFor(() => {
         expect(screen.getByText('Platform Dashboard')).toBeInTheDocument();
       });
-      
+
       const reloadButton = screen.getByRole('button', { name: /reload mfe registry/i });
       await userEvent.click(reloadButton);
-      
+
       // Notification appears
       await waitFor(() => {
         expect(screen.getByText('Registry Reloading')).toBeInTheDocument();
       });
-      
+
       // Notification should auto-dismiss after timeout
-      await waitFor(() => {
-        expect(screen.queryByText('Registry Reloading')).not.toBeInTheDocument();
-      }, { timeout: 4000 });
+      await waitFor(
+        () => {
+          expect(screen.queryByText('Registry Reloading')).not.toBeInTheDocument();
+        },
+        { timeout: 4000 }
+      );
     });
   });
 
@@ -182,9 +188,9 @@ describe('Container App Integration Tests', () => {
           token: 'test-token',
         },
       });
-      
+
       renderApp('/dashboard');
-      
+
       // Should show username in dashboard
       expect(screen.getByText('testuser')).toBeInTheDocument();
     });
@@ -193,10 +199,10 @@ describe('Container App Integration Tests', () => {
   describe('MFE Loading Integration', () => {
     it('should load MFE page when navigating to MFE route', async () => {
       renderApp();
-      
+
       const mfeLink = screen.getByRole('link', { name: /example mfe/i });
       await userEvent.click(mfeLink);
-      
+
       await waitFor(() => {
         expect(screen.getByTestId('mfe-page')).toBeInTheDocument();
         expect(screen.getByText('MFE Page: example')).toBeInTheDocument();
@@ -205,7 +211,7 @@ describe('Container App Integration Tests', () => {
 
     it('should handle MFE route parameters', () => {
       renderApp('/mfe/custom-mfe');
-      
+
       expect(screen.getByTestId('mfe-page')).toBeInTheDocument();
       expect(screen.getByText('MFE Page: custom-mfe')).toBeInTheDocument();
     });
@@ -214,7 +220,7 @@ describe('Container App Integration Tests', () => {
   describe('Service Integration', () => {
     it('should provide services to window for MFEs', () => {
       renderApp();
-      
+
       // Check that services are available on window
       expect((window as any).__MFE_SERVICES__).toBeDefined();
       expect((window as any).__MFE_SERVICES__.logger).toBeDefined();
@@ -226,7 +232,7 @@ describe('Container App Integration Tests', () => {
 
     it('should expose Redux store on window', () => {
       renderApp();
-      
+
       expect((window as any).__REDUX_STORE__).toBeDefined();
       expect((window as any).__REDUX_STORE__.getState).toBeDefined();
       expect((window as any).__REDUX_STORE__.dispatch).toBeDefined();
@@ -236,7 +242,7 @@ describe('Container App Integration Tests', () => {
   describe('Error Handling', () => {
     it('should show 404 page for unknown routes', () => {
       renderApp('/unknown-route');
-      
+
       expect(screen.getByText('404 - Page Not Found')).toBeInTheDocument();
       expect(screen.getByText(/The page you are looking for does not exist/)).toBeInTheDocument();
     });
@@ -245,10 +251,10 @@ describe('Container App Integration Tests', () => {
   describe('Responsive Design', () => {
     it('should have responsive navigation', () => {
       renderApp();
-      
+
       const nav = screen.getByRole('navigation');
       expect(nav).toHaveClass('border-b');
-      
+
       const navContainer = nav.querySelector('.container');
       expect(navContainer).toHaveClass('mx-auto', 'flex', 'items-center', 'justify-between');
     });
