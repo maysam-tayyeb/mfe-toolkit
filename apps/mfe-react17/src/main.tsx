@@ -2,12 +2,17 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { App } from './App';
 import { EVENTS } from '@mfe/shared';
-import { EventBusImpl } from '@mfe/dev-kit';
-import type { MFEServices } from '@mfe/dev-kit';
+import { EventBusImpl, MFEModule, MFEServices } from '@mfe/dev-kit';
 import './index.css';
 
-// React 17 MFE Entry Point
-if (process.env.NODE_ENV === 'development') {
+// Development mode - render directly (only when accessing the page directly, not when loaded as ES module)
+const isDev =
+  typeof document !== 'undefined' &&
+  document.getElementById('react17-mfe-root') !== null &&
+  typeof window !== 'undefined' &&
+  window.location.port === '3002';
+
+if (isDev) {
   // Development mode - render directly with mock services
   const mockServices: MFEServices = {
     logger: {
@@ -53,58 +58,73 @@ if (process.env.NODE_ENV === 'development') {
 
   const root = document.getElementById('react17-mfe-root');
   if (root) {
-    ReactDOM.render(<App services={mockServices} />, root);
-  }
-} else {
-  // Production mode - expose for container to mount
-  (window as any).React17MFE = {
-    mount: (containerId: string) => {
-      const services = (window as any).__MFE_SERVICES__;
-      if (!services) {
-        console.error('React 17 MFE: Services not available');
-        return;
-      }
-
-      const container = document.getElementById(containerId);
-      if (!container) {
-        console.error(`React 17 MFE: Container element '${containerId}' not found`);
-        return;
-      }
-
-      try {
-        // React 17 uses ReactDOM.render instead of createRoot
-        ReactDOM.render(<App services={services} />, container);
-
-        services.logger.info('React 17 MFE mounted successfully');
-        services.eventBus.emit(EVENTS.MFE_LOADED, {
-          name: 'react17',
-          version: '1.0.0',
-          reactVersion: React.version,
-        });
-      } catch (error) {
-        services.logger.error('Failed to render React 17 MFE', error);
-      }
-    },
-
-    unmount: () => {
-      const services = (window as any).__MFE_SERVICES__;
-      const container = document.querySelector('[data-testid="react17-mfe"]')?.parentElement;
-
-      if (container) {
-        // React 17 unmount
-        ReactDOM.unmountComponentAtNode(container);
-
-        if (services) {
-          services.eventBus.emit(EVENTS.MFE_UNLOADED, { name: 'react17' });
-          services.logger.info('React 17 MFE unmounted');
-        }
-      }
-    },
-  };
-
-  // Log initialization
-  const services = (window as any).__MFE_SERVICES__;
-  if (services) {
-    services.logger.info('React 17 MFE initialized');
+    ReactDOM.render(
+      <React.StrictMode>
+        <div style={{ padding: '2rem' }}>
+          <App services={mockServices} />
+        </div>
+      </React.StrictMode>,
+      root
+    );
   }
 }
+
+// ES Module export - the MFE interface for dynamic imports
+let mountPoint: HTMLDivElement | null = null;
+
+const React17MFE: MFEModule = {
+  mount: (element: HTMLElement, services: MFEServices) => {
+    services.logger.info('React 17 MFE mounting to element');
+
+    try {
+      // Check if already mounted
+      if (mountPoint && element.contains(mountPoint)) {
+        services.logger.info('React 17 MFE already mounted, skipping duplicate mount');
+        return;
+      }
+
+      // Clean up any existing mount
+      if (mountPoint && mountPoint.parentNode) {
+        ReactDOM.unmountComponentAtNode(mountPoint);
+        mountPoint.parentNode.removeChild(mountPoint);
+      }
+
+      // Create mount point
+      mountPoint = document.createElement('div');
+      mountPoint.setAttribute('data-mfe', 'react17');
+      element.appendChild(mountPoint);
+
+      // React 17 uses ReactDOM.render instead of createRoot
+      ReactDOM.render(React.createElement(App, { services }), mountPoint);
+
+      services.logger.info('React 17 MFE mounted successfully');
+      services.eventBus.emit(EVENTS.MFE_LOADED, {
+        name: 'react17',
+        version: '1.0.0',
+        reactVersion: React.version,
+      });
+    } catch (error) {
+      services.logger.error('Error during React 17 MFE mount', error);
+      throw error;
+    }
+  },
+  unmount: () => {
+    if (mountPoint) {
+      try {
+        // React 17 unmount
+        ReactDOM.unmountComponentAtNode(mountPoint);
+        
+        if (mountPoint.parentNode) {
+          mountPoint.parentNode.removeChild(mountPoint);
+        }
+        mountPoint = null;
+
+        console.log('React 17 MFE unmounted successfully');
+      } catch (error) {
+        console.error('Error during React 17 MFE unmount:', error);
+      }
+    }
+  },
+};
+
+export default React17MFE;
