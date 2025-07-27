@@ -1,5 +1,36 @@
 # MFE Monorepo Setup Instructions for Claude Code
 
+## 🔄 IMPORTANT: Development Workflow
+
+When working on any task in this codebase, ALWAYS follow this workflow:
+
+1. **📊 ANALYZE** - First understand the current state
+   - Read relevant files
+   - Search for related code
+   - Understand dependencies and impacts
+
+2. **📝 PLAN** - Present a clear plan before making changes
+   - List specific files to be modified
+   - Describe the changes to be made
+   - Identify potential impacts
+
+3. **⚡ ACTION** - Execute the planned changes
+   - Make the modifications
+   - Test if applicable
+   - Verify the changes work
+
+4. **✅ QUALITY CHECK** - Before review, always run:
+   - `pnpm format` - Format code with Prettier
+   - `pnpm lint` - Check code with ESLint
+   - `pnpm test` - Run tests if applicable
+   - `pnpm type-check` - Verify TypeScript types
+
+5. **⏸️ WAIT FOR REVIEW** - DO NOT commit or push
+   - Present the completed changes
+   - Show results of quality checks
+   - Wait for user review and approval
+   - Only commit/push when explicitly asked
+
 ## Project Overview
 This is a monorepo using pnpm workspaces for a microfrontend (MFE) architecture with a container app that dynamically loads MFEs. The container app shares React 19, Redux Toolkit, TailwindCSS, and ShadCN components with MFEs to reduce bundle sizes.
 
@@ -10,6 +41,8 @@ The monorepo has been successfully created with all requested features implement
 - **Package Manager**: pnpm with workspaces
 - **Build Tool**: Vite
 - **Testing**: Vitest
+- **Code Formatting**: Prettier
+- **Linting**: ESLint with TypeScript support
 - **Frontend**: React 19, TypeScript
 - **Styling**: TailwindCSS, ShadCN UI components
 - **State Management**: Redux Toolkit with React-Redux
@@ -173,6 +206,11 @@ Container app navigation includes:
 - ✅ `pnpm dev:mfe` - Start only example MFE
 - ✅ `pnpm build` - Build all packages
 - ✅ `pnpm type-check` - TypeScript checking
+- ✅ `pnpm format` - Format code with Prettier
+- ✅ `pnpm lint` - Run ESLint on all packages
+- ✅ `pnpm test` - Run tests with Vitest
+- ✅ `pnpm format:check` - Check formatting without fixing
+- ✅ `pnpm lint:fix` - Auto-fix ESLint issues
 
 ## ShadCN Integration ✅
 - ✅ Initialize ShadCN in container app
