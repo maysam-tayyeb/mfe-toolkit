@@ -228,7 +228,7 @@ export const App: React.FC<AppProps> = ({ services }) => {
       </div>
 
       {/* Service Cards */}
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid gap-6 lg:grid-cols-3">
         {/* Modal Service */}
         <div className="border rounded-lg p-6 space-y-4">
           <h2 className="text-xl font-semibold">Modal Service</h2>
@@ -240,7 +240,7 @@ export const App: React.FC<AppProps> = ({ services }) => {
               <button
                 key={example.title}
                 onClick={example.action}
-                className="px-3 py-1.5 bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/80 transition-colors text-sm text-left"
+                className="px-3 py-1.5 bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/80 transition-colors text-sm"
               >
                 {example.title}
               </button>
@@ -330,7 +330,7 @@ export const App: React.FC<AppProps> = ({ services }) => {
           <div className="flex flex-col gap-2">
             <button
               onClick={checkSession}
-              className="px-3 py-1.5 bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/80 transition-colors text-sm text-left"
+              className="px-3 py-1.5 bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/80 transition-colors text-sm"
             >
               View Session Details
             </button>
@@ -342,7 +342,7 @@ export const App: React.FC<AppProps> = ({ services }) => {
                   `Has "write" permission: ${hasPermission ? 'Yes' : 'No'}`
                 );
               }}
-              className="px-3 py-1.5 bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/80 transition-colors text-sm text-left"
+              className="px-3 py-1.5 bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/80 transition-colors text-sm"
             >
               Check Write Permission
             </button>
@@ -350,7 +350,7 @@ export const App: React.FC<AppProps> = ({ services }) => {
         </div>
 
         {/* Logger Service */}
-        <div className="border rounded-lg p-6 space-y-4 lg:col-span-2">
+        <div className="border rounded-lg p-6 space-y-4 lg:col-span-3">
           <h2 className="text-xl font-semibold">Logger Service</h2>
           <p className="text-sm text-muted-foreground">
             Log messages at different levels (check browser console)
@@ -408,44 +408,88 @@ export const App: React.FC<AppProps> = ({ services }) => {
       )}
 
       {/* MFE Info */}
-      <div className="bg-muted/50 rounded-lg p-6">
-        <h3 className="font-semibold mb-3">MFE Configuration</h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-          <div>
-            <span className="text-muted-foreground">Name:</span>
-            <p className="font-medium">Example MFE</p>
+      <div className="space-y-6">
+        {/* MFE Details */}
+        <div className="border rounded-lg p-6">
+          <h3 className="text-xl font-semibold mb-4">MFE Information</h3>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="space-y-1">
+              <p className="text-sm text-muted-foreground">Name</p>
+              <p className="font-medium">Example MFE</p>
+            </div>
+            <div className="space-y-1">
+              <p className="text-sm text-muted-foreground">Version</p>
+              <p className="font-medium">1.0.0</p>
+            </div>
+            <div className="space-y-1">
+              <p className="text-sm text-muted-foreground">Dev Port</p>
+              <p className="font-medium">3001</p>
+            </div>
+            <div className="space-y-1">
+              <p className="text-sm text-muted-foreground">Format</p>
+              <p className="font-medium">ESM Module</p>
+            </div>
           </div>
-          <div>
-            <span className="text-muted-foreground">Version:</span>
-            <p className="font-medium">1.0.0</p>
-          </div>
-          <div>
-            <span className="text-muted-foreground">Dev Port:</span>
-            <p className="font-medium">3001</p>
-          </div>
-          <div>
-            <span className="text-muted-foreground">Format:</span>
-            <p className="font-medium">ESM Module</p>
-          </div>
-          <div>
-            <span className="text-muted-foreground">React Version:</span>
-            <p className="font-medium">{React.version || '19.1.0'}</p>
-          </div>
-          <div>
-            <span className="text-muted-foreground">Redux Toolkit:</span>
-            <p className="font-medium">^2.0.1</p>
-          </div>
-          <div>
-            <span className="text-muted-foreground">Tailwind CSS:</span>
-            <p className="font-medium">^4.1.11</p>
-          </div>
-          <div>
-            <span className="text-muted-foreground">TypeScript:</span>
-            <p className="font-medium">^5.3.3</p>
-          </div>
-          <div>
-            <span className="text-muted-foreground">Import Map:</span>
-            <p className="font-medium">ESM CDN</p>
+        </div>
+
+        {/* Shared Dependencies */}
+        <div className="border rounded-lg p-6">
+          <h3 className="text-xl font-semibold mb-4">Shared Dependencies</h3>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
+                <span className="text-primary font-semibold">R</span>
+              </div>
+              <div>
+                <p className="font-medium">React</p>
+                <p className="text-sm text-muted-foreground">{React.version || '19.1.0'}</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
+                <span className="text-primary font-semibold">R</span>
+              </div>
+              <div>
+                <p className="font-medium">Redux Toolkit</p>
+                <p className="text-sm text-muted-foreground">^2.0.1</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
+                <span className="text-primary font-semibold">T</span>
+              </div>
+              <div>
+                <p className="font-medium">Tailwind CSS</p>
+                <p className="text-sm text-muted-foreground">^4.1.11</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
+                <span className="text-primary font-semibold">T</span>
+              </div>
+              <div>
+                <p className="font-medium">TypeScript</p>
+                <p className="text-sm text-muted-foreground">^5.3.3</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
+                <span className="text-primary font-semibold">R</span>
+              </div>
+              <div>
+                <p className="font-medium">React Redux</p>
+                <p className="text-sm text-muted-foreground">^9.1.0</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
+                <span className="text-primary font-semibold">E</span>
+              </div>
+              <div>
+                <p className="font-medium">Import Map</p>
+                <p className="text-sm text-muted-foreground">ESM CDN</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
