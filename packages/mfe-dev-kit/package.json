@@ -24,18 +24,18 @@
     "format:check": "prettier --check \"src/**/*.{ts,tsx,js,jsx,json}\""
   },
   "dependencies": {
-    "react": "^19.0.0-rc",
-    "react-dom": "^19.0.0-rc",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
     "react-router-dom": "^6.21.3"
   },
   "devDependencies": {
-    "@types/react": "^18.2.48",
-    "@types/react-dom": "^18.2.18",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
     "typescript": "^5.3.3"
   },
   "peerDependencies": {
-    "react": "^19.0.0-rc",
-    "react-dom": "^19.0.0-rc",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
     "react-router-dom": "^6.21.3"
   }
 }

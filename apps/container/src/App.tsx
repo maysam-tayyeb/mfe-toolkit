@@ -16,8 +16,8 @@ function App() {
     registry.register({
       name: 'example',
       version: '1.0.0',
-      // Development: Vite dev server (ES module)
-      url: 'http://localhost:3001/dist/mfe-example.js',
+      // Development: Static server serving dist folder (ES module)
+      url: 'http://localhost:3001/mfe-example.js',
       // Production examples:
       // url: 'https://cdn.example.com/mfes/example/1.0.0/mfe-example.js',
       // url: 'https://mfe-example.example.com/mfe-example.js',
