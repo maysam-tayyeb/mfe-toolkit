@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --port 3002",
-    "build": "tsc && esbuild src/main.tsx --bundle --format=esm --outfile=dist/react17-mfe.js --define:process.env.NODE_ENV='\"production\"' --define:global=globalThis",
+    "build": "tsc && node esbuild.config.js",
     "preview": "vite preview",
     "serve:static": "npx http-server dist -p 8081 --cors -c-1",
     "serve": "npx http-server dist -p 3002 --cors -c-1 -o",
