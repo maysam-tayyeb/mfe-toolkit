@@ -1,0 +1,28 @@
+{
+  "name": "@mfe/example-mfe",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --port 3001",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@mfe/dev-kit": "workspace:*",
+    "@mfe/shared": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.48",
+    "@types/react-dom": "^18.2.18",
+    "@vitejs/plugin-react": "^4.2.1",
+    "react": "^19.0.0-rc",
+    "react-dom": "^19.0.0-rc",
+    "typescript": "^5.3.3",
+    "vite": "^5.0.12"
+  },
+  "peerDependencies": {
+    "react": "^19.0.0-rc",
+    "react-dom": "^19.0.0-rc"
+  }
+}
