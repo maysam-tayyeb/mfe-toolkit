@@ -54,7 +54,7 @@ export const MFELoader: React.FC<MFELoaderProps> = ({
           return new Promise<MFEModule>((resolve, reject) => {
             let attempts = 0;
             const maxAttempts = 50; // 5 seconds
-            
+
             const interval = setInterval(() => {
               if (mfeWindow[name]) {
                 clearInterval(interval);
@@ -98,7 +98,7 @@ export const MFELoader: React.FC<MFELoaderProps> = ({
           console.error('Error unmounting MFE:', err);
         }
       }
-      
+
       // Remove script
       const script = document.querySelector(`script[data-mfe="${name}"]`);
       if (script) {

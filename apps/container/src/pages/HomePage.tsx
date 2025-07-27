@@ -10,9 +10,7 @@ export const HomePage: React.FC = () => {
   return (
     <div className="space-y-8">
       <div className="text-center space-y-4">
-        <h1 className="text-4xl font-bold tracking-tight">
-          Welcome to MFE Platform
-        </h1>
+        <h1 className="text-4xl font-bold tracking-tight">Welcome to MFE Platform</h1>
         <p className="text-xl text-muted-foreground">
           A modern microfrontend architecture with shared dependencies
         </p>
@@ -21,15 +19,9 @@ export const HomePage: React.FC = () => {
       {auth.session && (
         <div className="bg-muted rounded-lg p-6">
           <h2 className="text-lg font-semibold mb-2">Current User</h2>
-          <p className="text-sm text-muted-foreground">
-            Username: {auth.session.username}
-          </p>
-          <p className="text-sm text-muted-foreground">
-            Email: {auth.session.email}
-          </p>
-          <p className="text-sm text-muted-foreground">
-            Roles: {auth.session.roles.join(', ')}
-          </p>
+          <p className="text-sm text-muted-foreground">Username: {auth.session.username}</p>
+          <p className="text-sm text-muted-foreground">Email: {auth.session.email}</p>
+          <p className="text-sm text-muted-foreground">Roles: {auth.session.roles.join(', ')}</p>
         </div>
       )}
 

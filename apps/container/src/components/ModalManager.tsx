@@ -43,7 +43,7 @@ export const ModalManager: React.FC = () => {
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent 
+      <DialogContent
         className={sizeClasses[config.size || 'md']}
         onInteractOutside={(e) => {
           if (!config.closeOnOverlayClick) {
@@ -66,9 +66,7 @@ export const ModalManager: React.FC = () => {
             <Button variant="outline" onClick={handleClose}>
               Cancel
             </Button>
-            <Button onClick={handleConfirm}>
-              Confirm
-            </Button>
+            <Button onClick={handleConfirm}>Confirm</Button>
           </DialogFooter>
         )}
       </DialogContent>

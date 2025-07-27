@@ -12,7 +12,7 @@ export const NotificationManager: React.FC = () => {
   useEffect(() => {
     notifications.forEach((notification) => {
       const variant = notification.type === 'error' ? 'destructive' : 'default';
-      
+
       toast({
         id: notification.id,
         title: notification.title,

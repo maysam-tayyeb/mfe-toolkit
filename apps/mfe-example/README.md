@@ -19,6 +19,7 @@ pnpm build
 ```
 
 This creates a production-ready UMD bundle in the `dist/` directory:
+
 - `mfe-example.umd.js` - The main MFE bundle
 - `style.css` - Any extracted styles (if applicable)
 
@@ -29,17 +30,19 @@ This creates a production-ready UMD bundle in the `dist/` directory:
 In production, MFEs should be served as static files from a web server. Here are several deployment options:
 
 ### Option 1: Simple HTTP Server (for testing)
+
 ```bash
 # Serve the built files on port 8080
 pnpm serve:static
 ```
 
 ### Option 2: Nginx Configuration
+
 ```nginx
 server {
     listen 80;
     server_name mfe.example.com;
-    
+
     location / {
         root /var/www/mfe-example/dist;
         add_header Access-Control-Allow-Origin *;
@@ -49,13 +52,16 @@ server {
 ```
 
 ### Option 3: CDN Deployment
+
 Upload the contents of `dist/` to your CDN:
+
 - AWS S3 + CloudFront
 - Cloudflare Pages
 - Netlify
 - Vercel (static hosting)
 
 ### Option 4: Docker + Nginx
+
 ```dockerfile
 FROM nginx:alpine
 COPY dist/ /usr/share/nginx/html/

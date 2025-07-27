@@ -5,6 +5,7 @@ A complete microfrontend (MFE) architecture built with React 19, Redux Toolkit, 
 ## 🚀 Quick Start
 
 ### Prerequisites
+
 - Node.js >= 18
 - pnpm (will be installed automatically if not present)
 
@@ -25,28 +26,35 @@ pnpm -r build
 ## 🏃‍♂️ Running the Applications
 
 ### Option 1: Run Everything in Parallel (Recommended)
+
 ```bash
 pnpm dev
 ```
+
 This starts both the container app and MFE example simultaneously.
 
 ### Option 2: Run Individual Applications
 
 #### Step 1: Start the Container App
+
 ```bash
 pnpm dev:container
 ```
+
 - **URL**: http://localhost:3000
 - **Purpose**: Main shell application with navigation and MFE loading
 
 #### Step 2: Start the Example MFE
+
 ```bash
 pnpm dev:mfe
 ```
+
 - **URL**: http://localhost:3001
 - **Purpose**: Standalone MFE for development and UMD bundle serving
 
 #### Step 3: Build MFE for Dynamic Loading
+
 ```bash
 cd apps/mfe-example
 pnpm build
@@ -112,6 +120,7 @@ mfe-made-easy/
 ## 🔧 Development Workflow
 
 ### Building New MFEs
+
 1. Create new app in `apps/` directory
 2. Configure Vite for UMD build
 3. Implement MFE module interface
@@ -119,6 +128,7 @@ mfe-made-easy/
 5. Build and copy UMD to public directory
 
 ### Key Configuration Files
+
 - `pnpm-workspace.yaml` - Workspace setup
 - `tsconfig.base.json` - Shared TypeScript config
 - `vite.config.base.ts` - Shared Vite configuration
@@ -133,22 +143,25 @@ mfe-made-easy/
 ✅ **Shared Services**: Auth, Modal, Notification, Event Bus, Logger  
 ✅ **Development Mode**: Hot reload for both container and MFEs  
 ✅ **TypeScript**: Full type safety across the monorepo  
-✅ **Modern Tooling**: Vite, Tailwind CSS, ESLint support  
+✅ **Modern Tooling**: Vite, Tailwind CSS, ESLint support
 
 ## 🐛 Troubleshooting
 
 ### MFE Not Loading
+
 1. Ensure MFE is built: `cd apps/mfe-example && pnpm build`
 2. Copy UMD to public: `cp dist/mfe-example.umd.js public/`
 3. Check if UMD is accessible: http://localhost:3001/mfe-example.umd.js
 4. Verify both container and MFE servers are running
 
 ### Build Errors
+
 1. Build packages first: `pnpm -r build`
 2. Clear node_modules: `rm -rf node_modules && pnpm install`
 3. Check TypeScript errors: `pnpm type-check`
 
 ### Port Conflicts
+
 - Container app uses port 3000
 - Example MFE uses port 3001
 - Modify ports in respective `vite.config.ts` files if needed

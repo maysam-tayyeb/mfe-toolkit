@@ -29,7 +29,7 @@ export const App: React.FC<AppProps> = ({ services }) => {
 
   const handleTestNotifications = () => {
     services.notification.info('MFE Notification', 'This is from the Example MFE');
-    
+
     setTimeout(() => {
       services.notification.success('Success!', 'MFE loaded successfully');
     }, 1000);
@@ -89,9 +89,7 @@ export const App: React.FC<AppProps> = ({ services }) => {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         <div className="border rounded-lg p-4">
           <h3 className="font-semibold mb-2">Modal Service</h3>
-          <p className="text-sm text-gray-600 mb-3">
-            Trigger modals in the container app
-          </p>
+          <p className="text-sm text-gray-600 mb-3">Trigger modals in the container app</p>
           <button
             onClick={handleTestModal}
             className="w-full px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
@@ -102,9 +100,7 @@ export const App: React.FC<AppProps> = ({ services }) => {
 
         <div className="border rounded-lg p-4">
           <h3 className="font-semibold mb-2">Notification Service</h3>
-          <p className="text-sm text-gray-600 mb-3">
-            Show notifications in the container
-          </p>
+          <p className="text-sm text-gray-600 mb-3">Show notifications in the container</p>
           <button
             onClick={handleTestNotifications}
             className="w-full px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
@@ -115,9 +111,7 @@ export const App: React.FC<AppProps> = ({ services }) => {
 
         <div className="border rounded-lg p-4">
           <h3 className="font-semibold mb-2">Event Bus</h3>
-          <p className="text-sm text-gray-600 mb-3">
-            Send events to other components
-          </p>
+          <p className="text-sm text-gray-600 mb-3">Send events to other components</p>
           <button
             onClick={handleTestEventBus}
             className="w-full px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600 transition-colors"
@@ -128,9 +122,7 @@ export const App: React.FC<AppProps> = ({ services }) => {
 
         <div className="border rounded-lg p-4">
           <h3 className="font-semibold mb-2">Auth Service</h3>
-          <p className="text-sm text-gray-600 mb-3">
-            Check authentication status
-          </p>
+          <p className="text-sm text-gray-600 mb-3">Check authentication status</p>
           <button
             onClick={handleTestAuth}
             className="w-full px-4 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600 transition-colors"
@@ -141,9 +133,7 @@ export const App: React.FC<AppProps> = ({ services }) => {
 
         <div className="border rounded-lg p-4">
           <h3 className="font-semibold mb-2">Logger Service</h3>
-          <p className="text-sm text-gray-600 mb-3">
-            Log messages to console
-          </p>
+          <p className="text-sm text-gray-600 mb-3">Log messages to console</p>
           <button
             onClick={handleTestLogger}
             className="w-full px-4 py-2 bg-orange-500 text-white rounded hover:bg-orange-600 transition-colors"

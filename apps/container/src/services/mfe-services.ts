@@ -1,7 +1,6 @@
 import {
   MFEServices,
   AuthService,
-  EventBus,
   ModalService,
   NotificationService,
   createLogger,

@@ -11,7 +11,7 @@ import { createMFEServices } from '@/services/mfe-services';
 function App() {
   const mfeRegistry = useMemo(() => {
     const registry = createMFERegistry();
-    
+
     // Register example MFE
     registry.register({
       name: 'example',

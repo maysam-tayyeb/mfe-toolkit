@@ -13,7 +13,7 @@ export class EventBusImpl implements EventBus {
 
     const handlers = this.events.get(event);
     if (handlers) {
-      handlers.forEach(handler => {
+      handlers.forEach((handler) => {
         try {
           handler(payload);
         } catch (error) {
@@ -27,7 +27,7 @@ export class EventBusImpl implements EventBus {
     if (!this.events.has(event)) {
       this.events.set(event, new Set());
     }
-    
+
     this.events.get(event)!.add(handler);
 
     return () => this.off(event, handler);

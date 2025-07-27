@@ -8,49 +8,61 @@ export const DashboardPage: React.FC = () => {
   const dispatch = useDispatch();
 
   const handleTestModal = () => {
-    dispatch(openModal({
-      title: 'Test Modal',
-      content: 'This is a test modal from the Dashboard page.',
-      size: 'md',
-      onConfirm: () => {
-        dispatch(addNotification({
-          type: 'success',
-          title: 'Action Confirmed',
-          message: 'You clicked confirm on the modal.',
-        }));
-      },
-    }));
+    dispatch(
+      openModal({
+        title: 'Test Modal',
+        content: 'This is a test modal from the Dashboard page.',
+        size: 'md',
+        onConfirm: () => {
+          dispatch(
+            addNotification({
+              type: 'success',
+              title: 'Action Confirmed',
+              message: 'You clicked confirm on the modal.',
+            })
+          );
+        },
+      })
+    );
   };
 
   const handleTestNotifications = () => {
-    dispatch(addNotification({
-      type: 'info',
-      title: 'Info Notification',
-      message: 'This is an informational message.',
-    }));
+    dispatch(
+      addNotification({
+        type: 'info',
+        title: 'Info Notification',
+        message: 'This is an informational message.',
+      })
+    );
 
     setTimeout(() => {
-      dispatch(addNotification({
-        type: 'success',
-        title: 'Success!',
-        message: 'Operation completed successfully.',
-      }));
+      dispatch(
+        addNotification({
+          type: 'success',
+          title: 'Success!',
+          message: 'Operation completed successfully.',
+        })
+      );
     }, 1000);
 
     setTimeout(() => {
-      dispatch(addNotification({
-        type: 'warning',
-        title: 'Warning',
-        message: 'Please review your settings.',
-      }));
+      dispatch(
+        addNotification({
+          type: 'warning',
+          title: 'Warning',
+          message: 'Please review your settings.',
+        })
+      );
     }, 2000);
 
     setTimeout(() => {
-      dispatch(addNotification({
-        type: 'error',
-        title: 'Error',
-        message: 'An error occurred during processing.',
-      }));
+      dispatch(
+        addNotification({
+          type: 'error',
+          title: 'Error',
+          message: 'An error occurred during processing.',
+        })
+      );
     }, 3000);
   };
 
@@ -69,9 +81,7 @@ export const DashboardPage: React.FC = () => {
           <p className="text-sm text-muted-foreground">
             Test the modal service that MFEs can use to display dialogs.
           </p>
-          <Button onClick={handleTestModal}>
-            Open Test Modal
-          </Button>
+          <Button onClick={handleTestModal}>Open Test Modal</Button>
         </div>
 
         <div className="border rounded-lg p-6 space-y-4">

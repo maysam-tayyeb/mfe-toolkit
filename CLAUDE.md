@@ -32,12 +32,15 @@ When working on any task in this codebase, ALWAYS follow this workflow:
    - Only commit/push when explicitly asked
 
 ## Project Overview
+
 This is a monorepo using pnpm workspaces for a microfrontend (MFE) architecture with a container app that dynamically loads MFEs. The container app shares React 19, Redux Toolkit, TailwindCSS, and ShadCN components with MFEs to reduce bundle sizes.
 
 ## ✅ Implementation Status
+
 The monorepo has been successfully created with all requested features implemented and working.
 
 ## Technology Stack
+
 - **Package Manager**: pnpm with workspaces
 - **Build Tool**: Vite
 - **Testing**: Vitest
@@ -52,10 +55,12 @@ The monorepo has been successfully created with all requested features implement
 ## Quick Start Guide
 
 ### Prerequisites
+
 - Node.js >= 18
 - pnpm >= 8 (will be installed automatically if not present)
 
 ### Installation & Development
+
 ```bash
 # Install dependencies
 pnpm install
@@ -72,13 +77,16 @@ pnpm dev:mfe        # Example MFE on http://localhost:3001 (Vite dev server)
 ```
 
 ### Testing the MFE Integration
+
 1. Start both apps with `pnpm dev`
 2. Navigate to http://localhost:3000
 3. Click on "Example MFE" in the navigation or go to http://localhost:3000/mfe/example
 4. The example MFE will be dynamically loaded and you can test all the services
 
 ### Production Deployment
+
 **Important**: In production, MFEs should be:
+
 1. Built using `pnpm build` to create UMD bundles
 2. Served from a separate web server (e.g., nginx, Apache, CDN)
 3. NOT served via Vite dev server
@@ -88,6 +96,7 @@ The Vite dev server (port 3001) is only for development. In production, update t
 ## Project Structure
 
 ### Root Level ✅
+
 - ✅ pnpm workspace configuration (`pnpm-workspace.yaml`)
 - ✅ Shared Vite, TailwindCSS, and TypeScript configs
 - ✅ Monorepo package.json with scripts for parallel development
@@ -96,6 +105,7 @@ The Vite dev server (port 3001) is only for development. In production, update t
 ### Apps Directory ✅
 
 #### Container App (`apps/container/`) ✅
+
 - **Purpose**: Main shell application with navigation and MFE loading
 - **Port**: 3000
 - **Features**:
@@ -108,6 +118,7 @@ The Vite dev server (port 3001) is only for development. In production, update t
   - ✅ Global exposure of React, ReactDOM, and Redux store
 
 #### Example MFE (`apps/mfe-example/`) ✅
+
 - **Purpose**: Demonstration microfrontend
 - **Port**: 3001 (development only via Vite)
 - **Features**:
@@ -122,7 +133,9 @@ The Vite dev server (port 3001) is only for development. In production, update t
 ### Packages Directory ✅
 
 #### MFE Development Kit (`packages/mfe-dev-kit/`) ✅
+
 **Services provided**:
+
 - ✅ **Logger**: Console logging with different levels and prefixes
 - ✅ **Auth Service**: Provides current user session and authentication state
 - ✅ **Event Bus**: Publish/subscribe system for inter-MFE communication
@@ -130,11 +143,13 @@ The Vite dev server (port 3001) is only for development. In production, update t
 - ✅ **Notification Service**: Function to show notifications in container app
 
 **Components provided**:
+
 - ✅ **MFELoader**: React component that dynamically loads MFE scripts
 - ✅ **MFERegistry**: Service to manage MFE manifests and loading
 - ✅ **MFEPage**: Route component that loads MFEs based on URL parameters
 
 **Types defined**:
+
 - ✅ MFE manifest structure (name, version, URL, dependencies, shared libs)
 - ✅ MFE registry format
 - ✅ Auth session interface
@@ -143,6 +158,7 @@ The Vite dev server (port 3001) is only for development. In production, update t
 - ✅ Complete TypeScript definitions for all services
 
 #### Shared Package (`packages/shared/`) ✅
+
 - ✅ Common utilities and components used across apps
 - ✅ TypeScript utility types
 - ✅ Shared constants and configurations
@@ -151,21 +167,25 @@ The Vite dev server (port 3001) is only for development. In production, update t
 ## Key Configuration Status ✅
 
 ### Dependency Sharing ✅
+
 - ✅ Container app exposes React, ReactDOM, Redux store globally
 - ✅ MFEs configured to use external dependencies instead of bundling them
 - ✅ Peer dependencies properly configured to avoid version conflicts
 
 ### Build Configuration ✅
+
 - ✅ Container builds as standard SPA
 - ✅ MFEs build as UMD modules with external dependencies
 - ✅ Proper externalization of shared libraries in Vite configs
 
 ### Development Workflow ✅
+
 - ✅ Parallel development scripts to run all apps simultaneously
 - ✅ Individual development scripts for focused development
 - ✅ Hot reload support for both container and MFEs
 
 ### TypeScript Configuration ✅
+
 - ✅ Shared base TypeScript config (`tsconfig.base.json`)
 - ✅ Path mapping for workspace packages
 - ✅ Proper module resolution for monorepo structure
@@ -173,12 +193,15 @@ The Vite dev server (port 3001) is only for development. In production, update t
 ## Implementation Details ✅
 
 ### Navigation Structure ✅
+
 Container app navigation includes:
+
 - ✅ Home page (standard React component)
-- ✅ Dashboard page (standard React component)  
+- ✅ Dashboard page (standard React component)
 - ✅ MFE routes (dynamic loading via `/mfe/:mfeName` pattern)
 
 ### MFE Loading Mechanism ✅
+
 1. ✅ MFE registry contains manifest information for each MFE
 2. ✅ Container dynamically creates script tags to load MFE bundles
 3. ✅ MFEs expose themselves on global window object with predictable naming
@@ -186,21 +209,25 @@ Container app navigation includes:
 5. ✅ Error handling for failed MFE loads with user-friendly fallbacks
 
 ### Service Integration ✅
+
 - ✅ All MFEs receive the same services object containing logger, auth, event bus, modal trigger, and notification trigger
 - ✅ Services are injected via global window object when MFE loads
-- ✅ Redux store shared and accessible via window.__REDUX_STORE__
+- ✅ Redux store shared and accessible via window.**REDUX_STORE**
 
 ### Event Communication ✅
+
 - ✅ Event bus allows MFEs to communicate with each other and container
 - ✅ Events include type, payload data, timestamp, and source identification
 - ✅ Container can listen to MFE events and vice versa
 
 ### Modal and Notification System ✅
+
 - ✅ Container owns modal and notification rendering
 - ✅ MFEs trigger modals/notifications via service functions
 - ✅ Support for different modal sizes and notification types
 
 ## Development Scripts ✅
+
 - ✅ `pnpm dev` - Start all apps in parallel
 - ✅ `pnpm dev:container` - Start only container app
 - ✅ `pnpm dev:mfe` - Start only example MFE
@@ -213,13 +240,16 @@ Container app navigation includes:
 - ✅ `pnpm lint:fix` - Auto-fix ESLint issues
 
 ## ShadCN Integration ✅
+
 - ✅ Initialize ShadCN in container app
 - ✅ Add button, dialog, and toast components
 - ✅ Configure proper Tailwind content paths for monorepo
 - ✅ Ensure ShadCN components are shared but not bundled in MFEs
 
 ## Working Demonstration ✅
+
 The implementation provides a complete working demonstration where:
+
 1. ✅ Container app runs on port 3000 with navigation
 2. ✅ Example MFE runs on port 3001 (dev mode only) and builds as UMD
 3. ✅ Navigation in container can route to MFE and load it dynamically
@@ -228,13 +258,16 @@ The implementation provides a complete working demonstration where:
 6. ✅ Development workflow allows simultaneous development of container and MFEs
 
 ## Production Deployment Architecture
+
 In production:
+
 - Container app is deployed as a standard SPA
 - MFEs are built as static UMD bundles and deployed to web servers/CDNs
 - MFE registry URLs point to production web server locations (not Vite ports)
 - No Vite dev servers are used in production
 
 ## Current File Structure
+
 ```
 mfe-made-easy/
 ├── pnpm-workspace.yaml

@@ -1,0 +1,31 @@
+# Dependencies
+node_modules
+pnpm-lock.yaml
+
+# Build outputs
+dist
+build
+.next
+out
+
+# Testing
+coverage
+.nyc_output
+
+# Cache
+.cache
+.turbo
+.parcel-cache
+
+# Misc
+.DS_Store
+*.log
+.env*
+
+# IDE
+.vscode
+.idea
+
+# Generated files
+*.generated.*
+components.json
