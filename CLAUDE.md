@@ -212,6 +212,7 @@ The Vite dev server (port 3001) is only for development. In production, update t
 ### Testing Configuration 🧪
 
 #### Unit & Integration Testing
+
 - **Framework**: Vitest with React Testing Library
 - **Config**: Shared `vitest.config.base.ts` at root level
 - **Coverage Requirements**: Minimum 80% for all packages
@@ -221,6 +222,7 @@ The Vite dev server (port 3001) is only for development. In production, update t
   - Test utilities: `__tests__/utils/` directories
 
 #### E2E Testing
+
 - **Framework**: Playwright
 - **Config**: `playwright.config.ts` at root level
 - **Test Location**: `e2e/` directory at root
@@ -231,6 +233,7 @@ The Vite dev server (port 3001) is only for development. In production, update t
   - Test fixtures: `e2e/fixtures/`
 
 #### Testing Best Practices
+
 - **TDD Approach**: Write tests before implementation
 - **Test Isolation**: Each test should be independent
 - **Mock External Dependencies**: Use MSW for API mocking
@@ -277,12 +280,14 @@ Container app navigation includes:
 ## Development Scripts ✅
 
 ### Development
+
 - ✅ `pnpm dev` - Start all apps in parallel
 - ✅ `pnpm dev:container` - Start only container app
 - ✅ `pnpm dev:mfe` - Start only example MFE
 - ✅ `pnpm build` - Build all packages
 
 ### Testing (TDD Workflow)
+
 - ✅ `pnpm test` - Run all unit and integration tests
 - ✅ `pnpm test:watch` - Run tests in watch mode (for TDD)
 - ✅ `pnpm test:coverage` - Run tests with coverage report
@@ -293,6 +298,7 @@ Container app navigation includes:
 - ✅ `pnpm e2e:report` - Open Playwright test report
 
 ### Code Quality
+
 - ✅ `pnpm type-check` - TypeScript checking
 - ✅ `pnpm format` - Format code with Prettier
 - ✅ `pnpm format:check` - Check formatting without fixing
@@ -300,6 +306,7 @@ Container app navigation includes:
 - ✅ `pnpm lint:fix` - Auto-fix ESLint issues
 
 ### Combined Commands
+
 - ✅ `pnpm validate` - Run all checks (format, lint, type-check, test)
 - ✅ `pnpm precommit` - Run validation before committing
 
@@ -386,6 +393,7 @@ When modifying any code in this monorepo, you MUST:
    - Coverage reports must be reviewed before merge
 
 3. **Test File Structure**
+
    ```
    src/
    ├── components/
