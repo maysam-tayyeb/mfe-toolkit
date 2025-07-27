@@ -77,7 +77,7 @@ export const App: React.FC<AppProps> = ({ services }) => {
       action: () => {
         services.modal.open({
           title: 'React 17 Simple Modal',
-          content: <p>This modal is triggered from a React 17 MFE!</p>,
+          content: 'This modal is triggered from a React 17 MFE!',
           size: 'sm',
         });
       },
@@ -87,18 +87,11 @@ export const App: React.FC<AppProps> = ({ services }) => {
       action: () => {
         services.modal.open({
           title: 'React 17 Class Components',
-          content: (
-            <div className="space-y-4">
-              <p>This MFE demonstrates React 17 features:</p>
-              <ul className="list-disc list-inside space-y-1 text-sm">
-                <li>Class components with lifecycle methods</li>
-                <li>Legacy componentDidMount/componentWillUnmount</li>
-                <li>ReactDOM.render instead of createRoot</li>
-                <li>Compatible with React 19 container</li>
-              </ul>
-              <Counter onIncrement={() => services.logger.debug('Counter incremented in modal')} />
-            </div>
-          ),
+          content: `This MFE demonstrates React 17 features:
+• Class components with lifecycle methods
+• Legacy componentDidMount/componentWillUnmount
+• ReactDOM.render instead of createRoot
+• Compatible with React 19 container`,
           size: 'md',
         });
       },
@@ -110,31 +103,11 @@ export const App: React.FC<AppProps> = ({ services }) => {
         if (session) {
           services.modal.open({
             title: 'User Information',
-            content: (
-              <div className="space-y-3">
-                <div className="grid grid-cols-2 gap-2 text-sm">
-                  <span className="font-medium">Username:</span>
-                  <span>{session.username}</span>
-                  <span className="font-medium">Email:</span>
-                  <span>{session.email}</span>
-                  <span className="font-medium">React Version:</span>
-                  <span>{React.version}</span>
-                </div>
-                <div className="pt-2 border-t">
-                  <p className="text-sm font-medium mb-1">Roles:</p>
-                  <div className="flex gap-2">
-                    {session.roles.map((role) => (
-                      <span
-                        key={role}
-                        className="px-2 py-1 bg-primary/10 text-primary rounded-md text-xs"
-                      >
-                        {role}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            ),
+            content: `Username: ${session.username}
+Email: ${session.email}
+React Version: ${React.version}
+Roles: ${session.roles.join(', ')}
+Permissions: ${session.permissions.join(', ')}`,
             size: 'md',
           });
         } else {

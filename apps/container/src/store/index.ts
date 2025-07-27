@@ -9,6 +9,17 @@ export const store = configureStore({
     modal: modalReducer,
     notification: notificationReducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        // Ignore these action types
+        ignoredActions: ['modal/openModal'],
+        // Ignore these field paths in all actions
+        ignoredActionPaths: ['payload.content', 'payload.onConfirm', 'payload.onClose'],
+        // Ignore these paths in the state
+        ignoredPaths: ['modal.config.content', 'modal.config.onConfirm', 'modal.config.onClose'],
+      },
+    }),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

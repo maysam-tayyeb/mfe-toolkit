@@ -107,7 +107,7 @@ describe('React 17 MFE App', () => {
 
       expect(mockServices.modal.open).toHaveBeenCalledWith({
         title: 'User Information',
-        content: expect.any(Object),
+        content: expect.any(String),
         size: 'md',
       });
     });

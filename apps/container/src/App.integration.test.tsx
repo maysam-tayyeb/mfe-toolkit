@@ -8,7 +8,7 @@ import App from './App';
 import authReducer from './store/authSlice';
 import modalReducer from './store/modalSlice';
 import notificationReducer from './store/notificationSlice';
-import { EVENTS } from '@mfe/shared';
+// import { EVENTS } from '@mfe/shared';
 
 // Mock the MFE loader component
 vi.mock('@mfe/dev-kit', () => ({
