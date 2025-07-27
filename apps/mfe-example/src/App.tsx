@@ -228,7 +228,7 @@ export const App: React.FC<AppProps> = ({ services }) => {
       </div>
 
       {/* Service Cards */}
-      <div className="grid gap-6 lg:grid-cols-3">
+      <div className="grid gap-6 md:grid-cols-2">
         {/* Modal Service */}
         <div className="border rounded-lg p-6 space-y-4">
           <h2 className="text-xl font-semibold">Modal Service</h2>
@@ -240,7 +240,7 @@ export const App: React.FC<AppProps> = ({ services }) => {
               <button
                 key={example.title}
                 onClick={example.action}
-                className="px-3 py-1.5 bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/80 transition-colors text-sm"
+                className="inline-flex items-center justify-center h-9 px-3 bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/80 transition-colors text-sm font-medium"
               >
                 {example.title}
               </button>
@@ -264,14 +264,69 @@ export const App: React.FC<AppProps> = ({ services }) => {
                     `This is a ${type} message from the MFE`
                   )
                 }
-                className="px-3 py-1.5 bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/80 transition-colors text-sm capitalize"
+                className="inline-flex items-center justify-center h-9 px-3 bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/80 transition-colors text-sm font-medium capitalize"
               >
                 {type}
               </button>
             ))}
           </div>
         </div>
+        {/* Auth Service */}
+        <div className="border rounded-lg p-6 space-y-4">
+          <h2 className="text-xl font-semibold">Auth Service</h2>
+          <p className="text-sm text-muted-foreground">
+            Access authentication state and user information
+          </p>
+          <div className="grid grid-cols-2 gap-2">
+            <button
+                onClick={checkSession}
+                className="inline-flex items-center justify-center h-9 px-3 bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/80 transition-colors text-sm font-medium"
+            >
+              View Session Details
+            </button>
+            <button
+                onClick={() => {
+                  const hasPermission = services.auth.hasPermission('write');
+                  services.notification.info(
+                      'Permission Check',
+                      `Has "write" permission: ${hasPermission ? 'Yes' : 'No'}`
+                  );
+                }}
+                className="inline-flex items-center justify-center h-9 px-3 bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/80 transition-colors text-sm font-medium"
+            >
+              Check Write Permission
+            </button>
+          </div>
+        </div>
 
+        {/* Logger Service */}
+        <div className="border rounded-lg p-6 space-y-4 md:col-span-2">
+          <h2 className="text-xl font-semibold">Logger Service</h2>
+          <p className="text-sm text-muted-foreground">
+            Log messages at different levels (check browser console)
+          </p>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+            {loggerLevels.map(({ level }) => (
+                <button
+                    key={level}
+                    onClick={() => {
+                      services.logger[level as keyof typeof services.logger](
+                          `Test ${level} message from MFE at ${new Date().toLocaleTimeString()}`
+                      );
+                      services.notification.info('Logged', `Check console for ${level} message`);
+                    }}
+                    className="inline-flex items-center justify-center h-9 px-3 border border-input bg-background hover:bg-accent hover:text-accent-foreground rounded-md transition-colors text-sm font-medium capitalize"
+                >
+                  {level}
+                </button>
+            ))}
+          </div>
+        </div>
+
+      </div>
+
+      {/* Event Bus and Event Log Side by Side */}
+      <div className="grid gap-6 md:grid-cols-2">
         {/* Event Bus */}
         <div className="border rounded-lg p-6 space-y-4">
           <h2 className="text-xl font-semibold">Event Bus</h2>
@@ -289,7 +344,7 @@ export const App: React.FC<AppProps> = ({ services }) => {
               />
               <button
                 onClick={() => setIsListening(!isListening)}
-                className={`px-3 py-1.5 rounded-md text-sm transition-colors ${
+                className={`inline-flex items-center justify-center h-9 px-3 rounded-md text-sm font-medium transition-colors ${
                   isListening
                     ? 'bg-primary text-primary-foreground hover:bg-primary/90'
                     : 'bg-muted text-muted-foreground hover:bg-muted/80'
@@ -307,13 +362,13 @@ export const App: React.FC<AppProps> = ({ services }) => {
             <div className="flex gap-2">
               <button
                 onClick={sendCustomEvent}
-                className="px-3 py-1.5 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors text-sm"
+                className="inline-flex items-center justify-center h-9 px-3 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors text-sm font-medium"
               >
                 Send Event
               </button>
               <button
                 onClick={clearEventLog}
-                className="px-3 py-1.5 bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/80 transition-colors text-sm"
+                className="inline-flex items-center justify-center h-9 px-3 bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/80 transition-colors text-sm font-medium"
               >
                 Clear Log
               </button>
@@ -321,65 +376,16 @@ export const App: React.FC<AppProps> = ({ services }) => {
           </div>
         </div>
 
-        {/* Auth Service */}
-        <div className="border rounded-lg p-6 space-y-4">
-          <h2 className="text-xl font-semibold">Auth Service</h2>
-          <p className="text-sm text-muted-foreground">
-            Access authentication state and user information
-          </p>
-          <div className="flex flex-col gap-2">
-            <button
-              onClick={checkSession}
-              className="px-3 py-1.5 bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/80 transition-colors text-sm"
-            >
-              View Session Details
-            </button>
-            <button
-              onClick={() => {
-                const hasPermission = services.auth.hasPermission('write');
-                services.notification.info(
-                  'Permission Check',
-                  `Has "write" permission: ${hasPermission ? 'Yes' : 'No'}`
-                );
-              }}
-              className="px-3 py-1.5 bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/80 transition-colors text-sm"
-            >
-              Check Write Permission
-            </button>
-          </div>
-        </div>
-
-        {/* Logger Service */}
-        <div className="border rounded-lg p-6 space-y-4 lg:col-span-3">
-          <h2 className="text-xl font-semibold">Logger Service</h2>
-          <p className="text-sm text-muted-foreground">
-            Log messages at different levels (check browser console)
-          </p>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-            {loggerLevels.map(({ level }) => (
-              <button
-                key={level}
-                onClick={() => {
-                  services.logger[level as keyof typeof services.logger](
-                    `Test ${level} message from MFE at ${new Date().toLocaleTimeString()}`
-                  );
-                  services.notification.info('Logged', `Check console for ${level} message`);
-                }}
-                className="px-3 py-1.5 border border-input bg-background hover:bg-accent hover:text-accent-foreground rounded-md transition-colors text-sm capitalize"
-              >
-                {level}
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Event Log */}
-      {eventLog.length > 0 && (
+        {/* Event Log */}
         <div className="border rounded-lg p-6 space-y-4">
           <h2 className="text-xl font-semibold">Event Log</h2>
           <div className="space-y-2 max-h-60 overflow-y-auto">
-            {eventLog.map((entry) => (
+            {eventLog.length === 0 ? (
+              <p className="text-sm text-muted-foreground text-center py-8">
+                No events logged yet. Send an event to see it here.
+              </p>
+            ) : (
+              eventLog.map((entry) => (
               <div key={entry.id} className="p-3 bg-muted rounded-md text-sm">
                 <div className="flex justify-between items-start">
                   <div className="space-y-1">
@@ -402,94 +408,70 @@ export const App: React.FC<AppProps> = ({ services }) => {
                   </span>
                 </div>
               </div>
-            ))}
+            ))
+            )}
           </div>
         </div>
-      )}
+      </div>
 
-      {/* MFE Info */}
-      <div className="space-y-6">
-        {/* MFE Details */}
-        <div className="border rounded-lg p-6">
-          <h3 className="text-xl font-semibold mb-4">MFE Information</h3>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="space-y-1">
-              <p className="text-sm text-muted-foreground">Name</p>
-              <p className="font-medium">Example MFE</p>
-            </div>
-            <div className="space-y-1">
-              <p className="text-sm text-muted-foreground">Version</p>
-              <p className="font-medium">1.0.0</p>
-            </div>
-            <div className="space-y-1">
-              <p className="text-sm text-muted-foreground">Dev Port</p>
-              <p className="font-medium">3001</p>
-            </div>
-            <div className="space-y-1">
-              <p className="text-sm text-muted-foreground">Format</p>
-              <p className="font-medium">ESM Module</p>
-            </div>
+      {/* MFE Configuration */}
+      <div className="bg-muted/50 rounded-lg p-6">
+        <h3 className="font-semibold mb-3">MFE Configuration</h3>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+          <div>
+            <span className="text-muted-foreground">Name:</span>
+            <p className="font-medium">Example MFE</p>
+          </div>
+          <div>
+            <span className="text-muted-foreground">Version:</span>
+            <p className="font-medium">1.0.0</p>
+          </div>
+          <div>
+            <span className="text-muted-foreground">Dev Port:</span>
+            <p className="font-medium">3001</p>
+          </div>
+          <div>
+            <span className="text-muted-foreground">Format:</span>
+            <p className="font-medium">ESM Module</p>
+          </div>
+          <div>
+            <span className="text-muted-foreground">Bundle Size:</span>
+            <p className="font-medium">~8.5KB</p>
+          </div>
+          <div>
+            <span className="text-muted-foreground">Load Time:</span>
+            <p className="font-medium">&lt; 100ms</p>
           </div>
         </div>
+      </div>
 
-        {/* Shared Dependencies */}
-        <div className="border rounded-lg p-6">
-          <h3 className="text-xl font-semibold mb-4">Shared Dependencies</h3>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
-                <span className="text-primary font-semibold">R</span>
-              </div>
-              <div>
-                <p className="font-medium">React</p>
-                <p className="text-sm text-muted-foreground">{React.version || '19.1.0'}</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
-                <span className="text-primary font-semibold">R</span>
-              </div>
-              <div>
-                <p className="font-medium">Redux Toolkit</p>
-                <p className="text-sm text-muted-foreground">^2.0.1</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
-                <span className="text-primary font-semibold">T</span>
-              </div>
-              <div>
-                <p className="font-medium">Tailwind CSS</p>
-                <p className="text-sm text-muted-foreground">^4.1.11</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
-                <span className="text-primary font-semibold">T</span>
-              </div>
-              <div>
-                <p className="font-medium">TypeScript</p>
-                <p className="text-sm text-muted-foreground">^5.3.3</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
-                <span className="text-primary font-semibold">R</span>
-              </div>
-              <div>
-                <p className="font-medium">React Redux</p>
-                <p className="text-sm text-muted-foreground">^9.1.0</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
-                <span className="text-primary font-semibold">E</span>
-              </div>
-              <div>
-                <p className="font-medium">Import Map</p>
-                <p className="text-sm text-muted-foreground">ESM CDN</p>
-              </div>
-            </div>
+      {/* Shared Dependencies */}
+      <div className="bg-muted/50 rounded-lg p-6 mt-6">
+        <h3 className="font-semibold mb-3">Shared Dependencies</h3>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+          <div>
+            <span className="text-muted-foreground">React:</span>
+            <p className="font-medium">{React.version || '19.1.0'}</p>
+          </div>
+          <div>
+            <span className="text-muted-foreground">Redux Toolkit:</span>
+            <p className="font-medium">^2.0.1</p>
+          </div>
+          <div>
+            <span className="text-muted-foreground">Tailwind CSS:</span>
+            <p className="font-medium">^4.1.11</p>
+          </div>
+          <div>
+            <span className="text-muted-foreground">TypeScript:</span>
+            <p className="font-medium">^5.3.3</p>
+          </div>
+          <div>
+            <span className="text-muted-foreground">React Redux:</span>
+            <p className="font-medium">^9.1.0</p>
+          </div>
+          <div>
+            <span className="text-muted-foreground">Import Map:</span>
+            <p className="font-medium">ESM CDN</p>
           </div>
         </div>
       </div>
