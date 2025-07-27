@@ -4,7 +4,8 @@ import { App } from './App';
 import { MFEModule, MFEServices, getMFEServices } from '@mfe/dev-kit';
 
 // Development mode - render directly
-if (import.meta.env.DEV) {
+const isDev = typeof process !== 'undefined' && process.env.NODE_ENV === 'development';
+if (isDev || (typeof window !== 'undefined' && window.location.port === '3001')) {
   const mockServices = getMFEServices() || {
     logger: console,
     auth: {
