@@ -344,12 +344,12 @@ The MFE system now uses modern web standards:
 
 - MFEs built as ES modules (`mfe-example.js` instead of `mfe-example.umd.js`)
 - Container uses `import()` for dynamic loading instead of script tags
-- Better tree-shaking and smaller bundle sizes (8.51KB vs 513KB)
+- Better tree-shaking and smaller bundle sizes (23.7KB vs 576KB with import map)
 - Native browser support, no complex UMD wrapper required
 
 ### ES Module Benefits ✅
 
-- **Smaller bundles**: Only 8.51KB vs 513KB UMD (98% reduction)
+- **Smaller bundles**: Only 23.7KB vs 576KB UMD (96% reduction with import map)
 - **Native browser support**: No polyfills or shims needed
 - **Better tree shaking**: Unused code automatically removed
 - **Type safety**: Full TypeScript support for imports
