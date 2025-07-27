@@ -2,7 +2,7 @@
 
 ## 🔄 IMPORTANT: Test-Driven Development Workflow
 
-When working on any task in this codebase, ALWAYS follow this TDD workflow:
+When working on any task in this codebase, ALWAYS follow this workflow:
 
 1. **📊 ANALYZE** - First understand the current state
    - Read relevant files and existing tests
@@ -10,7 +10,7 @@ When working on any task in this codebase, ALWAYS follow this TDD workflow:
    - Understand dependencies and impacts
    - Review test coverage reports
 
-2. **🧪 WRITE TESTS FIRST** - TDD approach (RED phase)
+2. **🧪 NO CODE DELIVERED UNLESS TESTED** - Ensure to keep tests up to date and used them for reference
    - Write failing unit tests for new functionality
    - Write integration tests for component interactions
    - Update E2E tests if user-facing behavior changes

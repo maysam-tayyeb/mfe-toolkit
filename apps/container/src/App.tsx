@@ -26,6 +26,15 @@ function App() {
       sharedLibs: ['@reduxjs/toolkit', 'react-redux'],
     });
 
+    // Register React 17 MFE
+    registry.register({
+      name: 'react17',
+      version: '1.0.0',
+      url: 'http://localhost:3002/react17-mfe.js',
+      dependencies: ['react', 'react-dom'],
+      sharedLibs: ['@reduxjs/toolkit', 'react-redux'],
+    });
+
     return registry;
   }, []);
 

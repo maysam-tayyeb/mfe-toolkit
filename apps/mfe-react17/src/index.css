@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* React 17 MFE specific styles */
+.bg-secondary {
+  @apply bg-gray-100;
+}
+
+.text-secondary-foreground {
+  @apply text-gray-900;
+}
+
+.hover\:bg-secondary\/80:hover {
+  @apply hover:bg-gray-200;
+}
