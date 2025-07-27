@@ -35,8 +35,8 @@ export function createVitestConfig(options: { root: string }) {
     resolve: {
       alias: {
         '@': path.resolve(options.root, './src'),
-        '@mfe/dev-kit': path.resolve(options.root, '../packages/mfe-dev-kit/src'),
-        '@mfe/shared': path.resolve(options.root, '../packages/shared/src'),
+        '@mfe/dev-kit': path.resolve(options.root, '../../packages/mfe-dev-kit/src'),
+        '@mfe/shared': path.resolve(options.root, '../../packages/shared/src'),
       },
     },
   });
