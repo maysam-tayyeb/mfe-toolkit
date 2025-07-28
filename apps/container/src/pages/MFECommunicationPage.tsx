@@ -134,8 +134,8 @@ export const MFECommunicationPage: React.FC = () => {
       dispatch(
         addNotification({
           type: 'success',
-          title: 'Event Published',
-          message: `Published "${customEventType}" event to both MFEs`,
+          title: 'Event Emitted',
+          message: `Emitted "${customEventType}" event to all MFEs`,
         })
       );
     } catch {
@@ -222,7 +222,7 @@ export const MFECommunicationPage: React.FC = () => {
             </div>
             <div className="flex gap-2">
               <Button onClick={handlePublishEvent} size="sm">
-                Publish Event
+                Emit Event
               </Button>
               <Button onClick={clearEventLog} variant="outline" size="sm">
                 Clear Event Log
