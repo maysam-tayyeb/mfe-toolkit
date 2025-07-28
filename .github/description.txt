@@ -1,0 +1,1 @@
+Production-ready microfrontend platform using native ES modules, import maps, and cross-version React compatibility. Features include shared services (auth, events, modals), TypeScript, and a lean design system. No complex bundlers - just modern web standards.
