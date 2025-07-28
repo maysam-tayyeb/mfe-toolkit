@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Layout } from '@/components/Layout';
 import { HomePage } from '@/pages/HomePage';
@@ -11,6 +11,14 @@ import { useRegistryContext } from '@/contexts/RegistryContext';
 export function AppContent() {
   const { registry, isLoading } = useRegistryContext();
   const mfeServices = useMemo(() => getMFEServicesSingleton(), []);
+
+  useEffect(() => {
+    // Ensure event bus is available globally on app initialization
+    if (typeof window !== 'undefined') {
+      (window as any).__EVENT_BUS__ = mfeServices.eventBus;
+      (window as any).__MFE_SERVICES__ = mfeServices;
+    }
+  }, [mfeServices]);
 
   if (isLoading) {
     return (

@@ -1,62 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Button } from '@/components/ui/button';
 import { useDispatch, useSelector } from 'react-redux';
 import { openModal } from '@/store/modalSlice';
 import { addNotification } from '@/store/notificationSlice';
 import { RootState } from '@/store';
-import { EVENTS } from '@mfe/shared';
-import { EventBusImpl, EventPayload } from '@mfe/dev-kit';
-
-interface MFEStatus {
-  name: string;
-  version: string;
-  loadTime: number;
-  status: 'loaded' | 'loading' | 'error';
-  lastEvent?: string;
-}
 
 export const DashboardPage: React.FC = () => {
   const dispatch = useDispatch();
   const auth = useSelector((state: RootState) => state.auth);
-  const [mfeStatuses, setMfeStatuses] = useState<Record<string, MFEStatus>>({});
-  const [eventCount, setEventCount] = useState(0);
-  const [eventBus] = useState(() => new EventBusImpl());
-
-  useEffect(() => {
-    // Listen for MFE events
-    const unsubscribes = [
-      eventBus.on(EVENTS.MFE_LOADED, (payload: EventPayload<{ name: string; version: string }>) => {
-        const { name, version } = payload.data;
-        setMfeStatuses((prev) => ({
-          ...prev,
-          [name]: {
-            name,
-            version,
-            loadTime: Date.now(),
-            status: 'loaded',
-            lastEvent: 'loaded',
-          },
-        }));
-        setEventCount((prev) => prev + 1);
-      }),
-      eventBus.on(EVENTS.MFE_UNLOADED, (payload: EventPayload<{ name: string }>) => {
-        const { name } = payload.data;
-        setMfeStatuses((prev) => {
-          const newStatuses = { ...prev };
-          delete newStatuses[name];
-          return newStatuses;
-        });
-        setEventCount((prev) => prev + 1);
-      }),
-    ];
-
-    // Store event bus on window for MFEs
-    (window as any).__EVENT_BUS__ = eventBus;
-
-    return () => {
-      unsubscribes.forEach((fn) => fn());
-    };
-  }, [eventBus]);
 
   const handleTestModal = () => {
     dispatch(
@@ -76,21 +27,10 @@ export const DashboardPage: React.FC = () => {
               </div>
             </div>
             <div className="space-y-2">
-              <h3 className="font-medium">Active MFEs</h3>
-              {Object.keys(mfeStatuses).length > 0 ? (
-                <ul className="text-sm space-y-1">
-                  {Object.values(mfeStatuses).map((mfe) => (
-                    <li key={mfe.name} className="flex justify-between">
-                      <span>
-                        {mfe.name} v{mfe.version}
-                      </span>
-                      <span>Active</span>
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p className="text-sm text-muted-foreground">No MFEs currently loaded</p>
-              )}
+              <h3 className="font-medium">Platform Info</h3>
+              <p className="text-sm text-muted-foreground">
+                For detailed MFE status and event monitoring, visit the MFE Communication page.
+              </p>
             </div>
           </div>
         ),
@@ -152,40 +92,6 @@ export const DashboardPage: React.FC = () => {
     }, 1500);
   };
 
-  const handleViewEventLog = () => {
-    dispatch(
-      openModal({
-        title: 'Platform Event Log',
-        content: (
-          <div className="space-y-3">
-            <div className="flex justify-between items-center">
-              <p className="text-sm text-muted-foreground">Total events: {eventCount}</p>
-              <Button size="sm" variant="outline" onClick={() => setEventCount(0)}>
-                Clear Log
-              </Button>
-            </div>
-            <div className="space-y-2 max-h-60 overflow-y-auto">
-              <div className="p-2 bg-muted rounded text-sm">
-                <span className="text-muted-foreground">10:45:23</span> - Platform initialized
-              </div>
-              <div className="p-2 bg-muted rounded text-sm">
-                <span className="text-muted-foreground">10:45:24</span> - Auth service ready
-              </div>
-              {Object.values(mfeStatuses).map((mfe) => (
-                <div key={mfe.name} className="p-2 bg-muted rounded text-sm">
-                  <span className="text-muted-foreground">
-                    {new Date(mfe.loadTime).toLocaleTimeString()}
-                  </span>{' '}
-                  - MFE "{mfe.name}" loaded
-                </div>
-              ))}
-            </div>
-          </div>
-        ),
-        size: 'lg',
-      })
-    );
-  };
 
   return (
     <div className="space-y-8">
@@ -195,22 +101,18 @@ export const DashboardPage: React.FC = () => {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid gap-4 md:grid-cols-4">
-        <div className="border rounded-lg p-4 space-y-1">
-          <p className="text-sm font-medium text-muted-foreground">Active MFEs</p>
-          <p className="text-2xl font-bold">{Object.keys(mfeStatuses).length}</p>
-        </div>
+      <div className="grid gap-4 md:grid-cols-3">
         <div className="border rounded-lg p-4 space-y-1">
           <p className="text-sm font-medium text-muted-foreground">Platform Status</p>
           <p className="text-2xl font-bold">Healthy</p>
         </div>
         <div className="border rounded-lg p-4 space-y-1">
-          <p className="text-sm font-medium text-muted-foreground">Total Events</p>
-          <p className="text-2xl font-bold">{eventCount}</p>
-        </div>
-        <div className="border rounded-lg p-4 space-y-1">
           <p className="text-sm font-medium text-muted-foreground">Active User</p>
           <p className="text-2xl font-bold">{auth.session?.username || 'Guest'}</p>
+        </div>
+        <div className="border rounded-lg p-4 space-y-1">
+          <p className="text-sm font-medium text-muted-foreground">Environment</p>
+          <p className="text-2xl font-bold">Development</p>
         </div>
       </div>
 
@@ -251,34 +153,35 @@ export const DashboardPage: React.FC = () => {
             <Button variant="secondary" size="sm" onClick={handleClearCache}>
               Clear Cache
             </Button>
-            <Button variant="secondary" size="sm" onClick={handleViewEventLog}>
-              View Event Log
-            </Button>
           </div>
         </div>
 
-        {/* Active MFEs */}
+        {/* Platform Overview */}
         <div className="border rounded-lg p-6 space-y-4">
-          <h2 className="text-xl font-semibold">Active MFEs</h2>
-          {Object.keys(mfeStatuses).length > 0 ? (
-            <div className="space-y-2">
-              {Object.values(mfeStatuses).map((mfe) => (
-                <div key={mfe.name} className="p-3 bg-muted rounded-md">
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <p className="font-medium">{mfe.name}</p>
-                      <p className="text-xs text-muted-foreground">v{mfe.version}</p>
-                    </div>
-                    <span className="text-xs text-muted-foreground">{mfe.status}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : (
+          <h2 className="text-xl font-semibold">Platform Overview</h2>
+          <div className="space-y-3">
             <p className="text-sm text-muted-foreground">
-              No MFEs are currently loaded. Navigate to an MFE page to load it.
+              This platform supports dynamic loading of microfrontends with shared services and real-time communication.
             </p>
-          )}
+            <div className="space-y-2">
+              <div className="flex items-center gap-2">
+                <span className="text-sm">• Event-driven architecture</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-sm">• Shared dependencies (React, Redux)</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-sm">• Cross-version React support</span>
+              </div>
+            </div>
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={() => window.location.href = '/mfe-communication'}
+            >
+              View MFE Communication
+            </Button>
+          </div>
         </div>
       </div>
 

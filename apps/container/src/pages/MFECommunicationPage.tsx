@@ -6,6 +6,7 @@ import { EventPayload } from '@mfe/dev-kit';
 import { getMFEServicesSingleton } from '@/services/mfe-services-singleton';
 import { MFELoader } from '@mfe/dev-kit';
 import { useMFEUrlsFromContext } from '@/hooks/useMFEUrlsFromContext';
+import { EVENTS } from '@mfe/shared';
 
 interface EventLogEntry {
   id: string;
@@ -16,9 +17,18 @@ interface EventLogEntry {
   direction: 'sent' | 'received';
 }
 
+interface MFEStatus {
+  name: string;
+  version: string;
+  loadTime: number;
+  status: 'loaded' | 'loading' | 'error';
+  lastEvent?: string;
+}
+
 export const MFECommunicationPage: React.FC = () => {
   const dispatch = useDispatch();
   const [eventLog, setEventLog] = useState<EventLogEntry[]>([]);
+  const [mfeStatuses, setMfeStatuses] = useState<Record<string, MFEStatus>>({});
   const [customEventType, setCustomEventType] = useState('custom.test');
   const [customEventData, setCustomEventData] = useState('{"message": "Hello from container!"}');
 
@@ -37,10 +47,6 @@ export const MFECommunicationPage: React.FC = () => {
   const eventBus = mfeServices.eventBus;
 
   useEffect(() => {
-    // Store event bus on window for MFEs to access
-    (window as any).__EVENT_BUS__ = eventBus;
-    (window as any).__MFE_SERVICES__ = mfeServices;
-
     // Listen to all events and log them
     const allEventTypes = [
       'mfe.loaded',
@@ -52,10 +58,34 @@ export const MFECommunicationPage: React.FC = () => {
       'custom.test',
       'inter-mfe.message',
       'demo.event',
+      EVENTS.MFE_LOADED,
+      EVENTS.MFE_UNLOADED,
     ];
 
     const unsubscribes = allEventTypes.map((eventType) =>
       eventBus.on(eventType, (payload: EventPayload<any>) => {
+        // Track MFE status
+        if (eventType === EVENTS.MFE_LOADED || eventType === 'mfe.loaded') {
+          const { name, version } = payload.data;
+          setMfeStatuses((prev) => ({
+            ...prev,
+            [name]: {
+              name,
+              version,
+              loadTime: Date.now(),
+              status: 'loaded',
+              lastEvent: 'loaded',
+            },
+          }));
+        } else if (eventType === EVENTS.MFE_UNLOADED || eventType === 'mfe.unloaded') {
+          const { name } = payload.data;
+          setMfeStatuses((prev) => {
+            const newStatuses = { ...prev };
+            delete newStatuses[name];
+            return newStatuses;
+          });
+        }
+
         const logEntry: EventLogEntry = {
           id: Date.now() + Math.random().toString(),
           timestamp: new Date(payload.timestamp),
@@ -150,6 +180,26 @@ export const MFECommunicationPage: React.FC = () => {
         <p className="text-muted-foreground mt-2">
           Test inter-MFE communication with real-time event monitoring
         </p>
+      </div>
+
+      {/* Stats Cards */}
+      <div className="grid gap-4 md:grid-cols-4">
+        <div className="border rounded-lg p-4 space-y-1">
+          <p className="text-sm font-medium text-muted-foreground">Active MFEs</p>
+          <p className="text-2xl font-bold">{Object.keys(mfeStatuses).length}</p>
+        </div>
+        <div className="border rounded-lg p-4 space-y-1">
+          <p className="text-sm font-medium text-muted-foreground">Total Events</p>
+          <p className="text-2xl font-bold">{eventLog.length}</p>
+        </div>
+        <div className="border rounded-lg p-4 space-y-1">
+          <p className="text-sm font-medium text-muted-foreground">Events Sent</p>
+          <p className="text-2xl font-bold">{eventLog.filter((e) => e.direction === 'sent').length}</p>
+        </div>
+        <div className="border rounded-lg p-4 space-y-1">
+          <p className="text-sm font-medium text-muted-foreground">Events Received</p>
+          <p className="text-2xl font-bold">{eventLog.filter((e) => e.direction === 'received').length}</p>
+        </div>
       </div>
 
       {/* Event Bus Controls */}
@@ -372,7 +422,7 @@ export const MFECommunicationPage: React.FC = () => {
           </div>
           <div>
             <span className="text-muted-foreground">Active MFEs:</span>
-            <p className="font-medium">2</p>
+            <p className="font-medium">{Object.keys(mfeStatuses).length}</p>
           </div>
         </div>
       </div>
