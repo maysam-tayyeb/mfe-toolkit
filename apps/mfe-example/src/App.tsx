@@ -289,9 +289,9 @@ export const App: React.FC<AppProps> = ({ services }) => {
     <div className="space-y-8" data-testid="mfe-content">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">MFE Service Explorer</h1>
+        <h1 className="text-3xl font-bold tracking-tight">React 19 MFE Service Explorer</h1>
         <p className="text-muted-foreground mt-2">
-          Interactive demonstration of all available MFE services and capabilities
+          Demonstrating modern React 19 features with shared container services
         </p>
       </div>
 
