@@ -225,7 +225,7 @@ export const MFECommunicationPage: React.FC = () => {
           <div className="text-sm text-muted-foreground">{eventLog.length} events logged</div>
         </div>
 
-        <div className="space-y-2 max-h-96 overflow-y-auto">
+        <div className="space-y-2 overflow-y-auto" style={{ maxHeight: '400px' }}>
           {eventLog.length === 0 ? (
             <div className="text-center py-8 text-muted-foreground">
               No events logged yet. Interact with the MFEs below to see events.

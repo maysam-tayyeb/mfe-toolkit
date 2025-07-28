@@ -366,7 +366,7 @@ Permissions: ${session.permissions.join(', ')}`,
         {/* Event Log */}
         <div className="border rounded-lg p-6 space-y-4">
           <h2 className="text-xl font-semibold">Event Log</h2>
-          <div className="space-y-2 max-h-60 overflow-y-auto">
+          <div className="space-y-2 overflow-y-auto" style={{ maxHeight: '300px' }}>
             {eventLog.length === 0 ? (
               <p className="text-sm text-muted-foreground text-center py-8">
                 No events logged yet. Send an event to see it here.
