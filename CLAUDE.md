@@ -1,6 +1,6 @@
 # MFE Monorepo Setup Instructions for Claude Code
 
-## 🔄 IMPORTANT: Test-Driven Development Workflow
+## 🔄 IMPORTANT: Development Workflow
 
 When working on any task in this codebase, ALWAYS follow this workflow:
 
@@ -10,28 +10,32 @@ When working on any task in this codebase, ALWAYS follow this workflow:
    - Understand dependencies and impacts
    - Review test coverage reports
 
-2. **🧪 NO CODE DELIVERED UNLESS TESTED** - Ensure to keep tests up to date and used them for reference
-   - Write failing unit tests for new functionality
-   - Write integration tests for component interactions
-   - Update E2E tests if user-facing behavior changes
-   - Ensure tests fail for the right reasons
-
-3. **📝 PLAN** - Present a clear plan before making changes
+2. **📝 PLAN** - Present a clear plan before making changes
    - List specific files to be modified
    - Describe the changes to be made
-   - Show the failing tests that will guide implementation
    - Identify potential impacts
+   - Consider what tests will be needed
 
-4. **⚡ IMPLEMENT** - Make tests pass (GREEN phase)
-   - Write minimal code to make tests pass
-   - Focus on functionality, not optimization
-   - Ensure all tests are green
-   - Add more tests if edge cases are discovered
+3. **⚡ IMPLEMENT** - Build the feature
+   - Write clean, maintainable code
+   - Follow existing patterns and conventions
+   - Ensure proper error handling
+   - Add appropriate logging
+   - **Run `pnpm type-check` frequently** to catch TypeScript errors early
+   - **Run `pnpm lint` periodically** to maintain code quality
 
-5. **♻️ REFACTOR** - Improve code quality (REFACTOR phase)
+4. **🧪 TEST** - Ensure comprehensive test coverage
+   - Write unit tests for new functionality
+   - Write integration tests for component interactions
+   - Update E2E tests if user-facing behavior changes
+   - **Run `pnpm test` after writing tests** to ensure they pass
+   - **Run `pnpm test:coverage`** to verify coverage meets requirements (>80%)
+
+5. **♻️ REFACTOR** - Improve code quality
    - Refactor implementation while keeping tests green
    - Improve code readability and maintainability
-   - Ensure no regression by running all tests
+   - **Run `pnpm test` after each refactor** to ensure no regression
+   - **Run `pnpm lint` and `pnpm type-check`** to maintain quality
 
 6. **✅ QUALITY CHECK** - Before review, always run:
    - `pnpm test` - Run all unit and integration tests
@@ -235,7 +239,7 @@ The Vite dev server (port 3001) is only for development. In production, update t
 
 #### Testing Best Practices
 
-- **TDD Approach**: Write tests before implementation
+- **Comprehensive Coverage**: Ensure all new code has appropriate tests
 - **Test Isolation**: Each test should be independent
 - **Mock External Dependencies**: Use MSW for API mocking
 - **Component Testing**: Test behavior, not implementation
@@ -287,10 +291,10 @@ Container app navigation includes:
 - ✅ `pnpm dev:mfe` - Start only example MFE
 - ✅ `pnpm build` - Build all packages
 
-### Testing (TDD Workflow)
+### Testing
 
 - ✅ `pnpm test` - Run all unit and integration tests
-- ✅ `pnpm test:watch` - Run tests in watch mode (for TDD)
+- ✅ `pnpm test:watch` - Run tests in watch mode
 - ✅ `pnpm test:coverage` - Run tests with coverage report
 - ✅ `pnpm test:ui` - Open Vitest UI for interactive testing
 - ✅ `pnpm e2e` - Run Playwright E2E tests
@@ -409,7 +413,7 @@ mfe-made-easy/
 
 When modifying any code in this monorepo, you MUST:
 
-1. **Write tests FIRST** (TDD approach)
+1. **Write comprehensive tests**
    - Unit tests for functions and utilities
    - Component tests for React components
    - Integration tests for feature flows
