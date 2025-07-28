@@ -40,10 +40,7 @@ export const Navigation: React.FC = () => {
               ))}
             </div>
           </div>
-          <div className="flex items-center space-x-2">
-            <Button variant="outline" size="sm" className="hidden sm:inline-flex">
-              Profile
-            </Button>
+          <div className="flex items-center">
             <Button
               variant="ghost"
               size="sm"
@@ -74,11 +71,6 @@ export const Navigation: React.FC = () => {
                 {item.label}
               </Link>
             ))}
-            <div className="px-4 py-2 sm:hidden">
-              <Button variant="outline" size="sm" className="w-full">
-                Profile
-              </Button>
-            </div>
           </div>
         )}
       </div>
