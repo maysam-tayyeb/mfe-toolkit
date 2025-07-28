@@ -70,14 +70,14 @@ export const HomePage: React.FC = () => {
           <div className="border rounded-lg p-6 space-y-3 hover:shadow-md transition-shadow">
             <div className="flex items-center gap-3">
               <Package className="h-5 w-5 text-primary" />
-              <h3 className="text-xl font-semibold">Example MFE</h3>
+              <h3 className="text-xl font-semibold">Service Explorer</h3>
             </div>
             <p className="text-muted-foreground">
-              Experience a fully-featured React 19 microfrontend with all services integrated.
+              Test and explore all platform services: auth, modals, notifications, and events.
             </p>
             <Button asChild variant="outline">
               <Link to="/mfe/example">
-                Load Example MFE
+                Open Service Explorer
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
@@ -86,14 +86,14 @@ export const HomePage: React.FC = () => {
           <div className="border rounded-lg p-6 space-y-3 hover:shadow-md transition-shadow">
             <div className="flex items-center gap-3">
               <Zap className="h-5 w-5 text-primary" />
-              <h3 className="text-xl font-semibold">React 17 MFE</h3>
+              <h3 className="text-xl font-semibold">Legacy Demo</h3>
             </div>
             <p className="text-muted-foreground">
-              See cross-version compatibility with a React 17 microfrontend in action.
+              Demonstrates cross-version compatibility with legacy React 17 applications.
             </p>
             <Button asChild variant="outline">
               <Link to="/mfe/react17">
-                Load React 17 MFE
+                Open Legacy Demo
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>

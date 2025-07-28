@@ -1,4 +1,4 @@
-import React, { Component, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { MFEServices } from '@mfe/dev-kit';
 import { EVENTS } from '@mfe/shared';
 
@@ -41,41 +41,6 @@ const InfoBlock: React.FC<InfoBlockProps> = ({ title, sections, className = '' }
   </div>
 );
 
-// Class component to demonstrate React 17 compatibility
-class Counter extends Component<{ onIncrement: () => void }, { count: number }> {
-  constructor(props: any) {
-    super(props);
-    this.state = { count: 0 };
-  }
-
-  componentDidMount() {
-    console.log('Counter component mounted (legacy lifecycle)');
-  }
-
-  componentWillUnmount() {
-    console.log('Counter component will unmount (legacy lifecycle)');
-  }
-
-  increment = () => {
-    this.setState({ count: this.state.count + 1 });
-    this.props.onIncrement();
-  };
-
-  render() {
-    return (
-      <div className="text-center space-y-3">
-        <p className="text-2xl font-bold">Count: {this.state.count}</p>
-        <button
-          onClick={this.increment}
-          className="inline-flex items-center justify-center h-9 px-4 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors text-sm font-medium"
-        >
-          Increment
-        </button>
-      </div>
-    );
-  }
-}
-
 export const App: React.FC<AppProps> = ({ services }) => {
   const [eventLog, setEventLog] = useState<EventLogEntry[]>([]);
   const [customEventName, setCustomEventName] = useState('');
@@ -112,15 +77,15 @@ export const App: React.FC<AppProps> = ({ services }) => {
       },
     },
     {
-      title: 'Class Component Modal',
+      title: 'Compatibility Info',
       action: () => {
         services.modal.open({
-          title: 'React 17 Class Components',
-          content: `This MFE demonstrates React 17 features:
-• Class components with lifecycle methods
-• Legacy componentDidMount/componentWillUnmount
+          title: 'React 17 Compatibility',
+          content: `This MFE demonstrates cross-version support:
+• React 17.0.2 running inside React 19 container
 • ReactDOM.render instead of createRoot
-• Compatible with React 19 container`,
+• Full service integration across versions
+• Seamless event bus communication`,
           size: 'md',
         });
       },
@@ -218,10 +183,6 @@ Permissions: ${session.permissions.join(', ')}`,
     { level: 'error' },
   ];
 
-  const handleCounterIncrement = () => {
-    services.logger.debug('Counter incremented in class component');
-    services.eventBus.emit('react17:counter:update', { timestamp: new Date().toISOString() });
-  };
 
   useEffect(() => {
     services.logger.info('React 17 MFE initialized');
@@ -446,28 +407,99 @@ Permissions: ${session.permissions.join(', ')}`,
           </div>
         </div>
 
-        {/* Class Component Demo */}
+        {/* Auth Service */}
         <div className="border rounded-lg p-6 space-y-4">
-          <h2 className="text-xl font-semibold">Class Component Demo</h2>
+          <h2 className="text-xl font-semibold">Auth Service</h2>
           <p className="text-sm text-muted-foreground">
-            React 17 class component with legacy lifecycle methods
+            Access authentication state and user information
           </p>
-          <Counter onIncrement={handleCounterIncrement} />
+          <div className="grid grid-cols-2 gap-2">
+            <button
+              onClick={() => {
+                const session = services.auth.getSession();
+                if (session) {
+                  services.modal.open({
+                    title: 'Session Information',
+                    content: (
+                      <div className="space-y-3">
+                        <div className="grid grid-cols-2 gap-2 text-sm">
+                          <span className="font-medium">User ID:</span>
+                          <span>{session.userId}</span>
+                          <span className="font-medium">Username:</span>
+                          <span>{session.username}</span>
+                          <span className="font-medium">Email:</span>
+                          <span>{session.email}</span>
+                          <span className="font-medium">Authenticated:</span>
+                          <span className={session.isAuthenticated ? 'text-green-600' : 'text-red-600'}>
+                            {session.isAuthenticated ? 'Yes' : 'No'}
+                          </span>
+                        </div>
+                        <div className="mt-3 pt-3 border-t">
+                          <p className="text-sm font-medium mb-2">Roles:</p>
+                          <div className="flex flex-wrap gap-1">
+                            {session.roles.map((role) => (
+                              <span
+                                key={role}
+                                className="px-2 py-1 bg-primary/10 text-primary rounded-md text-xs"
+                              >
+                                {role}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                        <div className="mt-3 pt-3 border-t">
+                          <p className="text-sm font-medium mb-2">Permissions:</p>
+                          <div className="flex flex-wrap gap-1">
+                            {session.permissions.map((permission) => (
+                              <span
+                                key={permission}
+                                className="px-2 py-1 bg-secondary text-secondary-foreground rounded-md text-xs"
+                              >
+                                {permission}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    ),
+                    size: 'md',
+                  });
+                } else {
+                  services.notification.warning('No Session', 'User is not logged in');
+                }
+              }}
+              className="inline-flex items-center justify-center h-9 px-3 bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/80 transition-colors text-sm font-medium"
+            >
+              View Session Details
+            </button>
+            <button
+              onClick={() => {
+                const hasPermission = services.auth.hasPermission('write');
+                services.notification.info(
+                  'Permission Check',
+                  `Has "write" permission: ${hasPermission ? 'Yes' : 'No'}`
+                );
+              }}
+              className="inline-flex items-center justify-center h-9 px-3 bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/80 transition-colors text-sm font-medium"
+            >
+              Check Write Permission
+            </button>
+          </div>
         </div>
 
         {/* Logger Service */}
-        <div className="border rounded-lg p-6 space-y-4">
+        <div className="border rounded-lg p-6 space-y-4 md:col-span-2">
           <h2 className="text-xl font-semibold">Logger Service</h2>
           <p className="text-sm text-muted-foreground">
             Log messages at different levels (check browser console)
           </p>
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
             {loggerLevels.map(({ level }) => (
               <button
                 key={level}
                 onClick={() => {
                   services.logger[level as keyof typeof services.logger](
-                    `React 17 ${level} message at ${new Date().toLocaleTimeString()}`
+                    `Test ${level} message from MFE at ${new Date().toLocaleTimeString()}`
                   );
                   services.notification.info('Logged', `Check console for ${level} message`);
                 }}
@@ -487,10 +519,10 @@ Permissions: ${session.permissions.join(', ')}`,
           <div className="space-y-2">
             <h4 className="font-medium">This MFE demonstrates:</h4>
             <ul className="list-disc list-inside space-y-1 text-muted-foreground">
-              <li>Class components with constructor and state</li>
-              <li>Legacy lifecycle methods (componentDidMount, componentWillUnmount)</li>
-              <li>ReactDOM.render instead of React 18+ createRoot</li>
               <li>React 17.0.2 running inside React 19 container</li>
+              <li>ReactDOM.render instead of React 18+ createRoot</li>
+              <li>Full compatibility with all platform services</li>
+              <li>Cross-version event bus communication</li>
             </ul>
           </div>
           <div className="space-y-2">
@@ -534,12 +566,12 @@ Permissions: ${session.permissions.join(', ')}`,
       <InfoBlock
         title="Shared Dependencies"
         sections={[
-          { label: 'React', value: '17.0.2 (bundled)' },
-          { label: 'Redux Toolkit', value: '^2.0.1' },
-          { label: 'Tailwind CSS', value: '^4.1.11' },
-          { label: 'TypeScript', value: '^5.3.3' },
-          { label: 'Container React', value: '19.1.0' },
-          { label: 'Cross-Version', value: 'Supported', highlight: true },
+          { label: 'Redux Toolkit', value: '2.0.1' },
+          { label: 'Tailwind CSS', value: '4.1.11' },
+          { label: 'TypeScript', value: '5.3.3' },
+          { label: 'React Redux', value: '9.1.0' },
+          { label: 'MFE Dev Kit', value: '1.0.0' },
+          { label: 'Shared Utils', value: '1.0.0' },
         ]}
         className="mt-6"
       />

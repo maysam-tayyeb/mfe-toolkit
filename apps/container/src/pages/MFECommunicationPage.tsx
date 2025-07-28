@@ -325,7 +325,7 @@ export const MFECommunicationPage: React.FC = () => {
       <div className="grid gap-6 lg:grid-cols-2">
         <div className="border rounded-lg p-4 space-y-4">
           <div className="flex justify-between items-center">
-            <h3 className="text-lg font-semibold">Example MFE (React 19)</h3>
+            <h3 className="text-lg font-semibold">Service Explorer</h3>
             <span className="text-xs bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 px-2 py-1 rounded">
               Port 3001
             </span>
@@ -340,7 +340,7 @@ export const MFECommunicationPage: React.FC = () => {
                   <div className="flex items-center justify-center h-64">
                     <div className="text-center">
                       <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-2"></div>
-                      <p className="text-sm text-muted-foreground">Loading Example MFE...</p>
+                      <p className="text-sm text-muted-foreground">Loading Service Explorer...</p>
                     </div>
                   </div>
                 }
@@ -349,7 +349,7 @@ export const MFECommunicationPage: React.FC = () => {
                     addNotification({
                       type: 'error',
                       title: 'MFE Load Error',
-                      message: `Failed to load Example MFE: ${error.message}`,
+                      message: `Failed to load Service Explorer: ${error.message}`,
                     })
                   );
                 }}
@@ -364,7 +364,7 @@ export const MFECommunicationPage: React.FC = () => {
 
         <div className="border rounded-lg p-4 space-y-4">
           <div className="flex justify-between items-center">
-            <h3 className="text-lg font-semibold">React 17 MFE</h3>
+            <h3 className="text-lg font-semibold">Legacy Demo</h3>
             <span className="text-xs bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 px-2 py-1 rounded">
               Port 3002
             </span>
@@ -379,7 +379,7 @@ export const MFECommunicationPage: React.FC = () => {
                   <div className="flex items-center justify-center h-64">
                     <div className="text-center">
                       <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-2"></div>
-                      <p className="text-sm text-muted-foreground">Loading React 17 MFE...</p>
+                      <p className="text-sm text-muted-foreground">Loading Legacy Demo...</p>
                     </div>
                   </div>
                 }
@@ -388,7 +388,7 @@ export const MFECommunicationPage: React.FC = () => {
                     addNotification({
                       type: 'error',
                       title: 'MFE Load Error',
-                      message: `Failed to load React 17 MFE: ${error.message}`,
+                      message: `Failed to load Legacy Demo: ${error.message}`,
                     })
                   );
                 }}

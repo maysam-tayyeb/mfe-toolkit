@@ -529,11 +529,12 @@ export const App: React.FC<AppProps> = ({ services }) => {
         title="Shared Dependencies"
         sections={[
           { label: 'React', value: React.version || '19.1.0' },
-          { label: 'Redux Toolkit', value: '^2.0.1' },
-          { label: 'Tailwind CSS', value: '^4.1.11' },
-          { label: 'TypeScript', value: '^5.3.3' },
-          { label: 'React Redux', value: '^9.1.0' },
-          { label: 'Import Map', value: 'ESM CDN', highlight: true },
+          { label: 'Redux Toolkit', value: '2.0.1' },
+          { label: 'Tailwind CSS', value: '4.1.11' },
+          { label: 'TypeScript', value: '5.3.3' },
+          { label: 'React Redux', value: '9.1.0' },
+          { label: 'MFE Dev Kit', value: '1.0.0' },
+          { label: 'Shared Utils', value: '1.0.0' },
         ]}
         className="mt-6"
       />
