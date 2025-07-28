@@ -120,6 +120,17 @@ export const MFECommunicationPage: React.FC = () => {
       const data = JSON.parse(customEventData);
       eventBus.emit(customEventType, data);
 
+      // Manually add to event log since the container doesn't listen to its own events
+      const logEntry: EventLogEntry = {
+        id: Date.now() + Math.random().toString(),
+        timestamp: new Date(),
+        type: customEventType,
+        source: 'container',
+        data: data,
+        direction: 'sent',
+      };
+      setEventLog((prev) => [logEntry, ...prev].slice(0, 50));
+
       dispatch(
         addNotification({
           type: 'success',
@@ -136,25 +147,6 @@ export const MFECommunicationPage: React.FC = () => {
         })
       );
     }
-  };
-
-  const handleSendInterMFEMessage = () => {
-    const message = {
-      from: 'container',
-      to: 'all-mfes',
-      content: 'This is a message from the container to demonstrate inter-MFE communication',
-      timestamp: new Date().toISOString(),
-    };
-
-    eventBus.emit('inter-mfe.message', message);
-
-    dispatch(
-      addNotification({
-        type: 'info',
-        title: 'Inter-MFE Message Sent',
-        message: 'Message broadcast to all MFEs via event bus',
-      })
-    );
   };
 
   const clearEventLog = () => {
@@ -193,131 +185,102 @@ export const MFECommunicationPage: React.FC = () => {
           <p className="text-2xl font-bold">{eventLog.length}</p>
         </div>
         <div className="border rounded-lg p-4 space-y-1">
-          <p className="text-sm font-medium text-muted-foreground">Events Sent</p>
+          <p className="text-sm font-medium text-muted-foreground">From Container</p>
           <p className="text-2xl font-bold">{eventLog.filter((e) => e.direction === 'sent').length}</p>
         </div>
         <div className="border rounded-lg p-4 space-y-1">
-          <p className="text-sm font-medium text-muted-foreground">Events Received</p>
+          <p className="text-sm font-medium text-muted-foreground">From MFEs</p>
           <p className="text-2xl font-bold">{eventLog.filter((e) => e.direction === 'received').length}</p>
         </div>
       </div>
 
-      {/* Event Bus Controls */}
-      <div className="border rounded-lg p-6 space-y-4">
-        <h2 className="text-xl font-semibold">Event Bus Controls</h2>
-
-        <div className="grid gap-4 md:grid-cols-2">
+      {/* Event Bus Controls and Event Log */}
+      <div className="grid gap-6 lg:grid-cols-2">
+        {/* Event Bus Controls */}
+        <div className="border rounded-lg p-6 space-y-4">
+          <h2 className="text-xl font-semibold">Event Bus Controls</h2>
           <div className="space-y-3">
-            <h3 className="font-medium">Custom Event Publisher</h3>
             <div className="space-y-2">
-              <div>
-                <label className="text-sm font-medium">Event Type</label>
-                <input
-                  type="text"
-                  value={customEventType}
-                  onChange={(e) => setCustomEventType(e.target.value)}
-                  className="w-full mt-1 px-3 py-2 border rounded-md text-sm"
-                  placeholder="custom.test"
-                />
-              </div>
-              <div>
-                <label className="text-sm font-medium">Event Data (JSON)</label>
-                <textarea
-                  value={customEventData}
-                  onChange={(e) => setCustomEventData(e.target.value)}
-                  className="w-full mt-1 px-3 py-2 border rounded-md text-sm font-mono"
-                  rows={3}
-                  placeholder='{"message": "Hello from container!"}'
-                />
-              </div>
+              <label className="text-sm font-medium">Event Type</label>
+              <input
+                type="text"
+                value={customEventType}
+                onChange={(e) => setCustomEventType(e.target.value)}
+                className="w-full px-3 py-2 border rounded-md text-sm"
+                placeholder="custom.test"
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Event Data (JSON)</label>
+              <textarea
+                value={customEventData}
+                onChange={(e) => setCustomEventData(e.target.value)}
+                className="w-full px-3 py-2 border rounded-md text-sm font-mono"
+                rows={3}
+                placeholder='{"message": "Hello from container!"}'
+              />
+            </div>
+            <div className="flex gap-2">
               <Button onClick={handlePublishEvent} size="sm">
                 Publish Event
               </Button>
-            </div>
-          </div>
-
-          <div className="space-y-3">
-            <h3 className="font-medium">Quick Actions</h3>
-            <div className="space-y-2">
-              <Button
-                onClick={handleSendInterMFEMessage}
-                variant="secondary"
-                size="sm"
-                className="w-full"
-              >
-                Send Inter-MFE Message
-              </Button>
-              <Button
-                onClick={() =>
-                  eventBus.emit('demo.event', {
-                    type: 'demo',
-                    message: 'Demo event from container',
-                  })
-                }
-                variant="secondary"
-                size="sm"
-                className="w-full"
-              >
-                Send Demo Event
-              </Button>
-              <Button onClick={clearEventLog} variant="outline" size="sm" className="w-full">
+              <Button onClick={clearEventLog} variant="outline" size="sm">
                 Clear Event Log
               </Button>
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Event Log */}
-      <div className="border rounded-lg p-6 space-y-4">
-        <div className="flex justify-between items-center">
-          <h2 className="text-xl font-semibold">Real-time Event Log</h2>
-          <div className="text-sm text-muted-foreground">{eventLog.length} events logged</div>
-        </div>
-
-        <div className="space-y-2 overflow-y-auto" style={{ maxHeight: '400px' }}>
-          {eventLog.length === 0 ? (
-            <div className="text-center py-8 text-muted-foreground">
-              No events logged yet. Interact with the MFEs below to see events.
-            </div>
-          ) : (
-            eventLog.map((entry) => (
-              <div
-                key={entry.id}
-                className={`p-3 rounded border-l-4 ${
-                  entry.direction === 'sent'
-                    ? 'border-l-blue-500 bg-blue-50 dark:bg-blue-950/20'
-                    : 'border-l-green-500 bg-green-50 dark:bg-green-950/20'
-                }`}
-              >
-                <div className="flex justify-between items-start mb-1">
-                  <div className="flex items-center gap-2">
-                    <span className="font-mono text-sm font-medium">{entry.type}</span>
-                    <span
-                      className={`px-2 py-1 rounded text-xs ${
-                        entry.direction === 'sent'
-                          ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200'
-                          : 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
-                      }`}
-                    >
-                      {entry.direction === 'sent' ? '→ OUT' : '← IN'}
+        {/* Event Log */}
+        <div className="border rounded-lg p-6 space-y-4">
+          <div className="flex justify-between items-center">
+            <h2 className="text-xl font-semibold">Real-time Event Log</h2>
+            <div className="text-sm text-muted-foreground">{eventLog.length} events</div>
+          </div>
+          <div className="space-y-2 overflow-y-auto" style={{ maxHeight: '300px' }}>
+            {eventLog.length === 0 ? (
+              <div className="text-center py-8 text-muted-foreground">
+                No events logged yet. Interact with the MFEs below to see events.
+              </div>
+            ) : (
+              eventLog.map((entry) => (
+                <div
+                  key={entry.id}
+                  className={`p-3 rounded border-l-4 ${
+                    entry.direction === 'sent'
+                      ? 'border-l-blue-500 bg-blue-50 dark:bg-blue-950/20'
+                      : 'border-l-green-500 bg-green-50 dark:bg-green-950/20'
+                  }`}
+                >
+                  <div className="flex justify-between items-start mb-1">
+                    <div className="flex items-center gap-2">
+                      <span className="font-mono text-sm font-medium">{entry.type}</span>
+                      <span
+                        className={`px-2 py-1 rounded text-xs ${
+                          entry.direction === 'sent'
+                            ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200'
+                            : 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
+                        }`}
+                      >
+                        {entry.direction === 'sent' ? '→ OUT' : '← IN'}
+                      </span>
+                    </div>
+                    <span className="text-xs text-muted-foreground">
+                      {entry.timestamp.toLocaleTimeString()}
                     </span>
                   </div>
-                  <span className="text-xs text-muted-foreground">
-                    {entry.timestamp.toLocaleTimeString()}
-                  </span>
+                  <div className="text-sm text-muted-foreground mb-2">
+                    <span>
+                      From: <strong>{entry.source}</strong>
+                    </span>
+                  </div>
+                  <pre className="text-xs bg-white dark:bg-gray-900 p-2 rounded border overflow-x-auto">
+                    {formatEventData(entry.data)}
+                  </pre>
                 </div>
-                <div className="text-sm text-muted-foreground mb-2">
-                  <span>
-                    From: <strong>{entry.source}</strong>
-                  </span>
-                </div>
-                <pre className="text-xs bg-white dark:bg-gray-900 p-2 rounded border overflow-x-auto">
-                  {formatEventData(entry.data)}
-                </pre>
-              </div>
-            ))
-          )}
+              ))
+            )}
+          </div>
         </div>
       </div>
 
@@ -411,11 +374,11 @@ export const MFECommunicationPage: React.FC = () => {
             <p className="font-medium">{eventLog.length}</p>
           </div>
           <div>
-            <span className="text-muted-foreground">Events Sent:</span>
+            <span className="text-muted-foreground">From Container:</span>
             <p className="font-medium">{eventLog.filter((e) => e.direction === 'sent').length}</p>
           </div>
           <div>
-            <span className="text-muted-foreground">Events Received:</span>
+            <span className="text-muted-foreground">From MFEs:</span>
             <p className="font-medium">
               {eventLog.filter((e) => e.direction === 'received').length}
             </p>
