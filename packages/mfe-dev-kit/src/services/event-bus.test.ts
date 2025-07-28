@@ -145,4 +145,54 @@ describe('EventBus', () => {
       expect(handler).toHaveBeenCalledTimes(1);
     });
   });
+
+  describe('wildcard listener', () => {
+    it('should listen to all events with wildcard', () => {
+      const handler = vi.fn();
+      const unsubscribe = eventBus.on('*', handler);
+
+      eventBus.emit('event.one', { data: 1 });
+      eventBus.emit('event.two', { data: 2 });
+      eventBus.emit('event.three', { data: 3 });
+
+      expect(handler).toHaveBeenCalledTimes(3);
+      expect(handler).toHaveBeenCalledWith(
+        expect.objectContaining({
+          type: 'event.one',
+          data: { data: 1 },
+        })
+      );
+      expect(handler).toHaveBeenCalledWith(
+        expect.objectContaining({
+          type: 'event.two',
+          data: { data: 2 },
+        })
+      );
+      expect(handler).toHaveBeenCalledWith(
+        expect.objectContaining({
+          type: 'event.three',
+          data: { data: 3 },
+        })
+      );
+
+      // Test unsubscribe
+      unsubscribe();
+      eventBus.emit('event.four', { data: 4 });
+      expect(handler).toHaveBeenCalledTimes(3);
+    });
+
+    it('should work alongside specific event listeners', () => {
+      const wildcardHandler = vi.fn();
+      const specificHandler = vi.fn();
+
+      eventBus.on('*', wildcardHandler);
+      eventBus.on('specific.event', specificHandler);
+
+      eventBus.emit('specific.event', { data: 'test' });
+      eventBus.emit('other.event', { data: 'other' });
+
+      expect(wildcardHandler).toHaveBeenCalledTimes(2);
+      expect(specificHandler).toHaveBeenCalledTimes(1);
+    });
+  });
 });

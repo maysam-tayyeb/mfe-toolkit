@@ -43,10 +43,10 @@ const InfoBlock: React.FC<InfoBlockProps> = ({ title, sections, className = '' }
 
 export const App: React.FC<AppProps> = ({ services }) => {
   const [eventLog, setEventLog] = useState<EventLogEntry[]>([]);
-  const [customEventName, setCustomEventName] = useState('');
-  const [customEventData, setCustomEventData] = useState('');
+  const [customEventName, setCustomEventName] = useState('react17.status');
+  const [customEventData, setCustomEventData] = useState('{"status": "active", "component": "React 17 MFE"}');
   const [listeningEvents, setListeningEvents] = useState<string[]>([]);
-  const [newEventToListen, setNewEventToListen] = useState('custom.test');
+  const [newEventToListen, setNewEventToListen] = useState('container.broadcast');
   const [eventUnsubscribes, setEventUnsubscribes] = useState<Map<string, () => void>>(new Map());
 
   const addToEventLog = (type: 'sent' | 'received', event: string, data?: any) => {
@@ -258,7 +258,7 @@ Permissions: ${session.permissions.join(', ')}`,
                 type="text"
                 value={newEventToListen}
                 onChange={(e) => setNewEventToListen(e.target.value)}
-                placeholder="Event name to listen (e.g., custom.test)"
+                placeholder="Event name to listen (e.g., container.broadcast)"
                 className="flex-1 px-3 py-2 border rounded-md text-sm"
                 onKeyPress={(e) => e.key === 'Enter' && startListeningToEvent()}
               />
@@ -301,7 +301,7 @@ Permissions: ${session.permissions.join(', ')}`,
               type="text"
               value={customEventName}
               onChange={(e) => setCustomEventName(e.target.value)}
-              placeholder="Event name to send"
+              placeholder="Event name to send (e.g., react17.status)"
               className="w-full px-3 py-2 border rounded-md text-sm"
               aria-label="Event Type:"
             />

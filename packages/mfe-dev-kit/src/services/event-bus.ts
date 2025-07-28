@@ -2,6 +2,7 @@ import { EventBus, EventPayload } from '../types';
 
 export class EventBusImpl implements EventBus {
   private events: Map<string, Set<(payload: EventPayload<any>) => void>> = new Map();
+  private wildcardHandlers: Set<(payload: EventPayload<any>) => void> = new Set();
 
   emit<T = any>(event: string, data: T): void {
     const payload: EventPayload<T> = {
@@ -11,6 +12,7 @@ export class EventBusImpl implements EventBus {
       source: 'unknown',
     };
 
+    // Emit to specific event handlers
     const handlers = this.events.get(event);
     if (handlers) {
       handlers.forEach((handler) => {
@@ -21,9 +23,24 @@ export class EventBusImpl implements EventBus {
         }
       });
     }
+
+    // Emit to wildcard handlers
+    this.wildcardHandlers.forEach((handler) => {
+      try {
+        handler(payload);
+      } catch (error) {
+        console.error(`Error in wildcard event handler:`, error);
+      }
+    });
   }
 
   on<T = any>(event: string, handler: (payload: EventPayload<T>) => void): () => void {
+    // Support wildcard '*' to listen to all events
+    if (event === '*') {
+      this.wildcardHandlers.add(handler);
+      return () => this.wildcardHandlers.delete(handler);
+    }
+
     if (!this.events.has(event)) {
       this.events.set(event, new Set());
     }

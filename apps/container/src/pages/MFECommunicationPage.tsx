@@ -29,8 +29,8 @@ export const MFECommunicationPage: React.FC = () => {
   const dispatch = useDispatch();
   const [eventLog, setEventLog] = useState<EventLogEntry[]>([]);
   const [mfeStatuses, setMfeStatuses] = useState<Record<string, MFEStatus>>({});
-  const [customEventType, setCustomEventType] = useState('custom.test');
-  const [customEventData, setCustomEventData] = useState('{"message": "Hello from container!"}');
+  const [customEventType, setCustomEventType] = useState('container.broadcast');
+  const [customEventData, setCustomEventData] = useState('{"message": "Broadcast from container", "timestamp": "' + new Date().toISOString() + '"}');
 
   // Use the custom hook to get MFE URLs from context (prevents multiple registry instances)
   const { urls: mfeUrls, isLoading: registryLoading } = useMFEUrlsFromContext([
@@ -47,57 +47,42 @@ export const MFECommunicationPage: React.FC = () => {
   const eventBus = mfeServices.eventBus;
 
   useEffect(() => {
-    // Listen to all events and log them
-    const allEventTypes = [
-      'mfe.loaded',
-      'mfe.unloaded',
-      'mfe.error',
-      'user.action',
-      'data.updated',
-      'navigation.changed',
-      'custom.test',
-      'inter-mfe.message',
-      'demo.event',
-      EVENTS.MFE_LOADED,
-      EVENTS.MFE_UNLOADED,
-    ];
+    // Listen to ALL events using wildcard
+    const unsubscribe = eventBus.on('*', (payload: EventPayload<any>) => {
+      // Track MFE status
+      const eventType = payload.type;
+      if (eventType === EVENTS.MFE_LOADED || eventType === 'mfe.loaded') {
+        const { name, version } = payload.data;
+        setMfeStatuses((prev) => ({
+          ...prev,
+          [name]: {
+            name,
+            version,
+            loadTime: Date.now(),
+            status: 'loaded',
+            lastEvent: 'loaded',
+          },
+        }));
+      } else if (eventType === EVENTS.MFE_UNLOADED || eventType === 'mfe.unloaded') {
+        const { name } = payload.data;
+        setMfeStatuses((prev) => {
+          const newStatuses = { ...prev };
+          delete newStatuses[name];
+          return newStatuses;
+        });
+      }
 
-    const unsubscribes = allEventTypes.map((eventType) =>
-      eventBus.on(eventType, (payload: EventPayload<any>) => {
-        // Track MFE status
-        if (eventType === EVENTS.MFE_LOADED || eventType === 'mfe.loaded') {
-          const { name, version } = payload.data;
-          setMfeStatuses((prev) => ({
-            ...prev,
-            [name]: {
-              name,
-              version,
-              loadTime: Date.now(),
-              status: 'loaded',
-              lastEvent: 'loaded',
-            },
-          }));
-        } else if (eventType === EVENTS.MFE_UNLOADED || eventType === 'mfe.unloaded') {
-          const { name } = payload.data;
-          setMfeStatuses((prev) => {
-            const newStatuses = { ...prev };
-            delete newStatuses[name];
-            return newStatuses;
-          });
-        }
+      const logEntry: EventLogEntry = {
+        id: Date.now() + Math.random().toString(),
+        timestamp: new Date(payload.timestamp),
+        type: payload.type,
+        source: payload.source || 'unknown',
+        data: payload.data,
+        direction: payload.source === 'container' ? 'sent' : 'received',
+      };
 
-        const logEntry: EventLogEntry = {
-          id: Date.now() + Math.random().toString(),
-          timestamp: new Date(payload.timestamp),
-          type: payload.type,
-          source: payload.source || 'unknown',
-          data: payload.data,
-          direction: payload.source === 'container' ? 'sent' : 'received',
-        };
-
-        setEventLog((prev) => [logEntry, ...prev].slice(0, 50)); // Keep last 50 events
-      })
-    );
+      setEventLog((prev) => [logEntry, ...prev].slice(0, 50)); // Keep last 50 events
+    });
 
     // Add initial log entry
     const initialEntry: EventLogEntry = {
@@ -111,7 +96,7 @@ export const MFECommunicationPage: React.FC = () => {
     setEventLog([initialEntry]);
 
     return () => {
-      unsubscribes.forEach((fn) => fn());
+      unsubscribe();
     };
   }, [eventBus, mfeServices]);
 
@@ -207,7 +192,7 @@ export const MFECommunicationPage: React.FC = () => {
                 value={customEventType}
                 onChange={(e) => setCustomEventType(e.target.value)}
                 className="w-full px-3 py-2 border rounded-md text-sm"
-                placeholder="custom.test"
+                placeholder="container.broadcast"
               />
             </div>
             <div className="space-y-2">
