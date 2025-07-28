@@ -270,7 +270,7 @@ export const MFECommunicationPage: React.FC = () => {
         <div className="border rounded-lg p-4 space-y-4">
           <div className="flex justify-between items-center">
             <h3 className="text-lg font-semibold">Service Explorer</h3>
-            <span className="text-xs bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 px-2 py-1 rounded">
+            <span className="text-xs bg-muted text-muted-foreground px-2 py-1 rounded">
               Port 3001
             </span>
           </div>
@@ -309,7 +309,7 @@ export const MFECommunicationPage: React.FC = () => {
         <div className="border rounded-lg p-4 space-y-4">
           <div className="flex justify-between items-center">
             <h3 className="text-lg font-semibold">Legacy Demo</h3>
-            <span className="text-xs bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 px-2 py-1 rounded">
+            <span className="text-xs bg-muted text-muted-foreground px-2 py-1 rounded">
               Port 3002
             </span>
           </div>
