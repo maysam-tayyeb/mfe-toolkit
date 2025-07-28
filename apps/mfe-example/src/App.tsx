@@ -297,7 +297,7 @@ export const App: React.FC<AppProps> = ({ services }) => {
     <div className="space-y-8" data-testid="mfe-content">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Service Explorer MFE</h1>
+        <h1 className="text-3xl font-bold tracking-tight">Service Explorer</h1>
         <p className="text-muted-foreground mt-2">
           Demonstrating modern React 19 features with shared container services
         </p>
