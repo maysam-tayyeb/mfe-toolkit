@@ -293,7 +293,7 @@ export const App: React.FC<AppProps> = ({ services }) => {
                 onClick={sendCustomEvent}
                 className="inline-flex items-center justify-center h-9 px-3 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors text-sm font-medium"
               >
-                Send Event
+                Emit Event
               </button>
               <button
                 onClick={clearEventLog}
