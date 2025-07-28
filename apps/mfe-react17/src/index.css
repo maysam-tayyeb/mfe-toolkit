@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* React 17 MFE specific styles */
+/* Legacy Service Explorer MFE specific styles */
 .bg-secondary {
   @apply bg-gray-100;
 }

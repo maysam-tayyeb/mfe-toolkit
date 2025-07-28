@@ -8,7 +8,7 @@ A complete microfrontend (MFE) architecture built with React 19, Redux Toolkit, 
 - 📡 **Inter-MFE Communication** - Real-time event bus for MFE-to-MFE messaging ([see guide](./docs/mfe-communication-guide.md))
 - 🎯 **Shared Services** - Modal, notification, auth, and logging services
 - 📦 **Optimized Bundles** - 96% smaller with import maps (576KB → 14KB)
-- 🔄 **Cross-Version Support** - React 17 MFEs work seamlessly in React 19 container
+- 🔄 **Cross-Version Support** - Legacy Service Explorer MFEs work seamlessly in React 19 container
 - 🛠️ **Modern Tooling** - Vite, TypeScript, pnpm workspaces, and ESBuild
 
 ## 🏗️ Architecture Overview
@@ -81,8 +81,8 @@ pnpm dev
 This command starts:
 
 - ✅ Container app on http://localhost:3000
-- ✅ Example MFE on http://localhost:3001
-- ✅ React 17 MFE on http://localhost:3002
+- ✅ Service Explorer MFE on http://localhost:3001
+- ✅ Legacy Service Explorer MFE on http://localhost:3002
 
 ### Option 2: Run Apps Individually
 
@@ -101,7 +101,7 @@ pnpm dev
 - **Purpose**: Main shell that hosts and orchestrates MFEs
 - **Features**: Navigation, shared services, MFE loading
 
-#### Terminal 2: Example MFE (React 19)
+#### Terminal 2: Service Explorer MFE
 
 ```bash
 # Start the example MFE
@@ -116,10 +116,10 @@ pnpm dev
 - **Loaded at**: http://localhost:3000/mfe/example (in container)
 - **Purpose**: Demonstrates all MFE services and capabilities
 
-#### Terminal 3: React 17 MFE
+#### Terminal 3: Legacy Service Explorer MFE
 
 ```bash
-# Navigate to React 17 MFE directory
+# Navigate to Legacy Service Explorer MFE directory
 cd apps/mfe-react17
 pnpm dev
 ```
@@ -191,7 +191,7 @@ mfe-made-easy/
 │   │   │   ├── App.tsx         # Interactive demo of all services
 │   │   │   └── main.tsx        # ES module export and dev mode
 │   │   └── package.json
-│   └── mfe-react17/            # React 17 MFE (port 3002)
+│   └── mfe-react17/            # Legacy Service Explorer MFE (port 3002)
 │       ├── src/
 │       │   ├── App.tsx         # React 17 compatibility demo
 │       │   └── main.tsx        # ES module export
@@ -215,7 +215,7 @@ mfe-made-easy/
 - `pnpm dev` - Start all apps in parallel
 - `pnpm dev:container` - Start only container app
 - `pnpm dev:mfe` - Start only example MFE
-- `pnpm dev:react17` - Start only React 17 MFE
+- `pnpm dev:react17` - Start only Legacy Service Explorer MFE
 - `pnpm build` - Build all packages
 - `pnpm -r build` - Build packages in dependency order
 - `pnpm type-check` - TypeScript checking
@@ -261,8 +261,8 @@ pnpm dev
 
 # Start individual apps
 pnpm dev:container    # Container on :3000
-pnpm dev:mfe          # Example MFE on :3001
-pnpm dev:react17      # React 17 MFE on :3002
+pnpm dev:mfe          # Service Explorer MFE on :3001
+pnpm dev:react17      # Legacy Service Explorer MFE on :3002
 
 # Build everything
 pnpm build
@@ -335,8 +335,8 @@ console.log(window.__REDUX_STORE__); // Redux store
 ```bash
 # Kill process on specific port
 lsof -ti:3000 | xargs kill -9  # Container
-lsof -ti:3001 | xargs kill -9  # Example MFE
-lsof -ti:3002 | xargs kill -9  # React 17 MFE
+lsof -ti:3001 | xargs kill -9  # Service Explorer MFE
+lsof -ti:3002 | xargs kill -9  # Legacy Service Explorer MFE (React 17)
 
 # Or use different ports in vite.config.ts
 ```

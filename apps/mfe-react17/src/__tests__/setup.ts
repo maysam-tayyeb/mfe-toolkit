@@ -1,4 +1,4 @@
-// Test setup for React 17 MFE
+// Test setup for Legacy Service Explorer MFE
 import '@testing-library/jest-dom';
 import { vi } from 'vitest';
 

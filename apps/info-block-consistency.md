@@ -48,6 +48,7 @@ const InfoBlock: React.FC<InfoBlockProps> = ({ title, sections, className = '' }
 ## Result
 
 Both MFEs now display their information in identical layouts with:
+
 - Consistent visual styling
 - Same grid structure
 - Highlighted important values (bundle size, format, etc.)

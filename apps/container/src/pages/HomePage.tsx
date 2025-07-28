@@ -4,13 +4,13 @@ import { Button } from '@/components/ui/button';
 import { ArrowRight, Zap, Package, Radio, Shield } from 'lucide-react';
 
 export const HomePage: React.FC = () => {
-
   return (
     <div className="space-y-12 pb-12">
       <div className="text-center space-y-4">
         <h1 className="text-4xl font-bold tracking-tight">MFE Made Easy</h1>
         <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-          A modern microfrontend platform with dynamic loading, shared services, and real-time communication
+          A modern microfrontend platform with dynamic loading, shared services, and real-time
+          communication
         </p>
       </div>
 
@@ -45,7 +45,6 @@ export const HomePage: React.FC = () => {
           <p className="text-sm text-muted-foreground">Auth, Modal, Notifications</p>
         </div>
       </div>
-
 
       {/* Quick Actions */}
       <div className="w-full">
@@ -116,7 +115,6 @@ export const HomePage: React.FC = () => {
           </div>
         </div>
       </div>
-
 
       {/* Platform Stats */}
       <div className="bg-gradient-to-r from-primary/5 to-primary/10 rounded-lg p-8 max-w-7xl mx-auto">

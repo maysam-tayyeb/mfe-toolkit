@@ -20,7 +20,7 @@
       "dependencies": ["react", "react-dom"],
       "sharedLibs": ["@reduxjs/toolkit", "react-redux"],
       "metadata": {
-        "displayName": "React 17 MFE",
+        "displayName": "Legacy Service Explorer MFE",
         "description": "Shows cross-version React compatibility",
         "icon": "⚛️",
         "cdnUrl": "https://cdn.example.com/mfes/react17/v1.0.0/"

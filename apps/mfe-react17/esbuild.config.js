@@ -1,7 +1,7 @@
 import { build } from 'esbuild';
 
 /**
- * ESBuild configuration for React 17 MFE
+ * ESBuild configuration for Legacy Service Explorer MFE
  *
  * This MFE bundles its own React 17 dependencies to demonstrate version compatibility
  * with the React 19 container. It does not use externalized dependencies.
@@ -64,7 +64,7 @@ async function getFileSize(filePath) {
 
 // Build the MFE
 try {
-  console.log('🔨 Building React 17 MFE...');
+  console.log('🔨 Building Legacy Service Explorer MFE...');
   const result = await build(config);
 
   if (result.errors.length > 0) {
@@ -81,7 +81,7 @@ try {
   const sourcemapSize = await getFileSize(config.outfile + '.map');
   const cssSize = await getFileSize('dist/react17-mfe.css');
 
-  console.log('✅ React 17 MFE built successfully!');
+  console.log('✅ Legacy Service Explorer MFE built successfully!');
   console.log('📦 Bundle created: dist/react17-mfe.js');
   console.log(`📏 Bundle size: ${formatBytes(bundleSize)} (minified)`);
   console.log('📊 Size comparison: ~270KB → 157.95KB (41.5% reduction with bundled React 17)');

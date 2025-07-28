@@ -16,7 +16,7 @@ describe('InfoBlock Component', () => {
 
   it('renders all sections', () => {
     render(<InfoBlock title="Test" sections={mockSections} />);
-    
+
     expect(screen.getByText('Name:')).toBeInTheDocument();
     expect(screen.getByText('John Doe')).toBeInTheDocument();
     expect(screen.getByText('Age:')).toBeInTheDocument();
@@ -27,7 +27,7 @@ describe('InfoBlock Component', () => {
 
   it('applies highlight styling when specified', () => {
     render(<InfoBlock title="Test" sections={mockSections} />);
-    
+
     const activeStatus = screen.getByText('Active');
     expect(activeStatus).toHaveClass('text-primary');
   });

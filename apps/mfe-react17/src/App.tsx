@@ -44,7 +44,9 @@ const InfoBlock: React.FC<InfoBlockProps> = ({ title, sections, className = '' }
 export const App: React.FC<AppProps> = ({ services }) => {
   const [eventLog, setEventLog] = useState<EventLogEntry[]>([]);
   const [customEventName, setCustomEventName] = useState('react17.status');
-  const [customEventData, setCustomEventData] = useState('{"status": "active", "component": "React 17 MFE"}');
+  const [customEventData, setCustomEventData] = useState(
+    '{"status": "active", "component": "Legacy Service Explorer MFE"}'
+  );
   const [listeningEvents, setListeningEvents] = useState<string[]>([]);
   const [newEventToListen, setNewEventToListen] = useState('container.broadcast');
   const [eventUnsubscribes, setEventUnsubscribes] = useState<Map<string, () => void>>(new Map());
@@ -71,7 +73,7 @@ export const App: React.FC<AppProps> = ({ services }) => {
       action: () => {
         services.modal.open({
           title: 'React 17 Simple Modal',
-          content: 'This modal is triggered from a React 17 MFE!',
+          content: 'This modal is triggered from a Legacy Service Explorer MFE!',
           size: 'sm',
         });
       },
@@ -151,13 +153,19 @@ Permissions: ${session.permissions.join(', ')}`,
     // Subscribe to the new event
     const unsubscribe = services.eventBus.on(newEventToListen as any, (payload) => {
       addToEventLog('received', newEventToListen, payload.data);
-      services.notification.info('Custom Event Received', `Received "${newEventToListen}" event from ${payload.source || 'unknown'}`);
+      services.notification.info(
+        'Custom Event Received',
+        `Received "${newEventToListen}" event from ${payload.source || 'unknown'}`
+      );
     });
 
     // Store the unsubscribe function
     setEventUnsubscribes((prev) => new Map(prev).set(newEventToListen, unsubscribe));
     setListeningEvents((prev) => [...prev, newEventToListen]);
-    services.notification.success('Listening Started', `Now listening to "${newEventToListen}" events`);
+    services.notification.success(
+      'Listening Started',
+      `Now listening to "${newEventToListen}" events`
+    );
     setNewEventToListen('');
   };
 
@@ -183,15 +191,13 @@ Permissions: ${session.permissions.join(', ')}`,
     { level: 'error' },
   ];
 
-
   useEffect(() => {
-    services.logger.info('React 17 MFE initialized');
-    services.logger.info('React 17 MFE mounted');
+    services.logger.info('Legacy Service Explorer MFE initialized');
+    services.logger.info('Legacy Service Explorer MFE mounted');
 
     // Emit MFE loaded event
     services.eventBus.emit(EVENTS.MFE_LOADED, { name: 'react17', version: '1.0.0' });
     addToEventLog('sent', EVENTS.MFE_LOADED, { name: 'react17', version: '1.0.0' });
-
 
     // Subscribe to events
     const unsubscribes: Array<() => void> = [];
@@ -218,12 +224,12 @@ Permissions: ${session.permissions.join(', ')}`,
     if (unsubscribe4) unsubscribes.push(unsubscribe4);
 
     return () => {
-      services.logger.info('React 17 MFE unmounting');
+      services.logger.info('Legacy Service Explorer MFE unmounting');
       unsubscribes.forEach((fn) => fn && typeof fn === 'function' && fn());
       services.eventBus.emit(EVENTS.MFE_UNLOADED, { name: 'react17' });
     };
   }, [services]);
-  
+
   // Cleanup dynamic event listeners on unmount
   useEffect(() => {
     return () => {
@@ -235,7 +241,7 @@ Permissions: ${session.permissions.join(', ')}`,
     <div className="space-y-8" data-testid="react17-mfe">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">React 17 MFE Service Explorer</h1>
+        <h1 className="text-3xl font-bold tracking-tight">Legacy Service Explorer</h1>
         <p className="text-muted-foreground mt-2">
           Demonstrating React 17 compatibility with React 19 container services
         </p>
@@ -249,7 +255,7 @@ Permissions: ${session.permissions.join(', ')}`,
           <p className="text-sm text-muted-foreground">
             Send and receive events between MFEs and the container
           </p>
-          
+
           {/* Dynamic Event Listening */}
           <div className="space-y-2">
             <h3 className="text-sm font-medium">Listen to Events</h3>
@@ -373,7 +379,7 @@ Permissions: ${session.permissions.join(', ')}`,
         <div className="border rounded-lg p-6 space-y-4">
           <h2 className="text-xl font-semibold">Modal Service</h2>
           <p className="text-sm text-muted-foreground">
-            Display modals in the React 19 container from React 17 MFE
+            Display modals in the React 19 container from Legacy Service Explorer MFE
           </p>
           <div className="flex flex-col gap-2">
             {modalExamples.map((example) => (
@@ -401,7 +407,7 @@ Permissions: ${session.permissions.join(', ')}`,
                 onClick={() =>
                   method(
                     `React 17 ${type.charAt(0).toUpperCase() + type.slice(1)}`,
-                    `This is a ${type} message from React 17 MFE`
+                    `This is a ${type} message from Legacy Service Explorer MFE`
                   )
                 }
                 className="inline-flex items-center justify-center h-9 px-3 bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/80 transition-colors text-sm font-medium capitalize"
@@ -435,7 +441,9 @@ Permissions: ${session.permissions.join(', ')}`,
                           <span className="font-medium">Email:</span>
                           <span>{session.email}</span>
                           <span className="font-medium">Authenticated:</span>
-                          <span className={session.isAuthenticated ? 'text-green-600' : 'text-red-600'}>
+                          <span
+                            className={session.isAuthenticated ? 'text-green-600' : 'text-red-600'}
+                          >
                             {session.isAuthenticated ? 'Yes' : 'No'}
                           </span>
                         </div>

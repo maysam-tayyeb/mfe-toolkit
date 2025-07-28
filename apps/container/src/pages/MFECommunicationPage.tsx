@@ -30,11 +30,13 @@ export const MFECommunicationPage: React.FC = () => {
   const [eventLog, setEventLog] = useState<EventLogEntry[]>([]);
   const [mfeStatuses, setMfeStatuses] = useState<Record<string, MFEStatus>>({});
   const [customEventType, setCustomEventType] = useState('container.broadcast');
-  const [customEventData, setCustomEventData] = useState('{"message": "Broadcast from container", "timestamp": "' + new Date().toISOString() + '"}');
+  const [customEventData, setCustomEventData] = useState(
+    '{"message": "Broadcast from container", "timestamp": "' + new Date().toISOString() + '"}'
+  );
 
   // Use the custom hook to get MFE URLs from context (prevents multiple registry instances)
   const { urls: mfeUrls, isLoading: registryLoading } = useMFEUrlsFromContext([
-    'example',
+    'react19',
     'react17',
   ]);
 
@@ -171,11 +173,15 @@ export const MFECommunicationPage: React.FC = () => {
         </div>
         <div className="border rounded-lg p-4 space-y-1">
           <p className="text-sm font-medium text-muted-foreground">From Container</p>
-          <p className="text-2xl font-bold">{eventLog.filter((e) => e.direction === 'sent').length}</p>
+          <p className="text-2xl font-bold">
+            {eventLog.filter((e) => e.direction === 'sent').length}
+          </p>
         </div>
         <div className="border rounded-lg p-4 space-y-1">
           <p className="text-sm font-medium text-muted-foreground">From MFEs</p>
-          <p className="text-2xl font-bold">{eventLog.filter((e) => e.direction === 'received').length}</p>
+          <p className="text-2xl font-bold">
+            {eventLog.filter((e) => e.direction === 'received').length}
+          </p>
         </div>
       </div>
 
@@ -231,22 +237,12 @@ export const MFECommunicationPage: React.FC = () => {
               eventLog.map((entry) => (
                 <div
                   key={entry.id}
-                  className={`p-3 rounded border-l-4 ${
-                    entry.direction === 'sent'
-                      ? 'border-l-blue-500 bg-blue-50 dark:bg-blue-950/20'
-                      : 'border-l-green-500 bg-green-50 dark:bg-green-950/20'
-                  }`}
+                  className="p-3 rounded border border-border bg-card"
                 >
                   <div className="flex justify-between items-start mb-1">
                     <div className="flex items-center gap-2">
                       <span className="font-mono text-sm font-medium">{entry.type}</span>
-                      <span
-                        className={`px-2 py-1 rounded text-xs ${
-                          entry.direction === 'sent'
-                            ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200'
-                            : 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
-                        }`}
-                      >
+                      <span className="px-2 py-1 rounded text-xs border border-border bg-background text-foreground font-medium">
                         {entry.direction === 'sent' ? '→ OUT' : '← IN'}
                       </span>
                     </div>
@@ -259,7 +255,7 @@ export const MFECommunicationPage: React.FC = () => {
                       From: <strong>{entry.source}</strong>
                     </span>
                   </div>
-                  <pre className="text-xs bg-white dark:bg-gray-900 p-2 rounded border overflow-x-auto">
+                  <pre className="text-xs bg-muted text-foreground p-2 rounded border border-border overflow-x-auto font-mono">
                     {formatEventData(entry.data)}
                   </pre>
                 </div>
@@ -279,10 +275,10 @@ export const MFECommunicationPage: React.FC = () => {
             </span>
           </div>
           <div className="border rounded-md overflow-hidden">
-            {!registryLoading && mfeUrls.example ? (
+            {!registryLoading && mfeUrls.react19 ? (
               <MFELoader
-                name="example"
-                url={mfeUrls.example}
+                name="react19"
+                url={mfeUrls.react19}
                 services={mfeServices}
                 fallback={
                   <div className="flex items-center justify-center h-64">

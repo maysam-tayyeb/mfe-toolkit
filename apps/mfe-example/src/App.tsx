@@ -44,7 +44,9 @@ const InfoBlock: React.FC<InfoBlockProps> = ({ title, sections, className = '' }
 export const App: React.FC<AppProps> = ({ services }) => {
   const [eventLog, setEventLog] = useState<EventLogEntry[]>([]);
   const [customEventName, setCustomEventName] = useState('react19.action');
-  const [customEventData, setCustomEventData] = useState('{"action": "user-interaction", "component": "React 19 MFE"}');
+  const [customEventData, setCustomEventData] = useState(
+    '{"action": "user-interaction", "component": "Service Explorer MFE"}'
+  );
   const [listeningEvents, setListeningEvents] = useState<string[]>([]);
   const [newEventToListen, setNewEventToListen] = useState('container.broadcast');
   const [eventUnsubscribes, setEventUnsubscribes] = useState<Map<string, () => void>>(new Map());
@@ -165,13 +167,19 @@ export const App: React.FC<AppProps> = ({ services }) => {
     // Subscribe to the new event
     const unsubscribe = services.eventBus.on(newEventToListen as any, (payload) => {
       addToEventLog('received', newEventToListen, payload.data);
-      services.notification.info('Event Received', `Received "${newEventToListen}" event from ${payload.source || 'unknown'}`);
+      services.notification.info(
+        'Event Received',
+        `Received "${newEventToListen}" event from ${payload.source || 'unknown'}`
+      );
     });
 
     // Store the unsubscribe function
     setEventUnsubscribes((prev) => new Map(prev).set(newEventToListen, unsubscribe));
     setListeningEvents((prev) => [...prev, newEventToListen]);
-    services.notification.success('Listening Started', `Now listening to "${newEventToListen}" events`);
+    services.notification.success(
+      'Listening Started',
+      `Now listening to "${newEventToListen}" events`
+    );
     setNewEventToListen('');
   };
 
@@ -267,17 +275,17 @@ export const App: React.FC<AppProps> = ({ services }) => {
     ];
 
     // Initial load event
-    services.logger.info('Example MFE mounted successfully');
-    services.eventBus.emit(EVENTS.MFE_LOADED, { name: 'example', version: '1.0.0' });
-    addToEventLog('sent', EVENTS.MFE_LOADED, { name: 'example', version: '1.0.0' });
+    services.logger.info('Service Explorer MFE mounted successfully');
+    services.eventBus.emit(EVENTS.MFE_LOADED, { name: 'react19', version: '1.0.0' });
+    addToEventLog('sent', EVENTS.MFE_LOADED, { name: 'react19', version: '1.0.0' });
 
     return () => {
       unsubscribes.forEach((fn) => fn());
-      services.logger.info('Example MFE unmounting');
-      services.eventBus.emit(EVENTS.MFE_UNLOADED, { name: 'example' });
+      services.logger.info('Service Explorer MFE unmounting');
+      services.eventBus.emit(EVENTS.MFE_UNLOADED, { name: 'react19' });
     };
   }, [services]);
-  
+
   // Cleanup dynamic event listeners on unmount
   useEffect(() => {
     return () => {
@@ -289,7 +297,7 @@ export const App: React.FC<AppProps> = ({ services }) => {
     <div className="space-y-8" data-testid="mfe-content">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">React 19 MFE Service Explorer</h1>
+        <h1 className="text-3xl font-bold tracking-tight">Service Explorer MFE</h1>
         <p className="text-muted-foreground mt-2">
           Demonstrating modern React 19 features with shared container services
         </p>
@@ -303,7 +311,7 @@ export const App: React.FC<AppProps> = ({ services }) => {
           <p className="text-sm text-muted-foreground">
             Send and receive events between MFEs and the container
           </p>
-          
+
           {/* Dynamic Event Listening */}
           <div className="space-y-2">
             <h3 className="text-sm font-medium">Listen to Events</h3>

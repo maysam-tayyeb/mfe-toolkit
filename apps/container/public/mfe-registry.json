@@ -13,13 +13,25 @@
       }
     },
     {
+      "name": "react19",
+      "version": "1.0.0",
+      "url": "http://localhost:3001/mfe-example.js",
+      "dependencies": ["react", "react-dom"],
+      "sharedLibs": ["@reduxjs/toolkit", "react-redux"],
+      "metadata": {
+        "displayName": "Service Explorer MFE",
+        "description": "Demonstrates modern React 19 features with shared container services",
+        "icon": "⚛️"
+      }
+    },
+    {
       "name": "react17",
       "version": "1.0.0",
       "url": "http://localhost:3002/react17-mfe.js",
       "dependencies": ["react", "react-dom"],
       "sharedLibs": ["@reduxjs/toolkit", "react-redux"],
       "metadata": {
-        "displayName": "React 17 MFE",
+        "displayName": "Legacy Service Explorer",
         "description": "Shows cross-version React compatibility",
         "icon": "⚛️"
       }

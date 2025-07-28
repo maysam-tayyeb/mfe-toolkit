@@ -7,21 +7,14 @@ export interface GridProps extends React.HTMLAttributes<HTMLDivElement> {
   cols?: 2 | 3 | 4 | 'responsive';
 }
 
-export const Grid: React.FC<GridProps> = ({ 
-  children,
-  cols = 2,
-  className,
-  ...props 
-}) => {
-  const gridClass = cols === 'responsive' 
-    ? gridStyles.responsive 
-    : gridStyles[`cols${cols}` as keyof typeof gridStyles];
+export const Grid: React.FC<GridProps> = ({ children, cols = 2, className, ...props }) => {
+  const gridClass =
+    cols === 'responsive'
+      ? gridStyles.responsive
+      : gridStyles[`cols${cols}` as keyof typeof gridStyles];
 
   return (
-    <div 
-      className={cn(gridClass, className)}
-      {...props}
-    >
+    <div className={cn(gridClass, className)} {...props}>
       {children}
     </div>
   );

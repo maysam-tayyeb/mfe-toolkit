@@ -59,6 +59,6 @@ This is a monorepo using pnpm workspaces for a microfrontend (MFE) architecture 
 
 ## Development Notes
 
-- **Rebuild if updated**: Always rebuild the project when making changes to core configurations or dependencies to ensure consistency across the monorepo.
+- **Rebuild MFEs if updated**: Always rebuild MFEs when making changes to core configurations or dependencies to ensure consistency across the monorepo.
 
 [Rest of the existing content remains unchanged]

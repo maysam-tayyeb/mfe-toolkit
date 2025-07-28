@@ -56,7 +56,7 @@ import { InfoBlock } from '@mfe/design-system';
     { label: 'Status', value: 'Active', highlight: true },
   ]}
   columns={3}
-/>
+/>;
 ```
 
 ### Section

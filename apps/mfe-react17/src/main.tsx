@@ -74,12 +74,14 @@ let mountPoint: HTMLDivElement | null = null;
 
 const React17MFE: MFEModule = {
   mount: (element: HTMLElement, services: MFEServices) => {
-    services.logger.info('React 17 MFE mounting to element');
+    services.logger.info('Legacy Service Explorer MFE mounting to element');
 
     try {
       // Check if already mounted
       if (mountPoint && element.contains(mountPoint)) {
-        services.logger.info('React 17 MFE already mounted, skipping duplicate mount');
+        services.logger.info(
+          'Legacy Service Explorer MFE already mounted, skipping duplicate mount'
+        );
         return;
       }
 
@@ -97,14 +99,14 @@ const React17MFE: MFEModule = {
       // React 17 uses ReactDOM.render instead of createRoot
       ReactDOM.render(React.createElement(App, { services }), mountPoint);
 
-      services.logger.info('React 17 MFE mounted successfully');
+      services.logger.info('Legacy Service Explorer MFE mounted successfully');
       services.eventBus.emit(EVENTS.MFE_LOADED, {
         name: 'react17',
         version: '1.0.0',
         reactVersion: React.version,
       });
     } catch (error) {
-      services.logger.error('Error during React 17 MFE mount', error);
+      services.logger.error('Error during Legacy Service Explorer MFE mount', error);
       throw error;
     }
   },
@@ -119,9 +121,9 @@ const React17MFE: MFEModule = {
         }
         mountPoint = null;
 
-        console.log('React 17 MFE unmounted successfully');
+        console.log('Legacy Service Explorer MFE unmounted successfully');
       } catch (error) {
-        console.error('Error during React 17 MFE unmount:', error);
+        console.error('Error during Legacy Service Explorer MFE unmount:', error);
       }
     }
   },

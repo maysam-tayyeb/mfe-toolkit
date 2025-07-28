@@ -67,12 +67,12 @@ const createNotificationServiceImpl = (): NotificationService => {
 
 export const createMFEServices = (): MFEServices => {
   const eventBus = createEventBus();
-  
+
   // Store event bus globally for direct access
   if (typeof window !== 'undefined') {
     (window as any).__EVENT_BUS__ = eventBus;
   }
-  
+
   return {
     logger: createLogger('MFE'),
     auth: createAuthService(),

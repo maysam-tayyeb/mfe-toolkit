@@ -22,7 +22,7 @@ vi.mock('./App', () => ({
   App: vi.fn(() => null),
 }));
 
-describe('React 17 MFE Main Entry', () => {
+describe('Legacy Service Explorer MFE Main Entry', () => {
   const originalEnv = process.env.NODE_ENV;
   const originalWindow = global.window;
 
@@ -143,7 +143,7 @@ describe('React 17 MFE Main Entry', () => {
       }).toThrow('Render error');
 
       expect((window as any).__MFE_SERVICES__.logger.error).toHaveBeenCalledWith(
-        'Error during React 17 MFE mount',
+        'Error during Legacy Service Explorer MFE mount',
         expect.any(Error)
       );
 

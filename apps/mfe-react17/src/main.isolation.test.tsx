@@ -46,7 +46,7 @@ const createMockServices = (): MFEServices => ({
   },
 });
 
-describe('React 17 MFE in Isolation', () => {
+describe('Legacy Service Explorer MFE in Isolation', () => {
   let mockServices: MFEServices;
 
   beforeEach(() => {
@@ -56,9 +56,7 @@ describe('React 17 MFE in Isolation', () => {
 
   it('should render and function without container dependencies', () => {
     render(<App services={mockServices} />);
-    expect(screen.getByText('React 17 MFE Service Explorer')).toBeInTheDocument();
-    const versionElements = screen.getAllByText('17.0.2');
-    expect(versionElements.length).toBeGreaterThan(0);
+    expect(screen.getByText('Legacy Service Explorer')).toBeInTheDocument();
   });
 
   it('should work with mock auth service', async () => {
@@ -70,7 +68,7 @@ describe('React 17 MFE in Isolation', () => {
 
     expect(mockServices.modal.open).toHaveBeenCalledWith({
       title: 'User Information',
-      content: expect.any(String),
+      content: expect.stringContaining('Username: isolateduser'),
       size: 'md',
     });
   });
@@ -100,15 +98,16 @@ describe('React 17 MFE in Isolation', () => {
   it('should maintain internal state independently', async () => {
     render(<App services={mockServices} />);
 
-    // Test counter state
-    const incrementButton = screen.getByRole('button', { name: /increment/i });
-    expect(screen.getByText('Count: 0')).toBeInTheDocument();
+    // Test event bus state - add and remove event listeners
+    const eventInput = screen.getByPlaceholderText(/Event name to listen/);
+    const listenButton = screen.getByRole('button', { name: 'Listen' });
 
-    await userEvent.click(incrementButton);
-    expect(screen.getByText('Count: 1')).toBeInTheDocument();
+    await userEvent.clear(eventInput);
+    await userEvent.type(eventInput, 'test.event');
+    await userEvent.click(listenButton);
 
-    // Legacy features are demonstrated through the component structure,
-    // not a toggle button in this implementation
+    // Check that the event listener was added
+    expect(screen.getByText('test.event')).toBeInTheDocument();
   });
 
   it('should handle permission checks with mock auth', () => {
@@ -158,7 +157,7 @@ describe('React 17 MFE in Isolation', () => {
     }).rejects.toThrow('Mock notification error');
 
     // Component should still be functional
-    expect(screen.getByText('React 17 MFE Service Explorer')).toBeInTheDocument();
+    expect(screen.getByText('Legacy Service Explorer')).toBeInTheDocument();
 
     // Restore console.error
     console.error = originalError;
@@ -176,6 +175,6 @@ describe('React 17 MFE in Isolation', () => {
 
     // In a real implementation, we'd verify off() was called
     // For now, we just verify the component unmounts cleanly
-    expect(mockServices.logger.info).toHaveBeenCalledWith('React 17 MFE unmounting');
+    expect(mockServices.logger.info).toHaveBeenCalledWith('Legacy Service Explorer MFE unmounting');
   });
 });

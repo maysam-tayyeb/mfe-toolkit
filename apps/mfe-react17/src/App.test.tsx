@@ -46,20 +46,20 @@ const mockServices: MFEServices = {
   },
 };
 
-describe('React 17 MFE App', () => {
+describe('Legacy Service Explorer MFE App', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
   it('should render the app title', () => {
     render(<App services={mockServices} />);
-    expect(screen.getByText('React 17 MFE Service Explorer')).toBeInTheDocument();
+    expect(screen.getByText('Legacy Service Explorer')).toBeInTheDocument();
   });
 
   it('should display React version', () => {
     render(<App services={mockServices} />);
     // Look for React 17 in the component structure
-    expect(screen.getByText('React 17 MFE Service Explorer')).toBeInTheDocument();
+    expect(screen.getByText('Legacy Service Explorer')).toBeInTheDocument();
   });
 
   it('should emit MFE loaded event on mount', () => {
@@ -70,31 +70,31 @@ describe('React 17 MFE App', () => {
     });
   });
 
-  describe('Counter Component', () => {
-    it('should display initial count of 0', () => {
+  describe('Modal Service', () => {
+    it('should open simple modal when button is clicked', async () => {
       render(<App services={mockServices} />);
-      expect(screen.getByText('Count: 0')).toBeInTheDocument();
+      const simpleModalButton = screen.getByRole('button', { name: /simple modal/i });
+
+      await userEvent.click(simpleModalButton);
+
+      expect(mockServices.modal.open).toHaveBeenCalledWith({
+        title: 'React 17 Simple Modal',
+        content: 'This modal is triggered from a Legacy Service Explorer MFE!',
+        size: 'sm',
+      });
     });
 
-    it('should increment count when button is clicked', async () => {
+    it('should open compatibility info modal', async () => {
       render(<App services={mockServices} />);
-      const incrementButton = screen.getByRole('button', { name: /increment/i });
+      const compatButton = screen.getByRole('button', { name: /compatibility info/i });
 
-      await userEvent.click(incrementButton);
-      expect(screen.getByText('Count: 1')).toBeInTheDocument();
+      await userEvent.click(compatButton);
 
-      await userEvent.click(incrementButton);
-      expect(screen.getByText('Count: 2')).toBeInTheDocument();
-    });
-
-    it('should log counter increment', async () => {
-      render(<App services={mockServices} />);
-      const incrementButton = screen.getByRole('button', { name: /increment/i });
-
-      await userEvent.click(incrementButton);
-      expect(mockServices.logger.debug).toHaveBeenCalledWith(
-        'Counter incremented in class component'
-      );
+      expect(mockServices.modal.open).toHaveBeenCalledWith({
+        title: 'React 17 Compatibility',
+        content: expect.stringContaining('This MFE demonstrates cross-version support'),
+        size: 'md',
+      });
     });
   });
 
@@ -107,7 +107,7 @@ describe('React 17 MFE App', () => {
 
       expect(mockServices.modal.open).toHaveBeenCalledWith({
         title: 'User Information',
-        content: expect.any(String),
+        content: expect.stringContaining('Username: testuser'),
         size: 'md',
       });
     });
@@ -147,16 +147,18 @@ describe('React 17 MFE App', () => {
       render(<App services={mockServices} />);
 
       // Fill in event name and data
-      const eventNameInput = screen.getByPlaceholderText('Event name');
+      const eventNameInput = screen.getByPlaceholderText(/Event name to send/);
       const eventDataInput = screen.getByPlaceholderText(/Event data.*JSON format/);
 
+      await userEvent.clear(eventNameInput);
       await userEvent.type(eventNameInput, 'react17:test');
+      await userEvent.clear(eventDataInput);
       await userEvent.paste(eventDataInput, '{"message": "Hello from React 17"}');
 
       const emitButton = screen.getByRole('button', { name: /emit event/i });
       await userEvent.click(emitButton);
 
-      expect(mockServices.eventBus.emit).toHaveBeenCalledWith('react17:test', {
+      expect(mockServices.eventBus.emit).toHaveBeenNthCalledWith(2, 'react17:test', {
         message: 'Hello from React 17',
       });
     });
@@ -164,8 +166,11 @@ describe('React 17 MFE App', () => {
     it('should handle empty event data', async () => {
       render(<App services={mockServices} />);
 
-      const eventNameInput = screen.getByPlaceholderText('Event name');
+      const eventNameInput = screen.getByPlaceholderText(/Event name to send/);
+      const eventDataInput = screen.getByPlaceholderText(/Event data.*JSON format/);
+      await userEvent.clear(eventNameInput);
       await userEvent.type(eventNameInput, 'react17:simple');
+      await userEvent.clear(eventDataInput);
 
       const emitButton = screen.getByRole('button', { name: /emit event/i });
       await userEvent.click(emitButton);
@@ -176,8 +181,11 @@ describe('React 17 MFE App', () => {
     it('should show notification on successful event emission', async () => {
       render(<App services={mockServices} />);
 
-      const eventNameInput = screen.getByPlaceholderText('Event name');
+      const eventNameInput = screen.getByPlaceholderText(/Event name to send/);
+      const eventDataInput = screen.getByPlaceholderText(/Event data.*JSON format/);
+      await userEvent.clear(eventNameInput);
       await userEvent.type(eventNameInput, 'react17:notify');
+      await userEvent.clear(eventDataInput);
 
       const emitButton = screen.getByRole('button', { name: /emit event/i });
       await userEvent.click(emitButton);
@@ -198,7 +206,7 @@ describe('React 17 MFE App', () => {
 
       expect(mockServices.notification.success).toHaveBeenCalledWith(
         'React 17 Success',
-        'This is a success message from React 17 MFE'
+        'This is a success message from Legacy Service Explorer MFE'
       );
     });
 
@@ -224,7 +232,7 @@ describe('React 17 MFE App', () => {
             mockServices.notification[type as keyof typeof mockServices.notification]
           ).toHaveBeenCalledWith(
             `React 17 ${type.charAt(0).toUpperCase() + type.slice(1)}`,
-            `This is a ${type} message from React 17 MFE`
+            `This is a ${type} message from Legacy Service Explorer MFE`
           );
         }
       }
@@ -246,7 +254,7 @@ describe('React 17 MFE App', () => {
       if (debugButton) {
         await userEvent.click(debugButton);
         expect(mockServices.logger.debug).toHaveBeenCalledWith(
-          expect.stringMatching(/React 17 debug message at/)
+          expect.stringMatching(/Test debug message from MFE at/)
         );
       }
     });
@@ -277,20 +285,24 @@ describe('React 17 MFE App', () => {
       const { unmount } = render(<App services={mockServices} />);
 
       // Component did mount is logged
-      expect(mockServices.logger.info).toHaveBeenCalledWith('React 17 MFE mounted');
+      expect(mockServices.logger.info).toHaveBeenCalledWith(
+        'Legacy Service Explorer MFE initialized'
+      );
 
       // Unmount the component
       unmount();
 
       // Component will unmount is logged
-      expect(mockServices.logger.info).toHaveBeenCalledWith('React 17 MFE unmounting');
+      expect(mockServices.logger.info).toHaveBeenCalledWith(
+        'Legacy Service Explorer MFE unmounting'
+      );
     });
   });
 
   describe('Event Bus Subscription Bug', () => {
     it('should maintain multiple event subscriptions when adding new listeners', async () => {
       const eventHandlers = new Map<string, Set<any>>();
-      
+
       const trackingServices = {
         ...mockServices,
         eventBus: {
@@ -300,7 +312,7 @@ describe('React 17 MFE App', () => {
               eventHandlers.set(event, new Set());
             }
             eventHandlers.get(event)!.add(handler);
-            
+
             // Return unsubscribe function
             return () => {
               const handlers = eventHandlers.get(event);
@@ -318,9 +330,10 @@ describe('React 17 MFE App', () => {
       render(<App services={trackingServices} />);
 
       // Subscribe to first event
-      const eventInput = screen.getByPlaceholderText('Event name to listen (e.g., custom.test)');
-      const listenButton = screen.getByText('Listen');
+      const eventInput = screen.getByPlaceholderText(/Event name to listen/);
+      const listenButton = screen.getByRole('button', { name: 'Listen' });
 
+      await userEvent.clear(eventInput);
       await userEvent.type(eventInput, 'test.event1');
       await userEvent.click(listenButton);
 
@@ -348,7 +361,7 @@ describe('React 17 MFE App', () => {
       expect(eventHandlers.has('test.event1')).toBe(true);
       expect(eventHandlers.has('test.event2')).toBe(true);
       expect(eventHandlers.has('test.event3')).toBe(true);
-      
+
       // Verify all handlers are still registered
       expect(eventHandlers.get('test.event1')?.size).toBe(1);
       expect(eventHandlers.get('test.event2')?.size).toBe(1);
@@ -357,7 +370,7 @@ describe('React 17 MFE App', () => {
 
     it('should receive events from all subscribed event types', async () => {
       const eventHandlers = new Map<string, Set<any>>();
-      
+
       const trackingServices = {
         ...mockServices,
         eventBus: {
@@ -367,7 +380,7 @@ describe('React 17 MFE App', () => {
               eventHandlers.set(event, new Set());
             }
             eventHandlers.get(event)!.add(handler);
-            
+
             return () => {
               const handlers = eventHandlers.get(event);
               if (handlers) {
@@ -383,8 +396,8 @@ describe('React 17 MFE App', () => {
 
       render(<App services={trackingServices} />);
 
-      const eventInput = screen.getByPlaceholderText('Event name to listen (e.g., custom.test)');
-      const listenButton = screen.getByText('Listen');
+      const eventInput = screen.getByPlaceholderText(/Event name to listen/);
+      const listenButton = screen.getByRole('button', { name: 'Listen' });
 
       // Add three event listeners
       const events = ['custom.test1', 'custom.test2', 'custom.test3'];
@@ -399,7 +412,7 @@ describe('React 17 MFE App', () => {
       for (const event of events) {
         const handlers = eventHandlers.get(event);
         if (handlers) {
-          handlers.forEach(handler => {
+          handlers.forEach((handler) => {
             handler({
               type: event,
               data: { message: `Test message for ${event}` },
@@ -445,7 +458,7 @@ describe('React 17 MFE App', () => {
       const { container } = render(<App services={errorServices} />);
 
       // Should render despite error potential
-      expect(screen.getByText('React 17 MFE Service Explorer')).toBeInTheDocument();
+      expect(screen.getByText('Legacy Service Explorer')).toBeInTheDocument();
       expect(container).toBeTruthy();
 
       // Restore console.error
@@ -458,10 +471,12 @@ describe('React 17 MFE App', () => {
       // Wait for component to fully render
       await screen.findByText('Event Bus');
 
-      const eventNameInput = screen.getByPlaceholderText('Event name');
+      const eventNameInput = screen.getByPlaceholderText(/Event name to send/);
       const eventDataInput = screen.getByPlaceholderText(/Event data.*JSON format/);
 
+      await userEvent.clear(eventNameInput);
       await userEvent.type(eventNameInput, 'test:event');
+      await userEvent.clear(eventDataInput);
       await userEvent.type(eventDataInput, 'invalid json');
 
       const emitButton = screen.getByRole('button', { name: /emit event/i });

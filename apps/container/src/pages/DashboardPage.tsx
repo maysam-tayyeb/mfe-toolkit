@@ -1,13 +1,11 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { openModal } from '@/store/modalSlice';
 import { addNotification } from '@/store/notificationSlice';
-import { RootState } from '@/store';
 
 export const DashboardPage: React.FC = () => {
   const dispatch = useDispatch();
-  const auth = useSelector((state: RootState) => state.auth);
 
   const handleTestModal = () => {
     dispatch(
@@ -92,7 +90,6 @@ export const DashboardPage: React.FC = () => {
     }, 1500);
   };
 
-
   return (
     <div className="space-y-8">
       <div>
@@ -161,7 +158,8 @@ export const DashboardPage: React.FC = () => {
           <h2 className="text-xl font-semibold">Platform Overview</h2>
           <div className="space-y-3">
             <p className="text-sm text-muted-foreground">
-              This platform supports dynamic loading of microfrontends with shared services and real-time communication.
+              This platform supports dynamic loading of microfrontends with shared services and
+              real-time communication.
             </p>
             <div className="space-y-2">
               <div className="flex items-center gap-2">
@@ -174,10 +172,10 @@ export const DashboardPage: React.FC = () => {
                 <span className="text-sm">• Cross-version React support</span>
               </div>
             </div>
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               size="sm"
-              onClick={() => window.location.href = '/mfe-communication'}
+              onClick={() => (window.location.href = '/mfe-communication')}
             >
               View MFE Communication
             </Button>
