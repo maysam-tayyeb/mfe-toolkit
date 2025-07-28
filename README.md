@@ -2,6 +2,15 @@
 
 A complete microfrontend (MFE) architecture built with React 19, Redux Toolkit, and pnpm workspaces. This setup demonstrates dynamic MFE loading, shared services, and a development workflow for building scalable frontend applications.
 
+## ✨ Key Features
+
+- 🚀 **Dynamic MFE Loading** - Load microfrontends on-demand with ES modules
+- 📡 **Inter-MFE Communication** - Real-time event bus for MFE-to-MFE messaging ([see guide](./docs/mfe-communication-guide.md))
+- 🎯 **Shared Services** - Modal, notification, auth, and logging services
+- 📦 **Optimized Bundles** - 96% smaller with import maps (576KB → 14KB)
+- 🔄 **Cross-Version Support** - React 17 MFEs work seamlessly in React 19 container
+- 🛠️ **Modern Tooling** - Vite, TypeScript, pnpm workspaces, and ESBuild
+
 ## 🚀 Quick Start
 
 ### Prerequisites
@@ -67,6 +76,7 @@ cp dist/mfe-example.umd.js public/
 2. **Navigate through the app**:
    - Home page shows the platform overview
    - Dashboard page tests container services
+   - MFE Communication page for inter-MFE messaging
 3. **Load the Example MFE**:
    - Click "Example MFE" in navigation, or
    - Go directly to http://localhost:3000/mfe/example
@@ -76,6 +86,10 @@ cp dist/mfe-example.umd.js public/
    - Test event bus communication
    - Check authentication integration
    - View logger output in console
+
+### 📡 Testing Inter-MFE Communication
+
+For a comprehensive guide on testing real-time communication between MFEs, see the [MFE Communication Guide](./docs/mfe-communication-guide.md).
 
 ## 📁 Project Structure
 
@@ -166,7 +180,16 @@ mfe-made-easy/
 - Example MFE uses port 3001
 - Modify ports in respective `vite.config.ts` files if needed
 
-## 📚 Next Steps
+## 📚 Documentation
+
+### Guides
+- **[MFE Communication Guide](./docs/mfe-communication-guide.md)** - Learn how to implement inter-MFE communication with real-time event bus examples
+
+### API Reference
+- **[MFE Development Kit](./packages/mfe-dev-kit/README.md)** - Core services and utilities for MFE development
+- **[Shared Utilities](./packages/shared/README.md)** - Common constants and helper functions
+
+## 🚀 Next Steps
 
 - Add more MFE examples
 - Implement routing between MFEs
