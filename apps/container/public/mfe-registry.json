@@ -1,19 +1,7 @@
 {
   "mfes": [
     {
-      "name": "example",
-      "version": "1.0.0",
-      "url": "http://localhost:3001/mfe-example.js",
-      "dependencies": ["react", "react-dom"],
-      "sharedLibs": ["@reduxjs/toolkit", "react-redux"],
-      "metadata": {
-        "displayName": "Example MFE",
-        "description": "Demonstrates all MFE services and capabilities",
-        "icon": "🎯"
-      }
-    },
-    {
-      "name": "react19",
+      "name": "serviceExplorer",
       "version": "1.0.0",
       "url": "http://localhost:3001/mfe-example.js",
       "dependencies": ["react", "react-dom"],
@@ -25,13 +13,13 @@
       }
     },
     {
-      "name": "react17",
+      "name": "legacyServiceExplorer",
       "version": "1.0.0",
       "url": "http://localhost:3002/react17-mfe.js",
       "dependencies": ["react", "react-dom"],
       "sharedLibs": ["@reduxjs/toolkit", "react-redux"],
       "metadata": {
-        "displayName": "Legacy Service Explorer",
+        "displayName": "Legacy Service Explorer MFE",
         "description": "Shows cross-version React compatibility",
         "icon": "⚛️"
       }

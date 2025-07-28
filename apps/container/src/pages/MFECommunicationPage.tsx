@@ -6,7 +6,7 @@ import { EventPayload } from '@mfe/dev-kit';
 import { getMFEServicesSingleton } from '@/services/mfe-services-singleton';
 import { MFELoader } from '@mfe/dev-kit';
 import { useMFEUrlsFromContext } from '@/hooks/useMFEUrlsFromContext';
-import { EVENTS } from '@mfe/shared';
+import { EVENTS, MFE_CONFIG } from '@mfe/shared';
 
 interface EventLogEntry {
   id: string;
@@ -36,8 +36,8 @@ export const MFECommunicationPage: React.FC = () => {
 
   // Use the custom hook to get MFE URLs from context (prevents multiple registry instances)
   const { urls: mfeUrls, isLoading: registryLoading } = useMFEUrlsFromContext([
-    'react19',
-    'react17',
+    MFE_CONFIG.serviceExplorer.id,
+    MFE_CONFIG.legacyServiceExplorer.id,
   ]);
 
   // Get singleton MFE services
@@ -235,10 +235,7 @@ export const MFECommunicationPage: React.FC = () => {
               </div>
             ) : (
               eventLog.map((entry) => (
-                <div
-                  key={entry.id}
-                  className="p-3 rounded border border-border bg-card"
-                >
+                <div key={entry.id} className="p-3 rounded border border-border bg-card">
                   <div className="flex justify-between items-start mb-1">
                     <div className="flex items-center gap-2">
                       <span className="font-mono text-sm font-medium">{entry.type}</span>
@@ -269,22 +266,24 @@ export const MFECommunicationPage: React.FC = () => {
       <div className="grid gap-6 lg:grid-cols-2">
         <div className="border rounded-lg p-4 space-y-4">
           <div className="flex justify-between items-center">
-            <h3 className="text-lg font-semibold">Service Explorer MFE</h3>
+            <h3 className="text-lg font-semibold">{MFE_CONFIG.serviceExplorer.displayName}</h3>
             <span className="text-xs bg-muted text-muted-foreground px-2 py-1 rounded">
-              Port 3001
+              Port {MFE_CONFIG.serviceExplorer.port}
             </span>
           </div>
           <div className="border rounded-md overflow-hidden">
-            {!registryLoading && mfeUrls.react19 ? (
+            {!registryLoading && mfeUrls[MFE_CONFIG.serviceExplorer.id] ? (
               <MFELoader
-                name="react19"
-                url={mfeUrls.react19}
+                name={MFE_CONFIG.serviceExplorer.id}
+                url={mfeUrls[MFE_CONFIG.serviceExplorer.id]}
                 services={mfeServices}
                 fallback={
                   <div className="flex items-center justify-center h-64">
                     <div className="text-center">
                       <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-2"></div>
-                      <p className="text-sm text-muted-foreground">Loading Service Explorer...</p>
+                      <p className="text-sm text-muted-foreground">
+                        Loading {MFE_CONFIG.serviceExplorer.name}...
+                      </p>
                     </div>
                   </div>
                 }
@@ -293,7 +292,7 @@ export const MFECommunicationPage: React.FC = () => {
                     addNotification({
                       type: 'error',
                       title: 'MFE Load Error',
-                      message: `Failed to load Service Explorer: ${error.message}`,
+                      message: `Failed to load ${MFE_CONFIG.serviceExplorer.name}: ${error.message}`,
                     })
                   );
                 }}
@@ -308,22 +307,26 @@ export const MFECommunicationPage: React.FC = () => {
 
         <div className="border rounded-lg p-4 space-y-4">
           <div className="flex justify-between items-center">
-            <h3 className="text-lg font-semibold">Legacy Service Explorer MFE</h3>
+            <h3 className="text-lg font-semibold">
+              {MFE_CONFIG.legacyServiceExplorer.displayName}
+            </h3>
             <span className="text-xs bg-muted text-muted-foreground px-2 py-1 rounded">
-              Port 3002
+              Port {MFE_CONFIG.legacyServiceExplorer.port}
             </span>
           </div>
           <div className="border rounded-md overflow-hidden">
-            {!registryLoading && mfeUrls.react17 ? (
+            {!registryLoading && mfeUrls[MFE_CONFIG.legacyServiceExplorer.id] ? (
               <MFELoader
-                name="react17"
-                url={mfeUrls.react17}
+                name={MFE_CONFIG.legacyServiceExplorer.id}
+                url={mfeUrls[MFE_CONFIG.legacyServiceExplorer.id]}
                 services={mfeServices}
                 fallback={
                   <div className="flex items-center justify-center h-64">
                     <div className="text-center">
                       <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-2"></div>
-                      <p className="text-sm text-muted-foreground">Loading Legacy Service Explorer...</p>
+                      <p className="text-sm text-muted-foreground">
+                        Loading {MFE_CONFIG.legacyServiceExplorer.name}...
+                      </p>
                     </div>
                   </div>
                 }
@@ -332,7 +335,7 @@ export const MFECommunicationPage: React.FC = () => {
                     addNotification({
                       type: 'error',
                       title: 'MFE Load Error',
-                      message: `Failed to load Legacy Service Explorer: ${error.message}`,
+                      message: `Failed to load ${MFE_CONFIG.legacyServiceExplorer.name}: ${error.message}`,
                     })
                   );
                 }}

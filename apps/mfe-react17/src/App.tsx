@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { MFEServices } from '@mfe/dev-kit';
-import { EVENTS } from '@mfe/shared';
+import { EVENTS, MFE_CONFIG } from '@mfe/shared';
 
 interface AppProps {
   services: MFEServices;
@@ -43,9 +43,11 @@ const InfoBlock: React.FC<InfoBlockProps> = ({ title, sections, className = '' }
 
 export const App: React.FC<AppProps> = ({ services }) => {
   const [eventLog, setEventLog] = useState<EventLogEntry[]>([]);
-  const [customEventName, setCustomEventName] = useState('react17.status');
+  const [customEventName, setCustomEventName] = useState(
+    `${MFE_CONFIG.legacyServiceExplorer.id}.status`
+  );
   const [customEventData, setCustomEventData] = useState(
-    '{"status": "active", "component": "Legacy Service Explorer MFE"}'
+    `{"status": "active", "component": "${MFE_CONFIG.legacyServiceExplorer.displayName}"}`
   );
   const [listeningEvents, setListeningEvents] = useState<string[]>([]);
   const [newEventToListen, setNewEventToListen] = useState('container.broadcast');
@@ -73,7 +75,7 @@ export const App: React.FC<AppProps> = ({ services }) => {
       action: () => {
         services.modal.open({
           title: 'React 17 Simple Modal',
-          content: 'This modal is triggered from a Legacy Service Explorer MFE!',
+          content: `This modal is triggered from ${MFE_CONFIG.legacyServiceExplorer.displayName}!`,
           size: 'sm',
         });
       },
@@ -192,12 +194,18 @@ Permissions: ${session.permissions.join(', ')}`,
   ];
 
   useEffect(() => {
-    services.logger.info('Legacy Service Explorer MFE initialized');
-    services.logger.info('Legacy Service Explorer MFE mounted');
+    services.logger.info(`${MFE_CONFIG.legacyServiceExplorer.displayName} initialized`);
+    services.logger.info(`${MFE_CONFIG.legacyServiceExplorer.displayName} mounted`);
 
     // Emit MFE loaded event
-    services.eventBus.emit(EVENTS.MFE_LOADED, { name: 'react17', version: '1.0.0' });
-    addToEventLog('sent', EVENTS.MFE_LOADED, { name: 'react17', version: '1.0.0' });
+    services.eventBus.emit(EVENTS.MFE_LOADED, {
+      name: MFE_CONFIG.legacyServiceExplorer.id,
+      version: MFE_CONFIG.legacyServiceExplorer.version,
+    });
+    addToEventLog('sent', EVENTS.MFE_LOADED, {
+      name: MFE_CONFIG.legacyServiceExplorer.id,
+      version: MFE_CONFIG.legacyServiceExplorer.version,
+    });
 
     // Subscribe to events
     const unsubscribes: Array<() => void> = [];
@@ -224,9 +232,11 @@ Permissions: ${session.permissions.join(', ')}`,
     if (unsubscribe4) unsubscribes.push(unsubscribe4);
 
     return () => {
-      services.logger.info('Legacy Service Explorer MFE unmounting');
+      services.logger.info(`${MFE_CONFIG.legacyServiceExplorer.displayName} unmounting`);
       unsubscribes.forEach((fn) => fn && typeof fn === 'function' && fn());
-      services.eventBus.emit(EVENTS.MFE_UNLOADED, { name: 'react17' });
+      services.eventBus.emit(EVENTS.MFE_UNLOADED, {
+        name: MFE_CONFIG.legacyServiceExplorer.id,
+      });
     };
   }, [services]);
 
@@ -241,10 +251,10 @@ Permissions: ${session.permissions.join(', ')}`,
     <div className="space-y-8" data-testid="react17-mfe">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Legacy Service Explorer</h1>
-        <p className="text-muted-foreground mt-2">
-          Demonstrating React 17 compatibility with React 19 container services
-        </p>
+        <h1 className="text-3xl font-bold tracking-tight">
+          {MFE_CONFIG.legacyServiceExplorer.name}
+        </h1>
+        <p className="text-muted-foreground mt-2">{MFE_CONFIG.legacyServiceExplorer.description}</p>
       </div>
 
       {/* Event Bus and Event Log */}
@@ -307,7 +317,7 @@ Permissions: ${session.permissions.join(', ')}`,
               type="text"
               value={customEventName}
               onChange={(e) => setCustomEventName(e.target.value)}
-              placeholder="Event name to send (e.g., react17.status)"
+              placeholder={`Event name to send (e.g., ${MFE_CONFIG.legacyServiceExplorer.id}.status)`}
               className="w-full px-3 py-2 border rounded-md text-sm"
               aria-label="Event Type:"
             />
@@ -379,7 +389,8 @@ Permissions: ${session.permissions.join(', ')}`,
         <div className="border rounded-lg p-6 space-y-4">
           <h2 className="text-xl font-semibold">Modal Service</h2>
           <p className="text-sm text-muted-foreground">
-            Display modals in the React 19 container from Legacy Service Explorer MFE
+            Display modals in the React 19 container from{' '}
+            {MFE_CONFIG.legacyServiceExplorer.displayName}
           </p>
           <div className="flex flex-col gap-2">
             {modalExamples.map((example) => (
@@ -407,7 +418,7 @@ Permissions: ${session.permissions.join(', ')}`,
                 onClick={() =>
                   method(
                     `React 17 ${type.charAt(0).toUpperCase() + type.slice(1)}`,
-                    `This is a ${type} message from Legacy Service Explorer MFE`
+                    `This is a ${type} message from ${MFE_CONFIG.legacyServiceExplorer.displayName}`
                   )
                 }
                 className="inline-flex items-center justify-center h-9 px-3 bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/80 transition-colors text-sm font-medium capitalize"
@@ -566,12 +577,16 @@ Permissions: ${session.permissions.join(', ')}`,
       <InfoBlock
         title="MFE Configuration"
         sections={[
-          { label: 'Name', value: 'Legacy Service Explorer' },
-          { label: 'Package', value: '@mfe/react17-mfe' },
-          { label: 'Version', value: '1.0.0' },
-          { label: 'Dev Port', value: '3002' },
-          { label: 'Format', value: 'ESM Module', highlight: true },
-          { label: 'Bundle Size', value: '~159KB', highlight: true },
+          { label: 'Name', value: MFE_CONFIG.legacyServiceExplorer.name },
+          { label: 'Package', value: MFE_CONFIG.legacyServiceExplorer.packageName },
+          { label: 'Version', value: MFE_CONFIG.legacyServiceExplorer.version },
+          { label: 'Dev Port', value: String(MFE_CONFIG.legacyServiceExplorer.port) },
+          { label: 'Format', value: MFE_CONFIG.legacyServiceExplorer.format, highlight: true },
+          {
+            label: 'Bundle Size',
+            value: MFE_CONFIG.legacyServiceExplorer.bundleSize,
+            highlight: true,
+          },
         ]}
       />
 

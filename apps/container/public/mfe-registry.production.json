@@ -1,29 +1,29 @@
 {
   "mfes": [
     {
-      "name": "example",
+      "name": "serviceExplorer",
       "version": "1.0.0",
-      "url": "https://cdn.example.com/mfes/example/v1.0.0/mfe-example.js",
+      "url": "https://cdn.example.com/mfes/serviceExplorer/v1.0.0/mfe-example.js",
       "dependencies": ["react", "react-dom"],
       "sharedLibs": ["@reduxjs/toolkit", "react-redux"],
       "metadata": {
-        "displayName": "Example MFE",
-        "description": "Demonstrates all MFE services and capabilities",
+        "displayName": "Service Explorer MFE",
+        "description": "Demonstrates modern React 19 features with shared container services",
         "icon": "🎯",
-        "cdnUrl": "https://cdn.example.com/mfes/example/v1.0.0/"
+        "cdnUrl": "https://cdn.example.com/mfes/serviceExplorer/v1.0.0/"
       }
     },
     {
-      "name": "react17",
+      "name": "legacyServiceExplorer",
       "version": "1.0.0",
-      "url": "https://cdn.example.com/mfes/react17/v1.0.0/react17-mfe.js",
+      "url": "https://cdn.example.com/mfes/legacyServiceExplorer/v1.0.0/react17-mfe.js",
       "dependencies": ["react", "react-dom"],
       "sharedLibs": ["@reduxjs/toolkit", "react-redux"],
       "metadata": {
         "displayName": "Legacy Service Explorer MFE",
         "description": "Shows cross-version React compatibility",
         "icon": "⚛️",
-        "cdnUrl": "https://cdn.example.com/mfes/react17/v1.0.0/"
+        "cdnUrl": "https://cdn.example.com/mfes/legacyServiceExplorer/v1.0.0/"
       }
     }
   ],

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { MFEServices } from '@mfe/dev-kit';
-import { EVENTS } from '@mfe/shared';
+import { EVENTS, MFE_CONFIG } from '@mfe/shared';
 
 interface AppProps {
   services: MFEServices;
@@ -43,9 +43,9 @@ const InfoBlock: React.FC<InfoBlockProps> = ({ title, sections, className = '' }
 
 export const App: React.FC<AppProps> = ({ services }) => {
   const [eventLog, setEventLog] = useState<EventLogEntry[]>([]);
-  const [customEventName, setCustomEventName] = useState('react19.action');
+  const [customEventName, setCustomEventName] = useState(`${MFE_CONFIG.serviceExplorer.id}.action`);
   const [customEventData, setCustomEventData] = useState(
-    '{"action": "user-interaction", "component": "Service Explorer MFE"}'
+    `{"action": "user-interaction", "component": "${MFE_CONFIG.serviceExplorer.displayName}"}`
   );
   const [listeningEvents, setListeningEvents] = useState<string[]>([]);
   const [newEventToListen, setNewEventToListen] = useState('container.broadcast');
@@ -275,14 +275,22 @@ export const App: React.FC<AppProps> = ({ services }) => {
     ];
 
     // Initial load event
-    services.logger.info('Service Explorer MFE mounted successfully');
-    services.eventBus.emit(EVENTS.MFE_LOADED, { name: 'react19', version: '1.0.0' });
-    addToEventLog('sent', EVENTS.MFE_LOADED, { name: 'react19', version: '1.0.0' });
+    services.logger.info(`${MFE_CONFIG.serviceExplorer.displayName} mounted successfully`);
+    services.eventBus.emit(EVENTS.MFE_LOADED, {
+      name: MFE_CONFIG.serviceExplorer.id,
+      version: MFE_CONFIG.serviceExplorer.version,
+    });
+    addToEventLog('sent', EVENTS.MFE_LOADED, {
+      name: MFE_CONFIG.serviceExplorer.id,
+      version: MFE_CONFIG.serviceExplorer.version,
+    });
 
     return () => {
       unsubscribes.forEach((fn) => fn());
-      services.logger.info('Service Explorer MFE unmounting');
-      services.eventBus.emit(EVENTS.MFE_UNLOADED, { name: 'react19' });
+      services.logger.info(`${MFE_CONFIG.serviceExplorer.displayName} unmounting`);
+      services.eventBus.emit(EVENTS.MFE_UNLOADED, {
+        name: MFE_CONFIG.serviceExplorer.id,
+      });
     };
   }, [services]);
 
@@ -297,10 +305,8 @@ export const App: React.FC<AppProps> = ({ services }) => {
     <div className="space-y-8" data-testid="mfe-content">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Service Explorer</h1>
-        <p className="text-muted-foreground mt-2">
-          Demonstrating modern React 19 features with shared container services
-        </p>
+        <h1 className="text-3xl font-bold tracking-tight">{MFE_CONFIG.serviceExplorer.name}</h1>
+        <p className="text-muted-foreground mt-2">{MFE_CONFIG.serviceExplorer.description}</p>
       </div>
 
       {/* Event Bus and Event Log Side by Side */}
@@ -363,7 +369,7 @@ export const App: React.FC<AppProps> = ({ services }) => {
               type="text"
               value={customEventName}
               onChange={(e) => setCustomEventName(e.target.value)}
-              placeholder="Event name to send (e.g., react19.action)"
+              placeholder={`Event name to send (e.g., ${MFE_CONFIG.serviceExplorer.id}.action)`}
               className="w-full px-3 py-2 border rounded-md text-sm"
             />
             <textarea
@@ -528,12 +534,12 @@ export const App: React.FC<AppProps> = ({ services }) => {
       <InfoBlock
         title="MFE Configuration"
         sections={[
-          { label: 'Name', value: 'Service Explorer' },
-          { label: 'Package', value: '@mfe/example-mfe' },
-          { label: 'Version', value: '1.0.0' },
-          { label: 'Dev Port', value: '3001' },
-          { label: 'Format', value: 'ESM Module', highlight: true },
-          { label: 'Bundle Size', value: '~14KB', highlight: true },
+          { label: 'Name', value: MFE_CONFIG.serviceExplorer.name },
+          { label: 'Package', value: MFE_CONFIG.serviceExplorer.packageName },
+          { label: 'Version', value: MFE_CONFIG.serviceExplorer.version },
+          { label: 'Dev Port', value: String(MFE_CONFIG.serviceExplorer.port) },
+          { label: 'Format', value: MFE_CONFIG.serviceExplorer.format, highlight: true },
+          { label: 'Bundle Size', value: MFE_CONFIG.serviceExplorer.bundleSize, highlight: true },
         ]}
       />
 

@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
+import { MFE_CONFIG } from '@mfe/shared';
 
 export const Navigation: React.FC = () => {
   const location = useLocation();
@@ -11,8 +12,14 @@ export const Navigation: React.FC = () => {
     { path: '/', label: 'Home' },
     { path: '/dashboard', label: 'Dashboard' },
     { path: '/mfe-communication', label: 'MFE Communication' },
-    { path: '/mfe/react19', label: 'Service Explorer MFE' },
-    { path: '/mfe/react17', label: 'Legacy Service Explorer' },
+    {
+      path: `/mfe/${MFE_CONFIG.serviceExplorer.id}`,
+      label: MFE_CONFIG.serviceExplorer.displayName,
+    },
+    {
+      path: `/mfe/${MFE_CONFIG.legacyServiceExplorer.id}`,
+      label: MFE_CONFIG.legacyServiceExplorer.displayName,
+    },
   ];
 
   return (

@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { App } from './App';
-import { EVENTS } from '@mfe/shared';
+import { EVENTS, MFE_CONFIG } from '@mfe/shared';
 import { EventBusImpl, MFEModule, MFEServices } from '@mfe/dev-kit';
 import './index.css';
 
@@ -74,13 +74,13 @@ let mountPoint: HTMLDivElement | null = null;
 
 const React17MFE: MFEModule = {
   mount: (element: HTMLElement, services: MFEServices) => {
-    services.logger.info('Legacy Service Explorer MFE mounting to element');
+    services.logger.info(`${MFE_CONFIG.legacyServiceExplorer.displayName} mounting to element`);
 
     try {
       // Check if already mounted
       if (mountPoint && element.contains(mountPoint)) {
         services.logger.info(
-          'Legacy Service Explorer MFE already mounted, skipping duplicate mount'
+          `${MFE_CONFIG.legacyServiceExplorer.displayName} already mounted, skipping duplicate mount`
         );
         return;
       }
@@ -93,20 +93,23 @@ const React17MFE: MFEModule = {
 
       // Create mount point
       mountPoint = document.createElement('div');
-      mountPoint.setAttribute('data-mfe', 'react17');
+      mountPoint.setAttribute('data-mfe', MFE_CONFIG.legacyServiceExplorer.id);
       element.appendChild(mountPoint);
 
       // React 17 uses ReactDOM.render instead of createRoot
       ReactDOM.render(React.createElement(App, { services }), mountPoint);
 
-      services.logger.info('Legacy Service Explorer MFE mounted successfully');
+      services.logger.info(`${MFE_CONFIG.legacyServiceExplorer.displayName} mounted successfully`);
       services.eventBus.emit(EVENTS.MFE_LOADED, {
-        name: 'react17',
-        version: '1.0.0',
+        name: MFE_CONFIG.legacyServiceExplorer.id,
+        version: MFE_CONFIG.legacyServiceExplorer.version,
         reactVersion: React.version,
       });
     } catch (error) {
-      services.logger.error('Error during Legacy Service Explorer MFE mount', error);
+      services.logger.error(
+        `Error during ${MFE_CONFIG.legacyServiceExplorer.displayName} mount`,
+        error
+      );
       throw error;
     }
   },
@@ -121,9 +124,12 @@ const React17MFE: MFEModule = {
         }
         mountPoint = null;
 
-        console.log('Legacy Service Explorer MFE unmounted successfully');
+        console.log(`${MFE_CONFIG.legacyServiceExplorer.displayName} unmounted successfully`);
       } catch (error) {
-        console.error('Error during Legacy Service Explorer MFE unmount:', error);
+        console.error(
+          `Error during ${MFE_CONFIG.legacyServiceExplorer.displayName} unmount:`,
+          error
+        );
       }
     }
   },
