@@ -247,8 +247,8 @@ pnpm dev
 
 # Start individual apps
 pnpm dev:container    # Container on :3000
-pnpm dev:mfe         # Example MFE on :3001
-pnpm dev:react17     # React 17 MFE on :3002
+pnpm dev:mfe          # Example MFE on :3001
+pnpm dev:react17      # React 17 MFE on :3002
 
 # Build everything
 pnpm build
