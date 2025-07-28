@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
+  "license": "MIT",
+  "author": "Maysam Tayyeb",
   "scripts": {
     "dev": "pnpm --parallel --filter './apps/**' dev",
     "dev:container": "pnpm --filter @mfe/container dev",

@@ -446,4 +446,4 @@ VITE_MFE_REGISTRY_URL=https://cdn.example.com/configs/mfe-registry.json
 
 ## 📄 License
 
-MIT License - see LICENSE file for details
+MIT License - see [LICENSE](./LICENSE) file for details.
