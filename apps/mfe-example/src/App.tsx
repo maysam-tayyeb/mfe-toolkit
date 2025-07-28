@@ -43,9 +43,11 @@ const InfoBlock: React.FC<InfoBlockProps> = ({ title, sections, className = '' }
 
 export const App: React.FC<AppProps> = ({ services }) => {
   const [eventLog, setEventLog] = useState<EventLogEntry[]>([]);
-  const [isListening, setIsListening] = useState(true);
   const [customEventName, setCustomEventName] = useState('');
   const [customEventData, setCustomEventData] = useState('');
+  const [listeningEvents, setListeningEvents] = useState<string[]>([]);
+  const [newEventToListen, setNewEventToListen] = useState('custom.test');
+  const [eventUnsubscribes, setEventUnsubscribes] = useState<Map<string, () => void>>(new Map());
 
   const addToEventLog = (type: 'sent' | 'received', event: string, data?: any) => {
     setEventLog((prev) =>
@@ -153,6 +155,40 @@ export const App: React.FC<AppProps> = ({ services }) => {
     services.notification.info('Event Log Cleared', 'All events have been removed');
   };
 
+  // Dynamic event listening functions
+  const startListeningToEvent = () => {
+    if (!newEventToListen.trim() || listeningEvents.includes(newEventToListen)) {
+      services.notification.warning('Invalid Event', 'Event name is empty or already listening');
+      return;
+    }
+
+    // Subscribe to the new event
+    const unsubscribe = services.eventBus.on(newEventToListen as any, (payload) => {
+      addToEventLog('received', newEventToListen, payload.data);
+      services.notification.info('Event Received', `Received "${newEventToListen}" event from ${payload.source || 'unknown'}`);
+    });
+
+    // Store the unsubscribe function
+    setEventUnsubscribes((prev) => new Map(prev).set(newEventToListen, unsubscribe));
+    setListeningEvents((prev) => [...prev, newEventToListen]);
+    services.notification.success('Listening Started', `Now listening to "${newEventToListen}" events`);
+    setNewEventToListen('');
+  };
+
+  const stopListeningToEvent = (eventName: string) => {
+    const unsubscribe = eventUnsubscribes.get(eventName);
+    if (unsubscribe) {
+      unsubscribe();
+      setEventUnsubscribes((prev) => {
+        const newMap = new Map(prev);
+        newMap.delete(eventName);
+        return newMap;
+      });
+      setListeningEvents((prev) => prev.filter((e) => e !== eventName));
+      services.notification.info('Listening Stopped', `Stopped listening to "${eventName}" events`);
+    }
+  };
+
   // Auth & Session
   const checkSession = () => {
     const session = services.auth.getSession();
@@ -217,8 +253,6 @@ export const App: React.FC<AppProps> = ({ services }) => {
   ];
 
   useEffect(() => {
-    if (!isListening) return;
-
     // Subscribe to common events
     const unsubscribes = [
       services.eventBus.on(EVENTS.AUTH_CHANGED, (payload) => {
@@ -239,10 +273,12 @@ export const App: React.FC<AppProps> = ({ services }) => {
 
     return () => {
       unsubscribes.forEach((fn) => fn());
+      // Clean up dynamic event listeners
+      eventUnsubscribes.forEach((unsubscribe) => unsubscribe());
       services.logger.info('Example MFE unmounting');
       services.eventBus.emit(EVENTS.MFE_UNLOADED, { name: 'example' });
     };
-  }, [services, isListening]);
+  }, [services, eventUnsubscribes]);
 
   return (
     <div className="space-y-8" data-testid="mfe-content">
@@ -262,26 +298,61 @@ export const App: React.FC<AppProps> = ({ services }) => {
           <p className="text-sm text-muted-foreground">
             Send and receive events between MFEs and the container
           </p>
-          <div className="space-y-3">
+          
+          {/* Dynamic Event Listening */}
+          <div className="space-y-2">
+            <h3 className="text-sm font-medium">Listen to Events</h3>
             <div className="flex gap-2">
               <input
                 type="text"
-                value={customEventName}
-                onChange={(e) => setCustomEventName(e.target.value)}
-                placeholder="Event name"
+                value={newEventToListen}
+                onChange={(e) => setNewEventToListen(e.target.value)}
+                placeholder="Event name to listen (e.g., custom.test)"
                 className="flex-1 px-3 py-2 border rounded-md text-sm"
+                onKeyPress={(e) => e.key === 'Enter' && startListeningToEvent()}
               />
               <button
-                onClick={() => setIsListening(!isListening)}
-                className={`inline-flex items-center justify-center h-9 px-3 rounded-md text-sm font-medium transition-colors ${
-                  isListening
-                    ? 'bg-primary text-primary-foreground hover:bg-primary/90'
-                    : 'bg-muted text-muted-foreground hover:bg-muted/80'
-                }`}
+                onClick={startListeningToEvent}
+                className="inline-flex items-center justify-center h-9 px-3 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors text-sm font-medium"
               >
-                {isListening ? 'Listening' : 'Paused'}
+                Listen
               </button>
             </div>
+            {listeningEvents.length > 0 && (
+              <div className="space-y-1">
+                <p className="text-xs text-muted-foreground">Currently listening to:</p>
+                <div className="flex flex-wrap gap-1">
+                  {listeningEvents.map((event) => (
+                    <span
+                      key={event}
+                      className="inline-flex items-center gap-1 px-2 py-1 bg-primary/10 text-primary rounded-md text-xs"
+                    >
+                      {event}
+                      <button
+                        onClick={() => stopListeningToEvent(event)}
+                        className="ml-1 hover:text-primary/80"
+                      >
+                        ×
+                      </button>
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+
+          <div className="border-t pt-3"></div>
+
+          {/* Send Events */}
+          <div className="space-y-3">
+            <h3 className="text-sm font-medium">Send Events</h3>
+            <input
+              type="text"
+              value={customEventName}
+              onChange={(e) => setCustomEventName(e.target.value)}
+              placeholder="Event name to send"
+              className="w-full px-3 py-2 border rounded-md text-sm"
+            />
             <textarea
               value={customEventData}
               onChange={(e) => setCustomEventData(e.target.value)}

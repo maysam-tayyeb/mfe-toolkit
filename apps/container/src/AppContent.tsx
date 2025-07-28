@@ -5,12 +5,12 @@ import { HomePage } from '@/pages/HomePage';
 import { DashboardPage } from '@/pages/DashboardPage';
 import { MFECommunicationPage } from '@/pages/MFECommunicationPage';
 import { MFEPage } from '@mfe/dev-kit';
-import { createMFEServices } from '@/services/mfe-services';
+import { getMFEServicesSingleton } from '@/services/mfe-services-singleton';
 import { useRegistryContext } from '@/contexts/RegistryContext';
 
 export function AppContent() {
   const { registry, isLoading } = useRegistryContext();
-  const mfeServices = useMemo(() => createMFEServices(), []);
+  const mfeServices = useMemo(() => getMFEServicesSingleton(), []);
 
   if (isLoading) {
     return (

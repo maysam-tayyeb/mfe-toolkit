@@ -2,8 +2,8 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import { useDispatch } from 'react-redux';
 import { addNotification } from '@/store/notificationSlice';
-import { EventBusImpl, EventPayload } from '@mfe/dev-kit';
-import { createMFEServices } from '@/services/mfe-services';
+import { EventPayload } from '@mfe/dev-kit';
+import { getMFEServicesSingleton } from '@/services/mfe-services-singleton';
 import { MFELoader } from '@mfe/dev-kit';
 import { useMFEUrlsFromContext } from '@/hooks/useMFEUrlsFromContext';
 
@@ -21,7 +21,6 @@ export const MFECommunicationPage: React.FC = () => {
   const [eventLog, setEventLog] = useState<EventLogEntry[]>([]);
   const [customEventType, setCustomEventType] = useState('custom.test');
   const [customEventData, setCustomEventData] = useState('{"message": "Hello from container!"}');
-  const [eventBus] = useState(() => new EventBusImpl());
 
   // Use the custom hook to get MFE URLs from context (prevents multiple registry instances)
   const { urls: mfeUrls, isLoading: registryLoading } = useMFEUrlsFromContext([
@@ -29,13 +28,13 @@ export const MFECommunicationPage: React.FC = () => {
     'react17',
   ]);
 
-  // Create MFE services with shared event bus
+  // Get singleton MFE services
   const mfeServices = useMemo(() => {
-    const services = createMFEServices();
-    // Use our shared event bus instead of the service's one
-    services.eventBus = eventBus;
-    return services;
-  }, [eventBus]);
+    return getMFEServicesSingleton();
+  }, []);
+
+  // Get the shared event bus from services
+  const eventBus = mfeServices.eventBus;
 
   useEffect(() => {
     // Store event bus on window for MFEs to access
