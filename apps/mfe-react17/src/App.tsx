@@ -238,86 +238,6 @@ Permissions: ${session.permissions.join(', ')}`,
         </p>
       </div>
 
-
-      {/* Service Cards */}
-      <div className="grid gap-6 md:grid-cols-2">
-        {/* Modal Service */}
-        <div className="border rounded-lg p-6 space-y-4">
-          <h2 className="text-xl font-semibold">Modal Service</h2>
-          <p className="text-sm text-muted-foreground">
-            Display modals in the React 19 container from React 17 MFE
-          </p>
-          <div className="flex flex-col gap-2">
-            {modalExamples.map((example) => (
-              <button
-                key={example.title}
-                onClick={example.action}
-                className="inline-flex items-center justify-center h-9 px-3 bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/80 transition-colors text-sm font-medium"
-              >
-                {example.title}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Notification Service */}
-        <div className="border rounded-lg p-6 space-y-4">
-          <h2 className="text-xl font-semibold">Notification Service</h2>
-          <p className="text-sm text-muted-foreground">
-            Show notifications using the container's notification system
-          </p>
-          <div className="grid grid-cols-2 gap-2">
-            {notificationTypes.map(({ type, method }) => (
-              <button
-                key={type}
-                onClick={() =>
-                  method(
-                    `React 17 ${type.charAt(0).toUpperCase() + type.slice(1)}`,
-                    `This is a ${type} message from React 17 MFE`
-                  )
-                }
-                className="inline-flex items-center justify-center h-9 px-3 bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/80 transition-colors text-sm font-medium capitalize"
-              >
-                {type}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Class Component Demo */}
-        <div className="border rounded-lg p-6 space-y-4">
-          <h2 className="text-xl font-semibold">Class Component Demo</h2>
-          <p className="text-sm text-muted-foreground">
-            React 17 class component with legacy lifecycle methods
-          </p>
-          <Counter onIncrement={handleCounterIncrement} />
-        </div>
-
-        {/* Logger Service */}
-        <div className="border rounded-lg p-6 space-y-4">
-          <h2 className="text-xl font-semibold">Logger Service</h2>
-          <p className="text-sm text-muted-foreground">
-            Log messages at different levels (check browser console)
-          </p>
-          <div className="grid grid-cols-2 gap-2">
-            {loggerLevels.map(({ level }) => (
-              <button
-                key={level}
-                onClick={() => {
-                  services.logger[level as keyof typeof services.logger](
-                    `React 17 ${level} message at ${new Date().toLocaleTimeString()}`
-                  );
-                  services.notification.info('Logged', `Check console for ${level} message`);
-                }}
-                className="inline-flex items-center justify-center h-9 px-3 border border-input bg-background hover:bg-accent hover:text-accent-foreground rounded-md transition-colors text-sm font-medium capitalize"
-              >
-                {level}
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
-
       {/* Event Bus and Event Log */}
       <div className="grid gap-6 md:grid-cols-2">
         {/* Event Bus */}
@@ -405,6 +325,85 @@ Permissions: ${session.permissions.join(', ')}`,
                 </div>
               ))
             )}
+          </div>
+        </div>
+      </div>
+
+      {/* Service Cards */}
+      <div className="grid gap-6 md:grid-cols-2">
+        {/* Modal Service */}
+        <div className="border rounded-lg p-6 space-y-4">
+          <h2 className="text-xl font-semibold">Modal Service</h2>
+          <p className="text-sm text-muted-foreground">
+            Display modals in the React 19 container from React 17 MFE
+          </p>
+          <div className="flex flex-col gap-2">
+            {modalExamples.map((example) => (
+              <button
+                key={example.title}
+                onClick={example.action}
+                className="inline-flex items-center justify-center h-9 px-3 bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/80 transition-colors text-sm font-medium"
+              >
+                {example.title}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Notification Service */}
+        <div className="border rounded-lg p-6 space-y-4">
+          <h2 className="text-xl font-semibold">Notification Service</h2>
+          <p className="text-sm text-muted-foreground">
+            Show notifications using the container's notification system
+          </p>
+          <div className="grid grid-cols-2 gap-2">
+            {notificationTypes.map(({ type, method }) => (
+              <button
+                key={type}
+                onClick={() =>
+                  method(
+                    `React 17 ${type.charAt(0).toUpperCase() + type.slice(1)}`,
+                    `This is a ${type} message from React 17 MFE`
+                  )
+                }
+                className="inline-flex items-center justify-center h-9 px-3 bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/80 transition-colors text-sm font-medium capitalize"
+              >
+                {type}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Class Component Demo */}
+        <div className="border rounded-lg p-6 space-y-4">
+          <h2 className="text-xl font-semibold">Class Component Demo</h2>
+          <p className="text-sm text-muted-foreground">
+            React 17 class component with legacy lifecycle methods
+          </p>
+          <Counter onIncrement={handleCounterIncrement} />
+        </div>
+
+        {/* Logger Service */}
+        <div className="border rounded-lg p-6 space-y-4">
+          <h2 className="text-xl font-semibold">Logger Service</h2>
+          <p className="text-sm text-muted-foreground">
+            Log messages at different levels (check browser console)
+          </p>
+          <div className="grid grid-cols-2 gap-2">
+            {loggerLevels.map(({ level }) => (
+              <button
+                key={level}
+                onClick={() => {
+                  services.logger[level as keyof typeof services.logger](
+                    `React 17 ${level} message at ${new Date().toLocaleTimeString()}`
+                  );
+                  services.notification.info('Logged', `Check console for ${level} message`);
+                }}
+                className="inline-flex items-center justify-center h-9 px-3 border border-input bg-background hover:bg-accent hover:text-accent-foreground rounded-md transition-colors text-sm font-medium capitalize"
+              >
+                {level}
+              </button>
+            ))}
           </div>
         </div>
       </div>

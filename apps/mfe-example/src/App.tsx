@@ -254,6 +254,95 @@ export const App: React.FC<AppProps> = ({ services }) => {
         </p>
       </div>
 
+      {/* Event Bus and Event Log Side by Side */}
+      <div className="grid gap-6 md:grid-cols-2">
+        {/* Event Bus */}
+        <div className="border rounded-lg p-6 space-y-4">
+          <h2 className="text-xl font-semibold">Event Bus</h2>
+          <p className="text-sm text-muted-foreground">
+            Send and receive events between MFEs and the container
+          </p>
+          <div className="space-y-3">
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={customEventName}
+                onChange={(e) => setCustomEventName(e.target.value)}
+                placeholder="Event name"
+                className="flex-1 px-3 py-2 border rounded-md text-sm"
+              />
+              <button
+                onClick={() => setIsListening(!isListening)}
+                className={`inline-flex items-center justify-center h-9 px-3 rounded-md text-sm font-medium transition-colors ${
+                  isListening
+                    ? 'bg-primary text-primary-foreground hover:bg-primary/90'
+                    : 'bg-muted text-muted-foreground hover:bg-muted/80'
+                }`}
+              >
+                {isListening ? 'Listening' : 'Paused'}
+              </button>
+            </div>
+            <textarea
+              value={customEventData}
+              onChange={(e) => setCustomEventData(e.target.value)}
+              placeholder='Event data (JSON format, e.g., {"key": "value"})'
+              className="w-full px-3 py-2 border rounded-md text-sm h-20"
+            />
+            <div className="flex gap-2">
+              <button
+                onClick={sendCustomEvent}
+                className="inline-flex items-center justify-center h-9 px-3 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors text-sm font-medium"
+              >
+                Send Event
+              </button>
+              <button
+                onClick={clearEventLog}
+                className="inline-flex items-center justify-center h-9 px-3 bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/80 transition-colors text-sm font-medium"
+              >
+                Clear Log
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Event Log */}
+        <div className="border rounded-lg p-6 space-y-4">
+          <h2 className="text-xl font-semibold">Event Log</h2>
+          <div className="space-y-2 max-h-60 overflow-y-auto">
+            {eventLog.length === 0 ? (
+              <p className="text-sm text-muted-foreground text-center py-8">
+                No events logged yet. Send an event to see it here.
+              </p>
+            ) : (
+              eventLog.map((entry) => (
+                <div key={entry.id} className="p-3 bg-muted rounded-md text-sm">
+                  <div className="flex justify-between items-start">
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2">
+                        <span className="font-medium">
+                          {entry.type === 'sent' ? 'Sent' : 'Received'}
+                        </span>
+                        <code className="px-2 py-0.5 bg-background rounded text-xs">
+                          {entry.event}
+                        </code>
+                      </div>
+                      {entry.data && (
+                        <pre className="text-xs text-muted-foreground overflow-x-auto">
+                          {JSON.stringify(entry.data, null, 2)}
+                        </pre>
+                      )}
+                    </div>
+                    <span className="text-xs text-muted-foreground">
+                      {entry.timestamp.toLocaleTimeString()}
+                    </span>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+      </div>
+
       {/* Service Cards */}
       <div className="grid gap-6 md:grid-cols-2">
         {/* Modal Service */}
@@ -347,95 +436,6 @@ export const App: React.FC<AppProps> = ({ services }) => {
                 {level}
               </button>
             ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Event Bus and Event Log Side by Side */}
-      <div className="grid gap-6 md:grid-cols-2">
-        {/* Event Bus */}
-        <div className="border rounded-lg p-6 space-y-4">
-          <h2 className="text-xl font-semibold">Event Bus</h2>
-          <p className="text-sm text-muted-foreground">
-            Send and receive events between MFEs and the container
-          </p>
-          <div className="space-y-3">
-            <div className="flex gap-2">
-              <input
-                type="text"
-                value={customEventName}
-                onChange={(e) => setCustomEventName(e.target.value)}
-                placeholder="Event name"
-                className="flex-1 px-3 py-2 border rounded-md text-sm"
-              />
-              <button
-                onClick={() => setIsListening(!isListening)}
-                className={`inline-flex items-center justify-center h-9 px-3 rounded-md text-sm font-medium transition-colors ${
-                  isListening
-                    ? 'bg-primary text-primary-foreground hover:bg-primary/90'
-                    : 'bg-muted text-muted-foreground hover:bg-muted/80'
-                }`}
-              >
-                {isListening ? 'Listening' : 'Paused'}
-              </button>
-            </div>
-            <textarea
-              value={customEventData}
-              onChange={(e) => setCustomEventData(e.target.value)}
-              placeholder='Event data (JSON format, e.g., {"key": "value"})'
-              className="w-full px-3 py-2 border rounded-md text-sm h-20"
-            />
-            <div className="flex gap-2">
-              <button
-                onClick={sendCustomEvent}
-                className="inline-flex items-center justify-center h-9 px-3 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors text-sm font-medium"
-              >
-                Send Event
-              </button>
-              <button
-                onClick={clearEventLog}
-                className="inline-flex items-center justify-center h-9 px-3 bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/80 transition-colors text-sm font-medium"
-              >
-                Clear Log
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Event Log */}
-        <div className="border rounded-lg p-6 space-y-4">
-          <h2 className="text-xl font-semibold">Event Log</h2>
-          <div className="space-y-2 max-h-60 overflow-y-auto">
-            {eventLog.length === 0 ? (
-              <p className="text-sm text-muted-foreground text-center py-8">
-                No events logged yet. Send an event to see it here.
-              </p>
-            ) : (
-              eventLog.map((entry) => (
-                <div key={entry.id} className="p-3 bg-muted rounded-md text-sm">
-                  <div className="flex justify-between items-start">
-                    <div className="space-y-1">
-                      <div className="flex items-center gap-2">
-                        <span className="font-medium">
-                          {entry.type === 'sent' ? 'Sent' : 'Received'}
-                        </span>
-                        <code className="px-2 py-0.5 bg-background rounded text-xs">
-                          {entry.event}
-                        </code>
-                      </div>
-                      {entry.data && (
-                        <pre className="text-xs text-muted-foreground overflow-x-auto">
-                          {JSON.stringify(entry.data, null, 2)}
-                        </pre>
-                      )}
-                    </div>
-                    <span className="text-xs text-muted-foreground">
-                      {entry.timestamp.toLocaleTimeString()}
-                    </span>
-                  </div>
-                </div>
-              ))
-            )}
           </div>
         </div>
       </div>
