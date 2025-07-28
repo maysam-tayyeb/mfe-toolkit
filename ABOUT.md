@@ -2,7 +2,7 @@
 
 ## 🎯 Mission
 
-MFE Made Easy is a production-ready microfrontend platform that demonstrates how to build scalable, maintainable web applications using modern web standards. This project showcases best practices for microfrontend architecture while keeping complexity manageable and developer experience delightful.
+MFE Made Easy is a close-to-production-ready microfrontend platform that demonstrates how to build scalable, maintainable web applications using modern web standards. This project showcases best practices for microfrontend architecture while keeping complexity manageable and developer experience delightful.
 
 ## 🚀 What Makes This Special
 
@@ -38,12 +38,12 @@ Microfrontends communicate through a well-defined service layer:
 ## 🏗️ Architecture Overview
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                    Container App (React 19)                  │
+┌───────────────────────────────────────────────────────────┐
+│                    Container App (React 19)               │
 │  ┌─────────────┐  ┌──────────────┐  ┌─────────────────┐   │
 │  │ Navigation  │  │ Redux Store  │  │ Service Layer   │   │
 │  └─────────────┘  └──────────────┘  └─────────────────┘   │
-└─────────────────────────────┬───────────────────────────────┘
+└─────────────────────────────┬─────────────────────────────┘
                               │
         ┌─────────────────────┼─────────────────────┐
         │                     │                     │
@@ -142,7 +142,7 @@ We welcome contributions! Whether it's:
 - New features
 - Documentation improvements
 - Example MFEs
-- Performance optimizations
+- Performance optimisations
 
 Please read our contributing guidelines and code of conduct before submitting PRs.
 
@@ -167,7 +167,7 @@ This architecture pattern has been successfully used in:
 - E-commerce platforms with multiple teams
 - Enterprise dashboards with plugin systems
 - SaaS applications with white-label requirements
-- Legacy system modernization projects
+- Legacy system modernisation projects
 
 ## 📚 Learn More
 
