@@ -14,6 +14,33 @@ interface EventLogEntry {
   data?: any;
 }
 
+// Inline component for consistent info blocks
+interface InfoBlockProps {
+  title: string;
+  sections: Array<{
+    label: string;
+    value: string | React.ReactNode;
+    highlight?: boolean;
+  }>;
+  className?: string;
+}
+
+const InfoBlock: React.FC<InfoBlockProps> = ({ title, sections, className = '' }) => (
+  <div className={`bg-muted/50 rounded-lg p-6 ${className}`}>
+    <h3 className="font-semibold mb-3">{title}</h3>
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+      {sections.map((section, index) => (
+        <div key={index}>
+          <span className="text-muted-foreground">{section.label}:</span>
+          <p className={`font-medium ${section.highlight ? 'text-primary' : ''}`}>
+            {section.value}
+          </p>
+        </div>
+      ))}
+    </div>
+  </div>
+);
+
 // Class component to demonstrate React 17 compatibility
 class Counter extends Component<{ onIncrement: () => void }, { count: number }> {
   constructor(props: any) {
@@ -211,28 +238,6 @@ Permissions: ${session.permissions.join(', ')}`,
         </p>
       </div>
 
-      {/* Version Info */}
-      <div className="bg-blue-50 dark:bg-blue-950/30 rounded-lg p-4">
-        <h2 className="font-semibold mb-2">Version Information</h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-          <div>
-            <span className="text-muted-foreground">React Version:</span>
-            <p className="font-mono font-medium">{React.version}</p>
-          </div>
-          <div>
-            <span className="text-muted-foreground">MFE Version:</span>
-            <p className="font-mono font-medium">1.0.0</p>
-          </div>
-          <div>
-            <span className="text-muted-foreground">Module Format:</span>
-            <p className="font-medium">ES Module</p>
-          </div>
-          <div>
-            <span className="text-muted-foreground">Dev Port:</span>
-            <p className="font-medium">3002</p>
-          </div>
-        </div>
-      </div>
 
       {/* Service Cards */}
       <div className="grid gap-6 md:grid-cols-2">
@@ -441,36 +446,32 @@ Permissions: ${session.permissions.join(', ')}`,
         </div>
       </div>
 
-      {/* Technical Details */}
-      <div className="bg-muted/50 rounded-lg p-6">
-        <h3 className="font-semibold mb-3">Technical Details</h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-          <div>
-            <span className="text-muted-foreground">React Version:</span>
-            <p className="font-medium">{React.version}</p>
-          </div>
-          <div>
-            <span className="text-muted-foreground">Build Format:</span>
-            <p className="font-medium">ES Module</p>
-          </div>
-          <div>
-            <span className="text-muted-foreground">Bundle Size:</span>
-            <p className="font-medium">~260KB</p>
-          </div>
-          <div>
-            <span className="text-muted-foreground">Container React:</span>
-            <p className="font-medium">19.1.0</p>
-          </div>
-          <div>
-            <span className="text-muted-foreground">Shared Deps:</span>
-            <p className="font-medium">Via Import Map</p>
-          </div>
-          <div>
-            <span className="text-muted-foreground">TypeScript:</span>
-            <p className="font-medium">^5.3.3</p>
-          </div>
-        </div>
-      </div>
+      {/* MFE Configuration */}
+      <InfoBlock
+        title="MFE Configuration"
+        sections={[
+          { label: 'Name', value: 'React 17 MFE' },
+          { label: 'Version', value: '1.0.0' },
+          { label: 'Dev Port', value: '3002' },
+          { label: 'Format', value: 'ESM Module', highlight: true },
+          { label: 'Bundle Size', value: '~157KB', highlight: true },
+          { label: 'React Version', value: React.version },
+        ]}
+      />
+
+      {/* Shared Dependencies */}
+      <InfoBlock
+        title="Shared Dependencies"
+        sections={[
+          { label: 'React', value: '17.0.2 (bundled)' },
+          { label: 'Redux Toolkit', value: '^2.0.1' },
+          { label: 'Tailwind CSS', value: '^4.1.11' },
+          { label: 'TypeScript', value: '^5.3.3' },
+          { label: 'Container React', value: '19.1.0' },
+          { label: 'Cross-Version', value: 'Supported', highlight: true },
+        ]}
+        className="mt-6"
+      />
     </div>
   );
 };

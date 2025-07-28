@@ -36,8 +36,9 @@ const config = {
   keepNames: true,
 
   // JSX configuration for React 17
-  jsx: 'automatic',
-  jsxImportSource: 'react',
+  jsx: 'transform',
+  jsxFactory: 'React.createElement',
+  jsxFragment: 'React.Fragment',
 };
 
 // Helper function to format file size

@@ -14,6 +14,33 @@ interface EventLogEntry {
   data?: any;
 }
 
+// Inline component for consistent info blocks
+interface InfoBlockProps {
+  title: string;
+  sections: Array<{
+    label: string;
+    value: string | React.ReactNode;
+    highlight?: boolean;
+  }>;
+  className?: string;
+}
+
+const InfoBlock: React.FC<InfoBlockProps> = ({ title, sections, className = '' }) => (
+  <div className={`bg-muted/50 rounded-lg p-6 ${className}`}>
+    <h3 className="font-semibold mb-3">{title}</h3>
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+      {sections.map((section, index) => (
+        <div key={index}>
+          <span className="text-muted-foreground">{section.label}:</span>
+          <p className={`font-medium ${section.highlight ? 'text-primary' : ''}`}>
+            {section.value}
+          </p>
+        </div>
+      ))}
+    </div>
+  </div>
+);
+
 export const App: React.FC<AppProps> = ({ services }) => {
   const [eventLog, setEventLog] = useState<EventLogEntry[]>([]);
   const [isListening, setIsListening] = useState(true);
@@ -414,66 +441,31 @@ export const App: React.FC<AppProps> = ({ services }) => {
       </div>
 
       {/* MFE Configuration */}
-      <div className="bg-muted/50 rounded-lg p-6">
-        <h3 className="font-semibold mb-3">MFE Configuration</h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-          <div>
-            <span className="text-muted-foreground">Name:</span>
-            <p className="font-medium">Example MFE</p>
-          </div>
-          <div>
-            <span className="text-muted-foreground">Version:</span>
-            <p className="font-medium">1.0.0</p>
-          </div>
-          <div>
-            <span className="text-muted-foreground">Dev Port:</span>
-            <p className="font-medium">3001</p>
-          </div>
-          <div>
-            <span className="text-muted-foreground">Format:</span>
-            <p className="font-medium">ESM Module</p>
-          </div>
-          <div>
-            <span className="text-muted-foreground">Bundle Size:</span>
-            <p className="font-medium">~8.5KB</p>
-          </div>
-          <div>
-            <span className="text-muted-foreground">Load Time:</span>
-            <p className="font-medium">&lt; 100ms</p>
-          </div>
-        </div>
-      </div>
+      <InfoBlock
+        title="MFE Configuration"
+        sections={[
+          { label: 'Name', value: 'Example MFE' },
+          { label: 'Version', value: '1.0.0' },
+          { label: 'Dev Port', value: '3001' },
+          { label: 'Format', value: 'ESM Module', highlight: true },
+          { label: 'Bundle Size', value: '~8.5KB', highlight: true },
+          { label: 'Load Time', value: '< 100ms' },
+        ]}
+      />
 
       {/* Shared Dependencies */}
-      <div className="bg-muted/50 rounded-lg p-6 mt-6">
-        <h3 className="font-semibold mb-3">Shared Dependencies</h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-          <div>
-            <span className="text-muted-foreground">React:</span>
-            <p className="font-medium">{React.version || '19.1.0'}</p>
-          </div>
-          <div>
-            <span className="text-muted-foreground">Redux Toolkit:</span>
-            <p className="font-medium">^2.0.1</p>
-          </div>
-          <div>
-            <span className="text-muted-foreground">Tailwind CSS:</span>
-            <p className="font-medium">^4.1.11</p>
-          </div>
-          <div>
-            <span className="text-muted-foreground">TypeScript:</span>
-            <p className="font-medium">^5.3.3</p>
-          </div>
-          <div>
-            <span className="text-muted-foreground">React Redux:</span>
-            <p className="font-medium">^9.1.0</p>
-          </div>
-          <div>
-            <span className="text-muted-foreground">Import Map:</span>
-            <p className="font-medium">ESM CDN</p>
-          </div>
-        </div>
-      </div>
+      <InfoBlock
+        title="Shared Dependencies"
+        sections={[
+          { label: 'React', value: React.version || '19.1.0' },
+          { label: 'Redux Toolkit', value: '^2.0.1' },
+          { label: 'Tailwind CSS', value: '^4.1.11' },
+          { label: 'TypeScript', value: '^5.3.3' },
+          { label: 'React Redux', value: '^9.1.0' },
+          { label: 'Import Map', value: 'ESM CDN', highlight: true },
+        ]}
+        className="mt-6"
+      />
     </div>
   );
 };
