@@ -85,14 +85,14 @@ export const HomePage: React.FC = () => {
           <div className="border rounded-lg p-6 space-y-3 hover:shadow-md transition-shadow">
             <div className="flex items-center gap-3">
               <Zap className="h-5 w-5 text-primary" />
-              <h3 className="text-xl font-semibold">Legacy Demo</h3>
+              <h3 className="text-xl font-semibold">Legacy Service Explorer</h3>
             </div>
             <p className="text-muted-foreground">
               Demonstrates cross-version compatibility with legacy React 17 applications.
             </p>
             <Button asChild variant="outline">
               <Link to="/mfe/react17">
-                Open Legacy Demo
+                Open Legacy Service Explorer
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>

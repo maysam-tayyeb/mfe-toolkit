@@ -269,7 +269,7 @@ export const MFECommunicationPage: React.FC = () => {
       <div className="grid gap-6 lg:grid-cols-2">
         <div className="border rounded-lg p-4 space-y-4">
           <div className="flex justify-between items-center">
-            <h3 className="text-lg font-semibold">Service Explorer</h3>
+            <h3 className="text-lg font-semibold">Service Explorer MFE</h3>
             <span className="text-xs bg-muted text-muted-foreground px-2 py-1 rounded">
               Port 3001
             </span>
@@ -308,7 +308,7 @@ export const MFECommunicationPage: React.FC = () => {
 
         <div className="border rounded-lg p-4 space-y-4">
           <div className="flex justify-between items-center">
-            <h3 className="text-lg font-semibold">Legacy Demo</h3>
+            <h3 className="text-lg font-semibold">Legacy Service Explorer MFE</h3>
             <span className="text-xs bg-muted text-muted-foreground px-2 py-1 rounded">
               Port 3002
             </span>
@@ -323,7 +323,7 @@ export const MFECommunicationPage: React.FC = () => {
                   <div className="flex items-center justify-center h-64">
                     <div className="text-center">
                       <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-2"></div>
-                      <p className="text-sm text-muted-foreground">Loading Legacy Demo...</p>
+                      <p className="text-sm text-muted-foreground">Loading Legacy Service Explorer...</p>
                     </div>
                   </div>
                 }
@@ -332,7 +332,7 @@ export const MFECommunicationPage: React.FC = () => {
                     addNotification({
                       type: 'error',
                       title: 'MFE Load Error',
-                      message: `Failed to load Legacy Demo: ${error.message}`,
+                      message: `Failed to load Legacy Service Explorer: ${error.message}`,
                     })
                   );
                 }}

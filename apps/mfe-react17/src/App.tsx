@@ -566,7 +566,7 @@ Permissions: ${session.permissions.join(', ')}`,
       <InfoBlock
         title="MFE Configuration"
         sections={[
-          { label: 'Name', value: 'Legacy Demo' },
+          { label: 'Name', value: 'Legacy Service Explorer' },
           { label: 'Package', value: '@mfe/react17-mfe' },
           { label: 'Version', value: '1.0.0' },
           { label: 'Dev Port', value: '3002' },
