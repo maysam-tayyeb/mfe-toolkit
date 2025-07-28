@@ -1,6 +1,6 @@
 import React from 'react';
 import { cn } from '@mfe/shared';
-import { cardStyles } from '../patterns/styles';
+import { cardStyles } from '../patterns';
 
 export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   variant?: keyof typeof cardStyles;

@@ -1,6 +1,6 @@
 import React from 'react';
 import { cn } from '@mfe/shared';
-import { textStyles } from '../patterns/styles';
+import { textStyles } from '../patterns';
 
 export interface SectionProps extends React.HTMLAttributes<HTMLElement> {
   title?: string;

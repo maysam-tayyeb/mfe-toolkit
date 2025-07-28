@@ -1,6 +1,6 @@
 import React from 'react';
 import { cn } from '@mfe/shared';
-import { gridStyles } from '../patterns/styles';
+import { gridStyles } from '../patterns';
 
 export interface GridProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
