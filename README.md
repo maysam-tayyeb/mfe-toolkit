@@ -130,7 +130,7 @@ cd apps/mfe-example
 pnpm serve  # Runs on port 3001 (matches registry)
 
 cd apps/mfe-react17
-npx http-server dist -p 3002 --cors -c-1  # Serve on expected port
+pnpm serve  # Runs on port 3002 (matches registry)
 ```
 
 > **Note**: The MFE registry URLs are currently hardcoded in `apps/container/src/App.tsx`. For production deployments:
@@ -168,16 +168,19 @@ mfe-made-easy/
 │   ├── container/              # Container app (port 3000)
 │   │   ├── src/
 │   │   │   ├── components/     # Navigation, Layout, UI components
-│   │   │   ├── pages/          # Home, Dashboard
-│   │   │   ├── store/          # Redux slices
+│   │   │   ├── pages/          # Home, Dashboard, MFE Communication
+│   │   │   ├── store/          # Redux slices (auth, modal, notification)
 │   │   │   └── services/       # MFE services implementation
 │   │   └── package.json
-│   └── mfe-example/            # Example MFE (port 3001)
+│   ├── mfe-example/            # Example MFE (port 3001)
+│   │   ├── src/
+│   │   │   ├── App.tsx         # Interactive demo of all services
+│   │   │   └── main.tsx        # ES module export and dev mode
+│   │   └── package.json
+│   └── mfe-react17/            # React 17 MFE (port 3002)
 │       ├── src/
-│       │   ├── App.tsx         # Interactive demo component
-│       │   └── main.tsx        # UMD export and dev mode
-│       ├── dist/               # Built UMD files
-│       ├── public/             # Static assets and UMD copy
+│       │   ├── App.tsx         # React 17 compatibility demo
+│       │   └── main.tsx        # ES module export
 │       └── package.json
 ├── packages/
 │   ├── mfe-dev-kit/            # Core MFE toolkit
@@ -187,6 +190,8 @@ mfe-made-easy/
 │   │       └── components/     # MFELoader, MFEPage
 │   └── shared/                 # Common utilities
 │       └── src/
+│           ├── utils.ts        # Helper functions
+│           └── constants.ts    # Shared constants
 ├── pnpm-workspace.yaml         # Workspace configuration
 └── package.json                # Root package with scripts
 ```
@@ -196,6 +201,7 @@ mfe-made-easy/
 - `pnpm dev` - Start all apps in parallel
 - `pnpm dev:container` - Start only container app
 - `pnpm dev:mfe` - Start only example MFE
+- `pnpm dev:react17` - Start only React 17 MFE
 - `pnpm build` - Build all packages
 - `pnpm -r build` - Build packages in dependency order
 - `pnpm type-check` - TypeScript checking
@@ -205,10 +211,10 @@ mfe-made-easy/
 ### Building New MFEs
 
 1. Create new app in `apps/` directory
-2. Configure Vite for UMD build
+2. Configure build for ES modules
 3. Implement MFE module interface
 4. Register in container's MFE registry
-5. Build and copy UMD to public directory
+5. Build ES modules for deployment
 
 ### Key Configuration Files
 
@@ -222,7 +228,7 @@ mfe-made-easy/
 ✅ **Monorepo Setup**: pnpm workspaces with shared configurations  
 ✅ **Container App**: React 19 + Redux Toolkit + ShadCN UI  
 ✅ **MFE Dev Kit**: Complete service layer for MFE integration  
-✅ **Dynamic Loading**: UMD modules loaded at runtime  
+✅ **Dynamic Loading**: ES modules loaded at runtime  
 ✅ **Shared Services**: Auth, Modal, Notification, Event Bus, Logger  
 ✅ **Development Mode**: Hot reload for both container and MFEs  
 ✅ **TypeScript**: Full type safety across the monorepo  
@@ -242,6 +248,7 @@ pnpm dev
 # Start individual apps
 pnpm dev:container    # Container on :3000
 pnpm dev:mfe         # Example MFE on :3001
+pnpm dev:react17     # React 17 MFE on :3002
 
 # Build everything
 pnpm build
