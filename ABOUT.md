@@ -47,7 +47,7 @@ Microfrontends communicate through a well-defined service layer:
                               │
         ┌─────────────────────┼─────────────────────┐
         │                     │                     │
-┌───────▼────────┐   ┌────────▼────────┐   ┌───────▼────────┐
+┌───────▼────────┐   ┌────────▼────────┐   ┌────────▼───────┐
 │ Service        │   │ Legacy Demo     │   │ Future MFE     │
 │ Explorer       │   │ (React 17)      │   │ (Any Version)  │
 │ (React 19)     │   │                 │   │                │
