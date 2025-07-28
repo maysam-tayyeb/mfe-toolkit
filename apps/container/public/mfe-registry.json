@@ -1,0 +1,30 @@
+{
+  "mfes": [
+    {
+      "name": "example",
+      "version": "1.0.0",
+      "url": "http://localhost:3001/mfe-example.js",
+      "dependencies": ["react", "react-dom"],
+      "sharedLibs": ["@reduxjs/toolkit", "react-redux"],
+      "metadata": {
+        "displayName": "Example MFE",
+        "description": "Demonstrates all MFE services and capabilities",
+        "icon": "🎯"
+      }
+    },
+    {
+      "name": "react17",
+      "version": "1.0.0",
+      "url": "http://localhost:3002/react17-mfe.js",
+      "dependencies": ["react", "react-dom"],
+      "sharedLibs": ["@reduxjs/toolkit", "react-redux"],
+      "metadata": {
+        "displayName": "React 17 MFE",
+        "description": "Shows cross-version React compatibility",
+        "icon": "⚛️"
+      }
+    }
+  ],
+  "version": "1.0.0",
+  "lastUpdated": "2024-01-20T10:00:00Z"
+}

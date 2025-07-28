@@ -11,6 +11,29 @@ A complete microfrontend (MFE) architecture built with React 19, Redux Toolkit, 
 - 🔄 **Cross-Version Support** - React 17 MFEs work seamlessly in React 19 container
 - 🛠️ **Modern Tooling** - Vite, TypeScript, pnpm workspaces, and ESBuild
 
+## 🏗️ Architecture Overview
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                   Container App (Port 3000)                  │
+│  ┌─────────────────────────────────────────────────────┐   │
+│  │  Navigation | Dashboard | MFE Communication Center   │   │
+│  └─────────────────────────────────────────────────────┘   │
+│                                                             │
+│  ┌──────────────┐  ┌──────────────┐  ┌────────────────┐   │
+│  │   Shared     │  │    Event     │  │     Redux      │   │
+│  │  Services    │  │     Bus      │  │     Store      │   │
+│  └──────────────┘  └──────────────┘  └────────────────┘   │
+│         ↓                  ↓                    ↓           │
+└─────────┼──────────────────┼───────────────────┼───────────┘
+          ↓                  ↓                    ↓
+    ┌─────────────┐    ┌─────────────┐    ┌─────────────┐
+    │ Example MFE │←──→│ React17 MFE │←──→│  Your MFE   │
+    │ (Port 3001) │    │ (Port 3002) │    │ (Port XXXX) │
+    └─────────────┘    └─────────────┘    └─────────────┘
+         React 19         React 17          Any Version
+```
+
 ## 🚀 Quick Start
 
 ### Prerequisites
@@ -34,41 +57,85 @@ pnpm -r build
 
 ## 🏃‍♂️ Running the Applications
 
-### Option 1: Run Everything in Parallel (Recommended)
+### Option 1: Run Everything Together (Recommended for Development)
 
 ```bash
+# From project root, run all apps in parallel
 pnpm dev
 ```
 
-This starts both the container app and MFE example simultaneously.
+This command starts:
+- ✅ Container app on http://localhost:3000
+- ✅ Example MFE on http://localhost:3001
+- ✅ React 17 MFE on http://localhost:3002
 
-### Option 2: Run Individual Applications
+### Option 2: Run Apps Individually
 
-#### Step 1: Start the Container App
+#### Terminal 1: Container Application
 
 ```bash
+# Start the main container app
 pnpm dev:container
+
+# Or navigate to container directory
+cd apps/container
+pnpm dev
 ```
 
 - **URL**: http://localhost:3000
-- **Purpose**: Main shell application with navigation and MFE loading
+- **Purpose**: Main shell that hosts and orchestrates MFEs
+- **Features**: Navigation, shared services, MFE loading
 
-#### Step 2: Start the Example MFE
+#### Terminal 2: Example MFE (React 19)
 
 ```bash
+# Start the example MFE
 pnpm dev:mfe
+
+# Or navigate to MFE directory
+cd apps/mfe-example
+pnpm dev
 ```
 
-- **URL**: http://localhost:3001
-- **Purpose**: Standalone MFE for development and UMD bundle serving
+- **URL**: http://localhost:3001 (standalone development)
+- **Loaded at**: http://localhost:3000/mfe/example (in container)
+- **Purpose**: Demonstrates all MFE services and capabilities
 
-#### Step 3: Build MFE for Dynamic Loading
+#### Terminal 3: React 17 MFE
 
 ```bash
-cd apps/mfe-example
-pnpm build
-cp dist/mfe-example.umd.js public/
+# Navigate to React 17 MFE directory
+cd apps/mfe-react17
+pnpm dev
 ```
+
+- **URL**: http://localhost:3002 (standalone development)
+- **Loaded at**: http://localhost:3000/mfe/react17 (in container)
+- **Purpose**: Shows cross-version React compatibility
+
+### Option 3: Production-like Setup
+
+```bash
+# Build all applications
+pnpm build
+
+# Serve container (terminal 1)
+cd apps/container
+pnpm preview  # Runs on port 4173
+
+# Serve MFEs as static files (terminal 2 & 3)
+# NOTE: Currently, the registry expects MFEs on ports 3001 & 3002
+cd apps/mfe-example
+pnpm serve  # Runs on port 3001 (matches registry)
+
+cd apps/mfe-react17
+npx http-server dist -p 3002 --cors -c-1  # Serve on expected port
+```
+
+> **Note**: The MFE registry URLs are currently hardcoded in `apps/container/src/App.tsx`. For production deployments:
+> - Update the registry URLs to point to your CDN or web server
+> - Use environment variables for dynamic configuration
+> - Example: `url: process.env.VITE_MFE_EXAMPLE_URL || 'http://localhost:3001/mfe-example.js'`
 
 ## 🧪 Testing the MFE Integration
 
@@ -159,26 +226,172 @@ mfe-made-easy/
 ✅ **TypeScript**: Full type safety across the monorepo  
 ✅ **Modern Tooling**: Vite, Tailwind CSS, ESLint support
 
+## 🚀 Quick Command Reference
+
+### Essential Commands
+
+```bash
+# Install dependencies
+pnpm install
+
+# Start all apps (recommended)
+pnpm dev
+
+# Start individual apps
+pnpm dev:container    # Container on :3000
+pnpm dev:mfe         # Example MFE on :3001
+
+# Build everything
+pnpm build
+
+# Run tests
+pnpm test
+
+# Type check
+pnpm type-check
+
+# Format code
+pnpm format
+```
+
+### Working with MFEs
+
+```bash
+# Build a specific MFE
+cd apps/mfe-example
+pnpm build
+
+# Serve MFE statically (production-like)
+pnpm serve:static
+
+# Check bundle size after build
+# Look for: "📏 Bundle size: XX KB"
+```
+
 ## 🐛 Troubleshooting
 
-### MFE Not Loading
+### MFE Not Loading?
 
-1. Ensure MFE is built: `cd apps/mfe-example && pnpm build`
-2. Copy UMD to public: `cp dist/mfe-example.umd.js public/`
-3. Check if UMD is accessible: http://localhost:3001/mfe-example.umd.js
-4. Verify both container and MFE servers are running
+```bash
+# 1. Check if all services are running
+pnpm dev  # Should start container + both MFEs
 
-### Build Errors
+# 2. Verify MFE is accessible
+curl http://localhost:3001/mfe-example.js
+curl http://localhost:3002/react17-mfe.js
 
-1. Build packages first: `pnpm -r build`
-2. Clear node_modules: `rm -rf node_modules && pnpm install`
-3. Check TypeScript errors: `pnpm type-check`
+# 3. Check browser console for errors
+# Open DevTools > Console
+```
 
-### Port Conflicts
+### Build or Module Errors?
 
-- Container app uses port 3000
-- Example MFE uses port 3001
-- Modify ports in respective `vite.config.ts` files if needed
+```bash
+# 1. Rebuild all packages
+pnpm -r build
+
+# 2. Clean install (if needed)
+rm -rf node_modules pnpm-lock.yaml
+pnpm install
+
+# 3. Check for TypeScript errors
+pnpm type-check
+```
+
+### Services Not Available?
+
+```javascript
+// Check in browser console:
+console.log(window.__MFE_SERVICES__);  // Should show all services
+console.log(window.__EVENT_BUS__);      // Event bus instance
+console.log(window.__REDUX_STORE__);    // Redux store
+```
+
+### Port Already in Use?
+
+```bash
+# Kill process on specific port
+lsof -ti:3000 | xargs kill -9  # Container
+lsof -ti:3001 | xargs kill -9  # Example MFE
+lsof -ti:3002 | xargs kill -9  # React 17 MFE
+
+# Or use different ports in vite.config.ts
+```
+
+### Development Tips
+
+- **Hot Reload**: Changes auto-refresh (HMR enabled)
+- **Browser DevTools**: Use React DevTools extension
+- **Network Tab**: Monitor MFE loading in DevTools
+- **Event Monitoring**: Use MFE Communication page at `/mfe-communication`
+
+## 🔧 Configuration
+
+### MFE Registry System
+
+The MFE platform now uses a **dynamic registry system** that loads MFE configurations from JSON files, making it easy to manage MFE URLs across different environments.
+
+#### Registry Files
+
+The container app looks for registry files in the `public` directory:
+
+- `mfe-registry.json` - Default registry
+- `mfe-registry.development.json` - Development environment
+- `mfe-registry.production.json` - Production environment
+
+#### Registry JSON Structure
+
+```json
+{
+  "mfes": [
+    {
+      "name": "example",
+      "version": "1.0.0",
+      "url": "http://localhost:3001/mfe-example.js",
+      "dependencies": ["react", "react-dom"],
+      "sharedLibs": ["@reduxjs/toolkit", "react-redux"],
+      "metadata": {
+        "displayName": "Example MFE",
+        "description": "Demonstrates all MFE services",
+        "icon": "🎯"
+      }
+    }
+  ],
+  "environment": "development",
+  "version": "1.0.0",
+  "lastUpdated": "2024-01-20T10:00:00Z"
+}
+```
+
+#### Environment Variables
+
+Configure the registry URL using environment variables:
+
+```bash
+# .env or .env.local
+VITE_MFE_REGISTRY_URL=/mfe-registry.json
+
+# For remote registry
+VITE_MFE_REGISTRY_URL=https://api.example.com/mfe-registry
+
+# For CDN-hosted registry
+VITE_MFE_REGISTRY_URL=https://cdn.example.com/configs/mfe-registry.json
+```
+
+#### Loading Order
+
+1. Tries to load from `VITE_MFE_REGISTRY_URL` if set
+2. Falls back to `/mfe-registry.json`
+3. Falls back to `/mfe-registry.{environment}.json`
+4. Uses hardcoded values in development if all fail
+
+#### Registry Features
+
+- ✅ **Remote Loading** - Load registry from any URL
+- ✅ **Caching** - 5-minute cache in dev, 30-minute in production
+- ✅ **Fallback Support** - Multiple fallback options
+- ✅ **Environment-Specific** - Different configs per environment
+- ✅ **Hot Reload** - Changes reflected on page refresh
 
 ## 📚 Documentation
 

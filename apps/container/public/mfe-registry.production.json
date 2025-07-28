@@ -1,0 +1,34 @@
+{
+  "mfes": [
+    {
+      "name": "example",
+      "version": "1.0.0",
+      "url": "https://cdn.example.com/mfes/example/v1.0.0/mfe-example.js",
+      "dependencies": ["react", "react-dom"],
+      "sharedLibs": ["@reduxjs/toolkit", "react-redux"],
+      "metadata": {
+        "displayName": "Example MFE",
+        "description": "Demonstrates all MFE services and capabilities",
+        "icon": "🎯",
+        "cdnUrl": "https://cdn.example.com/mfes/example/v1.0.0/"
+      }
+    },
+    {
+      "name": "react17",
+      "version": "1.0.0",
+      "url": "https://cdn.example.com/mfes/react17/v1.0.0/react17-mfe.js",
+      "dependencies": ["react", "react-dom"],
+      "sharedLibs": ["@reduxjs/toolkit", "react-redux"],
+      "metadata": {
+        "displayName": "React 17 MFE",
+        "description": "Shows cross-version React compatibility",
+        "icon": "⚛️",
+        "cdnUrl": "https://cdn.example.com/mfes/react17/v1.0.0/"
+      }
+    }
+  ],
+  "environment": "production",
+  "version": "1.0.0",
+  "lastUpdated": "2024-01-20T10:00:00Z",
+  "cdnBaseUrl": "https://cdn.example.com/mfes/"
+}

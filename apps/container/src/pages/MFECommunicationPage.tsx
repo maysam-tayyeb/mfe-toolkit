@@ -5,6 +5,7 @@ import { addNotification } from '@/store/notificationSlice';
 import { EventBusImpl, EventPayload } from '@mfe/dev-kit';
 import { createMFEServices } from '@/services/mfe-services';
 import { MFELoader } from '@mfe/dev-kit';
+import { useMFEUrlsFromContext } from '@/hooks/useMFEUrlsFromContext';
 
 interface EventLogEntry {
   id: string;
@@ -21,6 +22,9 @@ export const MFECommunicationPage: React.FC = () => {
   const [customEventType, setCustomEventType] = useState('custom.test');
   const [customEventData, setCustomEventData] = useState('{"message": "Hello from container!"}');
   const [eventBus] = useState(() => new EventBusImpl());
+  
+  // Use the custom hook to get MFE URLs from context (prevents multiple registry instances)
+  const { urls: mfeUrls, isLoading: registryLoading } = useMFEUrlsFromContext(['example', 'react17']);
 
   // Create MFE services with shared event bus
   const mfeServices = useMemo(() => {
@@ -275,28 +279,34 @@ export const MFECommunicationPage: React.FC = () => {
             </span>
           </div>
           <div className="border rounded-md overflow-hidden">
-            <MFELoader
-              name="example"
-              url="http://localhost:3001/mfe-example.js"
-              services={mfeServices}
-              fallback={
-                <div className="flex items-center justify-center h-64">
-                  <div className="text-center">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-2"></div>
-                    <p className="text-sm text-muted-foreground">Loading Example MFE...</p>
+            {!registryLoading && mfeUrls.example ? (
+              <MFELoader
+                name="example"
+                url={mfeUrls.example}
+                services={mfeServices}
+                fallback={
+                  <div className="flex items-center justify-center h-64">
+                    <div className="text-center">
+                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-2"></div>
+                      <p className="text-sm text-muted-foreground">Loading Example MFE...</p>
+                    </div>
                   </div>
-                </div>
-              }
-              onError={(error) => {
-                dispatch(
-                  addNotification({
-                    type: 'error',
-                    title: 'MFE Load Error',
-                    message: `Failed to load Example MFE: ${error.message}`,
-                  })
-                );
-              }}
-            />
+                }
+                onError={(error) => {
+                  dispatch(
+                    addNotification({
+                      type: 'error',
+                      title: 'MFE Load Error',
+                      message: `Failed to load Example MFE: ${error.message}`,
+                    })
+                  );
+                }}
+              />
+            ) : (
+              <div className="flex items-center justify-center h-64">
+                <p className="text-sm text-muted-foreground">Loading registry...</p>
+              </div>
+            )}
           </div>
         </div>
 
@@ -308,28 +318,34 @@ export const MFECommunicationPage: React.FC = () => {
             </span>
           </div>
           <div className="border rounded-md overflow-hidden">
-            <MFELoader
-              name="react17"
-              url="http://localhost:3002/react17-mfe.js"
-              services={mfeServices}
-              fallback={
-                <div className="flex items-center justify-center h-64">
-                  <div className="text-center">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-2"></div>
-                    <p className="text-sm text-muted-foreground">Loading React 17 MFE...</p>
+            {!registryLoading && mfeUrls.react17 ? (
+              <MFELoader
+                name="react17"
+                url={mfeUrls.react17}
+                services={mfeServices}
+                fallback={
+                  <div className="flex items-center justify-center h-64">
+                    <div className="text-center">
+                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-2"></div>
+                      <p className="text-sm text-muted-foreground">Loading React 17 MFE...</p>
+                    </div>
                   </div>
-                </div>
-              }
-              onError={(error) => {
-                dispatch(
-                  addNotification({
-                    type: 'error',
-                    title: 'MFE Load Error',
-                    message: `Failed to load React 17 MFE: ${error.message}`,
-                  })
-                );
-              }}
-            />
+                }
+                onError={(error) => {
+                  dispatch(
+                    addNotification({
+                      type: 'error',
+                      title: 'MFE Load Error',
+                      message: `Failed to load React 17 MFE: ${error.message}`,
+                    })
+                  );
+                }}
+              />
+            ) : (
+              <div className="flex items-center justify-center h-64">
+                <p className="text-sm text-muted-foreground">Loading registry...</p>
+              </div>
+            )}
           </div>
         </div>
       </div>

@@ -4,7 +4,12 @@ export * from './types';
 // Services
 export { createLogger } from './services/logger';
 export { createEventBus, EventBusImpl } from './services/event-bus';
-export { createMFERegistry, MFERegistryService } from './services/mfe-registry';
+export { 
+  createMFERegistry, 
+  MFERegistryService,
+  type RegistryConfig,
+  type RegistryOptions 
+} from './services/mfe-registry';
 
 // Components
 export { MFELoader } from './components/MFELoader';
