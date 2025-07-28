@@ -1,12 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { useSelector } from 'react-redux';
-import { RootState } from '@/store';
 import { ArrowRight, Zap, Package, Radio, Shield } from 'lucide-react';
 
 export const HomePage: React.FC = () => {
-  const auth = useSelector((state: RootState) => state.auth);
 
   return (
     <div className="space-y-12 pb-12">
@@ -49,22 +46,6 @@ export const HomePage: React.FC = () => {
         </div>
       </div>
 
-      {auth.session && (
-        <div className="bg-muted/50 rounded-lg p-6 max-w-md mx-auto">
-          <h2 className="text-lg font-semibold mb-3">Current User</h2>
-          <div className="space-y-1 text-sm">
-            <p>
-              <span className="text-muted-foreground">Username:</span> {auth.session.username}
-            </p>
-            <p>
-              <span className="text-muted-foreground">Email:</span> {auth.session.email}
-            </p>
-            <p>
-              <span className="text-muted-foreground">Roles:</span> {auth.session.roles.join(', ')}
-            </p>
-          </div>
-        </div>
-      )}
 
       {/* Quick Actions */}
       <div className="w-full">

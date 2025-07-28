@@ -107,8 +107,8 @@ export const DashboardPage: React.FC = () => {
           <p className="text-2xl font-bold">Healthy</p>
         </div>
         <div className="border rounded-lg p-4 space-y-1">
-          <p className="text-sm font-medium text-muted-foreground">Active User</p>
-          <p className="text-2xl font-bold">{auth.session?.username || 'Guest'}</p>
+          <p className="text-sm font-medium text-muted-foreground">Services</p>
+          <p className="text-2xl font-bold">Active</p>
         </div>
         <div className="border rounded-lg p-4 space-y-1">
           <p className="text-sm font-medium text-muted-foreground">Environment</p>
