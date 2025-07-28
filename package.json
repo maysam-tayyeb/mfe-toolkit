@@ -10,6 +10,7 @@
     "dev:container": "pnpm --filter @mfe/container dev",
     "dev:mfe": "pnpm --filter @mfe/example-mfe dev",
     "dev:react17": "pnpm --filter @mfe/react17-mfe dev",
+    "dev:event-demo": "pnpm --filter @mfe/event-demo dev",
     "serve:mfe": "pnpm --filter @mfe/example-mfe serve",
     "build": "pnpm -r build",
     "test": "vitest run",

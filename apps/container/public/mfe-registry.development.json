@@ -25,6 +25,19 @@
         "icon": "⚛️",
         "devPort": 3002
       }
+    },
+    {
+      "name": "eventDemo",
+      "version": "1.0.0",
+      "url": "http://localhost:3003/event-demo.js",
+      "dependencies": ["react", "react-dom"],
+      "sharedLibs": ["@reduxjs/toolkit", "react-redux"],
+      "metadata": {
+        "displayName": "Event Demo MFE",
+        "description": "Demonstrates event communication with container",
+        "icon": "📡",
+        "devPort": 3003
+      }
     }
   ],
   "environment": "development",
