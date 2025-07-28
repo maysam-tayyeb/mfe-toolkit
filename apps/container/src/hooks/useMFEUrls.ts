@@ -23,9 +23,9 @@ export interface UseMFEUrlsOptions {
 // to avoid multiple registry instances
 export function useMFEUrls(mfeNames?: string[]): UseMFEUrlsResult {
   const { registry, isLoading, error } = useRegistry();
-  
+
   const result = useMFEUrlsWithRegistry({ registry, mfeNames });
-  
+
   // Override loading and error states from registry
   return {
     ...result,
@@ -38,9 +38,10 @@ export function useMFEUrls(mfeNames?: string[]): UseMFEUrlsResult {
 export function useMFEUrlsWithRegistry(options: UseMFEUrlsOptions): UseMFEUrlsResult {
   const { registry, mfeNames } = options;
   const [urls, setUrls] = useState<MFEUrls>({});
-  
+
   // Create stable reference for mfeNames
-  const stableMfeNames = useMemo(() => mfeNames, [JSON.stringify(mfeNames)]);
+  const mfeNamesKey = JSON.stringify(mfeNames);
+  const stableMfeNames = useMemo(() => mfeNames, [mfeNamesKey]);
 
   useEffect(() => {
     if (!registry) {
@@ -49,10 +50,10 @@ export function useMFEUrlsWithRegistry(options: UseMFEUrlsOptions): UseMFEUrlsRe
     }
 
     const newUrls: MFEUrls = {};
-    
+
     if (stableMfeNames) {
       // Get specific MFEs
-      stableMfeNames.forEach(name => {
+      stableMfeNames.forEach((name) => {
         const mfe = registry.get(name);
         if (mfe) {
           newUrls[name] = mfe.url;
@@ -65,7 +66,7 @@ export function useMFEUrlsWithRegistry(options: UseMFEUrlsOptions): UseMFEUrlsRe
         newUrls[name] = mfe.url;
       });
     }
-    
+
     setUrls(newUrls);
   }, [registry, stableMfeNames]);
 

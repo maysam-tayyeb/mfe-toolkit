@@ -279,20 +279,20 @@ export const App: React.FC<AppProps> = ({ services }) => {
           </p>
           <div className="grid grid-cols-2 gap-2">
             <button
-                onClick={checkSession}
-                className="inline-flex items-center justify-center h-9 px-3 bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/80 transition-colors text-sm font-medium"
+              onClick={checkSession}
+              className="inline-flex items-center justify-center h-9 px-3 bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/80 transition-colors text-sm font-medium"
             >
               View Session Details
             </button>
             <button
-                onClick={() => {
-                  const hasPermission = services.auth.hasPermission('write');
-                  services.notification.info(
-                      'Permission Check',
-                      `Has "write" permission: ${hasPermission ? 'Yes' : 'No'}`
-                  );
-                }}
-                className="inline-flex items-center justify-center h-9 px-3 bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/80 transition-colors text-sm font-medium"
+              onClick={() => {
+                const hasPermission = services.auth.hasPermission('write');
+                services.notification.info(
+                  'Permission Check',
+                  `Has "write" permission: ${hasPermission ? 'Yes' : 'No'}`
+                );
+              }}
+              className="inline-flex items-center justify-center h-9 px-3 bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/80 transition-colors text-sm font-medium"
             >
               Check Write Permission
             </button>
@@ -307,22 +307,21 @@ export const App: React.FC<AppProps> = ({ services }) => {
           </p>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
             {loggerLevels.map(({ level }) => (
-                <button
-                    key={level}
-                    onClick={() => {
-                      services.logger[level as keyof typeof services.logger](
-                          `Test ${level} message from MFE at ${new Date().toLocaleTimeString()}`
-                      );
-                      services.notification.info('Logged', `Check console for ${level} message`);
-                    }}
-                    className="inline-flex items-center justify-center h-9 px-3 border border-input bg-background hover:bg-accent hover:text-accent-foreground rounded-md transition-colors text-sm font-medium capitalize"
-                >
-                  {level}
-                </button>
+              <button
+                key={level}
+                onClick={() => {
+                  services.logger[level as keyof typeof services.logger](
+                    `Test ${level} message from MFE at ${new Date().toLocaleTimeString()}`
+                  );
+                  services.notification.info('Logged', `Check console for ${level} message`);
+                }}
+                className="inline-flex items-center justify-center h-9 px-3 border border-input bg-background hover:bg-accent hover:text-accent-foreground rounded-md transition-colors text-sm font-medium capitalize"
+              >
+                {level}
+              </button>
             ))}
           </div>
         </div>
-
       </div>
 
       {/* Event Bus and Event Log Side by Side */}
@@ -386,29 +385,29 @@ export const App: React.FC<AppProps> = ({ services }) => {
               </p>
             ) : (
               eventLog.map((entry) => (
-              <div key={entry.id} className="p-3 bg-muted rounded-md text-sm">
-                <div className="flex justify-between items-start">
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-2">
-                      <span className="font-medium">
-                        {entry.type === 'sent' ? 'Sent' : 'Received'}
-                      </span>
-                      <code className="px-2 py-0.5 bg-background rounded text-xs">
-                        {entry.event}
-                      </code>
+                <div key={entry.id} className="p-3 bg-muted rounded-md text-sm">
+                  <div className="flex justify-between items-start">
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2">
+                        <span className="font-medium">
+                          {entry.type === 'sent' ? 'Sent' : 'Received'}
+                        </span>
+                        <code className="px-2 py-0.5 bg-background rounded text-xs">
+                          {entry.event}
+                        </code>
+                      </div>
+                      {entry.data && (
+                        <pre className="text-xs text-muted-foreground overflow-x-auto">
+                          {JSON.stringify(entry.data, null, 2)}
+                        </pre>
+                      )}
                     </div>
-                    {entry.data && (
-                      <pre className="text-xs text-muted-foreground overflow-x-auto">
-                        {JSON.stringify(entry.data, null, 2)}
-                      </pre>
-                    )}
+                    <span className="text-xs text-muted-foreground">
+                      {entry.timestamp.toLocaleTimeString()}
+                    </span>
                   </div>
-                  <span className="text-xs text-muted-foreground">
-                    {entry.timestamp.toLocaleTimeString()}
-                  </span>
                 </div>
-              </div>
-            ))
+              ))
             )}
           </div>
         </div>

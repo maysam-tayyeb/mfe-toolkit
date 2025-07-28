@@ -113,7 +113,7 @@ const React17MFE: MFEModule = {
       try {
         // React 17 unmount
         ReactDOM.unmountComponentAtNode(mountPoint);
-        
+
         if (mountPoint.parentNode) {
           mountPoint.parentNode.removeChild(mountPoint);
         }

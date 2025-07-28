@@ -2,9 +2,7 @@ import { createContext, useContext, ReactNode } from 'react';
 import { MFERegistryService } from '@mfe/dev-kit';
 import { useRegistry, UseRegistryResult } from '@/hooks/useRegistry';
 
-interface RegistryContextValue extends UseRegistryResult {
-  // Add any additional registry-related methods here
-}
+type RegistryContextValue = UseRegistryResult;
 
 const RegistryContext = createContext<RegistryContextValue | undefined>(undefined);
 
@@ -15,11 +13,7 @@ export interface RegistryProviderProps {
 export function RegistryProvider({ children }: RegistryProviderProps) {
   const registryResult = useRegistry();
 
-  return (
-    <RegistryContext.Provider value={registryResult}>
-      {children}
-    </RegistryContext.Provider>
-  );
+  return <RegistryContext.Provider value={registryResult}>{children}</RegistryContext.Provider>;
 }
 
 export function useRegistryContext(): RegistryContextValue {

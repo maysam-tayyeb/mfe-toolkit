@@ -70,8 +70,8 @@ describe('React 17 MFE Main Entry', () => {
   describe('Production Mode', () => {
     beforeEach(() => {
       process.env.NODE_ENV = 'production';
-      
-      // Mock window.location for production mode  
+
+      // Mock window.location for production mode
       Object.defineProperty(window, 'location', {
         value: { port: '3000' }, // Not dev port
         writable: true,
@@ -157,7 +157,7 @@ describe('React 17 MFE Main Entry', () => {
     it('should unmount the MFE when unmount is called', async () => {
       // Reset modules to clear previous test's mock
       vi.resetModules();
-      
+
       // Re-mock React and ReactDOM
       vi.mock('react', () => ({
         default: {
@@ -166,14 +166,14 @@ describe('React 17 MFE Main Entry', () => {
           StrictMode: ({ children }: any) => children,
         },
       }));
-      
+
       vi.mock('react-dom', () => ({
         default: {
           render: vi.fn(),
           unmountComponentAtNode: vi.fn(),
         },
       }));
-      
+
       const ReactDOM = (await import('react-dom')).default;
       const module = await import('./main');
 

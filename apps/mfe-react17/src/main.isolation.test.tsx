@@ -151,7 +151,7 @@ describe('React 17 MFE in Isolation', () => {
 
     // Should not crash when service throws error
     const successButton = screen.getByRole('button', { name: /success/i });
-    
+
     // Expect the click to not throw
     await expect(async () => {
       await userEvent.click(successButton);

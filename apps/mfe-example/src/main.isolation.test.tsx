@@ -45,16 +45,16 @@ describe('MFE in Isolation', () => {
   describe('MFE Isolation Tests', () => {
     it('should render without container services', () => {
       render(<App services={mockServices} />);
-      
+
       expect(screen.getByText('MFE Service Explorer')).toBeInTheDocument();
     });
 
     it('should handle null session gracefully', async () => {
       render(<App services={mockServices} />);
-      
+
       const viewSessionBtn = screen.getByRole('button', { name: /view session details/i });
       await userEvent.click(viewSessionBtn);
-      
+
       expect(mockServices.notification.warning).toHaveBeenCalledWith(
         'No Session',
         'No active session found'
@@ -63,46 +63,48 @@ describe('MFE in Isolation', () => {
 
     it('should work with mock logger service', async () => {
       render(<App services={mockServices} />);
-      
+
       expect(mockServices.logger.info).toHaveBeenCalledWith('Example MFE mounted successfully');
     });
 
     it('should emit events through mock event bus', () => {
       render(<App services={mockServices} />);
-      
-      expect(mockServices.eventBus.emit).toHaveBeenCalledWith(
-        'mfe:loaded',
-        { name: 'example', version: '1.0.0' }
-      );
+
+      expect(mockServices.eventBus.emit).toHaveBeenCalledWith('mfe:loaded', {
+        name: 'example',
+        version: '1.0.0',
+      });
     });
 
     it('should handle modal service calls', async () => {
       render(<App services={mockServices} />);
-      
+
       const simpleModalBtn = screen.getByRole('button', { name: /simple modal/i });
       await userEvent.click(simpleModalBtn);
-      
+
       expect(mockServices.modal.open).toHaveBeenCalled();
     });
 
     it('should handle notification service calls', async () => {
       render(<App services={mockServices} />);
-      
+
       const notificationSection = screen.getByText('Notification Service').closest('div');
       const successBtn = within(notificationSection!).getByRole('button', { name: /success/i });
       await userEvent.click(successBtn);
-      
+
       expect(mockServices.notification.success).toHaveBeenCalled();
     });
 
     it('should handle service errors gracefully', () => {
       // Make auth service throw error
-      mockServices.auth.getSession = vi.fn(() => { throw new Error('Auth error'); });
-      
+      mockServices.auth.getSession = vi.fn(() => {
+        throw new Error('Auth error');
+      });
+
       // Component should still render
       const { container } = render(<App services={mockServices} />);
       expect(container).toBeTruthy();
-      
+
       // Main content should be visible
       expect(screen.getByText('MFE Service Explorer')).toBeInTheDocument();
     });
@@ -140,7 +142,7 @@ describe('MFE in Isolation', () => {
           info: () => {},
         },
       };
-      
+
       expect(() => render(<App services={minimalServices} />)).not.toThrow();
     });
   });

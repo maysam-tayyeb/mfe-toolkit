@@ -2,11 +2,15 @@
 
 /**
  * Script to update MFE registry URLs for different environments
- * Usage: node scripts/update-registry.js --env production --base-url https://cdn.example.com
+ * Usage: node scripts/update-registry.mjs --env production --base-url https://cdn.example.com
  */
 
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const args = process.argv.slice(2);
 const envIndex = args.indexOf('--env');
@@ -42,8 +46,11 @@ registry.lastUpdated = new Date().toISOString();
 
 fs.writeFileSync(registryPath, JSON.stringify(registry, null, 2));
 
+// eslint-disable-next-line no-console
 console.log(`✅ Updated registry for ${environment} environment`);
 if (baseUrl) {
+  // eslint-disable-next-line no-console
   console.log(`📍 Base URL set to: ${baseUrl}`);
 }
+// eslint-disable-next-line no-console
 console.log(`📄 File: ${registryPath}`);

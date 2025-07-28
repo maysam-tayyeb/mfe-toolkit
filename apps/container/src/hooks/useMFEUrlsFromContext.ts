@@ -8,14 +8,17 @@ import { useRegistryContext } from '@/contexts/RegistryContext';
  */
 export function useMFEUrlsFromContext(mfeNames?: string[]): UseMFEUrlsResult {
   const { registry, isLoading, error } = useRegistryContext();
-  
+
   // Use the existing useMFEUrlsWithRegistry hook with the context registry
   const result = useMFEUrlsWithRegistry({ registry, mfeNames });
-  
+
   // Override loading and error states from context
-  return useMemo(() => ({
-    ...result,
-    isLoading,
-    error,
-  }), [result, isLoading, error]);
+  return useMemo(
+    () => ({
+      ...result,
+      isLoading,
+      error,
+    }),
+    [result, isLoading, error]
+  );
 }

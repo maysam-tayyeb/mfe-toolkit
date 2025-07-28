@@ -9,6 +9,7 @@ The MFE Communication Center provides a real-time testing environment for inter-
 ## 🚀 Quick Start
 
 1. **Start all applications:**
+
    ```bash
    pnpm dev
    ```
@@ -73,8 +74,8 @@ eventBus.emit('user.action', {
   source: 'example',
   data: {
     title: 'Product ABC',
-    price: 99.99
-  }
+    price: 99.99,
+  },
 });
 
 // React 17 MFE listens and responds
@@ -91,6 +92,7 @@ eventBus.on('user.action', (payload) => {
 **Implement request-response communication:**
 
 1. **Request from Example MFE:**
+
    ```json
    {
      "type": "request",
@@ -129,14 +131,16 @@ eventBus.emit('custom.event', {
   from: 'your-mfe',
   to: 'target-mfe',
   action: 'update',
-  data: { /* your data */ }
+  data: {
+    /* your data */
+  },
 });
 
 // Broadcast to all MFEs
 eventBus.emit('broadcast.event', {
   from: 'your-mfe',
   to: 'all',
-  message: 'Global update'
+  message: 'Global update',
 });
 ```
 
@@ -145,18 +149,18 @@ eventBus.emit('broadcast.event', {
 ```typescript
 useEffect(() => {
   const { eventBus } = window.__MFE_SERVICES__;
-  
+
   // Listen for specific events
   const unsubscribe = eventBus.on('custom.event', (payload) => {
     console.log('Received event:', payload);
-    
+
     // Check if this MFE is the target
     if (payload.data.to === 'your-mfe' || payload.data.to === 'all') {
       // Handle the event
       handleIncomingEvent(payload.data);
     }
   });
-  
+
   // Cleanup on unmount
   return () => unsubscribe();
 }, []);
@@ -166,25 +170,27 @@ useEffect(() => {
 
 The platform supports these standard event types:
 
-| Event Type | Purpose | Example Usage |
-|------------|---------|---------------|
-| `mfe.loaded` | MFE successfully loaded | Notify other MFEs of availability |
-| `mfe.unloaded` | MFE is unmounting | Cleanup shared resources |
-| `inter-mfe.message` | Direct MFE communication | Send targeted messages |
-| `user.action` | User interaction events | Coordinate UI state |
-| `data.updated` | Data change notifications | Sync shared data |
-| `auth.changed` | Authentication updates | Update permissions |
-| `custom.*` | Custom application events | App-specific needs |
+| Event Type          | Purpose                   | Example Usage                     |
+| ------------------- | ------------------------- | --------------------------------- |
+| `mfe.loaded`        | MFE successfully loaded   | Notify other MFEs of availability |
+| `mfe.unloaded`      | MFE is unmounting         | Cleanup shared resources          |
+| `inter-mfe.message` | Direct MFE communication  | Send targeted messages            |
+| `user.action`       | User interaction events   | Coordinate UI state               |
+| `data.updated`      | Data change notifications | Sync shared data                  |
+| `auth.changed`      | Authentication updates    | Update permissions                |
+| `custom.*`          | Custom application events | App-specific needs                |
 
 ## 📊 MFE Communication Center Features
 
 ### Event Bus Controls
+
 - **Custom Event Publisher**: Send events with custom types and JSON payloads
 - **Quick Actions**: Pre-configured buttons for common event types
 - **Event Type Input**: Define custom event types
 - **JSON Data Editor**: Format complex event payloads
 
 ### Real-time Event Log
+
 - **Direction Indicators**: Visual distinction between sent (→ OUT) and received (← IN) events
 - **Timestamp Tracking**: Precise timing for each event
 - **Source Identification**: Track which MFE sent each event
@@ -192,6 +198,7 @@ The platform supports these standard event types:
 - **Log Management**: Clear log functionality
 
 ### Communication Statistics
+
 - **Total Events**: Count of all logged events
 - **Events Sent**: Number of outgoing events
 - **Events Received**: Number of incoming events
@@ -200,6 +207,7 @@ The platform supports these standard event types:
 ## 🎨 UI Components
 
 ### Event Log Entry Structure
+
 ```typescript
 interface EventLogEntry {
   id: string;
@@ -212,6 +220,7 @@ interface EventLogEntry {
 ```
 
 ### Visual Indicators
+
 - **Blue**: Outgoing events (sent from container)
 - **Green**: Incoming events (received from MFEs)
 - **Timestamps**: Locale-specific time formatting
@@ -230,6 +239,7 @@ interface EventLogEntry {
    - Keep payloads lightweight
 
 3. **Error Handling**
+
    ```typescript
    try {
      const data = JSON.parse(eventData);
@@ -263,6 +273,7 @@ interface EventLogEntry {
 ## 📚 Advanced Patterns
 
 ### Event Aggregation
+
 ```typescript
 // Collect responses from multiple MFEs
 const responses = new Map();
@@ -270,7 +281,7 @@ const requestId = 'req-' + Date.now();
 
 eventBus.emit('survey.request', {
   id: requestId,
-  question: 'Are you ready?'
+  question: 'Are you ready?',
 });
 
 eventBus.on('survey.response', (payload) => {
@@ -281,6 +292,7 @@ eventBus.on('survey.response', (payload) => {
 ```
 
 ### Event Throttling
+
 ```typescript
 import { throttle } from 'lodash';
 
@@ -295,13 +307,14 @@ window.addEventListener('scroll', () => {
 ```
 
 ### State Synchronization
+
 ```typescript
 // Sync state changes across MFEs
 const syncState = (state) => {
   eventBus.emit('state.sync', {
     from: 'mfe-name',
     state: state,
-    version: Date.now()
+    version: Date.now(),
   });
 };
 

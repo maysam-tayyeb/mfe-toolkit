@@ -30,7 +30,7 @@ export function useRegistry(options: UseRegistryOptions = {}): UseRegistryResult
     if (useSingleton) {
       return getRegistrySingleton();
     }
-    
+
     // Create new instance if explicitly requested
     const registryUrl = import.meta.env.VITE_MFE_REGISTRY_URL || '/mfe-registry.json';
     const environment = import.meta.env.MODE;
@@ -52,7 +52,6 @@ export function useRegistry(options: UseRegistryOptions = {}): UseRegistryResult
 
     try {
       await registry.loadFromUrl();
-      console.log('MFE registry loaded successfully');
       onLoadSuccess?.();
     } catch (err) {
       const error = err instanceof Error ? err : new Error('Failed to load registry');
@@ -62,7 +61,6 @@ export function useRegistry(options: UseRegistryOptions = {}): UseRegistryResult
 
       // Fallback to hardcoded registry for development
       if (import.meta.env.DEV) {
-        console.log('Using hardcoded registry for development');
         registry.register({
           name: 'example',
           version: '1.0.0',

@@ -172,23 +172,23 @@ Permissions: ${session.permissions.join(', ')}`,
 
     // Subscribe to events
     const unsubscribes: Array<() => void> = [];
-    
+
     const unsubscribe1 = services.eventBus.on('container:update', (payload: any) => {
       services.logger.info('Received container update', payload);
       addToEventLog('received', 'container:update', payload.data);
     });
     if (unsubscribe1) unsubscribes.push(unsubscribe1);
-    
+
     const unsubscribe2 = services.eventBus.on(EVENTS.AUTH_CHANGED, (payload) => {
       addToEventLog('received', EVENTS.AUTH_CHANGED, payload.data);
     });
     if (unsubscribe2) unsubscribes.push(unsubscribe2);
-    
+
     const unsubscribe3 = services.eventBus.on(EVENTS.MFE_LOADED, (payload) => {
       addToEventLog('received', EVENTS.MFE_LOADED, payload.data);
     });
     if (unsubscribe3) unsubscribes.push(unsubscribe3);
-    
+
     const unsubscribe4 = services.eventBus.on(EVENTS.MFE_UNLOADED, (payload) => {
       addToEventLog('received', EVENTS.MFE_UNLOADED, payload.data);
     });
@@ -196,7 +196,7 @@ Permissions: ${session.permissions.join(', ')}`,
 
     return () => {
       services.logger.info('React 17 MFE unmounting');
-      unsubscribes.forEach(fn => fn && typeof fn === 'function' && fn());
+      unsubscribes.forEach((fn) => fn && typeof fn === 'function' && fn());
       services.eventBus.emit(EVENTS.MFE_UNLOADED, { name: 'react17' });
     };
   }, [services, isListening]);

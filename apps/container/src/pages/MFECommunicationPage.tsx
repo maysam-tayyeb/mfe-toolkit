@@ -22,9 +22,12 @@ export const MFECommunicationPage: React.FC = () => {
   const [customEventType, setCustomEventType] = useState('custom.test');
   const [customEventData, setCustomEventData] = useState('{"message": "Hello from container!"}');
   const [eventBus] = useState(() => new EventBusImpl());
-  
+
   // Use the custom hook to get MFE URLs from context (prevents multiple registry instances)
-  const { urls: mfeUrls, isLoading: registryLoading } = useMFEUrlsFromContext(['example', 'react17']);
+  const { urls: mfeUrls, isLoading: registryLoading } = useMFEUrlsFromContext([
+    'example',
+    'react17',
+  ]);
 
   // Create MFE services with shared event bus
   const mfeServices = useMemo(() => {
@@ -95,7 +98,7 @@ export const MFECommunicationPage: React.FC = () => {
           message: `Published "${customEventType}" event to both MFEs`,
         })
       );
-    } catch (error) {
+    } catch {
       dispatch(
         addNotification({
           type: 'error',

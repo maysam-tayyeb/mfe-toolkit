@@ -65,6 +65,7 @@ pnpm dev
 ```
 
 This command starts:
+
 - ✅ Container app on http://localhost:3000
 - ✅ Example MFE on http://localhost:3001
 - ✅ React 17 MFE on http://localhost:3002
@@ -133,6 +134,7 @@ npx http-server dist -p 3002 --cors -c-1  # Serve on expected port
 ```
 
 > **Note**: The MFE registry URLs are currently hardcoded in `apps/container/src/App.tsx`. For production deployments:
+>
 > - Update the registry URLs to point to your CDN or web server
 > - Use environment variables for dynamic configuration
 > - Example: `url: process.env.VITE_MFE_EXAMPLE_URL || 'http://localhost:3001/mfe-example.js'`
@@ -302,9 +304,9 @@ pnpm type-check
 
 ```javascript
 // Check in browser console:
-console.log(window.__MFE_SERVICES__);  // Should show all services
-console.log(window.__EVENT_BUS__);      // Event bus instance
-console.log(window.__REDUX_STORE__);    // Redux store
+console.log(window.__MFE_SERVICES__); // Should show all services
+console.log(window.__EVENT_BUS__); // Event bus instance
+console.log(window.__REDUX_STORE__); // Redux store
 ```
 
 ### Port Already in Use?
@@ -396,9 +398,11 @@ VITE_MFE_REGISTRY_URL=https://cdn.example.com/configs/mfe-registry.json
 ## 📚 Documentation
 
 ### Guides
+
 - **[MFE Communication Guide](./docs/mfe-communication-guide.md)** - Learn how to implement inter-MFE communication with real-time event bus examples
 
 ### API Reference
+
 - **[MFE Development Kit](./packages/mfe-dev-kit/README.md)** - Core services and utilities for MFE development
 - **[Shared Utilities](./packages/shared/README.md)** - Common constants and helper functions
 

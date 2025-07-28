@@ -13,15 +13,15 @@ import { useRegistry } from '@/hooks/useRegistry';
 
 function MyComponent() {
   const { registry, isLoading, error, reload } = useRegistry();
-  
+
   if (isLoading) {
     return <div>Loading registry...</div>;
   }
-  
+
   if (error) {
     return <div>Error: {error.message}</div>;
   }
-  
+
   // Use registry
   const mfe = registry.get('example');
 }
@@ -53,10 +53,10 @@ import { useMFEUrls } from '@/hooks/useMFEUrls';
 function MyComponent() {
   // Get specific MFE URLs
   const { urls, isLoading, error, getUrl } = useMFEUrls(['example', 'react17']);
-  
+
   // Or get all MFE URLs
   const { urls: allUrls } = useMFEUrls();
-  
+
   return (
     <MFELoader
       name="example"
@@ -77,10 +77,10 @@ import { useMFEUrlsFromContext } from '@/hooks/useMFEUrlsFromContext';
 function MyComponent() {
   // Get specific MFE URLs from context
   const { urls, isLoading, error, getUrl } = useMFEUrlsFromContext(['example', 'react17']);
-  
+
   // Or get all MFE URLs
   const { urls: allUrls } = useMFEUrlsFromContext();
-  
+
   return (
     <MFELoader
       name="example"
@@ -109,11 +109,11 @@ function MyComponent() {
 ```typescript
 function App() {
   const { registry, isLoading } = useRegistry();
-  
+
   if (isLoading) {
     return <LoadingScreen />;
   }
-  
+
   return (
     <MFEPage registry={registry} />
   );
@@ -130,7 +130,7 @@ function App() {
     onLoadSuccess: () => console.log('Registry loaded!'),
     onLoadError: (error) => console.error('Registry failed:', error),
   });
-  
+
   return (
     <div>
       <button onClick={reload}>Refresh Registry</button>
@@ -145,11 +145,11 @@ function App() {
 ```typescript
 function MFEGrid() {
   const { urls, isLoading } = useMFEUrls();
-  
+
   if (isLoading) {
     return <div>Loading MFEs...</div>;
   }
-  
+
   return (
     <div className="grid grid-cols-2 gap-4">
       {Object.entries(urls).map(([name, url]) => (
@@ -170,7 +170,7 @@ function MFEGrid() {
 ```typescript
 function MFEContainer() {
   const { registry, isLoading, error, reload } = useRegistry();
-  
+
   if (error) {
     return (
       <ErrorBoundary
@@ -180,7 +180,7 @@ function MFEContainer() {
       />
     );
   }
-  
+
   // ...
 }
 ```
@@ -193,6 +193,7 @@ The hooks automatically use these environment variables:
 - `MODE` - Environment mode (development/production)
 
 The registry will try to load from:
+
 1. `VITE_MFE_REGISTRY_URL` if set
 2. `/mfe-registry.json` as default
 3. `/mfe-registry.{environment}.json` as fallback

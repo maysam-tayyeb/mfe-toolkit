@@ -149,17 +149,16 @@ describe('React 17 MFE App', () => {
       // Fill in event name and data
       const eventNameInput = screen.getByPlaceholderText('Event name');
       const eventDataInput = screen.getByPlaceholderText(/Event data.*JSON format/);
-      
+
       await userEvent.type(eventNameInput, 'react17:test');
       await userEvent.paste(eventDataInput, '{"message": "Hello from React 17"}');
 
       const emitButton = screen.getByRole('button', { name: /emit event/i });
       await userEvent.click(emitButton);
 
-      expect(mockServices.eventBus.emit).toHaveBeenCalledWith(
-        'react17:test',
-        { message: 'Hello from React 17' }
-      );
+      expect(mockServices.eventBus.emit).toHaveBeenCalledWith('react17:test', {
+        message: 'Hello from React 17',
+      });
     });
 
     it('should handle empty event data', async () => {
@@ -171,10 +170,7 @@ describe('React 17 MFE App', () => {
       const emitButton = screen.getByRole('button', { name: /emit event/i });
       await userEvent.click(emitButton);
 
-      expect(mockServices.eventBus.emit).toHaveBeenCalledWith(
-        'react17:simple',
-        {}
-      );
+      expect(mockServices.eventBus.emit).toHaveBeenCalledWith('react17:simple', {});
     });
 
     it('should show notification on successful event emission', async () => {
@@ -208,21 +204,25 @@ describe('React 17 MFE App', () => {
 
     it('should trigger all notification types', async () => {
       render(<App services={mockServices} />);
-      
+
       // Test all notification types
       const types = ['success', 'error', 'warning', 'info'];
-      
+
       for (const type of types) {
         const buttons = screen.getAllByRole('button', { name: new RegExp(type, 'i') });
         // Get the first button that matches (to avoid logger buttons)
-        const notificationButton = buttons.find(btn => 
-          btn.closest('[class*="border rounded-lg p-6"]')?.textContent?.includes('Notification Service')
+        const notificationButton = buttons.find((btn) =>
+          btn
+            .closest('[class*="border rounded-lg p-6"]')
+            ?.textContent?.includes('Notification Service')
         );
-        
+
         if (notificationButton) {
           await userEvent.click(notificationButton);
-          
-          expect(mockServices.notification[type as keyof typeof mockServices.notification]).toHaveBeenCalledWith(
+
+          expect(
+            mockServices.notification[type as keyof typeof mockServices.notification]
+          ).toHaveBeenCalledWith(
             `React 17 ${type.charAt(0).toUpperCase() + type.slice(1)}`,
             `This is a ${type} message from React 17 MFE`
           );
@@ -234,14 +234,15 @@ describe('React 17 MFE App', () => {
   describe('Logger Service', () => {
     it('should trigger logger at different levels', async () => {
       render(<App services={mockServices} />);
-      
+
       // Find all buttons with text "debug" and get the one in logger service section
       const allButtons = screen.getAllByRole('button');
-      const debugButton = allButtons.find(btn => 
-        btn.textContent === 'debug' && 
-        btn.closest('.border')?.textContent?.includes('Logger Service')
+      const debugButton = allButtons.find(
+        (btn) =>
+          btn.textContent === 'debug' &&
+          btn.closest('.border')?.textContent?.includes('Logger Service')
       );
-      
+
       if (debugButton) {
         await userEvent.click(debugButton);
         expect(mockServices.logger.debug).toHaveBeenCalledWith(
@@ -252,14 +253,15 @@ describe('React 17 MFE App', () => {
 
     it('should show notification when logging', async () => {
       render(<App services={mockServices} />);
-      
+
       // Find all buttons with text "info" and get the one in logger service section
       const allButtons = screen.getAllByRole('button');
-      const infoButton = allButtons.find(btn => 
-        btn.textContent === 'info' && 
-        btn.closest('.border')?.textContent?.includes('Logger Service')
+      const infoButton = allButtons.find(
+        (btn) =>
+          btn.textContent === 'info' &&
+          btn.closest('.border')?.textContent?.includes('Logger Service')
       );
-      
+
       if (infoButton) {
         await userEvent.click(infoButton);
         expect(mockServices.notification.info).toHaveBeenCalledWith(
@@ -302,7 +304,7 @@ describe('React 17 MFE App', () => {
 
       // Should not throw during render
       const { container } = render(<App services={errorServices} />);
-      
+
       // Should render despite error potential
       expect(screen.getByText('React 17 MFE Service Explorer')).toBeInTheDocument();
       expect(container).toBeTruthy();
@@ -313,13 +315,13 @@ describe('React 17 MFE App', () => {
 
     it('should show error notification for invalid JSON in event data', async () => {
       render(<App services={mockServices} />);
-      
+
       // Wait for component to fully render
       await screen.findByText('Event Bus');
 
       const eventNameInput = screen.getByPlaceholderText('Event name');
       const eventDataInput = screen.getByPlaceholderText(/Event data.*JSON format/);
-      
+
       await userEvent.type(eventNameInput, 'test:event');
       await userEvent.type(eventDataInput, 'invalid json');
 
