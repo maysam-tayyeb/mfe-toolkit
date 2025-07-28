@@ -36,7 +36,8 @@ export const MFECommunicationPage: React.FC = () => {
 
   // Use the custom hook to get MFE URLs from context
   const { urls: mfeUrls, isLoading: registryLoading } = useMFEUrlsFromContext([
-    'eventDemo',
+    'serviceExplorer',
+    'legacyServiceExplorer',
   ]);
 
   // Get singleton MFE services
@@ -261,78 +262,78 @@ export const MFECommunicationPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Two-Column MFE Layout - Event Demo MFEs */}
+      {/* Two-Column MFE Layout - Service Explorer MFEs */}
       <div className="grid gap-6 lg:grid-cols-2">
         <div className="border rounded-lg overflow-hidden">
           <div className="bg-muted/50 px-4 py-2 border-b">
-            <h3 className="text-sm font-semibold">Event Demo MFE - Instance 1</h3>
+            <h3 className="text-sm font-semibold">Service Explorer MFE (React 19)</h3>
           </div>
-          {!registryLoading && mfeUrls.eventDemo ? (
-            <div className="mfe-container" data-instance-id="1">
+          <div className="p-4">
+            {!registryLoading && mfeUrls.serviceExplorer ? (
               <MFELoader
-                name="eventDemo-1"
-                url={mfeUrls.eventDemo}
-                services={mfeServices}
-                fallback={
-                  <div className="flex items-center justify-center h-64">
-                    <div className="text-center">
-                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-2"></div>
-                      <p className="text-sm text-muted-foreground">Loading Event Demo MFE - Instance 1...</p>
-                    </div>
+              name="serviceExplorer"
+              url={mfeUrls.serviceExplorer}
+              services={mfeServices}
+              fallback={
+                <div className="flex items-center justify-center h-64">
+                  <div className="text-center">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-2"></div>
+                    <p className="text-sm text-muted-foreground">Loading Service Explorer MFE...</p>
                   </div>
-                }
-                onError={(error) => {
-                  dispatch(
-                    addNotification({
-                      type: 'error',
-                      title: 'MFE Load Error',
-                      message: `Failed to load Event Demo MFE Instance 1: ${error.message}`,
-                    })
-                  );
-                }}
-              />
-            </div>
+                </div>
+              }
+              onError={(error) => {
+                dispatch(
+                  addNotification({
+                    type: 'error',
+                    title: 'MFE Load Error',
+                    message: `Failed to load Service Explorer MFE: ${error.message}`,
+                  })
+                );
+              }}
+            />
           ) : (
             <div className="flex items-center justify-center h-64">
               <p className="text-sm text-muted-foreground">Loading registry...</p>
             </div>
           )}
+          </div>
         </div>
 
         <div className="border rounded-lg overflow-hidden">
           <div className="bg-muted/50 px-4 py-2 border-b">
-            <h3 className="text-sm font-semibold">Event Demo MFE - Instance 2</h3>
+            <h3 className="text-sm font-semibold">Legacy Service Explorer MFE (React 17)</h3>
           </div>
-          {!registryLoading && mfeUrls.eventDemo ? (
-            <div className="mfe-container" data-instance-id="2">
+          <div className="p-4">
+            {!registryLoading && mfeUrls.legacyServiceExplorer ? (
               <MFELoader
-                name="eventDemo-2"
-                url={mfeUrls.eventDemo}
-                services={mfeServices}
-                fallback={
-                  <div className="flex items-center justify-center h-64">
+              name="legacyServiceExplorer"
+              url={mfeUrls.legacyServiceExplorer}
+              services={mfeServices}
+              fallback={
+                <div className="flex items-center justify-center h-64">
                     <div className="text-center">
                       <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-2"></div>
-                      <p className="text-sm text-muted-foreground">Loading Event Demo MFE - Instance 2...</p>
+                      <p className="text-sm text-muted-foreground">Loading Legacy Service Explorer MFE...</p>
                     </div>
                   </div>
-                }
-                onError={(error) => {
-                  dispatch(
-                    addNotification({
-                      type: 'error',
-                      title: 'MFE Load Error',
-                      message: `Failed to load Event Demo MFE Instance 2: ${error.message}`,
-                    })
-                  );
-                }}
-              />
-            </div>
+              }
+              onError={(error) => {
+                dispatch(
+                  addNotification({
+                    type: 'error',
+                    title: 'MFE Load Error',
+                    message: `Failed to load Legacy Service Explorer MFE: ${error.message}`,
+                  })
+                );
+              }}
+            />
           ) : (
             <div className="flex items-center justify-center h-64">
               <p className="text-sm text-muted-foreground">Loading registry...</p>
             </div>
           )}
+          </div>
         </div>
       </div>
     </div>
