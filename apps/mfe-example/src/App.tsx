@@ -515,12 +515,12 @@ export const App: React.FC<AppProps> = ({ services }) => {
       <InfoBlock
         title="MFE Configuration"
         sections={[
-          { label: 'Name', value: 'Example MFE' },
+          { label: 'Name', value: 'Service Explorer' },
+          { label: 'Package', value: '@mfe/example-mfe' },
           { label: 'Version', value: '1.0.0' },
           { label: 'Dev Port', value: '3001' },
           { label: 'Format', value: 'ESM Module', highlight: true },
-          { label: 'Bundle Size', value: '~8.5KB', highlight: true },
-          { label: 'Load Time', value: '< 100ms' },
+          { label: 'Bundle Size', value: '~14KB', highlight: true },
         ]}
       />
 

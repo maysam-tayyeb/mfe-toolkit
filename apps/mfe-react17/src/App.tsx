@@ -553,12 +553,12 @@ Permissions: ${session.permissions.join(', ')}`,
       <InfoBlock
         title="MFE Configuration"
         sections={[
-          { label: 'Name', value: 'React 17 MFE' },
+          { label: 'Name', value: 'Legacy Demo' },
+          { label: 'Package', value: '@mfe/react17-mfe' },
           { label: 'Version', value: '1.0.0' },
           { label: 'Dev Port', value: '3002' },
           { label: 'Format', value: 'ESM Module', highlight: true },
-          { label: 'Bundle Size', value: '~157KB', highlight: true },
-          { label: 'React Version', value: React.version },
+          { label: 'Bundle Size', value: '~159KB', highlight: true },
         ]}
       />
 
