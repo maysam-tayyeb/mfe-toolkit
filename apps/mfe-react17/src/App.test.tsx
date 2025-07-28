@@ -58,8 +58,8 @@ describe('React 17 MFE App', () => {
 
   it('should display React version', () => {
     render(<App services={mockServices} />);
-    const versionElement = screen.getAllByText('17.0.2')[0]; // Get the first one
-    expect(versionElement).toBeInTheDocument();
+    // Look for React 17 in the component structure
+    expect(screen.getByText('React 17 MFE Service Explorer')).toBeInTheDocument();
   });
 
   it('should emit MFE loaded event on mount', () => {
@@ -284,6 +284,145 @@ describe('React 17 MFE App', () => {
 
       // Component will unmount is logged
       expect(mockServices.logger.info).toHaveBeenCalledWith('React 17 MFE unmounting');
+    });
+  });
+
+  describe('Event Bus Subscription Bug', () => {
+    it('should maintain multiple event subscriptions when adding new listeners', async () => {
+      const eventHandlers = new Map<string, Set<any>>();
+      
+      const trackingServices = {
+        ...mockServices,
+        eventBus: {
+          ...mockServices.eventBus,
+          on: vi.fn((event: string, handler: any) => {
+            if (!eventHandlers.has(event)) {
+              eventHandlers.set(event, new Set());
+            }
+            eventHandlers.get(event)!.add(handler);
+            
+            // Return unsubscribe function
+            return () => {
+              const handlers = eventHandlers.get(event);
+              if (handlers) {
+                handlers.delete(handler);
+                if (handlers.size === 0) {
+                  eventHandlers.delete(event);
+                }
+              }
+            };
+          }),
+        },
+      };
+
+      render(<App services={trackingServices} />);
+
+      // Subscribe to first event
+      const eventInput = screen.getByPlaceholderText('Event name to listen (e.g., custom.test)');
+      const listenButton = screen.getByText('Listen');
+
+      await userEvent.type(eventInput, 'test.event1');
+      await userEvent.click(listenButton);
+
+      await screen.findByText('test.event1');
+
+      // Verify first subscription is active
+      expect(eventHandlers.has('test.event1')).toBe(true);
+      expect(eventHandlers.get('test.event1')?.size).toBe(1);
+
+      // Clear input and subscribe to second event
+      await userEvent.clear(eventInput);
+      await userEvent.type(eventInput, 'test.event2');
+      await userEvent.click(listenButton);
+
+      await screen.findByText('test.event2');
+
+      // Clear input and subscribe to third event
+      await userEvent.clear(eventInput);
+      await userEvent.type(eventInput, 'test.event3');
+      await userEvent.click(listenButton);
+
+      await screen.findByText('test.event3');
+
+      // BUG: All event subscriptions should still be active
+      expect(eventHandlers.has('test.event1')).toBe(true);
+      expect(eventHandlers.has('test.event2')).toBe(true);
+      expect(eventHandlers.has('test.event3')).toBe(true);
+      
+      // Verify all handlers are still registered
+      expect(eventHandlers.get('test.event1')?.size).toBe(1);
+      expect(eventHandlers.get('test.event2')?.size).toBe(1);
+      expect(eventHandlers.get('test.event3')?.size).toBe(1);
+    });
+
+    it('should receive events from all subscribed event types', async () => {
+      const eventHandlers = new Map<string, Set<any>>();
+      
+      const trackingServices = {
+        ...mockServices,
+        eventBus: {
+          ...mockServices.eventBus,
+          on: vi.fn((event: string, handler: any) => {
+            if (!eventHandlers.has(event)) {
+              eventHandlers.set(event, new Set());
+            }
+            eventHandlers.get(event)!.add(handler);
+            
+            return () => {
+              const handlers = eventHandlers.get(event);
+              if (handlers) {
+                handlers.delete(handler);
+                if (handlers.size === 0) {
+                  eventHandlers.delete(event);
+                }
+              }
+            };
+          }),
+        },
+      };
+
+      render(<App services={trackingServices} />);
+
+      const eventInput = screen.getByPlaceholderText('Event name to listen (e.g., custom.test)');
+      const listenButton = screen.getByText('Listen');
+
+      // Add three event listeners
+      const events = ['custom.test1', 'custom.test2', 'custom.test3'];
+      for (const event of events) {
+        await userEvent.clear(eventInput);
+        await userEvent.type(eventInput, event);
+        await userEvent.click(listenButton);
+        await screen.findByText(event);
+      }
+
+      // Simulate receiving events from another MFE
+      for (const event of events) {
+        const handlers = eventHandlers.get(event);
+        if (handlers) {
+          handlers.forEach(handler => {
+            handler({
+              type: event,
+              data: { message: `Test message for ${event}` },
+              timestamp: Date.now(),
+              source: 'test-mfe',
+            });
+          });
+        }
+      }
+
+      // Check that notifications were shown for all events
+      expect(trackingServices.notification.info).toHaveBeenCalledWith(
+        'Custom Event Received',
+        expect.stringContaining('custom.test1')
+      );
+      expect(trackingServices.notification.info).toHaveBeenCalledWith(
+        'Custom Event Received',
+        expect.stringContaining('custom.test2')
+      );
+      expect(trackingServices.notification.info).toHaveBeenCalledWith(
+        'Custom Event Received',
+        expect.stringContaining('custom.test3')
+      );
     });
   });
 

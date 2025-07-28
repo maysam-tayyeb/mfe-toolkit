@@ -220,11 +220,16 @@ Permissions: ${session.permissions.join(', ')}`,
     return () => {
       services.logger.info('React 17 MFE unmounting');
       unsubscribes.forEach((fn) => fn && typeof fn === 'function' && fn());
-      // Clean up dynamic event listeners
-      eventUnsubscribes.forEach((unsubscribe) => unsubscribe());
       services.eventBus.emit(EVENTS.MFE_UNLOADED, { name: 'react17' });
     };
-  }, [services, eventUnsubscribes]);
+  }, [services]);
+  
+  // Cleanup dynamic event listeners on unmount
+  useEffect(() => {
+    return () => {
+      eventUnsubscribes.forEach((unsubscribe) => unsubscribe());
+    };
+  }, []);
 
   return (
     <div className="space-y-8" data-testid="react17-mfe">

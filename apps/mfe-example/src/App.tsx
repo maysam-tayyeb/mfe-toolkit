@@ -273,12 +273,17 @@ export const App: React.FC<AppProps> = ({ services }) => {
 
     return () => {
       unsubscribes.forEach((fn) => fn());
-      // Clean up dynamic event listeners
-      eventUnsubscribes.forEach((unsubscribe) => unsubscribe());
       services.logger.info('Example MFE unmounting');
       services.eventBus.emit(EVENTS.MFE_UNLOADED, { name: 'example' });
     };
-  }, [services, eventUnsubscribes]);
+  }, [services]);
+  
+  // Cleanup dynamic event listeners on unmount
+  useEffect(() => {
+    return () => {
+      eventUnsubscribes.forEach((unsubscribe) => unsubscribe());
+    };
+  }, []);
 
   return (
     <div className="space-y-8" data-testid="mfe-content">
