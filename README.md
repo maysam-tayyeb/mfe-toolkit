@@ -38,8 +38,22 @@ A complete microfrontend (MFE) architecture built with React 19, Redux Toolkit, 
 
 ### Prerequisites
 
-- Node.js >= 18
+- Node.js >= 18 (use [nvm](https://github.com/nvm-sh/nvm) to manage Node versions)
 - pnpm >= 8 (install with `npm install -g pnpm` or see [pnpm.io](https://pnpm.io/installation))
+
+#### Setting up Node.js with nvm (if needed)
+
+```bash
+# Install nvm (if not already installed)
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+
+# Install and use Node.js 18+
+nvm install 18
+nvm use 18
+
+# Install pnpm globally
+npm install -g pnpm
+```
 
 ### Installation
 
