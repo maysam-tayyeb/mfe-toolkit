@@ -27,6 +27,7 @@ const config = {
     'react/jsx-dev-runtime',
     '@reduxjs/toolkit',
     'react-redux',
+    'lucide-react',
   ],
 
   // Define environment variables

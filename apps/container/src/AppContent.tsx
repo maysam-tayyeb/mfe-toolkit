@@ -8,6 +8,7 @@ import { UniversalStateDemoPage } from '@/pages/UniversalStateDemoPage';
 import { MFEPage } from '@mfe/dev-kit';
 import { getMFEServicesSingleton } from '@/services/mfe-services-singleton';
 import { useRegistryContext } from '@/contexts/RegistryContext';
+import { getGlobalStateManager } from '@mfe/universal-state';
 
 export function AppContent() {
   const { registry, isLoading } = useRegistryContext();
@@ -19,6 +20,28 @@ export function AppContent() {
       (window as any).__EVENT_BUS__ = mfeServices.eventBus;
       (window as any).__MFE_SERVICES__ = mfeServices;
     }
+    
+    // Set up global theme management
+    const stateManager = getGlobalStateManager();
+    
+    // Subscribe to theme changes
+    const unsubscribe = stateManager.subscribe('theme', (value) => {
+      if (value === 'dark') {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    });
+    
+    // Set initial theme
+    const currentTheme = stateManager.get('theme');
+    if (currentTheme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+    
+    return unsubscribe;
   }, [mfeServices]);
 
   if (isLoading) {

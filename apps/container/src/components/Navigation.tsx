@@ -1,12 +1,33 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { MFE_CONFIG } from '@mfe/shared';
+import { getGlobalStateManager } from '@mfe/universal-state';
+import { Moon, Sun } from 'lucide-react';
 
 export const Navigation: React.FC = () => {
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
+  const stateManager = getGlobalStateManager();
+
+  useEffect(() => {
+    // Subscribe to theme changes
+    const currentTheme = stateManager.get('theme') || 'light';
+    setTheme(currentTheme);
+    
+    const unsubscribe = stateManager.subscribe('theme', (value) => {
+      setTheme(value || 'light');
+    });
+    
+    return unsubscribe;
+  }, [stateManager]);
+
+  const toggleTheme = () => {
+    const newTheme = theme === 'dark' ? 'light' : 'dark';
+    stateManager.set('theme', newTheme, 'navigation');
+  };
 
   const navItems = [
     { path: '/', label: 'Home' },
@@ -48,7 +69,20 @@ export const Navigation: React.FC = () => {
               ))}
             </div>
           </div>
-          <div className="flex items-center">
+          <div className="flex items-center gap-2">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={toggleTheme}
+              className="h-9 w-9"
+              aria-label="Toggle theme"
+            >
+              {theme === 'dark' ? (
+                <Sun className="h-4 w-4" />
+              ) : (
+                <Moon className="h-4 w-4" />
+              )}
+            </Button>
             <Button
               variant="ghost"
               size="sm"

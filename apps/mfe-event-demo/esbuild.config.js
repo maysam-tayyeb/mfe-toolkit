@@ -27,6 +27,7 @@ async function buildMFE() {
         'react-dom/client',
         '@reduxjs/toolkit',
         'react-redux',
+        'lucide-react',
       ],
       loader: {
         '.tsx': 'tsx',

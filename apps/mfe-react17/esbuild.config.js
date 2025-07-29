@@ -20,7 +20,8 @@ const config = {
   target: 'es2020',
 
   // Bundle all dependencies (no externals for React 17 compatibility demo)
-  external: [],
+  // But still externalize lucide-react to use shared version
+  external: ['lucide-react'],
 
   // Define environment variables
   define: {

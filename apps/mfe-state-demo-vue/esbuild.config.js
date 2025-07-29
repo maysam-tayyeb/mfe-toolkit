@@ -13,7 +13,7 @@ const config = {
   outfile: path.join(rootDir, 'dist', 'mfe-state-demo-vue', 'mfe-state-demo-vue.js'),
   platform: 'browser',
   target: 'es2020',
-  external: [],
+  external: ['lucide-react'],
   plugins: [vue()],
   loader: {
     '.ts': 'ts',

@@ -10,6 +10,7 @@ const config = {
   format: 'esm',
   sourcemap: true,
   target: 'es2020',
+  external: ['lucide-react'],
   loader: {
     '.js': 'js',
   },
