@@ -20,9 +20,14 @@ export const IsolatedMFELoader: React.FC<IsolatedMFELoaderProps> = ({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
   const mfeInstanceRef = useRef<any>(null);
+  const cleanupRef = useRef<(() => void) | null>(null);
+  
+  // Use ref to avoid stale closure
+  const onErrorRef = useRef(onError);
+  onErrorRef.current = onError;
 
   useEffect(() => {
-    let cleanup: (() => void) | null = null;
+    let isMounted = true;
 
     const loadAndMountMFE = async () => {
       try {
@@ -34,6 +39,9 @@ export const IsolatedMFELoader: React.FC<IsolatedMFELoaderProps> = ({
         if (!module.default || typeof module.default.mount !== 'function') {
           throw new Error(`MFE ${name} does not export a valid module with mount function`);
         }
+
+        // Only proceed if component is still mounted
+        if (!isMounted) return;
 
         // Create an isolated container for the MFE
         const mfeContainer = document.createElement('div');
@@ -53,8 +61,9 @@ export const IsolatedMFELoader: React.FC<IsolatedMFELoaderProps> = ({
           
           // Store cleanup function
           if (module.default.unmount) {
-            cleanup = () => {
+            cleanupRef.current = () => {
               try {
+                console.log(`[IsolatedMFELoader] Unmounting ${name}`);
                 module.default.unmount(mfeContainer);
               } catch (err) {
                 console.error(`Error unmounting ${name}:`, err);
@@ -66,29 +75,51 @@ export const IsolatedMFELoader: React.FC<IsolatedMFELoaderProps> = ({
           console.log(`[IsolatedMFELoader] ${name} mounted successfully`);
         }
       } catch (err) {
+        if (!isMounted) return;
+        
         const error = err instanceof Error ? err : new Error('Unknown error');
         console.error(`[IsolatedMFELoader] Error loading ${name}:`, error);
         setError(error);
         setLoading(false);
-        onError?.(error);
+        onErrorRef.current?.(error);
       }
     };
+
+    // Reset state when name/url changes
+    setLoading(true);
+    setError(null);
+    
+    // Cleanup previous MFE if any
+    if (cleanupRef.current) {
+      cleanupRef.current();
+      cleanupRef.current = null;
+    }
+    
+    // Clear container
+    if (containerRef.current) {
+      containerRef.current.innerHTML = '';
+    }
 
     // Delay loading slightly to ensure DOM is ready
     const timer = setTimeout(loadAndMountMFE, 100);
 
     // Cleanup
     return () => {
+      isMounted = false;
       clearTimeout(timer);
-      if (cleanup) {
-        cleanup();
+      
+      // Only cleanup if component is truly unmounting
+      if (cleanupRef.current) {
+        cleanupRef.current();
+        cleanupRef.current = null;
       }
+      
       // Clean up the container
       if (containerRef.current) {
         containerRef.current.innerHTML = '';
       }
     };
-  }, [name, url]); // Only depend on name and url to prevent remounting
+  }, [name, url, services]); // Include services but it should be stable
 
   if (error) {
     return (

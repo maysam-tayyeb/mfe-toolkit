@@ -65,9 +65,20 @@ export const MFECommunicationPage: React.FC = () => {
   }, [addNotification]);
 
   useEffect(() => {
+    let eventQueue: EventLogEntry[] = [];
+    let timeoutId: NodeJS.Timeout;
+    
+    // Batch event updates to reduce re-renders
+    const flushEventQueue = () => {
+      if (eventQueue.length > 0) {
+        setEventLog((prev) => [...eventQueue, ...prev].slice(0, 50));
+        eventQueue = [];
+      }
+    };
+    
     // Listen to ALL events using wildcard
     const unsubscribe = eventBus.on('*', (payload: EventPayload<any>) => {
-      // Track MFE status
+      // Track MFE status immediately (important for UI)
       const eventType = payload.type;
       if (eventType === EVENTS.MFE_LOADED || eventType === 'mfe.loaded') {
         const { name, version } = payload.data;
@@ -99,7 +110,12 @@ export const MFECommunicationPage: React.FC = () => {
         direction: payload.source === 'container' ? 'sent' : 'received',
       };
 
-      setEventLog((prev) => [logEntry, ...prev].slice(0, 50)); // Keep last 50 events
+      // Queue the event instead of updating state immediately
+      eventQueue.push(logEntry);
+      
+      // Debounce the flush to batch updates
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(flushEventQueue, 100);
     });
 
     // Add initial log entry
@@ -115,6 +131,8 @@ export const MFECommunicationPage: React.FC = () => {
 
     return () => {
       unsubscribe();
+      clearTimeout(timeoutId);
+      flushEventQueue(); // Flush any remaining events
     };
   }, [eventBus, mfeServices]);
 
