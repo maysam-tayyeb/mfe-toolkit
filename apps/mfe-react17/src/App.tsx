@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { MFEServices } from '@mfe/dev-kit';
 import { EVENTS, MFE_CONFIG } from '@mfe/shared';
+import { LegacyStateDemo } from './components/LegacyStateDemo';
 
 interface AppProps {
   services: MFEServices;
@@ -590,16 +591,28 @@ Permissions: ${session.permissions.join(', ')}`,
         ]}
       />
 
+      {/* Zustand State Management Demo */}
+      <div className="border rounded-lg p-6">
+        <h2 className="text-xl font-semibold mb-4">State Management</h2>
+        <p className="text-sm text-muted-foreground mb-4">
+          React 17 MFE with isolated Zustand state management
+        </p>
+        <LegacyStateDemo />
+      </div>
+
       {/* Shared Dependencies */}
       <InfoBlock
         title="Shared Dependencies"
         sections={[
           { label: 'Redux Toolkit', value: '2.0.1' },
+          { label: 'Zustand', value: '5.0.6 (shared)', highlight: true },
           { label: 'Tailwind CSS', value: '4.1.11' },
           { label: 'TypeScript', value: '5.3.3' },
           { label: 'React Redux', value: '9.1.0' },
           { label: 'MFE Dev Kit', value: '1.0.0' },
           { label: 'Shared Utils', value: '1.0.0' },
+          { label: 'React', value: '17.0.2 (bundled)', highlight: true },
+          { label: 'React DOM', value: '17.0.2 (bundled)', highlight: true },
         ]}
         className="mt-6"
       />

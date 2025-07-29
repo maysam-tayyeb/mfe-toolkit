@@ -14,6 +14,7 @@ export default defineConfig(({ command }) => {
           formats: ['es'],
         },
         rollupOptions: {
+          external: ['react', 'react-dom', 'react-dom/client', 'zustand', 'zustand/middleware'],
           output: {
             entryFileNames: 'mfe-example.js',
           },

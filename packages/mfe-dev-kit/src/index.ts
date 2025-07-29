@@ -11,6 +11,10 @@ export {
   type RegistryOptions,
 } from './services/mfe-registry';
 
+// State Management
+export * from './state/mfe-store-factory';
+export * from './state/mfe-store-hooks';
+
 // Components
 export { MFELoader } from './components/MFELoader';
 export { MFEPage } from './components/MFEPage';

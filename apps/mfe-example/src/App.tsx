@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { MFEServices } from '@mfe/dev-kit';
 import { EVENTS, MFE_CONFIG } from '@mfe/shared';
+import { ZustandDemo } from './components/ZustandDemo';
 
 interface AppProps {
   services: MFEServices;
@@ -543,12 +544,22 @@ export const App: React.FC<AppProps> = ({ services }) => {
         ]}
       />
 
+      {/* Zustand State Management Demo */}
+      <div className="border rounded-lg p-6">
+        <h2 className="text-xl font-semibold mb-4">Zustand State Management</h2>
+        <p className="text-sm text-muted-foreground mb-4">
+          Isolated state management for this MFE using shared Zustand from container
+        </p>
+        <ZustandDemo />
+      </div>
+
       {/* Shared Dependencies */}
       <InfoBlock
         title="Shared Dependencies"
         sections={[
           { label: 'React', value: React.version || '19.1.0' },
           { label: 'Redux Toolkit', value: '2.0.1' },
+          { label: 'Zustand', value: '5.0.6 (shared)', highlight: true },
           { label: 'Tailwind CSS', value: '4.1.11' },
           { label: 'TypeScript', value: '5.3.3' },
           { label: 'React Redux', value: '9.1.0' },
