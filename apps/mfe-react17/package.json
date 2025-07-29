@@ -7,8 +7,6 @@
     "dev": "vite --port 3002",
     "build": "tsc && node esbuild.config.js",
     "preview": "vite preview",
-    "serve:static": "npx http-server dist -p 8081 --cors -c-1",
-    "serve": "npx http-server dist -p 3002 --cors -c-1 -o",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
