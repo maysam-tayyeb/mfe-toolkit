@@ -2,9 +2,8 @@ import React, { useEffect, useState, useMemo } from 'react';
 import { getGlobalStateManager } from '@mfe/universal-state';
 import { getMFEServicesSingleton } from '@/services/mfe-services-singleton';
 import { useMFEUrlsFromContext } from '@/hooks/useMFEUrlsFromContext';
+import { IsolatedMFELoader } from '@/components/IsolatedMFELoader';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
-import { MFEErrorBoundary } from '@/components/MFEErrorBoundary';
-import { SafeMFELoader } from '@/components/SafeMFELoader';
 
 export const UniversalStateDemoPage: React.FC = () => {
   // Use the custom hook to get MFE URLs from context
@@ -141,21 +140,19 @@ export const UniversalStateDemoPage: React.FC = () => {
             </div>
             <div className="p-4">
               {mfeUrls.stateDemoReact ? (
-                <MFEErrorBoundary mfeName="React State Demo">
-                  <SafeMFELoader
-                    name="state-demo-react"
-                    url={mfeUrls.stateDemoReact}
-                    services={mfeServices}
-                    fallback={
-                      <div className="h-64 flex items-center justify-center">
-                        <p className="text-muted-foreground">Loading React MFE...</p>
-                      </div>
-                    }
-                    onError={(error) => {
-                      console.error('Failed to load React MFE:', error);
-                    }}
-                  />
-                </MFEErrorBoundary>
+                <IsolatedMFELoader
+                  name="state-demo-react"
+                  url={mfeUrls.stateDemoReact}
+                  services={mfeServices}
+                  fallback={
+                    <div className="h-64 flex items-center justify-center">
+                      <p className="text-muted-foreground">Loading React MFE...</p>
+                    </div>
+                  }
+                  onError={(error) => {
+                    console.error('Failed to load React MFE:', error);
+                  }}
+                />
               ) : (
                 <div className="h-64 flex items-center justify-center">
                   <p className="text-muted-foreground">React MFE not found in registry</p>
@@ -173,21 +170,19 @@ export const UniversalStateDemoPage: React.FC = () => {
             </div>
             <div className="p-4">
               {mfeUrls.stateDemoVue ? (
-                <MFEErrorBoundary mfeName="Vue State Demo">
-                  <SafeMFELoader
-                    name="state-demo-vue"
-                    url={mfeUrls.stateDemoVue}
-                    services={mfeServices}
-                    fallback={
-                      <div className="h-64 flex items-center justify-center">
-                        <p className="text-muted-foreground">Loading Vue MFE...</p>
-                      </div>
-                    }
-                    onError={(error) => {
-                      console.error('Failed to load Vue MFE:', error);
-                    }}
-                  />
-                </MFEErrorBoundary>
+                <IsolatedMFELoader
+                  name="state-demo-vue"
+                  url={mfeUrls.stateDemoVue}
+                  services={mfeServices}
+                  fallback={
+                    <div className="h-64 flex items-center justify-center">
+                      <p className="text-muted-foreground">Loading Vue MFE...</p>
+                    </div>
+                  }
+                  onError={(error) => {
+                    console.error('Failed to load Vue MFE:', error);
+                  }}
+                />
               ) : (
                 <div className="h-64 flex items-center justify-center">
                   <p className="text-muted-foreground">Vue MFE not found in registry</p>
@@ -205,21 +200,19 @@ export const UniversalStateDemoPage: React.FC = () => {
             </div>
             <div className="p-4">
               {mfeUrls.stateDemoVanilla ? (
-                <MFEErrorBoundary mfeName="Vanilla State Demo">
-                  <SafeMFELoader
-                    name="state-demo-vanilla"
-                    url={mfeUrls.stateDemoVanilla}
-                    services={mfeServices}
-                    fallback={
-                      <div className="h-64 flex items-center justify-center">
-                        <p className="text-muted-foreground">Loading Vanilla JS MFE...</p>
-                      </div>
-                    }
-                    onError={(error) => {
-                      console.error('Failed to load Vanilla JS MFE:', error);
-                    }}
-                  />
-                </MFEErrorBoundary>
+                <IsolatedMFELoader
+                  name="state-demo-vanilla"
+                  url={mfeUrls.stateDemoVanilla}
+                  services={mfeServices}
+                  fallback={
+                    <div className="h-64 flex items-center justify-center">
+                      <p className="text-muted-foreground">Loading Vanilla JS MFE...</p>
+                    </div>
+                  }
+                  onError={(error) => {
+                    console.error('Failed to load Vanilla JS MFE:', error);
+                  }}
+                />
               ) : (
                 <div className="h-64 flex items-center justify-center">
                   <p className="text-muted-foreground">Vanilla JS MFE not found in registry</p>
