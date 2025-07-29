@@ -1,16 +1,20 @@
-import React, { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '@/store';
-import { removeNotification } from '@/store/notificationSlice';
+import React, { useEffect, useRef } from 'react';
+import { useUI } from '@/contexts/UIContext';
 import { useToast } from '@/components/ui/use-toast';
 
 export const NotificationManager: React.FC = () => {
-  const dispatch = useDispatch();
-  const notifications = useSelector((state: RootState) => state.notification.notifications);
+  const { notifications, removeNotification } = useUI();
   const { toast } = useToast();
+  const activeToasts = useRef<Set<string>>(new Set());
 
   useEffect(() => {
     notifications.forEach((notification) => {
+      // Skip if already shown or no ID
+      if (!notification.id || activeToasts.current.has(notification.id)) {
+        return;
+      }
+
+      activeToasts.current.add(notification.id);
       const variant = notification.type === 'error' ? 'destructive' : 'default';
 
       toast({
@@ -20,7 +24,8 @@ export const NotificationManager: React.FC = () => {
         duration: notification.duration || 5000,
         onOpenChange: (open) => {
           if (!open && notification.id) {
-            dispatch(removeNotification(notification.id));
+            activeToasts.current.delete(notification.id);
+            removeNotification(notification.id);
             if (notification.onClose) {
               notification.onClose();
             }
@@ -28,7 +33,7 @@ export const NotificationManager: React.FC = () => {
         },
       });
     });
-  }, [notifications, toast, dispatch]);
+  }, [notifications, toast, removeNotification]);
 
   return null;
 };

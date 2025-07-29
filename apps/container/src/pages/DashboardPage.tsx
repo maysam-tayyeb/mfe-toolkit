@@ -1,15 +1,12 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { useDispatch } from 'react-redux';
-import { openModal } from '@/store/modalSlice';
-import { addNotification } from '@/store/notificationSlice';
+import { useUI } from '@/contexts/UIContext';
 
 export const DashboardPage: React.FC = () => {
-  const dispatch = useDispatch();
+  const { openModal, addNotification } = useUI();
 
   const handleTestModal = () => {
-    dispatch(
-      openModal({
+    openModal({
         title: 'Platform Health Check',
         content: (
           <div className="space-y-4">
@@ -33,13 +30,11 @@ export const DashboardPage: React.FC = () => {
           </div>
         ),
         size: 'md',
-      })
-    );
+    });
   };
 
   const handleClearCache = () => {
-    dispatch(
-      openModal({
+    openModal({
         title: 'Clear Platform Cache',
         content: (
           <div className="space-y-2">
@@ -57,36 +52,29 @@ export const DashboardPage: React.FC = () => {
           // Simulate cache clearing
           localStorage.clear();
           sessionStorage.clear();
-          dispatch(
-            addNotification({
+          addNotification({
               type: 'success',
               title: 'Cache Cleared',
               message: 'All platform caches have been successfully cleared.',
-            })
-          );
+          });
         },
-      })
-    );
+    });
   };
 
   const handleReloadRegistry = () => {
-    dispatch(
-      addNotification({
+    addNotification({
         type: 'info',
         title: 'Registry Reloading',
         message: 'Refreshing MFE registry...',
-      })
-    );
+    });
 
     // Simulate registry reload
     setTimeout(() => {
-      dispatch(
-        addNotification({
+      addNotification({
           type: 'success',
           title: 'Registry Updated',
           message: 'MFE registry has been successfully reloaded.',
-        })
-      );
+      });
     }, 1500);
   };
 
@@ -201,7 +189,7 @@ export const DashboardPage: React.FC = () => {
           </div>
           <div>
             <span className="text-muted-foreground">Shared Dependencies:</span>
-            <p className="font-medium">React 19, Redux Toolkit, TailwindCSS</p>
+            <p className="font-medium">React 19, TailwindCSS</p>
           </div>
           <div>
             <span className="text-muted-foreground">Container Port:</span>

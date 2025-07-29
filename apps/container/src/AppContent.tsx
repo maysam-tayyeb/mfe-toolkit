@@ -15,12 +15,6 @@ export function AppContent() {
   const mfeServices = useMemo(() => getMFEServicesSingleton(), []);
 
   useEffect(() => {
-    // Ensure event bus is available globally on app initialization
-    if (typeof window !== 'undefined') {
-      (window as any).__EVENT_BUS__ = mfeServices.eventBus;
-      (window as any).__MFE_SERVICES__ = mfeServices;
-    }
-    
     // Set up global theme management
     const stateManager = getGlobalStateManager();
     

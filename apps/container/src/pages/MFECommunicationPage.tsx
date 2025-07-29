@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Button } from '@/components/ui/button';
-import { useDispatch } from 'react-redux';
-import { addNotification } from '@/store/notificationSlice';
+import { useUI } from '@/contexts/UIContext';
 import { EventPayload } from '@mfe/dev-kit';
 import { getMFEServicesSingleton } from '@/services/mfe-services-singleton';
 import { EVENTS } from '@mfe/shared';
@@ -26,7 +25,7 @@ interface MFEStatus {
 }
 
 export const MFECommunicationPage: React.FC = () => {
-  const dispatch = useDispatch();
+  const { addNotification } = useUI();
   const [eventLog, setEventLog] = useState<EventLogEntry[]>([]);
   const [mfeStatuses, setMfeStatuses] = useState<Record<string, MFEStatus>>({});
   const [customEventType, setCustomEventType] = useState('container.broadcast');
@@ -118,33 +117,27 @@ export const MFECommunicationPage: React.FC = () => {
       };
       setEventLog((prev) => [logEntry, ...prev].slice(0, 50));
 
-      dispatch(
-        addNotification({
-          type: 'success',
-          title: 'Event Emitted',
-          message: `Emitted "${customEventType}" event to all MFEs`,
-        })
-      );
+      addNotification({
+        type: 'success',
+        title: 'Event Emitted',
+        message: `Emitted "${customEventType}" event to all MFEs`,
+      });
     } catch {
-      dispatch(
-        addNotification({
-          type: 'error',
-          title: 'Invalid JSON',
-          message: 'Please check your event data format',
-        })
-      );
+      addNotification({
+        type: 'error',
+        title: 'Invalid JSON',
+        message: 'Please check your event data format',
+      });
     }
   };
 
   const clearEventLog = () => {
     setEventLog([]);
-    dispatch(
-      addNotification({
-        type: 'info',
-        title: 'Event Log Cleared',
-        message: 'All event log entries have been cleared',
-      })
-    );
+    addNotification({
+      type: 'info',
+      title: 'Event Log Cleared',
+      message: 'All event log entries have been cleared',
+    });
   };
 
   const formatEventData = (data: any) => {
@@ -283,13 +276,11 @@ export const MFECommunicationPage: React.FC = () => {
                 </div>
               }
               onError={(error) => {
-                dispatch(
-                  addNotification({
-                    type: 'error',
-                    title: 'MFE Load Error',
-                    message: `Failed to load Service Explorer MFE: ${error.message}`,
-                  })
-                );
+                addNotification({
+                  type: 'error',
+                  title: 'MFE Load Error',
+                  message: `Failed to load Service Explorer MFE: ${error.message}`,
+                });
               }}
             />
           ) : (
@@ -319,13 +310,11 @@ export const MFECommunicationPage: React.FC = () => {
                   </div>
               }
               onError={(error) => {
-                dispatch(
-                  addNotification({
-                    type: 'error',
-                    title: 'MFE Load Error',
-                    message: `Failed to load Legacy Service Explorer MFE: ${error.message}`,
-                  })
-                );
+                addNotification({
+                  type: 'error',
+                  title: 'MFE Load Error',
+                  message: `Failed to load Legacy Service Explorer MFE: ${error.message}`,
+                });
               }}
             />
           ) : (

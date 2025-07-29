@@ -1,7 +1,5 @@
 import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '@/store';
-import { closeModal } from '@/store/modalSlice';
+import { useUI } from '@/contexts/UIContext';
 import {
   Dialog,
   DialogContent,
@@ -13,8 +11,8 @@ import {
 import { Button } from '@/components/ui/button';
 
 export const ModalManager: React.FC = () => {
-  const dispatch = useDispatch();
-  const { isOpen, config } = useSelector((state: RootState) => state.modal);
+  const { modal, closeModal } = useUI();
+  const { isOpen, config } = modal;
 
   if (!config) {
     return null;
@@ -24,14 +22,14 @@ export const ModalManager: React.FC = () => {
     if (config.onClose) {
       config.onClose();
     }
-    dispatch(closeModal());
+    closeModal();
   };
 
   const handleConfirm = () => {
     if (config.onConfirm) {
       config.onConfirm();
     }
-    dispatch(closeModal());
+    closeModal();
   };
 
   const sizeClasses = {

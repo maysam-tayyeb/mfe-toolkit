@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { MFEServices } from '@mfe/dev-kit';
 import { EVENTS, MFE_CONFIG } from '@mfe/shared';
-import { LegacyStateDemo } from '@/components/LegacyStateDemo';
+// import { LegacyStateDemo } from '@/components/LegacyStateDemo';
 
 interface AppProps {
   services: MFEServices;
@@ -595,9 +595,11 @@ Permissions: ${session.permissions.join(', ')}`,
       <div className="border rounded-lg p-6">
         <h2 className="text-xl font-semibold mb-4">State Management</h2>
         <p className="text-sm text-muted-foreground mb-4">
-          React 17 MFE with isolated Zustand state management
+          React 17 MFE - State management temporarily disabled due to React version conflict
         </p>
-        <LegacyStateDemo />
+        <div className="text-sm text-yellow-600 bg-yellow-50 p-3 rounded">
+          Note: Zustand state management is temporarily disabled in React 17 MFE due to React hooks conflict between bundled React 17 and shared React 19.
+        </div>
       </div>
 
       {/* Shared Dependencies */}

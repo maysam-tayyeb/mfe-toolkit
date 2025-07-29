@@ -3,31 +3,44 @@ import {
   AuthService,
   ModalService,
   NotificationService,
-  NotificationConfig,
   createLogger,
   createEventBus,
 } from '@mfe/dev-kit';
-import { store } from '@/store';
-import { openModal, closeModal } from '@/store/modalSlice';
-import { addNotification } from '@/store/notificationSlice';
+import { ContextBridgeRef } from './context-bridge';
+
+// Context bridge will be set by the App component
+let contextBridge: ContextBridgeRef | null = null;
+
+export const setContextBridge = (bridge: ContextBridgeRef) => {
+  contextBridge = bridge;
+};
 
 const createAuthService = (): AuthService => {
+  // Return a proxy that defers to the context bridge when available
   return {
     getSession: () => {
-      const state = store.getState();
-      return state.auth.session;
+      if (!contextBridge) {
+        return null;
+      }
+      return contextBridge.getAuthService().getSession();
     },
     isAuthenticated: () => {
-      const state = store.getState();
-      return state.auth.session?.isAuthenticated || false;
+      if (!contextBridge) {
+        return false;
+      }
+      return contextBridge.getAuthService().isAuthenticated();
     },
     hasPermission: (permission: string) => {
-      const state = store.getState();
-      return state.auth.session?.permissions.includes(permission) || false;
+      if (!contextBridge) {
+        return false;
+      }
+      return contextBridge.getAuthService().hasPermission(permission);
     },
     hasRole: (role: string) => {
-      const state = store.getState();
-      return state.auth.session?.roles.includes(role) || false;
+      if (!contextBridge) {
+        return false;
+      }
+      return contextBridge.getAuthService().hasRole(role);
     },
   };
 };
@@ -35,43 +48,64 @@ const createAuthService = (): AuthService => {
 const createModalServiceImpl = (): ModalService => {
   return {
     open: (config) => {
-      store.dispatch(openModal(config));
+      if (!contextBridge) {
+        console.warn('Modal service called before context bridge initialization');
+        return;
+      }
+      contextBridge.getModalService().open(config);
     },
     close: () => {
-      store.dispatch(closeModal());
+      if (!contextBridge) {
+        console.warn('Modal service called before context bridge initialization');
+        return;
+      }
+      contextBridge.getModalService().close();
     },
   };
 };
 
 const createNotificationServiceImpl = (): NotificationService => {
-  const show = (config: NotificationConfig) => {
-    store.dispatch(addNotification(config));
-  };
-
   return {
-    show,
+    show: (config) => {
+      if (!contextBridge) {
+        console.warn('Notification service called before context bridge initialization');
+        return;
+      }
+      contextBridge.getNotificationService().show(config);
+    },
     success: (title, message) => {
-      show({ type: 'success', title, message });
+      if (!contextBridge) {
+        console.warn('Notification service called before context bridge initialization');
+        return;
+      }
+      contextBridge.getNotificationService().success(title, message);
     },
     error: (title, message) => {
-      show({ type: 'error', title, message });
+      if (!contextBridge) {
+        console.warn('Notification service called before context bridge initialization');
+        return;
+      }
+      contextBridge.getNotificationService().error(title, message);
     },
     warning: (title, message) => {
-      show({ type: 'warning', title, message });
+      if (!contextBridge) {
+        console.warn('Notification service called before context bridge initialization');
+        return;
+      }
+      contextBridge.getNotificationService().warning(title, message);
     },
     info: (title, message) => {
-      show({ type: 'info', title, message });
+      if (!contextBridge) {
+        console.warn('Notification service called before context bridge initialization');
+        return;
+      }
+      contextBridge.getNotificationService().info(title, message);
     },
   };
 };
 
 export const createMFEServices = (): MFEServices => {
   const eventBus = createEventBus();
-
-  // Store event bus globally for direct access
-  if (typeof window !== 'undefined') {
-    (window as any).__EVENT_BUS__ = eventBus;
-  }
 
   return {
     logger: createLogger('MFE'),

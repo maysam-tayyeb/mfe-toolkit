@@ -97,7 +97,12 @@ const React17MFE: MFEModule = {
       element.appendChild(mountPoint);
 
       // React 17 uses ReactDOM.render instead of createRoot
-      ReactDOM.render(React.createElement(App, { services }), mountPoint);
+      console.log('React version in MFE:', React.version);
+      console.log('ReactDOM available:', !!ReactDOM);
+      console.log('Creating React element...');
+      const reactElement = React.createElement(App, { services });
+      console.log('Rendering to mount point...');
+      ReactDOM.render(reactElement, mountPoint);
 
       services.logger.info(`${MFE_CONFIG.legacyServiceExplorer.displayName} mounted successfully`);
       services.eventBus.emit(EVENTS.MFE_LOADED, {
