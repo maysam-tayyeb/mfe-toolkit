@@ -418,12 +418,18 @@ VITE_MFE_REGISTRY_URL=https://cdn.example.com/configs/mfe-registry.json
 
 ## 📚 Documentation
 
-### Guides
+### Documentation
 
-- **[MFE Communication Guide](./docs/mfe-communication-guide.md)** - Learn how to implement inter-MFE communication with real-time event bus examples
+- **[Architecture Documentation](./docs/architecture/)** - Technical architecture and analysis
+- **[Developer Guides](./docs/guides/)** - How-to guides and tutorials
+- **[API Reference](./docs/api/)** - Package and service API documentation
+- **[MFE Communication Guide](./docs/guides/mfe-communication-guide.md)** - Learn how to implement inter-MFE communication with real-time event bus examples
 
-### API Reference
+### Quick Links
 
+- **[All Documentation](./docs/)** - Browse all documentation
+- **[Architecture Analysis](./docs/architecture/architecture-analysis-report.md)** - Comprehensive architecture review
+- **[Improvement Roadmap](./docs/architecture/improvement-roadmap.md)** - 7-phase enhancement plan
 - **[MFE Development Kit](./packages/mfe-dev-kit/README.md)** - Core services and utilities for MFE development
 - **[Shared Utilities](./packages/shared/README.md)** - Common constants and helper functions
 
