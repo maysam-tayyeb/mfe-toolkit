@@ -4,6 +4,7 @@ import { Layout } from '@/components/Layout';
 import { HomePage } from '@/pages/HomePage';
 import { DashboardPage } from '@/pages/DashboardPage';
 import { MFECommunicationPage } from '@/pages/MFECommunicationPage';
+import { UniversalStateDemoPage } from '@/pages/UniversalStateDemoPage';
 import { MFEPage } from '@mfe/dev-kit';
 import { getMFEServicesSingleton } from '@/services/mfe-services-singleton';
 import { useRegistryContext } from '@/contexts/RegistryContext';
@@ -38,6 +39,7 @@ export function AppContent() {
           <Route index element={<HomePage />} />
           <Route path="dashboard" element={<DashboardPage />} />
           <Route path="mfe-communication" element={<MFECommunicationPage />} />
+          <Route path="universal-state-demo" element={<UniversalStateDemoPage />} />
           <Route
             path="mfe/:mfeName"
             element={

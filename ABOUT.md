@@ -2,7 +2,7 @@
 
 ## 🎯 Mission
 
-MFE Made Easy is a close-to-production-ready microfrontend platform that demonstrates how to build scalable, maintainable web applications using modern web standards. This project showcases best practices for microfrontend architecture while keeping complexity manageable and developer experience delightful.
+MFE Made Easy is a WIP microfrontend platform that demonstrates how to build scalable, maintainable web applications using modern web standards. This project showcases best practices for microfrontend architecture while keeping complexity manageable and developer experience delightful.
 
 ## 🚀 What Makes This Special
 
@@ -92,14 +92,7 @@ We chose ES modules over Module Federation because:
 - No proprietary solutions
 - Future-proof architecture
 
-### 3. **Production-Ready**
-
-- Comprehensive error handling
-- Performance optimized
-- Security best practices
-- Monitoring and logging built-in
-
-### 4. **Incremental Adoption**
+### 3. **Incremental Adoption**
 
 - Start with one MFE and grow
 - Gradually migrate legacy applications

@@ -1,0 +1,27 @@
+{
+  "name": "@mfe/state-demo-vue",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --port 3005",
+    "build": "node esbuild.config.js",
+    "build:vite": "vite build",
+    "preview": "vite preview",
+    "serve": "serve dist -p 3005 --cors"
+  },
+  "dependencies": {
+    "@mfe/dev-kit": "workspace:*",
+    "@mfe/universal-state": "workspace:*",
+    "vue": "^3.5.17"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^6.0.0",
+    "@vue/tsconfig": "^0.7.0",
+    "esbuild": "^0.25.8",
+    "serve": "^14.2.0",
+    "typescript": "~5.8.3",
+    "vite": "^7.0.4",
+    "vue-tsc": "^2.2.12"
+  }
+}

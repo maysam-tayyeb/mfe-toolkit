@@ -3,7 +3,7 @@
     {
       "name": "serviceExplorer",
       "version": "1.0.0",
-      "url": "http://localhost:3001/mfe-example.js",
+      "url": "http://localhost:8080/mfe-example/mfe-example.js",
       "dependencies": ["react", "react-dom"],
       "sharedLibs": ["@reduxjs/toolkit", "react-redux"],
       "metadata": {
@@ -15,7 +15,7 @@
     {
       "name": "legacyServiceExplorer",
       "version": "1.0.0",
-      "url": "http://localhost:3002/react17-mfe.js",
+      "url": "http://localhost:8080/mfe-react17/mfe-react17.js",
       "dependencies": ["react", "react-dom"],
       "sharedLibs": ["@reduxjs/toolkit", "react-redux"],
       "metadata": {

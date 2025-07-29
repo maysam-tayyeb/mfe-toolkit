@@ -1,8 +1,11 @@
 import { build } from 'esbuild';
 import { promises as fs } from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
 
-const outfile = 'dist/event-demo.js';
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const rootDir = path.resolve(__dirname, '../..');
+const outfile = path.join(rootDir, 'dist', 'mfe-event-demo', 'mfe-event-demo.js');
 
 async function buildMFE() {
   console.log('🔨 Building Event Demo MFE...');
@@ -36,7 +39,8 @@ async function buildMFE() {
 
     // Analyze bundle
     const metaText = JSON.stringify(result.metafile, null, 2);
-    await fs.writeFile('dist/meta.json', metaText);
+    const metaPath = path.join(rootDir, 'dist', 'mfe-event-demo', 'meta.json');
+    await fs.writeFile(metaPath, metaText);
 
     // Log bundle size
     const stats = await fs.stat(outfile);

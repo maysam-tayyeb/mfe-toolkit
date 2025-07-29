@@ -1,4 +1,9 @@
 import { build } from 'esbuild';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const rootDir = path.resolve(__dirname, '../..');
 
 /**
  * ESBuild configuration for Legacy Service Explorer MFE
@@ -10,7 +15,7 @@ const config = {
   entryPoints: ['src/main.tsx'],
   bundle: true,
   format: 'esm',
-  outfile: 'dist/react17-mfe.js',
+  outfile: path.join(rootDir, 'dist', 'mfe-react17', 'mfe-react17.js'),
   platform: 'browser',
   target: 'es2020',
 
