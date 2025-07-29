@@ -229,6 +229,13 @@ const StateDemoVanillaMFE: VanillaMFE = {
       })
     );
     
+    // Register this MFE
+    stateManager.registerMFE('state-demo-vanilla', {
+      version: '1.0.0',
+      framework: 'vanilla',
+      features: ['user-management', 'theme-switcher', 'counter']
+    });
+    
     // Initialize
     initializeState();
     
@@ -236,6 +243,8 @@ const StateDemoVanillaMFE: VanillaMFE = {
     element._cleanup = () => {
       // Unsubscribe from all
       unsubscribers.forEach(unsub => unsub());
+      // Unregister MFE
+      stateManager.unregisterMFE('state-demo-vanilla');
       // Remove event listeners by replacing element content
       element.innerHTML = '';
     };
