@@ -165,11 +165,20 @@ MFEs are configured via JSON registry files:
 
 ### State Management
 
-- Container uses React Context API for state management (replaced Redux)
-- Three main contexts: AuthContext, UIContext (modals/notifications), RegistryContext
-- MFEs manage their own state independently (no shared Redux store)
-- Universal state package provides cross-framework state sharing
-- Event bus enables decoupled communication between MFEs
+The platform uses a dual state management approach:
+
+1. **ContextBridge** (Container Services)
+   - Provides UI services: auth, modals, notifications
+   - Imperative API for MFEs to call container functionality
+   - Services injected at MFE mount time
+
+2. **Universal State Manager** (Application State)
+   - Shared business/application state between MFEs
+   - Cross-tab synchronization and persistence
+   - Framework-agnostic (React, Vue, Vanilla JS)
+   - Reactive subscriptions for state changes
+
+See [State Management Architecture](./docs/architecture/STATE_MANAGEMENT_ARCHITECTURE.md) for detailed documentation.
 
 ### Architecture Decisions
 

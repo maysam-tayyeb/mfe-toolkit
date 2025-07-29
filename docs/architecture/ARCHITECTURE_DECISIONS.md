@@ -196,8 +196,29 @@ export default {
 
 ---
 
+## 6. Dual State Management System
+
+**Decision**: Use ContextBridge for container services and Universal State Manager for application state.
+
+**Date**: January 2025
+
+**Context**: 
+MFEs need both container-provided UI services and shared application state, but these have different characteristics and requirements.
+
+**Decision Rationale**:
+- **Clear separation of concerns**: UI services vs business state
+- **Appropriate tools**: Imperative APIs for services, reactive state for data
+- **Framework flexibility**: Universal State works with any framework
+- **Scalability**: Each system can evolve independently
+
+**Implementation**:
+- See [State Management Architecture](./STATE_MANAGEMENT_ARCHITECTURE.md) for detailed documentation
+
+---
+
 ## References
 
 - [Martin Fowler on Micro Frontends](https://martinfowler.com/articles/micro-frontends.html)
 - [Module Federation vs Dynamic Imports](https://blog.bitsrc.io/module-federation-vs-dynamic-imports)
 - [Micro Frontend Architecture Patterns](https://medium.com/@lucamezzalira/micro-frontends-decisions-framework)
+- [State Management Architecture](./STATE_MANAGEMENT_ARCHITECTURE.md)

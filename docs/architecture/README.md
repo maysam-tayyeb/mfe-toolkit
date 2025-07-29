@@ -4,6 +4,35 @@ This directory contains architectural documentation for the MFE Made Easy platfo
 
 ## 📄 Documents
 
+### [Architecture Decisions](./ARCHITECTURE_DECISIONS.md)
+Key architectural decisions and their rationale:
+- Dynamic imports over Module Federation
+- React Context over Redux
+- Service injection pattern
+- Dual state management approach
+- MFE loader strategies
+
+### [State Management Architecture](./STATE_MANAGEMENT_ARCHITECTURE.md)
+Comprehensive guide to the dual state management system:
+- ContextBridge for container services
+- Universal State Manager for application state
+- Clear separation of concerns
+- Migration recommendations
+
+### [MFE Loading Guide](./MFE_LOADING_GUIDE.md)
+Technical guide for MFE loading implementation:
+- Current dual-loader implementation
+- When to use each loader
+- Consolidation plan for unified loader
+- Performance best practices
+
+### [Improvements Status](./IMPROVEMENTS_STATUS.md)
+Current status of architecture improvements:
+- Completed improvements
+- In-progress work
+- Technical debt identified
+- Future work priorities
+
 ### [Architecture Analysis Report](./architecture-analysis-report.md)
 A comprehensive analysis of the current MFE architecture including:
 - Current implementation review
@@ -25,9 +54,11 @@ Detailed roadmap for platform improvements including:
 The MFE Made Easy platform implements a microfrontend architecture with:
 
 - **Container Application** - React 19-based shell that orchestrates MFEs
-- **Microfrontends** - Independently deployed frontend modules
-- **Shared Services** - Centralized auth, notifications, modals, event bus
-- **Development Kit** - Tools and utilities for building MFEs
+- **Microfrontends** - Independently deployed frontend modules (React, Vue, Vanilla JS)
+- **ContextBridge Services** - Container UI services (auth, modals, notifications)
+- **Universal State Manager** - Cross-MFE application state with framework adapters
+- **Dynamic Loading** - ES module imports without build-time coupling
+- **Development Kit** - Tools, types, and components for building MFEs
 
 ## 🔑 Key Principles
 
@@ -39,11 +70,12 @@ The MFE Made Easy platform implements a microfrontend architecture with:
 
 ## 📋 Upcoming Documentation
 
-- [ ] Architecture Decision Records (ADRs)
-- [ ] System Design Document
+- [x] Architecture Decision Records (ADRs) - See [Architecture Decisions](./ARCHITECTURE_DECISIONS.md)
+- [x] State Management Architecture - See [State Management Architecture](./STATE_MANAGEMENT_ARCHITECTURE.md)
 - [ ] Performance Architecture
 - [ ] Security Architecture
 - [ ] Deployment Architecture
+- [ ] Testing Architecture
 
 ---
 

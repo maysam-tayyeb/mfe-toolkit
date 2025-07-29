@@ -56,11 +56,12 @@ export const UIProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     if (notification.duration !== 0) {
       const duration = notification.duration || 5000;
       const timeout = setTimeout(() => {
-        removeNotification(id);
+        setNotifications(prev => prev.filter(n => n.id !== id));
+        timeoutsRef.current.delete(id);
       }, duration);
       timeoutsRef.current.set(id, timeout);
     }
-  }, [removeNotification]);
+  }, []);
 
   // Clean up timeouts on unmount
   useEffect(() => {

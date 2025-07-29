@@ -192,7 +192,7 @@ export function getGlobalStateManager(): StateManager {
 }
 
 // React adapter
-import { useEffect, useState, useCallback, useRef, useSyncExternalStore } from 'react';
+import { useEffect, useCallback, useRef, useSyncExternalStore } from 'react';
 
 export class ReactAdapter {
   constructor(private stateManager: StateManager) {}

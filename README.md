@@ -64,6 +64,7 @@ A complete microfrontend (MFE) architecture built with React 19, Redux Toolkit, 
 ### 📚 Architecture Documentation
 
 - [Architecture Decisions](./docs/architecture/ARCHITECTURE_DECISIONS.md) - Key design choices and rationale
+- [State Management Architecture](./docs/architecture/STATE_MANAGEMENT_ARCHITECTURE.md) - ContextBridge vs Universal State Manager
 - [MFE Loading Guide](./docs/architecture/MFE_LOADING_GUIDE.md) - How MFEs are loaded and best practices
 - [Improvements Status](./docs/architecture/IMPROVEMENTS_STATUS.md) - Completed and planned improvements
 
