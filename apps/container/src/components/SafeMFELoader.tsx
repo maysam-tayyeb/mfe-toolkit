@@ -97,7 +97,7 @@ export const SafeMFELoader: React.FC<SafeMFELoaderProps> = ({
             console.log(`[SafeMFELoader] ${name} loading complete`);
           } catch (mountErr) {
             console.error(`[SafeMFELoader] Error during mount of ${name}:`, mountErr);
-            console.error(`[SafeMFELoader] Mount error stack:`, mountErr.stack);
+            console.error(`[SafeMFELoader] Mount error stack:`, (mountErr as Error).stack);
             throw mountErr;
           }
         } else {

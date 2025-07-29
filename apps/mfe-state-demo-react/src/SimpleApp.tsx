@@ -65,47 +65,99 @@ export const SimpleApp: React.FC<SimpleAppProps> = ({ stateManager }) => {
   };
 
   return (
-    <div style={{
-      padding: '20px',
-      backgroundColor: theme === 'dark' ? '#1a1a1a' : '#ffffff',
-      color: theme === 'dark' ? '#ffffff' : '#000000',
-      minHeight: '300px',
-      borderRadius: '8px'
-    }}>
-      <h2>React State Demo</h2>
+    <div className={`p-6 rounded-lg transition-colors ${
+      theme === 'dark' ? 'bg-gray-800 text-gray-100' : 'bg-gray-50 text-gray-900'
+    }`}>
+      <h2 className="text-xl font-semibold mb-6 flex items-center gap-2">
+        <span className="text-2xl">⚛️</span>
+        React State Demo
+      </h2>
       
-      <div style={{ marginBottom: '20px' }}>
-        <h3>User Info</h3>
-        {user ? (
-          <p>Name: {user.name}, Email: {user.email}</p>
-        ) : (
-          <p>No user set</p>
-        )}
-        <input
-          type="text"
-          placeholder="Name"
-          value={formData.name}
-          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-          style={{ marginRight: '10px' }}
-        />
-        <input
-          type="email"
-          placeholder="Email"
-          value={formData.email}
-          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-          style={{ marginRight: '10px' }}
-        />
-        <button onClick={updateUser}>Update User</button>
+      <div className={`mb-6 p-4 rounded-md ${
+        theme === 'dark' ? 'bg-gray-700' : 'bg-white shadow-sm'
+      }`}>
+        <h3 className="text-lg font-medium mb-3">User Info</h3>
+        <div className={`mb-3 p-3 rounded ${
+          theme === 'dark' ? 'bg-gray-800' : 'bg-gray-100'
+        }`}>
+          {user ? (
+            <p className="flex items-center gap-2">
+              <span>👤</span>
+              <span className="font-medium">{user.name}</span>
+              <span className="text-sm opacity-75">({user.email})</span>
+            </p>
+          ) : (
+            <p className="text-gray-500">No user set</p>
+          )}
+        </div>
+        <div className="flex flex-wrap gap-2">
+          <input
+            type="text"
+            placeholder="Name"
+            value={formData.name}
+            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+            className={`flex-1 min-w-[150px] px-3 py-2 rounded-md border transition-colors ${
+              theme === 'dark' 
+                ? 'bg-gray-900 border-gray-600 text-gray-100 placeholder-gray-400 focus:border-blue-400' 
+                : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500 focus:border-blue-500'
+            } focus:outline-none focus:ring-2 focus:ring-blue-500/20`}
+          />
+          <input
+            type="email"
+            placeholder="Email"
+            value={formData.email}
+            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+            className={`flex-1 min-w-[150px] px-3 py-2 rounded-md border transition-colors ${
+              theme === 'dark' 
+                ? 'bg-gray-900 border-gray-600 text-gray-100 placeholder-gray-400 focus:border-blue-400' 
+                : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500 focus:border-blue-500'
+            } focus:outline-none focus:ring-2 focus:ring-blue-500/20`}
+          />
+          <button 
+            onClick={updateUser} 
+            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md transition-colors"
+          >
+            Update User
+          </button>
+        </div>
       </div>
 
-      <div style={{ marginBottom: '20px' }}>
-        <h3>Theme: {theme}</h3>
-        <button onClick={toggleTheme}>Toggle Theme</button>
+      <div className={`mb-6 p-4 rounded-md ${
+        theme === 'dark' ? 'bg-gray-700' : 'bg-white shadow-sm'
+      }`}>
+        <h3 className="text-lg font-medium mb-3">Theme Settings</h3>
+        <div className="flex items-center gap-3 mb-3">
+          <span className="text-gray-600 dark:text-gray-400">Current theme:</span>
+          <span className="font-medium flex items-center gap-2">
+            {theme === 'dark' ? (
+              <>🌙 Dark</>
+            ) : (
+              <>☀️ Light</>
+            )}
+          </span>
+        </div>
+        <button 
+          onClick={toggleTheme} 
+          className="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white font-medium rounded-md transition-colors"
+        >
+          Toggle Theme
+        </button>
       </div>
 
-      <div>
-        <h3>Shared Counter: {counter}</h3>
-        <button onClick={incrementCounter}>Increment</button>
+      <div className={`p-4 rounded-md ${
+        theme === 'dark' ? 'bg-gray-700' : 'bg-white shadow-sm'
+      }`}>
+        <h3 className="text-lg font-medium mb-3">Shared Counter</h3>
+        <div className="flex items-center gap-4">
+          <span className="text-gray-600 dark:text-gray-400">Value:</span>
+          <span className="text-2xl font-bold min-w-[40px] text-center">{counter}</span>
+          <button 
+            onClick={incrementCounter} 
+            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md transition-colors"
+          >
+            Increment
+          </button>
+        </div>
       </div>
     </div>
   );

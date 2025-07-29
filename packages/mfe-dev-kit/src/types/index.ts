@@ -52,6 +52,7 @@ export interface MFEServices {
   eventBus: EventBus;
   modal: ModalService;
   notification: NotificationService;
+  stateManager?: any; // Added for Universal State Demo
 }
 
 export interface Logger {

@@ -1,83 +1,83 @@
 <template>
-  <div :style="containerStyle">
-    <h2>Vue MFE - State Demo</h2>
-    <p>This MFE demonstrates framework-agnostic state management using Vue 3.</p>
+  <div :class="`p-6 rounded-lg transition-colors ${
+    theme === 'dark' ? 'bg-gray-800 text-gray-100' : 'bg-gray-50 text-gray-900'
+  }`">
+    <h2 class="text-xl font-semibold mb-6 flex items-center gap-2">
+      <span class="text-2xl">💚</span>
+      Vue State Demo
+    </h2>
     
     <!-- User Management Section -->
-    <div class="section">
-      <h3>User Management</h3>
-      <div v-if="user">
-        <p><strong>Current User:</strong></p>
-        <p>Name: {{ user.name }}</p>
-        <p>Email: {{ user.email }}</p>
+    <div :class="`mb-6 p-4 rounded-md ${
+      theme === 'dark' ? 'bg-gray-700' : 'bg-white shadow-sm'
+    }`">
+      <h3 class="text-lg font-medium mb-3">User Info</h3>
+      <div :class="`mb-3 p-3 rounded ${
+        theme === 'dark' ? 'bg-gray-800' : 'bg-gray-100'
+      }`">
+        <div v-if="user" class="flex items-center gap-2">
+          <span>👤</span>
+          <span class="font-medium">{{ user.name }}</span>
+          <span class="text-sm opacity-75">({{ user.email }})</span>
+        </div>
+        <p v-else class="text-gray-500">No user set</p>
       </div>
-      <p v-else>No user logged in</p>
-      
-      <div class="form-group">
+      <div class="flex flex-wrap gap-2">
         <input
           v-model="formData.name"
           type="text"
           placeholder="Name"
-          :style="inputStyle"
+          :class="`flex-1 min-w-[150px] px-3 py-2 rounded-md border transition-colors ${
+            theme === 'dark' 
+              ? 'bg-gray-900 border-gray-600 text-gray-100 placeholder-gray-400 focus:border-blue-400' 
+              : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500 focus:border-blue-500'
+          } focus:outline-none focus:ring-2 focus:ring-blue-500/20`"
         />
         <input
           v-model="formData.email"
           type="email"
           placeholder="Email"
-          :style="inputStyle"
+          :class="`flex-1 min-w-[150px] px-3 py-2 rounded-md border transition-colors ${
+            theme === 'dark' 
+              ? 'bg-gray-900 border-gray-600 text-gray-100 placeholder-gray-400 focus:border-blue-400' 
+              : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500 focus:border-blue-500'
+          } focus:outline-none focus:ring-2 focus:ring-blue-500/20`"
         />
-        <button @click="updateUser" class="btn btn-primary">
+        <button @click="updateUser" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md transition-colors">
           Update User
         </button>
       </div>
     </div>
     
     <!-- Theme Switcher Section -->
-    <div class="section">
-      <h3>Theme Switcher</h3>
-      <p>Current theme: <strong>{{ theme || 'light' }}</strong></p>
-      <button @click="toggleTheme" :class="['btn', theme === 'dark' ? 'btn-light' : 'btn-dark']">
+    <div :class="`mb-6 p-4 rounded-md ${
+      theme === 'dark' ? 'bg-gray-700' : 'bg-white shadow-sm'
+    }`">
+      <h3 class="text-lg font-medium mb-3">Theme Settings</h3>
+      <div class="flex items-center gap-3 mb-3">
+        <span class="text-gray-600 dark:text-gray-400">Current theme:</span>
+        <span class="font-medium flex items-center gap-2">
+          <template v-if="theme === 'dark'">🌙 Dark</template>
+          <template v-else>☀️ Light</template>
+        </span>
+      </div>
+      <button @click="toggleTheme" class="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white font-medium rounded-md transition-colors">
         Toggle Theme
       </button>
     </div>
     
     <!-- Shared Counter Section -->
-    <div class="section">
-      <h3>Shared Counter</h3>
-      <p>This counter is shared across all MFEs:</p>
-      <p class="counter">{{ counter || 0 }}</p>
-      <button @click="incrementCounter" class="btn btn-success">
-        Increment
-      </button>
-    </div>
-    
-    <!-- Shopping Cart Demo -->
-    <div class="section">
-      <h3>Shopping Cart (Vue-specific)</h3>
-      <p>Cart items: {{ cartItems?.length || 0 }}</p>
-      <div class="form-group">
-        <input
-          v-model="newItem"
-          type="text"
-          placeholder="Item name"
-          :style="inputStyle"
-        />
-        <button @click="addToCart" class="btn btn-primary">
-          Add to Cart
+    <div :class="`p-4 rounded-md ${
+      theme === 'dark' ? 'bg-gray-700' : 'bg-white shadow-sm'
+    }`">
+      <h3 class="text-lg font-medium mb-3">Shared Counter</h3>
+      <div class="flex items-center gap-4">
+        <span class="text-gray-600 dark:text-gray-400">Value:</span>
+        <span class="text-2xl font-bold min-w-[40px] text-center">{{ counter || 0 }}</span>
+        <button @click="incrementCounter" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md transition-colors">
+          Increment
         </button>
       </div>
-      <ul v-if="cartItems?.length">
-        <li v-for="(item, index) in cartItems" :key="index">
-          {{ item }}
-          <button @click="removeFromCart(index)" class="btn-small">Remove</button>
-        </li>
-      </ul>
-    </div>
-    
-    <!-- State Snapshot -->
-    <div class="section">
-      <h3>Current State Snapshot</h3>
-      <pre :style="preStyle">{{ stateSnapshot }}</pre>
     </div>
   </div>
 </template>
@@ -122,33 +122,6 @@ adapter.useMFERegistration('state-demo-vue', {
   features: ['user-management', 'theme-switcher', 'counter', 'shopping-cart']
 });
 
-// Computed styles
-const containerStyle = computed(() => ({
-  padding: '20px',
-  backgroundColor: theme.value === 'dark' ? '#1a1a1a' : '#ffffff',
-  color: theme.value === 'dark' ? '#ffffff' : '#000000',
-  minHeight: '400px',
-  borderRadius: '8px',
-  transition: 'all 0.3s ease'
-}));
-
-const inputStyle = computed(() => ({
-  padding: '5px',
-  marginRight: '10px',
-  backgroundColor: theme.value === 'dark' ? '#333' : '#fff',
-  color: theme.value === 'dark' ? '#fff' : '#000',
-  border: '1px solid #ccc',
-  borderRadius: '4px'
-}));
-
-const preStyle = computed(() => ({
-  backgroundColor: theme.value === 'dark' ? '#333' : '#f5f5f5',
-  padding: '10px',
-  borderRadius: '4px',
-  overflow: 'auto',
-  fontSize: '12px'
-}));
-
 const stateSnapshot = computed(() => {
   return JSON.stringify(props.stateManager.getSnapshot(), null, 2);
 });
@@ -191,82 +164,3 @@ onMounted(() => {
 });
 </script>
 
-<style scoped>
-.section {
-  margin-bottom: 20px;
-  padding: 15px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-.form-group {
-  margin-top: 10px;
-}
-
-.btn {
-  padding: 5px 15px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-right: 10px;
-  transition: background-color 0.3s;
-}
-
-.btn-primary {
-  background-color: #007bff;
-  color: white;
-}
-
-.btn-primary:hover {
-  background-color: #0056b3;
-}
-
-.btn-success {
-  background-color: #28a745;
-  color: white;
-}
-
-.btn-success:hover {
-  background-color: #218838;
-}
-
-.btn-light {
-  background-color: #f8f9fa;
-  color: #000;
-}
-
-.btn-dark {
-  background-color: #343a40;
-  color: #fff;
-}
-
-.btn-small {
-  padding: 2px 8px;
-  font-size: 12px;
-  margin-left: 10px;
-  background-color: #dc3545;
-  color: white;
-  border: none;
-  border-radius: 3px;
-  cursor: pointer;
-}
-
-.counter {
-  font-size: 24px;
-  font-weight: bold;
-  margin: 10px 0;
-}
-
-input {
-  outline: none;
-}
-
-ul {
-  list-style: none;
-  padding: 0;
-}
-
-li {
-  padding: 5px 0;
-}
-</style>

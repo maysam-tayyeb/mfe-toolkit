@@ -13,25 +13,44 @@ const StateDemoVanillaMFE = {
     
     // Create the UI
     element.innerHTML = `
-      <div id="vanilla-app" style="padding: 20px; min-height: 300px; border-radius: 8px;">
-        <h2>Vanilla JS State Demo</h2>
+      <div id="vanilla-app" class="p-6 rounded-lg transition-colors bg-gray-50 text-gray-900">
+        <h2 class="text-xl font-semibold mb-6 flex items-center gap-2">
+          <span class="text-2xl">🟨</span>
+          Vanilla JS State Demo  
+        </h2>
         
-        <div style="margin-bottom: 20px;">
-          <h3>User Info</h3>
-          <p id="user-display">No user set</p>
-          <input type="text" id="name-input" placeholder="Name" style="margin-right: 10px;" />
-          <input type="email" id="email-input" placeholder="Email" style="margin-right: 10px;" />
-          <button id="update-user-btn">Update User</button>
+        <div class="mb-6 p-4 rounded-md bg-white shadow-sm">
+          <h3 class="text-lg font-medium mb-3">User Info</h3>
+          <div class="mb-3 p-3 rounded bg-gray-100">
+            <p id="user-display" class="text-gray-500">No user set</p>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <input type="text" id="name-input" placeholder="Name" 
+              class="flex-1 min-w-[150px] px-3 py-2 rounded-md border bg-white border-gray-300 text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-colors" />
+            <input type="email" id="email-input" placeholder="Email" 
+              class="flex-1 min-w-[150px] px-3 py-2 rounded-md border bg-white border-gray-300 text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-colors" />
+            <button id="update-user-btn" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md transition-colors">Update User</button>
+          </div>
         </div>
         
-        <div style="margin-bottom: 20px;">
-          <h3>Theme: <span id="theme-display">light</span></h3>
-          <button id="toggle-theme-btn">Toggle Theme</button>
+        <div class="mb-6 p-4 rounded-md bg-white shadow-sm">
+          <h3 class="text-lg font-medium mb-3">Theme Settings</h3>
+          <div class="flex items-center gap-3 mb-3">
+            <span class="text-gray-600">Current theme:</span>
+            <span class="font-medium flex items-center gap-2">
+              <span id="theme-display">☀️ light</span>
+            </span>
+          </div>
+          <button id="toggle-theme-btn" class="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white font-medium rounded-md transition-colors">Toggle Theme</button>
         </div>
         
-        <div>
-          <h3>Shared Counter: <span id="counter-display">0</span></h3>
-          <button id="increment-btn">Increment</button>
+        <div class="p-4 rounded-md bg-white shadow-sm">
+          <h3 class="text-lg font-medium mb-3">Shared Counter</h3>
+          <div class="flex items-center gap-4">
+            <span class="text-gray-600">Value:</span>
+            <span id="counter-display" class="text-2xl font-bold min-w-[40px] text-center">0</span>
+            <button id="increment-btn" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md transition-colors">Increment</button>
+          </div>
         </div>
       </div>
     `;
@@ -55,13 +74,57 @@ const StateDemoVanillaMFE = {
     // Apply theme
     const applyTheme = (theme) => {
       currentTheme = theme;
-      themeDisplay.textContent = theme;
+      themeDisplay.textContent = theme === 'dark' ? '🌙 dark' : '☀️ light';
+      
+      // Update main container classes
       if (theme === 'dark') {
-        app.style.backgroundColor = '#1a1a1a';
-        app.style.color = '#ffffff';
+        app.className = 'p-6 rounded-lg transition-colors bg-gray-800 text-gray-100';
+        // Update sections
+        const sections = app.querySelectorAll('.mb-6, .p-4');
+        sections.forEach(section => {
+          if (section.classList.contains('mb-6')) {
+            section.className = 'mb-6 p-4 rounded-md bg-gray-700';
+          } else if (section.classList.contains('p-4') && !section.classList.contains('mb-6')) {
+            section.className = 'p-4 rounded-md bg-gray-700';  
+          }
+        });
+        // Update user display area
+        const userArea = app.querySelector('.mb-3');
+        if (userArea) userArea.className = 'mb-3 p-3 rounded bg-gray-800';
+        // Update inputs
+        const inputs = app.querySelectorAll('input');
+        inputs.forEach(input => {
+          input.className = 'flex-1 min-w-[150px] px-3 py-2 rounded-md border bg-gray-900 border-gray-600 text-gray-100 placeholder-gray-400 focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-colors';
+        });
+        // Update theme display spans
+        const themeSpans = app.querySelectorAll('.text-gray-600');
+        themeSpans.forEach(span => {
+          span.className = 'text-gray-400';
+        });
       } else {
-        app.style.backgroundColor = '#ffffff';
-        app.style.color = '#000000';
+        app.className = 'p-6 rounded-lg transition-colors bg-gray-50 text-gray-900';
+        // Update sections
+        const sections = app.querySelectorAll('.mb-6, .p-4');
+        sections.forEach(section => {
+          if (section.classList.contains('mb-6') || section.className.includes('mb-6')) {
+            section.className = 'mb-6 p-4 rounded-md bg-white shadow-sm';
+          } else {
+            section.className = 'p-4 rounded-md bg-white shadow-sm';
+          }
+        });
+        // Update user display area  
+        const userArea = app.querySelector('.mb-3, .bg-gray-800');
+        if (userArea) userArea.className = 'mb-3 p-3 rounded bg-gray-100';
+        // Update inputs
+        const inputs = app.querySelectorAll('input');
+        inputs.forEach(input => {
+          input.className = 'flex-1 min-w-[150px] px-3 py-2 rounded-md border bg-white border-gray-300 text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-colors';
+        });
+        // Update theme display spans
+        const graySpans = app.querySelectorAll('.text-gray-400');
+        graySpans.forEach(span => {
+          span.className = 'text-gray-600';
+        });
       }
     };
     
@@ -69,9 +132,11 @@ const StateDemoVanillaMFE = {
     const updateUserDisplay = (user) => {
       currentUser = user;
       if (user) {
-        userDisplay.textContent = `Name: ${user.name}, Email: ${user.email}`;
+        userDisplay.innerHTML = `<span>👤</span> <span style="font-weight: 500;">${user.name}</span> <span style="font-size: 0.875rem; opacity: 0.75;">(${user.email})</span>`;
+        userDisplay.className = 'flex items-center gap-2';
       } else {
         userDisplay.textContent = 'No user set';
+        userDisplay.className = 'text-gray-500';
       }
     };
     

@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import ReactDOM from 'react-dom/client';
 import { MFEServices } from '@mfe/dev-kit';
 
 interface IsolatedMFELoaderProps {
@@ -9,12 +8,6 @@ interface IsolatedMFELoaderProps {
   fallback?: React.ReactNode;
   onError?: (error: Error) => void;
 }
-
-// Create a portal-based component to isolate MFE content
-const MFEPortal: React.FC<{ containerRef: React.RefObject<HTMLDivElement> }> = ({ containerRef }) => {
-  if (!containerRef.current) return null;
-  return ReactDOM.createPortal(<></>, containerRef.current);
-};
 
 export const IsolatedMFELoader: React.FC<IsolatedMFELoaderProps> = ({
   name,
@@ -95,7 +88,7 @@ export const IsolatedMFELoader: React.FC<IsolatedMFELoaderProps> = ({
         containerRef.current.innerHTML = '';
       }
     };
-  }, [name, url, services, onError]);
+  }, [name, url, onError]); // Removed 'services' from dependencies to prevent remounting
 
   if (error) {
     return (

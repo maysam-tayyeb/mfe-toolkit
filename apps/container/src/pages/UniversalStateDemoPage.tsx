@@ -1,9 +1,10 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { getGlobalStateManager } from '@mfe/universal-state';
 import { getMFEServicesSingleton } from '@/services/mfe-services-singleton';
 import { useMFEUrlsFromContext } from '@/hooks/useMFEUrlsFromContext';
 import { IsolatedMFELoader } from '@/components/IsolatedMFELoader';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
+import { StateChangeLog } from '@/components/StateChangeLog';
 
 export const UniversalStateDemoPage: React.FC = () => {
   // Use the custom hook to get MFE URLs from context
@@ -35,30 +36,9 @@ export const UniversalStateDemoPage: React.FC = () => {
     return enhancedServices;
   }, [stateManager]);
   
-  const [stateLog, setStateLog] = useState<Array<{
-    timestamp: Date;
-    key: string;
-    value: any;
-    source: string;
-  }>>([]);
-  
-  useEffect(() => {
-    // Subscribe to all state changes
-    const unsubscribe = stateManager.subscribeAll((event) => {
-      setStateLog(prev => [{
-        timestamp: new Date(event.timestamp),
-        key: event.key,
-        value: event.value,
-        source: event.source
-      }, ...prev].slice(0, 20)); // Keep last 20 entries
-    });
-    
-    return unsubscribe;
-  }, [stateManager]);
   
   const clearState = () => {
     stateManager.clear();
-    setStateLog([]);
   };
   
   const resetCounter = () => {
@@ -103,26 +83,8 @@ export const UniversalStateDemoPage: React.FC = () => {
         </p>
       </div>
       
-      {/* State Change Log */}
-      <div className="border rounded-lg p-4">
-        <h2 className="text-xl font-semibold mb-4">Real-time State Change Log</h2>
-        <div className="space-y-2 max-h-60 overflow-y-auto">
-          {stateLog.length === 0 ? (
-            <p className="text-muted-foreground">No state changes yet. Interact with the MFEs below.</p>
-          ) : (
-            stateLog.map((entry, index) => (
-              <div key={index} className="p-2 bg-muted rounded text-sm font-mono">
-                <span className="text-muted-foreground">
-                  [{entry.timestamp.toLocaleTimeString()}]
-                </span>{' '}
-                <span className="font-semibold">{entry.key}</span> ={' '}
-                <span className="text-primary">{JSON.stringify(entry.value)}</span>
-                <span className="text-muted-foreground"> (from: {entry.source})</span>
-              </div>
-            ))
-          )}
-        </div>
-      </div>
+      {/* State Change Log - Memoized to prevent MFE re-renders */}
+      <StateChangeLog stateManager={stateManager} />
       
       {/* MFE Grid */}
       {registryLoading ? (
