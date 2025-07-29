@@ -1,5 +1,5 @@
 import { createApp } from 'vue';
-import SimpleApp from './SimpleApp.vue';
+import App from './App.vue';
 import './style.css';
 
 // MFE export - this is what gets loaded by the container
@@ -16,7 +16,7 @@ const StateDemoVueMFE = {
       return;
     }
     
-    const app = createApp(SimpleApp, { stateManager });
+    const app = createApp(App, { stateManager });
     app.mount(element);
     
     // Store reference for unmount
