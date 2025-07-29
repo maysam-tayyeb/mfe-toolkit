@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { StateManager } from '@mfe/universal-state';
 import { getButtonClasses } from '@mfe/shared';
+import { Moon, Sun } from 'lucide-react';
 
 interface AppProps {
   stateManager: StateManager;
@@ -141,8 +142,12 @@ export const App: React.FC<AppProps> = ({ stateManager }) => {
                   <p className="font-medium">Current Theme</p>
                   <p className="text-sm text-muted-foreground">Applies to all MFEs</p>
                 </div>
-                <div className="text-2xl">
-                  {theme === 'dark' ? '🌙' : '☀️'}
+                <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-muted">
+                  {theme === 'dark' ? (
+                    <Moon className="w-5 h-5 text-muted-foreground" />
+                  ) : (
+                    <Sun className="w-5 h-5 text-muted-foreground" />
+                  )}
                 </div>
               </div>
               <button
