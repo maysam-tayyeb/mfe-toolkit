@@ -48,6 +48,7 @@ This document tracks the status of architecture improvements identified in the [
 - Implemented comprehensive error reporting service
 - Created demo page to test various error scenarios
 - Added graceful fallback UI for failed MFEs
+- Fixed MFE flickering issues in high-update pages
 
 **Features**:
 - Error boundary catches JavaScript errors in MFE component tree
@@ -59,9 +60,19 @@ This document tracks the status of architecture improvements identified in the [
 - Severity classification (low, medium, high, critical)
 - Integration with logger and notification services
 
-### 6. 📋 Module Federation
-**Status**: Planned
-**Notes**: Currently using dynamic imports, Module Federation migration pending
+**Known Issues**:
+- Two different loader components (MFELoader and IsolatedMFELoader)
+- Complex ref management in error boundary integration
+- See [MFE Loading Guide](./MFE_LOADING_GUIDE.md) for consolidation plan
+
+### 6. ❌ Module Federation
+**Status**: Rejected
+**Decision**: Will not implement Module Federation
+**Rationale**: 
+- Dynamic imports provide better independence and flexibility
+- No build-time coupling between MFEs
+- Teams can use different build tools and deploy independently
+- See [Architecture Decisions](./ARCHITECTURE_DECISIONS.md#1-dynamic-imports-over-module-federation) for full rationale
 
 ### 7. 📋 Security Considerations
 **Status**: Planned
@@ -83,15 +94,45 @@ This document tracks the status of architecture improvements identified in the [
    - Each MFE has independent state management
    - No more cross-MFE state pollution risks
 
+3. **Error Boundaries and Recovery**
+   - Comprehensive error handling for MFEs
+   - Automatic retry mechanisms
+   - User-friendly error states
+   - Fixed flickering issues with dual loader approach
+
 ### Benefits Realized
 - ✅ Better security through elimination of global scope pollution
 - ✅ Improved testability with proper dependency injection
 - ✅ Enhanced MFE isolation and independence
 - ✅ Cleaner architecture without global dependencies
 - ✅ Reduced coupling between container and MFEs
+- ✅ Better user experience with error recovery
+- ✅ Stable MFE rendering without flickering
 
 ### Technical Debt Addressed
 - Removed 300+ lines of Redux boilerplate
 - Simplified state management with React Context
 - Reduced bundle size by removing Redux dependencies
 - Improved type safety with TypeScript contexts
+- Fixed re-rendering performance issues
+
+### Technical Debt Created
+- Two different MFE loader components (temporary solution)
+- Need to consolidate loaders in future iteration
+- See [MFE Loading Guide](./MFE_LOADING_GUIDE.md) for plan
+
+## Future Work
+
+### High Priority
+1. **Consolidate MFE Loaders**: Merge MFELoader and IsolatedMFELoader into single component
+2. **Security Headers**: Implement CSP and sandboxing
+3. **Performance Monitoring**: Add metrics for MFE load times
+
+### Medium Priority
+1. **Import Maps**: Better dependency management
+2. **Service Worker**: Offline support and caching
+3. **Type Safety**: Shared types package for MFE contracts
+
+### Low Priority
+1. **Web Components**: Evaluate for better isolation
+2. **Edge Deployment**: CDN strategy for global performance

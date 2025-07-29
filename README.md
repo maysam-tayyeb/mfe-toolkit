@@ -21,8 +21,8 @@ A complete microfrontend (MFE) architecture built with React 19, Redux Toolkit, 
 │  └───────────────────────────────────────────────────────┘  │
 │                                                             │
 │  ┌──────────────┐   ┌──────────────┐  ┌─────────────────┐   │
-│  │    Shared    │   │    Event     │  │      Redux      │   │
-│  │   Services   │   │     Bus      │  │      Store      │   │
+│  │    Shared    │   │    Event     │  │  React Context  │   │
+│  │   Services   │   │     Bus      │  │   (Auth, UI)    │   │
 │  └──────────────┘   └──────────────┘  └─────────────────┘   │
 │         ↓                  ↓                   ↓            │
 └─────────┼──────────────────┼───────────────────┼────────────┘
@@ -33,6 +33,12 @@ A complete microfrontend (MFE) architecture built with React 19, Redux Toolkit, 
     └─────────────┘    └─────────────┘    └─────────────┘
          React 19         React 17          Any Version
 ```
+
+### 📚 Architecture Documentation
+
+- [Architecture Decisions](./docs/architecture/ARCHITECTURE_DECISIONS.md) - Key design choices and rationale
+- [MFE Loading Guide](./docs/architecture/MFE_LOADING_GUIDE.md) - How MFEs are loaded and best practices
+- [Improvements Status](./docs/architecture/IMPROVEMENTS_STATUS.md) - Completed and planned improvements
 
 ## 🚀 Quick Start
 
