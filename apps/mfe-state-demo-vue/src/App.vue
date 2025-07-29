@@ -1,105 +1,81 @@
 <template>
-  <div :style="{
-    padding: '20px',
-    backgroundColor: theme === 'dark' ? '#1a1a1a' : '#ffffff',
-    color: theme === 'dark' ? '#ffffff' : '#000000',
-    minHeight: '400px',
-    borderRadius: '8px',
-    transition: 'all 0.3s ease'
-  }">
-    <h2>Vue MFE - State Demo</h2>
-    <p>This MFE demonstrates framework-agnostic state management.</p>
+  <div class="space-y-6 p-6">
+    <div class="space-y-2">
+      <h2 class="text-2xl font-bold">💚 Vue State Demo</h2>
+      <p class="text-muted-foreground mt-2">This MFE demonstrates framework-agnostic state management.</p>
+    </div>
     
     <!-- User Management Section -->
-    <div :style="{ marginBottom: '20px', padding: '15px', border: '1px solid #ccc', borderRadius: '4px' }">
-      <h3>User Management</h3>
-      <div v-if="user">
-        <p><strong>Current User:</strong></p>
-        <p>Name: {{ user.name }}</p>
-        <p>Email: {{ user.email }}</p>
+    <div class="border rounded-lg p-6 space-y-4">
+      <h2 class="text-xl font-semibold">User Management</h2>
+      <div class="bg-muted/50 rounded-lg p-4">
+        <div v-if="user" class="space-y-1">
+          <p class="text-sm font-medium">Current User:</p>
+          <p class="text-sm text-muted-foreground">Name: {{ user.name }}</p>
+          <p class="text-sm text-muted-foreground">Email: {{ user.email }}</p>
+        </div>
+        <p v-else class="text-sm text-muted-foreground">No user logged in</p>
       </div>
-      <p v-else>No user logged in</p>
       
-      <div :style="{ marginTop: '10px' }">
+      <div class="flex flex-wrap gap-2">
         <input
           v-model="formData.name"
           type="text"
           placeholder="Name"
-          :style="{
-            padding: '5px',
-            marginRight: '10px',
-            backgroundColor: theme === 'dark' ? '#333' : '#fff',
-            color: theme === 'dark' ? '#fff' : '#000',
-            border: '1px solid #ccc'
-          }"
+          class="w-full px-3 py-2 border rounded-md text-sm flex-1 min-w-[150px]"
         />
         <input
           v-model="formData.email"
           type="email"
           placeholder="Email"
-          :style="{
-            padding: '5px',
-            marginRight: '10px',
-            backgroundColor: theme === 'dark' ? '#333' : '#fff',
-            color: theme === 'dark' ? '#fff' : '#000',
-            border: '1px solid #ccc'
-          }"
+          class="w-full px-3 py-2 border rounded-md text-sm flex-1 min-w-[150px]"
         />
-        <button @click="updateUser" :style="{
-          padding: '5px 15px',
-          backgroundColor: '#007bff',
-          color: 'white',
-          border: 'none',
-          borderRadius: '4px',
-          cursor: 'pointer'
-        }">
+        <button 
+          @click="updateUser" 
+          class="inline-flex items-center justify-center h-9 px-3 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors text-sm font-medium"
+        >
           Update User
         </button>
       </div>
     </div>
     
     <!-- Theme Switcher Section -->
-    <div :style="{ marginBottom: '20px', padding: '15px', border: '1px solid #ccc', borderRadius: '4px' }">
-      <h3>Theme Switcher</h3>
-      <p>Current theme: <strong>{{ theme }}</strong></p>
-      <button @click="toggleTheme" :style="{
-        padding: '5px 15px',
-        backgroundColor: theme === 'dark' ? '#f8f9fa' : '#343a40',
-        color: theme === 'dark' ? '#000' : '#fff',
-        border: 'none',
-        borderRadius: '4px',
-        cursor: 'pointer'
-      }">
+    <div class="border rounded-lg p-6 space-y-4">
+      <h2 class="text-xl font-semibold">Theme Settings</h2>
+      <div class="flex items-center gap-3">
+        <span class="text-sm text-muted-foreground">Current theme:</span>
+        <span class="text-sm font-medium">
+          {{ theme === 'dark' ? '🌙 Dark' : '☀️ Light' }}
+        </span>
+      </div>
+      <button 
+        @click="toggleTheme" 
+        class="inline-flex items-center justify-center h-9 px-3 bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/80 transition-colors text-sm font-medium"
+      >
         Toggle Theme
       </button>
     </div>
     
     <!-- Shared Counter Section -->
-    <div :style="{ marginBottom: '20px', padding: '15px', border: '1px solid #ccc', borderRadius: '4px' }">
-      <h3>Shared Counter</h3>
-      <p>This counter is shared across all MFEs:</p>
-      <p :style="{ fontSize: '24px', fontWeight: 'bold' }">{{ counter || 0 }}</p>
-      <button @click="incrementCounter" :style="{
-        padding: '5px 15px',
-        backgroundColor: '#28a745',
-        color: 'white',
-        border: 'none',
-        borderRadius: '4px',
-        cursor: 'pointer'
-      }">
-        Increment
-      </button>
+    <div class="border rounded-lg p-6 space-y-4">
+      <h2 class="text-xl font-semibold">Shared Counter</h2>
+      <p class="text-sm text-muted-foreground">This counter is shared across all MFEs:</p>
+      <div class="flex items-center gap-4">
+        <span class="text-sm text-muted-foreground">Value:</span>
+        <span class="text-3xl font-bold min-w-[40px] text-center">{{ counter || 0 }}</span>
+        <button 
+          @click="incrementCounter" 
+          class="inline-flex items-center justify-center h-9 px-3 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors text-sm font-medium"
+        >
+          Increment
+        </button>
+      </div>
     </div>
     
     <!-- State Snapshot -->
-    <div :style="{ padding: '15px', border: '1px solid #ccc', borderRadius: '4px' }">
-      <h3>Current State Snapshot</h3>
-      <pre :style="{
-        backgroundColor: theme === 'dark' ? '#333' : '#f5f5f5',
-        padding: '10px',
-        borderRadius: '4px',
-        overflow: 'auto'
-      }">{{ stateSnapshot }}</pre>
+    <div class="border rounded-lg p-6 space-y-4">
+      <h2 class="text-xl font-semibold">Current State Snapshot</h2>
+      <pre class="w-full px-3 py-2 border rounded-md text-sm font-mono text-xs h-32 overflow-auto">{{ stateSnapshot }}</pre>
     </div>
   </div>
 </template>

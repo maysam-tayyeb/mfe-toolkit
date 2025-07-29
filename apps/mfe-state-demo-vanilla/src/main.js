@@ -13,41 +13,49 @@ const StateDemoVanillaMFE = {
     
     // Create the UI
     element.innerHTML = `
-      <div id="vanilla-app" style="padding: 20px; background-color: #ffffff; color: #000000; min-height: 400px; border-radius: 8px; transition: all 0.3s ease;">
-        <h2>Vanilla JS MFE - State Demo</h2>
-        <p>This MFE demonstrates framework-agnostic state management.</p>
+      <div id="vanilla-app" class="space-y-6 p-6">
+        <div class="space-y-2">
+          <h2 class="text-2xl font-bold">🟨 Vanilla JS State Demo</h2>
+          <p class="text-muted-foreground mt-2">This MFE demonstrates framework-agnostic state management.</p>
+        </div>
         
-        <div style="margin-bottom: 20px; padding: 15px; border: 1px solid #ccc; border-radius: 4px;">
-          <h3>User Management</h3>
-          <div id="user-display-section">
-            <p>No user logged in</p>
+        <div class="border rounded-lg p-6 space-y-4">
+          <h2 class="text-xl font-semibold">User Management</h2>
+          <div id="user-display-section" class="bg-muted/50 rounded-lg p-4">
+            <p class="text-sm text-muted-foreground">No user logged in</p>
           </div>
           
-          <div style="margin-top: 10px;">
+          <div class="flex flex-wrap gap-2">
             <input type="text" id="name-input" placeholder="Name" 
-              style="padding: 5px; margin-right: 10px; background-color: #fff; color: #000; border: 1px solid #ccc;" />
+              class="w-full px-3 py-2 border rounded-md text-sm flex-1 min-w-[150px]" />
             <input type="email" id="email-input" placeholder="Email" 
-              style="padding: 5px; margin-right: 10px; background-color: #fff; color: #000; border: 1px solid #ccc;" />
-            <button id="update-user-btn" style="padding: 5px 15px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer;">Update User</button>
+              class="w-full px-3 py-2 border rounded-md text-sm flex-1 min-w-[150px]" />
+            <button id="update-user-btn" class="inline-flex items-center justify-center h-9 px-3 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors text-sm font-medium">Update User</button>
           </div>
         </div>
         
-        <div style="margin-bottom: 20px; padding: 15px; border: 1px solid #ccc; border-radius: 4px;">
-          <h3>Theme Switcher</h3>
-          <p>Current theme: <strong id="theme-display">light</strong></p>
-          <button id="toggle-theme-btn" style="padding: 5px 15px; background-color: #343a40; color: #fff; border: none; border-radius: 4px; cursor: pointer;">Toggle Theme</button>
+        <div class="border rounded-lg p-6 space-y-4">
+          <h2 class="text-xl font-semibold">Theme Settings</h2>
+          <div class="flex items-center gap-3">
+            <span class="text-sm text-muted-foreground">Current theme:</span>
+            <span id="theme-display" class="text-sm font-medium">light</span>
+          </div>
+          <button id="toggle-theme-btn" class="inline-flex items-center justify-center h-9 px-3 bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/80 transition-colors text-sm font-medium">Toggle Theme</button>
         </div>
         
-        <div style="margin-bottom: 20px; padding: 15px; border: 1px solid #ccc; border-radius: 4px;">
-          <h3>Shared Counter</h3>
-          <p>This counter is shared across all MFEs:</p>
-          <p id="counter-display" style="font-size: 24px; font-weight: bold;">0</p>
-          <button id="increment-btn" style="padding: 5px 15px; background-color: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer;">Increment</button>
+        <div class="border rounded-lg p-6 space-y-4">
+          <h2 class="text-xl font-semibold">Shared Counter</h2>
+          <p class="text-sm text-muted-foreground">This counter is shared across all MFEs:</p>
+          <div class="flex items-center gap-4">
+            <span class="text-sm text-muted-foreground">Value:</span>
+            <span id="counter-display" class="text-3xl font-bold min-w-[40px] text-center">0</span>
+            <button id="increment-btn" class="inline-flex items-center justify-center h-9 px-3 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors text-sm font-medium">Increment</button>
+          </div>
         </div>
         
-        <div style="padding: 15px; border: 1px solid #ccc; border-radius: 4px;">
-          <h3>Current State Snapshot</h3>
-          <pre id="state-snapshot" style="background-color: #f5f5f5; padding: 10px; border-radius: 4px; overflow: auto;"></pre>
+        <div class="border rounded-lg p-6 space-y-4">
+          <h2 class="text-xl font-semibold">Current State Snapshot</h2>
+          <pre id="state-snapshot" class="w-full px-3 py-2 border rounded-md text-sm font-mono text-xs h-32 overflow-auto"></pre>
         </div>
       </div>
     `;
@@ -72,32 +80,8 @@ const StateDemoVanillaMFE = {
     // Apply theme
     const applyTheme = (theme) => {
       currentTheme = theme;
-      themeDisplay.textContent = theme;
-      
-      // Update main app styles
-      if (theme === 'dark') {
-        app.style.backgroundColor = '#1a1a1a';
-        app.style.color = '#ffffff';
-        toggleThemeBtn.style.backgroundColor = '#f8f9fa';
-        toggleThemeBtn.style.color = '#000';
-        stateSnapshot.style.backgroundColor = '#333';
-        // Update inputs
-        nameInput.style.backgroundColor = '#333';
-        nameInput.style.color = '#fff';
-        emailInput.style.backgroundColor = '#333';
-        emailInput.style.color = '#fff';
-      } else {
-        app.style.backgroundColor = '#ffffff';
-        app.style.color = '#000000';
-        toggleThemeBtn.style.backgroundColor = '#343a40';
-        toggleThemeBtn.style.color = '#fff';
-        stateSnapshot.style.backgroundColor = '#f5f5f5';
-        // Update inputs
-        nameInput.style.backgroundColor = '#fff';
-        nameInput.style.color = '#000';
-        emailInput.style.backgroundColor = '#fff';
-        emailInput.style.color = '#000';
-      }
+      themeDisplay.textContent = theme === 'dark' ? '🌙 Dark' : '☀️ Light';
+      // The design system handles dark/light mode automatically via CSS variables
     };
     
     // Update user display
@@ -105,12 +89,14 @@ const StateDemoVanillaMFE = {
       currentUser = user;
       if (user) {
         userDisplaySection.innerHTML = `
-          <p><strong>Current User:</strong></p>
-          <p>Name: ${user.name}</p>
-          <p>Email: ${user.email}</p>
+          <div class="space-y-1">
+            <p class="text-sm font-medium">Current User:</p>
+            <p class="text-sm text-muted-foreground">Name: ${user.name}</p>
+            <p class="text-sm text-muted-foreground">Email: ${user.email}</p>
+          </div>
         `;
       } else {
-        userDisplaySection.innerHTML = '<p>No user logged in</p>';
+        userDisplaySection.innerHTML = '<p class="text-sm text-muted-foreground">No user logged in</p>';
       }
     };
     

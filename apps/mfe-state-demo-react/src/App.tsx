@@ -75,67 +75,45 @@ export const App: React.FC<AppProps> = ({ stateManager }) => {
   }, [theme, stateManager]);
   
   return (
-    <div style={{
-      padding: '20px',
-      backgroundColor: theme === 'dark' ? '#1a1a1a' : '#ffffff',
-      color: theme === 'dark' ? '#ffffff' : '#000000',
-      minHeight: '400px',
-      borderRadius: '8px',
-      transition: 'all 0.3s ease'
-    }}>
-      <h2>React MFE - State Demo</h2>
-      <p>This MFE demonstrates framework-agnostic state management.</p>
+    <div className="space-y-6 p-6">
+      <div className="space-y-2">
+        <h2 className="text-2xl font-bold">⚛️ React State Demo</h2>
+        <p className="text-muted-foreground mt-2">This MFE demonstrates framework-agnostic state management.</p>
+      </div>
       
       {/* User Management Section */}
-      <div style={{ marginBottom: '20px', padding: '15px', border: '1px solid #ccc', borderRadius: '4px' }}>
-        <h3>User Management</h3>
-        {user ? (
-          <div>
-            <p><strong>Current User:</strong></p>
-            <p>Name: {user.name}</p>
-            <p>Email: {user.email}</p>
-          </div>
-        ) : (
-          <p>No user logged in</p>
-        )}
+      <div className="border rounded-lg p-6 space-y-4">
+        <h2 className="text-xl font-semibold">User Management</h2>
+        <div className="bg-muted/50 rounded-lg p-4">
+          {user ? (
+            <div className="space-y-1">
+              <p className="text-sm font-medium">Current User:</p>
+              <p className="text-sm text-muted-foreground">Name: {user.name}</p>
+              <p className="text-sm text-muted-foreground">Email: {user.email}</p>
+            </div>
+          ) : (
+            <p className="text-sm text-muted-foreground">No user logged in</p>
+          )}
+        </div>
         
-        <div style={{ marginTop: '10px' }}>
+        <div className="flex flex-wrap gap-2">
           <input
             type="text"
             placeholder="Name"
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-            style={{
-              padding: '5px',
-              marginRight: '10px',
-              backgroundColor: theme === 'dark' ? '#333' : '#fff',
-              color: theme === 'dark' ? '#fff' : '#000',
-              border: '1px solid #ccc'
-            }}
+            className="w-full px-3 py-2 border rounded-md text-sm flex-1 min-w-[150px]"
           />
           <input
             type="email"
             placeholder="Email"
             value={formData.email}
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-            style={{
-              padding: '5px',
-              marginRight: '10px',
-              backgroundColor: theme === 'dark' ? '#333' : '#fff',
-              color: theme === 'dark' ? '#fff' : '#000',
-              border: '1px solid #ccc'
-            }}
+            className="w-full px-3 py-2 border rounded-md text-sm flex-1 min-w-[150px]"
           />
           <button
             onClick={handleUpdateUser}
-            style={{
-              padding: '5px 15px',
-              backgroundColor: '#007bff',
-              color: 'white',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: 'pointer'
-            }}
+            className="inline-flex items-center justify-center h-9 px-3 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors text-sm font-medium"
           >
             Update User
           </button>
@@ -143,53 +121,42 @@ export const App: React.FC<AppProps> = ({ stateManager }) => {
       </div>
       
       {/* Theme Switcher Section */}
-      <div style={{ marginBottom: '20px', padding: '15px', border: '1px solid #ccc', borderRadius: '4px' }}>
-        <h3>Theme Switcher</h3>
-        <p>Current theme: <strong>{theme}</strong></p>
+      <div className="border rounded-lg p-6 space-y-4">
+        <h2 className="text-xl font-semibold">Theme Settings</h2>
+        <div className="flex items-center gap-3">
+          <span className="text-sm text-muted-foreground">Current theme:</span>
+          <span className="text-sm font-medium">
+            {theme === 'dark' ? '🌙 Dark' : '☀️ Light'}
+          </span>
+        </div>
         <button
           onClick={handleThemeToggle}
-          style={{
-            padding: '5px 15px',
-            backgroundColor: theme === 'dark' ? '#f8f9fa' : '#343a40',
-            color: theme === 'dark' ? '#000' : '#fff',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: 'pointer'
-          }}
+          className="inline-flex items-center justify-center h-9 px-3 bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/80 transition-colors text-sm font-medium"
         >
           Toggle Theme
         </button>
       </div>
       
       {/* Shared Counter Section */}
-      <div style={{ marginBottom: '20px', padding: '15px', border: '1px solid #ccc', borderRadius: '4px' }}>
-        <h3>Shared Counter</h3>
-        <p>This counter is shared across all MFEs:</p>
-        <p style={{ fontSize: '24px', fontWeight: 'bold' }}>{counter}</p>
-        <button
-          onClick={handleIncrement}
-          style={{
-            padding: '5px 15px',
-            backgroundColor: '#28a745',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: 'pointer'
-          }}
-        >
-          Increment
-        </button>
+      <div className="border rounded-lg p-6 space-y-4">
+        <h2 className="text-xl font-semibold">Shared Counter</h2>
+        <p className="text-sm text-muted-foreground">This counter is shared across all MFEs:</p>
+        <div className="flex items-center gap-4">
+          <span className="text-sm text-muted-foreground">Value:</span>
+          <span className="text-3xl font-bold min-w-[40px] text-center">{counter}</span>
+          <button
+            onClick={handleIncrement}
+            className="inline-flex items-center justify-center h-9 px-3 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors text-sm font-medium"
+          >
+            Increment
+          </button>
+        </div>
       </div>
       
       {/* State Snapshot */}
-      <div style={{ padding: '15px', border: '1px solid #ccc', borderRadius: '4px' }}>
-        <h3>Current State Snapshot</h3>
-        <pre style={{
-          backgroundColor: theme === 'dark' ? '#333' : '#f5f5f5',
-          padding: '10px',
-          borderRadius: '4px',
-          overflow: 'auto'
-        }}>
+      <div className="border rounded-lg p-6 space-y-4">
+        <h2 className="text-xl font-semibold">Current State Snapshot</h2>
+        <pre className="w-full px-3 py-2 border rounded-md text-sm font-mono text-xs h-32 overflow-auto">
           {JSON.stringify(stateManager.getSnapshot(), null, 2)}
         </pre>
       </div>

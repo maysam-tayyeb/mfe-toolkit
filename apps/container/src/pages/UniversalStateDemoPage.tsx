@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { getGlobalStateManager } from '@mfe/universal-state';
 import { getMFEServicesSingleton } from '@/services/mfe-services-singleton';
 import { useMFEUrlsFromContext } from '@/hooks/useMFEUrlsFromContext';
@@ -36,6 +36,28 @@ export const UniversalStateDemoPage: React.FC = () => {
     return enhancedServices;
   }, [stateManager]);
   
+  // Subscribe to theme changes and update document class
+  useEffect(() => {
+    // Subscribe to theme changes
+    const unsubscribe = stateManager.subscribe('theme', (value) => {
+      if (value === 'dark') {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    });
+    
+    // Set initial theme
+    const currentTheme = stateManager.get('theme');
+    if (currentTheme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+    
+    return unsubscribe;
+  }, [stateManager]);
+  
   
   const clearState = () => {
     stateManager.clear();
@@ -55,36 +77,43 @@ export const UniversalStateDemoPage: React.FC = () => {
         </p>
       </div>
       
-      {/* Control Panel */}
-      <div className="border rounded-lg p-4 space-y-4">
-        <h2 className="text-xl font-semibold">Control Panel</h2>
-        <div className="flex gap-4">
-          <button
-            onClick={clearState}
-            className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition"
-          >
-            Clear All State
-          </button>
-          <button
-            onClick={resetCounter}
-            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
-          >
-            Reset Counter
-          </button>
-          <button
-            onClick={() => window.location.reload()}
-            className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition"
-          >
-            Reload Page
-          </button>
+      {/* Control Panel and State Change Log */}
+      <div className="grid gap-6 lg:grid-cols-6">
+        {/* Control Panel - 1 column */}
+        <div className="lg:col-span-1">
+          <div className="border rounded-lg p-4 space-y-4">
+            <h2 className="text-xl font-semibold">Control Panel</h2>
+            <div className="space-y-2">
+              <button
+                onClick={clearState}
+                className="w-full px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition text-sm"
+              >
+                Clear All State
+              </button>
+              <button
+                onClick={resetCounter}
+                className="w-full px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition text-sm"
+              >
+                Reset Counter
+              </button>
+              <button
+                onClick={() => window.location.reload()}
+                className="w-full px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition text-sm"
+              >
+                Reload Page
+              </button>
+            </div>
+            <p className="text-xs text-muted-foreground">
+              Note: State persists across page reloads and is synchronized across browser tabs!
+            </p>
+          </div>
         </div>
-        <p className="text-sm text-muted-foreground">
-          Note: State persists across page reloads and is synchronized across browser tabs!
-        </p>
+        
+        {/* State Change Log - 5 columns */}
+        <div className="lg:col-span-5">
+          <StateChangeLog stateManager={stateManager} />
+        </div>
       </div>
-      
-      {/* State Change Log - Memoized to prevent MFE re-renders */}
-      <StateChangeLog stateManager={stateManager} />
       
       {/* MFE Grid */}
       {registryLoading ? (

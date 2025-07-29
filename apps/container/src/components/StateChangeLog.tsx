@@ -40,7 +40,7 @@ export const StateChangeLog: React.FC<StateChangeLogProps> = memo(({ stateManage
   return (
     <div className="border rounded-lg p-4">
       <h2 className="text-xl font-semibold mb-4">Real-time State Change Log</h2>
-      <div className="space-y-2 max-h-60 overflow-y-auto">
+      <div className="space-y-2 max-h-48 overflow-y-auto">
         {stateLog.length === 0 ? (
           <p className="text-muted-foreground">No state changes yet. Interact with the MFEs below.</p>
         ) : (
