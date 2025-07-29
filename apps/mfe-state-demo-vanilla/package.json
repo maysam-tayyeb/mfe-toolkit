@@ -6,9 +6,16 @@
   "scripts": {
     "dev": "node esbuild.config.js --watch",
     "build": "node esbuild.config.js",
-    "clean": "rm -rf dist"
+    "clean": "rm -rf dist",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@mfe/dev-kit": "workspace:*",
+    "@mfe/universal-state": "workspace:*"
   },
   "devDependencies": {
-    "esbuild": "^0.23.1"
+    "@types/node": "^20.0.0",
+    "esbuild": "^0.23.1",
+    "typescript": "^5.0.0"
   }
 }

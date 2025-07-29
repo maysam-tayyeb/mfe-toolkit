@@ -1,6 +1,23 @@
-// Vanilla JS State Demo MFE
-const StateDemoVanillaMFE = {
-  mount: (element, services) => {
+// Vanilla TypeScript State Demo MFE
+import type { MFEServices } from '@mfe/dev-kit';
+import type { StateChangeEvent } from '@mfe/universal-state';
+
+interface User {
+  name: string;
+  email: string;
+}
+
+interface VanillaMFE {
+  mount: (element: HTMLElement, services: MFEServices) => void;
+  unmount: (element: HTMLElement) => void;
+}
+
+interface ElementWithCleanup extends HTMLElement {
+  _cleanup?: () => void;
+}
+
+const StateDemoVanillaMFE: VanillaMFE = {
+  mount: (element: ElementWithCleanup, services: MFEServices) => {
     console.log('[Vanilla State Demo] Mounting with services:', services);
     
     // Get state manager from services
@@ -15,7 +32,7 @@ const StateDemoVanillaMFE = {
     element.innerHTML = `
       <div id="vanilla-app" class="space-y-6 p-6">
         <div class="space-y-2">
-          <h2 class="text-2xl font-bold">🟨 Vanilla JS State Demo</h2>
+          <h2 class="text-2xl font-bold">🟨 Vanilla TypeScript State Demo</h2>
           <p class="text-muted-foreground mt-2">This MFE demonstrates framework-agnostic state management.</p>
         </div>
         
@@ -60,32 +77,39 @@ const StateDemoVanillaMFE = {
       </div>
     `;
     
-    // Get UI elements
-    const app = element.querySelector('#vanilla-app');
-    const userDisplaySection = element.querySelector('#user-display-section');
-    const nameInput = element.querySelector('#name-input');
-    const emailInput = element.querySelector('#email-input');
-    const updateUserBtn = element.querySelector('#update-user-btn');
-    const themeDisplay = element.querySelector('#theme-display');
-    const toggleThemeBtn = element.querySelector('#toggle-theme-btn');
-    const counterDisplay = element.querySelector('#counter-display');
-    const incrementBtn = element.querySelector('#increment-btn');
-    const stateSnapshot = element.querySelector('#state-snapshot');
+    // Get UI elements with proper types
+    const app = element.querySelector<HTMLDivElement>('#vanilla-app');
+    const userDisplaySection = element.querySelector<HTMLDivElement>('#user-display-section');
+    const nameInput = element.querySelector<HTMLInputElement>('#name-input');
+    const emailInput = element.querySelector<HTMLInputElement>('#email-input');
+    const updateUserBtn = element.querySelector<HTMLButtonElement>('#update-user-btn');
+    const themeDisplay = element.querySelector<HTMLSpanElement>('#theme-display');
+    const toggleThemeBtn = element.querySelector<HTMLButtonElement>('#toggle-theme-btn');
+    const counterDisplay = element.querySelector<HTMLSpanElement>('#counter-display');
+    const incrementBtn = element.querySelector<HTMLButtonElement>('#increment-btn');
+    const stateSnapshot = element.querySelector<HTMLPreElement>('#state-snapshot');
+    
+    // Ensure all elements exist
+    if (!app || !userDisplaySection || !nameInput || !emailInput || !updateUserBtn || 
+        !themeDisplay || !toggleThemeBtn || !counterDisplay || !incrementBtn || !stateSnapshot) {
+      console.error('[Vanilla State Demo] Failed to find required DOM elements');
+      return;
+    }
     
     // State
-    let currentTheme = 'light';
-    let currentUser = null;
+    let currentTheme: 'light' | 'dark' = 'light';
+    let currentUser: User | null = null;
     let currentCounter = 0;
     
     // Apply theme
-    const applyTheme = (theme) => {
+    const applyTheme = (theme: 'light' | 'dark') => {
       currentTheme = theme;
       themeDisplay.textContent = theme === 'dark' ? '🌙 Dark' : '☀️ Light';
       // The design system handles dark/light mode automatically via CSS variables
     };
     
     // Update user display
-    const updateUserDisplay = (user) => {
+    const updateUserDisplay = (user: User | null) => {
       currentUser = user;
       if (user) {
         userDisplaySection.innerHTML = `
@@ -101,9 +125,9 @@ const StateDemoVanillaMFE = {
     };
     
     // Update counter display
-    const updateCounterDisplay = (value) => {
+    const updateCounterDisplay = (value: number) => {
       currentCounter = value;
-      counterDisplay.textContent = value;
+      counterDisplay.textContent = value.toString();
     };
     
     // Update state snapshot
@@ -114,9 +138,9 @@ const StateDemoVanillaMFE = {
     
     // Initialize with current values
     const initializeState = () => {
-      const user = stateManager.get('user');
-      const theme = stateManager.get('theme') || 'light';
-      const counter = stateManager.get('sharedCounter') || 0;
+      const user = stateManager.get('user') as User | null;
+      const theme = (stateManager.get('theme') as 'light' | 'dark' | null) || 'light';
+      const counter = (stateManager.get('sharedCounter') as number | null) || 0;
       
       updateUserDisplay(user);
       applyTheme(theme);
@@ -137,7 +161,7 @@ const StateDemoVanillaMFE = {
     });
     
     toggleThemeBtn.addEventListener('click', () => {
-      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      const newTheme: 'light' | 'dark' = currentTheme === 'dark' ? 'light' : 'dark';
       stateManager.set('theme', newTheme, 'vanilla-mfe');
     });
     
@@ -146,24 +170,24 @@ const StateDemoVanillaMFE = {
     });
     
     // Subscribe to state changes
-    const unsubscribers = [];
+    const unsubscribers: Array<() => void> = [];
     
     unsubscribers.push(
-      stateManager.subscribe('user', (value) => {
+      stateManager.subscribe('user', (value: User | null) => {
         console.log('[Vanilla MFE] User changed:', value);
         updateUserDisplay(value);
       })
     );
     
     unsubscribers.push(
-      stateManager.subscribe('theme', (value) => {
+      stateManager.subscribe('theme', (value: 'light' | 'dark' | null) => {
         console.log('[Vanilla MFE] Theme changed:', value);
         applyTheme(value || 'light');
       })
     );
     
     unsubscribers.push(
-      stateManager.subscribe('sharedCounter', (value) => {
+      stateManager.subscribe('sharedCounter', (value: number | null) => {
         console.log('[Vanilla MFE] Counter changed:', value);
         updateCounterDisplay(value || 0);
       })
@@ -171,7 +195,7 @@ const StateDemoVanillaMFE = {
     
     // Subscribe to all changes to update state snapshot
     unsubscribers.push(
-      stateManager.subscribeAll((event) => {
+      stateManager.subscribeAll((event: StateChangeEvent) => {
         console.log(`[Vanilla MFE] State changed: ${event.key} =`, event.value);
         updateStateSnapshot();
       })
@@ -189,7 +213,7 @@ const StateDemoVanillaMFE = {
     };
   },
   
-  unmount: (element) => {
+  unmount: (element: ElementWithCleanup) => {
     console.log('[Vanilla State Demo] Unmounting');
     if (element._cleanup) {
       element._cleanup();
