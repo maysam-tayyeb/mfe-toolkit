@@ -88,7 +88,7 @@ export const IsolatedMFELoader: React.FC<IsolatedMFELoaderProps> = ({
         containerRef.current.innerHTML = '';
       }
     };
-  }, [name, url, onError]); // Removed 'services' from dependencies to prevent remounting
+  }, [name, url]); // Only depend on name and url to prevent remounting
 
   if (error) {
     return (

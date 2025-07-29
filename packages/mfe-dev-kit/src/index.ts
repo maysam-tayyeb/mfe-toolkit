@@ -10,6 +10,12 @@ export {
   type RegistryConfig,
   type RegistryOptions,
 } from './services/mfe-registry';
+export {
+  ErrorReporter,
+  getErrorReporter,
+  type ErrorReport,
+  type ErrorReporterConfig,
+} from './services/error-reporter';
 
 // State Management
 export * from './state/mfe-store-factory';
@@ -18,6 +24,7 @@ export * from './state/mfe-store-hooks';
 // Components
 export { MFELoader } from './components/MFELoader';
 export { MFEPage } from './components/MFEPage';
+export { MFEErrorBoundary, withMFEErrorBoundary } from './components/MFEErrorBoundary';
 
 // Utility function to get services from window
 import { MFEServices, MFEWindow } from './types';

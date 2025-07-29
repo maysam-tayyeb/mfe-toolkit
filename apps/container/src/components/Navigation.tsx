@@ -34,6 +34,7 @@ export const Navigation: React.FC = () => {
     { path: '/dashboard', label: 'Dashboard' },
     { path: '/mfe-communication', label: 'MFE Communication' },
     { path: '/universal-state-demo', label: 'State Demo' },
+    { path: '/error-boundary-demo', label: 'Error Demo' },
     {
       path: `/mfe/${MFE_CONFIG.serviceExplorer.id}`,
       label: MFE_CONFIG.serviceExplorer.displayName,

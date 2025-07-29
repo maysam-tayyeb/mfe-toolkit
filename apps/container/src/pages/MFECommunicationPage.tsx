@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { useUI } from '@/contexts/UIContext';
 import { EventPayload } from '@mfe/dev-kit';
 import { getMFEServicesSingleton } from '@/services/mfe-services-singleton';
 import { EVENTS } from '@mfe/shared';
-import { MFELoader } from '@mfe/dev-kit';
-import { useMFEUrlsFromContext } from '@/hooks/useMFEUrlsFromContext';
+import { IsolatedMFELoader } from '@/components/IsolatedMFELoader';
+import { useRegistryContext } from '@/contexts/RegistryContext';
 
 interface EventLogEntry {
   id: string;
@@ -32,12 +32,12 @@ export const MFECommunicationPage: React.FC = () => {
   const [customEventData, setCustomEventData] = useState(
     '{"message": "Broadcast from container", "timestamp": "' + new Date().toISOString() + '"}'
   );
+  // Get the registry from context
+  const { registry, isLoading: registryLoading } = useRegistryContext();
 
-  // Use the custom hook to get MFE URLs from context
-  const { urls: mfeUrls, isLoading: registryLoading } = useMFEUrlsFromContext([
-    'serviceExplorer',
-    'legacyServiceExplorer',
-  ]);
+  // Get MFE manifests
+  const serviceExplorerManifest = registry?.get('serviceExplorer');
+  const legacyServiceExplorerManifest = registry?.get('legacyServiceExplorer');
 
   // Get singleton MFE services
   const mfeServices = useMemo(() => {
@@ -46,6 +46,23 @@ export const MFECommunicationPage: React.FC = () => {
 
   // Get the shared event bus from services
   const eventBus = mfeServices.eventBus;
+  
+  // Memoize error handlers to prevent re-renders
+  const handleServiceExplorerError = useCallback((error: Error) => {
+    addNotification({
+      type: 'error',
+      title: 'MFE Load Error',
+      message: `Failed to load Service Explorer MFE: ${error.message}`,
+    });
+  }, [addNotification]);
+  
+  const handleLegacyServiceExplorerError = useCallback((error: Error) => {
+    addNotification({
+      type: 'error',
+      title: 'MFE Load Error',
+      message: `Failed to load Legacy Service Explorer MFE: ${error.message}`,
+    });
+  }, [addNotification]);
 
   useEffect(() => {
     // Listen to ALL events using wildcard
@@ -262,32 +279,30 @@ export const MFECommunicationPage: React.FC = () => {
             <h3 className="text-sm font-semibold">Service Explorer MFE (React 19)</h3>
           </div>
           <div className="p-4">
-            {!registryLoading && mfeUrls.serviceExplorer ? (
-              <MFELoader
-              name="serviceExplorer"
-              url={mfeUrls.serviceExplorer}
-              services={mfeServices}
-              fallback={
-                <div className="flex items-center justify-center h-64">
-                  <div className="text-center">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-2"></div>
-                    <p className="text-sm text-muted-foreground">Loading Service Explorer MFE...</p>
+            {!registryLoading && serviceExplorerManifest ? (
+              <IsolatedMFELoader
+                name={serviceExplorerManifest.name}
+                url={serviceExplorerManifest.url}
+                services={mfeServices}
+                fallback={
+                  <div className="flex items-center justify-center h-64">
+                    <div className="text-center">
+                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-2"></div>
+                      <p className="text-sm text-muted-foreground">
+                        Loading Service Explorer MFE...
+                      </p>
+                    </div>
                   </div>
-                </div>
-              }
-              onError={(error) => {
-                addNotification({
-                  type: 'error',
-                  title: 'MFE Load Error',
-                  message: `Failed to load Service Explorer MFE: ${error.message}`,
-                });
-              }}
-            />
-          ) : (
-            <div className="flex items-center justify-center h-64">
-              <p className="text-sm text-muted-foreground">Loading registry...</p>
-            </div>
-          )}
+                }
+                onError={handleServiceExplorerError}
+              />
+            ) : (
+              <div className="flex items-center justify-center h-64">
+                <p className="text-sm text-muted-foreground">
+                  {registryLoading ? 'Loading registry...' : 'MFE not found in registry'}
+                </p>
+              </div>
+            )}
           </div>
         </div>
 
@@ -296,32 +311,30 @@ export const MFECommunicationPage: React.FC = () => {
             <h3 className="text-sm font-semibold">Legacy Service Explorer MFE (React 17)</h3>
           </div>
           <div className="p-4">
-            {!registryLoading && mfeUrls.legacyServiceExplorer ? (
-              <MFELoader
-              name="legacyServiceExplorer"
-              url={mfeUrls.legacyServiceExplorer}
-              services={mfeServices}
-              fallback={
-                <div className="flex items-center justify-center h-64">
+            {!registryLoading && legacyServiceExplorerManifest ? (
+              <IsolatedMFELoader
+                name={legacyServiceExplorerManifest.name}
+                url={legacyServiceExplorerManifest.url}
+                services={mfeServices}
+                fallback={
+                  <div className="flex items-center justify-center h-64">
                     <div className="text-center">
                       <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-2"></div>
-                      <p className="text-sm text-muted-foreground">Loading Legacy Service Explorer MFE...</p>
+                      <p className="text-sm text-muted-foreground">
+                        Loading Legacy Service Explorer MFE...
+                      </p>
                     </div>
                   </div>
-              }
-              onError={(error) => {
-                addNotification({
-                  type: 'error',
-                  title: 'MFE Load Error',
-                  message: `Failed to load Legacy Service Explorer MFE: ${error.message}`,
-                });
-              }}
-            />
-          ) : (
-            <div className="flex items-center justify-center h-64">
-              <p className="text-sm text-muted-foreground">Loading registry...</p>
-            </div>
-          )}
+                }
+                onError={handleLegacyServiceExplorerError}
+              />
+            ) : (
+              <div className="flex items-center justify-center h-64">
+                <p className="text-sm text-muted-foreground">
+                  {registryLoading ? 'Loading registry...' : 'MFE not found in registry'}
+                </p>
+              </div>
+            )}
           </div>
         </div>
       </div>
