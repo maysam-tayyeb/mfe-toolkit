@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useExampleStore } from '../store/useExampleStore';
+import { useExampleStore } from '@/store/useExampleStore';
 
 export const ZustandDemo: React.FC = () => {
   const store = useExampleStore();

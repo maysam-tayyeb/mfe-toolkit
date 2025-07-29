@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useReact17Store } from '../store/useReact17Store';
+import { useReact17Store } from '@/store/useReact17Store';
 
 export const LegacyStateDemo: React.FC = () => {
   const store = useReact17Store();

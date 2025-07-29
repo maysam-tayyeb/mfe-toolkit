@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { MFEServices } from '@mfe/dev-kit';
 import { EVENTS, MFE_CONFIG } from '@mfe/shared';
-import { LegacyStateDemo } from './components/LegacyStateDemo';
+import { LegacyStateDemo } from '@/components/LegacyStateDemo';
 
 interface AppProps {
   services: MFEServices;

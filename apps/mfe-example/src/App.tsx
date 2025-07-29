@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { MFEServices } from '@mfe/dev-kit';
 import { EVENTS, MFE_CONFIG } from '@mfe/shared';
-import { ZustandDemo } from './components/ZustandDemo';
+import { ZustandDemo } from '@/components/ZustandDemo';
 
 interface AppProps {
   services: MFEServices;
