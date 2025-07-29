@@ -1,64 +1,162 @@
-# MFE Monorepo Setup Instructions for Claude Code
+# CLAUDE.md
 
-## 🔄 IMPORTANT: Development Workflow
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-When working on any task in this codebase, ALWAYS follow this workflow:
+## Essential Commands
 
-1. **📊 ANALYZE** - First understand the current state
-   - Read relevant files and existing tests
-   - Search for related code
-   - Understand dependencies and impacts
-   - Review test coverage reports
+### Development
+```bash
+# Install dependencies (run after cloning)
+pnpm install
 
-2. **📝 PLAN** - Present a clear plan before making changes
-   - List specific files to be modified
-   - Describe the changes to be made
-   - Identify potential impacts
-   - Consider what tests will be needed
+# Build all packages (required before first run)
+pnpm -r build
 
-3. **⚡ IMPLEMENT** - Build the feature
-   - Write clean, maintainable code
-   - Follow existing patterns and conventions
-   - Ensure proper error handling
-   - Add appropriate logging
-   - **Run `pnpm type-check` frequently** to catch TypeScript errors early
-   - **Run `pnpm lint` periodically** to maintain code quality
+# Start all applications in parallel (recommended)
+pnpm dev
 
-4. **🧪 TEST** - Ensure comprehensive test coverage
-   - Write unit tests for new functionality
-   - Write integration tests for component interactions
-   - Update E2E tests if user-facing behavior changes
-   - **Run `pnpm test` after writing tests** to ensure they pass
-   - **Run `pnpm test:coverage`** to verify coverage meets requirements (>80%)
+# Start individual applications
+pnpm dev:container      # Container app on http://localhost:3000
+pnpm dev:mfe           # Example MFE on http://localhost:3001  
+pnpm dev:react17       # React 17 MFE on http://localhost:3002
+pnpm dev:state-react   # State demo React MFE
+pnpm dev:state-vue     # State demo Vue MFE
+pnpm dev:state-demos   # All state demo MFEs in parallel
+```
 
-5. **♻️ REFACTOR** - Improve code quality
-   - Refactor implementation while keeping tests green
-   - Improve code readability and maintainability
-   - **Run `pnpm test` after each refactor** to ensure no regression
-   - **Run `pnpm lint` and `pnpm type-check`** to maintain quality
+### Testing
+```bash
+# Run all tests
+pnpm test
 
-6. **✅ QUALITY CHECK** - Before review, always run:
-   - `pnpm test` - Run all unit and integration tests
-   - `pnpm test:coverage` - Ensure test coverage meets requirements (>80%)
-   - `pnpm e2e` - Run E2E tests with Playwright
-   - `pnpm format` - Format code with Prettier
-   - `pnpm lint` - Check code with ESLint
-   - `pnpm type-check` - Verify TypeScript types and compilation
-   - `pnpm build` - Ensure code compiles without errors after linting
+# Watch mode for tests
+pnpm test:watch
 
-7. **⏸️ WAIT FOR REVIEW** - DO NOT commit or push
-   - Present the completed changes with passing tests
-   - Show test coverage reports
-   - Show results of all quality checks
-   - Wait for user review and approval
-   - Only commit/push when explicitly asked
+# Coverage report
+pnpm test:coverage
 
-## Project Overview
+# Run a single test file
+pnpm vitest src/App.test.tsx
 
-This is a monorepo using pnpm workspaces for a microfrontend (MFE) architecture with a container app that dynamically loads MFEs. The container app shares React 19, Redux Toolkit, TailwindCSS, and ShadCN components with MFEs to reduce bundle sizes.
+# E2E tests with Playwright
+pnpm e2e              # Headless mode
+pnpm e2e:headed      # Headed mode
+pnpm e2e:debug       # Debug mode
+pnpm e2e:report      # View test report
+```
 
-## Development Notes
+### Code Quality
+```bash
+# Lint all files
+pnpm lint
 
-- **Rebuild MFEs if updated**: Always rebuild MFEs when making changes to core configurations or dependencies to ensure consistency across the monorepo.
+# Fix lint issues
+pnpm lint:fix
 
-[Rest of the existing content remains unchanged]
+# Format code
+pnpm format
+
+# Check formatting
+pnpm format:check
+
+# Type checking
+pnpm type-check
+
+# Run all validations (format, lint, type-check, test)
+pnpm validate
+```
+
+### Building
+```bash
+# Build all packages
+pnpm build
+
+# Build in dependency order
+pnpm -r build
+
+# Preview production build
+cd apps/container && pnpm preview
+```
+
+## Architecture Overview
+
+This is a **microfrontend (MFE) monorepo** using pnpm workspaces. The architecture consists of:
+
+### Core Components
+
+1. **Container Application** (`apps/container/`)
+   - Main shell application that hosts and orchestrates MFEs
+   - React 19 + Redux Toolkit + Tailwind CSS + ShadCN UI
+   - Provides shared services: auth, modal, notifications, event bus
+   - Dynamic MFE loading via ES modules
+   - MFE registry system for configuration management
+
+2. **Microfrontends** (`apps/mfe-*/`)
+   - `mfe-example`: Demonstrates all MFE services and capabilities
+   - `mfe-react17`: Legacy MFE showing cross-version React compatibility
+   - `mfe-event-demo`: Event bus communication demo
+   - `mfe-state-demo-react`: Universal state management demo (React)
+   - `mfe-state-demo-vue`: Universal state management demo (Vue)
+
+3. **Shared Packages** (`packages/`)
+   - `mfe-dev-kit`: Core MFE toolkit with types, services, and components
+   - `shared`: Common utilities and constants
+   - `universal-state`: Cross-framework state management solution
+
+### Key Services
+
+The container exposes these services to all MFEs via `window.__MFE_SERVICES__`:
+
+- **Logger Service**: Centralized logging with levels (debug, info, warn, error)
+- **Event Bus**: Inter-MFE communication via pub/sub pattern
+- **Modal Service**: Programmatic modal management
+- **Notification Service**: Toast notifications system
+- **Auth Service**: Authentication state management
+- **Redux Store**: Shared Redux store access
+
+### MFE Loading Process
+
+1. Container loads MFE registry from JSON configuration
+2. MFEs are loaded dynamically as ES modules
+3. Each MFE exports a default function that receives services
+4. MFEs mount their React/Vue components with injected services
+
+### Registry System
+
+MFEs are configured via JSON registry files:
+- `public/mfe-registry.json` - Default registry
+- `public/mfe-registry.{environment}.json` - Environment-specific
+- Configurable via `VITE_MFE_REGISTRY_URL` environment variable
+
+## Development Guidelines
+
+### When Creating New MFEs
+
+1. Create new app in `apps/` directory following naming convention `mfe-{name}`
+2. Export default function that accepts MFE services
+3. Configure Vite to build ES module format
+4. Add to container's MFE registry
+5. Ensure proper TypeScript types from `@mfe/dev-kit`
+
+### Testing Approach
+
+- Unit tests use Vitest with React Testing Library
+- E2E tests use Playwright
+- Test files follow `*.test.tsx` or `*.spec.tsx` pattern
+- Setup files located in `src/__tests__/setup.ts`
+- Coverage thresholds: 80% for all metrics
+
+### Important File Locations
+
+- Container services: `apps/container/src/services/`
+- Redux slices: `apps/container/src/store/`
+- MFE types: `packages/mfe-dev-kit/src/types/`
+- Shared components: `apps/container/src/components/ui/`
+- MFE registry: `apps/container/public/mfe-registry.json`
+
+### State Management
+
+- Container uses Redux Toolkit with slices for auth, modal, and notifications
+- MFEs can access the Redux store via services
+- Universal state package provides cross-framework state sharing
+- Event bus enables decoupled communication between MFEs
