@@ -13,51 +13,48 @@ const StateDemoVanillaMFE = {
     
     // Create the UI
     element.innerHTML = `
-      <div id="vanilla-app" class="p-6 rounded-lg transition-colors bg-gray-50 text-gray-900">
-        <h2 class="text-xl font-semibold mb-6 flex items-center gap-2">
-          <span class="text-2xl">🟨</span>
-          Vanilla JS State Demo  
-        </h2>
+      <div id="vanilla-app" style="padding: 20px; background-color: #ffffff; color: #000000; min-height: 400px; border-radius: 8px; transition: all 0.3s ease;">
+        <h2>Vanilla JS MFE - State Demo</h2>
+        <p>This MFE demonstrates framework-agnostic state management.</p>
         
-        <div class="mb-6 p-4 rounded-md bg-white shadow-sm">
-          <h3 class="text-lg font-medium mb-3">User Info</h3>
-          <div class="mb-3 p-3 rounded bg-gray-100">
-            <p id="user-display" class="text-gray-500">No user set</p>
+        <div style="margin-bottom: 20px; padding: 15px; border: 1px solid #ccc; border-radius: 4px;">
+          <h3>User Management</h3>
+          <div id="user-display-section">
+            <p>No user logged in</p>
           </div>
-          <div class="flex flex-wrap gap-2">
+          
+          <div style="margin-top: 10px;">
             <input type="text" id="name-input" placeholder="Name" 
-              class="flex-1 min-w-[150px] px-3 py-2 rounded-md border bg-white border-gray-300 text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-colors" />
+              style="padding: 5px; margin-right: 10px; background-color: #fff; color: #000; border: 1px solid #ccc;" />
             <input type="email" id="email-input" placeholder="Email" 
-              class="flex-1 min-w-[150px] px-3 py-2 rounded-md border bg-white border-gray-300 text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-colors" />
-            <button id="update-user-btn" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md transition-colors">Update User</button>
+              style="padding: 5px; margin-right: 10px; background-color: #fff; color: #000; border: 1px solid #ccc;" />
+            <button id="update-user-btn" style="padding: 5px 15px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer;">Update User</button>
           </div>
         </div>
         
-        <div class="mb-6 p-4 rounded-md bg-white shadow-sm">
-          <h3 class="text-lg font-medium mb-3">Theme Settings</h3>
-          <div class="flex items-center gap-3 mb-3">
-            <span class="text-gray-600">Current theme:</span>
-            <span class="font-medium flex items-center gap-2">
-              <span id="theme-display">☀️ light</span>
-            </span>
-          </div>
-          <button id="toggle-theme-btn" class="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white font-medium rounded-md transition-colors">Toggle Theme</button>
+        <div style="margin-bottom: 20px; padding: 15px; border: 1px solid #ccc; border-radius: 4px;">
+          <h3>Theme Switcher</h3>
+          <p>Current theme: <strong id="theme-display">light</strong></p>
+          <button id="toggle-theme-btn" style="padding: 5px 15px; background-color: #343a40; color: #fff; border: none; border-radius: 4px; cursor: pointer;">Toggle Theme</button>
         </div>
         
-        <div class="p-4 rounded-md bg-white shadow-sm">
-          <h3 class="text-lg font-medium mb-3">Shared Counter</h3>
-          <div class="flex items-center gap-4">
-            <span class="text-gray-600">Value:</span>
-            <span id="counter-display" class="text-2xl font-bold min-w-[40px] text-center">0</span>
-            <button id="increment-btn" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md transition-colors">Increment</button>
-          </div>
+        <div style="margin-bottom: 20px; padding: 15px; border: 1px solid #ccc; border-radius: 4px;">
+          <h3>Shared Counter</h3>
+          <p>This counter is shared across all MFEs:</p>
+          <p id="counter-display" style="font-size: 24px; font-weight: bold;">0</p>
+          <button id="increment-btn" style="padding: 5px 15px; background-color: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer;">Increment</button>
+        </div>
+        
+        <div style="padding: 15px; border: 1px solid #ccc; border-radius: 4px;">
+          <h3>Current State Snapshot</h3>
+          <pre id="state-snapshot" style="background-color: #f5f5f5; padding: 10px; border-radius: 4px; overflow: auto;"></pre>
         </div>
       </div>
     `;
     
     // Get UI elements
     const app = element.querySelector('#vanilla-app');
-    const userDisplay = element.querySelector('#user-display');
+    const userDisplaySection = element.querySelector('#user-display-section');
     const nameInput = element.querySelector('#name-input');
     const emailInput = element.querySelector('#email-input');
     const updateUserBtn = element.querySelector('#update-user-btn');
@@ -65,6 +62,7 @@ const StateDemoVanillaMFE = {
     const toggleThemeBtn = element.querySelector('#toggle-theme-btn');
     const counterDisplay = element.querySelector('#counter-display');
     const incrementBtn = element.querySelector('#increment-btn');
+    const stateSnapshot = element.querySelector('#state-snapshot');
     
     // State
     let currentTheme = 'light';
@@ -74,57 +72,31 @@ const StateDemoVanillaMFE = {
     // Apply theme
     const applyTheme = (theme) => {
       currentTheme = theme;
-      themeDisplay.textContent = theme === 'dark' ? '🌙 dark' : '☀️ light';
+      themeDisplay.textContent = theme;
       
-      // Update main container classes
+      // Update main app styles
       if (theme === 'dark') {
-        app.className = 'p-6 rounded-lg transition-colors bg-gray-800 text-gray-100';
-        // Update sections
-        const sections = app.querySelectorAll('.mb-6, .p-4');
-        sections.forEach(section => {
-          if (section.classList.contains('mb-6')) {
-            section.className = 'mb-6 p-4 rounded-md bg-gray-700';
-          } else if (section.classList.contains('p-4') && !section.classList.contains('mb-6')) {
-            section.className = 'p-4 rounded-md bg-gray-700';  
-          }
-        });
-        // Update user display area
-        const userArea = app.querySelector('.mb-3');
-        if (userArea) userArea.className = 'mb-3 p-3 rounded bg-gray-800';
+        app.style.backgroundColor = '#1a1a1a';
+        app.style.color = '#ffffff';
+        toggleThemeBtn.style.backgroundColor = '#f8f9fa';
+        toggleThemeBtn.style.color = '#000';
+        stateSnapshot.style.backgroundColor = '#333';
         // Update inputs
-        const inputs = app.querySelectorAll('input');
-        inputs.forEach(input => {
-          input.className = 'flex-1 min-w-[150px] px-3 py-2 rounded-md border bg-gray-900 border-gray-600 text-gray-100 placeholder-gray-400 focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-colors';
-        });
-        // Update theme display spans
-        const themeSpans = app.querySelectorAll('.text-gray-600');
-        themeSpans.forEach(span => {
-          span.className = 'text-gray-400';
-        });
+        nameInput.style.backgroundColor = '#333';
+        nameInput.style.color = '#fff';
+        emailInput.style.backgroundColor = '#333';
+        emailInput.style.color = '#fff';
       } else {
-        app.className = 'p-6 rounded-lg transition-colors bg-gray-50 text-gray-900';
-        // Update sections
-        const sections = app.querySelectorAll('.mb-6, .p-4');
-        sections.forEach(section => {
-          if (section.classList.contains('mb-6') || section.className.includes('mb-6')) {
-            section.className = 'mb-6 p-4 rounded-md bg-white shadow-sm';
-          } else {
-            section.className = 'p-4 rounded-md bg-white shadow-sm';
-          }
-        });
-        // Update user display area  
-        const userArea = app.querySelector('.mb-3, .bg-gray-800');
-        if (userArea) userArea.className = 'mb-3 p-3 rounded bg-gray-100';
+        app.style.backgroundColor = '#ffffff';
+        app.style.color = '#000000';
+        toggleThemeBtn.style.backgroundColor = '#343a40';
+        toggleThemeBtn.style.color = '#fff';
+        stateSnapshot.style.backgroundColor = '#f5f5f5';
         // Update inputs
-        const inputs = app.querySelectorAll('input');
-        inputs.forEach(input => {
-          input.className = 'flex-1 min-w-[150px] px-3 py-2 rounded-md border bg-white border-gray-300 text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-colors';
-        });
-        // Update theme display spans
-        const graySpans = app.querySelectorAll('.text-gray-400');
-        graySpans.forEach(span => {
-          span.className = 'text-gray-600';
-        });
+        nameInput.style.backgroundColor = '#fff';
+        nameInput.style.color = '#000';
+        emailInput.style.backgroundColor = '#fff';
+        emailInput.style.color = '#000';
       }
     };
     
@@ -132,11 +104,13 @@ const StateDemoVanillaMFE = {
     const updateUserDisplay = (user) => {
       currentUser = user;
       if (user) {
-        userDisplay.innerHTML = `<span>👤</span> <span style="font-weight: 500;">${user.name}</span> <span style="font-size: 0.875rem; opacity: 0.75;">(${user.email})</span>`;
-        userDisplay.className = 'flex items-center gap-2';
+        userDisplaySection.innerHTML = `
+          <p><strong>Current User:</strong></p>
+          <p>Name: ${user.name}</p>
+          <p>Email: ${user.email}</p>
+        `;
       } else {
-        userDisplay.textContent = 'No user set';
-        userDisplay.className = 'text-gray-500';
+        userDisplaySection.innerHTML = '<p>No user logged in</p>';
       }
     };
     
@@ -144,6 +118,12 @@ const StateDemoVanillaMFE = {
     const updateCounterDisplay = (value) => {
       currentCounter = value;
       counterDisplay.textContent = value;
+    };
+    
+    // Update state snapshot
+    const updateStateSnapshot = () => {
+      const snapshot = stateManager.getSnapshot();
+      stateSnapshot.textContent = JSON.stringify(snapshot, null, 2);
     };
     
     // Initialize with current values
@@ -155,6 +135,7 @@ const StateDemoVanillaMFE = {
       updateUserDisplay(user);
       applyTheme(theme);
       updateCounterDisplay(counter);
+      updateStateSnapshot();
     };
     
     // Event handlers
@@ -199,6 +180,14 @@ const StateDemoVanillaMFE = {
       stateManager.subscribe('sharedCounter', (value) => {
         console.log('[Vanilla MFE] Counter changed:', value);
         updateCounterDisplay(value || 0);
+      })
+    );
+    
+    // Subscribe to all changes to update state snapshot
+    unsubscribers.push(
+      stateManager.subscribeAll((event) => {
+        console.log(`[Vanilla MFE] State changed: ${event.key} =`, event.value);
+        updateStateSnapshot();
       })
     );
     
