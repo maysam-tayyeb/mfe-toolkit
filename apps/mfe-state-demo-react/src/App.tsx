@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import { ReactAdapter } from '@mfe/universal-state';
+import React, { useState, useEffect, useCallback } from 'react';
 import { StateManager } from '@mfe/universal-state';
 
 interface AppProps {
@@ -7,41 +6,73 @@ interface AppProps {
 }
 
 export const App: React.FC<AppProps> = ({ stateManager }) => {
-  const adapter = new ReactAdapter(stateManager);
+  // Local state that syncs with global state
+  const [user, setLocalUser] = useState<{ name: string; email: string } | undefined>();
+  const [theme, setLocalTheme] = useState<'light' | 'dark'>('light');
+  const [counter, setLocalCounter] = useState<number>(0);
   
-  // Use global state hooks
-  const [user, setUser] = adapter.useGlobalState<{ name: string; email: string }>('user');
-  const [theme, setTheme] = adapter.useGlobalState<'light' | 'dark'>('theme');
-  const [counter, setCounter] = adapter.useGlobalState<number>('sharedCounter');
-  
-  // Local state for form
+  // Form state
   const [formData, setFormData] = useState({ name: '', email: '' });
   
-  // Register this MFE
-  adapter.useMFERegistration('state-demo-react', {
-    version: '1.0.0',
-    features: ['user-management', 'theme-switcher', 'counter']
-  });
+  // Subscribe to state changes
+  useEffect(() => {
+    // Initial values
+    setLocalUser(stateManager.get('user'));
+    setLocalTheme(stateManager.get('theme') || 'light');
+    setLocalCounter(stateManager.get('sharedCounter') || 0);
+    
+    // Subscribe to changes
+    const unsubUser = stateManager.subscribe('user', (value) => {
+      setLocalUser(value);
+    });
+    
+    const unsubTheme = stateManager.subscribe('theme', (value) => {
+      setLocalTheme(value || 'light');
+    });
+    
+    const unsubCounter = stateManager.subscribe('sharedCounter', (value) => {
+      setLocalCounter(value || 0);
+    });
+    
+    // Register this MFE
+    stateManager.registerMFE('state-demo-react', {
+      version: '1.0.0',
+      framework: 'react',
+      features: ['user-management', 'theme-switcher', 'counter']
+    });
+    
+    // Cleanup
+    return () => {
+      unsubUser();
+      unsubTheme();
+      unsubCounter();
+      stateManager.unregisterMFE('state-demo-react');
+    };
+  }, [stateManager]);
   
-  // Listen to all state changes
-  adapter.useGlobalStateListener((key, value) => {
-    console.log(`[React MFE] State changed: ${key} =`, value);
-  });
+  // Log all state changes
+  useEffect(() => {
+    const unsub = stateManager.subscribeAll((event) => {
+      console.log(`[React MFE] State changed: ${event.key} =`, event.value);
+    });
+    return unsub;
+  }, [stateManager]);
   
-  const handleUpdateUser = () => {
+  const handleUpdateUser = useCallback(() => {
     if (formData.name && formData.email) {
-      setUser(formData);
+      stateManager.set('user', formData, 'state-demo-react');
       setFormData({ name: '', email: '' });
     }
-  };
+  }, [formData, stateManager]);
   
-  const handleIncrement = () => {
-    setCounter((counter || 0) + 1);
-  };
+  const handleIncrement = useCallback(() => {
+    stateManager.set('sharedCounter', counter + 1, 'state-demo-react');
+  }, [counter, stateManager]);
   
-  const handleThemeToggle = () => {
-    setTheme(theme === 'dark' ? 'light' : 'dark');
-  };
+  const handleThemeToggle = useCallback(() => {
+    const newTheme = theme === 'dark' ? 'light' : 'dark';
+    stateManager.set('theme', newTheme, 'state-demo-react');
+  }, [theme, stateManager]);
   
   return (
     <div style={{
@@ -114,7 +145,7 @@ export const App: React.FC<AppProps> = ({ stateManager }) => {
       {/* Theme Switcher Section */}
       <div style={{ marginBottom: '20px', padding: '15px', border: '1px solid #ccc', borderRadius: '4px' }}>
         <h3>Theme Switcher</h3>
-        <p>Current theme: <strong>{theme || 'light'}</strong></p>
+        <p>Current theme: <strong>{theme}</strong></p>
         <button
           onClick={handleThemeToggle}
           style={{
@@ -134,7 +165,7 @@ export const App: React.FC<AppProps> = ({ stateManager }) => {
       <div style={{ marginBottom: '20px', padding: '15px', border: '1px solid #ccc', borderRadius: '4px' }}>
         <h3>Shared Counter</h3>
         <p>This counter is shared across all MFEs:</p>
-        <p style={{ fontSize: '24px', fontWeight: 'bold' }}>{counter || 0}</p>
+        <p style={{ fontSize: '24px', fontWeight: 'bold' }}>{counter}</p>
         <button
           onClick={handleIncrement}
           style={{

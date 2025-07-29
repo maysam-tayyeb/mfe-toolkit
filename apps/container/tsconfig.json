@@ -5,7 +5,8 @@
     "paths": {
       "@/*": ["./src/*"],
       "@mfe/dev-kit": ["../../packages/mfe-dev-kit/src"],
-      "@mfe/shared": ["../../packages/shared/src"]
+      "@mfe/shared": ["../../packages/shared/src"],
+      "@mfe/universal-state": ["../../packages/universal-state/src"]
     }
   },
   "include": ["src"],

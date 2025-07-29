@@ -10,6 +10,7 @@ export function createViteConfig(dirname: string, options: any = {}) {
         '@': path.resolve(dirname, './src'),
         '@mfe/dev-kit': path.resolve(dirname, '../../packages/mfe-dev-kit/src'),
         '@mfe/shared': path.resolve(dirname, '../../packages/shared/src'),
+        '@mfe/universal-state': path.resolve(dirname, '../../packages/universal-state/src'),
       },
     },
     ...options,

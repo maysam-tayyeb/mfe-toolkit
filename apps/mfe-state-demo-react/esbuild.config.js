@@ -15,6 +15,8 @@ const config = {
   external: ['react', 'react-dom', 'react/jsx-runtime', 'react/jsx-dev-runtime'],
   define: {
     'process.env.NODE_ENV': '"production"',
+    'import.meta.env.DEV': 'false',
+    'import.meta.env.PROD': 'true',
     global: 'globalThis',
   },
   sourcemap: true,

@@ -13,7 +13,7 @@ const config = {
   outfile: path.join(rootDir, 'dist', 'mfe-state-demo-vue', 'mfe-state-demo-vue.js'),
   platform: 'browser',
   target: 'es2020',
-  external: ['vue'],
+  external: [],
   plugins: [vue()],
   loader: {
     '.ts': 'ts',
@@ -23,6 +23,8 @@ const config = {
   },
   define: {
     'process.env.NODE_ENV': '"production"',
+    'import.meta.env.DEV': 'false',
+    'import.meta.env.PROD': 'true',
     global: 'globalThis',
   },
   sourcemap: true,
