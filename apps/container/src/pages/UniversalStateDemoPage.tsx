@@ -1,9 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { MFELoader } from '@mfe/dev-kit';
 import { getGlobalStateManager } from '@mfe/universal-state';
 import { getMFEServicesSingleton } from '@/services/mfe-services-singleton';
+import { useMFEUrlsFromContext } from '@/hooks/useMFEUrlsFromContext';
 
 export const UniversalStateDemoPage: React.FC = () => {
+  // Use the custom hook to get MFE URLs from context
+  const { urls: mfeUrls, isLoading: registryLoading } = useMFEUrlsFromContext([
+    'stateDemoReact',
+    'stateDemoVue',
+  ]);
+
   const [stateManager] = useState(() => getGlobalStateManager({
     devtools: true,
     persistent: true,
@@ -15,13 +22,13 @@ export const UniversalStateDemoPage: React.FC = () => {
   }));
   
   // Create enhanced services with state manager
-  const [mfeServices] = useState(() => {
+  const mfeServices = useMemo(() => {
     const baseServices = getMFEServicesSingleton();
     return {
       ...baseServices,
       stateManager
     };
-  });
+  }, [stateManager]);
   
   const [stateLog, setStateLog] = useState<Array<{
     timestamp: Date;
@@ -112,55 +119,73 @@ export const UniversalStateDemoPage: React.FC = () => {
       </div>
       
       {/* MFE Grid */}
-      <div className="grid gap-6 lg:grid-cols-2">
-        {/* React MFE */}
-        <div className="border rounded-lg overflow-hidden">
-          <div className="bg-blue-500 text-white px-4 py-2">
-            <h3 className="font-semibold flex items-center gap-2">
-              <span>⚛️</span> React MFE
-            </h3>
-          </div>
-          <div className="p-4">
-            <MFELoader
-              name="state-demo-react"
-              url="http://localhost:3004/state-demo-react.js"
-              services={mfeServices}
-              fallback={
+      {registryLoading ? (
+        <div className="flex items-center justify-center h-64">
+          <p className="text-muted-foreground">Loading MFE registry...</p>
+        </div>
+      ) : (
+        <div className="grid gap-6 lg:grid-cols-2">
+          {/* React MFE */}
+          <div className="border rounded-lg overflow-hidden">
+            <div className="bg-blue-500 text-white px-4 py-2">
+              <h3 className="font-semibold flex items-center gap-2">
+                <span>⚛️</span> React MFE
+              </h3>
+            </div>
+            <div className="p-4">
+              {mfeUrls.stateDemoReact ? (
+                <MFELoader
+                  name="state-demo-react"
+                  url={mfeUrls.stateDemoReact}
+                  services={mfeServices}
+                  fallback={
+                    <div className="h-64 flex items-center justify-center">
+                      <p className="text-muted-foreground">Loading React MFE...</p>
+                    </div>
+                  }
+                  onError={(error) => {
+                    console.error('Failed to load React MFE:', error);
+                  }}
+                />
+              ) : (
                 <div className="h-64 flex items-center justify-center">
-                  <p className="text-muted-foreground">Loading React MFE...</p>
+                  <p className="text-muted-foreground">React MFE not found in registry</p>
                 </div>
-              }
-              onError={(error) => {
-                console.error('Failed to load React MFE:', error);
-              }}
-            />
+              )}
+            </div>
+          </div>
+          
+          {/* Vue MFE */}
+          <div className="border rounded-lg overflow-hidden">
+            <div className="bg-green-500 text-white px-4 py-2">
+              <h3 className="font-semibold flex items-center gap-2">
+                <span>💚</span> Vue MFE
+              </h3>
+            </div>
+            <div className="p-4">
+              {mfeUrls.stateDemoVue ? (
+                <MFELoader
+                  name="state-demo-vue"
+                  url={mfeUrls.stateDemoVue}
+                  services={mfeServices}
+                  fallback={
+                    <div className="h-64 flex items-center justify-center">
+                      <p className="text-muted-foreground">Loading Vue MFE...</p>
+                    </div>
+                  }
+                  onError={(error) => {
+                    console.error('Failed to load Vue MFE:', error);
+                  }}
+                />
+              ) : (
+                <div className="h-64 flex items-center justify-center">
+                  <p className="text-muted-foreground">Vue MFE not found in registry</p>
+                </div>
+              )}
+            </div>
           </div>
         </div>
-        
-        {/* Vue MFE */}
-        <div className="border rounded-lg overflow-hidden">
-          <div className="bg-green-500 text-white px-4 py-2">
-            <h3 className="font-semibold flex items-center gap-2">
-              <span>💚</span> Vue MFE
-            </h3>
-          </div>
-          <div className="p-4">
-            <MFELoader
-              name="state-demo-vue"
-              url="http://localhost:3005/state-demo-vue.js"
-              services={mfeServices}
-              fallback={
-                <div className="h-64 flex items-center justify-center">
-                  <p className="text-muted-foreground">Loading Vue MFE...</p>
-                </div>
-              }
-              onError={(error) => {
-                console.error('Failed to load Vue MFE:', error);
-              }}
-            />
-          </div>
-        </div>
-      </div>
+      )}
       
       {/* Instructions */}
       <div className="border rounded-lg p-4 bg-muted/50">
