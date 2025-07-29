@@ -132,6 +132,7 @@ const setCounter = counterState.setValue;
 
 // Local state
 const formData = reactive({ name: '', email: '' });
+const stateSnapshot = ref('');
 
 // Register MFE
 adapter.useMFERegistration('state-demo-vue', {
@@ -139,9 +140,10 @@ adapter.useMFERegistration('state-demo-vue', {
   features: ['user-management', 'theme-switcher', 'counter']
 });
 
-const stateSnapshot = computed(() => {
-  return JSON.stringify(props.stateManager.getSnapshot(), null, 2);
-});
+// Update state snapshot
+const updateStateSnapshot = () => {
+  stateSnapshot.value = JSON.stringify(props.stateManager.getSnapshot(), null, 2);
+};
 
 // Methods
 const updateUser = () => {
@@ -160,10 +162,15 @@ const incrementCounter = () => {
   setCounter((counter.value || 0) + 1);
 };
 
-// Log state changes
+// Initialize and subscribe to state changes
 onMounted(() => {
+  // Initialize state snapshot
+  updateStateSnapshot();
+  
+  // Subscribe to all state changes to update snapshot
   props.stateManager.subscribeAll((event) => {
     console.log(`[Vue MFE] State changed: ${event.key} =`, event.value);
+    updateStateSnapshot();
   });
 });
 </script>
