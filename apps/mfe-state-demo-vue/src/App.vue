@@ -1,81 +1,104 @@
 <template>
   <div class="space-y-6 p-6">
-    <div class="space-y-2">
-      <h2 class="text-2xl font-bold">💚 Vue State Demo</h2>
-      <p class="text-muted-foreground mt-2">This MFE demonstrates framework-agnostic state management.</p>
+    <div>
+      <h2 class="text-2xl font-bold">Vue State Demo</h2>
+      <p class="text-muted-foreground">Demonstrating cross-framework state synchronization</p>
     </div>
     
-    <!-- User Management Section -->
-    <div class="border rounded-lg p-6 space-y-4">
-      <h2 class="text-xl font-semibold">User Management</h2>
-      <div class="bg-muted/50 rounded-lg p-4">
-        <div v-if="user" class="space-y-1">
-          <p class="text-sm font-medium">Current User:</p>
-          <p class="text-sm text-muted-foreground">Name: {{ user.name }}</p>
-          <p class="text-sm text-muted-foreground">Email: {{ user.email }}</p>
+    <!-- User Management Card -->
+    <div class="rounded-lg border bg-card text-card-foreground shadow-sm">
+      <div class="p-6">
+        <h3 class="text-lg font-semibold mb-4">User Management</h3>
+        
+        <div v-if="user" class="flex items-center gap-3 mb-4 p-3 bg-muted rounded-md">
+          <div class="h-10 w-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-semibold">
+            {{ user.name.charAt(0).toUpperCase() }}
+          </div>
+          <div>
+            <p class="font-medium">{{ user.name }}</p>
+            <p class="text-sm text-muted-foreground">{{ user.email }}</p>
+          </div>
         </div>
-        <p v-else class="text-sm text-muted-foreground">No user logged in</p>
+        <div v-else class="mb-4 p-4 bg-muted rounded-md text-center text-muted-foreground">
+          No user logged in
+        </div>
+        
+        <div class="space-y-3">
+          <div class="grid grid-cols-2 gap-3">
+            <input
+              v-model="formData.name"
+              type="text"
+              placeholder="Name"
+              class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+            />
+            <input
+              v-model="formData.email"
+              type="email"
+              placeholder="Email"
+              class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+            />
+          </div>
+          <button 
+            @click="updateUser" 
+            class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full"
+          >
+            Update User
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <div class="grid gap-6 md:grid-cols-2">
+      <!-- Theme Settings Card -->
+      <div class="rounded-lg border bg-card text-card-foreground shadow-sm">
+        <div class="p-6">
+          <h3 class="text-lg font-semibold mb-4">Theme Settings</h3>
+          <div class="space-y-4">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="font-medium">Current Theme</p>
+                <p class="text-sm text-muted-foreground">Applies to all MFEs</p>
+              </div>
+              <div class="text-2xl">
+                {{ theme === 'dark' ? '🌙' : '☀️' }}
+              </div>
+            </div>
+            <button 
+              @click="toggleTheme" 
+              class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 w-full"
+            >
+              Toggle Theme
+            </button>
+          </div>
+        </div>
       </div>
       
-      <div class="flex flex-wrap gap-2">
-        <input
-          v-model="formData.name"
-          type="text"
-          placeholder="Name"
-          class="w-full px-3 py-2 border rounded-md text-sm flex-1 min-w-[150px]"
-        />
-        <input
-          v-model="formData.email"
-          type="email"
-          placeholder="Email"
-          class="w-full px-3 py-2 border rounded-md text-sm flex-1 min-w-[150px]"
-        />
-        <button 
-          @click="updateUser" 
-          class="inline-flex items-center justify-center h-9 px-3 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors text-sm font-medium"
-        >
-          Update User
-        </button>
+      <!-- Shared Counter Card -->
+      <div class="rounded-lg border bg-card text-card-foreground shadow-sm">
+        <div class="p-6">
+          <h3 class="text-lg font-semibold mb-4">Shared Counter</h3>
+          <div class="space-y-4">
+            <div class="text-center">
+              <div class="text-4xl font-bold tabular-nums">{{ counter || 0 }}</div>
+              <p class="text-sm text-muted-foreground mt-1">Synchronized value</p>
+            </div>
+            <button 
+              @click="incrementCounter" 
+              class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full"
+            >
+              Increment
+            </button>
+          </div>
+        </div>
       </div>
     </div>
     
-    <!-- Theme Switcher Section -->
-    <div class="border rounded-lg p-6 space-y-4">
-      <h2 class="text-xl font-semibold">Theme Settings</h2>
-      <div class="flex items-center gap-3">
-        <span class="text-sm text-muted-foreground">Current theme:</span>
-        <span class="text-sm font-medium">
-          {{ theme === 'dark' ? '🌙 Dark' : '☀️ Light' }}
-        </span>
+    <!-- State Snapshot Card -->
+    <div class="rounded-lg border bg-card text-card-foreground shadow-sm">
+      <div class="p-6">
+        <h3 class="text-lg font-semibold mb-4">State Snapshot</h3>
+        <pre class="p-4 rounded-md bg-muted text-sm font-mono overflow-auto max-h-48">{{ stateSnapshot }}</pre>
       </div>
-      <button 
-        @click="toggleTheme" 
-        class="inline-flex items-center justify-center h-9 px-3 bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/80 transition-colors text-sm font-medium"
-      >
-        Toggle Theme
-      </button>
-    </div>
-    
-    <!-- Shared Counter Section -->
-    <div class="border rounded-lg p-6 space-y-4">
-      <h2 class="text-xl font-semibold">Shared Counter</h2>
-      <p class="text-sm text-muted-foreground">This counter is shared across all MFEs:</p>
-      <div class="flex items-center gap-4">
-        <span class="text-sm text-muted-foreground">Value:</span>
-        <span class="text-3xl font-bold min-w-[40px] text-center">{{ counter || 0 }}</span>
-        <button 
-          @click="incrementCounter" 
-          class="inline-flex items-center justify-center h-9 px-3 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors text-sm font-medium"
-        >
-          Increment
-        </button>
-      </div>
-    </div>
-    
-    <!-- State Snapshot -->
-    <div class="border rounded-lg p-6 space-y-4">
-      <h2 class="text-xl font-semibold">Current State Snapshot</h2>
-      <pre class="w-full px-3 py-2 border rounded-md text-sm font-mono text-xs h-32 overflow-auto">{{ stateSnapshot }}</pre>
     </div>
   </div>
 </template>
