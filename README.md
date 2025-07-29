@@ -18,20 +18,47 @@ A complete microfrontend (MFE) architecture built with React 19, Redux Toolkit, 
 │                  Container App (Port 3000)                  │
 │  ┌───────────────────────────────────────────────────────┐  │
 │  │  Navigation | Dashboard | MFE Communication Center    │  │
+│  │  Universal State Demo | Error Boundary Demo           │  │
 │  └───────────────────────────────────────────────────────┘  │
 │                                                             │
-│  ┌──────────────┐   ┌──────────────┐  ┌─────────────────┐   │
-│  │    Shared    │   │    Event     │  │  React Context  │   │
-│  │   Services   │   │     Bus      │  │   (Auth, UI)    │   │
-│  └──────────────┘   └──────────────┘  └─────────────────┘   │
-│         ↓                  ↓                   ↓            │
-└─────────┼──────────────────┼───────────────────┼────────────┘
-          ↓                  ↓                   ↓
-    ┌─────────────┐    ┌─────────────┐    ┌─────────────┐
-    │ Example MFE │←──→│ React17 MFE │←──→│  Your MFE   │
-    │ (Port 3001) │    │ (Port 3002) │    │ (Port XXXX) │
-    └─────────────┘    └─────────────┘    └─────────────┘
-         React 19         React 17          Any Version
+│  ┌─────────────────────────────────────────────────────┐    │
+│  │              Injected Services Layer                │    │
+│  │  ┌──────────┐ ┌───────────┐ ┌───────────┐ ┌───────┐ │    │
+│  │  │  Logger  │ │ Event Bus │ │   Modal   │ │Notify │ │    │
+│  │  └──────────┘ └───────────┘ └───────────┘ └───────┘ │    │
+│  └─────────────────────────────────────────────────────┘    │
+│                                                             │
+│  ┌─────────────────────────────────────────────────────┐    │
+│  │            React Context (State Management)         │    │
+│  │      AuthContext  |  UIContext  |  RegistryContext  │    │
+│  └─────────────────────────────────────────────────────┘    │
+│                                                             │
+│  ┌─────────────────────────────────────────────────────┐    │
+│  │          MFE Loading Infrastructure                 │    │
+│  │    MFELoader | IsolatedMFELoader | ErrorBoundary    │    │
+│  └─────────────────────────────────────────────────────┘    │
+└─────────────────────────────────────────────────────────────┘
+                              ↓
+                  Dynamic Import (Runtime)
+                              ↓
+┌─────────────────────────────────────────────────────────────┐
+│         Static File Server (Port 8080)                      │
+│         Serves Built MFEs from dist/ directory              │
+│  ┌──────────────┐ ┌──────────────┐ ┌─────────────────┐      │
+│  │/mfe-example/ │ │/mfe-react17/ │ │/mfe-state-demo-*│      │
+│  │.js .js.map   │ │.js .js.map   │ │react|vue|vanilla│      │
+│  └──────────────┘ └──────────────┘ └─────────────────┘      │
+└─────────────────────────────────────────────────────────────┘
+                              ↓
+┌─────────────────────────────────────────────────────────────┐
+│                    Microfrontends (MFEs)                    │
+│  ┌──────────────┐ ┌──────────────┐ ┌─────────────────┐      │
+│  │Example MFE   │ │React17 MFE   │ │State Demo MFEs  │      │
+│  │- Services    │ │- Legacy      │ │- React          │      │
+│  │- Event Bus   │ │- Zustand     │ │- Vue            │      │
+│  │- Modals      │ │- Services    │ │- Vanilla JS     │      │
+│  └──────────────┘ └──────────────┘ └─────────────────┘      │
+└─────────────────────────────────────────────────────────────┘
 ```
 
 ### 📚 Architecture Documentation
@@ -77,87 +104,73 @@ pnpm -r build
 
 ## 🏃‍♂️ Running the Applications
 
-### Option 1: Run Everything Together (Recommended for Development)
+### Development Mode
 
 ```bash
-# From project root, run all apps in parallel
-pnpm dev
-```
-
-This command starts:
-
-- ✅ Container app on http://localhost:3000
-- ✅ Service Explorer MFE on http://localhost:3001
-- ✅ Legacy Service Explorer MFE on http://localhost:3002
-
-### Option 2: Run Apps Individually
-
-#### Terminal 1: Container Application
-
-```bash
-# Start the main container app
-pnpm dev:container
-
-# Or navigate to container directory
-cd apps/container
-pnpm dev
-```
-
-- **URL**: http://localhost:3000
-- **Purpose**: Main shell that hosts and orchestrates MFEs
-- **Features**: Navigation, shared services, MFE loading
-
-#### Terminal 2: Service Explorer MFE
-
-```bash
-# Start the example MFE
-pnpm dev:mfe
-
-# Or navigate to MFE directory
-cd apps/mfe-example
-pnpm dev
-```
-
-- **URL**: http://localhost:3001 (standalone development)
-- **Loaded at**: http://localhost:3000/mfe/example (in container)
-- **Purpose**: Demonstrates all MFE services and capabilities
-
-#### Terminal 3: Legacy Service Explorer MFE
-
-```bash
-# Navigate to Legacy Service Explorer MFE directory
-cd apps/mfe-react17
-pnpm dev
-```
-
-- **URL**: http://localhost:3002 (standalone development)
-- **Loaded at**: http://localhost:3000/mfe/react17 (in container)
-- **Purpose**: Shows cross-version React compatibility
-
-### Option 3: Production-like Setup
-
-```bash
-# Build all applications
+# Build all packages first
 pnpm build
 
-# Serve container (terminal 1)
-cd apps/container
-pnpm preview  # Runs on port 4173
+# Terminal 1: Start the static file server for MFEs
+pnpm serve
 
-# Serve MFEs as static files (terminal 2 & 3)
-# NOTE: Currently, the registry expects MFEs on ports 3001 & 3002
-cd apps/mfe-example
-pnpm serve  # Runs on port 3001 (matches registry)
-
-cd apps/mfe-react17
-pnpm serve  # Runs on port 3002 (matches registry)
+# Terminal 2: Start the container app
+pnpm dev:container
 ```
 
-> **Note**: The MFE registry URLs are currently hardcoded in `apps/container/src/App.tsx`. For production deployments:
+This starts:
+- ✅ Container app on http://localhost:3000
+- ✅ Static file server on http://localhost:8080 (serves built MFEs)
+
+### Production Mode
+
+```bash
+# Build everything
+pnpm build
+
+# Serve the built MFEs
+pnpm serve
+
+# In another terminal, preview the container
+cd apps/container && pnpm preview
+```
+
+### How MFEs Are Loaded
+
+MFEs are loaded dynamically from the static file server:
+
+1. **Build Phase**: MFEs are built as ES modules to the `dist/` directory
+2. **Serve Phase**: Static file server (port 8080) serves the built files
+3. **Runtime**: Container loads MFEs via dynamic imports from the registry
+
+```bash
+# Example MFE URLs when served:
+http://localhost:8080/mfe-example/mfe-example.js
+http://localhost:8080/mfe-react17/mfe-react17.js
+http://localhost:8080/mfe-event-demo/mfe-event-demo.js
+```
+
+### MFE Registry Configuration
+
+The container uses `mfe-registry.json` to discover MFEs:
+
+```json
+{
+  "mfes": [{
+    "name": "serviceExplorer",
+    "url": "http://localhost:8080/mfe-example/mfe-example.js",
+    "metadata": {
+      "displayName": "Service Explorer MFE",
+      "description": "Demonstrates modern React 19 features"
+    }
+  }]
+}
+```
+
+> **Note**: For production deployments:
 >
 > - Update the registry URLs to point to your CDN or web server
 > - Use environment variables for dynamic configuration
-> - Example: `url: process.env.VITE_MFE_EXAMPLE_URL || 'http://localhost:3001/mfe-example.js'`
+> - Consider using different registry files for different environments
 
 ## 🧪 Testing the MFE Integration
 
@@ -218,13 +231,27 @@ mfe-made-easy/
 
 ## 🛠️ Available Scripts
 
-- `pnpm dev` - Start all apps in parallel
+### Development
+- `pnpm dev` - Start all apps in development mode
 - `pnpm dev:container` - Start only container app
 - `pnpm dev:mfe` - Start only example MFE
 - `pnpm dev:react17` - Start only Legacy Service Explorer MFE
-- `pnpm build` - Build all packages
-- `pnpm -r build` - Build packages in dependency order
+- `pnpm dev:state-demos` - Start all state demo MFEs
+
+### Building & Serving
+- `pnpm build` - Build container and all MFEs
+- `pnpm build:container` - Build only container
+- `pnpm build:mfes` - Build all MFEs
+- `pnpm serve` - Serve built MFEs on port 8080
+- `pnpm serve:mfes` - Same as above (alias)
+
+### Code Quality
+- `pnpm lint` - Run ESLint
+- `pnpm lint:fix` - Fix linting issues
+- `pnpm format` - Format code with Prettier
 - `pnpm type-check` - TypeScript checking
+- `pnpm test` - Run tests
+- `pnpm validate` - Run all checks (format, lint, type-check, test)
 
 ## 🔧 Development Workflow
 

@@ -86,10 +86,11 @@ This is a **microfrontend (MFE) monorepo** using pnpm workspaces. The architectu
 
 1. **Container Application** (`apps/container/`)
    - Main shell application that hosts and orchestrates MFEs
-   - React 19 + Redux Toolkit + Tailwind CSS + ShadCN UI
-   - Provides shared services: auth, modal, notifications, event bus
-   - Dynamic MFE loading via ES modules
+   - React 19 + React Context + Tailwind CSS + ShadCN UI
+   - Provides shared services: auth, modal, notifications, event bus, logger
+   - Dynamic MFE loading via ES modules (no Module Federation)
    - MFE registry system for configuration management
+   - Uses React Context for state management (AuthContext, UIContext, RegistryContext)
 
 2. **Microfrontends** (`apps/mfe-*/`)
    - `mfe-example`: Demonstrates all MFE services and capabilities
@@ -97,29 +98,37 @@ This is a **microfrontend (MFE) monorepo** using pnpm workspaces. The architectu
    - `mfe-event-demo`: Event bus communication demo
    - `mfe-state-demo-react`: Universal state management demo (React)
    - `mfe-state-demo-vue`: Universal state management demo (Vue)
+   - `mfe-state-demo-vanilla`: Universal state management demo (Vanilla JS)
 
 3. **Shared Packages** (`packages/`)
-   - `mfe-dev-kit`: Core MFE toolkit with types, services, and components
+   - `mfe-dev-kit`: Core MFE toolkit with types, services, components, and error handling
    - `shared`: Common utilities and constants
    - `universal-state`: Cross-framework state management solution
 
 ### Key Services
 
-The container exposes these services to all MFEs via `window.__MFE_SERVICES__`:
+Services are injected into MFEs at mount time (no global window pollution):
 
 - **Logger Service**: Centralized logging with levels (debug, info, warn, error)
 - **Event Bus**: Inter-MFE communication via pub/sub pattern
 - **Modal Service**: Programmatic modal management
 - **Notification Service**: Toast notifications system
 - **Auth Service**: Authentication state management
-- **Redux Store**: Shared Redux store access
+- **Error Reporter**: Comprehensive error tracking and reporting
 
 ### MFE Loading Process
 
 1. Container loads MFE registry from JSON configuration
-2. MFEs are loaded dynamically as ES modules
-3. Each MFE exports a default function that receives services
-4. MFEs mount their React/Vue components with injected services
+2. MFEs are built and served from static file server (port 8080)
+3. Container dynamically imports MFEs at runtime
+4. Each MFE exports a default object with mount/unmount functions
+5. Services are injected into MFEs during mount (no global dependencies)
+
+### MFE Loading Components
+
+- **MFELoader**: Standard loader with error boundaries and retry mechanisms
+- **IsolatedMFELoader**: For pages with frequent re-renders (prevents flickering)
+- Both include comprehensive error handling and recovery
 
 ### Registry System
 
@@ -156,7 +165,34 @@ MFEs are configured via JSON registry files:
 
 ### State Management
 
-- Container uses Redux Toolkit with slices for auth, modal, and notifications
-- MFEs can access the Redux store via services
+- Container uses React Context API for state management (replaced Redux)
+- Three main contexts: AuthContext, UIContext (modals/notifications), RegistryContext
+- MFEs manage their own state independently (no shared Redux store)
 - Universal state package provides cross-framework state sharing
 - Event bus enables decoupled communication between MFEs
+
+### Architecture Decisions
+
+- **Dynamic Imports over Module Federation**: Better independence, no build-time coupling
+- **React Context over Redux**: Better isolation, simpler state management
+- **Service Injection**: No global window pollution, better testability
+- **Dual MFE Loaders**: Temporary solution for handling different re-render scenarios
+
+### After Making Changes
+
+Always run these commands to ensure code quality:
+```bash
+# Check for lint errors
+pnpm lint
+
+# Check for TypeScript errors
+pnpm type-check
+
+# Run tests
+pnpm test
+
+# Or run all validations at once
+pnpm validate
+```
+
+If you don't know the correct commands for a project, ask the user and suggest updating this file.
