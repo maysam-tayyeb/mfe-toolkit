@@ -1,5 +1,5 @@
 import ReactDOM from 'react-dom/client';
-import { App } from './App';
+import { SimpleApp } from './SimpleApp';
 
 // MFE export - this is what gets loaded by the container
 const StateDemoReactMFE = {
@@ -21,7 +21,7 @@ const StateDemoReactMFE = {
     }
     
     const root = ReactDOM.createRoot(element);
-    root.render(<App stateManager={stateManager} />);
+    root.render(<SimpleApp stateManager={stateManager} />);
     
     // Store reference for unmount
     (element as any)._reactRoot = root;
