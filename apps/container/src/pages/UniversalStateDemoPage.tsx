@@ -5,6 +5,7 @@ import { useMFEUrlsFromContext } from '@/hooks/useMFEUrlsFromContext';
 import { IsolatedMFELoader } from '@/components/IsolatedMFELoader';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { StateChangeLog } from '@/components/StateChangeLog';
+import { Button } from '@/components/ui/button';
 
 export const UniversalStateDemoPage: React.FC = () => {
   // Use the custom hook to get MFE URLs from context
@@ -81,31 +82,39 @@ export const UniversalStateDemoPage: React.FC = () => {
       <div className="grid gap-6 lg:grid-cols-6">
         {/* Control Panel - 1 column */}
         <div className="lg:col-span-1">
-          <div className="border rounded-lg p-4 space-y-4">
-            <h2 className="text-xl font-semibold">Control Panel</h2>
-            <div className="space-y-2">
-              <button
-                onClick={clearState}
-                className="w-full px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition text-sm"
-              >
-                Clear All State
-              </button>
-              <button
-                onClick={resetCounter}
-                className="w-full px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition text-sm"
-              >
-                Reset Counter
-              </button>
-              <button
-                onClick={() => window.location.reload()}
-                className="w-full px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition text-sm"
-              >
-                Reload Page
-              </button>
+          <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
+            <div className="p-4 space-y-4">
+              <h3 className="text-lg font-semibold">Control Panel</h3>
+              <div className="space-y-2">
+                <Button
+                  onClick={clearState}
+                  variant="outline"
+                  size="sm"
+                  className="w-full"
+                >
+                  Clear All State
+                </Button>
+                <Button
+                  onClick={resetCounter}
+                  variant="secondary"
+                  size="sm"
+                  className="w-full"
+                >
+                  Reset Counter
+                </Button>
+                <Button
+                  onClick={() => window.location.reload()}
+                  variant="outline"
+                  size="sm"
+                  className="w-full"
+                >
+                  Reload Page
+                </Button>
+              </div>
+              <p className="text-xs text-muted-foreground">
+                Note: State persists across page reloads and is synchronized across browser tabs!
+              </p>
             </div>
-            <p className="text-xs text-muted-foreground">
-              Note: State persists across page reloads and is synchronized across browser tabs!
-            </p>
           </div>
         </div>
         
@@ -123,11 +132,9 @@ export const UniversalStateDemoPage: React.FC = () => {
       ) : (
         <div className="grid gap-6 lg:grid-cols-3">
           {/* React MFE */}
-          <div className="border rounded-lg overflow-hidden">
-            <div className="bg-blue-500 text-white px-4 py-2">
-              <h3 className="font-semibold flex items-center gap-2">
-                <span>⚛️</span> React MFE
-              </h3>
+          <div className="rounded-lg border bg-card text-card-foreground shadow-sm overflow-hidden">
+            <div className="border-b bg-muted px-4 py-3">
+              <h3 className="font-semibold">React MFE</h3>
             </div>
             <div className="p-4">
               {mfeUrls.stateDemoReact ? (
@@ -153,11 +160,9 @@ export const UniversalStateDemoPage: React.FC = () => {
           </div>
           
           {/* Vue MFE */}
-          <div className="border rounded-lg overflow-hidden">
-            <div className="bg-green-500 text-white px-4 py-2">
-              <h3 className="font-semibold flex items-center gap-2">
-                <span>💚</span> Vue MFE
-              </h3>
+          <div className="rounded-lg border bg-card text-card-foreground shadow-sm overflow-hidden">
+            <div className="border-b bg-muted px-4 py-3">
+              <h3 className="font-semibold">Vue MFE</h3>
             </div>
             <div className="p-4">
               {mfeUrls.stateDemoVue ? (
@@ -183,11 +188,9 @@ export const UniversalStateDemoPage: React.FC = () => {
           </div>
           
           {/* Vanilla JS MFE */}
-          <div className="border rounded-lg overflow-hidden">
-            <div className="bg-yellow-500 text-white px-4 py-2">
-              <h3 className="font-semibold flex items-center gap-2">
-                <span>🟨</span> Vanilla JS MFE
-              </h3>
+          <div className="rounded-lg border bg-card text-card-foreground shadow-sm overflow-hidden">
+            <div className="border-b bg-muted px-4 py-3">
+              <h3 className="font-semibold">Vanilla TypeScript MFE</h3>
             </div>
             <div className="p-4">
               {mfeUrls.stateDemoVanilla ? (
@@ -215,16 +218,36 @@ export const UniversalStateDemoPage: React.FC = () => {
       )}
       
       {/* Instructions */}
-      <div className="border rounded-lg p-4 bg-muted/50">
-        <h3 className="font-semibold mb-2">🎯 Try These Actions:</h3>
-        <ul className="space-y-1 text-sm">
-          <li>• Update the user in one MFE and see it reflect in all three</li>
-          <li>• Toggle the theme and watch all MFEs update their appearance</li>
-          <li>• Increment the shared counter from any MFE</li>
-          <li>• Notice how state changes from React, Vue, or Vanilla JS are synchronized</li>
-          <li>• Open this page in another tab and see state sync in real-time</li>
-          <li>• Refresh the page and see that state persists</li>
-        </ul>
+      <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
+        <div className="p-6">
+          <h3 className="text-lg font-semibold mb-3">Try These Actions</h3>
+          <ul className="space-y-2 text-sm text-muted-foreground">
+            <li className="flex items-start gap-2">
+              <span className="text-muted-foreground/60">•</span>
+              <span>Update the user in one MFE and see it reflect in all three</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-muted-foreground/60">•</span>
+              <span>Toggle the theme and watch all MFEs update their appearance</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-muted-foreground/60">•</span>
+              <span>Increment the shared counter from any MFE</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-muted-foreground/60">•</span>
+              <span>Notice how state changes from React, Vue, or Vanilla JS are synchronized</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-muted-foreground/60">•</span>
+              <span>Open this page in another tab and see state sync in real-time</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-muted-foreground/60">•</span>
+              <span>Refresh the page and see that state persists</span>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
     </ErrorBoundary>

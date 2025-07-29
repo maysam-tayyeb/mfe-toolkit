@@ -11,6 +11,7 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
+    "@mfe/shared": "workspace:*",
     "@mfe/universal-state": "workspace:*",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"

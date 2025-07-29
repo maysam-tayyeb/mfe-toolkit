@@ -1,6 +1,7 @@
 // Vanilla TypeScript State Demo MFE
 import type { MFEServices } from '@mfe/dev-kit';
 import type { StateChangeEvent } from '@mfe/universal-state';
+import { getButtonClasses } from '@mfe/shared';
 
 interface User {
   name: string;
@@ -52,7 +53,7 @@ const StateDemoVanillaMFE: VanillaMFE = {
                 <input type="email" id="email-input" placeholder="Email" 
                   class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" />
               </div>
-              <button id="update-user-btn" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full">Update User</button>
+              <button id="update-user-btn" class="${getButtonClasses('secondary', 'default', 'w-full')}">Update User</button>
             </div>
           </div>
         </div>
@@ -70,7 +71,7 @@ const StateDemoVanillaMFE: VanillaMFE = {
                   </div>
                   <div id="theme-display" class="text-2xl">☀️</div>
                 </div>
-                <button id="toggle-theme-btn" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 w-full">Toggle Theme</button>
+                <button id="toggle-theme-btn" class="${getButtonClasses('outline', 'default', 'w-full')}">Toggle Theme</button>
               </div>
             </div>
           </div>
@@ -84,7 +85,7 @@ const StateDemoVanillaMFE: VanillaMFE = {
                   <div id="counter-display" class="text-4xl font-bold tabular-nums">0</div>
                   <p class="text-sm text-muted-foreground mt-1">Synchronized value</p>
                 </div>
-                <button id="increment-btn" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full">Increment</button>
+                <button id="increment-btn" class="${getButtonClasses('secondary', 'default', 'w-full')}">Increment</button>
               </div>
             </div>
           </div>

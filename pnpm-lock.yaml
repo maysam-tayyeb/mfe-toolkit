@@ -318,6 +318,9 @@ importers:
 
   apps/mfe-state-demo-react:
     dependencies:
+      '@mfe/shared':
+        specifier: workspace:*
+        version: link:../../packages/shared
       '@mfe/universal-state':
         specifier: workspace:*
         version: link:../../packages/universal-state
@@ -355,6 +358,9 @@ importers:
       '@mfe/dev-kit':
         specifier: workspace:*
         version: link:../../packages/mfe-dev-kit
+      '@mfe/shared':
+        specifier: workspace:*
+        version: link:../../packages/shared
       '@mfe/universal-state':
         specifier: workspace:*
         version: link:../../packages/universal-state
@@ -374,6 +380,9 @@ importers:
       '@mfe/dev-kit':
         specifier: workspace:*
         version: link:../../packages/mfe-dev-kit
+      '@mfe/shared':
+        specifier: workspace:*
+        version: link:../../packages/shared
       '@mfe/universal-state':
         specifier: workspace:*
         version: link:../../packages/universal-state

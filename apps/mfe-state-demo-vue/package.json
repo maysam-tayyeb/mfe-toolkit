@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@mfe/dev-kit": "workspace:*",
+    "@mfe/shared": "workspace:*",
     "@mfe/universal-state": "workspace:*",
     "vue": "^3.5.17"
   },
