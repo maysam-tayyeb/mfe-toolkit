@@ -88,7 +88,7 @@ export const App: React.FC<AppProps> = ({ stateManager }) => {
           
           {user ? (
             <div className="flex items-center gap-3 mb-4 p-3 bg-muted rounded-md">
-              <div className="h-10 w-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-semibold">
+              <div className="h-10 w-10 rounded-full bg-muted-foreground/20 flex items-center justify-center font-semibold">
                 {user.name.charAt(0).toUpperCase()}
               </div>
               <div>

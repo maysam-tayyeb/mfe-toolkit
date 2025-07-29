@@ -135,7 +135,7 @@ const StateDemoVanillaMFE: VanillaMFE = {
       if (user) {
         userDisplaySection.innerHTML = `
           <div class="flex items-center gap-3 p-3 bg-muted rounded-md">
-            <div class="h-10 w-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-semibold">
+            <div class="h-10 w-10 rounded-full bg-muted-foreground/20 flex items-center justify-center font-semibold">
               ${user.name.charAt(0).toUpperCase()}
             </div>
             <div>
