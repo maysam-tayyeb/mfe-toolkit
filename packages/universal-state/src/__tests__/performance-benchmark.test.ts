@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { ValtioStateManager } from '../core/valtio-state-manager';
+import { UniversalStateManager } from '../core/universal-state-manager';
 
 interface BenchmarkResult {
   name: string;
@@ -32,12 +32,12 @@ function runBenchmark(
   };
 }
 
-describe('ValtioStateManager Performance Benchmarks', () => {
+describe('UniversalStateManager Performance Benchmarks', () => {
   describe('Write Performance', () => {
     it('should benchmark set operation performance', () => {
       const result = runBenchmark(
-        'ValtioStateManager - set',
-        () => new ValtioStateManager({ devtools: false, persistent: false, crossTab: false }),
+        'UniversalStateManager - set',
+        () => new UniversalStateManager({ devtools: false, persistent: false, crossTab: false }),
         (manager) => {
           manager.set('counter', Math.random());
         },
@@ -57,9 +57,9 @@ describe('ValtioStateManager Performance Benchmarks', () => {
   describe('Read Performance', () => {
     it('should benchmark get operation performance', () => {
       const result = runBenchmark(
-        'ValtioStateManager - get',
+        'UniversalStateManager - get',
         () => {
-          const manager = new ValtioStateManager({ devtools: false, persistent: false, crossTab: false });
+          const manager = new UniversalStateManager({ devtools: false, persistent: false, crossTab: false });
           // Pre-populate with data
           for (let i = 0; i < 100; i++) {
             manager.set(`key${i}`, `value${i}`);
@@ -84,7 +84,7 @@ describe('ValtioStateManager Performance Benchmarks', () => {
 
   describe('Subscription Performance', () => {
     it('should benchmark subscription handling', () => {
-      const manager = new ValtioStateManager({ devtools: false, persistent: false, crossTab: false });
+      const manager = new UniversalStateManager({ devtools: false, persistent: false, crossTab: false });
       let updateCount = 0;
       
       // Add multiple subscribers
@@ -95,7 +95,7 @@ describe('ValtioStateManager Performance Benchmarks', () => {
       }
       
       const result = runBenchmark(
-        'ValtioStateManager - subscription notifications',
+        'UniversalStateManager - subscription notifications',
         () => manager,
         (mgr) => {
           mgr.set('testKey', Math.random());
@@ -116,12 +116,12 @@ describe('ValtioStateManager Performance Benchmarks', () => {
     });
   });
 
-  describe('Valtio-specific Features', () => {
+  describe('Implementation-specific Features (Valtio)', () => {
     it('should benchmark proxy access performance', () => {
       const result = runBenchmark(
-        'ValtioStateManager - proxy access',
+        'UniversalStateManager - proxy access',
         () => {
-          const manager = new ValtioStateManager({ devtools: false, persistent: false, crossTab: false });
+          const manager = new UniversalStateManager({ devtools: false, persistent: false, crossTab: false });
           const proxy = manager.getProxyStore();
           // Pre-populate
           for (let i = 0; i < 100; i++) {

@@ -9,6 +9,19 @@ import {
   StateManagerConfig,
 } from '../types';
 
+/**
+ * UniversalStateManager - Cross-framework state management solution
+ * 
+ * This implementation uses Valtio as the underlying state management library,
+ * but provides a vendor-agnostic API that allows for:
+ * 1. Consistent state management across React, Vue, and Vanilla JS
+ * 2. Easy migration to different state management solutions if needed
+ * 3. Custom middleware, persistence, and cross-tab synchronization
+ * 4. Framework-specific adapters without vendor lock-in
+ * 
+ * Current implementation: Valtio (proxy-based reactivity)
+ */
+
 interface ValtioInternalState {
   store: Record<string, any>;
   mfeRegistry: Record<string, MFEMetadata>;
@@ -20,7 +33,7 @@ interface ValtioInternalState {
   };
 }
 
-export class ValtioStateManager implements StateManager {
+export class UniversalStateManager implements StateManager {
   private state: ValtioInternalState;
   private config: Required<StateManagerConfig>;
   private broadcastChannel?: BroadcastChannel;
@@ -337,6 +350,64 @@ export class ValtioStateManager implements StateManager {
   getProxyStore(): Record<string, any> {
     return this.state.store;
   }
+  
+  // Batch multiple updates (useful for performance)
+  batchUpdate(updates: Record<string, any>, source: string = 'batch'): void {
+    // Update metadata once
+    this.state._meta.source = source;
+    this.state._meta.lastUpdate = Date.now();
+    this.state._meta.updateCount++;
+    
+    // Apply all updates at once
+    Object.entries(updates).forEach(([key, value]) => {
+      const previousValue = this.state.store[key];
+      this.state.store[key] = value;
+      
+      // Notify listeners for each key
+      const event: StateChangeEvent = {
+        key,
+        value,
+        previousValue,
+        source,
+        timestamp: Date.now(),
+      };
+      
+      const keyListenerSet = this.keyListeners.get(key);
+      if (keyListenerSet && keyListenerSet.size > 0) {
+        keyListenerSet.forEach((listener) => {
+          try {
+            listener(value, event);
+          } catch (error) {
+            console.error(`[ValtioStateManager] Error in listener for key "${key}":`, error);
+          }
+        });
+      }
+      
+      this.notifyGlobalListeners(event);
+    });
+    
+    // Persist all at once if enabled
+    if (this.config.persistent && !this.isProcessingBroadcast) {
+      Object.entries(updates).forEach(([key, value]) => {
+        this.saveToStorage(key, value);
+      });
+    }
+  }
+  
+  // Check if a key exists in the store
+  has(key: string): boolean {
+    return key in this.state.store;
+  }
+  
+  // Get all keys in the store
+  keys(): string[] {
+    return Object.keys(this.state.store);
+  }
+  
+  // Get the size of the store
+  size(): number {
+    return Object.keys(this.state.store).length;
+  }
 
   // Private methods
 
@@ -468,13 +539,14 @@ export class ValtioStateManager implements StateManager {
 
   private setupDevtools(): void {
     // Expose state manager to window for debugging
-    (window as any).__MFE_VALTIO_STATE__ = {
+    (window as any).__MFE_UNIVERSAL_STATE__ = {
       manager: this,
       state: this.state,
       getState: () => this.getSnapshot(),
       setState: (key: string, value: any) => this.set(key, value, 'devtools'),
       subscribe: (key: string, callback: StateListener) => this.subscribe(key, callback),
       mfes: () => Object.values(this.state.mfeRegistry),
+      implementation: 'valtio',
     };
   }
 
@@ -483,7 +555,7 @@ export class ValtioStateManager implements StateManager {
 
     // Console logging
     if (this.config.devtools) {
-      console.log(`[MFE Valtio State] ${action}`, data);
+      console.log(`[MFE Universal State] ${action}`, data);
     }
   }
 }

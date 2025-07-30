@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
-import { ValtioStateManager, setGlobalValtioStateManagerReact } from '@mfe/universal-state';
+import { UniversalStateManager, setGlobalValtioStateManagerReact } from '@mfe/universal-state';
 import { useValtioGlobalState, useValtioGlobalStates, useValtioStore } from '@mfe/universal-state';
 import { getButtonClasses } from '@mfe/shared';
 import { Moon, Sun } from 'lucide-react';
 
 interface ValtioAppProps {
-  stateManager: ValtioStateManager;
+  stateManager: UniversalStateManager;
 }
 
 export const ValtioApp: React.FC<ValtioAppProps> = ({ stateManager }) => {
@@ -55,8 +55,8 @@ export const ValtioApp: React.FC<ValtioAppProps> = ({ stateManager }) => {
   return (
     <div className="space-y-6 p-6">
       <div>
-        <h2 className="text-2xl font-bold">React State Demo (Valtio Enhanced)</h2>
-        <p className="text-muted-foreground">Using Valtio hooks for reactive state management</p>
+        <h2 className="text-2xl font-bold">React State Demo (Universal State Manager)</h2>
+        <p className="text-muted-foreground">Using reactive hooks powered by Valtio implementation</p>
       </div>
 
       {/* User Management Card */}
@@ -159,7 +159,7 @@ export const ValtioApp: React.FC<ValtioAppProps> = ({ stateManager }) => {
       {/* Valtio Features Card */}
       <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
         <div className="p-6">
-          <h3 className="text-lg font-semibold mb-4">Valtio Benefits</h3>
+          <h3 className="text-lg font-semibold mb-4">Universal State Manager Benefits</h3>
           <div className="grid gap-3 text-sm">
             <div className="flex items-start gap-2">
               <span className="text-green-500">✓</span>

@@ -1,8 +1,8 @@
 <template>
   <div class="space-y-6 p-6">
     <div>
-      <h2 class="text-2xl font-bold">Vue State Demo (Valtio Enhanced)</h2>
-      <p class="text-muted-foreground">Using Valtio reactive state management</p>
+      <h2 class="text-2xl font-bold">Vue State Demo (Universal State Manager)</h2>
+      <p class="text-muted-foreground">Using reactive state management powered by Valtio implementation</p>
     </div>
     
     <!-- User Management Card -->
@@ -101,7 +101,7 @@
     <!-- Valtio Features Card -->
     <div class="rounded-lg border bg-card text-card-foreground shadow-sm">
       <div class="p-6">
-        <h3 class="text-lg font-semibold mb-4">Valtio Benefits in Vue</h3>
+        <h3 class="text-lg font-semibold mb-4">Universal State Manager Benefits in Vue</h3>
         <div class="grid gap-3 text-sm">
           <div class="flex items-start gap-2">
             <span class="text-green-500">✓</span>
@@ -143,13 +143,13 @@
 
 <script setup lang="ts">
 import { reactive, onMounted, onUnmounted } from 'vue';
-import { ValtioStateManager, createValtioVueAdapter } from '@mfe/universal-state';
+import { UniversalStateManager, createValtioVueAdapter } from '@mfe/universal-state';
 import type { ValtioVueAdapter } from '@mfe/universal-state';
 import { getButtonClasses } from '@mfe/shared';
 
 // Props
 const props = defineProps<{
-  stateManager: ValtioStateManager;
+  stateManager: UniversalStateManager;
 }>();
 
 // Create adapter instance for this component

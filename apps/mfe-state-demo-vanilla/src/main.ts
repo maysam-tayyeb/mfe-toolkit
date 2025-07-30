@@ -1,21 +1,21 @@
 // Vanilla TypeScript State Demo MFE
 import type { MFEServices } from '@mfe/dev-kit';
-import { ValtioStateManager } from '@mfe/universal-state';
+import { UniversalStateManager } from '@mfe/universal-state';
 import valtioMFE from './valtio-main';
 
-// For backward compatibility, check if we're using Valtio
-const isValtio = (services: MFEServices): boolean => {
-  return services.stateManager instanceof ValtioStateManager;
+// Check if we're using UniversalStateManager (Valtio implementation)
+const isUniversalStateManager = (services: MFEServices): boolean => {
+  return services.stateManager instanceof UniversalStateManager;
 };
 
 // Export the appropriate implementation based on the state manager type
 const StateDemoVanillaMFE = {
   mount: (element: HTMLElement, services: MFEServices) => {
-    if (isValtio(services)) {
+    if (isUniversalStateManager(services)) {
       return valtioMFE.mount(element, services);
     }
-    // For now, fall back to Valtio implementation as we're migrating
-    console.log('[Vanilla State Demo] Using Valtio implementation');
+    // For now, fall back to Universal State Manager implementation
+    console.log('[Vanilla State Demo] Using Universal State Manager implementation');
     return valtioMFE.mount(element, services);
   },
   unmount: (element: HTMLElement) => {

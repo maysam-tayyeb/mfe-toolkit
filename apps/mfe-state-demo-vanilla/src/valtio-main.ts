@@ -1,6 +1,6 @@
-// Valtio-Enhanced Vanilla TypeScript State Demo MFE
+// Universal State Manager Enhanced Vanilla TypeScript State Demo MFE
 import type { MFEServices } from '@mfe/dev-kit';
-import { ValtioStateManager } from '@mfe/universal-state';
+import { UniversalStateManager } from '@mfe/universal-state';
 import { getButtonClasses } from '@mfe/shared';
 import { subscribe, snapshot } from 'valtio';
 
@@ -23,11 +23,11 @@ export const createValtioVanillaMFE = (): VanillaMFE => ({
     console.log('[Valtio Vanilla State Demo] Mounting with services:', services);
 
     // Get state manager from services
-    const stateManager = services.stateManager as ValtioStateManager;
-    if (!stateManager || !(stateManager instanceof ValtioStateManager)) {
-      console.error('[Valtio Vanilla State Demo] No Valtio state manager provided');
+    const stateManager = services.stateManager as UniversalStateManager;
+    if (!stateManager || !(stateManager instanceof UniversalStateManager)) {
+      console.error('[Vanilla State Demo] No Universal state manager provided');
       element.innerHTML =
-        '<div style="padding: 20px; color: red;">Error: Valtio state manager required</div>';
+        '<div style="padding: 20px; color: red;">Error: Universal state manager required</div>';
       return;
     }
 
@@ -38,8 +38,8 @@ export const createValtioVanillaMFE = (): VanillaMFE => ({
     element.innerHTML = `
       <div id="valtio-vanilla-app" class="space-y-6 p-6">
         <div>
-          <h2 class="text-2xl font-bold">Vanilla TypeScript State Demo (Valtio Enhanced)</h2>
-          <p class="text-muted-foreground">Using Valtio proxy for reactive state</p>
+          <h2 class="text-2xl font-bold">Vanilla TypeScript State Demo (Universal State Manager)</h2>
+          <p class="text-muted-foreground">Using reactive proxy for state management</p>
         </div>
         
         <!-- User Management Card -->
@@ -101,7 +101,7 @@ export const createValtioVanillaMFE = (): VanillaMFE => ({
         <!-- Valtio Features Card -->
         <div class="rounded-lg border bg-card text-card-foreground shadow-sm">
           <div class="p-6">
-            <h3 class="text-lg font-semibold mb-4">Valtio Benefits in Vanilla JS</h3>
+            <h3 class="text-lg font-semibold mb-4">Universal State Manager Benefits in Vanilla JS</h3>
             <div class="grid gap-3 text-sm">
               <div class="flex items-start gap-2">
                 <span class="text-green-500">✓</span>

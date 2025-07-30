@@ -1,15 +1,17 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
-import { ValtioStateManager } from '../core/valtio-state-manager';
+import { UniversalStateManager } from '../core/universal-state-manager';
 import { StateChangeEvent } from '../types';
 
-describe('ValtioStateManager', () => {
-  let manager: ValtioStateManager;
+describe('UniversalStateManager (Valtio implementation)', () => {
+  let manager: UniversalStateManager;
 
   beforeEach(() => {
-    // Clear localStorage
-    localStorage.clear();
+    // Clear localStorage if available
+    if (typeof localStorage !== 'undefined') {
+      localStorage.clear();
+    }
     // Create new manager instance
-    manager = new ValtioStateManager({
+    manager = new UniversalStateManager({
       persistent: false,
       crossTab: false,
       devtools: false,
@@ -18,9 +20,11 @@ describe('ValtioStateManager', () => {
 
   afterEach(() => {
     // Clean up any broadcast channels
-    if ('BroadcastChannel' in globalThis) {
-      // @ts-ignore
-      globalThis.BroadcastChannel.prototype.close();
+    if (manager && typeof manager['broadcastChannel'] !== 'undefined') {
+      const channel = (manager as any).broadcastChannel;
+      if (channel && typeof channel.close === 'function') {
+        channel.close();
+      }
     }
   });
 
@@ -207,7 +211,7 @@ describe('ValtioStateManager', () => {
 
   describe('Persistence', () => {
     it('should persist to localStorage when enabled', () => {
-      const persistentManager = new ValtioStateManager({
+      const persistentManager = new UniversalStateManager({
         persistent: true,
         storagePrefix: 'test',
         crossTab: false,
@@ -220,7 +224,7 @@ describe('ValtioStateManager', () => {
     it('should load from localStorage on init', () => {
       localStorage.setItem('test:existing', '"loadedValue"');
       
-      const persistentManager = new ValtioStateManager({
+      const persistentManager = new UniversalStateManager({
         persistent: true,
         storagePrefix: 'test',
         crossTab: false,
@@ -232,7 +236,7 @@ describe('ValtioStateManager', () => {
     it('should handle invalid JSON in localStorage', () => {
       localStorage.setItem('test:invalid', 'not-json');
       
-      const persistentManager = new ValtioStateManager({
+      const persistentManager = new UniversalStateManager({
         persistent: true,
         storagePrefix: 'test',
         crossTab: false,
@@ -246,7 +250,7 @@ describe('ValtioStateManager', () => {
     it('should execute middleware before state changes', () => {
       const middleware = vi.fn((event, next) => next());
       
-      const managerWithMiddleware = new ValtioStateManager({
+      const managerWithMiddleware = new UniversalStateManager({
         middleware: [middleware],
         persistent: false,
         crossTab: false,
@@ -269,7 +273,7 @@ describe('ValtioStateManager', () => {
         next();
       });
 
-      const managerWithMiddleware = new ValtioStateManager({
+      const managerWithMiddleware = new UniversalStateManager({
         middleware: [blockingMiddleware],
         persistent: false,
         crossTab: false,
@@ -296,7 +300,7 @@ describe('ValtioStateManager', () => {
         next();
       };
 
-      const managerWithMiddleware = new ValtioStateManager({
+      const managerWithMiddleware = new UniversalStateManager({
         middleware: [middleware1, middleware2],
         persistent: false,
         crossTab: false,

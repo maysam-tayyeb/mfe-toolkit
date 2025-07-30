@@ -8,22 +8,22 @@ import type {
   MFERegistrationMetadata,
   FrameworkAdapter,
 } from '../types';
-import { ValtioStateManager } from '../core/valtio-state-manager';
+import { UniversalStateManager } from '../core/universal-state-manager';
 
 // Type for the state manager context
-let globalValtioStateManager: ValtioStateManager | null = null;
+let globalValtioStateManager: UniversalStateManager | null = null;
 
 /**
  * Set the global Valtio state manager instance
  */
-export function setGlobalValtioStateManager(manager: ValtioStateManager): void {
+export function setGlobalValtioStateManager(manager: UniversalStateManager): void {
   globalValtioStateManager = manager;
 }
 
 /**
  * Get the global Valtio state manager instance
  */
-function getValtioStateManager(): ValtioStateManager {
+function getValtioStateManager(): UniversalStateManager {
   if (!globalValtioStateManager) {
     throw new Error('No global Valtio state manager set. Call setGlobalValtioStateManager first.');
   }
@@ -190,7 +190,7 @@ export function useValtioStore(): ComputedRef<Record<string, any>> {
  * Create a Vue adapter instance for a specific Valtio state manager
  * This is useful when you need multiple state managers
  */
-export function createValtioVueAdapter(stateManager: ValtioStateManager): ValtioVueAdapter {
+export function createValtioVueAdapter(stateManager: UniversalStateManager): ValtioVueAdapter {
   return {
     name: 'vue' as const,
     

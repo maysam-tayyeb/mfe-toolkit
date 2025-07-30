@@ -1,8 +1,8 @@
-// Core exports - ValtioStateManager is now the primary implementation
-export { ValtioStateManager } from './core/valtio-state-manager';
-export { ValtioStateManager as StateManager } from './core/valtio-state-manager';
-// Backward compatibility: UniversalStateManager is now an alias for ValtioStateManager
-export { ValtioStateManager as UniversalStateManager } from './core/valtio-state-manager';
+// Core exports - UniversalStateManager with Valtio implementation
+export { UniversalStateManager } from './core/universal-state-manager';
+export { UniversalStateManager as StateManager } from './core/universal-state-manager';
+// Legacy export for backward compatibility
+export { UniversalStateManager as ValtioStateManager } from './core/universal-state-manager';
 
 // Type exports
 export * from './types';
@@ -35,19 +35,19 @@ export {
 } from './adapters/valtio-vue';
 
 // Factory function for easy setup
-import { ValtioStateManager } from './core/valtio-state-manager';
+import { UniversalStateManager } from './core/universal-state-manager';
 import { StateManagerConfig } from './types';
 
-export function createStateManager(config?: StateManagerConfig): ValtioStateManager {
-  return new ValtioStateManager(config);
+export function createStateManager(config?: StateManagerConfig): UniversalStateManager {
+  return new UniversalStateManager(config);
 }
 
 // Global singleton instance (optional)
-let globalInstance: ValtioStateManager | null = null;
+let globalInstance: UniversalStateManager | null = null;
 
-export function getGlobalStateManager(config?: StateManagerConfig): ValtioStateManager {
+export function getGlobalStateManager(config?: StateManagerConfig): UniversalStateManager {
   if (!globalInstance) {
-    globalInstance = new ValtioStateManager(config);
+    globalInstance = new UniversalStateManager(config);
   }
   return globalInstance;
 }

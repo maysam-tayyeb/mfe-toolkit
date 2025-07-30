@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { StateManager, ValtioStateManager } from '@mfe/universal-state';
+import { StateManager, UniversalStateManager } from '@mfe/universal-state';
 import { getButtonClasses } from '@mfe/shared';
 import { Moon, Sun } from 'lucide-react';
 import { ValtioApp } from './ValtioApp';
@@ -9,8 +9,8 @@ interface AppProps {
 }
 
 export const App: React.FC<AppProps> = ({ stateManager }) => {
-  // Check if we're using Valtio and use the enhanced version
-  if (stateManager instanceof ValtioStateManager) {
+  // Check if we're using UniversalStateManager (Valtio implementation) and use the enhanced version
+  if (stateManager instanceof UniversalStateManager) {
     return <ValtioApp stateManager={stateManager} />;
   }
   // Local state that syncs with global state
