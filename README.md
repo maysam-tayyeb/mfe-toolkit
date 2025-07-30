@@ -15,7 +15,7 @@ A complete microfrontend (MFE) architecture built with React 19, Redux Toolkit, 
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                  Container App (Port 3000)                  │
+│                       Container App                         │
 │  ┌───────────────────────────────────────────────────────┐  │
 │  │  Navigation | Dashboard | MFE Communication Center    │  │
 │  │  Universal State Demo | Error Boundary Demo           │  │
