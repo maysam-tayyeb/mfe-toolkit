@@ -2,12 +2,17 @@
 export { UniversalStateManager } from './core/universal-state-manager';
 export { UniversalStateManager as StateManager } from './core/universal-state-manager';
 
+// Enhanced features leveraging Valtio
+export * from './core/universal-state-extensions';
+
 // Type exports
 export * from './types';
 
 // Adapter exports
-export { ReactAdapter } from './adapters/react';
+export type { ReactAdapter } from './adapters/react';
 export { VueAdapter } from './adapters/vue';
+export { createReactAdapter } from './adapters/react';
+export { createVueAdapter } from './adapters/vue';
 
 // Valtio adapter exports with specific names to avoid conflicts
 export type { ValtioReactAdapter } from './adapters/valtio-react';
