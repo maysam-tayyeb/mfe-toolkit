@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { ManifestValidator } from '@/services/manifest-validator';
-import { MFEManifestV1, MFEManifestV2 } from '@/types/manifest';
+import { ManifestValidator } from './manifest-validator';
+import { MFEManifestV1, MFEManifestV2 } from '../types/manifest';
 
 describe('ManifestValidator', () => {
   const validator = new ManifestValidator();
@@ -15,22 +15,22 @@ describe('ManifestValidator', () => {
         metadata: {
           displayName: 'Test MFE',
           description: 'Test description',
-          icon: '🎯'
-        }
+          icon: '🎯',
+        },
       };
 
       const result = validator.validate(v1Manifest);
       expect(result.valid).toBe(true);
       expect(result.version).toBe('v1');
       expect(result.warnings).toBeDefined();
-      expect(result.warnings?.some(w => w.message.includes('legacy V1 format'))).toBe(true);
+      expect(result.warnings?.some((w) => w.message.includes('legacy V1 format'))).toBe(true);
     });
 
     it('should fail validation for invalid V1 manifest', () => {
       const invalidManifest = {
         name: '',
         version: '1.0.0',
-        url: 'not-a-url'
+        url: 'not-a-url',
       };
 
       const result = validator.validate(invalidManifest);
@@ -49,22 +49,19 @@ describe('ManifestValidator', () => {
         dependencies: {
           runtime: {},
           peer: {
-            'react': '^18.0.0'
-          }
+            react: '^18.0.0',
+          },
         },
         compatibility: {
-          container: '>=1.0.0'
+          container: '>=1.0.0',
         },
         requirements: {
-          services: [
-            { name: 'logger' },
-            { name: 'eventBus' }
-          ]
+          services: [{ name: 'logger' }, { name: 'eventBus' }],
         },
         metadata: {
           displayName: 'Test MFE',
-          description: 'Test description'
-        }
+          description: 'Test description',
+        },
       };
 
       const result = validator.validate(v2Manifest);
@@ -79,24 +76,24 @@ describe('ManifestValidator', () => {
         url: 'http://localhost:8080/minimal.js',
         dependencies: {
           runtime: {},
-          peer: {}
+          peer: {},
         },
         compatibility: {
-          container: '>=1.0.0'
+          container: '>=1.0.0',
         },
         requirements: {
-          services: []
+          services: [],
         },
         metadata: {
           displayName: 'Minimal MFE',
-          description: 'Minimal description'
-        }
+          description: 'Minimal description',
+        },
       };
 
       const result = validator.validate(minimalV2);
       expect(result.valid).toBe(true);
       expect(result.warnings).toBeDefined();
-      expect(result.warnings?.some(w => w.field === 'security')).toBe(true);
+      expect(result.warnings?.some((w) => w.field === 'security')).toBe(true);
     });
   });
 
@@ -111,12 +108,12 @@ describe('ManifestValidator', () => {
         metadata: {
           displayName: 'Legacy MFE',
           description: 'Legacy app',
-          icon: '📦'
-        }
+          icon: '📦',
+        },
       };
 
       const v2Manifest = validator.migrateToV2(v1Manifest);
-      
+
       expect(v2Manifest.name).toBe('legacy-mfe');
       expect(v2Manifest.dependencies.peer['react']).toBeDefined();
       expect(v2Manifest.dependencies.peer['react-dom']).toBeDefined();
