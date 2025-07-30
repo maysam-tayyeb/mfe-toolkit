@@ -12,9 +12,9 @@ export type {
   MFEConfig,
   MFESecurity,
   MFELifecycle,
-} from '@/types/manifest';
+} from './manifest';
 
-export { isMFEManifestV1, isMFEManifestV2 } from '@/types/manifest';
+export { isMFEManifestV1, isMFEManifestV2 } from './manifest';
 
 export interface AuthSession {
   userId: string;

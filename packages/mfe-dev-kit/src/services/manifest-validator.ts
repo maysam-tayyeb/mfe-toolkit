@@ -1,7 +1,7 @@
 import Ajv, { ValidateFunction } from 'ajv';
 import addFormats from 'ajv-formats';
-import { MFEManifest, MFEManifestV1, MFEManifestV2 } from '@/types/manifest';
-import manifestSchemaV2 from '@/schemas/mfe-manifest-v2.schema.json';
+import { MFEManifest, MFEManifestV1, MFEManifestV2 } from '../types/manifest';
+import manifestSchemaV2 from '../schemas/mfe-manifest-v2.schema.json';
 
 export interface ValidationResult {
   valid: boolean;

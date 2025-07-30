@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
 import { writeFileSync, readFileSync, existsSync } from 'fs';
-import { MFEManifestV2 } from '@/types/manifest';
-import { manifestValidator } from '@/services/manifest-validator';
-import { manifestMigrator } from '@/services/manifest-migrator';
+import { MFEManifestV2 } from '../types/manifest';
+import { manifestValidator } from '../services/manifest-validator';
+import { manifestMigrator } from '../services/manifest-migrator';
 
 interface GeneratorOptions {
   name: string;

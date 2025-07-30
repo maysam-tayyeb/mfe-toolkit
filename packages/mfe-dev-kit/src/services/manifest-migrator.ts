@@ -1,5 +1,5 @@
-import { MFEManifestV1, MFEManifestV2, MFERegistry } from '@/types/manifest';
-import { manifestValidator } from '@/services/manifest-validator';
+import { MFEManifestV1, MFEManifestV2, MFERegistry } from '../types/manifest';
+import { manifestValidator } from './manifest-validator';
 
 export interface MigrationResult {
   success: boolean;
