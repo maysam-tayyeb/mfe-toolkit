@@ -3,22 +3,26 @@
 Commits staged changes with formatting and linting checks.
 
 ## Usage
+
 ```
 /commit "Your commit message"
 ```
 
 ## Steps
+
 1. Check for staged changes
 2. Format staged files with Prettier
 3. Run ESLint on staged TypeScript/JavaScript files
 4. Create commit with message and Claude signature
 
 ## Example
+
 ```
 /commit "feat: Add user authentication"
 ```
 
 ## Implementation
+
 ```bash
 # Check for staged changes
 git diff --cached --quiet || echo "No staged changes"

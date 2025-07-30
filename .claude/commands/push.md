@@ -3,6 +3,7 @@
 Safely pushes commits to the remote repository.
 
 ## Usage
+
 ```
 /push [branch-name]
 ```
@@ -10,12 +11,14 @@ Safely pushes commits to the remote repository.
 If no branch name is provided, pushes to the current branch.
 
 ## Steps
+
 1. Check for uncommitted changes
 2. Pull latest changes with rebase
 3. Push to remote repository
 4. Show push summary
 
 ## Example
+
 ```
 /push
 /push main
@@ -23,6 +26,7 @@ If no branch name is provided, pushes to the current branch.
 ```
 
 ## Implementation
+
 ```bash
 # Get current branch if not specified
 BRANCH=${1:-$(git rev-parse --abbrev-ref HEAD)}
