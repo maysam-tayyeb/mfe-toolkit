@@ -3,12 +3,15 @@
 Stages all changes (tracked and untracked) for commit.
 
 ## Usage
+
 ```
 /stage
 ```
 
 ## Description
+
 This command stages all changes in the repository, including:
+
 - Modified files
 - New untracked files
 - Deleted files
@@ -20,11 +23,13 @@ This command stages all changes in the repository, including:
 3. Show updated status with staged changes
 
 ## Example
+
 ```
 /stage
 ```
 
 ## Implementation
+
 ```bash
 # Show current status
 echo "Current git status:"
@@ -44,6 +49,7 @@ git status --short
 ```
 
 ## Notes
+
 - Uses `git add -A` to stage all changes including deletions
 - Shows before and after status for clarity
 - Useful before running `/commit` or as part of `/ship`
