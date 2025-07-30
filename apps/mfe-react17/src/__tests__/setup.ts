@@ -2,6 +2,11 @@
 import '@testing-library/jest-dom';
 import { vi } from 'vitest';
 
+// Ensure happy-dom is loaded
+if (typeof document === 'undefined') {
+  throw new Error('happy-dom environment is not loaded. Check vitest config.');
+}
+
 // Mock console methods to avoid noise in tests
 global.console = {
   ...console,

@@ -179,3 +179,8 @@ export function useGlobalStates<T extends Record<string, any>>(keys: string[]) {
   }
   return defaultAdapter.useGlobalStates<T>(keys);
 }
+
+// Export createVueAdapter for consistency with React adapter
+export function createVueAdapter(stateManager: StateManager): VueAdapter {
+  return new VueAdapter(stateManager);
+}

@@ -145,6 +145,7 @@ export function useMFERegistration(mfeId: string, metadata?: MFERegistrationMeta
  */
 export function createReactAdapter(stateManager: StateManager): ReactAdapter {
   return {
+    name: 'react' as const,
     useGlobalState<T = StateValue>(key: StateKey): StateHookReturn<T> {
       const value = useSyncExternalStore(
         (callback) => stateManager.subscribe<T>(key, callback),
@@ -239,7 +240,7 @@ export interface ReactAdapter extends FrameworkAdapter {
 
 // For backward compatibility - deprecated
 export class ReactAdapterClass {
-  constructor(private stateManager: StateManager) {
+  constructor(_stateManager: StateManager) {
     console.warn(
       'ReactAdapterClass is deprecated. Use the hook functions directly or createReactAdapter.'
     );

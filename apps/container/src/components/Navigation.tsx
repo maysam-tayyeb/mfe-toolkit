@@ -14,10 +14,10 @@ export const Navigation: React.FC = () => {
 
   useEffect(() => {
     // Subscribe to theme changes
-    const currentTheme = stateManager.get('theme') || 'light';
+    const currentTheme = stateManager.get<'light' | 'dark'>('theme') || 'light';
     setTheme(currentTheme);
 
-    const unsubscribe = stateManager.subscribe('theme', (value) => {
+    const unsubscribe = stateManager.subscribe<'light' | 'dark'>('theme', (value) => {
       setTheme(value || 'light');
     });
 

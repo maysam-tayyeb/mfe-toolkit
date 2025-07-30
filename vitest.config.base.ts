@@ -3,12 +3,15 @@ import react from '@vitejs/plugin-react';
 import * as path from 'path';
 
 export function createVitestConfig(options: { root: string }) {
+  // Always include the setup file - vitest will handle missing files gracefully
+  const setupFiles = [path.resolve(options.root, './src/__tests__/setup.ts')];
+  
   return defineConfig({
     plugins: [react()],
     test: {
       globals: true,
       environment: 'happy-dom',
-      setupFiles: [path.resolve(options.root, './src/__tests__/setup.ts')],
+      setupFiles,
       coverage: {
         provider: 'v8',
         reporter: ['text', 'json', 'html', 'lcov'],
@@ -37,6 +40,7 @@ export function createVitestConfig(options: { root: string }) {
         '@': path.resolve(options.root, './src'),
         '@mfe/dev-kit': path.resolve(options.root, '../../packages/mfe-dev-kit/src'),
         '@mfe/shared': path.resolve(options.root, '../../packages/shared/src'),
+        '@mfe/universal-state': path.resolve(options.root, '../../packages/universal-state/src'),
       },
     },
   });
@@ -44,9 +48,11 @@ export function createVitestConfig(options: { root: string }) {
 
 // Root level config for running all tests
 export default defineConfig({
+  plugins: [react()],
   test: {
     globals: true,
     environment: 'happy-dom',
+    setupFiles: ['./vitest.setup.ts'],
     include: ['**/src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
     exclude: ['node_modules', 'dist', '.idea', '.git', '.cache', 'e2e'],
     coverage: {
@@ -69,6 +75,14 @@ export default defineConfig({
         lines: 80,
         statements: 80,
       },
+    },
+  },
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'),
+      '@mfe/dev-kit': path.resolve(__dirname, './packages/mfe-dev-kit/src'),
+      '@mfe/shared': path.resolve(__dirname, './packages/shared/src'),
+      '@mfe/universal-state': path.resolve(__dirname, './packages/universal-state/src'),
     },
   },
 });

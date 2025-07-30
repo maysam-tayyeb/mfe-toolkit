@@ -47,11 +47,11 @@ export class UniversalStateManager implements StateManager {
     }
   }
 
-  get(key: string): any {
-    return this.state.get(key);
+  get<T = unknown>(key: string): T | undefined {
+    return this.state.get(key) as T | undefined;
   }
 
-  set(key: string, value: any, source: string = 'unknown'): void {
+  set<T = unknown>(key: string, value: T, source: string = 'unknown'): void {
     const previousValue = this.state.get(key);
 
     // Create state change event
@@ -142,21 +142,21 @@ export class UniversalStateManager implements StateManager {
     this.logToDevtools('CLEAR', { keys });
   }
 
-  subscribe(key: string, listener: StateListener): Unsubscribe {
+  subscribe<T = unknown>(key: string, listener: StateListener<T>): Unsubscribe {
     if (!this.listeners.has(key)) {
       this.listeners.set(key, new Set());
     }
 
     const keyListeners = this.listeners.get(key)!;
-    keyListeners.add(listener);
+    keyListeners.add(listener as StateListener);
 
     // Call immediately with current value if exists
-    const currentValue = this.state.get(key);
+    const currentValue = this.state.get(key) as T;
     if (currentValue !== undefined) {
       listener(currentValue, {
         key,
         value: currentValue,
-        previousValue: undefined,
+        previousValue: currentValue, // Use current value as previous for initial call
         source: 'initial',
         timestamp: Date.now(),
       });
@@ -164,7 +164,7 @@ export class UniversalStateManager implements StateManager {
 
     // Return unsubscribe function
     return () => {
-      keyListeners.delete(listener);
+      keyListeners.delete(listener as StateListener);
       if (keyListeners.size === 0) {
         this.listeners.delete(key);
       }
@@ -227,9 +227,9 @@ export class UniversalStateManager implements StateManager {
   getAdapter(framework: string): any {
     switch (framework) {
       case 'react':
-        return import('../adapters/react').then((m) => new m.ReactAdapter(this));
+        return import('../adapters/react').then((m) => m.createReactAdapter(this));
       case 'vue':
-        return import('../adapters/vue').then((m) => new m.VueAdapter(this));
+        return import('../adapters/vue').then((m) => m.createVueAdapter(this));
       case 'vanilla':
       default:
         return this;
