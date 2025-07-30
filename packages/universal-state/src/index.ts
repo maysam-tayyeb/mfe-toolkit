@@ -1,8 +1,6 @@
 // Core exports - UniversalStateManager with Valtio implementation
 export { UniversalStateManager } from './core/universal-state-manager';
 export { UniversalStateManager as StateManager } from './core/universal-state-manager';
-// Legacy export for backward compatibility
-export { UniversalStateManager as ValtioStateManager } from './core/universal-state-manager';
 
 // Type exports
 export * from './types';

@@ -314,8 +314,3 @@ export interface ValtioVueAdapter extends FrameworkAdapter {
   useStore: typeof useValtioStore;
 }
 
-// For backward compatibility with existing code
-export const useGlobalState = useValtioGlobalState;
-export const useGlobalStates = useValtioGlobalStates;
-export const useGlobalStateListener = useValtioGlobalStateListener;
-export const useMFERegistration = useValtioMFERegistration;

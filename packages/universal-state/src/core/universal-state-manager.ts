@@ -335,11 +335,20 @@ export class UniversalStateManager implements StateManager {
   }
 
   getAdapter(framework: string): any {
+    // Note: This method is kept for backward compatibility but
+    // it's recommended to import adapters directly from their modules
+    console.warn(
+      `getAdapter() is deprecated. Import adapters directly from '@mfe/universal-state' instead.`
+    );
+    
     switch (framework) {
       case 'react':
-        return import('../adapters/valtio-react').then((m) => m.createValtioReactAdapter(this));
       case 'vue':
-        return import('../adapters/valtio-vue').then((m) => m.createValtioVueAdapter(this));
+        throw new Error(
+          `Please import ${framework} adapters directly: import { createValtio${
+            framework.charAt(0).toUpperCase() + framework.slice(1)
+          }Adapter } from '@mfe/universal-state'`
+        );
       case 'vanilla':
       default:
         return this;
