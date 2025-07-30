@@ -7,9 +7,11 @@ This document explains the state management architecture in the MFE Made Easy pl
 The platform uses two complementary state management systems:
 
 1. **ContextBridge** - Container-provided UI services
-2. **Valtio State Manager** - Cross-MFE application state powered by Valtio proxy-based reactivity
+2. **Universal State Manager** - Cross-MFE application state with vendor-agnostic abstraction (currently powered by Valtio proxy-based reactivity)
 
 Both systems co-exist and serve different purposes in the architecture.
+
+> **Note**: The Universal State Manager provides an abstraction layer that allows switching the underlying state management implementation without breaking MFE contracts. See [Universal State Abstraction](./UNIVERSAL_STATE_ABSTRACTION.md) for details.
 
 ## Architecture Diagram
 
@@ -32,7 +34,7 @@ Both systems co-exist and serve different purposes in the architecture.
                               │
                               ↓
 ┌─────────────────────────────────────────────────────────────┐
-│               Valtio State Manager (Proxy-based)            │
+│          Universal State Manager (Abstraction Layer)        │
 │                                                             │
 │  ┌─────────────┐ ┌──────────────┐ ┌───────────────────┐   │
 │  │ Cart State  │ │User Prefs    │ │ Product Selection │   │
@@ -43,7 +45,8 @@ Both systems co-exist and serve different purposes in the architecture.
 │  Lifecycle: Can persist across sessions                    │
 │  Access: Any MFE can read/write                           │
 │  Features: Cross-tab sync, persistence, framework-agnostic │
-│  Powered by: Valtio proxy-based reactivity                │
+│  Implementation: Currently Valtio (proxy-based reactivity) │
+│  Abstraction: Vendor-independent interface                 │
 └─────────────────────────────────────────────────────────────┘
 ```
 
