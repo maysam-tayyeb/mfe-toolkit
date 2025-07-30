@@ -12,19 +12,32 @@ import {
   AlertCircle,
   Activity,
   Blocks,
-  GitBranch,
+  Shield,
+  Users,
 } from 'lucide-react';
 import { MFE_CONFIG } from '@mfe/shared';
+import { usePlatformMetrics } from '@/hooks/usePlatformMetrics';
+import { useRegistryContext } from '@/contexts/RegistryContext';
 
 export const HomePage: React.FC = () => {
+  const metrics = usePlatformMetrics();
+  const { registry } = useRegistryContext();
+
+  // Default values for when metrics are not yet loaded
+  const bundleReduction = metrics?.bundleReduction ?? 97;
+  const stateSyncLatency = metrics?.stateSyncLatency ?? 0;
+  const typeSafetyCoverage = metrics?.typeSafetyCoverage ?? 100;
+  const activeMFEs = metrics?.activeMFEs ?? (registry ? Object.keys(registry.getAll()).length : 0);
+  const eventBusMessages = metrics?.eventBusMessages ?? 0;
+
   return (
     <div className="space-y-8">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">MFE Made Easy</h1>
           <p className="text-muted-foreground mt-2">
-            A modern microfrontend platform with dynamic loading, universal state management, and
-            seamless cross-framework integration
+            A framework-agnostic microfrontend platform supporting any JavaScript framework with
+            dynamic loading and universal state management
           </p>
         </div>
       </div>
@@ -74,12 +87,12 @@ export const HomePage: React.FC = () => {
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium flex items-center gap-2">
               <Blocks className="h-4 w-4" />
-              Frameworks
+              Framework Support
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">3</div>
-            <p className="text-xs text-muted-foreground">React, Vue, Vanilla JS</p>
+            <div className="text-2xl font-bold">∞</div>
+            <p className="text-xs text-muted-foreground">Any JS framework</p>
           </CardContent>
         </Card>
       </div>
@@ -130,8 +143,8 @@ export const HomePage: React.FC = () => {
             <div className="pt-2">
               <Button asChild size="sm" className="w-full">
                 <Link to="/dashboard">
+                  <ArrowRight className="h-4 w-4 mr-2" />
                   View All Features
-                  <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
             </div>
@@ -187,48 +200,56 @@ export const HomePage: React.FC = () => {
             </div>
             <div className="pt-2">
               <p className="text-xs text-muted-foreground">
-                All MFEs support hot reloading and service injection
+                All MFEs receive injected services at mount time
               </p>
             </div>
           </CardContent>
         </Card>
 
-        {/* Quick Start */}
+        {/* Platform Status */}
         <Card>
           <CardHeader>
-            <CardTitle>Quick Start</CardTitle>
-            <CardDescription>Get up and running in minutes</CardDescription>
+            <CardTitle>Platform Status</CardTitle>
+            <CardDescription>Real-time platform health and activity</CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
-            <div className="space-y-3">
-              <div className="flex items-start gap-3">
-                <Badge className="mt-0.5">1</Badge>
-                <div className="flex-1">
-                  <p className="text-sm font-medium">Install dependencies</p>
-                  <code className="text-xs text-muted-foreground">pnpm install</code>
+            <div className="space-y-2">
+              <div className="flex items-center justify-between p-2 rounded-lg hover:bg-muted transition-colors">
+                <div className="flex items-center gap-2">
+                  <Activity className="h-4 w-4 text-muted-foreground" />
+                  <span className="text-sm font-medium">Active MFEs</span>
                 </div>
+                <Badge variant="secondary" className="text-xs">
+                  {activeMFEs}
+                </Badge>
               </div>
-              <div className="flex items-start gap-3">
-                <Badge className="mt-0.5">2</Badge>
-                <div className="flex-1">
-                  <p className="text-sm font-medium">Build packages</p>
-                  <code className="text-xs text-muted-foreground">pnpm build</code>
+
+              <div className="flex items-center justify-between p-2 rounded-lg hover:bg-muted transition-colors">
+                <div className="flex items-center gap-2">
+                  <Radio className="h-4 w-4 text-muted-foreground" />
+                  <span className="text-sm font-medium">Event Messages</span>
                 </div>
+                <Badge variant="secondary" className="text-xs">
+                  {eventBusMessages}
+                </Badge>
               </div>
-              <div className="flex items-start gap-3">
-                <Badge className="mt-0.5">3</Badge>
-                <div className="flex-1">
-                  <p className="text-sm font-medium">Start development</p>
-                  <code className="text-xs text-muted-foreground">pnpm dev</code>
+
+              <div className="flex items-center justify-between p-2 rounded-lg hover:bg-muted transition-colors">
+                <div className="flex items-center gap-2">
+                  <Shield className="h-4 w-4 text-muted-foreground" />
+                  <span className="text-sm font-medium">Type Safety</span>
                 </div>
+                <Badge variant="secondary" className="text-xs">
+                  {typeSafetyCoverage}%
+                </Badge>
               </div>
             </div>
             <div className="pt-2">
-              <Button asChild variant="outline" size="sm" className="w-full">
-                <a href="https://github.com" target="_blank" rel="noopener noreferrer">
-                  <GitBranch className="h-4 w-4 mr-2" />
-                  View on GitHub
-                </a>
+              <Button asChild size="sm" className="w-full">
+                <Link to="/dashboard">
+                  <Users className="h-4 w-4 mr-2" />
+                  View System Dashboard
+                </Link>
               </Button>
             </div>
           </CardContent>
@@ -243,22 +264,22 @@ export const HomePage: React.FC = () => {
         <CardContent>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
             <div className="space-y-2">
-              <div className="text-3xl font-bold">97%</div>
+              <div className="text-3xl font-bold">{bundleReduction}%</div>
               <p className="text-sm font-medium">Bundle Reduction</p>
               <p className="text-xs text-muted-foreground">Import maps</p>
             </div>
             <div className="space-y-2">
-              <div className="text-3xl font-bold">3</div>
-              <p className="text-sm font-medium">Frameworks</p>
-              <p className="text-xs text-muted-foreground">Cross-framework</p>
+              <div className="text-3xl font-bold">∞</div>
+              <p className="text-sm font-medium">Framework Agnostic</p>
+              <p className="text-xs text-muted-foreground">Any JS framework</p>
             </div>
             <div className="space-y-2">
-              <div className="text-3xl font-bold">0ms</div>
+              <div className="text-3xl font-bold">{stateSyncLatency}ms</div>
               <p className="text-sm font-medium">State Sync</p>
               <p className="text-xs text-muted-foreground">Real-time updates</p>
             </div>
             <div className="space-y-2">
-              <div className="text-3xl font-bold">100%</div>
+              <div className="text-3xl font-bold">{typeSafetyCoverage}%</div>
               <p className="text-sm font-medium">Type Safety</p>
               <p className="text-xs text-muted-foreground">End-to-end TS</p>
             </div>

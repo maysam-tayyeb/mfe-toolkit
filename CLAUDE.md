@@ -246,3 +246,7 @@ If you don't know the correct commands for a project, ask the user and suggest u
 
 - **Never use enums**
 - **Always use shortened imports**
+
+## State Management Principles
+
+- **Strictly no global polutioning. Only use state management**

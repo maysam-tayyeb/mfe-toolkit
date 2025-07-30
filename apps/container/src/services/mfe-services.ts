@@ -4,9 +4,9 @@ import {
   ModalService,
   NotificationService,
   createLogger,
-  createEventBus,
 } from '@mfe/dev-kit';
 import { ContextBridgeRef } from './context-bridge';
+import { createPlatformEventBus } from './platform-event-bus';
 
 // Context bridge will be set by the App component
 let contextBridge: ContextBridgeRef | null = null;
@@ -105,7 +105,7 @@ const createNotificationServiceImpl = (): NotificationService => {
 };
 
 export const createMFEServices = (): MFEServices => {
-  const eventBus = createEventBus();
+  const eventBus = createPlatformEventBus();
 
   return {
     logger: createLogger('MFE'),

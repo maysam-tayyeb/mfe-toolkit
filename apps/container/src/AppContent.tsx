@@ -10,12 +10,16 @@ import { MFEPage } from '@mfe/dev-kit';
 import { getMFEServicesSingleton } from '@/services/mfe-services-singleton';
 import { useRegistryContext } from '@/contexts/RegistryContext';
 import { getGlobalStateManager } from '@mfe/universal-state';
+import { initializePlatformMetrics, updatePlatformMetric } from '@/store/platform-metrics';
 
 export function AppContent() {
   const { registry, isLoading } = useRegistryContext();
   const mfeServices = useMemo(() => getMFEServicesSingleton(), []);
 
   useEffect(() => {
+    // Initialize platform metrics
+    initializePlatformMetrics();
+
     // Set up global theme management
     const stateManager = getGlobalStateManager();
 
@@ -38,6 +42,15 @@ export function AppContent() {
 
     return unsubscribe;
   }, [mfeServices]);
+
+  useEffect(() => {
+    // Update MFE counts when registry changes
+    if (registry) {
+      const totalMFEs = Object.keys(registry.getAll()).length;
+      updatePlatformMetric('totalMFEs', totalMFEs);
+      // We'll track active MFEs through the MFELoader component
+    }
+  }, [registry]);
 
   if (isLoading) {
     return (
