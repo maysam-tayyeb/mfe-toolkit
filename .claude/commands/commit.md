@@ -39,7 +39,7 @@ for file in $STAGED_FILES; do
         # Look for test files in same directory or __tests__ folder
         base_name=$(basename "$file" | sed 's/\.[^.]*$//')
         dir_name=$(dirname "$file")
-        
+
         # Check for test files
         if [ -f "${dir_name}/${base_name}.test.tsx" ]; then
             TEST_FILES="$TEST_FILES ${dir_name}/${base_name}.test.tsx"
