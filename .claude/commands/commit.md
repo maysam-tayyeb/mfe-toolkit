@@ -15,7 +15,6 @@ Commits staged changes with formatting and linting checks.
 3. Format staged files with Prettier
 4. Run ESLint on staged TypeScript/JavaScript files
 5. Create commit with message and Claude signature
-6. Rebase from main to ensure commit is on top of latest changes
 
 ## Example
 
@@ -81,8 +80,4 @@ git commit -m "${1}
 🤖 Generated with [Claude Code](https://claude.ai/code)
 
 Co-Authored-By: Claude <noreply@anthropic.com>"
-
-# Rebase from main to ensure commit is on top of latest changes
-echo "Rebasing from main..."
-git pull --rebase origin main
 ```
