@@ -245,3 +245,4 @@ If you don't know the correct commands for a project, ask the user and suggest u
 ## Code Style Guidance
 
 - **Never use enums**
+- **Always use shortened imports**

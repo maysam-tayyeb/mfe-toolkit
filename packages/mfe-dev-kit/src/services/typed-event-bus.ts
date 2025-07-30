@@ -77,7 +77,11 @@ export type EventInterceptor<TEventMap extends EventMap> = {
   /**
    * Called after a handler is invoked
    */
-  afterHandle?: (event: TypedEvent<TEventMap>, handler: (...args: any[]) => void, error?: Error) => void;
+  afterHandle?: (
+    event: TypedEvent<TEventMap>,
+    handler: (...args: any[]) => void,
+    error?: Error
+  ) => void;
 };
 
 /**

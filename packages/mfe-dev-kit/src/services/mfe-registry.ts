@@ -1,4 +1,4 @@
-import { MFEManifest, MFERegistry } from '../types';
+import { MFEManifest } from '@/types';
 
 export interface RegistryConfig {
   mfes: MFEManifest[];
@@ -15,7 +15,7 @@ export interface RegistryOptions {
 }
 
 export class MFERegistryService {
-  private registry: MFERegistry = {};
+  private manifests: Map<string, MFEManifest> = new Map();
   private options: RegistryOptions;
   private lastFetch: number = 0;
   private cacheKey = 'mfe-registry-cache';
@@ -102,27 +102,27 @@ export class MFERegistryService {
   }
 
   register(manifest: MFEManifest): void {
-    this.registry[manifest.name] = manifest;
+    this.manifests.set(manifest.name, manifest);
   }
 
   unregister(name: string): void {
-    delete this.registry[name];
+    this.manifests.delete(name);
   }
 
   get(name: string): MFEManifest | undefined {
-    return this.registry[name];
+    return this.manifests.get(name);
   }
 
-  getAll(): MFERegistry {
-    return { ...this.registry };
+  getAll(): Record<string, MFEManifest> {
+    return Object.fromEntries(this.manifests);
   }
 
   has(name: string): boolean {
-    return name in this.registry;
+    return this.manifests.has(name);
   }
 
   clear(): void {
-    this.registry = {};
+    this.manifests.clear();
   }
 
   async refresh(): Promise<void> {

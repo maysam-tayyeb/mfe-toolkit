@@ -1,15 +1,20 @@
-export interface MFEManifest {
-  name: string;
-  version: string;
-  url: string;
-  dependencies?: string[];
-  sharedLibs?: string[];
-  metadata?: Record<string, any>;
-}
+// Re-export manifest types
+export type {
+  MFEManifest,
+  MFEManifestV1,
+  MFEManifestV2,
+  MFERegistry,
+  MFEDependencies,
+  MFECompatibility,
+  MFECapabilities,
+  MFERequirements,
+  MFEMetadata,
+  MFEConfig,
+  MFESecurity,
+  MFELifecycle,
+} from '@/types/manifest';
 
-export interface MFERegistry {
-  [key: string]: MFEManifest;
-}
+export { isMFEManifestV1, isMFEManifestV2 } from '@/types/manifest';
 
 export interface AuthSession {
   userId: string;
