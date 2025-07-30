@@ -12,8 +12,8 @@ Combines /commit and /push commands to ship changes in one step.
 
 This command runs:
 
-1. `/commit "Your commit message"` - Formats, lints, and commits staged changes
-2. `/push` - Pushes commits to the remote repository
+1. `/commit "Your commit message"` - Tests changed files, formats, lints, and commits staged changes
+2. `/push` - Runs all tests and pushes commits to the remote repository
 
 ## Example
 
@@ -33,11 +33,12 @@ This command simply executes:
 ## Prerequisites
 
 - Changes must be staged with `git add` before running
-- The `/commit` command will handle formatting and linting
-- The `/push` command will handle pulling and pushing
+- The `/commit` command will handle testing changed files, formatting and linting
+- The `/push` command will handle running all tests, pulling and pushing
 
 ## Notes
 
-- If commit fails (due to lint errors, etc.), push will not execute
+- If commit fails (due to test failures, lint errors, etc.), push will not execute
+- If push tests fail, the push will be aborted
 - Uses the same formatting and linting rules as `/commit`
 - Pushes to the current branch by default

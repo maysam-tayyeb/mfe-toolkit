@@ -214,6 +214,10 @@ If you don't know the correct commands for a project, ask the user and suggest u
 
 ## Commit Guidelines
 
+- **Always test code before commit**
+  - Run tests for changed files to ensure they work correctly
+  - Use `pnpm test` to run all tests before pushing
+  - Never commit untested code
 - **Always format code before commit**
   - Use `pnpm format` to ensure consistent code formatting
   - Helps maintain code quality and reduces unnecessary diffs
@@ -221,6 +225,7 @@ If you don't know the correct commands for a project, ask the user and suggest u
   - Helps catch and prevent potential code quality issues before they are committed
 - **Only lint and format changed code before commit**
   - Focus on optimizing the linting and formatting process for modified files
+- **Do not commit untested code**
 
 ## Development Best Practices
 
