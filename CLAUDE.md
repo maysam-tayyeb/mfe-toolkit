@@ -211,3 +211,15 @@ pnpm validate
 ```
 
 If you don't know the correct commands for a project, ask the user and suggest updating this file.
+
+## Commit Guidelines
+
+- **Always format code before commit**
+  - Use `pnpm format` to ensure consistent code formatting
+  - Helps maintain code quality and reduces unnecessary diffs
+- **Always run lint before commit**
+  - Helps catch and prevent potential code quality issues before they are committed
+
+```
+
+```
