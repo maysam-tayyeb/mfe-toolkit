@@ -27,7 +27,7 @@ export const ErrorBoundaryDemoPage: React.FC = () => {
     {
       id: 'invalidModule',
       name: 'Invalid Module',
-      description: 'MFE that doesn\'t export proper mount function',
+      description: "MFE that doesn't export proper mount function",
       url: ERROR_SCENARIOS.invalidModule,
     },
     {
@@ -73,9 +73,7 @@ export const ErrorBoundaryDemoPage: React.FC = () => {
               onClick={() => setSelectedScenario(scenario.id)}
             >
               <h3 className="font-semibold">{scenario.name}</h3>
-              <p className="text-sm text-muted-foreground mt-1">
-                {scenario.description}
-              </p>
+              <p className="text-sm text-muted-foreground mt-1">{scenario.description}</p>
             </div>
           ))}
         </div>
@@ -88,12 +86,12 @@ export const ErrorBoundaryDemoPage: React.FC = () => {
           <p className="text-sm text-muted-foreground mb-4">
             Loading MFE with scenario: <strong>{selectedScenario}</strong>
           </p>
-          
+
           <div className="border border-dashed border-gray-300 rounded-lg p-4 min-h-[200px]">
             <MFELoader
               key={selectedScenario} // Force remount on scenario change
               name={`test-${selectedScenario}`}
-              url={scenarios.find(s => s.id === selectedScenario)?.url || ''}
+              url={scenarios.find((s) => s.id === selectedScenario)?.url || ''}
               services={services}
               maxRetries={2}
               retryDelay={1000}
@@ -192,17 +190,20 @@ export const ErrorBoundaryDemoPage: React.FC = () => {
                   <div className="flex justify-between items-start">
                     <div>
                       <span className="font-medium">{error.mfeName}</span>
-                      <span className={`ml-2 px-2 py-1 rounded text-xs ${
-                        error.severity === 'critical' ? 'bg-red-100 text-red-700' :
-                        error.severity === 'high' ? 'bg-orange-100 text-orange-700' :
-                        error.severity === 'medium' ? 'bg-yellow-100 text-yellow-700' :
-                        'bg-gray-100 text-gray-700'
-                      }`}>
+                      <span
+                        className={`ml-2 px-2 py-1 rounded text-xs ${
+                          error.severity === 'critical'
+                            ? 'bg-red-100 text-red-700'
+                            : error.severity === 'high'
+                              ? 'bg-orange-100 text-orange-700'
+                              : error.severity === 'medium'
+                                ? 'bg-yellow-100 text-yellow-700'
+                                : 'bg-gray-100 text-gray-700'
+                        }`}
+                      >
                         {error.severity}
                       </span>
-                      <span className="ml-2 text-muted-foreground">
-                        {error.type}
-                      </span>
+                      <span className="ml-2 text-muted-foreground">{error.type}</span>
                     </div>
                     <span className="text-xs text-muted-foreground">
                       {error.timestamp.toLocaleTimeString()}

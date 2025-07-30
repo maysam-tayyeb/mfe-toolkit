@@ -20,12 +20,7 @@ export function getButtonClasses(
   size: keyof typeof buttonStyles.sizes = 'default',
   className?: string
 ): string {
-  return [
-    buttonStyles.base,
-    buttonStyles.variants[variant],
-    buttonStyles.sizes[size],
-    className,
-  ]
+  return [buttonStyles.base, buttonStyles.variants[variant], buttonStyles.sizes[size], className]
     .filter(Boolean)
     .join(' ');
 }

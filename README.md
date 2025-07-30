@@ -119,6 +119,7 @@ pnpm dev:container
 ```
 
 This starts:
+
 - ✅ Container app on http://localhost:3000
 - ✅ Static file server on http://localhost:8080 (serves built MFEs)
 
@@ -156,14 +157,16 @@ The container uses `mfe-registry.json` to discover MFEs:
 
 ```json
 {
-  "mfes": [{
-    "name": "serviceExplorer",
-    "url": "http://localhost:8080/mfe-example/mfe-example.js",
-    "metadata": {
-      "displayName": "Service Explorer MFE",
-      "description": "Demonstrates modern React 19 features"
+  "mfes": [
+    {
+      "name": "serviceExplorer",
+      "url": "http://localhost:8080/mfe-example/mfe-example.js",
+      "metadata": {
+        "displayName": "Service Explorer MFE",
+        "description": "Demonstrates modern React 19 features"
+      }
     }
-  }]
+  ]
 }
 ```
 
@@ -233,6 +236,7 @@ mfe-made-easy/
 ## 🛠️ Available Scripts
 
 ### Development
+
 - `pnpm dev` - Start all apps in development mode
 - `pnpm dev:container` - Start only container app
 - `pnpm dev:mfe` - Start only example MFE
@@ -240,6 +244,7 @@ mfe-made-easy/
 - `pnpm dev:state-demos` - Start all state demo MFEs
 
 ### Building & Serving
+
 - `pnpm build` - Build container and all MFEs
 - `pnpm build:container` - Build only container
 - `pnpm build:mfes` - Build all MFEs
@@ -247,6 +252,7 @@ mfe-made-easy/
 - `pnpm serve:mfes` - Same as above (alias)
 
 ### Code Quality
+
 - `pnpm lint` - Run ESLint
 - `pnpm lint:fix` - Fix linting issues
 - `pnpm format` - Format code with Prettier

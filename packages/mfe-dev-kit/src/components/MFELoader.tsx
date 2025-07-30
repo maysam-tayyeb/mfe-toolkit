@@ -55,7 +55,7 @@ const MFELoaderContent: React.FC<MFELoaderProps> = ({
     loadingRef.current = true;
 
     try {
-      setState(prev => ({ ...prev, loading: true, error: null }));
+      setState((prev) => ({ ...prev, loading: true, error: null }));
 
       console.log(`[MFELoader] Starting to load MFE ${name} from URL: ${url}`);
       services.logger.info(`Loading MFE ${name} from URL: ${url}`);
@@ -108,46 +108,49 @@ const MFELoaderContent: React.FC<MFELoaderProps> = ({
         });
       });
 
-      setState(prev => ({ ...prev, loading: false }));
+      setState((prev) => ({ ...prev, loading: false }));
       services.logger.info(`MFE ${name} ready`);
     } catch (err) {
       const error = err instanceof Error ? err : new Error('Unknown error loading MFE');
-      
+
       console.error(`[MFELoader] Failed to load MFE ${name}:`, error);
       services.logger.error(`Failed to load MFE ${name}: ${error.message}`);
-      
+
       // Report error
       const errorReporter = getErrorReporter({}, services);
-      const errorType = error.message.includes('timeout') ? 'timeout-error' : 
-                       error.message.includes('network') ? 'network-error' : 'load-error';
-      
-      errorReporter.reportError(
-        name,
-        error,
-        errorType,
-        { 
-          retryCount: state.retryCount,
-          url 
-        }
-      );
-      
+      const errorType = error.message.includes('timeout')
+        ? 'timeout-error'
+        : error.message.includes('network')
+          ? 'network-error'
+          : 'load-error';
+
+      errorReporter.reportError(name, error, errorType, {
+        retryCount: state.retryCount,
+        url,
+      });
+
       // Handle retry logic
       if (state.retryCount < maxRetries) {
-        services.logger.info(`Retrying MFE ${name} in ${retryDelay}ms (attempt ${state.retryCount + 1}/${maxRetries})`);
-        
-        setState(prev => ({ 
-          ...prev, 
-          error, 
+        services.logger.info(
+          `Retrying MFE ${name} in ${retryDelay}ms (attempt ${state.retryCount + 1}/${maxRetries})`
+        );
+
+        setState((prev) => ({
+          ...prev,
+          error,
           loading: false,
-          retryCount: prev.retryCount + 1 
+          retryCount: prev.retryCount + 1,
         }));
-        
+
         // Auto-retry after delay
-        retryTimeoutRef.current = setTimeout(() => {
-          loadMFE();
-        }, retryDelay * Math.pow(2, state.retryCount)); // Exponential backoff
+        retryTimeoutRef.current = setTimeout(
+          () => {
+            loadMFE();
+          },
+          retryDelay * Math.pow(2, state.retryCount)
+        ); // Exponential backoff
       } else {
-        setState(prev => ({ ...prev, error, loading: false }));
+        setState((prev) => ({ ...prev, error, loading: false }));
         if (onError) {
           onError(error);
         }
@@ -165,7 +168,7 @@ const MFELoaderContent: React.FC<MFELoaderProps> = ({
     // Check if name or URL actually changed
     const nameChanged = prevNameRef.current !== name;
     const urlChanged = prevUrlRef.current !== url;
-    
+
     if (nameChanged || urlChanged) {
       // Unmount previous MFE if it exists
       if (mfeRef.current && mfeRef.current.unmount && mountedRef.current) {
@@ -178,12 +181,12 @@ const MFELoaderContent: React.FC<MFELoaderProps> = ({
           services.logger.error(`Error unmounting MFE ${prevNameRef.current}:`, err);
         }
       }
-      
+
       // Update refs
       prevNameRef.current = name;
       prevUrlRef.current = url;
     }
-    
+
     // Only load if not already loaded or mounted
     if (!mfeRef.current && !mountedRef.current && !loadingRef.current) {
       loadMFE();
@@ -215,7 +218,7 @@ const MFELoaderContent: React.FC<MFELoaderProps> = ({
   }, []); // Empty deps = only on mount/unmount
 
   const handleManualRetry = useCallback(() => {
-    setState(prev => ({ ...prev, retryCount: 0 }));
+    setState((prev) => ({ ...prev, retryCount: 0 }));
     loadMFE();
   }, [loadMFE]);
 
@@ -259,7 +262,7 @@ export const MFELoader: React.FC<MFELoaderProps> = (props) => {
   const [retryKey, setRetryKey] = useState(0);
 
   const handleRetry = useCallback(() => {
-    setRetryKey(prev => prev + 1);
+    setRetryKey((prev) => prev + 1);
   }, []);
 
   return (
@@ -268,9 +271,7 @@ export const MFELoader: React.FC<MFELoaderProps> = (props) => {
       services={props.services}
       fallback={(error, _errorInfo, retry) => (
         <div className="p-4 bg-red-50 border border-red-200 rounded">
-          <h3 className="text-red-800 font-semibold mb-2">
-            MFE {props.name} crashed unexpectedly
-          </h3>
+          <h3 className="text-red-800 font-semibold mb-2">MFE {props.name} crashed unexpectedly</h3>
           <p className="text-red-600 text-sm">{error.message}</p>
           <button
             onClick={() => {

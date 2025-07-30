@@ -5,20 +5,26 @@ This directory contains API documentation for all packages in the MFE Made Easy 
 ## 📦 Packages
 
 ### [@mfe/dev-kit](../../packages/mfe-dev-kit/README.md)
+
 Core development kit for building MFEs
+
 - TypeScript interfaces
 - MFELoader component
 - Service definitions
 - Event bus implementation
 
 ### [@mfe/shared](../../packages/shared/README.md)
+
 Shared utilities and constants
+
 - Common constants
 - Helper functions
 - Type definitions
 
 ### [@mfe/design-system](../../packages/design-system/README.md)
+
 Shared UI components and design tokens
+
 - ShadCN components
 - Tailwind configuration
 - Theme system
@@ -26,6 +32,7 @@ Shared UI components and design tokens
 ## 🔌 Core APIs
 
 ### MFE Module Interface
+
 ```typescript
 interface MFEModule {
   mount(element: HTMLElement, services: MFEServices): void;
@@ -34,6 +41,7 @@ interface MFEModule {
 ```
 
 ### MFE Services
+
 ```typescript
 interface MFEServices {
   auth: AuthService;
@@ -45,6 +53,7 @@ interface MFEServices {
 ```
 
 ### Event Bus API
+
 ```typescript
 interface EventBus {
   emit(event: string, data: any): void;
@@ -63,4 +72,4 @@ interface EventBus {
 
 ---
 
-*For implementation examples, see the [guides](../guides/) section.*
+_For implementation examples, see the [guides](../guides/) section._

@@ -5,7 +5,9 @@ This directory contains architectural documentation for the MFE Made Easy platfo
 ## 📄 Documents
 
 ### [Architecture Decisions](./ARCHITECTURE_DECISIONS.md)
+
 Key architectural decisions and their rationale:
+
 - Dynamic imports over Module Federation
 - React Context over Redux
 - Service injection pattern
@@ -13,36 +15,46 @@ Key architectural decisions and their rationale:
 - MFE loader strategies
 
 ### [State Management Architecture](./STATE_MANAGEMENT_ARCHITECTURE.md)
+
 Comprehensive guide to the dual state management system:
+
 - ContextBridge for container services
 - Universal State Manager for application state
 - Clear separation of concerns
 - Migration recommendations
 
 ### [MFE Loading Guide](./MFE_LOADING_GUIDE.md)
+
 Technical guide for MFE loading implementation:
+
 - Current dual-loader implementation
 - When to use each loader
 - Consolidation plan for unified loader
 - Performance best practices
 
 ### [Improvements Status](./IMPROVEMENTS_STATUS.md)
+
 Current status of architecture improvements:
+
 - Completed improvements
 - In-progress work
 - Technical debt identified
 - Future work priorities
 
 ### [Architecture Analysis Report](./architecture-analysis-report.md)
+
 A comprehensive analysis of the current MFE architecture including:
+
 - Current implementation review
-- Strengths and weaknesses analysis  
+- Strengths and weaknesses analysis
 - Improvement recommendations
 - Implementation roadmap
 - Success metrics
 
 ### [Improvement Roadmap](./improvement-roadmap.md)
+
 Detailed roadmap for platform improvements including:
+
 - 7-phase implementation plan
 - Technical deliverables for each phase
 - Success criteria and metrics
@@ -79,4 +91,4 @@ The MFE Made Easy platform implements a microfrontend architecture with:
 
 ---
 
-*For implementation details, see the [guides](../guides/) section.*
+_For implementation details, see the [guides](../guides/) section._

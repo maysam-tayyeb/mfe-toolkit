@@ -598,7 +598,8 @@ Permissions: ${session.permissions.join(', ')}`,
           React 17 MFE - State management temporarily disabled due to React version conflict
         </p>
         <div className="text-sm text-yellow-600 bg-yellow-50 p-3 rounded">
-          Note: Zustand state management is temporarily disabled in React 17 MFE due to React hooks conflict between bundled React 17 and shared React 19.
+          Note: Zustand state management is temporarily disabled in React 17 MFE due to React hooks
+          conflict between bundled React 17 and shared React 19.
         </div>
       </div>
 

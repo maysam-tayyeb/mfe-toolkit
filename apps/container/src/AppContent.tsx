@@ -18,7 +18,7 @@ export function AppContent() {
   useEffect(() => {
     // Set up global theme management
     const stateManager = getGlobalStateManager();
-    
+
     // Subscribe to theme changes
     const unsubscribe = stateManager.subscribe('theme', (value) => {
       if (value === 'dark') {
@@ -27,7 +27,7 @@ export function AppContent() {
         document.documentElement.classList.remove('dark');
       }
     });
-    
+
     // Set initial theme
     const currentTheme = stateManager.get('theme');
     if (currentTheme === 'dark') {
@@ -35,7 +35,7 @@ export function AppContent() {
     } else {
       document.documentElement.classList.remove('dark');
     }
-    
+
     return unsubscribe;
   }, [mfeServices]);
 

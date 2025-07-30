@@ -1,4 +1,12 @@
-import React, { createContext, useContext, useState, useCallback, ReactNode, useRef, useEffect } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useCallback,
+  ReactNode,
+  useRef,
+  useEffect,
+} from 'react';
 import { ModalConfig, NotificationConfig } from '@mfe/dev-kit';
 
 interface UIContextType {
@@ -37,7 +45,7 @@ export const UIProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
   // Notification functions
   const removeNotification = useCallback((id: string) => {
-    setNotifications(prev => prev.filter(n => n.id !== id));
+    setNotifications((prev) => prev.filter((n) => n.id !== id));
     // Clear any pending timeout
     const timeout = timeoutsRef.current.get(id);
     if (timeout) {
@@ -49,14 +57,14 @@ export const UIProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const addNotification = useCallback((notification: NotificationConfig) => {
     const id = notification.id || `notification-${Date.now()}-${Math.random()}`;
     const newNotification = { ...notification, id };
-    
-    setNotifications(prev => [...prev, newNotification]);
+
+    setNotifications((prev) => [...prev, newNotification]);
 
     // Auto-remove after duration
     if (notification.duration !== 0) {
       const duration = notification.duration || 5000;
       const timeout = setTimeout(() => {
-        setNotifications(prev => prev.filter(n => n.id !== id));
+        setNotifications((prev) => prev.filter((n) => n.id !== id));
         timeoutsRef.current.delete(id);
       }, duration);
       timeoutsRef.current.set(id, timeout);
@@ -66,7 +74,7 @@ export const UIProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   // Clean up timeouts on unmount
   useEffect(() => {
     return () => {
-      timeoutsRef.current.forEach(timeout => clearTimeout(timeout));
+      timeoutsRef.current.forEach((timeout) => clearTimeout(timeout));
       timeoutsRef.current.clear();
     };
   }, []);

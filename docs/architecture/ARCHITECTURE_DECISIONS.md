@@ -5,6 +5,7 @@ This document captures important architectural decisions made in the MFE Made Ea
 ## Decision Record Format
 
 Each decision follows this format:
+
 - **Decision**: What was decided
 - **Date**: When the decision was made
 - **Context**: Why the decision was needed
@@ -20,10 +21,11 @@ Each decision follows this format:
 
 **Date**: January 2025
 
-**Context**: 
+**Context**:
 The team needed to choose between Module Federation (build-time integration) and dynamic imports (runtime integration) for the microfrontend architecture.
 
 **Options Considered**:
+
 1. **Webpack Module Federation**: Build-time sharing of dependencies with automatic version negotiation
 2. **Dynamic ES Module Imports**: Runtime loading of independently built and deployed modules
 3. **Hybrid Approach**: Module Federation for dev, dynamic imports for production
@@ -40,6 +42,7 @@ We chose dynamic imports for several compelling reasons:
 7. **No Version Lock-in**: No need to coordinate framework or dependency versions across teams
 
 **Implications**:
+
 - ✅ Maximum flexibility and independence
 - ✅ Simpler deployment and operations
 - ✅ Better fault isolation
@@ -48,6 +51,7 @@ We chose dynamic imports for several compelling reasons:
 - ❌ Need to implement our own version management
 
 **Implementation Example**:
+
 ```javascript
 // Our approach - completely decoupled
 const module = await import(/* @vite-ignore */ url);
@@ -65,10 +69,11 @@ import('remoteMFE/Component'); // Needs configuration at build time
 
 **Date**: January 2025
 
-**Context**: 
+**Context**:
 The container was using Redux for state management, but this created risks of state pollution between MFEs and added unnecessary complexity.
 
 **Options Considered**:
+
 1. **Keep Redux**: Continue with centralized Redux store
 2. **React Context**: Use React's built-in Context API
 3. **Zustand/Valtio**: Adopt a lighter state management library
@@ -84,6 +89,7 @@ We migrated to React Context because:
 5. **Type Safety**: Better TypeScript integration with contexts
 
 **Implications**:
+
 - ✅ Reduced bundle size (removed Redux dependencies)
 - ✅ Simpler state management
 - ✅ Better MFE isolation
@@ -99,10 +105,11 @@ We migrated to React Context because:
 
 **Date**: January 2025
 
-**Context**: 
+**Context**:
 MFEs were flickering on pages with frequent state updates due to re-mounting.
 
 **Options Considered**:
+
 1. **Single Universal Loader**: One loader that handles all cases
 2. **Two Specialized Loaders**: Different loaders for different use cases
 3. **Fix Re-rendering Issues**: Address the root cause in parent components
@@ -114,11 +121,13 @@ We kept both loaders as a pragmatic solution:
 2. **IsolatedMFELoader**: For pages with frequent updates (like MFE Communication page)
 
 While not ideal architecturally, this approach:
+
 - Solves the immediate flickering problem
 - Maintains backward compatibility
 - Allows gradual migration to better patterns
 
 **Implications**:
+
 - ✅ Immediate fix for flickering issues
 - ✅ Flexibility for different use cases
 - ❌ Technical debt (duplicate code)
@@ -133,16 +142,18 @@ While not ideal architecturally, this approach:
 
 **Date**: Initial architecture
 
-**Context**: 
+**Context**:
 MFEs need to communicate without direct dependencies.
 
 **Decision Rationale**:
+
 - Loose coupling between MFEs
 - Can be enhanced with typing later
 - Simple pub/sub pattern
 - Works across frameworks
 
 **Implications**:
+
 - ✅ Framework agnostic communication
 - ✅ Debugging via event logs
 - ❌ No type safety (yet)
@@ -156,23 +167,25 @@ MFEs need to communicate without direct dependencies.
 
 **Date**: January 2025
 
-**Context**: 
+**Context**:
 Originally services were exposed via `window.__MFE_SERVICES__`, creating security and testing issues.
 
 **Decision Rationale**:
+
 - Better security (no global exposure)
 - Easier testing (can mock services)
 - Cleaner API contracts
 - Proper dependency injection
 
 **Implementation**:
+
 ```javascript
 // Instead of accessing window.__MFE_SERVICES__
 export default {
   mount: (container, services) => {
     // Services injected directly
     const { logger, eventBus, modal } = services;
-  }
+  },
 };
 ```
 
@@ -202,16 +215,18 @@ export default {
 
 **Date**: January 2025
 
-**Context**: 
+**Context**:
 MFEs need both container-provided UI services and shared application state, but these have different characteristics and requirements.
 
 **Decision Rationale**:
+
 - **Clear separation of concerns**: UI services vs business state
 - **Appropriate tools**: Imperative APIs for services, reactive state for data
 - **Framework flexibility**: Universal State works with any framework
 - **Scalability**: Each system can evolve independently
 
 **Implementation**:
+
 - See [State Management Architecture](./STATE_MANAGEMENT_ARCHITECTURE.md) for detailed documentation
 
 ---

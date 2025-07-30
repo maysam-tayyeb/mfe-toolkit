@@ -134,24 +134,21 @@ export class ErrorReporter {
     return report;
   }
 
-  private calculateSeverity(
-    error: Error,
-    type: ErrorReport['type']
-  ): ErrorReport['severity'] {
+  private calculateSeverity(error: Error, type: ErrorReport['type']): ErrorReport['severity'] {
     // Network errors are usually medium severity
     if (type === 'network-error') return 'medium';
-    
+
     // Timeout errors are low severity (can retry)
     if (type === 'timeout-error') return 'low';
-    
+
     // Load errors are high severity
     if (type === 'load-error') return 'high';
-    
+
     // Runtime errors depend on the error type
     if (error.name === 'TypeError' || error.name === 'ReferenceError') {
       return 'critical';
     }
-    
+
     return 'medium';
   }
 
@@ -183,7 +180,7 @@ export class ErrorReporter {
   }
 
   getErrorsByMFE(mfeName: string): ErrorReport[] {
-    return this.errors.filter(e => e.mfeName === mfeName);
+    return this.errors.filter((e) => e.mfeName === mfeName);
   }
 
   getErrorCounts(): Record<string, number> {
@@ -213,13 +210,14 @@ export class ErrorReporter {
       errorsByMFE: {} as Record<string, number>,
     };
 
-    this.errors.forEach(error => {
+    this.errors.forEach((error) => {
       // By type
       summary.errorsByType[error.type] = (summary.errorsByType[error.type] || 0) + 1;
-      
+
       // By severity
-      summary.errorsBySeverity[error.severity] = (summary.errorsBySeverity[error.severity] || 0) + 1;
-      
+      summary.errorsBySeverity[error.severity] =
+        (summary.errorsBySeverity[error.severity] || 0) + 1;
+
       // By MFE
       summary.errorsByMFE[error.mfeName] = (summary.errorsByMFE[error.mfeName] || 0) + 1;
     });

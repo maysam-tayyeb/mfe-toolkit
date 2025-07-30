@@ -13,7 +13,12 @@
   "files": [
     "dist"
   ],
-  "keywords": ["mfe", "state", "microfrontend", "framework-agnostic"],
+  "keywords": [
+    "mfe",
+    "state",
+    "microfrontend",
+    "framework-agnostic"
+  ],
   "author": "",
   "license": "MIT",
   "devDependencies": {

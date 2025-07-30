@@ -46,28 +46,34 @@ export const MFECommunicationPage: React.FC = () => {
 
   // Get the shared event bus from services
   const eventBus = mfeServices.eventBus;
-  
+
   // Memoize error handlers to prevent re-renders
-  const handleServiceExplorerError = useCallback((error: Error) => {
-    addNotification({
-      type: 'error',
-      title: 'MFE Load Error',
-      message: `Failed to load Service Explorer MFE: ${error.message}`,
-    });
-  }, [addNotification]);
-  
-  const handleLegacyServiceExplorerError = useCallback((error: Error) => {
-    addNotification({
-      type: 'error',
-      title: 'MFE Load Error',
-      message: `Failed to load Legacy Service Explorer MFE: ${error.message}`,
-    });
-  }, [addNotification]);
+  const handleServiceExplorerError = useCallback(
+    (error: Error) => {
+      addNotification({
+        type: 'error',
+        title: 'MFE Load Error',
+        message: `Failed to load Service Explorer MFE: ${error.message}`,
+      });
+    },
+    [addNotification]
+  );
+
+  const handleLegacyServiceExplorerError = useCallback(
+    (error: Error) => {
+      addNotification({
+        type: 'error',
+        title: 'MFE Load Error',
+        message: `Failed to load Legacy Service Explorer MFE: ${error.message}`,
+      });
+    },
+    [addNotification]
+  );
 
   useEffect(() => {
     let eventQueue: EventLogEntry[] = [];
     let timeoutId: NodeJS.Timeout;
-    
+
     // Batch event updates to reduce re-renders
     const flushEventQueue = () => {
       if (eventQueue.length > 0) {
@@ -75,7 +81,7 @@ export const MFECommunicationPage: React.FC = () => {
         eventQueue = [];
       }
     };
-    
+
     // Listen to ALL events using wildcard
     const unsubscribe = eventBus.on('*', (payload: EventPayload<any>) => {
       // Track MFE status immediately (important for UI)
@@ -112,7 +118,7 @@ export const MFECommunicationPage: React.FC = () => {
 
       // Queue the event instead of updating state immediately
       eventQueue.push(logEntry);
-      
+
       // Debounce the flush to batch updates
       clearTimeout(timeoutId);
       timeoutId = setTimeout(flushEventQueue, 100);

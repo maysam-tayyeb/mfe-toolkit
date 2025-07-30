@@ -1,10 +1,6 @@
 import { useState } from 'react';
 import { useStore, type StoreApi } from 'zustand';
-import { 
-  createMFEStore, 
-  getMFEStore,
-  MFEStoreConfig 
-} from './mfe-store-factory';
+import { createMFEStore, getMFEStore, MFEStoreConfig } from './mfe-store-factory';
 
 // Hook to create and use an MFE store
 export function useMFEStore<T extends object>(
@@ -18,13 +14,13 @@ export function useMFEStore<T extends object>(
     if (existingStore) {
       return existingStore;
     }
-    
+
     // Create new store
     return createMFEStore(config, initialState, actions);
   });
-  
+
   const state = useStore(store);
-  
+
   return [state, store];
 }
 
@@ -41,7 +37,7 @@ export function useLazyMFEStore<T extends object>(
   const [store, setStore] = useState<StoreApi<T> | null>(() => {
     return getMFEStore<T>(config.name) || null;
   });
-  
+
   const initialize = () => {
     if (!store) {
       const newStore = createMFEStore(config, initialState(), actions);
@@ -50,7 +46,7 @@ export function useLazyMFEStore<T extends object>(
     }
     return store;
   };
-  
+
   return {
     store,
     initialize,

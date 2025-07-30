@@ -90,6 +90,7 @@ pnpm serve:mfes  # Same as above (alias)
 ### MFE Build Configuration (esbuild)
 
 Each MFE has its own `esbuild.config.js` that:
+
 - Outputs to the global `/dist/{mfe-name}/` folder
 - Bundles as ES modules for dynamic imports
 - Externalizes shared dependencies (React, Redux) via import maps
@@ -98,6 +99,7 @@ Each MFE has its own `esbuild.config.js` that:
 - Each MFE manages its own esbuild dependency
 
 Example from `apps/mfe-example/esbuild.config.js`:
+
 ```javascript
 {
   entryPoints: ['src/main.tsx'],
@@ -112,6 +114,7 @@ Example from `apps/mfe-example/esbuild.config.js`:
 ### Container Build Configuration
 
 The container uses its own build system (check `apps/container/package.json`):
+
 - Handles Tailwind CSS v4 with PostCSS
 - Manages static assets and HTML
 - Code splitting for optimal loading
@@ -119,6 +122,7 @@ The container uses its own build system (check `apps/container/package.json`):
 ### Development Configuration (Vite)
 
 MFEs use Vite for development:
+
 - Hot Module Replacement (HMR)
 - Fast refresh for React/Vue
 - TypeScript support
@@ -126,11 +130,13 @@ MFEs use Vite for development:
 ## Technical Details
 
 ### Build Tools
+
 - **Container**: Uses its own build system
 - **MFEs**: esbuild for production builds
 - **Development**: Vite dev servers
 
 ### Build Characteristics
+
 - **Output Format**: ES modules for all applications
 - **Code Splitting**: Enabled for container app only
 - **MFE Bundles**: Single file ES modules for easy loading
@@ -139,11 +145,13 @@ MFEs use Vite for development:
 - **Import Maps**: Used for sharing dependencies
 
 ### Bundle Sizes
+
 - Example MFE: ~14KB (97% reduction with externals)
 - React 17 MFE: ~158KB (includes React 17)
 - Container: ~358KB (includes all shared deps)
 
 ### Dependencies
+
 - esbuild is installed per-MFE (not at root)
 - Container manages its own build dependencies
 - Shared dependencies use pnpm workspace protocol
@@ -153,11 +161,13 @@ MFEs use Vite for development:
 The MFE registry configuration differs by environment:
 
 ### Development Mode
+
 - Each MFE runs on its own dev server (ports 3001-3005)
 - Registry points to individual dev servers
 - Hot Module Replacement enabled
 
 ### Production Mode
+
 - All apps served from single HTTP server (port 8080)
 - Registry uses relative URLs: `/mfe-example/mfe-example.js`
 - Optimized bundles with minification

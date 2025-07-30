@@ -15,7 +15,7 @@ export const ZustandDemo: React.FC = () => {
   return (
     <div className="p-6 bg-white rounded-lg shadow-md">
       <h2 className="text-2xl font-bold mb-4">Zustand State Management Demo</h2>
-      
+
       {/* Counter Section */}
       <div className="mb-6 p-4 border rounded">
         <h3 className="text-lg font-semibold mb-2">Counter</h3>

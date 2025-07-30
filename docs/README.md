@@ -5,20 +5,28 @@ Welcome to the MFE Made Easy documentation. This directory contains comprehensiv
 ## 📚 Documentation Structure
 
 ### 🏗️ [Architecture](./architecture/)
+
 Technical architecture documentation and analysis
+
 - [Architecture Analysis Report](./architecture/architecture-analysis-report.md) - Comprehensive analysis of the current architecture with recommendations
 - [Improvement Roadmap](./architecture/improvement-roadmap.md) - Detailed 7-phase roadmap for platform enhancements
 
 ### 📖 [Guides](./guides/)
+
 How-to guides and tutorials
+
 - [MFE Communication Guide](./guides/mfe-communication-guide.md) - Learn how to implement inter-MFE communication
 
 ### 🔌 [API Reference](./api/)
+
 API documentation for packages and services
+
 - Coming soon: Detailed API documentation for all packages
 
 ### 📝 [Decisions](./decisions/)
+
 Architecture Decision Records (ADRs)
+
 - Coming soon: Documentation of key architectural decisions
 
 ## 🚀 Quick Links
@@ -50,4 +58,4 @@ To contribute to the documentation:
 
 ---
 
-*Last updated: January 2025*
+_Last updated: January 2025_

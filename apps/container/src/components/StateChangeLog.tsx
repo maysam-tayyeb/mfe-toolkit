@@ -14,18 +14,23 @@ interface StateChangeLogProps {
 // Memoized component to prevent re-renders from affecting parent
 export const StateChangeLog: React.FC<StateChangeLogProps> = memo(({ stateManager }) => {
   const [stateLog, setStateLog] = useState<Array<StateLogEntry>>([]);
-  
+
   useEffect(() => {
     // Subscribe to all state changes
     const unsubscribe = stateManager.subscribeAll((event: any) => {
-      setStateLog(prev => [{
-        timestamp: new Date(event.timestamp),
-        key: event.key,
-        value: event.value,
-        source: event.source
-      }, ...prev].slice(0, 20)); // Keep last 20 entries
+      setStateLog((prev) =>
+        [
+          {
+            timestamp: new Date(event.timestamp),
+            key: event.key,
+            value: event.value,
+            source: event.source,
+          },
+          ...prev,
+        ].slice(0, 20)
+      ); // Keep last 20 entries
     });
-    
+
     return unsubscribe;
   }, [stateManager]);
 
@@ -42,7 +47,9 @@ export const StateChangeLog: React.FC<StateChangeLogProps> = memo(({ stateManage
       <h2 className="text-xl font-semibold mb-4">Real-time State Change Log</h2>
       <div className="space-y-2 max-h-48 overflow-y-auto">
         {stateLog.length === 0 ? (
-          <p className="text-muted-foreground">No state changes yet. Interact with the MFEs below.</p>
+          <p className="text-muted-foreground">
+            No state changes yet. Interact with the MFEs below.
+          </p>
         ) : (
           stateLog.map((entry, index) => (
             <div key={index} className="p-2 bg-muted rounded text-sm font-mono">

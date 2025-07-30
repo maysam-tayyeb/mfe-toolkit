@@ -15,26 +15,25 @@ export interface MFEServicesProviderProps {
 }
 
 export const MFEServicesProvider: React.FC<MFEServicesProviderProps> = ({ services, children }) => {
-  const container = useMemo<ServiceContainer>(() => ({
-    getService<T extends keyof MFEServices>(serviceName: T): MFEServices[T] {
-      if (!(serviceName in services)) {
-        throw new Error(`Service "${serviceName}" not found in container`);
-      }
-      return services[serviceName];
-    },
-    hasService(serviceName: keyof MFEServices): boolean {
-      return serviceName in services;
-    },
-    getAllServices(): MFEServices {
-      return services;
-    }
-  }), [services]);
-
-  return (
-    <MFEServicesContext.Provider value={container}>
-      {children}
-    </MFEServicesContext.Provider>
+  const container = useMemo<ServiceContainer>(
+    () => ({
+      getService<T extends keyof MFEServices>(serviceName: T): MFEServices[T] {
+        if (!(serviceName in services)) {
+          throw new Error(`Service "${serviceName}" not found in container`);
+        }
+        return services[serviceName];
+      },
+      hasService(serviceName: keyof MFEServices): boolean {
+        return serviceName in services;
+      },
+      getAllServices(): MFEServices {
+        return services;
+      },
+    }),
+    [services]
   );
+
+  return <MFEServicesContext.Provider value={container}>{children}</MFEServicesContext.Provider>;
 };
 
 export const useMFEServices = (): ServiceContainer => {

@@ -22,7 +22,7 @@ export class MFEServiceContainer {
     const service = this.services[serviceName];
     const proxy = this.createServiceProxy(serviceName, service);
     this.serviceProxies.set(serviceName, proxy);
-    
+
     return proxy;
   }
 
@@ -46,7 +46,7 @@ export class MFEServiceContainer {
     return new Proxy(service, {
       get: (target, prop) => {
         const value = (target as any)[prop];
-        
+
         // If it's a function, wrap it for logging/monitoring
         if (typeof value === 'function') {
           return (...args: any[]) => {
@@ -60,9 +60,9 @@ export class MFEServiceContainer {
             }
           };
         }
-        
+
         return value;
-      }
+      },
     });
   }
 
@@ -70,7 +70,7 @@ export class MFEServiceContainer {
   createScoped(overrides: Partial<MFEServices>): MFEServiceContainer {
     return new MFEServiceContainer({
       ...this.services,
-      ...overrides
+      ...overrides,
     });
   }
 

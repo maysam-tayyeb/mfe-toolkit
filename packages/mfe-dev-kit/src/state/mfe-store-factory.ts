@@ -16,7 +16,7 @@ export function createMFEStore<T extends object>(
   actions?: (set: (state: Partial<T>) => void, get: () => T) => any
 ) {
   const storeName = `mfe-${config.name}`;
-  
+
   // Check if store already exists
   if (storeRegistry.has(storeName)) {
     console.warn(`Store ${storeName} already exists. Returning existing store.`);

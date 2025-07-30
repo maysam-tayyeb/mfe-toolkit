@@ -35,10 +35,10 @@ export class MFEErrorBoundary extends Component<Props, State> {
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     const { mfeName, services, onError } = this.props;
     const { retryCount } = this.state;
-    
+
     // Log error to console
     console.error(`MFE Error Boundary caught error in ${mfeName}:`, error, errorInfo);
-    
+
     // Report error using error reporter
     const errorReporter = getErrorReporter({}, services);
     errorReporter.reportError(
@@ -48,7 +48,7 @@ export class MFEErrorBoundary extends Component<Props, State> {
       { retryCount },
       { componentStack: errorInfo?.componentStack || undefined }
     );
-    
+
     // Log to MFE logger service if available
     if (services?.logger) {
       services.logger.error(`MFE ${mfeName} crashed: ${error.message}`, {
@@ -57,12 +57,12 @@ export class MFEErrorBoundary extends Component<Props, State> {
         componentStack: errorInfo.componentStack,
       });
     }
-    
+
     // Call custom error handler if provided
     if (onError) {
       onError(error, errorInfo);
     }
-    
+
     // Update state with error details
     this.setState({ errorInfo });
   }
@@ -70,11 +70,11 @@ export class MFEErrorBoundary extends Component<Props, State> {
   handleRetry = () => {
     const { retryCount } = this.state;
     const { services, mfeName } = this.props;
-    
+
     if (services?.logger) {
       services.logger.info(`Retrying MFE ${mfeName} (attempt ${retryCount + 1})`);
     }
-    
+
     this.setState({
       hasError: false,
       error: null,
@@ -114,13 +114,11 @@ export class MFEErrorBoundary extends Component<Props, State> {
                 </svg>
               </div>
               <div className="flex-1">
-                <h3 className="text-lg font-semibold text-red-800">
-                  MFE Loading Error
-                </h3>
+                <h3 className="text-lg font-semibold text-red-800">MFE Loading Error</h3>
                 <p className="mt-1 text-sm text-red-700">
                   Failed to load <strong>{mfeName}</strong> microfrontend.
                 </p>
-                
+
                 {/* Error details in development */}
                 {process.env.NODE_ENV === 'development' && (
                   <details className="mt-3">
@@ -137,7 +135,7 @@ export class MFEErrorBoundary extends Component<Props, State> {
                     </div>
                   </details>
                 )}
-                
+
                 <div className="mt-4 flex gap-3">
                   <button
                     onClick={this.handleRetry}

@@ -14,10 +14,10 @@ console.log('📁 Checking MFE build files:');
 const mfeFiles = [
   'dist/mfe-state-demo-react/mfe-state-demo-react.js',
   'dist/mfe-state-demo-vue/mfe-state-demo-vue.js',
-  'dist/mfe-state-demo-vanilla/main.js'
+  'dist/mfe-state-demo-vanilla/main.js',
 ];
 
-mfeFiles.forEach(file => {
+mfeFiles.forEach((file) => {
   const path = join(__dirname, file);
   if (existsSync(path)) {
     const stats = readFileSync(path);
@@ -31,22 +31,25 @@ mfeFiles.forEach(file => {
 console.log('\n🌐 Checking HTTP server on port 8080:');
 const checkServer = () => {
   return new Promise((resolve) => {
-    const req = createServer().request({
-      hostname: 'localhost',
-      port: 8080,
-      path: '/mfe-state-demo-react/mfe-state-demo-react.js',
-      method: 'GET'
-    }, (res) => {
-      console.log(`  ✅ Server is running (status: ${res.statusCode})`);
-      resolve(true);
-    });
-    
+    const req = createServer().request(
+      {
+        hostname: 'localhost',
+        port: 8080,
+        path: '/mfe-state-demo-react/mfe-state-demo-react.js',
+        method: 'GET',
+      },
+      (res) => {
+        console.log(`  ✅ Server is running (status: ${res.statusCode})`);
+        resolve(true);
+      }
+    );
+
     req.on('error', (err) => {
       console.log(`  ❌ Server is not running: ${err.message}`);
       console.log('  💡 Run: pnpm serve');
       resolve(false);
     });
-    
+
     req.end();
   });
 };
@@ -56,14 +59,14 @@ console.log('\n📋 Checking MFE registry:');
 const registryPath = join(__dirname, 'apps/container/public/mfe-registry.json');
 if (existsSync(registryPath)) {
   const registry = JSON.parse(readFileSync(registryPath, 'utf8'));
-  const stateMfes = registry.mfes.filter(mfe => 
+  const stateMfes = registry.mfes.filter((mfe) =>
     ['stateDemoReact', 'stateDemoVue', 'stateDemoVanilla'].includes(mfe.name)
   );
-  
-  stateMfes.forEach(mfe => {
+
+  stateMfes.forEach((mfe) => {
     console.log(`  ✅ ${mfe.name}: ${mfe.url}`);
   });
-  
+
   if (stateMfes.length < 3) {
     console.log('  ⚠️  Some state demo MFEs are missing from registry');
   }

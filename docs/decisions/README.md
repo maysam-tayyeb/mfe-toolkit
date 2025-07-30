@@ -10,21 +10,27 @@ When creating a new ADR, use this template:
 # ADR-XXXX: Title
 
 ## Status
+
 [Proposed | Accepted | Deprecated | Superseded by ADR-YYYY]
 
 ## Context
+
 What is the issue that we're seeing that is motivating this decision?
 
 ## Decision
+
 What is the change that we're proposing and/or doing?
 
 ## Consequences
+
 What becomes easier or more difficult to do because of this change?
 
 ## Alternatives Considered
+
 What other options were evaluated?
 
 ## References
+
 Links to relevant documentation, discussions, or related ADRs.
 ```
 
@@ -43,8 +49,8 @@ Links to relevant documentation, discussions, or related ADRs.
 
 ## 🔍 ADR Index
 
-*No ADRs have been documented yet. This section will be updated as decisions are recorded.*
+_No ADRs have been documented yet. This section will be updated as decisions are recorded._
 
 ---
 
-*For current architecture details, see the [architecture documentation](../architecture/).*
+_For current architecture details, see the [architecture documentation](../architecture/)._

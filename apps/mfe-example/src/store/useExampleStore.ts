@@ -38,9 +38,10 @@ export const useExampleStore = () => {
       decrement: () => set({ count: get().count - 1 }),
       setUser: (user: ExampleState['user']) => set({ user }),
       addItem: (item: string) => set({ items: [...get().items, item] }),
-      removeItem: (index: number) => set({ 
-        items: get().items.filter((_: string, i: number) => i !== index) 
-      }),
+      removeItem: (index: number) =>
+        set({
+          items: get().items.filter((_: string, i: number) => i !== index),
+        }),
       reset: () => set(initialState),
     })
   );

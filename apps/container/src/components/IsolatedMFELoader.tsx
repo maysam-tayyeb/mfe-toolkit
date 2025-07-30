@@ -21,7 +21,7 @@ export const IsolatedMFELoader: React.FC<IsolatedMFELoaderProps> = ({
   const [error, setError] = useState<Error | null>(null);
   const mfeInstanceRef = useRef<any>(null);
   const cleanupRef = useRef<(() => void) | null>(null);
-  
+
   // Use ref to avoid stale closure
   const onErrorRef = useRef(onError);
   onErrorRef.current = onError;
@@ -32,10 +32,10 @@ export const IsolatedMFELoader: React.FC<IsolatedMFELoaderProps> = ({
     const loadAndMountMFE = async () => {
       try {
         console.log(`[IsolatedMFELoader] Loading ${name} from ${url}`);
-        
+
         // Import the MFE module
         const module = await import(/* @vite-ignore */ url);
-        
+
         if (!module.default || typeof module.default.mount !== 'function') {
           throw new Error(`MFE ${name} does not export a valid module with mount function`);
         }
@@ -48,17 +48,17 @@ export const IsolatedMFELoader: React.FC<IsolatedMFELoaderProps> = ({
         mfeContainer.style.width = '100%';
         mfeContainer.setAttribute('data-mfe', name);
         mfeContainer.setAttribute('data-react-root', 'false'); // Mark as non-React content
-        
+
         // Wait for our container to be ready
         if (containerRef.current) {
           // Clear any existing content
           containerRef.current.innerHTML = '';
           containerRef.current.appendChild(mfeContainer);
-          
+
           console.log(`[IsolatedMFELoader] Mounting ${name}`);
           module.default.mount(mfeContainer, services);
           mfeInstanceRef.current = module.default;
-          
+
           // Store cleanup function
           if (module.default.unmount) {
             cleanupRef.current = () => {
@@ -70,13 +70,13 @@ export const IsolatedMFELoader: React.FC<IsolatedMFELoaderProps> = ({
               }
             };
           }
-          
+
           setLoading(false);
           console.log(`[IsolatedMFELoader] ${name} mounted successfully`);
         }
       } catch (err) {
         if (!isMounted) return;
-        
+
         const error = err instanceof Error ? err : new Error('Unknown error');
         console.error(`[IsolatedMFELoader] Error loading ${name}:`, error);
         setError(error);
@@ -88,13 +88,13 @@ export const IsolatedMFELoader: React.FC<IsolatedMFELoaderProps> = ({
     // Reset state when name/url changes
     setLoading(true);
     setError(null);
-    
+
     // Cleanup previous MFE if any
     if (cleanupRef.current) {
       cleanupRef.current();
       cleanupRef.current = null;
     }
-    
+
     // Clear container
     if (containerRef.current) {
       containerRef.current.innerHTML = '';
@@ -107,13 +107,13 @@ export const IsolatedMFELoader: React.FC<IsolatedMFELoaderProps> = ({
     return () => {
       isMounted = false;
       clearTimeout(timer);
-      
+
       // Only cleanup if component is truly unmounting
       if (cleanupRef.current) {
         cleanupRef.current();
         cleanupRef.current = null;
       }
-      
+
       // Clean up the container
       if (containerRef.current) {
         containerRef.current.innerHTML = '';
@@ -133,8 +133,8 @@ export const IsolatedMFELoader: React.FC<IsolatedMFELoaderProps> = ({
   return (
     <>
       {loading && fallback}
-      <div 
-        ref={containerRef} 
+      <div
+        ref={containerRef}
         style={{ width: '100%', display: loading ? 'none' : 'block' }}
         // Prevent React from touching this div's children
         suppressHydrationWarning

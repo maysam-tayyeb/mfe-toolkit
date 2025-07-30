@@ -13,10 +13,14 @@ const isDev =
 if (isDev) {
   const mockServices = getMFEServices() || {
     logger: {
-      debug: (message: string, ...args: any[]) => console.debug(`[EventDemo1-Dev] ${message}`, ...args),
-      info: (message: string, ...args: any[]) => console.info(`[EventDemo1-Dev] ${message}`, ...args),
-      warn: (message: string, ...args: any[]) => console.warn(`[EventDemo1-Dev] ${message}`, ...args),
-      error: (message: string, ...args: any[]) => console.error(`[EventDemo1-Dev] ${message}`, ...args),
+      debug: (message: string, ...args: any[]) =>
+        console.debug(`[EventDemo1-Dev] ${message}`, ...args),
+      info: (message: string, ...args: any[]) =>
+        console.info(`[EventDemo1-Dev] ${message}`, ...args),
+      warn: (message: string, ...args: any[]) =>
+        console.warn(`[EventDemo1-Dev] ${message}`, ...args),
+      error: (message: string, ...args: any[]) =>
+        console.error(`[EventDemo1-Dev] ${message}`, ...args),
     },
     auth: {
       getSession: () => ({
@@ -66,7 +70,7 @@ const EventDemoMFE: MFEModule = {
     // Get instance ID from parent element's data attribute
     const parentWithId = element.closest('[data-instance-id]');
     const instanceId = parentWithId?.getAttribute('data-instance-id') || '1';
-    
+
     rootElement = ReactDOM.createRoot(element);
     rootElement.render(<App services={services} instanceId={instanceId} />);
   },

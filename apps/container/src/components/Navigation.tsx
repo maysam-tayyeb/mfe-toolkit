@@ -16,11 +16,11 @@ export const Navigation: React.FC = () => {
     // Subscribe to theme changes
     const currentTheme = stateManager.get('theme') || 'light';
     setTheme(currentTheme);
-    
+
     const unsubscribe = stateManager.subscribe('theme', (value) => {
       setTheme(value || 'light');
     });
-    
+
     return unsubscribe;
   }, [stateManager]);
 
@@ -78,11 +78,7 @@ export const Navigation: React.FC = () => {
               className="h-9 w-9"
               aria-label="Toggle theme"
             >
-              {theme === 'dark' ? (
-                <Sun className="h-4 w-4" />
-              ) : (
-                <Moon className="h-4 w-4" />
-              )}
+              {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
             </Button>
             <Button
               variant="ghost"

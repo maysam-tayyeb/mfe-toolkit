@@ -5,6 +5,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Essential Commands
 
 ### Development
+
 ```bash
 # Install dependencies (run after cloning)
 pnpm install
@@ -17,7 +18,7 @@ pnpm dev
 
 # Start individual applications
 pnpm dev:container      # Container app on http://localhost:3000
-pnpm dev:mfe           # Example MFE on http://localhost:3001  
+pnpm dev:mfe           # Example MFE on http://localhost:3001
 pnpm dev:react17       # React 17 MFE on http://localhost:3002
 pnpm dev:state-react   # State demo React MFE
 pnpm dev:state-vue     # State demo Vue MFE
@@ -25,6 +26,7 @@ pnpm dev:state-demos   # All state demo MFEs in parallel
 ```
 
 ### Testing
+
 ```bash
 # Run all tests
 pnpm test
@@ -46,6 +48,7 @@ pnpm e2e:report      # View test report
 ```
 
 ### Code Quality
+
 ```bash
 # Lint all files
 pnpm lint
@@ -67,6 +70,7 @@ pnpm validate
 ```
 
 ### Building
+
 ```bash
 # Build all packages
 pnpm build
@@ -133,6 +137,7 @@ Services are injected into MFEs at mount time (no global window pollution):
 ### Registry System
 
 MFEs are configured via JSON registry files:
+
 - `public/mfe-registry.json` - Default registry
 - `public/mfe-registry.{environment}.json` - Environment-specific
 - Configurable via `VITE_MFE_REGISTRY_URL` environment variable
@@ -190,6 +195,7 @@ See [State Management Architecture](./docs/architecture/STATE_MANAGEMENT_ARCHITE
 ### After Making Changes
 
 Always run these commands to ensure code quality:
+
 ```bash
 # Check for lint errors
 pnpm lint

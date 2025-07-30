@@ -39,15 +39,17 @@ export const useReact17Store = () => {
     (set: any, get: any) => ({
       increment: () => set({ count: get().count + 1 }),
       decrement: () => set({ count: get().count - 1 }),
-      updateLegacyData: (version: string) => set({ 
-        legacyData: { 
-          version, 
-          lastUpdated: new Date() 
-        } 
-      }),
-      addMessage: (message: string) => set({ 
-        messages: [...get().messages, message] 
-      }),
+      updateLegacyData: (version: string) =>
+        set({
+          legacyData: {
+            version,
+            lastUpdated: new Date(),
+          },
+        }),
+      addMessage: (message: string) =>
+        set({
+          messages: [...get().messages, message],
+        }),
       clearMessages: () => set({ messages: [] }),
       reset: () => set(initialState),
     })

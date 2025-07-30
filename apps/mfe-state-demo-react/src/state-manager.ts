@@ -50,7 +50,7 @@ class SimpleStateManager implements StateManager {
 
   set(key: string, value: any, source: string = 'unknown'): void {
     this.state.set(key, value);
-    
+
     // Save to localStorage
     if (typeof window !== 'undefined' && window.localStorage) {
       try {
@@ -72,16 +72,16 @@ class SimpleStateManager implements StateManager {
     if (!this.listeners.has(key)) {
       this.listeners.set(key, new Set());
     }
-    
+
     const listeners = this.listeners.get(key)!;
     listeners.add(listener);
-    
+
     // Call immediately with current value
     const currentValue = this.state.get(key);
     if (currentValue !== undefined) {
       listener(currentValue);
     }
-    
+
     return () => {
       listeners.delete(listener);
       if (listeners.size === 0) {
@@ -108,16 +108,16 @@ class SimpleStateManager implements StateManager {
   clear(): void {
     const keys = Array.from(this.state.keys());
     this.state.clear();
-    
+
     // Clear localStorage
     if (typeof window !== 'undefined' && window.localStorage) {
-      keys.forEach(key => {
+      keys.forEach((key) => {
         localStorage.removeItem(`mfe-state:${key}`);
       });
     }
-    
+
     // Notify listeners
-    keys.forEach(key => {
+    keys.forEach((key) => {
       this.notifyListeners(key, undefined, 'clear');
     });
   }
@@ -134,14 +134,14 @@ class SimpleStateManager implements StateManager {
         keysToRemove.push(key);
       }
     });
-    
-    keysToRemove.forEach(key => {
+
+    keysToRemove.forEach((key) => {
       this.state.delete(key);
       if (typeof window !== 'undefined' && window.localStorage) {
         localStorage.removeItem(`mfe-state:${key}`);
       }
     });
-    
+
     console.log(`MFE unregistered: ${mfeId}`);
   }
 
@@ -149,7 +149,7 @@ class SimpleStateManager implements StateManager {
     // Notify key-specific listeners
     const keyListeners = this.listeners.get(key);
     if (keyListeners) {
-      keyListeners.forEach(listener => {
+      keyListeners.forEach((listener) => {
         try {
           listener(value);
         } catch (error) {
@@ -157,15 +157,15 @@ class SimpleStateManager implements StateManager {
         }
       });
     }
-    
+
     // Notify global listeners
-    this.globalListeners.forEach(listener => {
+    this.globalListeners.forEach((listener) => {
       try {
         listener({
           key,
           value,
           source,
-          timestamp: Date.now()
+          timestamp: Date.now(),
         });
       } catch (error) {
         console.error('Global state listener error:', error);
@@ -179,12 +179,12 @@ let globalInstance: StateManager | null = null;
 export function getGlobalStateManager(): StateManager {
   if (!globalInstance) {
     globalInstance = new SimpleStateManager();
-    
+
     // Expose to window for debugging
     if (typeof window !== 'undefined') {
       (window as any).__MFE_STATE__ = {
         manager: globalInstance,
-        getState: () => globalInstance!.getSnapshot()
+        getState: () => globalInstance!.getSnapshot(),
       };
     }
   }
@@ -196,39 +196,42 @@ import { useEffect, useCallback, useRef, useSyncExternalStore } from 'react';
 
 export class ReactAdapter {
   constructor(private stateManager: StateManager) {}
-  
+
   useGlobalState<T = any>(key: string): [T | undefined, (value: T) => void] {
     const value = useSyncExternalStore(
       (callback) => this.stateManager.subscribe(key, callback),
       () => this.stateManager.get(key),
       () => this.stateManager.get(key)
     );
-    
-    const setValue = useCallback((newValue: T) => {
-      this.stateManager.set(key, newValue, 'react-hook');
-    }, [key]);
-    
+
+    const setValue = useCallback(
+      (newValue: T) => {
+        this.stateManager.set(key, newValue, 'react-hook');
+      },
+      [key]
+    );
+
     return [value, setValue];
   }
-  
+
   useGlobalStateListener(callback: (key: string, value: any) => void): void {
     const callbackRef = useRef(callback);
     callbackRef.current = callback;
-    
+
     useEffect(() => {
       return this.stateManager.subscribeAll((event) => {
         callbackRef.current(event.key, event.value);
       });
     }, []);
   }
-  
+
   useMFERegistration(mfeId: string, metadata?: any): void {
     useEffect(() => {
       this.stateManager.registerMFE(mfeId, {
         ...metadata,
-        framework: 'react'
+        framework: 'react',
       });
-      
+
       return () => {
         this.stateManager.unregisterMFE(mfeId);
       };

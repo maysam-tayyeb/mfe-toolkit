@@ -17,25 +17,26 @@ interface EventLogEntry {
 
 export const App: React.FC<AppProps> = ({ services, instanceId = '1' }) => {
   const mfeName = `event-demo-${instanceId}`;
-  
+
   const [eventLog, setEventLog] = useState<EventLogEntry[]>([]);
   const [customEventName, setCustomEventName] = useState(`${mfeName}.action`);
   const [customEventData, setCustomEventData] = useState(
-    `{"message": "Hello from Event Demo MFE instance ${instanceId}"}` 
+    `{"message": "Hello from Event Demo MFE instance ${instanceId}"}`
   );
 
   const addToEventLog = (type: 'sent' | 'received', event: string, data?: any) => {
-    setEventLog((prev) =>
-      [
-        ...prev,
-        {
-          id: `${Date.now()}-${Math.random()}`,
-          timestamp: new Date(),
-          type,
-          event,
-          data,
-        },
-      ].slice(-10) // Keep last 10 events
+    setEventLog(
+      (prev) =>
+        [
+          ...prev,
+          {
+            id: `${Date.now()}-${Math.random()}`,
+            timestamp: new Date(),
+            type,
+            event,
+            data,
+          },
+        ].slice(-10) // Keep last 10 events
     );
   };
 
@@ -66,9 +67,12 @@ export const App: React.FC<AppProps> = ({ services, instanceId = '1' }) => {
 
     // Subscribe to other instance events
     const otherInstanceId = instanceId === '1' ? '2' : '1';
-    const unsubscribeOther = services.eventBus.on(`event-demo-${otherInstanceId}.action`, (payload) => {
-      addToEventLog('received', `event-demo-${otherInstanceId}.action`, payload.data);
-    });
+    const unsubscribeOther = services.eventBus.on(
+      `event-demo-${otherInstanceId}.action`,
+      (payload) => {
+        addToEventLog('received', `event-demo-${otherInstanceId}.action`, payload.data);
+      }
+    );
 
     return () => {
       unsubscribeContainer();
@@ -82,7 +86,9 @@ export const App: React.FC<AppProps> = ({ services, instanceId = '1' }) => {
     <div className="p-6 space-y-6">
       <div>
         <h2 className="text-2xl font-bold">Event Demo MFE - Instance {instanceId}</h2>
-        <p className="text-muted-foreground">Demonstrating event communication with the container</p>
+        <p className="text-muted-foreground">
+          Demonstrating event communication with the container
+        </p>
       </div>
 
       {/* Send Events */}
@@ -121,8 +127,8 @@ export const App: React.FC<AppProps> = ({ services, instanceId = '1' }) => {
               <div
                 key={entry.id}
                 className={`p-3 rounded border ${
-                  entry.type === 'sent' 
-                    ? 'border-l-4 border-l-primary' 
+                  entry.type === 'sent'
+                    ? 'border-l-4 border-l-primary'
                     : 'border-l-4 border-l-muted-foreground'
                 }`}
               >

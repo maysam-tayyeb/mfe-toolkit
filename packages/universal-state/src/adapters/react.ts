@@ -3,7 +3,7 @@ import { StateManager } from '../types';
 
 export class ReactAdapter {
   constructor(private stateManager: StateManager) {}
-  
+
   /**
    * React hook for subscribing to a specific state key
    */
@@ -14,14 +14,17 @@ export class ReactAdapter {
       () => this.stateManager.get(key),
       () => this.stateManager.get(key) // Server snapshot
     );
-    
-    const setValue = useCallback((newValue: T) => {
-      this.stateManager.set(key, newValue, 'react-hook');
-    }, [key]);
-    
+
+    const setValue = useCallback(
+      (newValue: T) => {
+        this.stateManager.set(key, newValue, 'react-hook');
+      },
+      [key]
+    );
+
     return [value, setValue];
   }
-  
+
   /**
    * React hook for subscribing to multiple state keys
    */
@@ -30,52 +33,50 @@ export class ReactAdapter {
   ): [T, (updates: Partial<T>) => void] {
     const [values, setValues] = useState<T>(() => {
       const initial: any = {};
-      keys.forEach(key => {
+      keys.forEach((key) => {
         initial[key] = this.stateManager.get(key);
       });
       return initial;
     });
-    
+
     useEffect(() => {
       const unsubscribes: (() => void)[] = [];
-      
-      keys.forEach(key => {
+
+      keys.forEach((key) => {
         const unsubscribe = this.stateManager.subscribe(key, (value) => {
-          setValues(prev => ({ ...prev, [key]: value }));
+          setValues((prev) => ({ ...prev, [key]: value }));
         });
         unsubscribes.push(unsubscribe);
       });
-      
+
       return () => {
-        unsubscribes.forEach(fn => fn());
+        unsubscribes.forEach((fn) => fn());
       };
     }, [keys.join(',')]);
-    
+
     const setMultipleValues = useCallback((updates: Partial<T>) => {
       Object.entries(updates).forEach(([key, value]) => {
         this.stateManager.set(key, value, 'react-hook-multi');
       });
     }, []);
-    
+
     return [values, setMultipleValues];
   }
-  
+
   /**
    * React hook for subscribing to all state changes
    */
-  useGlobalStateListener(
-    callback: (key: string, value: any) => void
-  ): void {
+  useGlobalStateListener(callback: (key: string, value: any) => void): void {
     const callbackRef = useRef(callback);
     callbackRef.current = callback;
-    
+
     useEffect(() => {
       return this.stateManager.subscribeAll((event) => {
         callbackRef.current(event.key, event.value);
       });
     }, []);
   }
-  
+
   /**
    * React hook for registering an MFE
    */
@@ -83,15 +84,15 @@ export class ReactAdapter {
     useEffect(() => {
       this.stateManager.registerMFE(mfeId, {
         ...metadata,
-        framework: 'react'
+        framework: 'react',
       });
-      
+
       return () => {
         this.stateManager.unregisterMFE(mfeId);
       };
     }, [mfeId]);
   }
-  
+
   /**
    * Higher-order component for providing state context
    */

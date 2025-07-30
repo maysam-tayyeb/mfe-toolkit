@@ -7,73 +7,73 @@ export const DashboardPage: React.FC = () => {
 
   const handleTestModal = () => {
     openModal({
-        title: 'Platform Health Check',
-        content: (
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <h3 className="font-medium">System Status</h3>
-              <div className="grid grid-cols-2 gap-2 text-sm">
-                <span className="text-muted-foreground">Platform:</span>
-                <span>Operational</span>
-                <span className="text-muted-foreground">Services:</span>
-                <span>All Active</span>
-                <span className="text-muted-foreground">Memory Usage:</span>
-                <span>~45MB</span>
-              </div>
-            </div>
-            <div className="space-y-2">
-              <h3 className="font-medium">Platform Info</h3>
-              <p className="text-sm text-muted-foreground">
-                For detailed MFE status and event monitoring, visit the MFE Communication page.
-              </p>
+      title: 'Platform Health Check',
+      content: (
+        <div className="space-y-4">
+          <div className="space-y-2">
+            <h3 className="font-medium">System Status</h3>
+            <div className="grid grid-cols-2 gap-2 text-sm">
+              <span className="text-muted-foreground">Platform:</span>
+              <span>Operational</span>
+              <span className="text-muted-foreground">Services:</span>
+              <span>All Active</span>
+              <span className="text-muted-foreground">Memory Usage:</span>
+              <span>~45MB</span>
             </div>
           </div>
-        ),
-        size: 'md',
+          <div className="space-y-2">
+            <h3 className="font-medium">Platform Info</h3>
+            <p className="text-sm text-muted-foreground">
+              For detailed MFE status and event monitoring, visit the MFE Communication page.
+            </p>
+          </div>
+        </div>
+      ),
+      size: 'md',
     });
   };
 
   const handleClearCache = () => {
     openModal({
-        title: 'Clear Platform Cache',
-        content: (
-          <div className="space-y-2">
-            <p>This will clear all cached data including:</p>
-            <ul className="list-disc list-inside text-sm text-muted-foreground">
-              <li>MFE module cache</li>
-              <li>Service worker cache</li>
-              <li>Local storage data</li>
-            </ul>
-            <p className="text-sm text-warning mt-2">This action cannot be undone.</p>
-          </div>
-        ),
-        size: 'md',
-        onConfirm: () => {
-          // Simulate cache clearing
-          localStorage.clear();
-          sessionStorage.clear();
-          addNotification({
-              type: 'success',
-              title: 'Cache Cleared',
-              message: 'All platform caches have been successfully cleared.',
-          });
-        },
+      title: 'Clear Platform Cache',
+      content: (
+        <div className="space-y-2">
+          <p>This will clear all cached data including:</p>
+          <ul className="list-disc list-inside text-sm text-muted-foreground">
+            <li>MFE module cache</li>
+            <li>Service worker cache</li>
+            <li>Local storage data</li>
+          </ul>
+          <p className="text-sm text-warning mt-2">This action cannot be undone.</p>
+        </div>
+      ),
+      size: 'md',
+      onConfirm: () => {
+        // Simulate cache clearing
+        localStorage.clear();
+        sessionStorage.clear();
+        addNotification({
+          type: 'success',
+          title: 'Cache Cleared',
+          message: 'All platform caches have been successfully cleared.',
+        });
+      },
     });
   };
 
   const handleReloadRegistry = () => {
     addNotification({
-        type: 'info',
-        title: 'Registry Reloading',
-        message: 'Refreshing MFE registry...',
+      type: 'info',
+      title: 'Registry Reloading',
+      message: 'Refreshing MFE registry...',
     });
 
     // Simulate registry reload
     setTimeout(() => {
       addNotification({
-          type: 'success',
-          title: 'Registry Updated',
-          message: 'MFE registry has been successfully reloaded.',
+        type: 'success',
+        title: 'Registry Updated',
+        message: 'MFE registry has been successfully reloaded.',
       });
     }, 1500);
   };

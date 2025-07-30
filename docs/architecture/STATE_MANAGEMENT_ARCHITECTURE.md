@@ -49,6 +49,7 @@ Both systems co-exist and serve different purposes in the architecture.
 ## ContextBridge: Container Services
 
 ### Purpose
+
 The ContextBridge provides MFEs with access to container-specific UI services that cannot be implemented within individual MFEs.
 
 ### Services Provided
@@ -87,12 +88,14 @@ interface ContainerServices {
 ```
 
 ### Characteristics
+
 - **Container-owned**: These services require container infrastructure
 - **Imperative API**: MFEs call methods, container handles implementation
 - **UI-focused**: Primarily for UI elements that render in container
 - **Stateless for MFEs**: MFEs don't manage this state directly
 
 ### Implementation
+
 ```typescript
 // How MFEs use container services
 export default {
@@ -100,20 +103,21 @@ export default {
     // Show a modal (rendered by container)
     services.modal.open({
       title: 'Confirm Action',
-      content: 'Are you sure?'
+      content: 'Are you sure?',
     });
 
     // Check authentication
     if (!services.auth.isAuthenticated()) {
       services.notification.error('Please log in');
     }
-  }
+  },
 };
 ```
 
 ## Universal State Manager: Shared Application State
 
 ### Purpose
+
 The Universal State Manager provides a framework-agnostic way for MFEs to share application and business state.
 
 ### State Categories
@@ -145,6 +149,7 @@ stateManager.set('lastAction', {
 ```
 
 ### Characteristics
+
 - **MFE-owned**: Any MFE can read/write state
 - **Persistent**: Can survive page reloads via localStorage
 - **Cross-tab sync**: Changes sync across browser tabs
@@ -152,6 +157,7 @@ stateManager.set('lastAction', {
 - **Reactive**: MFEs can subscribe to state changes
 
 ### Implementation
+
 ```typescript
 // React MFE
 const [cart, setCart] = adapter.useGlobalState('cart');
@@ -169,12 +175,14 @@ stateManager.subscribe('cart', (newCart) => {
 ## When to Use Which?
 
 ### Use ContextBridge Services When:
+
 - ✅ Rendering UI in the container (modals, notifications)
 - ✅ Accessing container-managed auth state
 - ✅ Calling container-provided functionality
 - ✅ Need imperative API for UI actions
 
 ### Use Universal State Manager When:
+
 - ✅ Sharing business data between MFEs
 - ✅ Storing user preferences
 - ✅ Implementing cross-MFE workflows
@@ -185,10 +193,12 @@ stateManager.subscribe('cart', (newCart) => {
 ## Migration Consideration: Theme Management
 
 Currently, theme management is split:
+
 - Theme state is in Universal State Manager
 - Theme application happens in container
 
 ### Recommendation
+
 Move theme to ContextBridge as a container service:
 
 ```typescript
@@ -203,11 +213,12 @@ services.theme = {
   },
   subscribe: (callback: (theme: string) => void) => {
     // Subscribe to theme changes
-  }
+  },
 };
 ```
 
 This would:
+
 - Clarify that theme is a container UI concern
 - Simplify the architecture
 - Keep all UI services in one place
@@ -215,20 +226,24 @@ This would:
 ## Best Practices
 
 ### 1. Clear Separation
+
 - **Container Services**: UI infrastructure, auth, container features
 - **Universal State**: Business data, user data, MFE communication
 
 ### 2. Don't Duplicate State
+
 - Auth state belongs in ContextBridge only
 - Business data belongs in Universal State only
 - Avoid syncing between the two systems
 
 ### 3. Performance Considerations
+
 - ContextBridge services are synchronous calls
 - Universal State updates are asynchronous
 - Use subscriptions wisely to avoid excessive re-renders
 
 ### 4. Testing Strategy
+
 - Mock ContextBridge services for MFE unit tests
 - Use real Universal State Manager for integration tests
 - Test cross-MFE workflows with both systems
@@ -241,42 +256,43 @@ export default {
   mount: (element, services) => {
     const { auth, modal, notification } = services;
     const stateManager = getGlobalStateManager();
-    
+
     // Check auth via ContextBridge
     if (!auth.isAuthenticated()) {
       notification.error('Please log in');
       return;
     }
-    
+
     // Get/set business state via Universal State
     const cart = stateManager.get('cart') || { items: [] };
-    
+
     // Subscribe to state changes
     const unsubscribe = stateManager.subscribe('selectedProduct', (productId) => {
       // React to product selection from another MFE
       loadProductDetails(productId);
     });
-    
+
     // Use container UI services
     const handleCheckout = () => {
       modal.open({
         title: 'Checkout',
         content: CheckoutForm,
-        props: { cart }
+        props: { cart },
       });
     };
-    
+
     // Cleanup
     return () => {
       unsubscribe();
     };
-  }
+  },
 };
 ```
 
 ## Summary
 
 The dual state management approach provides:
+
 - **Clear architectural boundaries**
 - **Appropriate tool for each use case**
 - **Framework flexibility**

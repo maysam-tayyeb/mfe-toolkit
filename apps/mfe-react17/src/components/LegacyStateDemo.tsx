@@ -43,12 +43,12 @@ export const LegacyStateDemo: React.FC = () => {
       <div className="border rounded-lg p-4">
         <h3 className="text-lg font-semibold mb-3">Legacy Data</h3>
         <div className="space-y-2 text-sm">
-          <p><span className="font-medium">React Version:</span> {store.legacyData.version}</p>
           <p>
-            <span className="font-medium">Last Updated:</span> {' '}
-            {store.legacyData.lastUpdated 
-              ? store.legacyData.lastUpdated.toLocaleString() 
-              : 'Never'}
+            <span className="font-medium">React Version:</span> {store.legacyData.version}
+          </p>
+          <p>
+            <span className="font-medium">Last Updated:</span>{' '}
+            {store.legacyData.lastUpdated ? store.legacyData.lastUpdated.toLocaleString() : 'Never'}
           </p>
         </div>
         <button

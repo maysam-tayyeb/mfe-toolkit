@@ -46,7 +46,7 @@ async function buildMFE() {
     // Log bundle size
     const stats = await fs.stat(outfile);
     const sizeInKB = (stats.size / 1024).toFixed(2);
-    
+
     console.log('✅ Event Demo MFE built successfully!');
     console.log(`📦 Bundle created: ${outfile}`);
     console.log(`📏 Bundle size: ${sizeInKB} KB (minified)`);
