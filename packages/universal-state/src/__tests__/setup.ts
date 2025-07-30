@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom';
-import { vi } from 'vitest';
+import { beforeEach } from 'vitest';
 
 // Store all broadcast channels for cross-channel communication in tests
 const channels = new Map<string, Set<MockBroadcastChannel>>();
@@ -28,7 +28,7 @@ class MockBroadcastChannel {
           // Simulate async message delivery
           setTimeout(() => {
             const event = new MessageEvent('message', { data: message });
-            channel.onmessage(event);
+            channel.onmessage!(event);
           }, 0);
         }
       });

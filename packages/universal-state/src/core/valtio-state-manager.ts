@@ -1,5 +1,4 @@
 import { proxy, subscribe, snapshot, ref } from 'valtio';
-import { subscribeKey } from 'valtio/utils';
 import { devtools } from 'valtio/utils';
 import {
   StateManager,
