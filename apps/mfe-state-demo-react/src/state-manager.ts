@@ -239,13 +239,3 @@ export function useMFERegistration(mfeId: string, metadata?: any): void {
     };
   }, [mfeId, metadata, stateManager]);
 }
-
-// For backward compatibility
-export class ReactAdapter {
-  constructor(private stateManager: StateManager) {}
-
-  // These methods are deprecated - use the hook functions directly
-  useGlobalState = useGlobalState;
-  useGlobalStateListener = useGlobalStateListener;
-  useMFERegistration = useMFERegistration;
-}
