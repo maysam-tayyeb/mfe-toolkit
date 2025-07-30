@@ -81,6 +81,15 @@ Co-Authored-By: Claude <noreply@anthropic.com>"
 
 if [ $? -eq 0 ]; then
     echo -e "${GREEN}✓ Commit created successfully${NC}"
+    
+    # Rebase from main to ensure commit is on top of latest changes
+    echo -e "${YELLOW}Rebasing from main...${NC}"
+    if git pull --rebase origin main; then
+        echo -e "${GREEN}✓ Successfully rebased from main${NC}"
+    else
+        echo -e "${RED}✗ Rebase failed - you may need to resolve conflicts${NC}"
+        exit 1
+    fi
 else
     echo -e "${RED}✗ Commit failed${NC}"
     exit 1
