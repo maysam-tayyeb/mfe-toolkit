@@ -232,6 +232,7 @@ If you don't know the correct commands for a project, ask the user and suggest u
 - **Always create and use named types**
   - Enhances code readability and type safety
   - Makes the codebase more maintainable and self-documenting
+- **Do not commit code containing unnamed types**
 
 ## Personal Preferences
 

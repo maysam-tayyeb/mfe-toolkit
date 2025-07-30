@@ -2,22 +2,22 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import { MFE_CONFIG } from '@mfe/shared';
+import { MFE_CONFIG, Theme } from '@mfe/shared';
 import { getGlobalStateManager } from '@mfe/universal-state';
 import { Moon, Sun } from 'lucide-react';
 
 export const Navigation: React.FC = () => {
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
-  const [theme, setTheme] = useState<'light' | 'dark'>('light');
+  const [theme, setTheme] = useState<Theme>('light');
   const stateManager = getGlobalStateManager();
 
   useEffect(() => {
     // Subscribe to theme changes
-    const currentTheme = stateManager.get<'light' | 'dark'>('theme') || 'light';
+    const currentTheme = stateManager.get<Theme>('theme') || 'light';
     setTheme(currentTheme);
 
-    const unsubscribe = stateManager.subscribe<'light' | 'dark'>('theme', (value) => {
+    const unsubscribe = stateManager.subscribe<Theme>('theme', (value) => {
       setTheme(value || 'light');
     });
 

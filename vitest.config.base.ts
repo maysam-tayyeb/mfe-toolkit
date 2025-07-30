@@ -5,7 +5,7 @@ import * as path from 'path';
 export function createVitestConfig(options: { root: string }) {
   // Always include the setup file - vitest will handle missing files gracefully
   const setupFiles = [path.resolve(options.root, './src/__tests__/setup.ts')];
-  
+
   return defineConfig({
     plugins: [react()],
     test: {
