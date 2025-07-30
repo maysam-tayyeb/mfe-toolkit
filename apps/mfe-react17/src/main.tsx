@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { App } from './App';
 import { EVENTS, MFE_CONFIG } from '@mfe/shared';
-import { EventBusImpl, MFEModule, MFEServices } from '@mfe/dev-kit';
+import { createEventBus, MFEModule, MFEServices } from '@mfe/dev-kit';
 import './index.css';
 
 // Development mode - render directly (only when accessing the page directly, not when loaded as ES module)
@@ -37,7 +37,7 @@ if (isDev) {
       hasPermission: () => true,
       hasRole: () => true,
     },
-    eventBus: new EventBusImpl(),
+    eventBus: createEventBus({ source: 'react17-mfe-dev' }),
     modal: {
       open: (config) => {
         console.log('[Dev Modal]', config);

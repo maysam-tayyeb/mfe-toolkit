@@ -6,8 +6,7 @@ describe('EventBus', () => {
   let eventBus: EventBus;
 
   beforeEach(() => {
-    // Use legacy implementation for these tests
-    eventBus = createEventBus({ useLegacy: true });
+    eventBus = createEventBus();
   });
 
   describe('on (subscribe)', () => {
@@ -29,7 +28,7 @@ describe('EventBus', () => {
         type: 'test-event',
         data: testData,
         timestamp: expect.any(Number),
-        source: 'unknown',
+        source: 'mfe-platform',
       });
       expect(handler).toHaveBeenCalledTimes(1);
     });
@@ -48,13 +47,13 @@ describe('EventBus', () => {
         type: 'test-event',
         data: testData,
         timestamp: expect.any(Number),
-        source: 'unknown',
+        source: 'mfe-platform',
       });
       expect(handler2).toHaveBeenCalledWith({
         type: 'test-event',
         data: testData,
         timestamp: expect.any(Number),
-        source: 'unknown',
+        source: 'mfe-platform',
       });
     });
 
@@ -110,7 +109,7 @@ describe('EventBus', () => {
         type: 'test-event',
         data: payload,
         timestamp: expect.any(Number),
-        source: 'unknown',
+        source: 'mfe-platform',
       });
     });
 
@@ -130,7 +129,7 @@ describe('EventBus', () => {
         type: 'test-event',
         data: undefined,
         timestamp: expect.any(Number),
-        source: 'unknown',
+        source: 'mfe-platform',
       });
     });
   });

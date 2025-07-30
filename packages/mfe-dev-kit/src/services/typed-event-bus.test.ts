@@ -148,7 +148,7 @@ describe('TypedEventBus', () => {
 
       // Track events through interceptor to verify correlation ID
       let capturedEvent: any;
-      const busWithInterceptor = createTypedEventBus({
+      const busWithInterceptor = createCustomEventBus<TestEventMap>({
         interceptors: [
           {
             beforeEmit: (event) => {
@@ -175,7 +175,7 @@ describe('TypedEventBus', () => {
 
       // Track events through interceptor to verify version
       let capturedEvent: any;
-      const busWithInterceptor = createTypedEventBus({
+      const busWithInterceptor = createCustomEventBus<TestEventMap>({
         interceptors: [
           {
             beforeEmit: (event) => {
@@ -462,7 +462,7 @@ describe('TypedEventBus', () => {
 
   describe('Debug Mode', () => {
     it('should log events when debug is enabled', () => {
-      const consoleSpy = vi.spyOn(console, 'debug').mockImplementation(() => {});
+      const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
 
       const bus = createCustomEventBus<TestEventMap>({
         debug: true,

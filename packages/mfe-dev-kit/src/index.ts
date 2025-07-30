@@ -4,7 +4,7 @@ export * from './types/events';
 
 // Services
 export { createLogger } from './services/logger';
-export { createEventBus, EventBusImpl } from './services/event-bus';
+export { createEventBus } from './services/event-bus';
 export {
   createTypedEventBus,
   createCustomEventBus,
