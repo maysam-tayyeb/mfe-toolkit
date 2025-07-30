@@ -12,8 +12,8 @@ export interface StateManager {
 
 class SimpleStateManager implements StateManager {
   private state = new Map<string, any>();
-  private listeners = new Map<string, Set<Function>>();
-  private globalListeners = new Set<Function>();
+  private listeners = new Map<string, Set<(value: any) => void>>();
+  private globalListeners = new Set<(event: any) => void>();
 
   constructor() {
     // Load from localStorage
@@ -191,50 +191,61 @@ export function getGlobalStateManager(): StateManager {
   return globalInstance;
 }
 
-// React adapter
+// React adapter hooks
 import { useEffect, useCallback, useRef, useSyncExternalStore } from 'react';
 
+export function useGlobalState<T = any>(key: string): [T | undefined, (value: T) => void] {
+  const stateManager = getGlobalStateManager();
+
+  const value = useSyncExternalStore(
+    (callback) => stateManager.subscribe(key, callback),
+    () => stateManager.get(key),
+    () => stateManager.get(key)
+  );
+
+  const setValue = useCallback(
+    (newValue: T) => {
+      stateManager.set(key, newValue, 'react-hook');
+    },
+    [key, stateManager]
+  );
+
+  return [value, setValue];
+}
+
+export function useGlobalStateListener(callback: (key: string, value: any) => void): void {
+  const stateManager = getGlobalStateManager();
+  const callbackRef = useRef(callback);
+  callbackRef.current = callback;
+
+  useEffect(() => {
+    return stateManager.subscribeAll((event) => {
+      callbackRef.current(event.key, event.value);
+    });
+  }, [stateManager]);
+}
+
+export function useMFERegistration(mfeId: string, metadata?: any): void {
+  const stateManager = getGlobalStateManager();
+
+  useEffect(() => {
+    stateManager.registerMFE(mfeId, {
+      ...metadata,
+      framework: 'react',
+    });
+
+    return () => {
+      stateManager.unregisterMFE(mfeId);
+    };
+  }, [mfeId, metadata, stateManager]);
+}
+
+// For backward compatibility
 export class ReactAdapter {
   constructor(private stateManager: StateManager) {}
 
-  useGlobalState<T = any>(key: string): [T | undefined, (value: T) => void] {
-    const value = useSyncExternalStore(
-      (callback) => this.stateManager.subscribe(key, callback),
-      () => this.stateManager.get(key),
-      () => this.stateManager.get(key)
-    );
-
-    const setValue = useCallback(
-      (newValue: T) => {
-        this.stateManager.set(key, newValue, 'react-hook');
-      },
-      [key]
-    );
-
-    return [value, setValue];
-  }
-
-  useGlobalStateListener(callback: (key: string, value: any) => void): void {
-    const callbackRef = useRef(callback);
-    callbackRef.current = callback;
-
-    useEffect(() => {
-      return this.stateManager.subscribeAll((event) => {
-        callbackRef.current(event.key, event.value);
-      });
-    }, []);
-  }
-
-  useMFERegistration(mfeId: string, metadata?: any): void {
-    useEffect(() => {
-      this.stateManager.registerMFE(mfeId, {
-        ...metadata,
-        framework: 'react',
-      });
-
-      return () => {
-        this.stateManager.unregisterMFE(mfeId);
-      };
-    }, [mfeId]);
-  }
+  // These methods are deprecated - use the hook functions directly
+  useGlobalState = useGlobalState;
+  useGlobalStateListener = useGlobalStateListener;
+  useMFERegistration = useMFERegistration;
 }

@@ -46,11 +46,11 @@ registry.lastUpdated = new Date().toISOString();
 
 fs.writeFileSync(registryPath, JSON.stringify(registry, null, 2));
 
-// eslint-disable-next-line no-console
+ 
 console.log(`✅ Updated registry for ${environment} environment`);
 if (baseUrl) {
-  // eslint-disable-next-line no-console
+   
   console.log(`📍 Base URL set to: ${baseUrl}`);
 }
-// eslint-disable-next-line no-console
+ 
 console.log(`📄 File: ${registryPath}`);

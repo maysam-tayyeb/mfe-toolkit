@@ -1,42 +1,74 @@
-export interface StateChangeEvent {
-  key: string;
-  value: any;
-  previousValue: any;
+// Generic state value type
+export type StateValue = unknown;
+
+// Generic state key type for better type safety
+export type StateKey = string;
+
+// State change event with proper typing
+export interface StateChangeEvent<T = StateValue> {
+  key: StateKey;
+  value: T;
+  previousValue: T;
   source: string;
   timestamp: number;
 }
 
-export type StateListener = (value: any, event: StateChangeEvent) => void;
+// Listener types with proper generic constraints
+export type StateListener<T = StateValue> = (value: T, event: StateChangeEvent<T>) => void;
+export type GlobalStateListener = (event: StateChangeEvent) => void;
 export type Unsubscribe = () => void;
+
+// State setter function type
+export type StateSetter<T = StateValue> = (value: T) => void;
+
+// State hook return type
+export type StateHookReturn<T = StateValue> = [T | undefined, StateSetter<T>];
 
 export interface StateManager {
   // Core API
-  get(key: string): any;
-  set(key: string, value: any, source?: string): void;
+  get<T = StateValue>(key: StateKey): T | undefined;
+  set<T = StateValue>(key: StateKey, value: T, source?: string): void;
   delete(key: string): void;
   clear(): void;
 
   // Subscription
-  subscribe(key: string, listener: StateListener): Unsubscribe;
-  subscribeAll(listener: (event: StateChangeEvent) => void): Unsubscribe;
+  subscribe<T = StateValue>(key: StateKey, listener: StateListener<T>): Unsubscribe;
+  subscribeAll(listener: GlobalStateListener): Unsubscribe;
 
   // MFE management
-  registerMFE(mfeId: string, metadata?: any): void;
+  registerMFE(mfeId: string, metadata?: MFERegistrationMetadata): void;
   unregisterMFE(mfeId: string): void;
 
   // State snapshots
-  getSnapshot(): Record<string, any>;
-  restoreSnapshot(snapshot: Record<string, any>): void;
+  getSnapshot(): Record<StateKey, StateValue>;
+  restoreSnapshot(snapshot: Record<StateKey, StateValue>): void;
 
   // Framework adapters
-  getAdapter(framework: 'react' | 'vue' | 'angular' | 'svelte' | 'vanilla'): any;
+  getAdapter(framework: SupportedFramework): FrameworkAdapter;
+}
+
+// Framework types
+export type SupportedFramework = 'react' | 'vue' | 'angular' | 'svelte' | 'vanilla';
+
+// MFE registration metadata
+export interface MFERegistrationMetadata {
+  framework?: SupportedFramework;
+  version?: string;
+  [key: string]: unknown;
 }
 
 export interface MFEMetadata {
   id: string;
-  framework: string;
+  framework: SupportedFramework;
   version: string;
   registeredAt: number;
+  metadata?: MFERegistrationMetadata;
+}
+
+// Framework adapter interface
+export interface FrameworkAdapter {
+  name: SupportedFramework;
+  // Each adapter will have its own specific methods
 }
 
 export interface StateManagerConfig {
@@ -53,7 +85,7 @@ export interface StateManagerConfig {
   devtools?: boolean;
 
   // Initial state
-  initialState?: Record<string, any>;
+  initialState?: Record<StateKey, StateValue>;
 
   // State change middleware
   middleware?: StateMiddleware[];

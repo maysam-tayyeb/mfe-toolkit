@@ -135,7 +135,7 @@ Permissions: ${session.permissions.join(', ')}`,
         // Clear form
         setCustomEventName('');
         setCustomEventData('');
-      } catch (error) {
+      } catch {
         services.notification.error('Invalid JSON', 'Please enter valid JSON data');
       }
     }

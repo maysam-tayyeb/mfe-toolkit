@@ -331,8 +331,7 @@ export class UniversalStateManager implements StateManager {
       manager: this,
       getState: () => this.getSnapshot(),
       setState: (key: string, value: any) => this.set(key, value, 'devtools'),
-      subscribe: (key: string, callback: Function) =>
-        this.subscribe(key, callback as StateListener),
+      subscribe: (key: string, callback: StateListener) => this.subscribe(key, callback),
       mfes: () => Array.from(this.mfeRegistry.values()),
     };
   }

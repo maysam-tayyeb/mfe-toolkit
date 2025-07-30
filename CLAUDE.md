@@ -220,6 +220,8 @@ If you don't know the correct commands for a project, ask the user and suggest u
 - **Always run lint before commit**
   - Helps catch and prevent potential code quality issues before they are committed
 
-```
+## Development Best Practices
 
-```
+- **Always create and use named types**
+  - Enhances code readability and type safety
+  - Makes the codebase more maintainable and self-documenting
