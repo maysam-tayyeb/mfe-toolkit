@@ -15,8 +15,10 @@ export const UniversalStateDemoPage: React.FC = () => {
     'stateDemoVanilla',
   ]);
 
-  const [stateManager] = useState(() =>
-    getGlobalStateManager({
+  const [stateManager] = useState(() => {
+    const useValtio = import.meta.env.VITE_USE_VALTIO_STATE === 'true';
+    console.log('[UniversalStateDemoPage] Using Valtio:', useValtio);
+    const manager = getGlobalStateManager({
       devtools: true,
       persistent: true,
       crossTab: true,
@@ -25,9 +27,11 @@ export const UniversalStateDemoPage: React.FC = () => {
         sharedCounter: 0,
       },
       // Enable Valtio implementation
-      useValtio: import.meta.env.VITE_USE_VALTIO_STATE === 'true',
-    })
-  );
+      useValtio,
+    });
+    console.log('[UniversalStateDemoPage] State manager type:', manager.constructor.name);
+    return manager;
+  });
 
   // Create enhanced services with state manager
   const mfeServices = useMemo(() => {
