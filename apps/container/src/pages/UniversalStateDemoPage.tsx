@@ -21,18 +21,6 @@ export const UniversalStateDemoPage: React.FC = () => {
   ]);
 
   const [stateManager] = useState(() => {
-    // Check URL params for testing
-    const urlParams = new URLSearchParams(window.location.search);
-    const forceValtio = urlParams.get('valtio') === 'true';
-    const forceOriginal = urlParams.get('valtio') === 'false';
-    
-    // Determine which implementation to use
-    let useValtio = import.meta.env.VITE_USE_VALTIO_STATE === 'true';
-    if (forceValtio) useValtio = true;
-    if (forceOriginal) useValtio = false;
-    
-    console.log('[UniversalStateDemoPage] Using Valtio:', useValtio);
-    
     const manager = getGlobalStateManager({
       devtools: true,
       persistent: true,
@@ -41,8 +29,6 @@ export const UniversalStateDemoPage: React.FC = () => {
         theme: 'light',
         sharedCounter: 0,
       },
-      // Enable Valtio implementation
-      useValtio,
     });
     
     console.log('[UniversalStateDemoPage] State manager type:', manager.constructor.name);

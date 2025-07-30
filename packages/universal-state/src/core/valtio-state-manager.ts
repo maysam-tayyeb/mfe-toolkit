@@ -1,5 +1,5 @@
-import { proxy, subscribe, snapshot, ref } from 'valtio';
-import { devtools, subscribeKey } from 'valtio/utils';
+import { proxy, snapshot, ref } from 'valtio';
+import { devtools } from 'valtio/utils';
 import {
   StateManager,
   StateListener,

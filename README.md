@@ -10,7 +10,7 @@ A complete microfrontend (MFE) architecture built with React 19, Redux Toolkit, 
 - 📦 **Optimized Bundles** - 96% smaller with import maps (576KB → 14KB)
 - 🔄 **Cross-Version Support** - React 17 MFEs work seamlessly in React 19 container
 - 🛠️ **Modern Tooling** - Vite, TypeScript, pnpm workspaces, and ESBuild
-- 🔧 **Universal State Manager** - Cross-framework state management (React, Vue, Vanilla JS)
+- 🔧 **Valtio State Manager** - Cross-framework state management (React, Vue, Vanilla JS) powered by Valtio proxy-based reactivity
 
 ## 🏗️ Architecture Overview
 
@@ -65,7 +65,7 @@ A complete microfrontend (MFE) architecture built with React 19, Redux Toolkit, 
 ### 📚 Architecture Documentation
 
 - [Architecture Decisions](./docs/architecture/ARCHITECTURE_DECISIONS.md) - Key design choices and rationale
-- [State Management Architecture](./docs/architecture/STATE_MANAGEMENT_ARCHITECTURE.md) - ContextBridge vs Universal State Manager
+- [State Management Architecture](./docs/architecture/STATE_MANAGEMENT_ARCHITECTURE.md) - ContextBridge vs Valtio State Manager
 - [MFE Loading Guide](./docs/architecture/MFE_LOADING_GUIDE.md) - How MFEs are loaded and best practices
 - [Improvements Status](./docs/architecture/IMPROVEMENTS_STATUS.md) - Completed and planned improvements
 
@@ -334,7 +334,7 @@ mfe-made-easy/
 ✅ **MFE Dev Kit**: Complete service layer for MFE integration  
 ✅ **Dynamic Loading**: ES modules loaded at runtime (no Module Federation)  
 ✅ **Shared Services**: Auth, Modal, Notification, Event Bus, Logger  
-✅ **Universal State Manager**: Cross-framework state synchronization  
+✅ **Valtio State Manager**: Cross-framework state synchronization with proxy-based reactivity  
 ✅ **Dual MFE Loaders**: Standard and Isolated loaders for different scenarios  
 ✅ **Development Mode**: Hot reload for both container and MFEs  
 ✅ **TypeScript**: Full type safety across the monorepo  
@@ -534,7 +534,7 @@ VITE_MFE_REGISTRY_URL=https://cdn.example.com/configs/mfe-registry.json
 
 - Implement MFE Manifest V2 for better metadata and dependency management
 - Add more cross-framework MFE examples
-- Enhance Universal State Manager with more features
+- Enhance Valtio State Manager with more features
 - Configure CI/CD pipeline with GitHub Actions
 - Improve error boundaries and recovery mechanisms
 - Add performance monitoring and optimization
