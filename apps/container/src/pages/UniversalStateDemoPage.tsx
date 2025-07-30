@@ -24,6 +24,8 @@ export const UniversalStateDemoPage: React.FC = () => {
         theme: 'light',
         sharedCounter: 0,
       },
+      // Enable Valtio implementation
+      useValtio: import.meta.env.VITE_USE_VALTIO_STATE === 'true',
     })
   );
 

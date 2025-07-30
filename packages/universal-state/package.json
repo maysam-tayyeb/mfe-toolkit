@@ -8,7 +8,10 @@
   "scripts": {
     "build": "vite build",
     "dev": "vite build --watch",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "test": "vitest",
+    "test:watch": "vitest watch",
+    "test:coverage": "vitest run --coverage"
   },
   "files": [
     "dist"
@@ -25,11 +28,13 @@
     "@testing-library/jest-dom": "^6.6.4",
     "@types/node": "^20.10.0",
     "@types/react": "^19.0.0",
+    "@vitest/ui": "^3.2.4",
     "happy-dom": "^18.0.1",
     "react": "^19.0.0",
     "typescript": "^5.3.2",
     "vite": "^5.0.12",
     "vite-plugin-dts": "^3.6.4",
+    "vitest": "^3.2.4",
     "vue": "^3.5.0"
   },
   "peerDependencies": {
@@ -43,5 +48,9 @@
     "vue": {
       "optional": true
     }
+  },
+  "dependencies": {
+    "valtio": "^2.1.5",
+    "valtio-persist": "^2.2.4"
   }
 }
