@@ -1,5 +1,11 @@
 import { EventBus, EventPayload } from '../types';
+import { createMigrationEventBus } from './event-bus-migration';
+import type { MFEEventMap } from '../types/events';
 
+/**
+ * @deprecated Use TypedEventBusImpl from './typed-event-bus' for new code
+ * This implementation is maintained for backward compatibility
+ */
 export class EventBusImpl implements EventBus {
   private events: Map<string, Set<(payload: EventPayload<any>) => void>> = new Map();
   private wildcardHandlers: Set<(payload: EventPayload<any>) => void> = new Set();
@@ -69,4 +75,28 @@ export class EventBusImpl implements EventBus {
   }
 }
 
-export const createEventBus = (): EventBus => new EventBusImpl();
+/**
+ * Create an event bus instance
+ *
+ * @param options - Configuration options
+ * @param options.useTyped - Use the new typed event bus (default: true)
+ * @param options.useLegacy - Force use of legacy implementation (default: false)
+ * @returns EventBus instance
+ */
+export const createEventBus = (options?: {
+  useTyped?: boolean;
+  useLegacy?: boolean;
+  source?: string;
+  debug?: boolean;
+}): EventBus => {
+  // Default to typed implementation unless explicitly using legacy
+  if (options?.useLegacy) {
+    return new EventBusImpl();
+  }
+
+  // Return migration adapter that supports both typed and untyped usage
+  return createMigrationEventBus<MFEEventMap>({
+    source: options?.source || 'mfe-platform',
+    debug: options?.debug || false,
+  });
+};

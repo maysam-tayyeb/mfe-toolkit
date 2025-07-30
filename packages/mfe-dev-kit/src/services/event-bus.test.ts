@@ -6,7 +6,8 @@ describe('EventBus', () => {
   let eventBus: EventBus;
 
   beforeEach(() => {
-    eventBus = createEventBus();
+    // Use legacy implementation for these tests
+    eventBus = createEventBus({ useLegacy: true });
   });
 
   describe('on (subscribe)', () => {

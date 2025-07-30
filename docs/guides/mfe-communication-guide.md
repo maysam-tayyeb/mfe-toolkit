@@ -2,6 +2,9 @@
 
 This guide demonstrates how to implement inter-MFE communication using the event bus system in the MFE platform.
 
+> **🚀 New: Typed Event Bus**  
+> The platform now supports a fully typed event system with compile-time type safety. See the [Typed Event Bus Migration Guide](./typed-event-bus-migration.md) for details on migrating to the typed API.
+
 ## 🎯 Overview
 
 The MFE Communication Center provides a real-time testing environment for inter-MFE communication. It displays two MFEs side-by-side with a centralized event log, allowing you to observe and test event-based communication patterns.
@@ -326,11 +329,86 @@ eventBus.on('state.sync', (payload) => {
 });
 ```
 
+## 🚀 Using the Typed Event Bus
+
+The platform now includes a fully typed event bus that provides compile-time type safety and better developer experience. Here's how to use it:
+
+### Define Your Event Types
+
+```typescript
+// types/events.ts
+import type { EventMap } from '@mfe/dev-kit';
+
+export type MyMFEEventMap = EventMap & {
+  'inter-mfe.message': {
+    from: string;
+    to: string;
+    message: string;
+    timestamp: string;
+  };
+  'user.action': {
+    action: string;
+    itemId: string;
+    source: string;
+    data: unknown;
+  };
+  'data.updated': {
+    entity: string;
+    id: string;
+    changes: Record<string, unknown>;
+    version: number;
+  };
+};
+```
+
+### Use Typed Event Bus
+
+```typescript
+import { createTypedEventBus } from '@mfe/dev-kit';
+import type { MyMFEEventMap } from './types/events';
+
+// Create typed event bus
+const eventBus = createTypedEventBus<MyMFEEventMap>({
+  source: 'my-mfe',
+});
+
+// Emit with full type safety
+eventBus.emit('inter-mfe.message', {
+  from: 'example',
+  to: 'react17',
+  message: 'Hello!',
+  timestamp: new Date().toISOString(),
+}); // TypeScript ensures all fields are correct!
+
+// Subscribe with typed handlers
+eventBus.on('user.action', (event) => {
+  // event.data is fully typed
+  console.log(event.data.action); // Auto-completion works!
+  console.log(event.data.itemId);
+});
+
+// Wait for events asynchronously
+const response = await eventBus.waitFor('data.updated', {
+  timeout: 5000,
+  filter: (event) => event.data.entity === 'user',
+});
+```
+
+### Benefits of Typed Events
+
+1. **Compile-time Safety**: Catch typos and type mismatches before runtime
+2. **Auto-completion**: IntelliSense for event names and data structures
+3. **Refactoring Support**: Rename events across your codebase safely
+4. **Better Documentation**: Types serve as living documentation
+
+For a complete migration guide, see [Typed Event Bus Migration Guide](./typed-event-bus-migration.md).
+
 ## 🔗 Related Documentation
 
 - [MFE Development Kit API](../packages/mfe-dev-kit/README.md)
 - [Container Services](../apps/container/README.md)
 - [Event Bus Implementation](../packages/mfe-dev-kit/src/services/event-bus.ts)
+- [Typed Event Bus Migration Guide](./typed-event-bus-migration.md)
 
 ## 💡 Try It Yourself
 

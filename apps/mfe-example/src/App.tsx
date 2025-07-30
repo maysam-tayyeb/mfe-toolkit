@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { MFEServices } from '@mfe/dev-kit';
 import { EVENTS, MFE_CONFIG } from '@mfe/shared';
 import { ZustandDemo } from '@/components/ZustandDemo';
+import { TypedEventDemo } from '@/components/TypedEventDemo';
 
 interface AppProps {
   services: MFEServices;
@@ -551,6 +552,16 @@ export const App: React.FC<AppProps> = ({ services }) => {
           Isolated state management for this MFE using shared Zustand from container
         </p>
         <ZustandDemo />
+      </div>
+
+      {/* Typed Event Bus Demo */}
+      <div className="border rounded-lg p-6">
+        <h2 className="text-xl font-semibold mb-4">Typed Event Bus Demo</h2>
+        <p className="text-sm text-muted-foreground mb-4">
+          Demonstrates the new typed event bus with compile-time type safety and better developer
+          experience
+        </p>
+        <TypedEventDemo services={services} />
       </div>
 
       {/* Shared Dependencies */}
