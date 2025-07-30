@@ -1,5 +1,5 @@
 import { proxy, subscribe, snapshot, ref } from 'valtio';
-import { devtools } from 'valtio/utils';
+import { devtools, subscribeKey } from 'valtio/utils';
 import {
   StateManager,
   StateListener,
@@ -93,11 +93,28 @@ export class ValtioStateManager implements StateManager {
 
     // Run middleware chain
     this.runMiddleware(event, () => {
+      // Update the source before making changes
+      this.state._meta.source = source;
+      
       // Update state using Valtio proxy
       this.state.store[key] = value;
       this.state._meta.lastUpdate = Date.now();
       this.state._meta.updateCount++;
-      this.state._meta.source = source;
+
+      // Notify key-specific listeners immediately
+      const keyListenerSet = this.keyListeners.get(key);
+      if (keyListenerSet && keyListenerSet.size > 0) {
+        keyListenerSet.forEach((listener) => {
+          try {
+            listener(value, event);
+          } catch (error) {
+            console.error(`[ValtioStateManager] Error in listener for key "${key}":`, error);
+          }
+        });
+      }
+      
+      // Notify global listeners immediately
+      this.notifyGlobalListeners(event);
 
       // Persist to storage
       if (this.config.persistent && !this.isProcessingBroadcast) {
@@ -136,6 +153,21 @@ export class ValtioStateManager implements StateManager {
       timestamp: Date.now(),
     };
 
+    // Notify key-specific listeners immediately
+    const keyListenerSet = this.keyListeners.get(key);
+    if (keyListenerSet && keyListenerSet.size > 0) {
+      keyListenerSet.forEach((listener) => {
+        try {
+          listener(undefined, event);
+        } catch (error) {
+          console.error(`[ValtioStateManager] Error in listener for key "${key}":`, error);
+        }
+      });
+    }
+    
+    // Notify global listeners immediately
+    this.notifyGlobalListeners(event);
+
     // Remove from storage
     if (this.config.persistent) {
       localStorage.removeItem(`${this.config.storagePrefix}:${key}`);
@@ -155,12 +187,41 @@ export class ValtioStateManager implements StateManager {
 
   clear(): void {
     const keys = Object.keys(this.state.store);
+    const previousValues: Record<string, unknown> = {};
+    
+    // Store previous values for notifications
+    keys.forEach(key => {
+      previousValues[key] = this.state.store[key];
+    });
     
     // Clear the store
     this.state.store = {};
     this.state._meta.lastUpdate = Date.now();
     this.state._meta.updateCount++;
     this.state._meta.source = 'clear';
+
+    // Notify all key-specific listeners
+    keys.forEach((key) => {
+      const keyListenerSet = this.keyListeners.get(key);
+      if (keyListenerSet && keyListenerSet.size > 0) {
+        const event: StateChangeEvent = {
+          key,
+          value: undefined,
+          previousValue: previousValues[key],
+          source: 'clear',
+          timestamp: Date.now(),
+        };
+        keyListenerSet.forEach((listener) => {
+          try {
+            listener(undefined, event);
+          } catch (error) {
+            console.error(`[ValtioStateManager] Error in listener for key "${key}":`, error);
+          }
+        });
+        // Also notify global listeners for each key
+        this.notifyGlobalListeners(event);
+      }
+    });
 
     // Clear storage
     if (this.config.persistent) {
@@ -280,35 +341,8 @@ export class ValtioStateManager implements StateManager {
   // Private methods
 
   private setupInternalSubscriptions(): void {
-    // Track all changes to the store
-    let previousSnapshot = snapshot(this.state.store);
-
-    subscribe(this.state.store, () => {
-      const currentSnapshot = snapshot(this.state.store);
-      
-      // Find changed keys
-      const allKeys = new Set([...Object.keys(previousSnapshot), ...Object.keys(currentSnapshot)]);
-      
-      allKeys.forEach((key) => {
-        const prevValue = previousSnapshot[key];
-        const currValue = currentSnapshot[key];
-        
-        if (prevValue !== currValue) {
-          const event: StateChangeEvent = {
-            key,
-            value: currValue,
-            previousValue: prevValue,
-            source: this.state._meta.source,
-            timestamp: Date.now(),
-          };
-          
-          // Notify global listeners
-          this.notifyGlobalListeners(event);
-        }
-      });
-      
-      previousSnapshot = currentSnapshot;
-    });
+    // We're using direct synchronous notifications in set/delete/clear methods
+    // No need for Valtio subscriptions at this level
   }
 
   private notifyGlobalListeners(event: StateChangeEvent): void {
@@ -320,17 +354,8 @@ export class ValtioStateManager implements StateManager {
       }
     });
     
-    // Also notify key-specific listeners
-    const keyListeners = this.keyListeners.get(event.key);
-    if (keyListeners) {
-      keyListeners.forEach((listener) => {
-        try {
-          listener(event.value, event);
-        } catch (error) {
-          console.error('State listener error:', error);
-        }
-      });
-    }
+    // Key-specific listeners are notified separately in set/delete/clear methods
+    // Don't notify them here to avoid double notifications
   }
 
   private runMiddleware(event: StateChangeEvent, next: () => void): void {
@@ -395,7 +420,24 @@ export class ValtioStateManager implements StateManager {
             const stateEvent = event.data.event as StateChangeEvent;
             // Use ref to avoid triggering subscriptions during sync
             ref(this.state.store)[stateEvent.key] = stateEvent.value;
-            // Then trigger subscriptions manually
+            
+            // Notify key-specific listeners
+            const keyListenerSet = this.keyListeners.get(stateEvent.key);
+            if (keyListenerSet && keyListenerSet.size > 0) {
+              const crossTabEvent = {
+                ...stateEvent,
+                source: `${stateEvent.source} (cross-tab)`,
+              };
+              keyListenerSet.forEach((listener) => {
+                try {
+                  listener(stateEvent.value, crossTabEvent);
+                } catch (error) {
+                  console.error(`[ValtioStateManager] Error in listener for key "${stateEvent.key}":`, error);
+                }
+              });
+            }
+            
+            // Then trigger global subscriptions
             this.notifyGlobalListeners({
               ...stateEvent,
               source: `${stateEvent.source} (cross-tab)`,

@@ -1,9 +1,8 @@
 <template>
-  <ValtioApp v-if="isValtio" :state-manager="stateManager" />
-  <div v-else class="space-y-6 p-6">
+  <div class="space-y-6 p-6">
     <div>
-      <h2 class="text-2xl font-bold">Vue State Demo</h2>
-      <p class="text-muted-foreground">Demonstrating cross-framework state synchronization</p>
+      <h2 class="text-2xl font-bold">Vue State Demo (Valtio Enhanced)</h2>
+      <p class="text-muted-foreground">Using Valtio reactive state management</p>
     </div>
     
     <!-- User Management Card -->
@@ -58,7 +57,7 @@
             <div class="flex items-center justify-between">
               <div>
                 <p class="font-medium">Current Theme</p>
-                <p class="text-sm text-muted-foreground">Applies to all MFEs</p>
+                <p class="text-sm text-muted-foreground">Reactive updates with Valtio</p>
               </div>
               <div class="flex items-center justify-center w-10 h-10 rounded-lg bg-muted">
                 <svg v-if="theme === 'dark'" class="w-5 h-5 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -86,7 +85,7 @@
           <div class="space-y-4">
             <div class="text-center">
               <div class="text-4xl font-bold tabular-nums">{{ counter || 0 }}</div>
-              <p class="text-sm text-muted-foreground mt-1">Synchronized value</p>
+              <p class="text-sm text-muted-foreground mt-1">Fine-grained updates</p>
             </div>
             <button 
               @click="incrementCounter" 
@@ -98,11 +97,44 @@
         </div>
       </div>
     </div>
+
+    <!-- Valtio Features Card -->
+    <div class="rounded-lg border bg-card text-card-foreground shadow-sm">
+      <div class="p-6">
+        <h3 class="text-lg font-semibold mb-4">Valtio Benefits in Vue</h3>
+        <div class="grid gap-3 text-sm">
+          <div class="flex items-start gap-2">
+            <span class="text-green-500">✓</span>
+            <div>
+              <strong>Reactive Integration:</strong> Seamless with Vue's reactivity system
+            </div>
+          </div>
+          <div class="flex items-start gap-2">
+            <span class="text-green-500">✓</span>
+            <div>
+              <strong>Cross-Framework Sync:</strong> State shared with React and Vanilla MFEs
+            </div>
+          </div>
+          <div class="flex items-start gap-2">
+            <span class="text-green-500">✓</span>
+            <div>
+              <strong>TypeScript Support:</strong> Full type inference without annotations
+            </div>
+          </div>
+          <div class="flex items-start gap-2">
+            <span class="text-green-500">✓</span>
+            <div>
+              <strong>No Global Pollution:</strong> Clean encapsulation via adapters
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     
     <!-- State Snapshot Card -->
     <div class="rounded-lg border bg-card text-card-foreground shadow-sm">
       <div class="p-6">
-        <h3 class="text-lg font-semibold mb-4">State Snapshot</h3>
+        <h3 class="text-lg font-semibold mb-4">Live State Snapshot</h3>
         <pre class="p-4 rounded-md bg-muted text-sm font-mono overflow-auto max-h-48">{{ stateSnapshot }}</pre>
       </div>
     </div>
@@ -110,50 +142,41 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, computed, onMounted, ref } from 'vue';
-import { VueAdapter, ValtioStateManager } from '@mfe/universal-state';
-import type { StateManager } from '@mfe/universal-state';
+import { reactive, onMounted, onUnmounted } from 'vue';
+import { ValtioStateManager, createValtioVueAdapter } from '@mfe/universal-state';
+import type { ValtioVueAdapter } from '@mfe/universal-state';
 import { getButtonClasses } from '@mfe/shared';
-import ValtioApp from './ValtioApp.vue';
 
 // Props
 const props = defineProps<{
-  stateManager: StateManager;
+  stateManager: ValtioStateManager;
 }>();
 
-// Check if using Valtio
-const isValtio = computed(() => props.stateManager instanceof ValtioStateManager);
+// Create adapter instance for this component
+const adapter: ValtioVueAdapter = createValtioVueAdapter(props.stateManager);
 
-// Create adapter
-const adapter = new VueAdapter(props.stateManager);
-
-// Use global states
-const userState = adapter.useGlobalState<{ name: string; email: string }>('user');
-const user = userState.value;
-const setUser = userState.setValue;
-
-const themeState = adapter.useGlobalState<'light' | 'dark'>('theme');
-const theme = themeState.value;
-const setTheme = themeState.setValue;
-
-const counterState = adapter.useGlobalState<number>('sharedCounter');
-const counter = counterState.value;
-const setCounter = counterState.setValue;
+// Use Valtio-enhanced state
+const { value: user, setValue: setUser } = adapter.useGlobalState<{ name: string; email: string }>('user');
+const { value: theme, setValue: setTheme } = adapter.useGlobalState<'light' | 'dark'>('theme');
+const { value: counter, setValue: setCounter } = adapter.useGlobalState<number>('sharedCounter');
+const store = adapter.useStore();
 
 // Local state
 const formData = reactive({ name: '', email: '' });
-const stateSnapshot = ref('');
+const stateSnapshot = store;
 
-// Register MFE
-adapter.useMFERegistration('state-demo-vue', {
-  version: '1.0.0',
-  features: ['user-management', 'theme-switcher', 'counter']
+// Register MFE on mount, cleanup on unmount
+onMounted(() => {
+  props.stateManager.registerMFE('state-demo-vue-valtio', {
+    version: '2.0.0',
+    framework: 'vue',
+    features: ['valtio-adapter', 'reactive-store', 'type-safe'],
+  });
 });
 
-// Update state snapshot
-const updateStateSnapshot = () => {
-  stateSnapshot.value = JSON.stringify(props.stateManager.getSnapshot(), null, 2);
-};
+onUnmounted(() => {
+  props.stateManager.unregisterMFE('state-demo-vue-valtio');
+});
 
 // Methods
 const updateUser = () => {
@@ -171,17 +194,4 @@ const toggleTheme = () => {
 const incrementCounter = () => {
   setCounter((counter.value || 0) + 1);
 };
-
-// Initialize and subscribe to state changes
-onMounted(() => {
-  // Initialize state snapshot
-  updateStateSnapshot();
-  
-  // Subscribe to all state changes to update snapshot
-  props.stateManager.subscribeAll((event) => {
-    console.log(`[Vue MFE] State changed: ${event.key} =`, event.value);
-    updateStateSnapshot();
-  });
-});
 </script>
-
