@@ -15,6 +15,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - ContextBridge component to connect React contexts to MFE services
 - KNOWN_ISSUES.md for tracking known issues
 - CHANGELOG.md for documenting changes
+- Typed event bus system with compile-time type safety
+- Standard MFE event map with lifecycle, navigation, user, state, and communication events
+- Event bus migration adapter for backward compatibility
+- TypedEventDemo component demonstrating typed event usage
+- Comprehensive typed event bus migration guide
 
 ### Changed
 
@@ -23,6 +28,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Modified MFE services to use lazy initialization with context bridge
 - Updated import map to remove Redux dependencies
 - Improved state isolation between container and MFEs
+- Event bus now defaults to typed implementation instead of legacy
+- All event bus tests updated to work with typed implementation
 
 ### Removed
 
@@ -30,6 +37,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Global window assignments (`__MFE_SERVICES__`, `__EVENT_BUS__`, `__REDUX_STORE__`)
 - Redux store implementation (authSlice, modalSlice, notificationSlice)
 - Zustand state demo from React 17 MFE (temporarily)
+- Deprecated EventBusImpl class (replaced with typed implementation)
+- Unused ReactAdapter class from state-demo-react
 
 ### Fixed
 
