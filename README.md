@@ -8,8 +8,9 @@ A complete microfrontend (MFE) architecture built with React 19, Redux Toolkit, 
 - 📡 **Inter-MFE Communication** - Real-time event bus for MFE-to-MFE messaging ([see guide](./docs/mfe-communication-guide.md))
 - 🎯 **Shared Services** - Modal, notification, auth, and logging services
 - 📦 **Optimized Bundles** - 96% smaller with import maps (576KB → 14KB)
-- 🔄 **Cross-Version Support** - Legacy Service Explorer MFEs work seamlessly in React 19 container
+- 🔄 **Cross-Version Support** - React 17 MFEs work seamlessly in React 19 container
 - 🛠️ **Modern Tooling** - Vite, TypeScript, pnpm workspaces, and ESBuild
+- 🔧 **Universal State Manager** - Cross-framework state management (React, Vue, Vanilla JS)
 
 ## 🏗️ Architecture Overview
 
@@ -23,9 +24,9 @@ A complete microfrontend (MFE) architecture built with React 19, Redux Toolkit, 
 │                                                             │
 │  ┌─────────────────────────────────────────────────────┐    │
 │  │              Injected Services Layer                │    │
-│  │  ┌──────────┐ ┌───────────┐ ┌───────────┐ ┌───────┐ │    │
-│  │  │  Logger  │ │ Event Bus │ │   Modal   │ │Notify │ │    │
-│  │  └──────────┘ └───────────┘ └───────────┘ └───────┘ │    │
+│  │  ┌──────────┐ ┌───────────┐ ┌─────────┐ ┌─────────┐ │    │
+│  │  │  Logger  │ │ Event Bus │ │  Modal  │ │ Notify  │ │    │
+│  │  └──────────┘ └───────────┘ └─────────┘ └─────────┘ │    │
 │  └─────────────────────────────────────────────────────┘    │
 │                                                             │
 │  ┌─────────────────────────────────────────────────────┐    │
@@ -108,20 +109,27 @@ pnpm -r build
 ### Development Mode
 
 ```bash
-# Build all packages first
-pnpm build
+# Install dependencies (run after cloning)
+pnpm install
 
-# Terminal 1: Start the static file server for MFEs
-pnpm serve
+# Build all packages (required before first run)
+pnpm -r build
 
-# Terminal 2: Start the container app
-pnpm dev:container
+# Start all applications in parallel (recommended)
+pnpm dev
 ```
 
-This starts:
+Or start individually:
 
-- ✅ Container app on http://localhost:3000
-- ✅ Static file server on http://localhost:8080 (serves built MFEs)
+```bash
+# Start individual applications
+pnpm dev:container      # Container app on http://localhost:3000
+pnpm dev:mfe           # Example MFE on http://localhost:3001
+pnpm dev:react17       # React 17 MFE on http://localhost:3002
+pnpm dev:state-react   # State demo React MFE
+pnpm dev:state-vue     # State demo Vue MFE
+pnpm dev:state-demos   # All state demo MFEs in parallel
+```
 
 ### Production Mode
 
@@ -138,14 +146,20 @@ cd apps/container && pnpm preview
 
 ### How MFEs Are Loaded
 
-MFEs are loaded dynamically from the static file server:
+The platform uses **dynamic ES module imports** (no Module Federation) for MFE loading:
 
-1. **Build Phase**: MFEs are built as ES modules to the `dist/` directory
-2. **Serve Phase**: Static file server (port 8080) serves the built files
-3. **Runtime**: Container loads MFEs via dynamic imports from the registry
+1. **Development Mode**: MFEs run on their own dev servers (ports 3001, 3002, etc.)
+2. **Production Mode**:
+   - Build MFEs as ES modules to `dist/` directory
+   - Serve via static file server (port 8080)
+   - Container loads MFEs dynamically from registry
 
 ```bash
-# Example MFE URLs when served:
+# Development URLs:
+http://localhost:3001/mfe-example.js      # Example MFE
+http://localhost:3002/mfe-react17.js      # React 17 MFE
+
+# Production URLs (after build):
 http://localhost:8080/mfe-example/mfe-example.js
 http://localhost:8080/mfe-react17/mfe-react17.js
 http://localhost:8080/mfe-event-demo/mfe-event-demo.js
@@ -153,36 +167,69 @@ http://localhost:8080/mfe-event-demo/mfe-event-demo.js
 
 ### MFE Registry Configuration
 
-The container uses `mfe-registry.json` to discover MFEs:
+The container uses a **dynamic registry system** that loads configurations from JSON files:
 
 ```json
 {
   "mfes": [
     {
-      "name": "serviceExplorer",
-      "url": "http://localhost:8080/mfe-example/mfe-example.js",
+      "name": "example",
+      "url": "http://localhost:3001/mfe-example.js", // Dev mode
       "metadata": {
-        "displayName": "Service Explorer MFE",
-        "description": "Demonstrates modern React 19 features"
+        "displayName": "Example MFE",
+        "description": "Demonstrates all MFE services",
+        "icon": "🎯"
       }
     }
   ]
 }
 ```
 
+**Registry Features:**
+
+- 📁 Multiple registry files: `mfe-registry.json`, `mfe-registry.{environment}.json`
+- 🔧 Environment variable: `VITE_MFE_REGISTRY_URL`
+- 🔄 Hot reload support in development
+- 📦 Automatic fallback to hardcoded values if registry fails
+
 > **Note**: For production deployments:
 >
-> - Update the registry URLs to point to your CDN or web server
-> - Use environment variables for dynamic configuration
-> - Consider using different registry files for different environments
+> - Update URLs to point to your CDN: `https://cdn.example.com/mfes/`
+> - Use environment-specific registry files
+> - Configure caching (5 min dev, 30 min prod)
 
-## 🧪 Testing the MFE Integration
+## 🧪 Testing
+
+### Running Tests
+
+```bash
+# Run all tests
+pnpm test
+
+# Watch mode for tests
+pnpm test:watch
+
+# Coverage report
+pnpm test:coverage
+
+# Run a single test file
+pnpm vitest src/App.test.tsx
+
+# E2E tests with Playwright
+pnpm e2e              # Headless mode
+pnpm e2e:headed      # Headed mode
+pnpm e2e:debug       # Debug mode
+pnpm e2e:report      # View test report
+```
+
+### Testing the MFE Integration
 
 1. **Open the Container App**: http://localhost:3000
 2. **Navigate through the app**:
    - Home page shows the platform overview
    - Dashboard page tests container services
    - MFE Communication page for inter-MFE messaging
+   - Universal State Demo for cross-MFE state management
 3. **Load the Example MFE**:
    - Click "Example MFE" in navigation, or
    - Go directly to http://localhost:3000/mfe/example
@@ -209,26 +256,26 @@ mfe-made-easy/
 │   │   │   ├── store/          # Redux slices (auth, modal, notification)
 │   │   │   └── services/       # MFE services implementation
 │   │   └── package.json
-│   ├── mfe-example/            # Example MFE (port 3001)
-│   │   ├── src/
-│   │   │   ├── App.tsx         # Interactive demo of all services
-│   │   │   └── main.tsx        # ES module export and dev mode
-│   │   └── package.json
-│   └── mfe-react17/            # Legacy Service Explorer MFE (port 3002)
-│       ├── src/
-│       │   ├── App.tsx         # React 17 compatibility demo
-│       │   └── main.tsx        # ES module export
-│       └── package.json
+│   ├── mfe-example/            # Example MFE - demonstrates all services
+│   ├── mfe-react17/            # React 17 compatibility demo
+│   ├── mfe-event-demo/         # Event bus communication demo
+│   ├── mfe-state-demo-react/   # Universal state demo (React)
+│   ├── mfe-state-demo-vue/     # Universal state demo (Vue)
+│   └── mfe-state-demo-vanilla/ # Universal state demo (Vanilla JS)
 ├── packages/
 │   ├── mfe-dev-kit/            # Core MFE toolkit
 │   │   └── src/
 │   │       ├── types/          # TypeScript definitions
 │   │       ├── services/       # Logger, EventBus, Registry
 │   │       └── components/     # MFELoader, MFEPage
-│   └── shared/                 # Common utilities
+│   ├── shared/                 # Common utilities
+│   │   └── src/
+│   │       ├── utils.ts        # Helper functions
+│   │       └── constants.ts    # Shared constants
+│   └── universal-state/        # Cross-framework state management
 │       └── src/
-│           ├── utils.ts        # Helper functions
-│           └── constants.ts    # Shared constants
+│           ├── StateManager.ts # Core state management
+│           └── adapters/       # Framework-specific adapters
 ├── pnpm-workspace.yaml         # Workspace configuration
 └── package.json                # Root package with scripts
 ```
@@ -240,24 +287,27 @@ mfe-made-easy/
 - `pnpm dev` - Start all apps in development mode
 - `pnpm dev:container` - Start only container app
 - `pnpm dev:mfe` - Start only example MFE
-- `pnpm dev:react17` - Start only Legacy Service Explorer MFE
+- `pnpm dev:react17` - Start only React 17 MFE
+- `pnpm dev:state-react` - Start state demo React MFE
+- `pnpm dev:state-vue` - Start state demo Vue MFE
 - `pnpm dev:state-demos` - Start all state demo MFEs
 
 ### Building & Serving
 
-- `pnpm build` - Build container and all MFEs
-- `pnpm build:container` - Build only container
-- `pnpm build:mfes` - Build all MFEs
-- `pnpm serve` - Serve built MFEs on port 8080
-- `pnpm serve:mfes` - Same as above (alias)
+- `pnpm build` - Build all packages
+- `pnpm -r build` - Build in dependency order
+- `pnpm preview` - Preview production build (run from apps/container)
 
 ### Code Quality
 
 - `pnpm lint` - Run ESLint
 - `pnpm lint:fix` - Fix linting issues
 - `pnpm format` - Format code with Prettier
+- `pnpm format:check` - Check formatting
 - `pnpm type-check` - TypeScript checking
 - `pnpm test` - Run tests
+- `pnpm test:watch` - Run tests in watch mode
+- `pnpm test:coverage` - Generate coverage report
 - `pnpm validate` - Run all checks (format, lint, type-check, test)
 
 ## 🔧 Development Workflow
@@ -280,13 +330,15 @@ mfe-made-easy/
 ## 🎯 Features Implemented
 
 ✅ **Monorepo Setup**: pnpm workspaces with shared configurations  
-✅ **Container App**: React 19 + Redux Toolkit + ShadCN UI  
+✅ **Container App**: React 19 + React Context + ShadCN UI  
 ✅ **MFE Dev Kit**: Complete service layer for MFE integration  
-✅ **Dynamic Loading**: ES modules loaded at runtime  
+✅ **Dynamic Loading**: ES modules loaded at runtime (no Module Federation)  
 ✅ **Shared Services**: Auth, Modal, Notification, Event Bus, Logger  
+✅ **Universal State Manager**: Cross-framework state synchronization  
+✅ **Dual MFE Loaders**: Standard and Isolated loaders for different scenarios  
 ✅ **Development Mode**: Hot reload for both container and MFEs  
 ✅ **TypeScript**: Full type safety across the monorepo  
-✅ **Modern Tooling**: Vite, Tailwind CSS, ESLint support
+✅ **Modern Tooling**: Vite, Tailwind CSS, ESLint, Vitest, Playwright
 
 ## 🚀 Quick Command Reference
 
@@ -296,25 +348,24 @@ mfe-made-easy/
 # Install dependencies
 pnpm install
 
+# Install and build (first time setup)
+pnpm install
+pnpm -r build
+
 # Start all apps (recommended)
 pnpm dev
 
 # Start individual apps
 pnpm dev:container    # Container on :3000
-pnpm dev:mfe          # Service Explorer MFE on :3001
-pnpm dev:react17      # Legacy Service Explorer MFE on :3002
+pnpm dev:mfe          # Example MFE on :3001
+pnpm dev:react17      # React 17 MFE on :3002
 
-# Build everything
-pnpm build
-
-# Run tests
-pnpm test
-
-# Type check
-pnpm type-check
-
-# Format code
-pnpm format
+# Code quality checks
+pnpm lint             # Run linter
+pnpm format           # Format code
+pnpm type-check       # Type checking
+pnpm test             # Run tests
+pnpm validate         # Run all checks
 ```
 
 ### Working with MFEs
@@ -336,14 +387,18 @@ pnpm serve:static
 ### MFE Not Loading?
 
 ```bash
-# 1. Check if all services are running
-pnpm dev  # Should start container + both MFEs
+# 1. Make sure packages are built first
+pnpm -r build
 
-# 2. Verify MFE is accessible
-curl http://localhost:3001/mfe-example.js
-curl http://localhost:3002/react17-mfe.js
+# 2. Start all services
+pnpm dev  # Should start container + all MFEs
 
-# 3. Check browser console for errors
+# 3. For production mode, build and serve
+pnpm build
+pnpm serve  # Terminal 1: Serves MFEs on :8080
+cd apps/container && pnpm preview  # Terminal 2: Container
+
+# 4. Check browser console for errors
 # Open DevTools > Console
 ```
 
@@ -363,12 +418,12 @@ pnpm type-check
 
 ### Services Not Available?
 
-```javascript
-// Check in browser console:
-console.log(window.__MFE_SERVICES__); // Should show all services
-console.log(window.__EVENT_BUS__); // Event bus instance
-console.log(window.__REDUX_STORE__); // Redux store
-```
+Services are injected into MFEs at mount time (no global window pollution). Check:
+
+1. MFE is properly importing from `@mfe/dev-kit`
+2. Services are passed to MFE during mount
+3. Error boundaries are catching and reporting errors
+4. Check the Error Reporter service for detailed error tracking
 
 ### Port Already in Use?
 
@@ -376,7 +431,8 @@ console.log(window.__REDUX_STORE__); // Redux store
 # Kill process on specific port
 lsof -ti:3000 | xargs kill -9  # Container
 lsof -ti:3001 | xargs kill -9  # Service Explorer MFE
-lsof -ti:3002 | xargs kill -9  # Legacy Service Explorer MFE (React 17)
+lsof -ti:3002 | xargs kill -9  # React 17 MFE
+lsof -ti:8080 | xargs kill -9  # Static file server
 
 # Or use different ports in vite.config.ts
 ```
@@ -461,9 +517,10 @@ VITE_MFE_REGISTRY_URL=https://cdn.example.com/configs/mfe-registry.json
 ### Documentation
 
 - **[Architecture Documentation](./docs/architecture/)** - Technical architecture and analysis
-- **[Developer Guides](./docs/guides/)** - How-to guides and tutorials
-- **[API Reference](./docs/api/)** - Package and service API documentation
-- **[MFE Communication Guide](./docs/guides/mfe-communication-guide.md)** - Learn how to implement inter-MFE communication with real-time event bus examples
+- **[State Management Architecture](./docs/architecture/STATE_MANAGEMENT_ARCHITECTURE.md)** - Dual state management approach (ContextBridge vs Universal State)
+- **[MFE Loading Guide](./docs/architecture/MFE_LOADING_GUIDE.md)** - How MFEs are loaded and best practices
+- **[Architecture Decisions](./docs/architecture/ARCHITECTURE_DECISIONS.md)** - Key design choices and rationale
+- **[MFE Communication Guide](./docs/mfe-communication-guide.md)** - Inter-MFE messaging with event bus
 
 ### Quick Links
 
@@ -475,12 +532,12 @@ VITE_MFE_REGISTRY_URL=https://cdn.example.com/configs/mfe-registry.json
 
 ## 🚀 Next Steps
 
-- Add more MFE examples
-- Implement routing between MFEs
-- Add testing setup with Vitest
-- Configure CI/CD pipeline
-- Add error boundaries and fallbacks
-- Implement MFE-specific state management
+- Implement MFE Manifest V2 for better metadata and dependency management
+- Add more cross-framework MFE examples
+- Enhance Universal State Manager with more features
+- Configure CI/CD pipeline with GitHub Actions
+- Improve error boundaries and recovery mechanisms
+- Add performance monitoring and optimization
 
 ## 🤝 Contributing
 
