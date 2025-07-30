@@ -1,0 +1,59 @@
+{
+  "$schema": "https://mfe-made-easy.com/schemas/mfe-manifest-v2.schema.json",
+  "name": "stateDemoReact",
+  "version": "1.0.0",
+  "url": "http://localhost:8080/mfe-state-demo-react/mfe-state-demo-react.js",
+  "dependencies": {
+    "runtime": {},
+    "peer": {
+      "react": "^18.0.0 || ^19.0.0",
+      "react-dom": "^18.0.0 || ^19.0.0"
+    }
+  },
+  "compatibility": {
+    "container": ">=1.0.0",
+    "frameworks": {
+      "react": ">=18.0.0"
+    }
+  },
+  "requirements": {
+    "services": [
+      {
+        "name": "logger",
+        "optional": false
+      },
+      {
+        "name": "eventBus",
+        "optional": false
+      },
+      {
+        "name": "auth",
+        "optional": true
+      },
+      {
+        "name": "modal",
+        "optional": true
+      },
+      {
+        "name": "notification",
+        "optional": true
+      }
+    ]
+  },
+  "metadata": {
+    "displayName": "State Demo React MFE",
+    "description": "Universal state management demo using React",
+    "icon": "🔄"
+  },
+  "capabilities": {
+    "emits": ["state:changed"],
+    "listens": ["app:theme-change", "user:login", "user:logout", "state:sync"]
+  },
+  "config": {
+    "loading": {
+      "timeout": 30000,
+      "retries": 3,
+      "retryDelay": 1000
+    }
+  }
+}

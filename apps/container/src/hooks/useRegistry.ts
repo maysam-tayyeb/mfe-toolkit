@@ -32,7 +32,7 @@ export function useRegistry(options: UseRegistryOptions = {}): UseRegistryResult
     }
 
     // Create new instance if explicitly requested
-    const registryUrl = import.meta.env.VITE_MFE_REGISTRY_URL || '/mfe-registry.json';
+    const registryUrl = import.meta.env.VITE_MFE_REGISTRY_URL || '/mfe-registry-v2.json';
     const environment = import.meta.env.MODE;
 
     return new MFERegistryService({

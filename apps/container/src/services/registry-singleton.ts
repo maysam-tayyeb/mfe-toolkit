@@ -4,7 +4,7 @@ let registryInstance: MFERegistryService | null = null;
 
 export function getRegistrySingleton(): MFERegistryService {
   if (!registryInstance) {
-    const registryUrl = import.meta.env.VITE_MFE_REGISTRY_URL || '/mfe-registry.json';
+    const registryUrl = import.meta.env.VITE_MFE_REGISTRY_URL || '/mfe-registry-v2.json';
     const environment = import.meta.env.MODE;
 
     registryInstance = new MFERegistryService({

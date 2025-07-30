@@ -28,6 +28,7 @@
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-router-dom": "^7.7.1",
+    "semver": "^7.7.2",
     "tailwind-merge": "^3.3.1",
     "tailwindcss-animate": "^1.0.7"
   },
@@ -36,6 +37,7 @@
     "@types/node": "^24.1.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
+    "@types/semver": "^7.7.0",
     "@vitejs/plugin-react": "^4.2.1",
     "autoprefixer": "^10.4.21",
     "eslint": "^8.56.0",
