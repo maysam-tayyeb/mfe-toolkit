@@ -219,9 +219,23 @@ If you don't know the correct commands for a project, ask the user and suggest u
   - Helps maintain code quality and reduces unnecessary diffs
 - **Always run lint before commit**
   - Helps catch and prevent potential code quality issues before they are committed
+- **Only lint and format changed code before commit**
+  - Focus on optimizing the linting and formatting process for modified files
 
 ## Development Best Practices
 
 - **Always create and use named types**
   - Enhances code readability and type safety
   - Makes the codebase more maintainable and self-documenting
+
+## Personal Preferences
+
+- I prefer functional coding
+
+## TypeScript Best Practices
+
+- **Use 'type' over 'interface' where possible**
+
+## Code Style Guidance
+
+- **Never use enums**
