@@ -136,11 +136,24 @@ export class UniversalStateManager implements StateManager {
 
       // Broadcast to other tabs
       if (this.config.crossTab && this.broadcastChannel && !this.isProcessingBroadcast) {
-        this.broadcastChannel.postMessage({
-          type: 'STATE_UPDATE',
-          event,
-          instanceId: this.instanceId,
-        });
+        try {
+          // Create a serializable version of the event
+          const serializableEvent = {
+            key: event.key,
+            value: this.toSerializable(event.value),
+            previousValue: this.toSerializable(event.previousValue),
+            source: event.source,
+            timestamp: event.timestamp,
+          };
+          
+          this.broadcastChannel.postMessage({
+            type: 'STATE_UPDATE',
+            event: serializableEvent,
+            instanceId: this.instanceId,
+          });
+        } catch (error) {
+          console.warn('Failed to broadcast state update:', error);
+        }
       }
 
       // Log to devtools
@@ -188,11 +201,23 @@ export class UniversalStateManager implements StateManager {
 
     // Broadcast to other tabs
     if (this.config.crossTab && this.broadcastChannel && !this.isProcessingBroadcast) {
-      this.broadcastChannel.postMessage({
-        type: 'STATE_DELETE',
-        event,
-        instanceId: this.instanceId,
-      });
+      try {
+        const serializableEvent = {
+          key: event.key,
+          value: undefined,
+          previousValue: this.toSerializable(event.previousValue),
+          source: event.source,
+          timestamp: event.timestamp,
+        };
+        
+        this.broadcastChannel.postMessage({
+          type: 'STATE_DELETE',
+          event: serializableEvent,
+          instanceId: this.instanceId,
+        });
+      } catch (error) {
+        console.warn('Failed to broadcast state delete:', error);
+      }
     }
 
     this.logToDevtools('DELETE', event);
@@ -565,6 +590,47 @@ export class UniversalStateManager implements StateManager {
     // Console logging
     if (this.config.devtools) {
       console.log(`[MFE Universal State] ${action}`, data);
+    }
+  }
+
+  private toSerializable(value: any): any {
+    // Handle primitive values
+    if (value === null || value === undefined) return value;
+    if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') {
+      return value;
+    }
+
+    // Handle dates
+    if (value instanceof Date) {
+      return value.toISOString();
+    }
+
+    // Handle arrays
+    if (Array.isArray(value)) {
+      return value.map(item => this.toSerializable(item));
+    }
+
+    // Handle plain objects
+    if (typeof value === 'object' && value.constructor === Object) {
+      const serialized: Record<string, any> = {};
+      for (const key in value) {
+        if (value.hasOwnProperty(key)) {
+          try {
+            serialized[key] = this.toSerializable(value[key]);
+          } catch (e) {
+            // Skip non-serializable properties
+          }
+        }
+      }
+      return serialized;
+    }
+
+    // For other types (functions, symbols, etc.), try JSON.stringify
+    try {
+      return JSON.parse(JSON.stringify(value));
+    } catch {
+      // If all else fails, return a string representation
+      return String(value);
     }
   }
 }
