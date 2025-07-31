@@ -10,7 +10,7 @@ A complete microfrontend (MFE) architecture built with React 19, Redux Toolkit, 
 - 📦 **Optimized Bundles** - 96% smaller with import maps (576KB → 14KB)
 - 🔄 **Cross-Version Support** - React 17 MFEs work seamlessly in React 19 container
 - 🛠️ **Modern Tooling** - Vite, TypeScript, pnpm workspaces, and ESBuild
-- 🔧 **Universal State Manager** - Cross-framework state management (React, Vue, Vanilla JS)
+- 🔧 **Universal State Manager** - Cross-framework state management (React, Vue, Vanilla JS) with proxy-based reactivity
 
 ## 🏗️ Architecture Overview
 
@@ -334,7 +334,7 @@ mfe-made-easy/
 ✅ **MFE Dev Kit**: Complete service layer for MFE integration  
 ✅ **Dynamic Loading**: ES modules loaded at runtime (no Module Federation)  
 ✅ **Shared Services**: Auth, Modal, Notification, Event Bus, Logger  
-✅ **Universal State Manager**: Cross-framework state synchronization  
+✅ **Universal State Manager**: Cross-framework state synchronization with proxy-based reactivity  
 ✅ **Dual MFE Loaders**: Standard and Isolated loaders for different scenarios  
 ✅ **Development Mode**: Hot reload for both container and MFEs  
 ✅ **TypeScript**: Full type safety across the monorepo  

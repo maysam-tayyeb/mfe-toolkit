@@ -6,6 +6,11 @@ import { IsolatedMFELoader } from '@/components/IsolatedMFELoader';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { StateChangeLog } from '@/components/StateChangeLog';
 import { Button } from '@/components/ui/button';
+import { 
+  initStatePerformanceMonitor, 
+  measureStateUpdate,
+  getPerformanceSummary 
+} from '@/utils/state-performance-monitor';
 
 export const UniversalStateDemoPage: React.FC = () => {
   // Use the custom hook to get MFE URLs from context
@@ -15,8 +20,8 @@ export const UniversalStateDemoPage: React.FC = () => {
     'stateDemoVanilla',
   ]);
 
-  const [stateManager] = useState(() =>
-    getGlobalStateManager({
+  const [stateManager] = useState(() => {
+    const manager = getGlobalStateManager({
       devtools: true,
       persistent: true,
       crossTab: true,
@@ -24,8 +29,19 @@ export const UniversalStateDemoPage: React.FC = () => {
         theme: 'light',
         sharedCounter: 0,
       },
-    })
-  );
+    });
+    
+    console.log('[UniversalStateDemoPage] State manager type:', manager.constructor.name);
+    
+    // Track implementation usage
+    if (typeof window !== 'undefined') {
+      (window as any).__STATE_MANAGER_IMPL__ = manager.constructor.name;
+      // Initialize performance monitoring
+      initStatePerformanceMonitor(manager.constructor.name);
+    }
+    
+    return manager;
+  });
 
   // Create enhanced services with state manager
   const mfeServices = useMemo(() => {
@@ -65,11 +81,21 @@ export const UniversalStateDemoPage: React.FC = () => {
   }, [stateManager]);
 
   const clearState = () => {
-    stateManager.clear();
+    measureStateUpdate(() => {
+      stateManager.clear();
+    }, 'clear-state');
   };
 
   const resetCounter = () => {
-    stateManager.set('sharedCounter', 0, 'container');
+    measureStateUpdate(() => {
+      stateManager.set('sharedCounter', 0, 'container');
+    }, 'reset-counter');
+  };
+  
+  const showPerformanceReport = () => {
+    const summary = getPerformanceSummary();
+    console.log('Performance Summary:', summary);
+    alert(`Performance data logged to console. Check developer tools.`);
   };
 
   return (
@@ -104,9 +130,20 @@ export const UniversalStateDemoPage: React.FC = () => {
                   >
                     Reload Page
                   </Button>
+                  <Button
+                    onClick={showPerformanceReport}
+                    variant="ghost"
+                    size="sm"
+                    className="w-full"
+                  >
+                    Performance Report
+                  </Button>
                 </div>
                 <p className="text-xs text-muted-foreground">
                   Note: State persists across page reloads and is synchronized across browser tabs!
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  Implementation: <strong>{stateManager.constructor.name}</strong>
                 </p>
               </div>
             </div>

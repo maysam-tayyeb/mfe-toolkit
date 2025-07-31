@@ -250,3 +250,7 @@ If you don't know the correct commands for a project, ask the user and suggest u
 ## State Management Principles
 
 - **Strictly no global polutioning. Only use state management**
+
+## JavaScript Best Practices
+
+- **Do not use deprecated functions like String.prototype.substr()**

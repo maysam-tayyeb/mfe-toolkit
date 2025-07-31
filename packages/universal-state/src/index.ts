@@ -1,18 +1,21 @@
-// Core exports
-export { UniversalStateManager } from './core/state-manager';
+// Core exports - UniversalStateManager with Valtio implementation
+export { UniversalStateManager } from './core/universal-state-manager';
+export { UniversalStateManager as StateManager } from './core/universal-state-manager';
 
 // Type exports
 export * from './types';
 
 // Adapter exports
-export { ReactAdapter } from './adapters/react';
+export type { ReactAdapter } from './adapters/react';
 export { VueAdapter } from './adapters/vue';
+export { createReactAdapter } from './adapters/react';
+export { createVueAdapter } from './adapters/vue';
 
 // Factory function for easy setup
-import { UniversalStateManager } from './core/state-manager';
+import { UniversalStateManager } from './core/universal-state-manager';
 import { StateManagerConfig } from './types';
 
-export function createStateManager(config?: StateManagerConfig) {
+export function createStateManager(config?: StateManagerConfig): UniversalStateManager {
   return new UniversalStateManager(config);
 }
 

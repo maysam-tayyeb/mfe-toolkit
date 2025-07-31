@@ -1,64 +1,73 @@
 // Vanilla TypeScript State Demo MFE
 import type { MFEServices } from '@mfe/dev-kit';
-import type { StateChangeEvent } from '@mfe/universal-state';
-import { getButtonClasses } from '@mfe/shared';
+import type { StateManager } from '@mfe/universal-state';
+import type { User, Theme, SharedCounter } from '@mfe/shared';
 
-interface User {
-  name: string;
-  email: string;
-}
-
-interface VanillaMFE {
+interface MFEModule {
   mount: (element: HTMLElement, services: MFEServices) => void;
   unmount: (element: HTMLElement) => void;
 }
 
-interface ElementWithCleanup extends HTMLElement {
-  _cleanup?: () => void;
-}
-
-const StateDemoVanillaMFE: VanillaMFE = {
-  mount: (element: ElementWithCleanup, services: MFEServices) => {
+// Pure vanilla implementation using only the StateManager interface
+const StateDemoVanillaMFE: MFEModule = {
+  mount: (element: HTMLElement, services: MFEServices) => {
     console.log('[Vanilla State Demo] Mounting with services:', services);
 
     // Get state manager from services
-    const stateManager = services.stateManager;
+    const stateManager = services.stateManager as StateManager;
     if (!stateManager) {
       console.error('[Vanilla State Demo] No state manager provided in services');
-      element.innerHTML =
-        '<div style="padding: 20px; color: red;">Error: No state manager provided</div>';
+      element.innerHTML = '<div style="padding: 20px; color: red;">Error: No state manager provided</div>';
       return;
     }
 
-    // Create the UI
+    // Register this MFE
+    stateManager.registerMFE('state-demo-vanilla', {
+      version: '1.0.0',
+      framework: 'vanilla',
+      features: ['user-management', 'theme-switcher', 'counter'],
+    });
+
+    // Create UI
     element.innerHTML = `
-      <div id="vanilla-app" class="space-y-6 p-6">
+      <div class="space-y-6 p-6">
         <div>
           <h2 class="text-2xl font-bold">Vanilla TypeScript State Demo</h2>
-          <p class="text-muted-foreground">Demonstrating cross-framework state synchronization</p>
+          <p class="text-muted-foreground">Pure JavaScript implementation with Universal State Manager</p>
         </div>
-        
+
         <!-- User Management Card -->
         <div class="rounded-lg border bg-card text-card-foreground shadow-sm">
           <div class="p-6">
             <h3 class="text-lg font-semibold mb-4">User Management</h3>
             
-            <div id="user-display-section" class="mb-4 p-4 bg-muted rounded-md text-center text-muted-foreground">
-              No user logged in
-            </div>
+            <div id="user-display" class="mb-4"></div>
             
             <div class="space-y-3">
               <div class="grid grid-cols-2 gap-3">
-                <input type="text" id="name-input" placeholder="Name" 
-                  class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" />
-                <input type="email" id="email-input" placeholder="Email" 
-                  class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" />
+                <input
+                  id="name-input"
+                  type="text"
+                  placeholder="Name"
+                  class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                />
+                <input
+                  id="email-input"
+                  type="email"
+                  placeholder="Email"
+                  class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                />
               </div>
-              <button id="update-user-btn" class="${getButtonClasses('secondary', 'default', 'w-full')}">Update User</button>
+              <button
+                id="update-user-btn"
+                class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 w-full"
+              >
+                Update User
+              </button>
             </div>
           </div>
         </div>
-        
+
         <div class="grid gap-6 md:grid-cols-2">
           <!-- Theme Settings Card -->
           <div class="rounded-lg border bg-card text-card-foreground shadow-sm">
@@ -68,19 +77,22 @@ const StateDemoVanillaMFE: VanillaMFE = {
                 <div class="flex items-center justify-between">
                   <div>
                     <p class="font-medium">Current Theme</p>
-                    <p class="text-sm text-muted-foreground">Applies to all MFEs</p>
+                    <p class="text-sm text-muted-foreground">Click to toggle</p>
                   </div>
-                  <div id="theme-display" class="flex items-center justify-center w-10 h-10 rounded-lg bg-muted">
-                    <svg class="w-5 h-5 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-                    </svg>
+                  <div id="theme-icon" class="flex items-center justify-center w-10 h-10 rounded-lg bg-muted">
+                    <!-- Icon will be inserted here -->
                   </div>
                 </div>
-                <button id="toggle-theme-btn" class="${getButtonClasses('outline', 'default', 'w-full')}">Toggle Theme</button>
+                <button
+                  id="toggle-theme-btn"
+                  class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 w-full"
+                >
+                  Toggle Theme
+                </button>
               </div>
             </div>
           </div>
-          
+
           <!-- Shared Counter Card -->
           <div class="rounded-lg border bg-card text-card-foreground shadow-sm">
             <div class="p-6">
@@ -88,14 +100,19 @@ const StateDemoVanillaMFE: VanillaMFE = {
               <div class="space-y-4">
                 <div class="text-center">
                   <div id="counter-display" class="text-4xl font-bold tabular-nums">0</div>
-                  <p class="text-sm text-muted-foreground mt-1">Synchronized value</p>
+                  <p class="text-sm text-muted-foreground mt-1">Synchronized across all MFEs</p>
                 </div>
-                <button id="increment-btn" class="${getButtonClasses('secondary', 'default', 'w-full')}">Increment</button>
+                <button
+                  id="increment-btn"
+                  class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 w-full"
+                >
+                  Increment
+                </button>
               </div>
             </div>
           </div>
         </div>
-        
+
         <!-- State Snapshot Card -->
         <div class="rounded-lg border bg-card text-card-foreground shadow-sm">
           <div class="p-6">
@@ -106,57 +123,21 @@ const StateDemoVanillaMFE: VanillaMFE = {
       </div>
     `;
 
-    // Get UI elements with proper types
-    const app = element.querySelector<HTMLDivElement>('#vanilla-app');
-    const userDisplaySection = element.querySelector<HTMLDivElement>('#user-display-section');
-    const nameInput = element.querySelector<HTMLInputElement>('#name-input');
-    const emailInput = element.querySelector<HTMLInputElement>('#email-input');
-    const updateUserBtn = element.querySelector<HTMLButtonElement>('#update-user-btn');
-    const themeDisplay = element.querySelector<HTMLSpanElement>('#theme-display');
-    const toggleThemeBtn = element.querySelector<HTMLButtonElement>('#toggle-theme-btn');
-    const counterDisplay = element.querySelector<HTMLSpanElement>('#counter-display');
-    const incrementBtn = element.querySelector<HTMLButtonElement>('#increment-btn');
-    const stateSnapshot = element.querySelector<HTMLPreElement>('#state-snapshot');
+    // Get DOM elements
+    const userDisplay = element.querySelector('#user-display') as HTMLDivElement;
+    const nameInput = element.querySelector('#name-input') as HTMLInputElement;
+    const emailInput = element.querySelector('#email-input') as HTMLInputElement;
+    const updateUserBtn = element.querySelector('#update-user-btn') as HTMLButtonElement;
+    const themeIcon = element.querySelector('#theme-icon') as HTMLDivElement;
+    const toggleThemeBtn = element.querySelector('#toggle-theme-btn') as HTMLButtonElement;
+    const counterDisplay = element.querySelector('#counter-display') as HTMLDivElement;
+    const incrementBtn = element.querySelector('#increment-btn') as HTMLButtonElement;
+    const stateSnapshot = element.querySelector('#state-snapshot') as HTMLPreElement;
 
-    // Ensure all elements exist
-    if (
-      !app ||
-      !userDisplaySection ||
-      !nameInput ||
-      !emailInput ||
-      !updateUserBtn ||
-      !themeDisplay ||
-      !toggleThemeBtn ||
-      !counterDisplay ||
-      !incrementBtn ||
-      !stateSnapshot
-    ) {
-      console.error('[Vanilla State Demo] Failed to find required DOM elements');
-      return;
-    }
-
-    // State
-    let currentTheme: 'light' | 'dark' = 'light';
-    let currentCounter = 0;
-
-    // Apply theme
-    const applyTheme = (theme: 'light' | 'dark') => {
-      currentTheme = theme;
-      themeDisplay.innerHTML =
-        theme === 'dark'
-          ? `<svg class="w-5 h-5 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-        </svg>`
-          : `<svg class="w-5 h-5 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-        </svg>`;
-      // The design system handles dark/light mode automatically via CSS variables
-    };
-
-    // Update user display
-    const updateUserDisplay = (user: User | null) => {
+    // Update functions
+    const updateUserDisplay = (user?: User) => {
       if (user) {
-        userDisplaySection.innerHTML = `
+        userDisplay.innerHTML = `
           <div class="flex items-center gap-3 p-3 bg-muted rounded-md">
             <div class="h-10 w-10 rounded-full bg-muted-foreground/20 flex items-center justify-center font-semibold">
               ${user.name.charAt(0).toUpperCase()}
@@ -167,117 +148,109 @@ const StateDemoVanillaMFE: VanillaMFE = {
             </div>
           </div>
         `;
-        userDisplaySection.classList.remove('text-center', 'text-muted-foreground');
       } else {
-        userDisplaySection.innerHTML = 'No user logged in';
-        userDisplaySection.classList.add('text-center', 'text-muted-foreground');
+        userDisplay.innerHTML = `
+          <div class="p-4 bg-muted rounded-md text-center text-muted-foreground">
+            No user logged in
+          </div>
+        `;
       }
     };
 
-    // Update counter display
-    const updateCounterDisplay = (value: number) => {
-      currentCounter = value;
-      counterDisplay.textContent = value.toString();
+    const updateThemeIcon = (theme: Theme) => {
+      if (theme === 'dark') {
+        themeIcon.innerHTML = `
+          <svg class="w-5 h-5 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+          </svg>
+        `;
+      } else {
+        themeIcon.innerHTML = `
+          <svg class="w-5 h-5 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+          </svg>
+        `;
+      }
     };
 
-    // Update state snapshot
     const updateStateSnapshot = () => {
       const snapshot = stateManager.getSnapshot();
       stateSnapshot.textContent = JSON.stringify(snapshot, null, 2);
     };
 
     // Initialize with current values
-    const initializeState = () => {
-      const user = stateManager.get('user') as User | null;
-      const theme = (stateManager.get('theme') as 'light' | 'dark' | null) || 'light';
-      const counter = (stateManager.get('sharedCounter') as number | null) || 0;
+    const currentUser = stateManager.get<User>('user');
+    const currentTheme = stateManager.get<Theme>('theme') || 'light';
+    const currentCounter = stateManager.get<SharedCounter>('sharedCounter') || 0;
 
-      updateUserDisplay(user);
-      applyTheme(theme);
-      updateCounterDisplay(counter);
-      updateStateSnapshot();
-    };
+    updateUserDisplay(currentUser);
+    updateThemeIcon(currentTheme);
+    counterDisplay.textContent = String(currentCounter);
+    updateStateSnapshot();
+
+    // Subscribe to state changes
+    const unsubscribers: Array<() => void> = [];
+
+    unsubscribers.push(
+      stateManager.subscribe<User>('user', (value) => {
+        updateUserDisplay(value);
+        updateStateSnapshot();
+      })
+    );
+
+    unsubscribers.push(
+      stateManager.subscribe<Theme>('theme', (value) => {
+        updateThemeIcon(value || 'light');
+        updateStateSnapshot();
+      })
+    );
+
+    unsubscribers.push(
+      stateManager.subscribe<SharedCounter>('sharedCounter', (value) => {
+        counterDisplay.textContent = String(value || 0);
+        updateStateSnapshot();
+      })
+    );
 
     // Event handlers
     updateUserBtn.addEventListener('click', () => {
       const name = nameInput.value.trim();
       const email = emailInput.value.trim();
-
+      
       if (name && email) {
-        stateManager.set('user', { name, email }, 'vanilla-mfe');
+        stateManager.set('user', { name, email }, 'vanilla-demo');
         nameInput.value = '';
         emailInput.value = '';
       }
     });
 
     toggleThemeBtn.addEventListener('click', () => {
-      const newTheme: 'light' | 'dark' = currentTheme === 'dark' ? 'light' : 'dark';
-      stateManager.set('theme', newTheme, 'vanilla-mfe');
+      const currentTheme = stateManager.get<Theme>('theme') || 'light';
+      stateManager.set('theme', currentTheme === 'dark' ? 'light' : 'dark', 'vanilla-demo');
     });
 
     incrementBtn.addEventListener('click', () => {
-      stateManager.set('sharedCounter', currentCounter + 1, 'vanilla-mfe');
+      const current = stateManager.get<SharedCounter>('sharedCounter') || 0;
+      stateManager.set('sharedCounter', current + 1, 'vanilla-demo');
     });
-
-    // Subscribe to state changes
-    const unsubscribers: Array<() => void> = [];
-
-    unsubscribers.push(
-      stateManager.subscribe('user', (value: User | null) => {
-        console.log('[Vanilla MFE] User changed:', value);
-        updateUserDisplay(value);
-      })
-    );
-
-    unsubscribers.push(
-      stateManager.subscribe('theme', (value: 'light' | 'dark' | null) => {
-        console.log('[Vanilla MFE] Theme changed:', value);
-        applyTheme(value || 'light');
-      })
-    );
-
-    unsubscribers.push(
-      stateManager.subscribe('sharedCounter', (value: number | null) => {
-        console.log('[Vanilla MFE] Counter changed:', value);
-        updateCounterDisplay(value || 0);
-      })
-    );
-
-    // Subscribe to all changes to update state snapshot
-    unsubscribers.push(
-      stateManager.subscribeAll((event: StateChangeEvent) => {
-        console.log(`[Vanilla MFE] State changed: ${event.key} =`, event.value);
-        updateStateSnapshot();
-      })
-    );
-
-    // Register this MFE
-    stateManager.registerMFE('state-demo-vanilla', {
-      version: '1.0.0',
-      framework: 'vanilla',
-      features: ['user-management', 'theme-switcher', 'counter'],
-    });
-
-    // Initialize
-    initializeState();
 
     // Store cleanup function
-    element._cleanup = () => {
-      // Unsubscribe from all
-      unsubscribers.forEach((unsub) => unsub());
-      // Unregister MFE
+    (element as any).__cleanup = () => {
+      unsubscribers.forEach(unsub => unsub());
       stateManager.unregisterMFE('state-demo-vanilla');
-      // Remove event listeners by replacing element content
-      element.innerHTML = '';
     };
   },
 
-  unmount: (element: ElementWithCleanup) => {
-    console.log('[Vanilla State Demo] Unmounting');
-    if (element._cleanup) {
-      element._cleanup();
-      delete element._cleanup;
+  unmount: (element: HTMLElement) => {
+    // Call cleanup if it exists
+    const cleanup = (element as any).__cleanup;
+    if (cleanup) {
+      cleanup();
+      delete (element as any).__cleanup;
     }
+    
+    // Clear the element
+    element.innerHTML = '';
   },
 };
 

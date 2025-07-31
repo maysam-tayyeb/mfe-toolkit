@@ -238,31 +238,3 @@ export interface ReactAdapter extends FrameworkAdapter {
   useMFERegistration: typeof useMFERegistration;
 }
 
-// For backward compatibility - deprecated
-export class ReactAdapterClass {
-  constructor(_stateManager: StateManager) {
-    console.warn(
-      'ReactAdapterClass is deprecated. Use the hook functions directly or createReactAdapter.'
-    );
-  }
-
-  // These will throw errors if used as they're not valid
-  useGlobalState = () => {
-    throw new Error('Cannot use hooks in class methods. Use the exported hook functions instead.');
-  };
-
-  useGlobalStates = () => {
-    throw new Error('Cannot use hooks in class methods. Use the exported hook functions instead.');
-  };
-
-  useGlobalStateListener = () => {
-    throw new Error('Cannot use hooks in class methods. Use the exported hook functions instead.');
-  };
-
-  useMFERegistration = () => {
-    throw new Error('Cannot use hooks in class methods. Use the exported hook functions instead.');
-  };
-}
-
-// Export the old name for backward compatibility
-export const ReactAdapter = ReactAdapterClass;

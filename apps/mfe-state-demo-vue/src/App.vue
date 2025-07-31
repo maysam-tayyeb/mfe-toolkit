@@ -112,7 +112,7 @@
 import { reactive, computed, onMounted, ref } from 'vue';
 import { VueAdapter } from '@mfe/universal-state';
 import type { StateManager } from '@mfe/universal-state';
-import { getButtonClasses } from '@mfe/shared';
+import { getButtonClasses, User, Theme, SharedCounter } from '@mfe/shared';
 
 // Props
 const props = defineProps<{
@@ -123,15 +123,15 @@ const props = defineProps<{
 const adapter = new VueAdapter(props.stateManager);
 
 // Use global states
-const userState = adapter.useGlobalState<{ name: string; email: string }>('user');
+const userState = adapter.useGlobalState<User>('user');
 const user = userState.value;
 const setUser = userState.setValue;
 
-const themeState = adapter.useGlobalState<'light' | 'dark'>('theme');
+const themeState = adapter.useGlobalState<Theme>('theme');
 const theme = themeState.value;
 const setTheme = themeState.setValue;
 
-const counterState = adapter.useGlobalState<number>('sharedCounter');
+const counterState = adapter.useGlobalState<SharedCounter>('sharedCounter');
 const counter = counterState.value;
 const setCounter = counterState.setValue;
 
