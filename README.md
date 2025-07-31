@@ -10,7 +10,7 @@ A complete microfrontend (MFE) architecture built with React 19, Redux Toolkit, 
 - 📦 **Optimized Bundles** - 96% smaller with import maps (576KB → 14KB)
 - 🔄 **Cross-Version Support** - React 17 MFEs work seamlessly in React 19 container
 - 🛠️ **Modern Tooling** - Vite, TypeScript, pnpm workspaces, and ESBuild
-- 🔧 **Valtio State Manager** - Cross-framework state management (React, Vue, Vanilla JS) powered by Valtio proxy-based reactivity
+- 🔧 **Universal State Manager** - Cross-framework state management (React, Vue, Vanilla JS) with proxy-based reactivity
 
 ## 🏗️ Architecture Overview
 
