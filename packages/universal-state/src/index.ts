@@ -14,29 +14,6 @@ export { VueAdapter } from './adapters/vue';
 export { createReactAdapter } from './adapters/react';
 export { createVueAdapter } from './adapters/vue';
 
-// Valtio adapter exports with specific names to avoid conflicts
-export type { ValtioReactAdapter } from './adapters/valtio-react';
-export {
-  createValtioReactAdapter,
-  setGlobalValtioStateManager as setGlobalValtioStateManagerReact,
-  useValtioGlobalState,
-  useValtioGlobalStates,
-  useValtioGlobalStateListener,
-  useValtioMFERegistration,
-  useValtioStore,
-} from './adapters/valtio-react';
-
-export type { ValtioVueAdapter } from './adapters/valtio-vue';
-export {
-  createValtioVueAdapter,
-  setGlobalValtioStateManager as setGlobalValtioStateManagerVue,
-  useValtioGlobalState as useValtioGlobalStateVue,
-  useValtioGlobalStates as useValtioGlobalStatesVue,
-  useValtioGlobalStateListener as useValtioGlobalStateListenerVue,
-  useValtioMFERegistration as useValtioMFERegistrationVue,
-  useValtioStore as useValtioStoreVue,
-} from './adapters/valtio-vue';
-
 // Factory function for easy setup
 import { UniversalStateManager } from './core/universal-state-manager';
 import { StateManagerConfig } from './types';
