@@ -1,6 +1,5 @@
 <template>
-  <ValtioApp v-if="isValtio" :state-manager="stateManager" />
-  <div v-else class="space-y-6 p-6">
+  <div class="space-y-6 p-6">
     <div>
       <h2 class="text-2xl font-bold">Vue State Demo</h2>
       <p class="text-muted-foreground">Demonstrating cross-framework state synchronization</p>
@@ -111,18 +110,14 @@
 
 <script setup lang="ts">
 import { reactive, computed, onMounted, ref } from 'vue';
-import { VueAdapter, UniversalStateManager } from '@mfe/universal-state';
+import { VueAdapter } from '@mfe/universal-state';
 import type { StateManager } from '@mfe/universal-state';
 import { getButtonClasses } from '@mfe/shared';
-import ValtioApp from './ValtioApp.vue';
 
 // Props
 const props = defineProps<{
   stateManager: StateManager;
 }>();
-
-// Check if using UniversalStateManager (Valtio implementation)
-const isValtio = computed(() => props.stateManager instanceof UniversalStateManager);
 
 // Create adapter
 const adapter = new VueAdapter(props.stateManager);

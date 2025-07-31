@@ -1,18 +1,13 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { StateManager, UniversalStateManager } from '@mfe/universal-state';
+import { StateManager } from '@mfe/universal-state';
 import { getButtonClasses } from '@mfe/shared';
 import { Moon, Sun } from 'lucide-react';
-import { ValtioApp } from './ValtioApp';
 
 interface AppProps {
   stateManager: StateManager;
 }
 
 export const App: React.FC<AppProps> = ({ stateManager }) => {
-  // Check if we're using UniversalStateManager (Valtio implementation) and use the enhanced version
-  if (stateManager instanceof UniversalStateManager) {
-    return <ValtioApp stateManager={stateManager} />;
-  }
   // Local state that syncs with global state
   const [user, setLocalUser] = useState<{ name: string; email: string } | undefined>();
   const [theme, setLocalTheme] = useState<'light' | 'dark'>('light');
@@ -24,20 +19,20 @@ export const App: React.FC<AppProps> = ({ stateManager }) => {
   // Subscribe to state changes
   useEffect(() => {
     // Initial values
-    setLocalUser(stateManager.get('user'));
-    setLocalTheme(stateManager.get('theme') || 'light');
-    setLocalCounter(stateManager.get('sharedCounter') || 0);
+    setLocalUser(stateManager.get<{ name: string; email: string }>('user'));
+    setLocalTheme(stateManager.get<'light' | 'dark'>('theme') || 'light');
+    setLocalCounter(stateManager.get<number>('sharedCounter') || 0);
 
     // Subscribe to changes
-    const unsubUser = stateManager.subscribe('user', (value) => {
+    const unsubUser = stateManager.subscribe<{ name: string; email: string }>('user', (value) => {
       setLocalUser(value);
     });
 
-    const unsubTheme = stateManager.subscribe('theme', (value) => {
+    const unsubTheme = stateManager.subscribe<'light' | 'dark'>('theme', (value) => {
       setLocalTheme(value || 'light');
     });
 
-    const unsubCounter = stateManager.subscribe('sharedCounter', (value) => {
+    const unsubCounter = stateManager.subscribe<number>('sharedCounter', (value) => {
       setLocalCounter(value || 0);
     });
 
