@@ -2,9 +2,6 @@
 export { UniversalStateManager } from './core/universal-state-manager';
 export { UniversalStateManager as StateManager } from './core/universal-state-manager';
 
-// Enhanced features leveraging Valtio
-export * from './core/universal-state-extensions';
-
 // Type exports
 export * from './types';
 
