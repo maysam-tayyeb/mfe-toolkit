@@ -365,9 +365,6 @@ importers:
       '@mfe/universal-state':
         specifier: workspace:*
         version: link:../../packages/universal-state
-      valtio:
-        specifier: ^2.0.0
-        version: 2.1.5(@types/react@19.1.8)(react@19.1.0)
     devDependencies:
       '@types/node':
         specifier: ^20.0.0

@@ -12,8 +12,7 @@
   "dependencies": {
     "@mfe/dev-kit": "workspace:*",
     "@mfe/shared": "workspace:*",
-    "@mfe/universal-state": "workspace:*",
-    "valtio": "^2.0.0"
+    "@mfe/universal-state": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
