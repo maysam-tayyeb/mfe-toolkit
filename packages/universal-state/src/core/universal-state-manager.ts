@@ -121,7 +121,7 @@ export class UniversalStateManager implements StateManager {
           try {
             listener(value, event);
           } catch (error) {
-            console.error(`[ValtioStateManager] Error in listener for key "${key}":`, error);
+            console.error(`[UniversalStateManager] Error in listener for key "${key}":`, error);
           }
         });
       }
@@ -253,7 +253,7 @@ export class UniversalStateManager implements StateManager {
           try {
             listener(undefined, event);
           } catch (error) {
-            console.error(`[ValtioStateManager] Error in listener for key "${key}":`, error);
+            console.error(`[UniversalStateManager] Error in listener for key "${key}":`, error);
           }
         });
         // Also notify global listeners for each key
@@ -412,7 +412,7 @@ export class UniversalStateManager implements StateManager {
           try {
             listener(value, event);
           } catch (error) {
-            console.error(`[ValtioStateManager] Error in listener for key "${key}":`, error);
+            console.error(`[UniversalStateManager] Error in listener for key "${key}":`, error);
           }
         });
       }
@@ -537,7 +537,7 @@ export class UniversalStateManager implements StateManager {
                 try {
                   listener(stateEvent.value, crossTabEvent);
                 } catch (error) {
-                  console.error(`[ValtioStateManager] Error in listener for key "${stateEvent.key}":`, error);
+                  console.error(`[UniversalStateManager] Error in listener for key "${stateEvent.key}":`, error);
                 }
               });
             }
