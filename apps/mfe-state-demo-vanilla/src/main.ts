@@ -1,6 +1,7 @@
 // Vanilla TypeScript State Demo MFE
 import type { MFEServices } from '@mfe/dev-kit';
 import type { StateManager } from '@mfe/universal-state';
+import type { User, Theme, SharedCounter } from '@mfe/shared';
 
 interface MFEModule {
   mount: (element: HTMLElement, services: MFEServices) => void;
@@ -134,7 +135,7 @@ const StateDemoVanillaMFE: MFEModule = {
     const stateSnapshot = element.querySelector('#state-snapshot') as HTMLPreElement;
 
     // Update functions
-    const updateUserDisplay = (user?: { name: string; email: string }) => {
+    const updateUserDisplay = (user?: User) => {
       if (user) {
         userDisplay.innerHTML = `
           <div class="flex items-center gap-3 p-3 bg-muted rounded-md">
@@ -156,7 +157,7 @@ const StateDemoVanillaMFE: MFEModule = {
       }
     };
 
-    const updateThemeIcon = (theme: string) => {
+    const updateThemeIcon = (theme: Theme) => {
       if (theme === 'dark') {
         themeIcon.innerHTML = `
           <svg class="w-5 h-5 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -178,9 +179,9 @@ const StateDemoVanillaMFE: MFEModule = {
     };
 
     // Initialize with current values
-    const currentUser = stateManager.get<{ name: string; email: string }>('user');
-    const currentTheme = stateManager.get<string>('theme') || 'light';
-    const currentCounter = stateManager.get<number>('sharedCounter') || 0;
+    const currentUser = stateManager.get<User>('user');
+    const currentTheme = stateManager.get<Theme>('theme') || 'light';
+    const currentCounter = stateManager.get<SharedCounter>('sharedCounter') || 0;
 
     updateUserDisplay(currentUser);
     updateThemeIcon(currentTheme);
@@ -191,21 +192,21 @@ const StateDemoVanillaMFE: MFEModule = {
     const unsubscribers: Array<() => void> = [];
 
     unsubscribers.push(
-      stateManager.subscribe<{ name: string; email: string }>('user', (value) => {
+      stateManager.subscribe<User>('user', (value) => {
         updateUserDisplay(value);
         updateStateSnapshot();
       })
     );
 
     unsubscribers.push(
-      stateManager.subscribe<string>('theme', (value) => {
+      stateManager.subscribe<Theme>('theme', (value) => {
         updateThemeIcon(value || 'light');
         updateStateSnapshot();
       })
     );
 
     unsubscribers.push(
-      stateManager.subscribe<number>('sharedCounter', (value) => {
+      stateManager.subscribe<SharedCounter>('sharedCounter', (value) => {
         counterDisplay.textContent = String(value || 0);
         updateStateSnapshot();
       })
@@ -224,12 +225,12 @@ const StateDemoVanillaMFE: MFEModule = {
     });
 
     toggleThemeBtn.addEventListener('click', () => {
-      const currentTheme = stateManager.get<string>('theme') || 'light';
+      const currentTheme = stateManager.get<Theme>('theme') || 'light';
       stateManager.set('theme', currentTheme === 'dark' ? 'light' : 'dark', 'vanilla-demo');
     });
 
     incrementBtn.addEventListener('click', () => {
-      const current = stateManager.get<number>('sharedCounter') || 0;
+      const current = stateManager.get<SharedCounter>('sharedCounter') || 0;
       stateManager.set('sharedCounter', current + 1, 'vanilla-demo');
     });
 

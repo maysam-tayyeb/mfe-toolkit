@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { StateManager } from '@mfe/universal-state';
-import { getButtonClasses } from '@mfe/shared';
+import { getButtonClasses, User, Theme, SharedCounter } from '@mfe/shared';
 import { Moon, Sun } from 'lucide-react';
 
 interface AppProps {
@@ -9,9 +9,9 @@ interface AppProps {
 
 export const App: React.FC<AppProps> = ({ stateManager }) => {
   // Local state that syncs with global state
-  const [user, setLocalUser] = useState<{ name: string; email: string } | undefined>();
-  const [theme, setLocalTheme] = useState<'light' | 'dark'>('light');
-  const [counter, setLocalCounter] = useState<number>(0);
+  const [user, setLocalUser] = useState<User | undefined>();
+  const [theme, setLocalTheme] = useState<Theme>('light');
+  const [counter, setLocalCounter] = useState<SharedCounter>(0);
 
   // Form state
   const [formData, setFormData] = useState({ name: '', email: '' });
@@ -19,20 +19,20 @@ export const App: React.FC<AppProps> = ({ stateManager }) => {
   // Subscribe to state changes
   useEffect(() => {
     // Initial values
-    setLocalUser(stateManager.get<{ name: string; email: string }>('user'));
-    setLocalTheme(stateManager.get<'light' | 'dark'>('theme') || 'light');
-    setLocalCounter(stateManager.get<number>('sharedCounter') || 0);
+    setLocalUser(stateManager.get<User>('user'));
+    setLocalTheme(stateManager.get<Theme>('theme') || 'light');
+    setLocalCounter(stateManager.get<SharedCounter>('sharedCounter') || 0);
 
     // Subscribe to changes
-    const unsubUser = stateManager.subscribe<{ name: string; email: string }>('user', (value) => {
+    const unsubUser = stateManager.subscribe<User>('user', (value) => {
       setLocalUser(value);
     });
 
-    const unsubTheme = stateManager.subscribe<'light' | 'dark'>('theme', (value) => {
+    const unsubTheme = stateManager.subscribe<Theme>('theme', (value) => {
       setLocalTheme(value || 'light');
     });
 
-    const unsubCounter = stateManager.subscribe<number>('sharedCounter', (value) => {
+    const unsubCounter = stateManager.subscribe<SharedCounter>('sharedCounter', (value) => {
       setLocalCounter(value || 0);
     });
 
