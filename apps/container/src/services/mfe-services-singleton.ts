@@ -1,4 +1,4 @@
-import { MFEServices } from '@mfe/dev-kit';
+import { MFEServices } from '@mfe-toolkit/core';
 import { createMFEServices } from './mfe-services';
 
 let mfeServicesInstance: MFEServices | null = null;

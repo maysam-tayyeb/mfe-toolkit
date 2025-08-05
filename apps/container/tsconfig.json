@@ -4,9 +4,9 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
-      "@mfe/dev-kit": ["../../packages/mfe-dev-kit/src"],
-      "@mfe/shared": ["../../packages/shared/src"],
-      "@mfe/universal-state": ["../../packages/universal-state/src"]
+      "@mfe-toolkit/core": ["../../packages/mfe-dev-kit/src"],
+      "@mfe-toolkit/shared": ["../../packages/shared/src"],
+      "@mfe-toolkit/state": ["../../packages/universal-state/src"]
     }
   },
   "include": ["src"],

@@ -1,5 +1,5 @@
 import { createContext, useContext, ReactNode } from 'react';
-import { MFERegistryService } from '@mfe/dev-kit';
+import { MFERegistryService } from '@mfe-toolkit/core';
 import { useRegistry, UseRegistryResult } from '@/hooks/useRegistry';
 
 type RegistryContextValue = UseRegistryResult;

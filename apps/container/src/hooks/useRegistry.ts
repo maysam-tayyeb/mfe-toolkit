@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { MFERegistryService, RegistryOptions } from '@mfe/dev-kit';
+import { MFERegistryService, RegistryOptions } from '@mfe-toolkit/core';
 import { getRegistrySingleton } from '@/services/registry-singleton';
 
 export interface UseRegistryOptions extends RegistryOptions {

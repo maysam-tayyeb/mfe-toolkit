@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { useUI } from '@/contexts/UIContext';
-import { EventPayload } from '@mfe/dev-kit';
+import { EventPayload } from '@mfe-toolkit/core';
 import { getMFEServicesSingleton } from '@/services/mfe-services-singleton';
-import { EVENTS } from '@mfe/shared';
+import { EVENTS } from '@mfe-toolkit/shared';
 import { IsolatedMFELoader } from '@/components/IsolatedMFELoader';
 import { useRegistryContext } from '@/contexts/RegistryContext';
 

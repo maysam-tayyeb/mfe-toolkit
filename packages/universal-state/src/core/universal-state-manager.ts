@@ -363,7 +363,7 @@ export class UniversalStateManager implements StateManager {
     // Note: This method is kept for backward compatibility but
     // it's recommended to import adapters directly from their modules
     console.warn(
-      `getAdapter() is deprecated. Import adapters directly from '@mfe/universal-state' instead.`
+      `getAdapter() is deprecated. Import adapters directly from '@mfe-toolkit/state' instead.`
     );
     
     switch (framework) {
@@ -372,7 +372,7 @@ export class UniversalStateManager implements StateManager {
         throw new Error(
           `Please import ${framework} adapters directly: import { createValtio${
             framework.charAt(0).toUpperCase() + framework.slice(1)
-          }Adapter } from '@mfe/universal-state'`
+          }Adapter } from '@mfe-toolkit/state'`
         );
       case 'vanilla':
       default:

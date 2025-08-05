@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { App } from './App';
-import { EVENTS, MFE_CONFIG } from '@mfe/shared';
-import { createEventBus, MFEModule, MFEServices } from '@mfe/dev-kit';
+import { EVENTS, MFE_CONFIG } from '@mfe-toolkit/shared';
+import { createEventBus, MFEModule, MFEServices } from '@mfe-toolkit/core';
 import './index.css';
 
 // Development mode - render directly (only when accessing the page directly, not when loaded as ES module)

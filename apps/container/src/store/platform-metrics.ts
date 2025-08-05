@@ -1,4 +1,4 @@
-import { getGlobalStateManager } from '@mfe/universal-state';
+import { getGlobalStateManager } from '@mfe-toolkit/state';
 
 export type PlatformMetrics = {
   bundleReduction: number;

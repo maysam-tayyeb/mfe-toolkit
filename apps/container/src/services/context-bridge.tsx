@@ -1,7 +1,7 @@
 import React, { useRef, useImperativeHandle, forwardRef, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useUI } from '@/contexts/UIContext';
-import { AuthService, ModalService, NotificationService, NotificationConfig } from '@mfe/dev-kit';
+import { AuthService, ModalService, NotificationService, NotificationConfig } from '@mfe-toolkit/core';
 
 export interface ContextBridgeRef {
   getAuthService: () => AuthService;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { cn } from '@mfe/shared';
+import { cn } from '@mfe-toolkit/shared';
 import { textStyles } from '../patterns';
 
 export interface SectionProps extends React.HTMLAttributes<HTMLElement> {

@@ -26,9 +26,9 @@ const config = {
   jsx: 'automatic',
   alias: {
     '@': path.join(__dirname, 'src'),
-    '@mfe/dev-kit': path.join(rootDir, 'packages/mfe-dev-kit/src'),
-    '@mfe/shared': path.join(rootDir, 'packages/shared/src'),
-    '@mfe/universal-state': path.join(rootDir, 'packages/universal-state/src'),
+    '@mfe-toolkit/core': path.join(rootDir, 'packages/mfe-dev-kit/src'),
+    '@mfe-toolkit/shared': path.join(rootDir, 'packages/shared/src'),
+    '@mfe-toolkit/state': path.join(rootDir, 'packages/universal-state/src'),
   },
 };
 

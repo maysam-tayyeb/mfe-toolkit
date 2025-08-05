@@ -27,8 +27,8 @@ export default defineConfig(({ command }) => {
       resolve: {
         alias: {
           '@': path.resolve(__dirname, './src'),
-          '@mfe/dev-kit': path.resolve(__dirname, '../../packages/mfe-dev-kit/src'),
-          '@mfe/shared': path.resolve(__dirname, '../../packages/shared/src'),
+          '@mfe-toolkit/core': path.resolve(__dirname, '../../packages/mfe-dev-kit/src'),
+          '@mfe-toolkit/shared': path.resolve(__dirname, '../../packages/shared/src'),
         },
       },
     };
@@ -48,8 +48,8 @@ export default defineConfig(({ command }) => {
     resolve: {
       alias: {
         '@': path.resolve(__dirname, './src'),
-        '@mfe/dev-kit': path.resolve(__dirname, '../../packages/mfe-dev-kit/src'),
-        '@mfe/shared': path.resolve(__dirname, '../../packages/shared/src'),
+        '@mfe-toolkit/core': path.resolve(__dirname, '../../packages/mfe-dev-kit/src'),
+        '@mfe-toolkit/shared': path.resolve(__dirname, '../../packages/shared/src'),
       },
     },
   };

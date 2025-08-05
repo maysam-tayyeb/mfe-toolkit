@@ -16,8 +16,8 @@
     "format:check": "prettier --check \"src/**/*.{ts,tsx,js,jsx,json,css}\""
   },
   "dependencies": {
-    "@mfe/dev-kit": "workspace:*",
-    "@mfe/shared": "workspace:*",
+    "@mfe-toolkit/core": "workspace:*",
+    "@mfe-toolkit/shared": "workspace:*",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
   },

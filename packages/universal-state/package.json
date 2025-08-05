@@ -1,6 +1,6 @@
 {
-  "name": "@mfe/universal-state",
-  "version": "1.0.0",
+  "name": "@mfe-toolkit/state",
+  "version": "0.1.0",
   "description": "Framework-agnostic state management for microfrontends",
   "main": "dist/index.js",
   "module": "dist/index.es",

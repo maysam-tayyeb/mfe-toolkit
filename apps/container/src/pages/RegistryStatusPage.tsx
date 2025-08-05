@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { CheckCircle2, XCircle, AlertCircle, RefreshCw, Package } from 'lucide-react';
-import { isMFEManifestV2 } from '@mfe/dev-kit';
+import { isMFEManifestV2 } from '@mfe-toolkit/core';
 
 export const RegistryStatusPage: React.FC = () => {
   const { registry, isLoading, error, reload } = useRegistry();

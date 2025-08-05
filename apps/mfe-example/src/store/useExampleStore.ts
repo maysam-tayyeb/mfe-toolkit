@@ -1,4 +1,4 @@
-import { useMFEStore } from '@mfe/dev-kit';
+import { useMFEStore } from '@mfe-toolkit/core';
 
 interface ExampleState {
   count: number;

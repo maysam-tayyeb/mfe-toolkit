@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { MFEManifest, MFEServices } from '@mfe/dev-kit';
+import { MFEManifest, MFEServices } from '@mfe-toolkit/core';
 import { IsolatedMFELoader } from './IsolatedMFELoader';
 import { compatibilityChecker } from '@/services/compatibility-checker';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';

@@ -1,6 +1,7 @@
 {
-  "name": "@mfe/shared",
-  "version": "1.0.0",
+  "name": "@mfe-toolkit/shared",
+  "version": "0.1.0",
+  "description": "Shared utilities and constants for MFE Toolkit",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",

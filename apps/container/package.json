@@ -16,9 +16,9 @@
     "format:check": "prettier --check \"src/**/*.{ts,tsx,js,jsx,json,css}\""
   },
   "dependencies": {
-    "@mfe/dev-kit": "workspace:*",
-    "@mfe/shared": "workspace:*",
-    "@mfe/universal-state": "workspace:*",
+    "@mfe-toolkit/core": "workspace:*",
+    "@mfe-toolkit/shared": "workspace:*",
+    "@mfe-toolkit/state": "workspace:*",
     "@radix-ui/react-dialog": "^1.0.5",
     "@radix-ui/react-slot": "^1.0.2",
     "@radix-ui/react-toast": "^1.1.5",

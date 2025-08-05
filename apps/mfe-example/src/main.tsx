@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { App } from './App';
-import { MFEModule, MFEServices, getMFEServices } from '@mfe/dev-kit';
+import { MFEModule, MFEServices, getMFEServices } from '@mfe-toolkit/core';
 
 // Development mode - render directly (only when accessing the page directly, not when loaded as ES module)
 const isDev =

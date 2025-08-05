@@ -1,10 +1,27 @@
 {
-  "name": "mfe-monorepo",
+  "name": "mfe-toolkit",
   "version": "1.0.0",
+  "description": "A comprehensive toolkit for building and managing microfrontends",
   "private": true,
   "type": "module",
   "license": "MIT",
-  "author": "Maysam Tayyeb",
+  "author": "Maysam Tayyeb <maysam@example.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/maysam-tayyeb/mfe-toolkit.git"
+  },
+  "homepage": "https://github.com/maysam-tayyeb/mfe-toolkit#readme",
+  "bugs": {
+    "url": "https://github.com/maysam-tayyeb/mfe-toolkit/issues"
+  },
+  "keywords": [
+    "microfrontend",
+    "mfe",
+    "monorepo",
+    "toolkit",
+    "react",
+    "typescript"
+  ],
   "scripts": {
     "dev": "pnpm --parallel --filter './apps/**' dev",
     "dev:container": "pnpm --filter @mfe/container dev",

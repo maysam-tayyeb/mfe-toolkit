@@ -6,10 +6,10 @@ import { DashboardPage } from '@/pages/DashboardPage';
 import { MFECommunicationPage } from '@/pages/MFECommunicationPage';
 import { UniversalStateDemoPage } from '@/pages/UniversalStateDemoPage';
 import { ErrorBoundaryDemoPage } from '@/pages/ErrorBoundaryDemoPage';
-import { MFEPage } from '@mfe/dev-kit';
+import { MFEPage } from '@mfe-toolkit/core';
 import { getMFEServicesSingleton } from '@/services/mfe-services-singleton';
 import { useRegistryContext } from '@/contexts/RegistryContext';
-import { getGlobalStateManager } from '@mfe/universal-state';
+import { getGlobalStateManager } from '@mfe-toolkit/state';
 import { initializePlatformMetrics, updatePlatformMetric } from '@/store/platform-metrics';
 
 export function AppContent() {

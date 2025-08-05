@@ -1,4 +1,4 @@
-import { MFEManifest, isMFEManifestV2 } from '@mfe/dev-kit';
+import { MFEManifest, isMFEManifestV2 } from '@mfe-toolkit/core';
 import semver from 'semver';
 
 export interface CompatibilityCheckResult {

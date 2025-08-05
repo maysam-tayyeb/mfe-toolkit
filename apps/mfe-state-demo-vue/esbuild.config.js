@@ -33,7 +33,7 @@ const config = {
   keepNames: true,
   alias: {
     '@': path.join(__dirname, 'src'),
-    '@mfe/universal-state': path.join(rootDir, 'packages/universal-state/src'),
+    '@mfe-toolkit/state': path.join(rootDir, 'packages/universal-state/src'),
   },
 };
 

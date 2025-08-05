@@ -1,4 +1,4 @@
-import { MFERegistryService } from '@mfe/dev-kit';
+import { MFERegistryService } from '@mfe-toolkit/core';
 
 let registryInstance: MFERegistryService | null = null;
 

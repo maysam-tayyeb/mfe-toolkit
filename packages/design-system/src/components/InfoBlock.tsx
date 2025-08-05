@@ -1,5 +1,5 @@
 import React from 'react';
-import { cn } from '@mfe/shared';
+import { cn } from '@mfe-toolkit/shared';
 
 export interface InfoSection {
   label: string;

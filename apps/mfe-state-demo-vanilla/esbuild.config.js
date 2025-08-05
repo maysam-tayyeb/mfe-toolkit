@@ -21,9 +21,9 @@ const config = {
   },
   alias: {
     '@': path.join(__dirname, 'src'),
-    '@mfe/dev-kit': path.join(__dirname, '../../packages/mfe-dev-kit/src'),
-    '@mfe/universal-state': path.join(__dirname, '../../packages/universal-state/src'),
-    '@mfe/shared': path.join(__dirname, '../../packages/shared/src'),
+    '@mfe-toolkit/core': path.join(__dirname, '../../packages/mfe-dev-kit/src'),
+    '@mfe-toolkit/state': path.join(__dirname, '../../packages/universal-state/src'),
+    '@mfe-toolkit/shared': path.join(__dirname, '../../packages/shared/src'),
   },
   logLevel: 'info',
 };

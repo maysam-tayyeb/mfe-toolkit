@@ -4,7 +4,7 @@ import {
   ModalService,
   NotificationService,
   createLogger,
-} from '@mfe/dev-kit';
+} from '@mfe-toolkit/core';
 import { ContextBridgeRef } from './context-bridge';
 import { createPlatformEventBus } from './platform-event-bus';
 

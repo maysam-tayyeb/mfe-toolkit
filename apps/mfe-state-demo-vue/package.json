@@ -11,9 +11,9 @@
     "serve": "serve dist -p 3005 --cors"
   },
   "dependencies": {
-    "@mfe/dev-kit": "workspace:*",
-    "@mfe/shared": "workspace:*",
-    "@mfe/universal-state": "workspace:*",
+    "@mfe-toolkit/core": "workspace:*",
+    "@mfe-toolkit/shared": "workspace:*",
+    "@mfe-toolkit/state": "workspace:*",
     "vue": "^3.5.17"
   },
   "devDependencies": {

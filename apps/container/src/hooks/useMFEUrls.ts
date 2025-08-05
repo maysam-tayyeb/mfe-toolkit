@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
-import { MFERegistryService } from '@mfe/dev-kit';
+import { MFERegistryService } from '@mfe-toolkit/core';
 import { useRegistry } from './useRegistry';
 
 export interface MFEUrls {

@@ -18,8 +18,8 @@
     "forceConsistentCasingInFileNames": true,
     "baseUrl": ".",
     "paths": {
-      "@mfe/dev-kit": ["packages/mfe-dev-kit/src/index.ts"],
-      "@mfe/shared": ["packages/shared/src/index.ts"]
+      "@mfe-toolkit/core": ["packages/mfe-dev-kit/src/index.ts"],
+      "@mfe-toolkit/shared": ["packages/shared/src/index.ts"]
     }
   }
 }

@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { useUI } from '@/contexts/UIContext';
 import { useRegistry } from '@/hooks/useRegistry';
 import { compatibilityChecker } from '@/services/compatibility-checker';
-import { isMFEManifestV2 } from '@mfe/dev-kit';
+import { isMFEManifestV2 } from '@mfe-toolkit/core';
 import {
   CheckCircle2,
   XCircle,

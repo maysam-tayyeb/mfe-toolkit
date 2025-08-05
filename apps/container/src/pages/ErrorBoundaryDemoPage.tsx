@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { MFELoader, getErrorReporter } from '@mfe/dev-kit';
+import { MFELoader, getErrorReporter } from '@mfe-toolkit/core';
 import { Button } from '@/components/ui/button';
 import { getMFEServicesSingleton } from '@/services/mfe-services-singleton';
 

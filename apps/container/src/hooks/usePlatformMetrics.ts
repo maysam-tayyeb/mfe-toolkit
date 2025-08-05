@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getGlobalStateManager } from '@mfe/universal-state';
+import { getGlobalStateManager } from '@mfe-toolkit/state';
 import type { PlatformMetrics } from '@/store/platform-metrics';
 
 export function usePlatformMetrics() {

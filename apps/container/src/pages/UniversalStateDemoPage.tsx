@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { getGlobalStateManager } from '@mfe/universal-state';
+import { getGlobalStateManager } from '@mfe-toolkit/state';
 import { getMFEServicesSingleton } from '@/services/mfe-services-singleton';
 import { useMFEUrlsFromContext } from '@/hooks/useMFEUrlsFromContext';
 import { IsolatedMFELoader } from '@/components/IsolatedMFELoader';

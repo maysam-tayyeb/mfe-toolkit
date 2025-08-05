@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useCallback, ReactNode } from 'react';
-import { AuthSession } from '@mfe/dev-kit';
+import { AuthSession } from '@mfe-toolkit/core';
 
 interface AuthContextType {
   session: AuthSession | null;

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import type { MFEServices, EventPayload } from '@mfe/dev-kit';
+import type { MFEServices, EventPayload } from '@mfe-toolkit/core';
 
 export function TypedEventDemo({ services }: { services: MFEServices }) {
   const [lastEvent, setLastEvent] = useState<string>('No events received');

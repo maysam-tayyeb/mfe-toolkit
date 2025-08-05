@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { MFEServices } from '@mfe/dev-kit';
+import { MFEServices } from '@mfe-toolkit/core';
 
 interface IsolatedMFELoaderProps {
   name: string;

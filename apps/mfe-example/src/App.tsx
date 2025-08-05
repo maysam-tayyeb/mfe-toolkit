@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { MFEServices } from '@mfe/dev-kit';
-import { EVENTS, MFE_CONFIG } from '@mfe/shared';
+import { MFEServices } from '@mfe-toolkit/core';
+import { EVENTS, MFE_CONFIG } from '@mfe-toolkit/shared';
 import { ZustandDemo } from '@/components/ZustandDemo';
 import { TypedEventDemo } from '@/components/TypedEventDemo';
 

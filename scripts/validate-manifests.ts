@@ -3,7 +3,7 @@
 import { readFileSync, readdirSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { ManifestValidator } from '@mfe/dev-kit';
+import { ManifestValidator } from '@mfe-toolkit/core';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

@@ -4,8 +4,8 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
-      "@mfe/dev-kit": ["../../packages/mfe-dev-kit/src"],
-      "@mfe/shared": ["../../packages/shared/src"]
+      "@mfe-toolkit/core": ["../../packages/mfe-dev-kit/src"],
+      "@mfe-toolkit/shared": ["../../packages/shared/src"]
     }
   },
   "include": ["src", "src/vite-env.d.ts"],

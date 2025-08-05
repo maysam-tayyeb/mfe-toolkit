@@ -241,7 +241,7 @@ const eventBus = createEventBus();
 
 With:
 \`\`\`typescript
-import { createTypedEventBus } from '@mfe/dev-kit';
+import { createTypedEventBus } from '@mfe-toolkit/core';
 import type { AppEventMap } from './types/events';
 
 const eventBus = createTypedEventBus<AppEventMap>();

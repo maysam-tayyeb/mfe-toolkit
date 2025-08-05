@@ -10,9 +10,9 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@mfe/dev-kit": "workspace:*",
-    "@mfe/shared": "workspace:*",
-    "@mfe/universal-state": "workspace:*"
+    "@mfe-toolkit/core": "workspace:*",
+    "@mfe-toolkit/shared": "workspace:*",
+    "@mfe-toolkit/state": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
