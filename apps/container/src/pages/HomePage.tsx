@@ -15,7 +15,7 @@ import {
   Shield,
   Users,
 } from 'lucide-react';
-import { MFE_CONFIG } from '@mfe-toolkit/shared';
+import { MFE_CONFIG } from '@mfe/shared';
 import { usePlatformMetrics } from '@/hooks/usePlatformMetrics';
 import { useRegistryContext } from '@/contexts/RegistryContext';
 

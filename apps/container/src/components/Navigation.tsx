@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import { MFE_CONFIG, Theme } from '@mfe-toolkit/shared';
+import { MFE_CONFIG, Theme } from '@mfe/shared';
 import { getGlobalStateManager } from '@mfe-toolkit/state';
 import { Moon, Sun } from 'lucide-react';
 

@@ -9,7 +9,7 @@ export function createViteConfig(dirname: string, options: any = {}) {
       alias: {
         '@': path.resolve(dirname, './src'),
         '@mfe-toolkit/core': path.resolve(dirname, '../../packages/mfe-toolkit-core/src'),
-        '@mfe-toolkit/shared': path.resolve(dirname, '../../packages/mfe-toolkit-shared/src'),
+        '@mfe/shared': path.resolve(dirname, '../../packages/shared/src'),
         '@mfe-toolkit/state': path.resolve(dirname, '../../packages/mfe-toolkit-state/src'),
       },
     },

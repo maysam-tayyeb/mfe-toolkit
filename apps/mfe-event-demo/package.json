@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@mfe-toolkit/core": "workspace:*",
-    "@mfe-toolkit/shared": "workspace:*"
+    "@mfe/shared": "workspace:*"
   },
   "devDependencies": {
     "@types/react": "^18.2.0",

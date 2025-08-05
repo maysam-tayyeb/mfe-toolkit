@@ -27,7 +27,7 @@ const config = {
   alias: {
     '@': path.join(__dirname, 'src'),
     '@mfe-toolkit/core': path.join(rootDir, 'packages/mfe-toolkit-core/src'),
-    '@mfe-toolkit/shared': path.join(rootDir, 'packages/mfe-toolkit-shared/src'),
+    '@mfe/shared': path.join(rootDir, 'packages/shared/src'),
     '@mfe-toolkit/state': path.join(rootDir, 'packages/mfe-toolkit-state/src'),
   },
 };

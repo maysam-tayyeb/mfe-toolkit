@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { useUI } from '@/contexts/UIContext';
 import { EventPayload } from '@mfe-toolkit/core';
 import { getMFEServicesSingleton } from '@/services/mfe-services-singleton';
-import { EVENTS } from '@mfe-toolkit/shared';
+import { EVENTS } from '@mfe/shared';
 import { IsolatedMFELoader } from '@/components/IsolatedMFELoader';
 import { useRegistryContext } from '@/contexts/RegistryContext';
 

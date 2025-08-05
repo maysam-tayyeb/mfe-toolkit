@@ -108,8 +108,8 @@ This is a **microfrontend (MFE) monorepo** using pnpm workspaces. The architectu
    - `@mfe-toolkit/core`: Framework-agnostic toolkit with types, services, and utilities
    - `@mfe-toolkit/react`: React-specific components and hooks (MFELoader, MFEErrorBoundary)
    - `@mfe-toolkit/cli`: Command-line tools for creating and managing MFEs
-   - `@mfe-toolkit/shared`: Common utilities and constants
    - `@mfe-toolkit/state`: Cross-framework state management solution
+   - `@mfe/shared`: Internal shared utilities for demo apps (private, not published)
    - `@mfe/design-system`: Internal UI components (private, not published)
 
 ### Key Services
@@ -156,6 +156,7 @@ The toolkit is split into several npm packages under the `@mfe-toolkit` organiza
    - Event bus, logger, error reporter, service container
    - MFE types and interfaces
    - Manifest validation and migration
+   - Common utility functions (generateId, delay, debounce, throttle)
 
 2. **@mfe-toolkit/react** (`packages/mfe-toolkit-react/`)
    - React-specific components: MFELoader, MFEErrorBoundary, MFEPage
@@ -167,16 +168,17 @@ The toolkit is split into several npm packages under the `@mfe-toolkit` organiza
    - Support for React, Vue, Vanilla JS/TS templates
    - Manifest generation and validation commands
 
-4. **@mfe-toolkit/shared** (`packages/mfe-toolkit-shared/`)
-   - Common utilities and constants
-   - Shared across all packages
-
-5. **@mfe-toolkit/state** (`packages/mfe-toolkit-state/`)
+4. **@mfe-toolkit/state** (`packages/mfe-toolkit-state/`)
    - Framework-agnostic state management
    - Cross-tab synchronization
    - Persistence support
 
 ### Internal Packages
+
+- **@mfe/shared** (`packages/shared/`)
+  - Internal utilities for demo apps
+  - App-specific constants and configurations
+  - Not published to npm (marked as private)
 
 - **@mfe/design-system** (`packages/design-system/`)
   - Internal UI components for examples

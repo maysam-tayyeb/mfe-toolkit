@@ -80,7 +80,6 @@ The toolkit is available as modular npm packages under the `@mfe-toolkit` organi
 | [`@mfe-toolkit/core`](./packages/mfe-toolkit-core) | Framework-agnostic core functionality | 0.1.0 |
 | [`@mfe-toolkit/react`](./packages/mfe-toolkit-react) | React components and hooks | 0.1.0 |
 | [`@mfe-toolkit/cli`](./packages/mfe-toolkit-cli) | CLI tools for MFE development | 0.1.0 |
-| [`@mfe-toolkit/shared`](./packages/mfe-toolkit-shared) | Shared utilities and constants | 0.1.0 |
 | [`@mfe-toolkit/state`](./packages/mfe-toolkit-state) | Cross-framework state management | 0.1.0 |
 
 ### Installation

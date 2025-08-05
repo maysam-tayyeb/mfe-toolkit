@@ -16,7 +16,7 @@
       "@/*": ["src/*"],
       "@mfe-toolkit/core": ["../../packages/mfe-toolkit-core/src"],
       "@mfe-toolkit/state": ["../../packages/mfe-toolkit-state/src"],
-      "@mfe-toolkit/shared": ["../../packages/mfe-toolkit-shared/src"]
+      "@mfe/shared": ["../../packages/shared/src"]
     }
   },
   "include": ["src/**/*"],

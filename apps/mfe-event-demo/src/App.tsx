@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { MFEServices } from '@mfe-toolkit/core';
-import { EVENTS } from '@mfe-toolkit/shared';
+import { EVENTS } from '@mfe/shared';
 
 interface AppProps {
   services: MFEServices;
