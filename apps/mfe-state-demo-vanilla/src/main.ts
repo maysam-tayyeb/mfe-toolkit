@@ -68,32 +68,7 @@ const StateDemoVanillaMFE: MFEModule = {
           </div>
         </div>
 
-        <div class="grid gap-6 md:grid-cols-2">
-          <!-- Theme Settings Card -->
-          <div class="rounded-lg border bg-card text-card-foreground shadow-sm">
-            <div class="p-6">
-              <h3 class="text-lg font-semibold mb-4">Theme Settings</h3>
-              <div class="space-y-4">
-                <div class="flex items-center justify-between">
-                  <div>
-                    <p class="font-medium">Current Theme</p>
-                    <p class="text-sm text-muted-foreground">Click to toggle</p>
-                  </div>
-                  <div id="theme-icon" class="flex items-center justify-center w-10 h-10 rounded-lg bg-muted">
-                    <!-- Icon will be inserted here -->
-                  </div>
-                </div>
-                <button
-                  id="toggle-theme-btn"
-                  class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 w-full"
-                >
-                  Toggle Theme
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <!-- Shared Counter Card -->
+        <!-- Shared Counter Card -->
           <div class="rounded-lg border bg-card text-card-foreground shadow-sm">
             <div class="p-6">
               <h3 class="text-lg font-semibold mb-4">Shared Counter</h3>
@@ -111,7 +86,6 @@ const StateDemoVanillaMFE: MFEModule = {
               </div>
             </div>
           </div>
-        </div>
 
         <!-- State Snapshot Card -->
         <div class="rounded-lg border bg-card text-card-foreground shadow-sm">

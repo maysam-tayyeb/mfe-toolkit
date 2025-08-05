@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { StateManager } from '@mfe-toolkit/state';
-import { getButtonClasses, User, Theme, SharedCounter } from '@mfe/shared';
-import { Moon, Sun } from 'lucide-react';
+import { getButtonClasses, User, SharedCounter } from '@mfe/shared';
 
 interface AppProps {
   stateManager: StateManager;
@@ -10,7 +9,6 @@ interface AppProps {
 export const App: React.FC<AppProps> = ({ stateManager }) => {
   // Local state that syncs with global state
   const [user, setLocalUser] = useState<User | undefined>();
-  const [theme, setLocalTheme] = useState<Theme>('light');
   const [counter, setLocalCounter] = useState<SharedCounter>(0);
 
   // Form state
@@ -20,7 +18,6 @@ export const App: React.FC<AppProps> = ({ stateManager }) => {
   useEffect(() => {
     // Initial values
     setLocalUser(stateManager.get<User>('user'));
-    setLocalTheme(stateManager.get<Theme>('theme') || 'light');
     setLocalCounter(stateManager.get<SharedCounter>('sharedCounter') || 0);
 
     // Subscribe to changes
@@ -28,9 +25,6 @@ export const App: React.FC<AppProps> = ({ stateManager }) => {
       setLocalUser(value);
     });
 
-    const unsubTheme = stateManager.subscribe<Theme>('theme', (value) => {
-      setLocalTheme(value || 'light');
-    });
 
     const unsubCounter = stateManager.subscribe<SharedCounter>('sharedCounter', (value) => {
       setLocalCounter(value || 0);
@@ -40,13 +34,12 @@ export const App: React.FC<AppProps> = ({ stateManager }) => {
     stateManager.registerMFE('state-demo-react', {
       version: '1.0.0',
       framework: 'react',
-      features: ['user-management', 'theme-switcher', 'counter'],
+      features: ['user-management', 'counter'],
     });
 
     // Cleanup
     return () => {
       unsubUser();
-      unsubTheme();
       unsubCounter();
       stateManager.unregisterMFE('state-demo-react');
     };
@@ -70,11 +63,6 @@ export const App: React.FC<AppProps> = ({ stateManager }) => {
   const handleIncrement = useCallback(() => {
     stateManager.set('sharedCounter', counter + 1, 'state-demo-react');
   }, [counter, stateManager]);
-
-  const handleThemeToggle = useCallback(() => {
-    const newTheme = theme === 'dark' ? 'light' : 'dark';
-    stateManager.set('theme', newTheme, 'state-demo-react');
-  }, [theme, stateManager]);
 
   return (
     <div className="space-y-6 p-6">
@@ -131,51 +119,21 @@ export const App: React.FC<AppProps> = ({ stateManager }) => {
         </div>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2">
-        {/* Theme Settings Card */}
-        <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
-          <div className="p-6">
-            <h3 className="text-lg font-semibold mb-4">Theme Settings</h3>
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="font-medium">Current Theme</p>
-                  <p className="text-sm text-muted-foreground">Applies to all MFEs</p>
-                </div>
-                <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-muted">
-                  {theme === 'dark' ? (
-                    <Moon className="w-5 h-5 text-muted-foreground" />
-                  ) : (
-                    <Sun className="w-5 h-5 text-muted-foreground" />
-                  )}
-                </div>
-              </div>
-              <button
-                onClick={handleThemeToggle}
-                className={getButtonClasses('outline', 'default', 'w-full')}
-              >
-                Toggle Theme
-              </button>
+      {/* Shared Counter Card */}
+      <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
+        <div className="p-6">
+          <h3 className="text-lg font-semibold mb-4">Shared Counter</h3>
+          <div className="space-y-4">
+            <div className="text-center">
+              <div className="text-4xl font-bold tabular-nums">{counter}</div>
+              <p className="text-sm text-muted-foreground mt-1">Synchronized value</p>
             </div>
-          </div>
-        </div>
-
-        {/* Shared Counter Card */}
-        <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
-          <div className="p-6">
-            <h3 className="text-lg font-semibold mb-4">Shared Counter</h3>
-            <div className="space-y-4">
-              <div className="text-center">
-                <div className="text-4xl font-bold tabular-nums">{counter}</div>
-                <p className="text-sm text-muted-foreground mt-1">Synchronized value</p>
-              </div>
-              <button
-                onClick={handleIncrement}
-                className={getButtonClasses('secondary', 'default', 'w-full')}
-              >
-                Increment
-              </button>
-            </div>
+            <button
+              onClick={handleIncrement}
+              className={getButtonClasses('secondary', 'default', 'w-full')}
+            >
+              Increment
+            </button>
           </div>
         </div>
       </div>
