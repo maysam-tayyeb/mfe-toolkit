@@ -33,7 +33,7 @@ const StateDemoVanillaMFE: MFEModule = {
       <div class="space-y-6 p-6">
         <div>
           <h2 class="text-2xl font-bold">Vanilla TypeScript State Demo</h2>
-          <p class="text-muted-foreground">Pure JavaScript implementation with Universal State Manager</p>
+          <p class="text-muted-foreground">Pure Vanilla TypeScript implementation with Universal State Manager</p>
         </div>
 
         <!-- User Management Card -->
