@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { App } from './App';
-import { MFEModule, MFEServices, getMFEServices } from '@mfe/dev-kit';
+import { MFEModule, MFEServices } from '@mfe-toolkit/core';
 
 // Development mode - render directly
 const isDev =
@@ -11,7 +11,7 @@ const isDev =
   window.location.port === '3003';
 
 if (isDev) {
-  const mockServices = getMFEServices() || {
+  const mockServices: MFEServices = {
     logger: {
       debug: (message: string, ...args: any[]) =>
         console.debug(`[EventDemo1-Dev] ${message}`, ...args),
@@ -46,11 +46,11 @@ if (isDev) {
       close: () => {},
     },
     notification: {
-      show: (config) => console.log('Notification:', config),
-      success: (title, message) => console.log('Success:', title, message),
-      error: (title, message) => console.log('Error:', title, message),
-      warning: (title, message) => console.log('Warning:', title, message),
-      info: (title, message) => console.log('Info:', title, message),
+      show: (config: any) => console.log('Notification:', config),
+      success: (title: string, message?: string) => console.log('Success:', title, message),
+      error: (title: string, message?: string) => console.log('Error:', title, message),
+      warning: (title: string, message?: string) => console.log('Warning:', title, message),
+      info: (title: string, message?: string) => console.log('Info:', title, message),
     },
   };
 
