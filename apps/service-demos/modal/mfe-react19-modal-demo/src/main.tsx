@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import type { MFEModule, MFEServices } from '@mfe-toolkit/core';
 import App from './App.tsx';
-import './index.css';
 
 const react19ModalDemo: MFEModule = {
   mount: (element: HTMLElement, services: MFEServices) => {

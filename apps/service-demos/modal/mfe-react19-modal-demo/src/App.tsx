@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import type { MFEServices } from '@mfe-toolkit/core';
-import './App.css';
 
 interface AppProps {
   services: MFEServices;
@@ -50,29 +49,31 @@ function App({ services }: AppProps) {
       const [email, setEmail] = useState('');
 
       return (
-        <div className="form-content">
-          <p>Please fill out the form below:</p>
-          <div className="form-group">
-            <label>
-              Name:
-              <input 
-                type="text" 
-                value={name} 
-                onChange={(e) => setName(e.target.value)}
-                placeholder="Enter your name"
-              />
+        <div className="space-y-4">
+          <p className="text-sm text-muted-foreground">Please fill out the form below:</p>
+          <div>
+            <label className="block text-sm font-medium mb-1">
+              Name
             </label>
+            <input 
+              type="text" 
+              value={name} 
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Enter your name"
+              className="w-full px-3 py-2 border border-input rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent"
+            />
           </div>
-          <div className="form-group">
-            <label>
-              Email:
-              <input 
-                type="email" 
-                value={email} 
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Enter your email"
-              />
+          <div>
+            <label className="block text-sm font-medium mb-1">
+              Email
             </label>
+            <input 
+              type="email" 
+              value={email} 
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Enter your email"
+              className="w-full px-3 py-2 border border-input rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent"
+            />
           </div>
         </div>
       );
@@ -98,15 +99,27 @@ function App({ services }: AppProps) {
 
   const handleCustomContent = () => {
     const CustomContent = () => (
-      <div style={{ textAlign: 'center' }}>
-        <div style={{ fontSize: '48px', marginBottom: '16px' }}>🎉</div>
-        <h3>Welcome to Modal Service!</h3>
-        <p>This modal demonstrates custom React content.</p>
-        <ul style={{ textAlign: 'left', maxWidth: '300px', margin: '16px auto' }}>
-          <li>✓ Rich content support</li>
-          <li>✓ React components</li>
-          <li>✓ Interactive elements</li>
-          <li>✓ Custom styling</li>
+      <div className="text-center space-y-4">
+        <div className="text-5xl mb-4">🎉</div>
+        <h3 className="text-lg font-semibold">Welcome to Modal Service!</h3>
+        <p className="text-sm text-muted-foreground">This modal demonstrates custom React content.</p>
+        <ul className="text-left max-w-sm mx-auto space-y-2 text-sm">
+          <li className="flex items-center gap-2">
+            <span className="text-green-500">✓</span>
+            <span>Rich content support</span>
+          </li>
+          <li className="flex items-center gap-2">
+            <span className="text-green-500">✓</span>
+            <span>React components</span>
+          </li>
+          <li className="flex items-center gap-2">
+            <span className="text-green-500">✓</span>
+            <span>Interactive elements</span>
+          </li>
+          <li className="flex items-center gap-2">
+            <span className="text-green-500">✓</span>
+            <span>Custom styling</span>
+          </li>
         </ul>
       </div>
     );
@@ -156,35 +169,52 @@ function App({ services }: AppProps) {
   };
 
   return (
-    <div className="modal-demo">
-      <h3>React 19 Modal Demo</h3>
-      <p>Click the buttons below to test different modal types:</p>
+    <div className="p-6 max-w-2xl mx-auto">
+      <h3 className="text-2xl font-semibold mb-2">React 19 Modal Demo</h3>
+      <p className="text-muted-foreground mb-6">Click the buttons below to test different modal types:</p>
       
-      <div className="demo-grid">
-        <button onClick={handleSimpleAlert} className="demo-button">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+        <button 
+          onClick={handleSimpleAlert} 
+          className="px-4 py-3 bg-card hover:bg-muted border border-border rounded-lg text-sm font-medium transition-colors duration-200 hover:shadow-sm"
+        >
           Simple Alert
         </button>
         
-        <button onClick={handleConfirmation} className="demo-button">
+        <button 
+          onClick={handleConfirmation} 
+          className="px-4 py-3 bg-card hover:bg-muted border border-border rounded-lg text-sm font-medium transition-colors duration-200 hover:shadow-sm"
+        >
           Confirmation Dialog
         </button>
         
-        <button onClick={handleFormModal} className="demo-button">
+        <button 
+          onClick={handleFormModal} 
+          className="px-4 py-3 bg-card hover:bg-muted border border-border rounded-lg text-sm font-medium transition-colors duration-200 hover:shadow-sm"
+        >
           Form Modal
         </button>
         
-        <button onClick={handleCustomContent} className="demo-button">
+        <button 
+          onClick={handleCustomContent} 
+          className="px-4 py-3 bg-card hover:bg-muted border border-border rounded-lg text-sm font-medium transition-colors duration-200 hover:shadow-sm"
+        >
           Custom Content
         </button>
         
-        <button onClick={handleNestedModal} className="demo-button">
+        <button 
+          onClick={handleNestedModal} 
+          className="px-4 py-3 bg-card hover:bg-muted border border-border rounded-lg text-sm font-medium transition-colors duration-200 hover:shadow-sm"
+        >
           Nested Modals
         </button>
       </div>
 
       {lastAction && (
-        <div className="last-action">
-          Last action: <strong>{lastAction}</strong>
+        <div className="p-4 bg-accent border border-border rounded-lg">
+          <p className="text-sm">
+            Last action: <strong className="font-semibold">{lastAction}</strong>
+          </p>
         </div>
       )}
     </div>
