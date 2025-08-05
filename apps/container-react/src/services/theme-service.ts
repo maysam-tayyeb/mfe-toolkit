@@ -5,21 +5,35 @@ type ThemeChangeListener = (theme: Theme) => void;
 export class ThemeServiceImpl implements ThemeService {
   private listeners: Set<ThemeChangeListener> = new Set();
   private currentTheme: Theme;
+  private availableThemes: Theme[];
 
-  constructor() {
+  constructor(themes: Theme[] = ['light', 'dark']) {
+    this.availableThemes = themes;
+    
     // Initialize theme from localStorage or system preference
     const savedTheme = localStorage.getItem('theme') as Theme | null;
     const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     
-    this.currentTheme = savedTheme || (systemPrefersDark ? 'dark' : 'light');
+    // Validate saved theme is still available
+    if (savedTheme && this.availableThemes.includes(savedTheme)) {
+      this.currentTheme = savedTheme;
+    } else {
+      // Fallback to system preference or first available theme
+      this.currentTheme = systemPrefersDark && this.availableThemes.includes('dark') 
+        ? 'dark' 
+        : this.availableThemes[0];
+    }
+    
     this.applyTheme(this.currentTheme);
     
     // Listen for system theme changes
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
       if (!localStorage.getItem('theme')) {
         // Only update if user hasn't set a preference
-        const newTheme = e.matches ? 'dark' : 'light';
-        this.setTheme(newTheme);
+        const preferredTheme = e.matches ? 'dark' : 'light';
+        if (this.availableThemes.includes(preferredTheme)) {
+          this.setTheme(preferredTheme);
+        }
       }
     });
   }
@@ -37,9 +51,14 @@ export class ThemeServiceImpl implements ThemeService {
     }
   }
 
-  toggleTheme(): void {
-    const newTheme = this.currentTheme === 'light' ? 'dark' : 'light';
-    this.setTheme(newTheme);
+  cycleTheme(): void {
+    const currentIndex = this.availableThemes.indexOf(this.currentTheme);
+    const nextIndex = (currentIndex + 1) % this.availableThemes.length;
+    this.setTheme(this.availableThemes[nextIndex]);
+  }
+
+  getAvailableThemes(): Theme[] {
+    return [...this.availableThemes];
   }
 
   subscribe(callback: ThemeChangeListener): () => void {
@@ -56,16 +75,29 @@ export class ThemeServiceImpl implements ThemeService {
   private applyTheme(theme: Theme): void {
     const root = document.documentElement;
     
-    if (theme === 'dark') {
-      root.classList.add('dark');
-    } else {
-      root.classList.remove('dark');
-    }
+    // Remove all theme classes
+    this.availableThemes.forEach(t => {
+      root.classList.remove(t);
+    });
+    
+    // Add current theme class
+    root.classList.add(theme);
+    
+    // Also set as data attribute for more flexible CSS targeting
+    root.setAttribute('data-theme', theme);
     
     // Update meta theme-color for mobile browsers
     const metaThemeColor = document.querySelector('meta[name="theme-color"]');
     if (metaThemeColor) {
-      metaThemeColor.setAttribute('content', theme === 'dark' ? '#000000' : '#ffffff');
+      // Use theme-specific colors or fallback to light/dark defaults
+      const themeColors: Record<string, string> = {
+        'light': '#ffffff',
+        'dark': '#000000',
+        'blue': '#1e40af',
+        'sepia': '#f5e6d3',
+        // Add more theme colors as needed
+      };
+      metaThemeColor.setAttribute('content', themeColors[theme] || '#ffffff');
     }
   }
 
@@ -83,9 +115,18 @@ export class ThemeServiceImpl implements ThemeService {
 // Singleton instance
 let themeService: ThemeServiceImpl | null = null;
 
-export const getThemeService = (): ThemeServiceImpl => {
+export const getThemeService = (themes?: Theme[]): ThemeServiceImpl => {
   if (!themeService) {
-    themeService = new ThemeServiceImpl();
+    themeService = new ThemeServiceImpl(themes);
   }
   return themeService;
+};
+
+// Export for configuration
+export const configureThemeService = (themes: Theme[]): void => {
+  if (themeService) {
+    console.warn('Theme service already initialized. Ignoring new configuration.');
+    return;
+  }
+  themeService = new ThemeServiceImpl(themes);
 };

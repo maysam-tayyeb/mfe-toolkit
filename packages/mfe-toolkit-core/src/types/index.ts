@@ -123,13 +123,14 @@ export interface NotificationService {
   info: (title: string, message?: string) => void;
 }
 
-export type Theme = 'light' | 'dark';
+export type Theme = string; // Allow any string for flexibility
 
 export interface ThemeService {
   getTheme: () => Theme;
   setTheme: (theme: Theme) => void;
-  toggleTheme: () => void;
   subscribe: (callback: (theme: Theme) => void) => () => void;
+  getAvailableThemes?: () => Theme[]; // Optional: List available themes
+  cycleTheme?: () => void; // Optional: Cycle to next theme
 }
 
 export interface MFEModule {

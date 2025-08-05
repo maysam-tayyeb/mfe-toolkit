@@ -22,8 +22,14 @@ export const Navigation: React.FC = () => {
     return unsubscribe;
   }, [themeService]);
 
-  const toggleTheme = () => {
-    themeService.toggleTheme();
+  const cycleTheme = () => {
+    if (themeService.cycleTheme) {
+      themeService.cycleTheme();
+    } else {
+      // Fallback for basic light/dark toggle
+      const newTheme = theme === 'light' ? 'dark' : 'light';
+      themeService.setTheme(newTheme);
+    }
   };
 
   const navItems = [
@@ -71,9 +77,9 @@ export const Navigation: React.FC = () => {
             <Button
               variant="ghost"
               size="icon"
-              onClick={toggleTheme}
+              onClick={cycleTheme}
               className="h-9 w-9"
-              aria-label="Toggle theme"
+              aria-label="Change theme"
             >
               {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
             </Button>
