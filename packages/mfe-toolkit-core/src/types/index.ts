@@ -127,8 +127,3 @@ export interface MFEModule {
   unmount: () => void;
 }
 
-// Deprecated: MFEWindow interface no longer needed
-// Services are now injected directly into MFE mount functions
-export interface MFEWindow extends Window {
-  [key: string]: any;
-}
