@@ -21,7 +21,7 @@ const PACKAGES_TO_PUBLISH = [
   'mfe-dev-kit', // @mfe-toolkit/core
   'shared',      // @mfe-toolkit/shared
   'universal-state', // @mfe-toolkit/state
-  'design-system'    // @mfe-toolkit/ui
+  // 'design-system' is private, not published
 ];
 
 function checkPackage(packageDir: string): CheckResult {
