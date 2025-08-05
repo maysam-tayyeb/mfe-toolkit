@@ -2,31 +2,28 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import { MFE_CONFIG, Theme } from '@mfe/shared';
-import { getGlobalStateManager } from '@mfe-toolkit/state';
+import { MFE_CONFIG } from '@mfe/shared';
+import { Theme } from '@mfe-toolkit/core';
+import { getThemeService } from '@/services/theme-service';
 import { Moon, Sun } from 'lucide-react';
 
 export const Navigation: React.FC = () => {
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
   const [theme, setTheme] = useState<Theme>('light');
-  const stateManager = getGlobalStateManager();
+  const themeService = getThemeService();
 
   useEffect(() => {
-    // Subscribe to theme changes
-    const currentTheme = stateManager.get<Theme>('theme') || 'light';
-    setTheme(currentTheme);
-
-    const unsubscribe = stateManager.subscribe<Theme>('theme', (value) => {
-      setTheme(value || 'light');
+    // Subscribe to theme changes from the theme service
+    const unsubscribe = themeService.subscribe((newTheme) => {
+      setTheme(newTheme);
     });
 
     return unsubscribe;
-  }, [stateManager]);
+  }, [themeService]);
 
   const toggleTheme = () => {
-    const newTheme = theme === 'dark' ? 'light' : 'dark';
-    stateManager.set('theme', newTheme, 'navigation');
+    themeService.toggleTheme();
   };
 
   const navItems = [

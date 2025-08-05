@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 import { getGlobalStateManager } from '@mfe-toolkit/state';
 import { getMFEServicesSingleton } from '@/services/mfe-services-singleton';
 import { useMFEUrlsFromContext } from '@/hooks/useMFEUrlsFromContext';
@@ -54,27 +54,6 @@ export const UniversalStateDemoPage: React.FC = () => {
     return enhancedServices;
   }, [stateManager]);
 
-  // Subscribe to theme changes and update document class
-  useEffect(() => {
-    // Subscribe to theme changes
-    const unsubscribe = stateManager.subscribe('theme', (value) => {
-      if (value === 'dark') {
-        document.documentElement.classList.add('dark');
-      } else {
-        document.documentElement.classList.remove('dark');
-      }
-    });
-
-    // Set initial theme
-    const currentTheme = stateManager.get('theme');
-    if (currentTheme === 'dark') {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-
-    return unsubscribe;
-  }, [stateManager]);
 
   const clearState = () => {
     measureStateUpdate(() => {

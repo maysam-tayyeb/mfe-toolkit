@@ -86,6 +86,7 @@ export interface MFEServices<TModalConfig = BaseModalConfig> {
   notification: NotificationService;
   stateManager?: StateManager;
   errorReporter?: ErrorReporterType;
+  theme?: ThemeService;
 }
 
 export interface Logger {
@@ -120,6 +121,15 @@ export interface NotificationService {
   error: (title: string, message?: string) => void;
   warning: (title: string, message?: string) => void;
   info: (title: string, message?: string) => void;
+}
+
+export type Theme = 'light' | 'dark';
+
+export interface ThemeService {
+  getTheme: () => Theme;
+  setTheme: (theme: Theme) => void;
+  toggleTheme: () => void;
+  subscribe: (callback: (theme: Theme) => void) => () => void;
 }
 
 export interface MFEModule {
