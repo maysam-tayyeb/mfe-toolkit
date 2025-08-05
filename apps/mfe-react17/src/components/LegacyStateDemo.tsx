@@ -82,7 +82,7 @@ export const LegacyStateDemo: React.FC = () => {
           {store.messages.length === 0 ? (
             <p className="text-gray-500 text-sm">No messages yet...</p>
           ) : (
-            store.messages.map((msg, idx) => (
+            store.messages.map((msg: string, idx: number) => (
               <div key={idx} className="text-sm p-1 bg-gray-50 rounded">
                 {msg}
               </div>

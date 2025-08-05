@@ -1,4 +1,4 @@
-import { useMFEStore } from '@mfe-toolkit/core';
+import { useMFEStore } from '@mfe-toolkit/react';
 
 interface React17State {
   count: number;
