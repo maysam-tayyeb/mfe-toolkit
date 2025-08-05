@@ -14,7 +14,7 @@ const ERROR_SCENARIOS = {
 export const ErrorBoundaryDemoPage: React.FC = () => {
   const [selectedScenario, setSelectedScenario] = useState<string>('');
   const [errorReportVisible, setErrorReportVisible] = useState(false);
-  const [refreshKey, setRefreshKey] = useState(0);
+  const [, setRefreshKey] = useState(0);
   const services = getMFEServicesSingleton();
   const errorReporter = services.errorReporter!;
 
