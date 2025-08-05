@@ -6,7 +6,7 @@ import { Info } from 'lucide-react';
 
 export function ModalServiceDemoPage() {
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <div className="space-y-6">
       {/* Header */}
       <div className="space-y-2">
         <h1 className="text-3xl font-bold">Modal Service Demo</h1>
