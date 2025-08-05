@@ -67,7 +67,7 @@ A comprehensive toolkit and reference architecture for building production-ready
 - [Architecture Decisions](./docs/architecture/ARCHITECTURE_DECISIONS.md) - Key design choices and rationale
 - [State Management Architecture](./docs/architecture/STATE_MANAGEMENT_ARCHITECTURE.md) - ContextBridge vs Universal State Manager
 - [MFE Loading Guide](./docs/architecture/MFE_LOADING_GUIDE.md) - How MFEs are loaded and best practices
-- [Improvements Status](./docs/architecture/IMPROVEMENTS_STATUS.md) - Completed and planned improvements
+- [Comprehensive Roadmap](./docs/architecture/COMPREHENSIVE_ROADMAP.md) - Complete development roadmap with completed work and future plans
 
 ## 📦 NPM Packages
 
@@ -598,7 +598,7 @@ VITE_MFE_REGISTRY_URL=https://cdn.example.com/configs/mfe-registry.json
 
 - **[All Documentation](./docs/)** - Browse all documentation
 - **[Architecture Analysis](./docs/architecture/architecture-analysis-report.md)** - Comprehensive architecture review
-- **[Improvement Roadmap](./docs/architecture/improvement-roadmap.md)** - 7-phase enhancement plan
+- **[Comprehensive Roadmap](./docs/architecture/COMPREHENSIVE_ROADMAP.md)** - Complete development roadmap
 - **[MFE Development Kit](./packages/mfe-dev-kit/README.md)** - Core services and utilities for MFE development
 - **[Shared Utilities](./packages/shared/README.md)** - Common constants and helper functions
 
@@ -610,6 +610,14 @@ VITE_MFE_REGISTRY_URL=https://cdn.example.com/configs/mfe-registry.json
 - Configure CI/CD pipeline with GitHub Actions
 - Improve error boundaries and recovery mechanisms
 - Add performance monitoring and optimization
+
+See our [Comprehensive Roadmap](./docs/architecture/COMPREHENSIVE_ROADMAP.md) for exciting upcoming features including:
+- 🔍 DevTools middleware for time-travel debugging
+- ✅ Validation middleware for runtime type safety
+- 🔄 Sync middleware for backend integration
+- 📊 Analytics middleware for usage insights
+- 🚀 Framework adapters for Svelte, Angular, SolidJS
+- And much more!
 
 ## 🤝 Contributing
 

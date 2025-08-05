@@ -2,7 +2,19 @@
 
 This directory contains architectural documentation for the MFE Made Easy platform.
 
-## 📄 Documents
+## 🎯 Primary Document
+
+### [Comprehensive Roadmap](./COMPREHENSIVE_ROADMAP.md)
+
+**This is the main roadmap document** that consolidates all improvement tracking and future development plans. It includes:
+- ✅ Completed improvements and achievements
+- 🚧 In-progress work and current priorities
+- 📅 Future development phases (Q1-Q4 2025 and beyond)
+- 📊 Success metrics and technical targets
+- 🚀 State management middleware roadmap
+- 🔧 Framework adapter plans
+
+## 📄 Core Architecture Documents
 
 ### [Architecture Decisions](./ARCHITECTURE_DECISIONS.md)
 
@@ -32,34 +44,36 @@ Technical guide for MFE loading implementation:
 - Consolidation plan for unified loader
 - Performance best practices
 
-### [Improvements Status](./IMPROVEMENTS_STATUS.md)
+### [Universal State Abstraction](./UNIVERSAL_STATE_ABSTRACTION.md)
 
-Current status of architecture improvements:
+Design principles for vendor-agnostic state management:
 
-- Completed improvements
-- In-progress work
-- Technical debt identified
-- Future work priorities
+- Abstraction layer benefits
+- Migration capabilities
+- Implementation flexibility
+- Future-proofing strategies
+
+
+## 📚 Reference Documents
 
 ### [Architecture Analysis Report](./architecture-analysis-report.md)
 
-A comprehensive analysis of the current MFE architecture including:
+Original comprehensive analysis that informed the roadmap:
 
 - Current implementation review
 - Strengths and weaknesses analysis
 - Improvement recommendations
-- Implementation roadmap
 - Success metrics
 
-### [Improvement Roadmap](./improvement-roadmap.md)
+## ⚠️ Deprecated Documents
 
-Detailed roadmap for platform improvements including:
+The following documents have been consolidated into the [Comprehensive Roadmap](./COMPREHENSIVE_ROADMAP.md):
 
-- 7-phase implementation plan
-- Technical deliverables for each phase
-- Success criteria and metrics
-- Timeline and resource requirements
-- Risk mitigation strategies
+- **IMPROVEMENTS_STATUS.md** - Tracking of completed improvements (merged)
+- **improvement-roadmap.md** - 7-phase development plan (merged)
+- **FUTURE_ROADMAP.md** - State middleware and adapter plans (merged)
+
+Please use the Comprehensive Roadmap for all improvement tracking and planning.
 
 ## 🏗️ Architecture Overview
 
