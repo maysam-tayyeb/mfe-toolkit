@@ -263,25 +263,19 @@ mfe-made-easy/
 │   ├── mfe-state-demo-vue/     # Universal state demo (Vue)
 │   └── mfe-state-demo-vanilla/ # Universal state demo (Vanilla JS)
 ├── packages/
-│   ├── mfe-toolkit-core/       # Framework-agnostic core
+│   ├── mfe-dev-kit/            # Core MFE toolkit
 │   │   └── src/
 │   │       ├── types/          # TypeScript definitions
 │   │       ├── services/       # Logger, EventBus, Registry
-│   │       └── utils/          # Common utilities
-│   ├── mfe-toolkit-react/      # React-specific components
-│   │   └── src/
 │   │       └── components/     # MFELoader, MFEPage
 │   ├── shared/                 # Common utilities
 │   │   └── src/
 │   │       ├── utils.ts        # Helper functions
 │   │       └── constants.ts    # Shared constants
-│   ├── mfe-toolkit-state/      # Cross-framework state management
-│   │   └── src/
-│   │       ├── StateManager.ts # Core state management
-│   │       └── adapters/       # Framework-specific adapters
-│   └── mfe-toolkit-state-middleware-performance/ # Performance monitoring
+│   └── universal-state/        # Cross-framework state management
 │       └── src/
-│           └── index.ts        # Performance middleware
+│           ├── StateManager.ts # Core state management
+│           └── adapters/       # Framework-specific adapters
 ├── pnpm-workspace.yaml         # Workspace configuration
 └── package.json                # Root package with scripts
 ```
@@ -426,7 +420,7 @@ pnpm type-check
 
 Services are injected into MFEs at mount time (no global window pollution). Check:
 
-1. MFE is properly importing from `@mfe-toolkit/core` or `@mfe-toolkit/react`
+1. MFE is properly importing from `@mfe/dev-kit`
 2. Services are passed to MFE during mount
 3. Error boundaries are catching and reporting errors
 4. Check the Error Reporter service for detailed error tracking
@@ -533,8 +527,7 @@ VITE_MFE_REGISTRY_URL=https://cdn.example.com/configs/mfe-registry.json
 - **[All Documentation](./docs/)** - Browse all documentation
 - **[Architecture Analysis](./docs/architecture/architecture-analysis-report.md)** - Comprehensive architecture review
 - **[Comprehensive Roadmap](./docs/architecture/COMPREHENSIVE_ROADMAP.md)** - Complete development roadmap
-- **[MFE Toolkit Core](./packages/mfe-toolkit-core/README.md)** - Framework-agnostic core services and utilities
-- **[MFE Toolkit React](./packages/mfe-toolkit-react/README.md)** - React-specific components and hooks
+- **[MFE Development Kit](./packages/mfe-dev-kit/README.md)** - Core services and utilities for MFE development
 - **[Shared Utilities](./packages/shared/README.md)** - Common constants and helper functions
 
 ## 🚀 Next Steps
