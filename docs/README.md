@@ -9,7 +9,7 @@ Welcome to the MFE Made Easy documentation. This directory contains comprehensiv
 Technical architecture documentation and analysis
 
 - [Architecture Analysis Report](./architecture/architecture-analysis-report.md) - Comprehensive analysis of the current architecture with recommendations
-- [Improvement Roadmap](./architecture/improvement-roadmap.md) - Detailed 7-phase roadmap for platform enhancements
+- [Comprehensive Roadmap](./architecture/COMPREHENSIVE_ROADMAP.md) - Consolidated improvement tracking and future development plans
 
 ### 📖 [Guides](./guides/)
 
