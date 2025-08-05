@@ -4,6 +4,7 @@ import {
   ModalService,
   NotificationService,
   createLogger,
+  getErrorReporter,
 } from '@mfe-toolkit/core';
 import { ContextBridgeRef } from './context-bridge';
 import { createPlatformEventBus } from './platform-event-bus';
@@ -106,12 +107,19 @@ const createNotificationServiceImpl = (): NotificationService => {
 
 export const createMFEServices = (): MFEServices => {
   const eventBus = createPlatformEventBus();
-
-  return {
+  const services: MFEServices = {
     logger: createLogger('MFE'),
     auth: createAuthService(),
     eventBus,
     modal: createModalServiceImpl(),
     notification: createNotificationServiceImpl(),
   };
+
+  // Create error reporter with services
+  services.errorReporter = getErrorReporter({
+    enableConsoleLog: true,
+    maxErrorsPerSession: 100,
+  }, services);
+
+  return services;
 };

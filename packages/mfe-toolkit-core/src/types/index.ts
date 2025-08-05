@@ -16,6 +16,11 @@ export type {
 
 export { isMFEManifestV1, isMFEManifestV2 } from './manifest';
 
+// Re-export error reporter types
+export type { ErrorReport } from '../services/error-reporter';
+export { ErrorReporter } from '../services/error-reporter';
+import type { ErrorReporter as ErrorReporterType } from '../services/error-reporter';
+
 export interface AuthSession {
   userId: string;
   username: string;
@@ -59,6 +64,7 @@ export interface MFEServices<TModalConfig = BaseModalConfig> {
   modal: ModalService<TModalConfig>;
   notification: NotificationService;
   stateManager?: any; // Added for Universal State Demo
+  errorReporter?: ErrorReporterType;
 }
 
 export interface Logger {

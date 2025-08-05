@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MFELoader } from '@mfe-toolkit/react';
-import { getErrorReporter } from '@mfe-toolkit/core';
 import { Button } from '@/components/ui/button';
 import { getMFEServicesSingleton } from '@/services/mfe-services-singleton';
 
@@ -15,8 +14,9 @@ const ERROR_SCENARIOS = {
 export const ErrorBoundaryDemoPage: React.FC = () => {
   const [selectedScenario, setSelectedScenario] = useState<string>('');
   const [errorReportVisible, setErrorReportVisible] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
   const services = getMFEServicesSingleton();
-  const errorReporter = getErrorReporter({}, services);
+  const errorReporter = services.errorReporter!;
 
   const scenarios = [
     {
@@ -49,6 +49,15 @@ export const ErrorBoundaryDemoPage: React.FC = () => {
     const summary = errorReporter.getSummary();
     return summary;
   };
+
+  // Refresh component to show updated error counts
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setRefreshKey(prev => prev + 1);
+    }, 2000); // Refresh every 2 seconds
+
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div className="space-y-6">
@@ -129,6 +138,7 @@ export const ErrorBoundaryDemoPage: React.FC = () => {
               onClick={() => {
                 errorReporter.clearErrors();
                 setErrorReportVisible(false);
+                setRefreshKey(prev => prev + 1);
               }}
             >
               Clear Errors

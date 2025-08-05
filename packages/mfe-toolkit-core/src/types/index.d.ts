@@ -1,5 +1,7 @@
 export type { MFEManifest, MFEManifestV1, MFEManifestV2, MFERegistry, MFEDependencies, MFECompatibility, MFECapabilities, MFERequirements, MFEMetadata, MFEConfig, MFESecurity, MFELifecycle, } from './manifest';
 export { isMFEManifestV1, isMFEManifestV2 } from './manifest';
+export type { ErrorReport } from '../services/error-reporter';
+export { ErrorReporter } from '../services/error-reporter';
 export interface AuthSession {
     userId: string;
     username: string;
@@ -38,6 +40,7 @@ export interface MFEServices<TModalConfig = BaseModalConfig> {
     modal: ModalService<TModalConfig>;
     notification: NotificationService;
     stateManager?: any;
+    errorReporter?: ErrorReporter;
 }
 export interface Logger {
     debug: (message: string, ...args: any[]) => void;
