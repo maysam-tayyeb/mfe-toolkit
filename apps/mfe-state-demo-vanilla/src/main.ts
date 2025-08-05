@@ -1,7 +1,7 @@
 // Vanilla TypeScript State Demo MFE
 import type { MFEServices } from '@mfe-toolkit/core';
 import type { StateManager } from '@mfe-toolkit/state';
-import type { User, Theme, SharedCounter } from '@mfe/shared';
+import type { User, SharedCounter } from '@mfe/shared';
 
 interface MFEModule {
   mount: (element: HTMLElement, services: MFEServices) => void;
@@ -25,7 +25,7 @@ const StateDemoVanillaMFE: MFEModule = {
     stateManager.registerMFE('state-demo-vanilla', {
       version: '1.0.0',
       framework: 'vanilla',
-      features: ['user-management', 'theme-switcher', 'counter'],
+      features: ['user-management', 'counter'],
     });
 
     // Create UI
@@ -102,8 +102,6 @@ const StateDemoVanillaMFE: MFEModule = {
     const nameInput = element.querySelector('#name-input') as HTMLInputElement;
     const emailInput = element.querySelector('#email-input') as HTMLInputElement;
     const updateUserBtn = element.querySelector('#update-user-btn') as HTMLButtonElement;
-    const themeIcon = element.querySelector('#theme-icon') as HTMLDivElement;
-    const toggleThemeBtn = element.querySelector('#toggle-theme-btn') as HTMLButtonElement;
     const counterDisplay = element.querySelector('#counter-display') as HTMLDivElement;
     const incrementBtn = element.querySelector('#increment-btn') as HTMLButtonElement;
     const stateSnapshot = element.querySelector('#state-snapshot') as HTMLPreElement;
@@ -131,22 +129,6 @@ const StateDemoVanillaMFE: MFEModule = {
       }
     };
 
-    const updateThemeIcon = (theme: Theme) => {
-      if (theme === 'dark') {
-        themeIcon.innerHTML = `
-          <svg class="w-5 h-5 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
-          </svg>
-        `;
-      } else {
-        themeIcon.innerHTML = `
-          <svg class="w-5 h-5 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
-          </svg>
-        `;
-      }
-    };
-
     const updateStateSnapshot = () => {
       const snapshot = stateManager.getSnapshot();
       stateSnapshot.textContent = JSON.stringify(snapshot, null, 2);
@@ -154,11 +136,9 @@ const StateDemoVanillaMFE: MFEModule = {
 
     // Initialize with current values
     const currentUser = stateManager.get<User>('user');
-    const currentTheme = stateManager.get<Theme>('theme') || 'light';
     const currentCounter = stateManager.get<SharedCounter>('sharedCounter') || 0;
 
     updateUserDisplay(currentUser);
-    updateThemeIcon(currentTheme);
     counterDisplay.textContent = String(currentCounter);
     updateStateSnapshot();
 
@@ -168,13 +148,6 @@ const StateDemoVanillaMFE: MFEModule = {
     unsubscribers.push(
       stateManager.subscribe<User>('user', (value) => {
         updateUserDisplay(value);
-        updateStateSnapshot();
-      })
-    );
-
-    unsubscribers.push(
-      stateManager.subscribe<Theme>('theme', (value) => {
-        updateThemeIcon(value || 'light');
         updateStateSnapshot();
       })
     );
@@ -196,11 +169,6 @@ const StateDemoVanillaMFE: MFEModule = {
         nameInput.value = '';
         emailInput.value = '';
       }
-    });
-
-    toggleThemeBtn.addEventListener('click', () => {
-      const currentTheme = stateManager.get<Theme>('theme') || 'light';
-      stateManager.set('theme', currentTheme === 'dark' ? 'light' : 'dark', 'vanilla-demo');
     });
 
     incrementBtn.addEventListener('click', () => {
