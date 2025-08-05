@@ -58,6 +58,16 @@ Create a comprehensive, framework-agnostic toolkit that enables teams to build, 
 - Deployment helpers
 - **Target**: Q2 2025
 
+### Infrastructure & Configuration
+
+**1. Environment-Specific Registries** 🌍
+- Support for multiple registry files per environment
+- Environment variable interpolation in registry URLs
+- Runtime environment detection and registry switching
+- Registry inheritance and overrides
+- Build-time registry validation
+- **Target**: Q1 2025
+
 ## 📅 Q2 2025 Roadmap
 
 ### Framework Adapters
