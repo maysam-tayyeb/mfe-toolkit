@@ -55,7 +55,15 @@
     "validate": "pnpm format:check && pnpm lint && pnpm type-check && pnpm test",
     "validate:manifests": "tsx scripts/validate-manifests.ts",
     "build:registry": "tsx scripts/build-registry.ts",
-    "precommit": "pnpm validate"
+    "precommit": "pnpm validate",
+    "prepublish:check": "tsx scripts/prepublish-check.ts",
+    "publish:dry": "pnpm -r publish --dry-run --no-git-checks",
+    "publish:alpha": "pnpm -r publish --tag alpha --no-git-checks",
+    "publish:beta": "pnpm -r publish --tag beta --no-git-checks",
+    "publish:latest": "pnpm -r publish --no-git-checks",
+    "changeset": "changeset",
+    "version": "changeset version && pnpm install --no-frozen-lockfile",
+    "release": "pnpm build && changeset publish"
   },
   "devDependencies": {
     "@eslint/js": "^9.30.1",

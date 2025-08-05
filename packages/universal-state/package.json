@@ -22,7 +22,7 @@
     "microfrontend",
     "framework-agnostic"
   ],
-  "author": "",
+  "author": "Maysam Tayyeb <maysam@example.com>",
   "license": "MIT",
   "devDependencies": {
     "@testing-library/jest-dom": "^6.6.4",
@@ -52,5 +52,18 @@
   "dependencies": {
     "valtio": "^2.1.5",
     "valtio-persist": "^2.2.4"
-  }
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/maysam-tayyeb/mfe-toolkit.git",
+    "directory": "packages/universal-state"
+  },
+  "bugs": {
+    "url": "https://github.com/maysam-tayyeb/mfe-toolkit/issues"
+  },
+  "homepage": "https://github.com/maysam-tayyeb/mfe-toolkit/tree/main/packages/universal-state#readme"
 }
