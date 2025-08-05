@@ -350,6 +350,55 @@
           "retryDelay": 1000
         }
       }
+    },
+    {
+      "$schema": "https://mfe-made-easy.com/schemas/mfe-manifest-v2.schema.json",
+      "name": "mfe-react19-modal-demo",
+      "version": "1.0.0",
+      "url": "http://localhost:8080/service-demos/modal/mfe-react19-modal-demo/mfe-react19-modal-demo.js",
+      "dependencies": {
+        "runtime": {},
+        "peer": {
+          "react": "^19.0.0",
+          "react-dom": "^19.0.0"
+        }
+      },
+      "compatibility": {
+        "container": ">=1.0.0",
+        "frameworks": {
+          "react": ">=19.0.0"
+        }
+      },
+      "requirements": {
+        "services": [
+          {
+            "name": "modal",
+            "optional": false
+          },
+          {
+            "name": "logger",
+            "optional": true
+          }
+        ]
+      },
+      "metadata": {
+        "displayName": "React 19 Modal Demo",
+        "description": "Modal service demonstration using React 19",
+        "icon": "🎭",
+        "category": "demo",
+        "tags": ["modal", "react19", "service-demo"]
+      },
+      "capabilities": {
+        "emits": [],
+        "listens": []
+      },
+      "config": {
+        "loading": {
+          "timeout": 30000,
+          "retries": 3,
+          "retryDelay": 1000
+        }
+      }
     }
   ],
   "config": {

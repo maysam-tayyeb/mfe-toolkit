@@ -8,7 +8,7 @@ const config = {
   entryPoints: ['src/main.tsx'],
   bundle: true,
   format: 'esm',
-  outfile: path.join(__dirname, 'dist', 'react19-modal-demo.js'),
+  outfile: path.join(__dirname, 'dist', 'mfe-react19-modal-demo.js'),
   platform: 'browser',
   target: 'es2020',
   external: [
@@ -32,7 +32,7 @@ try {
   console.log('🔨 Building React 19 Modal Demo MFE...');
   const result = await build(config);
   console.log('✅ React 19 Modal Demo MFE built successfully!');
-  console.log('📦 Bundle created: dist/react19-modal-demo.js');
+  console.log('📦 Bundle created: dist/mfe-react19-modal-demo.js');
 } catch (error) {
   console.error('❌ Build failed:', error);
   process.exit(1);

@@ -73,9 +73,9 @@
       }
     },
     {
-      "name": "react19-modal-demo",
+      "name": "mfe-react19-modal-demo",
       "version": "1.0.0",
-      "url": "http://localhost:8080/service-demos/modal/react19-modal-demo/react19-modal-demo.js",
+      "url": "http://localhost:8080/service-demos/modal/mfe-react19-modal-demo/mfe-react19-modal-demo.js",
       "dependencies": ["react", "react-dom"],
       "sharedLibs": [],
       "metadata": {

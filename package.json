@@ -35,7 +35,7 @@
     "build": "pnpm build:containers && pnpm build:mfes",
     "build:containers": "pnpm --parallel --filter './apps/container-*' build",
     "build:container-react": "pnpm --filter @mfe/container-react build",
-    "build:mfes": "pnpm --parallel --filter './apps/mfe-*' build && pnpm copy-mfe-dists",
+    "build:mfes": "pnpm --parallel --filter './apps/mfe-*' --filter './apps/service-demos/**' build && pnpm copy-mfe-dists",
     "copy-mfe-dists": "node scripts/copy-mfe-dists.js",
     "build:all": "pnpm -r build",
     "build:vite": "pnpm -r build:vite",

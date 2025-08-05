@@ -71,7 +71,7 @@ export function ModalServiceDemoPage() {
             <CardContent>
               <div className="border rounded-lg bg-muted/10 min-h-[400px]">
                 <MFELoader
-                  id="react19-modal-demo"
+                  id="mfe-react19-modal-demo"
                   fallback={
                     <div className="flex items-center justify-center h-[400px] text-muted-foreground">
                       <p>Loading React 19 Modal Demo...</p>
