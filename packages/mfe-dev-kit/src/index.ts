@@ -47,14 +47,8 @@ export {
   type RegistryMigrationResult,
 } from './services/manifest-migrator';
 
-// State Management
-export * from './state/mfe-store-factory';
-export * from './state/mfe-store-hooks';
-
-// Components
-export { MFELoader } from './components/MFELoader';
-export { MFEPage } from './components/MFEPage';
-export { MFEErrorBoundary, withMFEErrorBoundary } from './components/MFEErrorBoundary';
+// Note: React-specific exports have been moved to @mfe-toolkit/react
+// This package now only contains framework-agnostic code
 
 // Utility function to get services from window
 import { MFEServices, MFEWindow } from './types';

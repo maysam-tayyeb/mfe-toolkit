@@ -32,9 +32,10 @@ export interface EventPayload<T = any> {
   source: string;
 }
 
-export interface ModalConfig {
+// Generic modal config that can be extended by framework-specific implementations
+export interface BaseModalConfig<TContent = any> {
   title: string;
-  content: React.ReactNode;
+  content: TContent;
   size?: 'sm' | 'md' | 'lg' | 'xl';
   onClose?: () => void;
   onConfirm?: () => void;
@@ -51,11 +52,11 @@ export interface NotificationConfig {
   onClose?: () => void;
 }
 
-export interface MFEServices {
+export interface MFEServices<TModalConfig = BaseModalConfig> {
   logger: Logger;
   auth: AuthService;
   eventBus: EventBus;
-  modal: ModalService;
+  modal: ModalService<TModalConfig>;
   notification: NotificationService;
   stateManager?: any; // Added for Universal State Demo
 }
@@ -81,8 +82,8 @@ export interface EventBus {
   once: <T = any>(event: string, handler: (payload: EventPayload<T>) => void) => void;
 }
 
-export interface ModalService {
-  open: (config: ModalConfig) => void;
+export interface ModalService<TModalConfig = BaseModalConfig> {
+  open: (config: TModalConfig) => void;
   close: () => void;
 }
 
