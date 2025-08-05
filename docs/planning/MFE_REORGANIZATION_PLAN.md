@@ -3,128 +3,180 @@
 ## Current Issues
 - Service Explorer MFEs are monolithic and demonstrate everything at once
 - Difficult to understand individual service capabilities
-- No real-world use case demonstrations
+- No clear demonstration of cross-framework compatibility
 - Poor discoverability of features
 
-## Proposed Structure
+## New Approach: Cross-Framework Service Demonstrations
 
-### 1. Service-Specific Demo MFEs
-Each MFE focuses on one service with multiple examples:
+### Core Concept
+Instead of creating service-specific MFEs, we'll create container pages that demonstrate each service across all supported frameworks (React 19, React 17, Vue, Vanilla TS) simultaneously.
 
-#### mfe-modal-showcase
-- **Simple Alert**: Basic modal with OK button
-- **Confirmation Dialog**: Yes/No decisions with callbacks
-- **Form Modal**: Input forms with validation
-- **Multi-Step Wizard**: Complex workflows
-- **Custom Styling**: Themed modals
-- **Nested Modals**: Modal within modal patterns
+### 1. Service Demo Pages (Container)
 
-#### mfe-notification-center
-- **Toast Types**: Success, error, warning, info
-- **Positions**: Top, bottom, corners
-- **Durations**: Auto-dismiss timings
-- **Actions**: Clickable notifications with actions
-- **Queue Management**: Multiple notifications
-- **Custom Templates**: Rich content notifications
+#### Modal Service Demo Page (`/services/modal`)
+- Loads 4 MFEs side-by-side: React 19, React 17, Vue, Vanilla TS
+- Each MFE demonstrates the same modal functionality:
+  - **Simple Alert**: Basic modal with OK button
+  - **Confirmation Dialog**: Yes/No decisions with callbacks
+  - **Form Modal**: Input forms with validation
+  - **Multi-Step Wizard**: Complex workflows
+  - **Custom Content**: Rich modal content
+  - **Nested Modals**: Modal within modal patterns
 
-#### mfe-logger-monitor
-- **Log Levels**: Debug, info, warn, error
-- **Performance Tracking**: Measure operations
-- **Error Reporting**: Structured error logging
-- **Log Filtering**: View logs by level/source
-- **Export Logs**: Download log history
-- **Real-time Monitor**: Live log viewer
+#### Notification Service Demo Page (`/services/notification`)
+- Loads 4 framework MFEs demonstrating notifications:
+  - **Toast Types**: Success, error, warning, info
+  - **Positions**: Different notification positions
+  - **Auto-dismiss**: Various timing configurations
+  - **Actions**: Clickable notifications
+  - **Queue Management**: Multiple notifications
+  - **Custom Content**: Rich notification content
 
-#### mfe-auth-guard
-- **Session Display**: Current user info
-- **Permission Checks**: Role-based access
-- **Login Simulation**: Mock auth flows
-- **Token Management**: JWT examples
-- **Protected Routes**: Access control demos
-- **Multi-tenancy**: Organization switching
+#### Logger Service Demo Page (`/services/logger`)
+- Loads 4 framework MFEs demonstrating logging:
+  - **Log Levels**: Debug, info, warn, error
+  - **Performance Tracking**: Measure operations
+  - **Structured Logging**: Context and metadata
+  - **Log Filtering**: By level/source
+  - **Real-time Updates**: Live log viewing
 
-#### mfe-error-showcase
-- **Runtime Errors**: Handled vs unhandled
-- **Network Errors**: API failure handling
-- **Validation Errors**: Form validation
-- **Recovery Strategies**: Retry mechanisms
-- **Error Boundaries**: Graceful degradation
-- **User Feedback**: Error messaging
+#### Auth Service Demo Page (`/services/auth`)
+- Loads 4 framework MFEs demonstrating authentication:
+  - **Session Display**: Current user info
+  - **Permission Checks**: Role-based access
+  - **Auth State**: Login/logout simulation
+  - **Protected Content**: Access control
 
-### 2. Real-World Use Case MFEs
-Complete mini-applications demonstrating service integration:
+#### Error Service Demo Page (`/services/error`)
+- Loads 4 framework MFEs demonstrating error handling:
+  - **Throwing Errors**: Controlled error generation
+  - **Error Reporting**: Structured error capture
+  - **Recovery**: Error boundaries and fallbacks
+  - **User Feedback**: Error messaging
+
+#### Theme Service Demo Page (`/services/theme`)
+- Loads 4 framework MFEs demonstrating theme service:
+  - **Current Theme**: Display active theme
+  - **Theme Switching**: Toggle between themes
+  - **Theme Persistence**: Saved preferences
+  - **Custom Themes**: Extended theme options
+
+### 2. Framework-Specific Service MFEs
+
+Create minimal MFEs that focus on demonstrating one service:
+
+```
+apps/
+├── service-demos/
+│   ├── modal/
+│   │   ├── react19-modal-demo/
+│   │   ├── react17-modal-demo/
+│   │   ├── vue-modal-demo/
+│   │   └── vanilla-modal-demo/
+│   ├── notification/
+│   │   ├── react19-notification-demo/
+│   │   ├── react17-notification-demo/
+│   │   ├── vue-notification-demo/
+│   │   └── vanilla-notification-demo/
+│   ├── logger/
+│   │   ├── react19-logger-demo/
+│   │   ├── react17-logger-demo/
+│   │   ├── vue-logger-demo/
+│   │   └── vanilla-logger-demo/
+│   └── ... (auth, error, theme)
+```
+
+### 3. Real-World Use Case MFEs
+
+Keep the existing approach for complete applications:
 
 #### mfe-user-profile
-- Uses: Auth, Modal, Notification
-- Features: View profile, edit in modal, save notifications
-
-#### mfe-data-dashboard
-- Uses: Logger, State, Error handling
-- Features: Charts, filters, error recovery, performance logging
+- Uses: Auth, Modal, Notification, Theme
+- Features: View profile, edit in modal, save notifications, theme preferences
 
 #### mfe-shopping-cart
 - Uses: Event Bus, State, Notifications
-- Features: Add/remove items, cross-MFE communication, checkout
+- Features: Add/remove items, cross-MFE communication, checkout flow
 
-#### mfe-settings-panel
+#### mfe-admin-dashboard
 - Uses: All services
-- Features: User preferences, theme switching, notification settings
+- Features: User management, system monitoring, settings
 
-### 3. Navigation Reorganization
+### 4. Navigation Reorganization
 
 ```
 MFE Platform
 ├── Home
 ├── Service Demos
-│   ├── Modal Showcase
-│   ├── Notification Center
-│   ├── Logger Monitor
-│   ├── Auth Guard
-│   └── Error Showcase
+│   ├── Modal Service (React 19, React 17, Vue, Vanilla)
+│   ├── Notification Service (React 19, React 17, Vue, Vanilla)
+│   ├── Logger Service (React 19, React 17, Vue, Vanilla)
+│   ├── Auth Service (React 19, React 17, Vue, Vanilla)
+│   ├── Error Service (React 19, React 17, Vue, Vanilla)
+│   └── Theme Service (React 19, React 17, Vue, Vanilla)
 ├── Use Cases
 │   ├── User Profile
-│   ├── Data Dashboard
 │   ├── Shopping Cart
-│   └── Settings Panel
-├── Framework Examples
-│   ├── React Examples
-│   ├── Vue State Demo
-│   └── Vanilla JS Demo
+│   └── Admin Dashboard
+├── State Management
+│   ├── Universal State Demo
+│   └── Cross-Tab Sync Demo
 └── Platform Tools
-    ├── MFE Communication
-    ├── Universal State Demo
-    └── Registry Status
+    ├── MFE Registry
+    ├── Event Bus Monitor
+    └── Performance Dashboard
 ```
 
-### 4. Implementation Priority
+### 5. Implementation Phases
 
-1. **Phase 1** (High Priority):
-   - Create mfe-modal-showcase
-   - Create mfe-notification-center
-   - Update navigation structure
-   - Update MFE registry
+#### Phase 1: Modal Service Demo (Proof of Concept)
+1. Create Modal Service Demo page in container
+2. Create 4 minimal MFEs (react19, react17, vue, vanilla) for modal demos
+3. Update navigation to include Service Demos section
+4. Update MFE registry
 
-2. **Phase 2** (Medium Priority):
-   - Create mfe-logger-monitor
-   - Create mfe-auth-guard
-   - Create mfe-user-profile use case
+#### Phase 2: Remaining Core Services
+1. Notification Service Demo page + 4 MFEs
+2. Logger Service Demo page + 4 MFEs
+3. Theme Service Demo page + 4 MFEs
 
-3. **Phase 3** (Lower Priority):
-   - Create remaining service demos
-   - Create remaining use cases
-   - Remove old service explorers
-   - Update documentation
+#### Phase 3: Advanced Services & Use Cases
+1. Auth Service Demo page + 4 MFEs
+2. Error Service Demo page + 4 MFEs
+3. Create real-world use case MFEs
+4. Remove old service explorer MFEs
 
-## Benefits
+### 6. Benefits of This Approach
 
-1. **Better Learning Curve**: Developers can focus on one service at a time
-2. **Real-World Examples**: Use cases show practical implementations
-3. **Improved Discoverability**: Organized navigation makes features easier to find
-4. **Reusable Patterns**: Each MFE becomes a reference implementation
-5. **Framework Flexibility**: Shows the toolkit works across frameworks
+1. **Cross-Framework Consistency**: See how the same service works identically across all frameworks
+2. **Side-by-Side Comparison**: Visual proof of framework-agnostic design
+3. **Smaller, Focused MFEs**: Each MFE has a single responsibility
+4. **Better Learning Experience**: Clear examples for each framework
+5. **Real Integration Testing**: Proves services work with different framework versions
 
-## Next Steps
+### 7. Technical Implementation Details
 
-1. Start with mfe-modal-showcase as the first service-specific demo
-2. Update navigation to support categorized structure
-3. Gradually migrate features from service explorers to focused MFEs
+#### Service Demo Page Structure
+```tsx
+// Example: ModalServiceDemoPage.tsx
+<div className="grid grid-cols-2 gap-4">
+  <MFELoader id="react19-modal" title="React 19" />
+  <MFELoader id="react17-modal" title="React 17" />
+  <MFELoader id="vue-modal" title="Vue 3" />
+  <MFELoader id="vanilla-modal" title="Vanilla TS" />
+</div>
+```
+
+#### Minimal MFE Structure
+Each framework-specific MFE should:
+- Be under 200 lines of code
+- Focus on demonstrating one service
+- Use the same UI patterns for consistency
+- Include the same set of examples
+
+### Next Steps
+
+1. Create Modal Service Demo page as proof of concept
+2. Create 4 framework-specific modal demo MFEs
+3. Update navigation and routing
+4. If successful, proceed with other services
