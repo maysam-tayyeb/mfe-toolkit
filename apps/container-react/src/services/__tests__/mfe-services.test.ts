@@ -50,6 +50,12 @@ describe('MFE Services with Proxy Pattern', () => {
       getAuthService: vi.fn(() => mockAuthService),
       getModalService: vi.fn(() => mockModalService),
       getNotificationService: vi.fn(() => mockNotificationService),
+      getThemeService: vi.fn(() => ({
+        getTheme: vi.fn(() => 'light' as const),
+        setTheme: vi.fn(),
+        toggleTheme: vi.fn(),
+        subscribe: vi.fn(() => vi.fn()),
+      })),
     };
 
     services = createMFEServices();

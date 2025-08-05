@@ -46,7 +46,7 @@
   },
   "capabilities": {
     "emits": ["state:changed"],
-    "listens": ["app:theme-change", "user:login", "user:logout", "state:sync"]
+    "listens": ["user:login", "user:logout", "state:sync"]
   },
   "config": {
     "loading": {

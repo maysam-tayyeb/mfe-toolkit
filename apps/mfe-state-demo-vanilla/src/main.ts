@@ -1,7 +1,7 @@
 // Vanilla TypeScript State Demo MFE
 import type { MFEServices } from '@mfe-toolkit/core';
 import type { StateManager } from '@mfe-toolkit/state';
-import type { User, Theme, SharedCounter } from '@mfe/shared';
+import type { User, SharedCounter } from '@mfe/shared';
 
 interface MFEModule {
   mount: (element: HTMLElement, services: MFEServices) => void;
@@ -25,7 +25,7 @@ const StateDemoVanillaMFE: MFEModule = {
     stateManager.registerMFE('state-demo-vanilla', {
       version: '1.0.0',
       framework: 'vanilla',
-      features: ['user-management', 'theme-switcher', 'counter'],
+      features: ['user-management', 'counter'],
     });
 
     // Create UI
@@ -33,7 +33,7 @@ const StateDemoVanillaMFE: MFEModule = {
       <div class="space-y-6 p-6">
         <div>
           <h2 class="text-2xl font-bold">Vanilla TypeScript State Demo</h2>
-          <p class="text-muted-foreground">Pure JavaScript implementation with Universal State Manager</p>
+          <p class="text-muted-foreground">Pure Vanilla TypeScript implementation with Universal State Manager</p>
         </div>
 
         <!-- User Management Card -->
@@ -68,32 +68,7 @@ const StateDemoVanillaMFE: MFEModule = {
           </div>
         </div>
 
-        <div class="grid gap-6 md:grid-cols-2">
-          <!-- Theme Settings Card -->
-          <div class="rounded-lg border bg-card text-card-foreground shadow-sm">
-            <div class="p-6">
-              <h3 class="text-lg font-semibold mb-4">Theme Settings</h3>
-              <div class="space-y-4">
-                <div class="flex items-center justify-between">
-                  <div>
-                    <p class="font-medium">Current Theme</p>
-                    <p class="text-sm text-muted-foreground">Click to toggle</p>
-                  </div>
-                  <div id="theme-icon" class="flex items-center justify-center w-10 h-10 rounded-lg bg-muted">
-                    <!-- Icon will be inserted here -->
-                  </div>
-                </div>
-                <button
-                  id="toggle-theme-btn"
-                  class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 w-full"
-                >
-                  Toggle Theme
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <!-- Shared Counter Card -->
+        <!-- Shared Counter Card -->
           <div class="rounded-lg border bg-card text-card-foreground shadow-sm">
             <div class="p-6">
               <h3 class="text-lg font-semibold mb-4">Shared Counter</h3>
@@ -111,7 +86,6 @@ const StateDemoVanillaMFE: MFEModule = {
               </div>
             </div>
           </div>
-        </div>
 
         <!-- State Snapshot Card -->
         <div class="rounded-lg border bg-card text-card-foreground shadow-sm">
@@ -128,8 +102,6 @@ const StateDemoVanillaMFE: MFEModule = {
     const nameInput = element.querySelector('#name-input') as HTMLInputElement;
     const emailInput = element.querySelector('#email-input') as HTMLInputElement;
     const updateUserBtn = element.querySelector('#update-user-btn') as HTMLButtonElement;
-    const themeIcon = element.querySelector('#theme-icon') as HTMLDivElement;
-    const toggleThemeBtn = element.querySelector('#toggle-theme-btn') as HTMLButtonElement;
     const counterDisplay = element.querySelector('#counter-display') as HTMLDivElement;
     const incrementBtn = element.querySelector('#increment-btn') as HTMLButtonElement;
     const stateSnapshot = element.querySelector('#state-snapshot') as HTMLPreElement;
@@ -157,22 +129,6 @@ const StateDemoVanillaMFE: MFEModule = {
       }
     };
 
-    const updateThemeIcon = (theme: Theme) => {
-      if (theme === 'dark') {
-        themeIcon.innerHTML = `
-          <svg class="w-5 h-5 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
-          </svg>
-        `;
-      } else {
-        themeIcon.innerHTML = `
-          <svg class="w-5 h-5 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
-          </svg>
-        `;
-      }
-    };
-
     const updateStateSnapshot = () => {
       const snapshot = stateManager.getSnapshot();
       stateSnapshot.textContent = JSON.stringify(snapshot, null, 2);
@@ -180,11 +136,9 @@ const StateDemoVanillaMFE: MFEModule = {
 
     // Initialize with current values
     const currentUser = stateManager.get<User>('user');
-    const currentTheme = stateManager.get<Theme>('theme') || 'light';
     const currentCounter = stateManager.get<SharedCounter>('sharedCounter') || 0;
 
     updateUserDisplay(currentUser);
-    updateThemeIcon(currentTheme);
     counterDisplay.textContent = String(currentCounter);
     updateStateSnapshot();
 
@@ -194,13 +148,6 @@ const StateDemoVanillaMFE: MFEModule = {
     unsubscribers.push(
       stateManager.subscribe<User>('user', (value) => {
         updateUserDisplay(value);
-        updateStateSnapshot();
-      })
-    );
-
-    unsubscribers.push(
-      stateManager.subscribe<Theme>('theme', (value) => {
-        updateThemeIcon(value || 'light');
         updateStateSnapshot();
       })
     );
@@ -222,11 +169,6 @@ const StateDemoVanillaMFE: MFEModule = {
         nameInput.value = '';
         emailInput.value = '';
       }
-    });
-
-    toggleThemeBtn.addEventListener('click', () => {
-      const currentTheme = stateManager.get<Theme>('theme') || 'light';
-      stateManager.set('theme', currentTheme === 'dark' ? 'light' : 'dark', 'vanilla-demo');
     });
 
     incrementBtn.addEventListener('click', () => {

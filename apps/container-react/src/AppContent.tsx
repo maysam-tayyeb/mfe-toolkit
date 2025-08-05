@@ -9,7 +9,6 @@ import { ErrorBoundaryDemoPage } from '@/pages/ErrorBoundaryDemoPage';
 import { CompatibleMFELoader } from '@/components/CompatibleMFELoader';
 import { getMFEServicesSingleton } from '@/services/mfe-services-singleton';
 import { useRegistryContext } from '@/contexts/RegistryContext';
-import { getGlobalStateManager } from '@mfe-toolkit/state';
 import { initializePlatformMetrics, updatePlatformMetric } from '@/store/platform-metrics';
 
 // Simple MFE Page component to replace the missing MFEPage from @mfe-toolkit/react
@@ -53,34 +52,11 @@ function MFEPage() {
 
 export function AppContent() {
   const { registry, isLoading } = useRegistryContext();
-  const mfeServices = useMemo(() => getMFEServicesSingleton(), []);
 
   useEffect(() => {
     // Initialize platform metrics
     initializePlatformMetrics();
-
-    // Set up global theme management
-    const stateManager = getGlobalStateManager();
-
-    // Subscribe to theme changes
-    const unsubscribe = stateManager.subscribe('theme', (value) => {
-      if (value === 'dark') {
-        document.documentElement.classList.add('dark');
-      } else {
-        document.documentElement.classList.remove('dark');
-      }
-    });
-
-    // Set initial theme
-    const currentTheme = stateManager.get('theme');
-    if (currentTheme === 'dark') {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-
-    return unsubscribe;
-  }, [mfeServices]);
+  }, []);
 
   useEffect(() => {
     // Update MFE counts when registry changes

@@ -1,12 +1,14 @@
 import React, { useRef, useImperativeHandle, forwardRef, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useUI } from '@/contexts/UIContext';
-import { AuthService, ModalService, NotificationService, NotificationConfig } from '@mfe-toolkit/core';
+import { AuthService, ModalService, NotificationService, NotificationConfig, ThemeService } from '@mfe-toolkit/core';
+import { getThemeService } from './theme-service';
 
 export interface ContextBridgeRef {
   getAuthService: () => AuthService;
   getModalService: () => ModalService;
   getNotificationService: () => NotificationService;
+  getThemeService: () => ThemeService;
 }
 
 // This component bridges React contexts to imperative services for MFEs
@@ -65,6 +67,9 @@ export const ContextBridge = forwardRef<ContextBridgeRef, { children: React.Reac
         show({ type: 'info', title, message });
     }, [ui.addNotification]);
 
+    // Get theme service singleton
+    const themeService = getThemeService();
+
     // Expose methods to get services
     useImperativeHandle(
       ref,
@@ -72,6 +77,7 @@ export const ContextBridge = forwardRef<ContextBridgeRef, { children: React.Reac
         getAuthService: () => authServiceRef.current,
         getModalService: () => modalServiceRef.current,
         getNotificationService: () => notificationServiceRef.current,
+        getThemeService: () => themeService,
       }),
       []
     );

@@ -3,6 +3,7 @@ import {
   AuthService,
   ModalService,
   NotificationService,
+  ThemeService,
   createLogger,
   getErrorReporter,
 } from '@mfe-toolkit/core';
@@ -99,6 +100,20 @@ const createNotificationServiceImpl = (): NotificationService => {
   );
 };
 
+const createThemeServiceImpl = (): ThemeService => {
+  return createProxiedService<ThemeService>(
+    'ThemeService',
+    () => contextBridge!.getThemeService(),
+    {
+      getTheme: 'light',
+      setTheme: undefined,
+      subscribe: () => () => {}, // Return empty unsubscribe function
+      getAvailableThemes: () => ['light', 'dark'], // Default themes
+      cycleTheme: undefined,
+    }
+  );
+};
+
 export const createMFEServices = (): MFEServices => {
   const eventBus = createPlatformEventBus();
   const services: MFEServices = {
@@ -107,6 +122,7 @@ export const createMFEServices = (): MFEServices => {
     eventBus,
     modal: createModalServiceImpl(),
     notification: createNotificationServiceImpl(),
+    theme: createThemeServiceImpl(),
   };
 
   // Create error reporter with services
