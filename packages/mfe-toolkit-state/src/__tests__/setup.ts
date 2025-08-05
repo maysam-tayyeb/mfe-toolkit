@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom';
-import { beforeEach, vi } from 'vitest';
+import { beforeEach } from 'vitest';
 
 // Store all broadcast channels for cross-channel communication in tests
 const channels = new Map<string, Set<MockBroadcastChannel>>();

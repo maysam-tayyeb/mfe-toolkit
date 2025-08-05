@@ -11,6 +11,7 @@ export interface StateChangeEvent<T = StateValue> {
   previousValue: T;
   source: string;
   timestamp: number;
+  type: 'set' | 'delete' | 'clear';
 }
 
 // Listener types with proper generic constraints

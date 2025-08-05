@@ -10,7 +10,7 @@ import {
   initStatePerformanceMonitor, 
   measureStateUpdate,
   getPerformanceSummary 
-} from '@/utils/state-performance-monitor';
+} from '@mfe-toolkit/state-middleware-performance';
 
 export const UniversalStateDemoPage: React.FC = () => {
   // Use the custom hook to get MFE URLs from context

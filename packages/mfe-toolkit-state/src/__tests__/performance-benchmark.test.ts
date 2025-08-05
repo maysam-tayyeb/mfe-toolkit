@@ -131,7 +131,7 @@ describe('UniversalStateManager Performance Benchmarks', () => {
         },
         ({ proxy }) => {
           // Direct proxy access
-          const value = proxy[`key${Math.floor(Math.random() * 100)}`];
+          proxy[`key${Math.floor(Math.random() * 100)}`];
         },
         100000
       );

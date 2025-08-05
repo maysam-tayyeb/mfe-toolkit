@@ -1,9 +1,9 @@
 /**
- * Performance monitoring for state manager implementation
- * Tracks key metrics to validate Valtio migration
+ * Performance monitoring for state manager implementations
+ * Tracks key metrics to validate and compare different state management solutions
  */
 
-interface StatePerformanceMetrics {
+export interface StatePerformanceMetrics {
   implementation: string;
   sessionDuration: number;
   stateUpdates: number;
@@ -13,7 +13,7 @@ interface StatePerformanceMetrics {
   errors: Array<{ message: string; timestamp: number }>;
 }
 
-class StatePerformanceMonitor {
+export class StatePerformanceMonitor {
   private metrics: StatePerformanceMetrics;
   private updateTimes: number[] = [];
   private sessionStart: number;
@@ -54,20 +54,24 @@ class StatePerformanceMonitor {
   }
 
   private setupErrorTracking() {
-    window.addEventListener('error', (event) => {
-      if (event.message.toLowerCase().includes('state')) {
-        this.metrics.errors.push({
-          message: event.message,
-          timestamp: Date.now(),
-        });
-      }
-    });
+    if (typeof window !== 'undefined') {
+      window.addEventListener('error', (event) => {
+        if (event.message.toLowerCase().includes('state')) {
+          this.metrics.errors.push({
+            message: event.message,
+            timestamp: Date.now(),
+          });
+        }
+      });
+    }
   }
 
   private setupUnloadHandler() {
-    window.addEventListener('beforeunload', () => {
-      this.sendMetrics();
-    });
+    if (typeof window !== 'undefined') {
+      window.addEventListener('beforeunload', () => {
+        this.sendMetrics();
+      });
+    }
   }
 
   trackStateUpdate(duration: number) {
@@ -106,21 +110,23 @@ class StatePerformanceMonitor {
     // In production, send to analytics service
     // analytics.track('state-manager-performance', this.metrics);
 
-    // Store in localStorage for debugging
-    try {
-      const key = `state-perf-${this.metrics.implementation}-${Date.now()}`;
-      localStorage.setItem(key, JSON.stringify(this.metrics));
-      
-      // Keep only last 5 sessions
-      const perfKeys = Object.keys(localStorage)
-        .filter(k => k.startsWith('state-perf-'))
-        .sort();
-      
-      if (perfKeys.length > 5) {
-        perfKeys.slice(0, -5).forEach(k => localStorage.removeItem(k));
+    // Store in localStorage for debugging (if available)
+    if (typeof localStorage !== 'undefined') {
+      try {
+        const key = `state-perf-${this.metrics.implementation}-${Date.now()}`;
+        localStorage.setItem(key, JSON.stringify(this.metrics));
+        
+        // Keep only last 5 sessions
+        const perfKeys = Object.keys(localStorage)
+          .filter(k => k.startsWith('state-perf-'))
+          .sort();
+        
+        if (perfKeys.length > 5) {
+          perfKeys.slice(0, -5).forEach(k => localStorage.removeItem(k));
+        }
+      } catch (e) {
+        // Ignore storage errors
       }
-    } catch (e) {
-      // Ignore storage errors
     }
   }
 
@@ -165,6 +171,10 @@ export function measureStateUpdate<T>(
 
 // Helper to get performance summary
 export function getPerformanceSummary(): Record<string, any> {
+  if (typeof localStorage === 'undefined') {
+    return {};
+  }
+
   const keys = Object.keys(localStorage)
     .filter(k => k.startsWith('state-perf-'))
     .sort()

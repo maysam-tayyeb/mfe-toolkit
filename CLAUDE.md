@@ -109,6 +109,7 @@ This is a **microfrontend (MFE) monorepo** using pnpm workspaces. The architectu
    - `@mfe-toolkit/react`: React-specific components and hooks (MFELoader, MFEErrorBoundary)
    - `@mfe-toolkit/cli`: Command-line tools for creating and managing MFEs
    - `@mfe-toolkit/state`: Cross-framework state management solution
+   - `@mfe-toolkit/state-middleware-performance`: Performance monitoring middleware for state management
    - `@mfe/shared`: Internal shared utilities for demo apps (private, not published)
    - `@mfe/design-system`: Internal UI components (private, not published)
 
@@ -173,6 +174,12 @@ The toolkit is split into several npm packages under the `@mfe-toolkit` organiza
    - Cross-tab synchronization
    - Persistence support
 
+5. **@mfe-toolkit/state-middleware-performance** (`packages/mfe-toolkit-state-middleware-performance/`)
+   - Performance monitoring middleware for state management
+   - Tracks state update metrics, memory usage, and render counts
+   - Identifies slow updates and large objects in state
+   - Provides performance summaries and analytics
+
 ### Internal Packages
 
 - **@mfe/shared** (`packages/shared/`)
@@ -224,6 +231,21 @@ The platform uses a dual state management approach:
    - Cross-tab synchronization and persistence
    - Framework-agnostic (React, Vue, Vanilla JS)
    - Reactive subscriptions for state changes
+   - Extensible with middleware (performance monitoring, logging, etc.)
+
+**State Middleware Usage:**
+```typescript
+import { createStateManager } from '@mfe-toolkit/state';
+import { createPerformanceMiddleware, initStatePerformanceMonitor } from '@mfe-toolkit/state-middleware-performance';
+
+// Initialize performance monitoring
+initStatePerformanceMonitor('my-app');
+
+// Create state manager with middleware
+const stateManager = createStateManager({
+  middleware: [createPerformanceMiddleware()]
+});
+```
 
 See [State Management Architecture](./docs/architecture/STATE_MANAGEMENT_ARCHITECTURE.md) for detailed documentation.
 

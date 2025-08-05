@@ -1,6 +1,6 @@
 # State Management Architecture
 
-This document explains the state management architecture in the MFE Made Easy platform, specifically the distinction and interaction between the ContextBridge and Valtio State Manager.
+This document explains the state management architecture in the MFE Made Easy platform, specifically the distinction and interaction between the ContextBridge and Universal State Manager.
 
 ## Overview
 
@@ -47,6 +47,7 @@ Both systems co-exist and serve different purposes in the architecture.
 │  Features: Cross-tab sync, persistence, framework-agnostic │
 │  Implementation: Currently Valtio (proxy-based reactivity) │
 │  Abstraction: Vendor-independent interface                 │
+│  Middleware: Extensible with performance monitoring, etc.  │
 └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -159,6 +160,7 @@ stateManager.set('lastAction', {
 - **Cross-tab sync**: Changes sync across browser tabs
 - **Framework-agnostic**: Works with React, Vue, Vanilla JS
 - **Reactive**: MFEs can subscribe to state changes
+- **Middleware support**: Extensible with performance monitoring, logging, validation
 
 ### Implementation
 
@@ -259,7 +261,12 @@ This would:
 export default {
   mount: (element, services) => {
     const { auth, modal, notification } = services;
-    const stateManager = getGlobalStateManager();
+    const stateManager = getGlobalStateManager({
+      middleware: [
+        // Optional: Add performance monitoring
+        createPerformanceMiddleware()
+      ]
+    });
 
     // Check auth via ContextBridge
     if (!auth.isAuthenticated()) {
@@ -293,6 +300,32 @@ export default {
 };
 ```
 
+## Middleware Support
+
+The Universal State Manager supports middleware for extending functionality:
+
+```typescript
+import { createStateManager } from '@mfe-toolkit/state';
+import { createPerformanceMiddleware } from '@mfe-toolkit/state-middleware-performance';
+
+// Create state manager with middleware
+const stateManager = createStateManager({
+  middleware: [
+    createPerformanceMiddleware({
+      slowUpdateThreshold: 16,  // Log updates slower than 16ms
+      largeObjectThreshold: 1000  // Log objects larger than 1KB
+    }),
+    // Add more middleware as needed
+    loggingMiddleware,
+    validationMiddleware
+  ]
+});
+```
+
+Available middleware packages:
+- `@mfe-toolkit/state-middleware-performance` - Performance monitoring
+- More middleware packages coming soon...
+
 ## Summary
 
 The dual state management approach provides:
@@ -300,6 +333,7 @@ The dual state management approach provides:
 - **Clear architectural boundaries**
 - **Appropriate tool for each use case**
 - **Framework flexibility**
+- **Extensible architecture with middleware**
 - **Scalable MFE development**
 
 By maintaining this separation, the platform remains maintainable and each system can evolve independently while serving its specific purpose effectively.

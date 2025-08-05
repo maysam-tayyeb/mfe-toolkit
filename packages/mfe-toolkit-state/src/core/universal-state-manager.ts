@@ -102,6 +102,7 @@ export class UniversalStateManager implements StateManager {
       previousValue,
       source,
       timestamp: Date.now(),
+      type: 'set',
     };
 
     // Run middleware chain
@@ -177,6 +178,7 @@ export class UniversalStateManager implements StateManager {
       previousValue,
       source: 'delete',
       timestamp: Date.now(),
+      type: 'delete',
     };
 
     // Notify key-specific listeners immediately
@@ -248,6 +250,7 @@ export class UniversalStateManager implements StateManager {
           previousValue: previousValues[key],
           source: 'clear',
           timestamp: Date.now(),
+          type: 'clear',
         };
         keyListenerSet.forEach((listener) => {
           try {
@@ -295,6 +298,7 @@ export class UniversalStateManager implements StateManager {
         previousValue: currentValue,
         source: 'initial',
         timestamp: Date.now(),
+        type: 'set',
       });
     }
 
@@ -404,6 +408,7 @@ export class UniversalStateManager implements StateManager {
         previousValue,
         source,
         timestamp: Date.now(),
+        type: 'set',
       };
       
       const keyListenerSet = this.keyListeners.get(key);

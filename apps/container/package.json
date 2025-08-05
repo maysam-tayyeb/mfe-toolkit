@@ -20,6 +20,7 @@
     "@mfe-toolkit/react": "workspace:*",
     "@mfe/shared": "workspace:*",
     "@mfe-toolkit/state": "workspace:*",
+    "@mfe-toolkit/state-middleware-performance": "workspace:*",
     "@radix-ui/react-dialog": "^1.0.5",
     "@radix-ui/react-slot": "^1.0.2",
     "@radix-ui/react-toast": "^1.1.5",

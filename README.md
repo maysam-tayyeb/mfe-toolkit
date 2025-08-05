@@ -10,7 +10,7 @@ A comprehensive toolkit and reference architecture for building production-ready
 - 📦 **Optimized Bundles** - 96% smaller with import maps (576KB → 14KB)
 - 🔄 **Cross-Version Support** - React 17 MFEs work seamlessly in React 19 container
 - 🛠️ **Modern Tooling** - Vite, TypeScript, pnpm workspaces, and ESBuild
-- 🔧 **Universal State Manager** - Cross-framework state management (React, Vue, Vanilla JS) with proxy-based reactivity
+- 🔧 **Universal State Manager** - Cross-framework state management (React, Vue, Vanilla JS) with proxy-based reactivity and middleware support
 
 ## 🏗️ Architecture Overview
 
@@ -82,6 +82,12 @@ The toolkit is available as modular npm packages under the `@mfe-toolkit` organi
 | [`@mfe-toolkit/cli`](./packages/mfe-toolkit-cli) | CLI tools for MFE development | 0.1.0 |
 | [`@mfe-toolkit/state`](./packages/mfe-toolkit-state) | Cross-framework state management | 0.1.0 |
 
+### Middleware Packages
+
+| Package | Description | Version |
+|---------|-------------|---------|
+| [`@mfe-toolkit/state-middleware-performance`](./packages/mfe-toolkit-state-middleware-performance) | Performance monitoring for state management | 0.1.0 |
+
 ### Installation
 
 ```bash
@@ -96,9 +102,46 @@ npm install -g @mfe-toolkit/cli
 
 # State management (optional)
 npm install @mfe-toolkit/state
+
+# Performance monitoring middleware (optional)
+npm install @mfe-toolkit/state-middleware-performance
 ```
 
 ## 🚀 Quick Start
+
+### State Management with Middleware
+
+The toolkit includes a powerful state management solution with optional middleware:
+
+```typescript
+import { createStateManager } from '@mfe-toolkit/state';
+import { 
+  createPerformanceMiddleware, 
+  initStatePerformanceMonitor 
+} from '@mfe-toolkit/state-middleware-performance';
+
+// Initialize performance monitoring
+initStatePerformanceMonitor('my-app');
+
+// Create state manager with middleware
+const stateManager = createStateManager({
+  devtools: true,
+  persistent: true,
+  crossTab: true,
+  middleware: [
+    createPerformanceMiddleware()
+  ]
+});
+
+// Use the state manager
+stateManager.set('user', { name: 'John' });
+const user = stateManager.get('user');
+
+// Subscribe to changes
+stateManager.subscribe('user', (value) => {
+  console.log('User changed:', value);
+});
+```
 
 ### Prerequisites
 
@@ -258,7 +301,7 @@ pnpm e2e:report      # View test report
    - Home page shows the platform overview
    - Dashboard page tests container services
    - MFE Communication page for inter-MFE messaging
-   - Universal State Demo for cross-MFE state management
+   - Universal State Demo for cross-MFE state management with performance monitoring
 3. **Load the Example MFE**:
    - Click "Example MFE" in navigation, or
    - Go directly to http://localhost:3000/mfe/example
