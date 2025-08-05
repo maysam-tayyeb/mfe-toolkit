@@ -126,47 +126,71 @@ eventBus.on('user.action', (payload) => {
 ### Sending Events
 
 ```typescript
-// Access the event bus from services
-const { eventBus } = window.__MFE_SERVICES__;
+// Access the event bus from injected services
+export default {
+  mount(element: HTMLElement, services: MFEServices) {
+    const { eventBus } = services;
 
-// Send a targeted message
-eventBus.emit('custom.event', {
-  from: 'your-mfe',
-  to: 'target-mfe',
-  action: 'update',
-  data: {
-    /* your data */
-  },
-});
+    // Send a targeted message
+    eventBus.emit('custom.event', {
+      from: 'your-mfe',
+      to: 'target-mfe',
+      action: 'update',
+      data: {
+        /* your data */
+      },
+    });
 
-// Broadcast to all MFEs
-eventBus.emit('broadcast.event', {
-  from: 'your-mfe',
-  to: 'all',
-  message: 'Global update',
-});
+    // Broadcast to all MFEs
+    eventBus.emit('broadcast.event', {
+      from: 'your-mfe',
+      to: 'all',
+      message: 'Global update',
+    });
+  }
+};
 ```
 
 ### Receiving Events
 
 ```typescript
-useEffect(() => {
-  const { eventBus } = window.__MFE_SERVICES__;
+// In React MFE
+export default {
+  mount(element: HTMLElement, services: MFEServices) {
+    const { eventBus } = services;
 
-  // Listen for specific events
-  const unsubscribe = eventBus.on('custom.event', (payload) => {
-    console.log('Received event:', payload);
+    // Listen for specific events
+    const unsubscribe = eventBus.on('custom.event', (payload) => {
+      console.log('Received event:', payload);
 
-    // Check if this MFE is the target
-    if (payload.data.to === 'your-mfe' || payload.data.to === 'all') {
-      // Handle the event
-      handleIncomingEvent(payload.data);
-    }
-  });
+      // Check if this MFE is the target
+      if (payload.data.to === 'your-mfe' || payload.data.to === 'all') {
+        // Handle the event
+        handleIncomingEvent(payload.data);
+      }
+    });
 
-  // Cleanup on unmount
-  return () => unsubscribe();
-}, []);
+    // Store unsubscribe for cleanup
+    return {
+      unmount: () => {
+        unsubscribe();
+      }
+    };
+  }
+};
+
+// Or in React component within MFE:
+function MyComponent({ services }: { services: MFEServices }) {
+  useEffect(() => {
+    const { eventBus } = services;
+    
+    const unsubscribe = eventBus.on('custom.event', (payload) => {
+      // Handle event
+    });
+
+    return () => unsubscribe();
+  }, [services]);
+}
 ```
 
 ### Event Types Reference
