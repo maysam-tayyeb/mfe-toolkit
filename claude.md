@@ -247,7 +247,7 @@ const stateManager = createStateManager({
 });
 ```
 
-See [State Management Architecture](./docs/architecture/STATE_MANAGEMENT_ARCHITECTURE.md) for detailed documentation.
+See [State Management Architecture](./docs/architecture/state-management-architecture.md) for detailed documentation.
 
 ### Architecture Decisions
 

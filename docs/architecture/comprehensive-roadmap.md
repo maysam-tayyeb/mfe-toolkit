@@ -128,7 +128,7 @@ Framework-specific container implementations:
 
 - [Platform Development](../platform/)
 - [Container Implementations](../containers/)
-- [Architecture Decisions](./ARCHITECTURE_DECISIONS.md)
+- [Architecture Decisions](./architecture-decisions.md)
 - [Contributing Guide](../../CONTRIBUTING.md)
 
 ---

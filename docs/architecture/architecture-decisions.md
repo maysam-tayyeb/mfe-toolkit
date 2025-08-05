@@ -240,7 +240,7 @@ MFEs need both container-provided UI services and shared application state, but 
 
 **Implementation**:
 
-- See [State Management Architecture](./STATE_MANAGEMENT_ARCHITECTURE.md) for detailed documentation
+- See [State Management Architecture](./state-management-architecture.md) for detailed documentation
 
 ---
 
@@ -249,4 +249,4 @@ MFEs need both container-provided UI services and shared application state, but 
 - [Martin Fowler on Micro Frontends](https://martinfowler.com/articles/micro-frontends.html)
 - [Module Federation vs Dynamic Imports](https://blog.bitsrc.io/module-federation-vs-dynamic-imports)
 - [Micro Frontend Architecture Patterns](https://medium.com/@lucamezzalira/micro-frontends-decisions-framework)
-- [State Management Architecture](./STATE_MANAGEMENT_ARCHITECTURE.md)
+- [State Management Architecture](./state-management-architecture.md)

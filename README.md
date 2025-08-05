@@ -64,10 +64,10 @@ A comprehensive toolkit and reference architecture for building production-ready
 
 ### 📚 Architecture Documentation
 
-- [Architecture Decisions](./docs/architecture/ARCHITECTURE_DECISIONS.md) - Key design choices and rationale
-- [State Management Architecture](./docs/architecture/STATE_MANAGEMENT_ARCHITECTURE.md) - ContextBridge vs Universal State Manager
-- [MFE Loading Guide](./docs/architecture/MFE_LOADING_GUIDE.md) - How MFEs are loaded and best practices
-- [Comprehensive Roadmap](./docs/architecture/COMPREHENSIVE_ROADMAP.md) - Complete development roadmap with completed work and future plans
+- [Architecture Decisions](./docs/architecture/architecture-decisions.md) - Key design choices and rationale
+- [State Management Architecture](./docs/architecture/state-management-architecture.md) - ContextBridge vs Universal State Manager
+- [MFE Loading Guide](./docs/architecture/mfe-loading-guide.md) - How MFEs are loaded and best practices
+- [Comprehensive Roadmap](./docs/architecture/comprehensive-roadmap.md) - Complete development roadmap with completed work and future plans
 
 ## 📦 NPM Packages
 
@@ -595,16 +595,16 @@ VITE_MFE_REGISTRY_URL=https://cdn.example.com/configs/mfe-registry.json
 ### Documentation
 
 - **[Architecture Documentation](./docs/architecture/)** - Technical architecture and analysis
-- **[State Management Architecture](./docs/architecture/STATE_MANAGEMENT_ARCHITECTURE.md)** - Dual state management approach (ContextBridge vs Universal State)
-- **[MFE Loading Guide](./docs/architecture/MFE_LOADING_GUIDE.md)** - How MFEs are loaded and best practices
-- **[Architecture Decisions](./docs/architecture/ARCHITECTURE_DECISIONS.md)** - Key design choices and rationale
+- **[State Management Architecture](./docs/architecture/state-management-architecture.md)** - Dual state management approach (ContextBridge vs Universal State)
+- **[MFE Loading Guide](./docs/architecture/mfe-loading-guide.md)** - How MFEs are loaded and best practices
+- **[Architecture Decisions](./docs/architecture/architecture-decisions.md)** - Key design choices and rationale
 - **[MFE Communication Guide](./docs/mfe-communication-guide.md)** - Inter-MFE messaging with event bus
 
 ### Quick Links
 
 - **[All Documentation](./docs/)** - Browse all documentation
 - **[Architecture Analysis](./docs/architecture/architecture-analysis-report.md)** - Comprehensive architecture review
-- **[Comprehensive Roadmap](./docs/architecture/COMPREHENSIVE_ROADMAP.md)** - Complete development roadmap
+- **[Comprehensive Roadmap](./docs/architecture/comprehensive-roadmap.md)** - Complete development roadmap
 - **[MFE Toolkit Core](./packages/mfe-toolkit-core/README.md)** - Framework-agnostic core services and utilities
 - **[MFE Toolkit React](./packages/mfe-toolkit-react/README.md)** - React-specific components and hooks
 - **[Shared Utilities](./packages/shared/README.md)** - Common constants and helper functions
@@ -618,7 +618,7 @@ VITE_MFE_REGISTRY_URL=https://cdn.example.com/configs/mfe-registry.json
 - Improve error boundaries and recovery mechanisms
 - Add performance monitoring and optimization
 
-See our [Comprehensive Roadmap](./docs/architecture/COMPREHENSIVE_ROADMAP.md) for exciting upcoming features including:
+See our [Comprehensive Roadmap](./docs/architecture/comprehensive-roadmap.md) for exciting upcoming features including:
 - 🔍 DevTools middleware for time-travel debugging
 - ✅ Validation middleware for runtime type safety
 - 🔄 Sync middleware for backend integration

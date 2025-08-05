@@ -49,9 +49,13 @@ Framework-specific container implementations:
 
 The following documentation is being reorganized:
 
-- [Architecture Decisions](./architecture/ARCHITECTURE_DECISIONS.md) → Being split between platform and container docs
-- [Comprehensive Roadmap](./architecture/COMPREHENSIVE_ROADMAP.md) → Being split into platform and container roadmaps
+- [Architecture Decisions](./architecture/architecture-decisions.md) → Being split between platform and container docs
+- [Comprehensive Roadmap](./architecture/comprehensive-roadmap.md) → Being split into platform and container roadmaps
 - [Guides](./guides/) → Being reorganized by audience
+
+## 📝 Documentation Standards
+
+See [Documentation Style Guide](./style-guide.md) for file naming conventions, formatting guidelines, and best practices.
 
 ---
 
