@@ -106,9 +106,10 @@ const createThemeServiceImpl = (): ThemeService => {
     () => contextBridge!.getThemeService(),
     {
       getTheme: 'light',
-      toggleTheme: undefined,
       setTheme: undefined,
       subscribe: () => () => {}, // Return empty unsubscribe function
+      getAvailableThemes: () => ['light', 'dark'], // Default themes
+      cycleTheme: undefined,
     }
   );
 };
