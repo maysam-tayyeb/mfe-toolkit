@@ -21,7 +21,7 @@ This directory contains architectural documentation for the MFE Made Easy platfo
 Key architectural decisions and their rationale:
 
 - Dynamic imports over Module Federation
-- Context-based state over Redux
+- React Context over Redux
 - Service injection pattern
 - Dual state management approach
 - MFE loader strategies

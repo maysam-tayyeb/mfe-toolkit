@@ -63,9 +63,9 @@ import('remoteMFE/Component'); // Needs configuration at build time
 
 ---
 
-## 2. Context-Based State Management Over Redux
+## 2. React Context API Over Redux for Container State
 
-**Decision**: Replace Redux with context-based state management for container state.
+**Decision**: Replace Redux with React Context API for container state management.
 
 **Date**: January 2025
 
@@ -75,18 +75,18 @@ The container was using Redux for state management, but this created risks of st
 **Options Considered**:
 
 1. **Keep Redux**: Continue with centralized Redux store
-2. **Context-Based State**: Use framework's built-in context/state management
+2. **React Context**: Use React's built-in Context API
 3. **Zustand/Valtio**: Adopt a lighter state management library
 4. **No Shared State**: Make container completely stateless
 
 **Decision Rationale**:
-We migrated to context-based state management because:
+We migrated to React Context because:
 
 1. **Isolation**: Each context is naturally isolated, preventing cross-MFE state pollution
 2. **Simplicity**: No additional dependencies or boilerplate
 3. **Performance**: No unnecessary re-renders from unrelated state changes
-4. **Framework Native**: Built into the framework, guaranteed compatibility
-5. **Type Safety**: Better TypeScript integration
+4. **React Native**: Built into React, guaranteed compatibility
+5. **Type Safety**: Better TypeScript integration with contexts
 
 **Implications**:
 
