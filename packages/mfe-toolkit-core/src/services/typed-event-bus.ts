@@ -202,7 +202,6 @@ export class TypedEventBusImpl<TEventMap extends EventMap = MFEEventMap>
       version?: string;
     }
   ): void {
-    // Create event payload
     const event = createEventUtil(
       type as any,
       data,
@@ -210,18 +209,14 @@ export class TypedEventBusImpl<TEventMap extends EventMap = MFEEventMap>
       options
     ) as TypedEvent<TEventMap>;
 
-    // Update statistics
     this.stats.totalEvents++;
     this.stats.eventCounts[type] = (this.stats.eventCounts[type] || 0) + 1;
-
-    // Apply interceptors
     let processedEvent = event;
     if (this.options.interceptors) {
       for (const interceptor of this.options.interceptors) {
         if (interceptor.beforeEmit) {
           const result = interceptor.beforeEmit(processedEvent);
           if (result === null) {
-            // Event cancelled by interceptor
             this.debug(`Event ${type} cancelled by interceptor`);
             return;
           }
@@ -230,7 +225,6 @@ export class TypedEventBusImpl<TEventMap extends EventMap = MFEEventMap>
       }
     }
 
-    // Validate event if schema is provided
     if (this.options.schema && type in this.options.schema) {
       const validator = this.options.schema[type as EventType<TEventMap>];
       if (validator && !validator(data)) {
@@ -239,10 +233,8 @@ export class TypedEventBusImpl<TEventMap extends EventMap = MFEEventMap>
       }
     }
 
-    // Debug logging
     this.debug(`Emitting event: ${type}`, processedEvent);
 
-    // Emit to specific handlers
     const handlers = this.handlers.get(type);
     if (handlers) {
       handlers.forEach((handler) => {
@@ -250,12 +242,10 @@ export class TypedEventBusImpl<TEventMap extends EventMap = MFEEventMap>
       });
     }
 
-    // Emit to wildcard handlers
     this.wildcardHandlers.forEach((handler) => {
       this.invokeHandler(handler, processedEvent);
     });
 
-    // After emit interceptors
     if (this.options.interceptors) {
       for (const interceptor of this.options.interceptors) {
         if (interceptor.afterEmit) {
@@ -279,7 +269,6 @@ export class TypedEventBusImpl<TEventMap extends EventMap = MFEEventMap>
       };
     }
 
-    // Handle specific event subscription
     if (!this.handlers.has(type)) {
       this.handlers.set(type, new Set());
     }

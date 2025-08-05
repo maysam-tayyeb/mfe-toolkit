@@ -35,7 +35,6 @@ export class MFERegistryService {
     }
 
     try {
-      // Check cache first
       const cached = this.loadFromCache();
       if (cached && !this.isCacheExpired()) {
         return;
@@ -49,17 +48,14 @@ export class MFERegistryService {
       const config: RegistryConfig = await response.json();
       this.loadFromConfig(config);
 
-      // Cache the registry
       this.saveToCache(config);
       this.lastFetch = Date.now();
     } catch (error) {
       console.error('Failed to load registry from URL:', error);
 
-      // Try fallback URL if available
       if (this.options.fallbackUrl && url !== this.options.fallbackUrl) {
         await this.loadFromUrl(this.options.fallbackUrl);
       } else {
-        // Try to use cached version as last resort
         const cached = this.loadFromCache();
         if (!cached) {
           throw error;

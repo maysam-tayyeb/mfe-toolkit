@@ -50,6 +50,4 @@ export {
 // Utilities
 export * from './utils';
 
-// Note: React-specific exports have been moved to @mfe-toolkit/react
-// This package now only contains framework-agnostic code
 

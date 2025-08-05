@@ -44,8 +44,6 @@ export class EventBusMigrationAdapter<TEventMap extends EventMap = MFEEventMap>
   }
 
   off(event: string, handler: (payload: EventPayload<any>) => void): void {
-    // Note: This might not work perfectly due to handler wrapping
-    // In practice, users should use the returned unsubscribe function
     this.typedEventBus.off(event, handler);
   }
 
@@ -157,7 +155,6 @@ export class EventUsageAnalyzer {
   private inferTypeFromSamples(samples: any[]): string {
     if (samples.length === 0) return 'unknown';
 
-    // Simple type inference - in production, use a more sophisticated approach
     const sample = samples[0];
 
     if (sample === null) return 'null';
