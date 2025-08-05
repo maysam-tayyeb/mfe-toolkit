@@ -14,7 +14,7 @@ The React 17 MFE's Zustand state management demo is currently disabled due to Re
 ### Technical Details
 
 - React 17 MFE bundles its own React (v17.0.2) for compatibility demonstration
-- Zustand hooks from `@mfe/dev-kit` import React from the shared import map (React v19)
+- Zustand hooks from `@mfe-toolkit/core` import React from the shared import map (React v19)
 - This creates a "Cannot read properties of null (reading 'useState')" error
 - The error occurs because React hooks from different React instances cannot be mixed
 

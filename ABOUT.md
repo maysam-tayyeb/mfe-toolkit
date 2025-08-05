@@ -71,7 +71,9 @@ Microfrontends communicate through a well-defined service layer:
 
 ### Packages
 
-- **@mfe/dev-kit**: Core MFE development toolkit
+- **@mfe-toolkit/core**: Framework-agnostic core functionality
+- **@mfe-toolkit/react**: React-specific components and hooks
+- **@mfe-toolkit/state**: Cross-framework state management
 - **@mfe/shared**: Common utilities and constants
 - **@mfe/design-system**: Reusable UI components built on Tailwind CSS
 
