@@ -38,7 +38,6 @@ export class ErrorReporter {
   private lastErrorTime = new Map<string, number>();
   private config: Required<ErrorReporterConfig>;
   private services?: MFEServices;
-
   constructor(config: ErrorReporterConfig = {}, services?: MFEServices) {
     this.config = {
       maxErrorsPerSession: 100,

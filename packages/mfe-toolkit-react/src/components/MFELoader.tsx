@@ -96,18 +96,15 @@ const IsolatedLoaderStrategy: React.FC<MFELoaderProps> = ({
         
         // Report error to error reporter
         const errorReporter = services.errorReporter || getErrorReporter({}, services);
-        console.log('[DEBUG] Error reporter available:', !!services.errorReporter, 'Using fallback:', !services.errorReporter);
-        
         const errorType = error.message.includes('timeout')
           ? 'timeout-error'
           : error.message.includes('network')
             ? 'network-error'
             : 'load-error';
         
-        const report = errorReporter.reportError(name, error, errorType, {
+        errorReporter.reportError(name, error, errorType, {
           url,
         });
-        console.log('[DEBUG] Error reported:', report);
         
         setError(error);
         setLoading(false);
