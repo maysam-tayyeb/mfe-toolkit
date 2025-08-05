@@ -4,7 +4,7 @@ This directory contains architectural documentation for the MFE Made Easy platfo
 
 ## 🎯 Primary Document
 
-### [Comprehensive Roadmap](./COMPREHENSIVE_ROADMAP.md)
+### [Comprehensive Roadmap](./comprehensive-roadmap.md)
 
 **This is the main roadmap document** that consolidates all improvement tracking and future development plans. It includes:
 - ✅ Completed improvements and achievements
@@ -16,7 +16,7 @@ This directory contains architectural documentation for the MFE Made Easy platfo
 
 ## 📄 Core Architecture Documents
 
-### [Architecture Decisions](./ARCHITECTURE_DECISIONS.md)
+### [Architecture Decisions](./architecture-decisions.md)
 
 Key architectural decisions and their rationale:
 
@@ -26,7 +26,7 @@ Key architectural decisions and their rationale:
 - Dual state management approach
 - MFE loader strategies
 
-### [State Management Architecture](./STATE_MANAGEMENT_ARCHITECTURE.md)
+### [State Management Architecture](./state-management-architecture.md)
 
 Comprehensive guide to the dual state management system:
 
@@ -35,7 +35,7 @@ Comprehensive guide to the dual state management system:
 - Clear separation of concerns
 - Migration recommendations
 
-### [MFE Loading Guide](./MFE_LOADING_GUIDE.md)
+### [MFE Loading Guide](./mfe-loading-guide.md)
 
 Technical guide for MFE loading implementation:
 
@@ -44,7 +44,7 @@ Technical guide for MFE loading implementation:
 - Consolidation plan for unified loader
 - Performance best practices
 
-### [Universal State Abstraction](./UNIVERSAL_STATE_ABSTRACTION.md)
+### [Universal State Abstraction](./universal-state-abstraction.md)
 
 Design principles for vendor-agnostic state management:
 
@@ -67,7 +67,7 @@ Original comprehensive analysis that informed the roadmap:
 
 ## ⚠️ Deprecated Documents
 
-The following documents have been consolidated into the [Comprehensive Roadmap](./COMPREHENSIVE_ROADMAP.md):
+The following documents have been consolidated into the [Comprehensive Roadmap](./comprehensive-roadmap.md):
 
 - **IMPROVEMENTS_STATUS.md** - Tracking of completed improvements (merged)
 - **improvement-roadmap.md** - 7-phase development plan (merged)
@@ -79,7 +79,7 @@ Please use the Comprehensive Roadmap for all improvement tracking and planning.
 
 The MFE Made Easy platform implements a microfrontend architecture with:
 
-- **Container Application** - React 19-based shell that orchestrates MFEs
+- **Container Application** - Shell application that orchestrates MFEs
 - **Microfrontends** - Independently deployed frontend modules (React, Vue, Vanilla JS)
 - **ContextBridge Services** - Container UI services (auth, modals, notifications)
 - **Universal State Manager** - Cross-MFE application state with framework adapters
@@ -96,8 +96,8 @@ The MFE Made Easy platform implements a microfrontend architecture with:
 
 ## 📋 Upcoming Documentation
 
-- [x] Architecture Decision Records (ADRs) - See [Architecture Decisions](./ARCHITECTURE_DECISIONS.md)
-- [x] State Management Architecture - See [State Management Architecture](./STATE_MANAGEMENT_ARCHITECTURE.md)
+- [x] Architecture Decision Records (ADRs) - See [Architecture Decisions](./architecture-decisions.md)
+- [x] State Management Architecture - See [State Management Architecture](./state-management-architecture.md)
 - [ ] Performance Architecture
 - [ ] Security Architecture
 - [ ] Deployment Architecture

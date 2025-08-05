@@ -1,60 +1,63 @@
-# MFE Made Easy Documentation
+# MFE Toolkit Documentation
 
-Welcome to the MFE Made Easy documentation. This directory contains comprehensive guides, architectural decisions, and API references for the microfrontend platform.
+Welcome to the MFE Toolkit documentation. This directory contains comprehensive documentation organized into three main sections:
 
 ## 📚 Documentation Structure
 
-### 🏗️ [Architecture](./architecture/)
+### 🎯 [Platform Documentation](./platform/)
 
-Technical architecture documentation and analysis
+Framework-agnostic documentation for the MFE Toolkit platform, including:
 
-- [Architecture Analysis Report](./architecture/architecture-analysis-report.md) - Comprehensive analysis of the current architecture with recommendations
-- [Comprehensive Roadmap](./architecture/COMPREHENSIVE_ROADMAP.md) - Consolidated improvement tracking and future development plans
+- **Architecture**: Core platform decisions and patterns
+- **Manifests**: MFE specification and validation documentation
+- **Packages**: Documentation for published npm packages (@mfe-toolkit/*)
+- **Roadmap**: Future development plans for toolkit libraries
 
-### 📖 [Guides](./guides/)
+### 📋 [Container Specification](./container-spec/)
 
-How-to guides and tutorials
+Defines what a container application must provide to host MFEs:
 
-- [MFE Communication Guide](./guides/mfe-communication-guide.md) - Learn how to implement inter-MFE communication
+- **Requirements**: Services and capabilities containers must implement
+- **Service Contracts**: Detailed API specifications
+- **Compliance Testing**: How to verify container compatibility
 
-### 🔌 [API Reference](./api/)
+### 🚀 [Container Implementations](./containers/)
 
-API documentation for packages and services
+Framework-specific container implementations:
 
-- Coming soon: Detailed API documentation for all packages
+- **[React Container](./containers/react/)**: Production-ready React 19 implementation
+- **Vue Container** (coming soon): Vue 3 implementation
+- **Vanilla Container** (coming soon): Pure JavaScript implementation
 
-### 📝 [Decisions](./decisions/)
+## 🔍 Quick Navigation
 
-Architecture Decision Records (ADRs)
+### For MFE Developers
+- [Getting Started with MFEs](./platform/guides/getting-started-mfe.md)
+- [MFE Manifest Quick Start](./platform/manifests/quick-start.md)
+- [Available Services](./container-spec/service-contracts.md)
+- [State Management Patterns](./platform/architecture/state-patterns.md)
 
-- Coming soon: Documentation of key architectural decisions
+### For Container Developers
+- [Container Requirements](./container-spec/requirements.md)
+- [React Container Setup](./containers/react/setup.md)
+- [Creating a New Container](./container-spec/creating-containers.md)
 
-## 🚀 Quick Links
+### For Library Contributors
+- [Platform Architecture](./platform/architecture/)
+- [Package Development](./platform/packages/)
+- [Contributing Guide](../CONTRIBUTING.md)
 
-- [Getting Started](../README.md#-quick-start)
-- [Project Structure](../README.md#-project-structure)
-- [Development Workflow](../README.md#-development-workflow)
-- [Troubleshooting](../README.md#-troubleshooting)
+## 📖 Legacy Documentation
 
-## 📋 Documentation Standards
+The following documentation is being reorganized:
 
-When contributing to documentation:
+- [Architecture Decisions](./architecture/architecture-decisions.md) → Being split between platform and container docs
+- [Comprehensive Roadmap](./architecture/comprehensive-roadmap.md) → Being split into platform and container roadmaps
+- [Guides](./guides/) → Being reorganized by audience
 
-1. **Use clear headings** - Structure content with markdown headers
-2. **Include examples** - Provide code samples and practical examples
-3. **Keep it current** - Update docs when making code changes
-4. **Be concise** - Write clearly and avoid unnecessary complexity
-5. **Add diagrams** - Use mermaid or ASCII art for complex concepts
+## 📝 Documentation Standards
 
-## 🤝 Contributing
-
-To contribute to the documentation:
-
-1. Follow the existing structure
-2. Use consistent formatting
-3. Include practical examples
-4. Update the index when adding new docs
-5. Review for accuracy before submitting
+See [Documentation Style Guide](./style-guide.md) for file naming conventions, formatting guidelines, and best practices.
 
 ---
 

@@ -17,7 +17,7 @@ This project uses a hybrid build approach: the container application uses its de
 pnpm build
 
 # Build only the container
-pnpm build:container
+pnpm build:container-react
 
 # Build only the MFEs (in parallel)
 pnpm build:mfes
@@ -41,7 +41,7 @@ pnpm build:vite
 ```bash
 # Development (with hot reload)
 pnpm dev                 # Start all apps in parallel
-pnpm dev:container       # Start only container
+pnpm dev:container-react  # Start React container
 pnpm dev:mfe            # Start specific MFE
 
 # Production build + serve

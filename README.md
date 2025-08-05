@@ -1,6 +1,6 @@
 # MFE Toolkit - Enterprise Microfrontend Development Platform
 
-A comprehensive toolkit and reference architecture for building production-ready microfrontends. Features framework-agnostic core, React components, CLI tools, and cross-framework state management.
+A comprehensive toolkit and reference architecture for building production-ready microfrontends. Features framework-agnostic core, framework-specific adapters, CLI tools, and cross-framework state management.
 
 ## ✨ Key Features
 
@@ -8,7 +8,7 @@ A comprehensive toolkit and reference architecture for building production-ready
 - 📡 **Inter-MFE Communication** - Real-time event bus for MFE-to-MFE messaging ([see guide](./docs/mfe-communication-guide.md))
 - 🎯 **Shared Services** - Modal, notification, auth, and logging services
 - 📦 **Optimized Bundles** - 96% smaller with import maps (576KB → 14KB)
-- 🔄 **Cross-Version Support** - React 17 MFEs work seamlessly in React 19 container
+- 🔄 **Cross-Version Support** - MFEs with different framework versions work seamlessly together
 - 🛠️ **Modern Tooling** - Vite, TypeScript, pnpm workspaces, and ESBuild
 - 🔧 **Universal State Manager** - Cross-framework state management (React, Vue, Vanilla JS) with proxy-based reactivity and middleware support
 
@@ -16,7 +16,7 @@ A comprehensive toolkit and reference architecture for building production-ready
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                       Container App                         │
+│                      Container Application                  │
 │  ┌───────────────────────────────────────────────────────┐  │
 │  │  Navigation | Dashboard | MFE Communication Center    │  │
 │  │  Universal State Demo | Error Boundary Demo           │  │
@@ -30,13 +30,13 @@ A comprehensive toolkit and reference architecture for building production-ready
 │  └─────────────────────────────────────────────────────┘    │
 │                                                             │
 │  ┌─────────────────────────────────────────────────────┐    │
-│  │            React Context (State Management)         │    │
-│  │      AuthContext  |  UIContext  |  RegistryContext  │    │
+│  │           Container State Management                │    │
+│  │    AuthContext  |  UIContext  |  RegistryContext    │    │
 │  └─────────────────────────────────────────────────────┘    │
 │                                                             │
 │  ┌─────────────────────────────────────────────────────┐    │
 │  │          MFE Loading Infrastructure                 │    │
-│  │    MFELoader | IsolatedMFELoader | ErrorBoundary    │    │
+│  │     MFELoader Components | Error Boundaries         │    │
 │  └─────────────────────────────────────────────────────┘    │
 └─────────────────────────────────────────────────────────────┘
                               ↓
@@ -64,10 +64,10 @@ A comprehensive toolkit and reference architecture for building production-ready
 
 ### 📚 Architecture Documentation
 
-- [Architecture Decisions](./docs/architecture/ARCHITECTURE_DECISIONS.md) - Key design choices and rationale
-- [State Management Architecture](./docs/architecture/STATE_MANAGEMENT_ARCHITECTURE.md) - ContextBridge vs Universal State Manager
-- [MFE Loading Guide](./docs/architecture/MFE_LOADING_GUIDE.md) - How MFEs are loaded and best practices
-- [Comprehensive Roadmap](./docs/architecture/COMPREHENSIVE_ROADMAP.md) - Complete development roadmap with completed work and future plans
+- [Architecture Decisions](./docs/architecture/architecture-decisions.md) - Key design choices and rationale
+- [State Management Architecture](./docs/architecture/state-management-architecture.md) - ContextBridge vs Universal State Manager
+- [MFE Loading Guide](./docs/architecture/mfe-loading-guide.md) - How MFEs are loaded and best practices
+- [Comprehensive Roadmap](./docs/architecture/comprehensive-roadmap.md) - Complete development roadmap with completed work and future plans
 
 ## 📦 NPM Packages
 
@@ -195,7 +195,7 @@ Or start individually:
 
 ```bash
 # Start individual applications
-pnpm dev:container      # Container app on http://localhost:3000
+pnpm dev:container-react  # React container app on http://localhost:3000
 pnpm dev:mfe           # Example MFE on http://localhost:3001
 pnpm dev:react17       # React 17 MFE on http://localhost:3002
 pnpm dev:state-react   # State demo React MFE
@@ -213,7 +213,7 @@ pnpm build
 pnpm serve
 
 # In another terminal, preview the container
-cd apps/container && pnpm preview
+cd apps/container-react && pnpm preview
 ```
 
 ### How MFEs Are Loaded
@@ -296,7 +296,7 @@ pnpm e2e:report      # View test report
 
 ### Testing the MFE Integration
 
-1. **Open the Container App**: http://localhost:3000
+1. **Open the Container Application**: http://localhost:3000
 2. **Navigate through the app**:
    - Home page shows the platform overview
    - Dashboard page tests container services
@@ -321,7 +321,7 @@ For a comprehensive guide on testing real-time communication between MFEs, see t
 ```
 mfe-made-easy/
 ├── apps/
-│   ├── container/              # Container app (port 3000)
+│   ├── container-react/        # React container app (port 3000)
 │   │   ├── src/
 │   │   │   ├── components/     # Navigation, Layout, UI components
 │   │   │   ├── pages/          # Home, Dashboard, MFE Communication
@@ -363,7 +363,7 @@ mfe-made-easy/
 ### Development
 
 - `pnpm dev` - Start all apps in development mode
-- `pnpm dev:container` - Start only container app
+- `pnpm dev:container-react` - Start React container app
 - `pnpm dev:mfe` - Start only example MFE
 - `pnpm dev:react17` - Start only React 17 MFE
 - `pnpm dev:state-react` - Start state demo React MFE
@@ -374,7 +374,7 @@ mfe-made-easy/
 
 - `pnpm build` - Build all packages
 - `pnpm -r build` - Build in dependency order
-- `pnpm preview` - Preview production build (run from apps/container)
+- `pnpm preview` - Preview production build (run from apps/container-react)
 
 ### Code Quality
 
@@ -408,7 +408,7 @@ mfe-made-easy/
 ## 🎯 Features Implemented
 
 ✅ **Monorepo Setup**: pnpm workspaces with shared configurations  
-✅ **Container App**: React 19 + React Context + ShadCN UI  
+✅ **Container Applications**: Framework-agnostic architecture with React implementation  
 ✅ **MFE Dev Kit**: Complete service layer for MFE integration  
 ✅ **Dynamic Loading**: ES modules loaded at runtime (no Module Federation)  
 ✅ **Shared Services**: Auth, Modal, Notification, Event Bus, Logger  
@@ -434,7 +434,7 @@ pnpm -r build
 pnpm dev
 
 # Start individual apps
-pnpm dev:container    # Container on :3000
+pnpm dev:container-react  # React container on :3000
 pnpm dev:mfe          # Example MFE on :3001
 pnpm dev:react17      # React 17 MFE on :3002
 
@@ -474,7 +474,7 @@ pnpm dev  # Should start container + all MFEs
 # 3. For production mode, build and serve
 pnpm build
 pnpm serve  # Terminal 1: Serves MFEs on :8080
-cd apps/container && pnpm preview  # Terminal 2: Container
+cd apps/container-react && pnpm preview  # Terminal 2: React Container
 
 # 4. Check browser console for errors
 # Open DevTools > Console
@@ -530,7 +530,7 @@ The MFE platform now uses a **dynamic registry system** that loads MFE configura
 
 #### Registry Files
 
-The container app looks for registry files in the `public` directory:
+The container application looks for registry files in the `public` directory:
 
 - `mfe-registry.json` - Default registry
 - `mfe-registry.development.json` - Development environment
@@ -595,30 +595,30 @@ VITE_MFE_REGISTRY_URL=https://cdn.example.com/configs/mfe-registry.json
 ### Documentation
 
 - **[Architecture Documentation](./docs/architecture/)** - Technical architecture and analysis
-- **[State Management Architecture](./docs/architecture/STATE_MANAGEMENT_ARCHITECTURE.md)** - Dual state management approach (ContextBridge vs Universal State)
-- **[MFE Loading Guide](./docs/architecture/MFE_LOADING_GUIDE.md)** - How MFEs are loaded and best practices
-- **[Architecture Decisions](./docs/architecture/ARCHITECTURE_DECISIONS.md)** - Key design choices and rationale
+- **[State Management Architecture](./docs/architecture/state-management-architecture.md)** - Dual state management approach (ContextBridge vs Universal State)
+- **[MFE Loading Guide](./docs/architecture/mfe-loading-guide.md)** - How MFEs are loaded and best practices
+- **[Architecture Decisions](./docs/architecture/architecture-decisions.md)** - Key design choices and rationale
 - **[MFE Communication Guide](./docs/mfe-communication-guide.md)** - Inter-MFE messaging with event bus
 
 ### Quick Links
 
 - **[All Documentation](./docs/)** - Browse all documentation
 - **[Architecture Analysis](./docs/architecture/architecture-analysis-report.md)** - Comprehensive architecture review
-- **[Comprehensive Roadmap](./docs/architecture/COMPREHENSIVE_ROADMAP.md)** - Complete development roadmap
+- **[Comprehensive Roadmap](./docs/architecture/comprehensive-roadmap.md)** - Complete development roadmap
 - **[MFE Toolkit Core](./packages/mfe-toolkit-core/README.md)** - Framework-agnostic core services and utilities
 - **[MFE Toolkit React](./packages/mfe-toolkit-react/README.md)** - React-specific components and hooks
 - **[Shared Utilities](./packages/shared/README.md)** - Common constants and helper functions
 
 ## 🚀 Next Steps
 
-- Implement MFE Manifest V2 for better metadata and dependency management
+- ✅ Implement MFE Manifest V2 for better metadata and dependency management (see [Platform Manifest Docs](./docs/platform/manifests/))
 - Add more cross-framework MFE examples
 - Enhance Universal State Manager with more features
 - Configure CI/CD pipeline with GitHub Actions
 - Improve error boundaries and recovery mechanisms
 - Add performance monitoring and optimization
 
-See our [Comprehensive Roadmap](./docs/architecture/COMPREHENSIVE_ROADMAP.md) for exciting upcoming features including:
+See our [Comprehensive Roadmap](./docs/architecture/comprehensive-roadmap.md) for exciting upcoming features including:
 - 🔍 DevTools middleware for time-travel debugging
 - ✅ Validation middleware for runtime type safety
 - 🔄 Sync middleware for backend integration

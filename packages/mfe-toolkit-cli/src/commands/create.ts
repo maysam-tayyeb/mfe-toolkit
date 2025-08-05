@@ -102,7 +102,15 @@ async function createBasicStructure(projectPath: string, config: any) {
   await fs.ensureDir(path.join(projectPath, 'src'));
   
   // Create package.json
-  const packageJson = {
+  const packageJson: {
+    name: string;
+    version: string;
+    private: boolean;
+    type: string;
+    scripts: Record<string, string>;
+    dependencies: Record<string, string>;
+    devDependencies: Record<string, string>;
+  } = {
     name: `@mfe/${config.name}`,
     version: '0.1.0',
     private: true,

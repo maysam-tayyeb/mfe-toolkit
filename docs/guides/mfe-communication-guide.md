@@ -430,7 +430,7 @@ For a complete migration guide, see [Typed Event Bus Migration Guide](./typed-ev
 ## 🔗 Related Documentation
 
 - [MFE Development Kit API](../packages/mfe-dev-kit/README.md)
-- [Container Services](../apps/container/README.md)
+- [Container Services](../apps/container-react/README.md)
 - [Event Bus Implementation](../packages/mfe-dev-kit/src/services/event-bus.ts)
 - [Typed Event Bus Migration Guide](./typed-event-bus-migration.md)
 
