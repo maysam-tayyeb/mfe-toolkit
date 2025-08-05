@@ -2,6 +2,18 @@ export type { MFEManifest, MFEManifestV1, MFEManifestV2, MFERegistry, MFEDepende
 export { isMFEManifestV1, isMFEManifestV2 } from './manifest';
 export type { ErrorReport } from '../services/error-reporter';
 export { ErrorReporter } from '../services/error-reporter';
+export interface StateManager {
+    get<T = any>(key: string): T | undefined;
+    set<T = any>(key: string, value: T, source?: string): void;
+    delete(key: string): void;
+    clear(): void;
+    subscribe<T = any>(key: string, listener: (value: T | undefined) => void): () => void;
+    subscribeAll(listener: (event: any) => void): () => void;
+    registerMFE(mfeId: string, metadata?: any): void;
+    unregisterMFE(mfeId: string): void;
+    getSnapshot(): Record<string, any>;
+    restoreSnapshot(snapshot: Record<string, any>): void;
+}
 export interface AuthSession {
     userId: string;
     username: string;
@@ -39,7 +51,7 @@ export interface MFEServices<TModalConfig = BaseModalConfig> {
     eventBus: EventBus;
     modal: ModalService<TModalConfig>;
     notification: NotificationService;
-    stateManager?: any;
+    stateManager?: StateManager;
     errorReporter?: ErrorReporter;
 }
 export interface Logger {

@@ -47,9 +47,11 @@ Coming soon - Production deployment best practices
 
 ### Error Handling
 
-- Error boundaries
-- Fallback strategies
-- Error reporting
+- Error boundaries for graceful failure recovery
+- Fallback strategies for failed MFE loads
+- Centralized error reporting via `services.errorReporter`
+- Error throttling and severity classification
+- Session-based error tracking
 
 ### Performance
 

@@ -87,6 +87,9 @@ This document tracks the status of architecture improvements identified in the [
 - Session-based error tracking
 - Severity classification (low, medium, high, critical)
 - Integration with logger and notification services
+- Centralized error reporter available via `services.errorReporter`
+- Error summary dashboard with counts by type, severity, and MFE
+- Both StandardLoader and IsolatedLoader strategies report errors
 
 **Known Issues**:
 
