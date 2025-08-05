@@ -1,73 +1,28 @@
-# MFE Toolkit - Comprehensive Roadmap
+# MFE Toolkit - Comprehensive Roadmap Overview
 
-This document consolidates all improvement tracking and future development plans for the MFE Toolkit platform.
+This document provides an overview of the MFE Toolkit roadmap, which has been split into focused areas for better organization.
 
-## 📊 Document Overview
+## 📊 Roadmap Structure
 
-This roadmap combines:
-- **Completed Improvements** (from IMPROVEMENTS_STATUS.md)
-- **7-Phase Development Plan** (from improvement-roadmap.md)  
-- **State Management & Middleware Roadmap** (from FUTURE_ROADMAP.md)
+The MFE Toolkit roadmap is now organized into separate, focused documents:
 
----
+### 🎯 [Platform Roadmap](../platform/roadmap.md)
 
-## ✅ Completed Improvements (2025 Q1)
+Covers framework-agnostic toolkit development:
+- Core packages (@mfe-toolkit/*)
+- State management middleware
+- CLI tools and developer experience
+- Framework adapters (Vue, Svelte, Angular)
+- Testing and quality tools
 
-### Major Achievements
+### 🚀 [Container Roadmaps](../containers/)
 
-#### 1. **Global Window Pollution Elimination** ✅
-**Completed**: 2025-08-05
+Framework-specific container implementations:
+- [React Container Roadmap](../containers/react/roadmap.md) - Current production implementation
+- Vue Container Roadmap (coming soon)
+- Vanilla JS Container Roadmap (coming soon)
 
-- Removed all `window.__*__` assignments
-- Implemented proper dependency injection via ContextBridge
-- Services passed through component props/mount functions
-- Improved security and testability
-
-#### 2. **Typed Event Bus System** ✅
-**Completed**: 2025-07-30
-
-- Fully typed event bus with TypeScript generics
-- Standard MFE event map (lifecycle, navigation, user, state events)
-- Migration adapter for backward compatibility
-- Event validation, interceptors, and async patterns
-- Event statistics and monitoring
-
-#### 3. **State Management Migration** ✅
-**Completed**: 2025-01-30
-
-- Migrated from Redux to context-based state management in container
-- Implemented isolated state management per MFE
-- Created Universal State Manager with vendor-agnostic abstraction
-- Cross-tab synchronization and persistence
-- Framework-agnostic (React, Vue, Vanilla JS)
-
-#### 4. **Error Boundaries & Recovery** ✅
-**Completed**: 2025-01-30
-
-- MFEErrorBoundary with automatic retry (3 attempts)
-- Exponential backoff for failed loads
-- Comprehensive error reporting service
-- Error throttling and session tracking
-- Fixed MFE flickering with dual loader approach
-
-#### 5. **Module Federation Decision** ❌
-**Rejected**: Will not implement
-
-- Chose Dynamic Imports for better independence
-- No build-time coupling between MFEs
-- Teams can use different tools and deploy independently
-
-### Architecture Patterns Established
-
-- **ContextBridge**: Container UI services (auth, modals, notifications)
-- **Universal State Manager**: Cross-MFE application state
-- **Service Injection**: No global pollution, better testability
-- **Dual MFE Loaders**: Temporary solution for re-render issues
-- **Container Architecture**: Framework-agnostic design with React implementation
-
----
-
-## 🚧 In-Progress Work (2025 Q1-Q2)
+## 🎯 Current Priority: Multi-Framework Containers
 
 ### Phase 0: Multi-Framework Container Demonstrations 🎯 HIGHEST PRIORITY
 
@@ -89,10 +44,10 @@ This roadmap combines:
 - `@mfe-toolkit/vanilla` - Pure JS/TS utilities
 - Future: `@mfe-toolkit/svelte`, `@mfe-toolkit/angular`, `@mfe-toolkit/solid`
 
-#### 0.4 Container Naming Refactor 📋 PLANNED
-- Rename `apps/container` to `apps/container-react`
-- Update all references in documentation and code
-- Ensure backward compatibility in scripts
+#### 0.4 Container Naming Refactor ✅ COMPLETED
+- Renamed `apps/container` to `apps/container-react`
+- Updated all references in documentation and code
+- Ensured backward compatibility in scripts
 
 #### 0.5 Documentation & Examples 📋 PLANNED
 - Update all examples to show cross-framework loading
@@ -100,311 +55,82 @@ This roadmap combines:
 - Best practices for framework-agnostic MFE development
 - Container comparison guide
 
-### Phase 1: Foundation Improvements (Weeks 4-6)
+## ✅ Major Achievements
 
-#### 1.1 Typed Event System ✅ COMPLETED
+### Platform Architecture
+- ✅ Dynamic ES module imports (no Module Federation)
+- ✅ Service injection pattern (no global pollution)
+- ✅ Framework-agnostic core
+- ✅ Typed event bus system
+- ✅ Universal state management
 
-#### 1.2 Comprehensive Error Boundaries ✅ COMPLETED
+### Published Packages
+- ✅ @mfe-toolkit/core (v0.1.0)
+- ✅ @mfe-toolkit/react (v0.1.0)
+- ✅ @mfe-toolkit/state (v0.1.0)
+- ✅ @mfe-toolkit/state-middleware-performance (v0.1.0)
+- ✅ @mfe-toolkit/cli (v0.1.0)
 
-#### 1.3 MFE Manifest Schema 📋 PLANNED
-- Define TypeScript interfaces for manifests
-- Add JSON schema validation
-- Create manifest generator CLI tool
-- Document manifest requirements
+### React Container
+- ✅ Production-ready implementation
+- ✅ React Context state management
+- ✅ Full service implementation
+- ✅ Error boundaries and recovery
+- ✅ TypeScript strict mode
 
-#### 1.4 Testing Infrastructure 🚧 IN PROGRESS
-- ✅ Vitest and React Testing Library setup
-- 📋 E2E tests for critical paths
-- 📋 Visual regression testing
-- 📋 Contract testing tools
+## 📅 2025 Timeline Overview
 
-### Phase 2: State Management Middleware (Q2 2025)
+### Q1 2025
+- 🎯 Multi-framework containers (Vue, Vanilla)
+- 📦 State middleware packages (devtools, validation, persistence)
+- 🔧 MFE Manifest v2 implementation
+- 🧪 Testing infrastructure
 
-#### Completed Middleware
-- ✅ **@mfe-toolkit/state-middleware-performance** - Performance monitoring (Completed!)
+### Q2 2025
+- 🔌 Framework adapters (Vue, Svelte, Angular)
+- 🔄 Advanced state middleware (sync, analytics)
+- 🛠️ CLI v2.0 with enhanced features
+- ⚛️ React container optimizations
 
-#### Next Sprint (Phase 1)
+### Q3 2025
+- 🧪 Testing and quality tools
+- 📊 Performance monitoring
+- 🌍 Internationalization
+- 🔒 Security enhancements
 
-##### 1. @mfe-toolkit/state-middleware-devtools 🔍
+### Q4 2025
+- 🏢 Enterprise features
+- 🚀 Edge deployment tools
+- 🤖 AI-powered development
+- 📈 Advanced analytics
 
-**Overview:**
-- Time-travel debugging
-- State diff visualization
-- Redux DevTools integration
-- Action replay functionality
+## 🎯 Success Metrics
 
-**GitHub Issue Template:**
-```
-Title: [Enhancement] Implement @mfe-toolkit/state-middleware-devtools - Time-travel debugging middleware
-Labels: enhancement, middleware, devtools, phase-1, state-management
-
-Description:
-Create a comprehensive development tools middleware for the MFE Toolkit state management system that provides time-travel debugging and state inspection capabilities.
-
-Acceptance Criteria:
-- [ ] Create new package with proper package.json structure
-- [ ] Implement time-travel debugging (undo/redo state changes)
-- [ ] Add state diff visualization capabilities
-- [ ] Build action replay functionality
-- [ ] Include performance profiling for state operations
-- [ ] Create state snapshots export/import feature
-- [ ] Integrate with Redux DevTools Extension
-- [ ] Provide TypeScript types and JSDoc comments
-- [ ] Write unit tests with >80% coverage
-- [ ] Create documentation with usage examples
-- [ ] Ensure bundle size stays under 5KB gzipped
-- [ ] Follow established middleware patterns
-- [ ] Add integration tests with React, Vue, and Vanilla JS
-
-Technical Notes:
-- Must work across different MFE frameworks
-- Should not impact production performance when disabled
-- Provide both programmatic API and browser extension integration
-- Handle large state objects efficiently
-```
-
-##### 2. @mfe-toolkit/state-middleware-validation ✅
-
-**Overview:**
-- Schema validation (Zod, Yup, custom)
-- Type guards for state updates
-- Development warnings
-- Production-safe validation
-
-**GitHub Issue Template:**
-```
-Title: [Enhancement] Implement @mfe-toolkit/state-middleware-validation - Runtime state validation middleware
-Labels: enhancement, middleware, validation, phase-1, state-management, type-safety
-
-Description:
-Create a runtime state validation middleware that provides schema validation and type checking for state updates in the MFE Toolkit state management system.
-
-Acceptance Criteria:
-- [ ] Create new package with proper package.json structure
-- [ ] Support multiple validation libraries (Zod, Yup, custom)
-- [ ] Implement type guards for state updates
-- [ ] Add development-time warnings for validation failures
-- [ ] Ensure production-safe validation (configurable)
-- [ ] Create schema validation for nested state objects
-- [ ] Provide clear error messages with field-level details
-- [ ] Support conditional validation based on state context
-- [ ] Include TypeScript integration
-- [ ] Write unit tests with >80% coverage
-- [ ] Create documentation with usage examples
-- [ ] Ensure bundle size stays under 5KB gzipped
-- [ ] Follow established middleware patterns
-- [ ] Provide performance benchmarks
-
-Technical Notes:
-- Allow selective validation (validate only specific state keys)
-- Support async validation for remote schema validation
-- Provide both strict mode (throw errors) and warning mode
-- Handle circular references in complex state objects
-- Integrate seamlessly with TypeScript
-
-Example Usage:
-const validationMiddleware = createValidationMiddleware({
-  cart: z.object({
-    items: z.array(cartItemSchema),
-    total: z.number().min(0)
-  }),
-  user: userSchema
-});
-```
-
-#### Q2 2025 Middleware
-1. **@mfe-toolkit/state-middleware-persistence** 💾
-   - IndexedDB for large state
-   - Encryption for sensitive data
-   - Selective persistence
-   - Offline-first capabilities
-
-2. **@mfe-toolkit/state-middleware-logger** 📝
-   - Multiple logging targets
-   - Remote integration (Sentry, LogRocket)
-   - Structured logging format
-
-3. **@mfe-toolkit/state-middleware-sync** 🔄
-   - REST/GraphQL integration
-   - WebSocket real-time sync
-   - Conflict resolution
-   - Optimistic updates
-
----
-
-## 📅 Future Development Phases
-
-### Phase 3: Performance & Architecture (Q2-Q3 2025)
-
-#### 3.1 Theme Management Migration
-Move theme from Universal State to ContextBridge as UI concern
-
-#### 3.2 MFE Loader Consolidation
-Merge MFELoader and IsolatedMFELoader into single configurable component
-
-#### 3.3 Framework Adapters
-- **@mfe-toolkit/state-adapter-svelte**
-- **@mfe-toolkit/state-adapter-angular**
-- **@mfe-toolkit/state-adapter-solid**
-
-#### 3.4 Core State Enhancements
-- Computed/Derived State
-- State Migrations
-- State Namespacing
-- State Transactions
-
-### Phase 4: Security & Scale (Q3 2025)
-
-#### Security Enhancements
-- Content Security Policy (CSP)
-- MFE sandboxing
-- Permission system
-- OAuth 2.0 / OIDC support
-
-#### Additional Middleware
-- **@mfe-toolkit/state-middleware-undo** ↩️
-- **@mfe-toolkit/state-middleware-analytics** 📊
-- **@mfe-toolkit/state-middleware-encryption** 🔐
-
-### Phase 5: Enterprise Features (Q4 2025)
-
-#### Plugin Architecture
-```typescript
-interface MFEPlugin {
-  id: string;
-  install(context: PluginContext): Promise<void>;
-  provides: ServiceDefinition[];
-  hooks: LifecycleHooks;
-}
-```
-
-#### Distributed Architecture
-- Service discovery
-- Load balancing
-- Circuit breakers
-- MFE Registry Service
-
-### Phase 6: Developer Experience (Q4 2025 - Q1 2026)
-
-#### CLI Enhancements
-```bash
-mfe create my-app --template react
-mfe dev --port 3001
-mfe test --coverage
-mfe deploy --env production
-```
-
-#### Developer Tools
-- MFE DevTools extension
-- Time-travel debugging
-- Visual development tools
-- Component marketplace
-
-#### Utility Packages
-- **@mfe-toolkit/state-testing**
-- **@mfe-toolkit/state-debugger**
-- **@mfe-toolkit/state-codegen**
-
-### Phase 7: Innovation & Future (2026)
-
-#### Advanced Patterns
-- State Machines Integration
-- Event Sourcing Support
-- Plugin System
-
-#### Next-Gen Technologies
-- AI-powered prefetching
-- Edge computing support
-- WebAssembly integration
-- Progressive Web App features
-
----
-
-## 📊 Success Metrics
-
-### Technical Metrics
-- **Bundle Size**: < 100KB per MFE, < 5KB per middleware
-- **Load Time**: < 200ms initial load
-- **Test Coverage**: > 90%
-- **TypeScript Coverage**: 100%
-
-### Performance Targets
-- State operations: < 1ms
-- Cross-tab sync: < 50ms
-- Memory usage: < 50MB per MFE
-- Lighthouse score: > 95
-
-### Adoption Goals
-- 1000+ weekly npm downloads
+### Adoption
+- 3+ production container implementations
+- 1,000+ weekly package downloads
 - 50+ production deployments
-- Active contributor community
-- Plugin ecosystem growth
+- 20+ contributing organizations
 
----
+### Performance
+- < 50KB core bundle size
+- < 100ms MFE load time
+- < 10ms state propagation
+- 100/100 Lighthouse scores
 
-## 🎯 Immediate Priorities
+### Developer Experience
+- < 5 minutes to scaffold new MFE
+- < 1 second hot reload
+- 90%+ developer satisfaction
+- Comprehensive documentation
 
-### High Priority (Next Sprint)
-1. ✅ ~~Performance monitoring middleware~~ (Completed!)
-2. DevTools middleware implementation
-3. Validation middleware implementation
-4. Theme migration to ContextBridge
-5. MFE Loader consolidation
+## 🔗 Quick Links
 
-### Medium Priority (Q2 2025)
-1. Svelte adapter
-2. Persistence middleware
-3. Logger middleware
-4. Computed state in core
-5. E2E test coverage
-
-### Low Priority (Q3+ 2025)
-1. Additional framework adapters
-2. Advanced middleware packages
-3. Plugin architecture
-4. Edge deployment
-
----
-
-## 📝 Technical Debt to Address
-
-1. **Dual MFE Loaders** - Consolidate into single component
-2. **Theme Location** - Move from Universal State to ContextBridge
-3. **Test Coverage** - Increase from current ~70% to >90%
-4. **Documentation** - Add more real-world examples
-
----
-
-## 🚀 Getting Started with Contributions
-
-### For Middleware Development
-1. Use `@mfe-toolkit/state-middleware-performance` as template
-2. Keep bundle size under 5KB gzipped
-3. Include TypeScript types
-4. Add comprehensive tests
-5. Document with examples
-
-### For Framework Adapters
-1. Study existing React and Vue adapters
-2. Use framework-specific patterns
-3. Maintain consistent API
-4. Include demo application
-
----
-
-## 📄 Related Documentation
-
+- [Platform Development](../platform/)
+- [Container Implementations](../containers/)
 - [Architecture Decisions](./ARCHITECTURE_DECISIONS.md)
-- [State Management Architecture](./STATE_MANAGEMENT_ARCHITECTURE.md)
-- [MFE Loading Guide](./MFE_LOADING_GUIDE.md)
+- [Contributing Guide](../../CONTRIBUTING.md)
 
 ---
 
-_Last Updated: January 2025_  
-_Version: 2.0.0_  
-_Status: Active_
-
-### Change Log
-- v2.0.0 - Consolidated three roadmap documents
-- v1.1.0 - Added state middleware roadmap
-- v1.0.0 - Initial 7-phase roadmap
+_This roadmap is updated quarterly. Last update: January 2025_
