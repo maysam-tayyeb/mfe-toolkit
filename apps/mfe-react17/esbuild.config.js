@@ -15,7 +15,7 @@ const config = {
   entryPoints: ['src/main.tsx'],
   bundle: true,
   format: 'esm',
-  outfile: path.join(rootDir, 'dist', 'mfe-react17', 'mfe-react17.js'),
+  outfile: path.join(__dirname, 'dist', 'mfe-react17.js'),
   platform: 'browser',
   target: 'es2020',
 

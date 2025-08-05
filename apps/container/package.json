@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@mfe-toolkit/core": "workspace:*",
+    "@mfe-toolkit/react": "workspace:*",
     "@mfe/shared": "workspace:*",
     "@mfe-toolkit/state": "workspace:*",
     "@radix-ui/react-dialog": "^1.0.5",

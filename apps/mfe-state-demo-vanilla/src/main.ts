@@ -1,7 +1,7 @@
 // Vanilla TypeScript State Demo MFE
 import type { MFEServices } from '@mfe-toolkit/core';
 import type { StateManager } from '@mfe-toolkit/state';
-import type { User, Theme, SharedCounter } from '@mfe-toolkit/shared';
+import type { User, Theme, SharedCounter } from '@mfe/shared';
 
 interface MFEModule {
   mount: (element: HTMLElement, services: MFEServices) => void;

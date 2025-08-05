@@ -5,7 +5,7 @@ import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, '../..');
-const outfile = path.join(rootDir, 'dist', 'mfe-event-demo', 'mfe-event-demo.js');
+const outfile = path.join(__dirname, 'dist', 'mfe-event-demo.js');
 
 async function buildMFE() {
   console.log('🔨 Building Event Demo MFE...');

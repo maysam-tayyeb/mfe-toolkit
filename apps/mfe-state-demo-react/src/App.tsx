@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { StateManager } from '@mfe-toolkit/state';
-import { getButtonClasses, User, Theme, SharedCounter } from '@mfe-toolkit/shared';
+import { getButtonClasses, User, Theme, SharedCounter } from '@mfe/shared';
 import { Moon, Sun } from 'lucide-react';
 
 interface AppProps {

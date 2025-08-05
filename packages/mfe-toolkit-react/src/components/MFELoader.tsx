@@ -11,6 +11,9 @@ interface MFELoaderProps {
   onError?: (error: Error) => void;
   maxRetries?: number;
   retryDelay?: number;
+  isolate?: boolean;
+  errorBoundary?: boolean;
+  errorFallback?: (error: Error, errorInfo: React.ErrorInfo, retry: () => void) => React.ReactNode;
 }
 
 interface LoaderState {
@@ -19,7 +22,143 @@ interface LoaderState {
   retryCount: number;
 }
 
-const MFELoaderContent: React.FC<MFELoaderProps> = ({
+// Isolated loading strategy - prevents unmounting during parent re-renders
+const IsolatedLoaderStrategy: React.FC<MFELoaderProps> = ({
+  name,
+  url,
+  services,
+  fallback = <div>Loading MFE...</div>,
+  onError,
+}) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
+  const mfeInstanceRef = useRef<any>(null);
+  const cleanupRef = useRef<(() => void) | null>(null);
+
+  // Use ref to avoid stale closure
+  const onErrorRef = useRef(onError);
+  onErrorRef.current = onError;
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const loadAndMountMFE = async () => {
+      try {
+        services.logger.debug(`[IsolatedLoader] Loading ${name} from ${url}`);
+
+        // Import the MFE module
+        const module = await import(/* @vite-ignore */ url);
+
+        if (!module.default || typeof module.default.mount !== 'function') {
+          throw new Error(`MFE ${name} does not export a valid module with mount function`);
+        }
+
+        // Only proceed if component is still mounted
+        if (!isMounted) return;
+
+        // Create an isolated container for the MFE
+        const mfeContainer = document.createElement('div');
+        mfeContainer.style.width = '100%';
+        mfeContainer.setAttribute('data-mfe', name);
+        mfeContainer.setAttribute('data-react-root', 'false'); // Mark as non-React content
+
+        // Wait for our container to be ready
+        if (containerRef.current) {
+          // Clear any existing content
+          containerRef.current.innerHTML = '';
+          containerRef.current.appendChild(mfeContainer);
+
+          services.logger.info(`[IsolatedLoader] Mounting ${name}`);
+          module.default.mount(mfeContainer, services);
+          mfeInstanceRef.current = module.default;
+
+          // Store cleanup function
+          if (module.default.unmount) {
+            cleanupRef.current = () => {
+              try {
+                services.logger.debug(`[IsolatedLoader] Unmounting ${name}`);
+                module.default.unmount(mfeContainer);
+              } catch (err) {
+                services.logger.error(`Error unmounting ${name}:`, err);
+              }
+            };
+          }
+
+          setLoading(false);
+          services.logger.info(`[IsolatedLoader] ${name} mounted successfully`);
+        }
+      } catch (err) {
+        if (!isMounted) return;
+
+        const error = err instanceof Error ? err : new Error('Unknown error');
+        services.logger.error(`[IsolatedLoader] Error loading ${name}:`, error);
+        setError(error);
+        setLoading(false);
+        onErrorRef.current?.(error);
+      }
+    };
+
+    // Reset state when name/url changes
+    setLoading(true);
+    setError(null);
+
+    // Cleanup previous MFE if any
+    if (cleanupRef.current) {
+      cleanupRef.current();
+      cleanupRef.current = null;
+    }
+
+    // Clear container
+    if (containerRef.current) {
+      containerRef.current.innerHTML = '';
+    }
+
+    // Delay loading slightly to ensure DOM is ready
+    const timer = setTimeout(loadAndMountMFE, 100);
+
+    // Cleanup
+    return () => {
+      isMounted = false;
+      clearTimeout(timer);
+
+      // Only cleanup if component is truly unmounting
+      if (cleanupRef.current) {
+        cleanupRef.current();
+        cleanupRef.current = null;
+      }
+
+      // Clean up the container
+      if (containerRef.current) {
+        containerRef.current.innerHTML = '';
+      }
+    };
+  }, [name, url, services]); // Include services but it should be stable
+
+  if (error) {
+    return (
+      <div className="text-red-500 p-4">
+        <h3>Error loading {name}</h3>
+        <p>{error.message}</p>
+      </div>
+    );
+  }
+
+  return (
+    <>
+      {loading && fallback}
+      <div
+        ref={containerRef}
+        style={{ width: '100%', display: loading ? 'none' : 'block' }}
+        // Prevent React from touching this div's children
+        suppressHydrationWarning
+      />
+    </>
+  );
+};
+
+// Standard loading strategy - with retry logic and error reporting
+const StandardLoaderStrategy: React.FC<MFELoaderProps> = ({
   name,
   url,
   services,
@@ -258,34 +397,55 @@ const MFELoaderContent: React.FC<MFELoaderProps> = ({
   );
 };
 
+// Unified MFELoader that supports both standard and isolated loading strategies
 export const MFELoader: React.FC<MFELoaderProps> = (props) => {
+  const {
+    errorBoundary = true,
+    isolate = false,
+    errorFallback,
+    ...loaderProps
+  } = props;
+
   const [retryKey, setRetryKey] = useState(0);
 
   const handleRetry = useCallback(() => {
     setRetryKey((prev) => prev + 1);
   }, []);
 
+  // Choose loading strategy based on isolation needs
+  const LoaderComponent = isolate ? IsolatedLoaderStrategy : StandardLoaderStrategy;
+
+  const content = <LoaderComponent key={retryKey} {...loaderProps} />;
+
+  // Optionally wrap in error boundary
+  if (!errorBoundary) {
+    return content;
+  }
+
   return (
     <MFEErrorBoundary
       mfeName={props.name}
       services={props.services}
-      fallback={(error, _errorInfo, retry) => (
-        <div className="p-4 bg-red-50 border border-red-200 rounded">
-          <h3 className="text-red-800 font-semibold mb-2">MFE {props.name} crashed unexpectedly</h3>
-          <p className="text-red-600 text-sm">{error.message}</p>
-          <button
-            onClick={() => {
-              retry();
-              handleRetry();
-            }}
-            className="mt-3 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition-colors text-sm"
-          >
-            Restart MFE
-          </button>
-        </div>
-      )}
+      fallback={
+        errorFallback ||
+        ((error, _errorInfo, retry) => (
+          <div className="p-4 bg-red-50 border border-red-200 rounded">
+            <h3 className="text-red-800 font-semibold mb-2">MFE {props.name} crashed unexpectedly</h3>
+            <p className="text-red-600 text-sm">{error.message}</p>
+            <button
+              onClick={() => {
+                retry();
+                handleRetry();
+              }}
+              className="mt-3 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition-colors text-sm"
+            >
+              Restart MFE
+            </button>
+          </div>
+        ))
+      }
     >
-      <MFELoaderContent key={retryKey} {...props} />
+      {content}
     </MFEErrorBoundary>
   );
 };

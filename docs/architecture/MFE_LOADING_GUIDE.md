@@ -1,59 +1,46 @@
 # MFE Loading Guide
 
-This guide explains the MFE loading system, current implementation details, known issues, and future improvements.
+This guide explains the MFE loading system and how to use the unified MFELoader component.
 
-## Current State: Two Loaders
+## Unified MFELoader Component
 
-We currently have two MFE loader components with different use cases:
+The `@mfe-toolkit/react` package now provides a unified MFELoader that supports both standard and isolated loading strategies.
 
-### 1. MFELoader (packages/mfe-dev-kit)
+### MFELoader (@mfe-toolkit/react)
 
-- **Purpose**: Standard MFE loader with error boundary protection
-- **Use When**:
-  - Page has stable state (minimal re-renders)
-  - You need error boundary protection
-  - You want retry mechanisms
+- **Purpose**: Universal MFE loader that can handle all loading scenarios
 - **Features**:
-  - Built-in error boundaries
+  - Two loading strategies: standard and isolated
+  - Built-in error boundaries (optional)
   - Automatic retry with exponential backoff
   - Error reporting integration
   - Loading states
+  - DOM isolation mode for high-frequency re-render scenarios
 
-### 2. IsolatedMFELoader (apps/container)
+## Usage
 
-- **Purpose**: Prevents MFE unmounting during parent re-renders
-- **Use When**:
-  - Parent component has frequent state updates
-  - You see MFEs flickering or unmounting/remounting
-  - Event-heavy pages (like MFE Communication)
-- **Features**:
-  - DOM isolation
-  - Minimal re-render impact
-  - Stable mounting
+### Basic Usage
 
-## The Problem: Why Two Loaders?
+```typescript
+import { MFELoader } from '@mfe-toolkit/react';
 
-### Issue Discovered
+// Standard loading (default)
+<MFELoader
+  name="my-mfe"
+  url="http://localhost:3001/my-mfe.js"
+  services={mfeServices}
+/>
 
-The MFE Communication page updates state on every event, causing:
+// Isolated loading for high-frequency re-renders
+<MFELoader
+  name="my-mfe"
+  url="http://localhost:3001/my-mfe.js"
+  services={mfeServices}
+  isolate={true}
+/>
+```
 
-1. Parent component re-renders
-2. Props recreation (especially callbacks)
-3. MFELoader's useEffect triggers
-4. MFE unmounts and remounts
-5. Visible flickering
-
-### Temporary Solution
-
-`IsolatedMFELoader` was created to:
-
-- Remove problematic dependencies from useEffect
-- Create isolated DOM containers
-- Prevent unmounting on parent re-renders
-
-## Better Solution: Consolidated Loader
-
-### Proposed Unified Loader Design
+### Advanced Options
 
 ```typescript
 interface UnifiedMFELoaderProps {

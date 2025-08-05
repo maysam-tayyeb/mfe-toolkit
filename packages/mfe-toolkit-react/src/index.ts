@@ -4,7 +4,13 @@ export { MFEPage } from './components/MFEPage';
 export { MFEErrorBoundary, withMFEErrorBoundary } from './components/MFEErrorBoundary';
 
 // Services
-export { MFEProvider, useMFEServices } from './services/dependency-injection';
+export { 
+  MFEServicesProvider,
+  MFEServicesProvider as MFEProvider, // alias for backward compatibility
+  useMFEServices,
+  useMFEService,
+  withMFEServices
+} from './services/dependency-injection';
 
 // State Management
 export * from './state/mfe-store-factory';

@@ -1,5 +1,5 @@
 import React from 'react';
-import { cn } from '@mfe-toolkit/shared';
+import { cn } from '@mfe/shared';
 import { cardStyles } from '../patterns';
 
 export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {

@@ -10,7 +10,7 @@ const config = {
   entryPoints: ['src/main.ts'],
   bundle: true,
   format: 'esm',
-  outfile: path.join(rootDir, 'dist', 'mfe-state-demo-vue', 'mfe-state-demo-vue.js'),
+  outfile: path.join(__dirname, 'dist', 'mfe-state-demo-vue.js'),
   platform: 'browser',
   target: 'es2020',
   external: ['lucide-react'],

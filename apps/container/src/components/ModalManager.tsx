@@ -42,7 +42,7 @@ export const ModalManager: React.FC = () => {
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent
-        className={sizeClasses[config.size || 'md']}
+        className={sizeClasses[(config.size || 'md') as keyof typeof sizeClasses]}
         onInteractOutside={(e) => {
           if (!config.closeOnOverlayClick) {
             e.preventDefault();

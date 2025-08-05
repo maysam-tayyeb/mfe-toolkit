@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@mfe-toolkit/core": "workspace:*",
-    "@mfe-toolkit/shared": "workspace:*",
+    "@mfe/shared": "workspace:*",
     "@mfe-toolkit/state": "workspace:*",
     "vue": "^3.5.17"
   },

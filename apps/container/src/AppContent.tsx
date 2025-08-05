@@ -1,16 +1,55 @@
 import { useMemo, useEffect } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useParams } from 'react-router-dom';
 import { Layout } from '@/components/Layout';
 import { HomePage } from '@/pages/HomePage';
 import { DashboardPage } from '@/pages/DashboardPage';
 import { MFECommunicationPage } from '@/pages/MFECommunicationPage';
 import { UniversalStateDemoPage } from '@/pages/UniversalStateDemoPage';
 import { ErrorBoundaryDemoPage } from '@/pages/ErrorBoundaryDemoPage';
-import { MFEPage } from '@mfe-toolkit/core';
+import { CompatibleMFELoader } from '@/components/CompatibleMFELoader';
 import { getMFEServicesSingleton } from '@/services/mfe-services-singleton';
 import { useRegistryContext } from '@/contexts/RegistryContext';
 import { getGlobalStateManager } from '@mfe-toolkit/state';
 import { initializePlatformMetrics, updatePlatformMetric } from '@/store/platform-metrics';
+
+// Simple MFE Page component to replace the missing MFEPage from @mfe-toolkit/react
+function MFEPage() {
+  const { mfeName } = useParams<{ mfeName: string }>();
+  const { registry } = useRegistryContext();
+  const mfeServices = useMemo(() => getMFEServicesSingleton(), []);
+
+  if (!mfeName || !registry) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <p className="text-muted-foreground">Loading...</p>
+      </div>
+    );
+  }
+
+  const manifest = registry.get(mfeName);
+  if (!manifest) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <p className="text-muted-foreground">MFE '{mfeName}' not found</p>
+      </div>
+    );
+  }
+
+  return (
+    <CompatibleMFELoader
+      manifest={manifest}
+      services={mfeServices}
+      fallback={
+        <div className="flex items-center justify-center h-64">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+            <p className="text-muted-foreground">Loading MFE...</p>
+          </div>
+        </div>
+      }
+    />
+  );
+}
 
 export function AppContent() {
   const { registry, isLoading } = useRegistryContext();
@@ -72,23 +111,7 @@ export function AppContent() {
           <Route path="mfe-communication" element={<MFECommunicationPage />} />
           <Route path="universal-state-demo" element={<UniversalStateDemoPage />} />
           <Route path="error-boundary-demo" element={<ErrorBoundaryDemoPage />} />
-          <Route
-            path="mfe/:mfeName"
-            element={
-              <MFEPage
-                services={mfeServices}
-                registry={registry}
-                fallback={
-                  <div className="flex items-center justify-center h-64">
-                    <div className="text-center">
-                      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-                      <p className="text-muted-foreground">Loading MFE...</p>
-                    </div>
-                  </div>
-                }
-              />
-            }
-          />
+          <Route path="mfe/:mfeName" element={<MFEPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

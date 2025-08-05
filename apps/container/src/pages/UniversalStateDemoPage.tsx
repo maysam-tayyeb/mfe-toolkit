@@ -2,7 +2,7 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { getGlobalStateManager } from '@mfe-toolkit/state';
 import { getMFEServicesSingleton } from '@/services/mfe-services-singleton';
 import { useMFEUrlsFromContext } from '@/hooks/useMFEUrlsFromContext';
-import { IsolatedMFELoader } from '@/components/IsolatedMFELoader';
+import { MFELoader } from '@mfe-toolkit/react';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { StateChangeLog } from '@/components/StateChangeLog';
 import { Button } from '@/components/ui/button';
@@ -169,7 +169,7 @@ export const UniversalStateDemoPage: React.FC = () => {
               </div>
               <div className="p-4">
                 {mfeUrls.stateDemoReact ? (
-                  <IsolatedMFELoader
+                  <MFELoader
                     name="state-demo-react"
                     url={mfeUrls.stateDemoReact}
                     services={mfeServices}
@@ -178,9 +178,10 @@ export const UniversalStateDemoPage: React.FC = () => {
                         <p className="text-muted-foreground">Loading React MFE...</p>
                       </div>
                     }
-                    onError={(error) => {
+                    onError={(error: Error) => {
                       console.error('Failed to load React MFE:', error);
                     }}
+                    isolate={true}
                   />
                 ) : (
                   <div className="h-64 flex items-center justify-center">
@@ -197,7 +198,7 @@ export const UniversalStateDemoPage: React.FC = () => {
               </div>
               <div className="p-4">
                 {mfeUrls.stateDemoVue ? (
-                  <IsolatedMFELoader
+                  <MFELoader
                     name="state-demo-vue"
                     url={mfeUrls.stateDemoVue}
                     services={mfeServices}
@@ -206,9 +207,10 @@ export const UniversalStateDemoPage: React.FC = () => {
                         <p className="text-muted-foreground">Loading Vue MFE...</p>
                       </div>
                     }
-                    onError={(error) => {
+                    onError={(error: Error) => {
                       console.error('Failed to load Vue MFE:', error);
                     }}
+                    isolate={true}
                   />
                 ) : (
                   <div className="h-64 flex items-center justify-center">
@@ -225,7 +227,7 @@ export const UniversalStateDemoPage: React.FC = () => {
               </div>
               <div className="p-4">
                 {mfeUrls.stateDemoVanilla ? (
-                  <IsolatedMFELoader
+                  <MFELoader
                     name="state-demo-vanilla"
                     url={mfeUrls.stateDemoVanilla}
                     services={mfeServices}
@@ -234,9 +236,10 @@ export const UniversalStateDemoPage: React.FC = () => {
                         <p className="text-muted-foreground">Loading Vanilla JS MFE...</p>
                       </div>
                     }
-                    onError={(error) => {
+                    onError={(error: Error) => {
                       console.error('Failed to load Vanilla JS MFE:', error);
                     }}
+                    isolate={true}
                   />
                 ) : (
                   <div className="h-64 flex items-center justify-center">

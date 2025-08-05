@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { MFELoader, getErrorReporter } from '@mfe-toolkit/core';
+import { MFELoader } from '@mfe-toolkit/react';
+import { getErrorReporter } from '@mfe-toolkit/core';
 import { Button } from '@/components/ui/button';
 import { getMFEServicesSingleton } from '@/services/mfe-services-singleton';
 
@@ -93,8 +94,6 @@ export const ErrorBoundaryDemoPage: React.FC = () => {
               name={`test-${selectedScenario}`}
               url={scenarios.find((s) => s.id === selectedScenario)?.url || ''}
               services={services}
-              maxRetries={2}
-              retryDelay={1000}
               fallback={
                 <div className="flex items-center justify-center h-32">
                   <div className="text-center">
@@ -103,9 +102,10 @@ export const ErrorBoundaryDemoPage: React.FC = () => {
                   </div>
                 </div>
               }
-              onError={(error) => {
+              onError={(error: Error) => {
                 services.notification.error('MFE Load Failed', error.message);
               }}
+              isolate={true}
             />
           </div>
         </div>

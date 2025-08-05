@@ -6,7 +6,7 @@ const isWatch = process.argv.includes('--watch');
 const config = {
   entryPoints: ['src/main.ts'],
   bundle: true,
-  outfile: path.join(__dirname, '../../dist/mfe-state-demo-vanilla/main.js'),
+  outfile: path.join(__dirname, 'dist/main.js'),
   format: 'esm',
   sourcemap: true,
   target: 'es2020',

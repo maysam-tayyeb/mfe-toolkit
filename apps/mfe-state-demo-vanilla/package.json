@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@mfe-toolkit/core": "workspace:*",
-    "@mfe-toolkit/shared": "workspace:*",
+    "@mfe/shared": "workspace:*",
     "@mfe-toolkit/state": "workspace:*"
   },
   "devDependencies": {

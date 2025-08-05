@@ -1,5 +1,5 @@
 import React from 'react';
-import { cn } from '@mfe-toolkit/shared';
+import { cn } from '@mfe/shared';
 import { gridStyles } from '../patterns';
 
 export interface GridProps extends React.HTMLAttributes<HTMLDivElement> {

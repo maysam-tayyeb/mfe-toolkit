@@ -19,7 +19,7 @@
     "package.json"
   ],
   "scripts": {
-    "build": "tsc",
+    "build": "node build.cjs",
     "dev": "tsc -w",
     "type-check": "tsc --noEmit",
     "test": "vitest run",

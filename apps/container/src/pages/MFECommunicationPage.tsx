@@ -4,7 +4,7 @@ import { useUI } from '@/contexts/UIContext';
 import { EventPayload } from '@mfe-toolkit/core';
 import { getMFEServicesSingleton } from '@/services/mfe-services-singleton';
 import { EVENTS } from '@mfe/shared';
-import { IsolatedMFELoader } from '@/components/IsolatedMFELoader';
+import { MFELoader } from '@mfe-toolkit/react';
 import { useRegistryContext } from '@/contexts/RegistryContext';
 
 interface EventLogEntry {
@@ -304,7 +304,7 @@ export const MFECommunicationPage: React.FC = () => {
           </div>
           <div className="p-4">
             {!registryLoading && serviceExplorerManifest ? (
-              <IsolatedMFELoader
+              <MFELoader
                 name={serviceExplorerManifest.name}
                 url={serviceExplorerManifest.url}
                 services={mfeServices}
@@ -319,6 +319,7 @@ export const MFECommunicationPage: React.FC = () => {
                   </div>
                 }
                 onError={handleServiceExplorerError}
+                isolate={true}
               />
             ) : (
               <div className="flex items-center justify-center h-64">
@@ -336,7 +337,7 @@ export const MFECommunicationPage: React.FC = () => {
           </div>
           <div className="p-4">
             {!registryLoading && legacyServiceExplorerManifest ? (
-              <IsolatedMFELoader
+              <MFELoader
                 name={legacyServiceExplorerManifest.name}
                 url={legacyServiceExplorerManifest.url}
                 services={mfeServices}
@@ -351,6 +352,7 @@ export const MFECommunicationPage: React.FC = () => {
                   </div>
                 }
                 onError={handleLegacyServiceExplorerError}
+                isolate={true}
               />
             ) : (
               <div className="flex items-center justify-center h-64">

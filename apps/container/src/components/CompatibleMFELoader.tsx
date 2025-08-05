@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { MFEManifest, MFEServices } from '@mfe-toolkit/core';
-import { IsolatedMFELoader } from './IsolatedMFELoader';
+import { MFELoader } from '@mfe-toolkit/react';
 import { compatibilityChecker } from '@/services/compatibility-checker';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
@@ -81,12 +81,13 @@ export const CompatibleMFELoader: React.FC<CompatibleMFELoaderProps> = ({
         </Alert>
       )}
 
-      <IsolatedMFELoader
+      <MFELoader
         name={manifest.name}
         url={manifest.url}
         services={services}
         fallback={fallback}
         onError={onError}
+        isolate={true}
       />
     </div>
   );

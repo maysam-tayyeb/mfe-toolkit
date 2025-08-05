@@ -1,4 +1,23 @@
-import type { BaseModalConfig } from '@mfe-toolkit/core';
 import type { ReactNode } from 'react';
 
-export interface ModalConfig extends BaseModalConfig<ReactNode> {}
+// Re-export core types for convenience
+export type {
+  MFEServices,
+  MFEModule,
+  MFEManifest,
+  Logger,
+  EventBus,
+  AuthService,
+  ModalService,
+  NotificationService,
+  BaseModalConfig,
+} from '@mfe-toolkit/core';
+
+// React-specific types
+export interface ModalConfig {
+  title: string;
+  content: ReactNode;
+  size?: 'sm' | 'md' | 'lg' | 'xl';
+  onClose?: () => void;
+  onConfirm?: () => void;
+}

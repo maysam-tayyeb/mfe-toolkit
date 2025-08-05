@@ -9,7 +9,7 @@ const config = {
   entryPoints: ['src/main.tsx'],
   bundle: true,
   format: 'esm',
-  outfile: path.join(rootDir, 'dist', 'mfe-state-demo-react', 'mfe-state-demo-react.js'),
+  outfile: path.join(__dirname, 'dist', 'mfe-state-demo-react.js'),
   platform: 'browser',
   target: 'es2020',
   external: ['react', 'react-dom', 'react/jsx-runtime', 'react/jsx-dev-runtime', 'lucide-react'],

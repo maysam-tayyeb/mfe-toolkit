@@ -80,7 +80,7 @@ export const ZustandDemo: React.FC = () => {
           </button>
         </div>
         <ul className="list-disc list-inside">
-          {store.items.map((item, index) => (
+          {store.items.map((item: string, index: number) => (
             <li key={index} className="flex justify-between items-center">
               <span>{item}</span>
               <button

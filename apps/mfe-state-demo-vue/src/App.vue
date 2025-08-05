@@ -110,8 +110,8 @@
 
 <script setup lang="ts">
 import { reactive, computed, onMounted, ref } from 'vue';
-import { VueAdapter } from '@mfe/universal-state';
-import type { StateManager } from '@mfe/universal-state';
+import { VueAdapter } from '@mfe-toolkit/state';
+import type { StateManager } from '@mfe-toolkit/state';
 import { getButtonClasses, User, Theme, SharedCounter } from '@mfe/shared';
 
 // Props

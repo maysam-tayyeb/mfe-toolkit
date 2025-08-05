@@ -7,7 +7,9 @@ import React, {
   useRef,
   useEffect,
 } from 'react';
-import { ModalConfig, NotificationConfig } from '@mfe-toolkit/core';
+import { BaseModalConfig, NotificationConfig } from '@mfe-toolkit/core';
+
+type ModalConfig = BaseModalConfig<React.ReactNode>;
 
 interface UIContextType {
   // Modal state
