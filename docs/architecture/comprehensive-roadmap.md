@@ -81,26 +81,26 @@ Framework-specific container implementations:
 ## 📋 Feature Priorities
 
 ### Current Focus
-- 🎯 Multi-framework containers (Vue, Vanilla)
-- 📦 State middleware packages (devtools, validation, persistence)
 - 🔧 MFE Manifest v2 implementation
 - 🧪 Testing infrastructure
 
 ### Next Up
-- 🔌 Framework adapters (Vue, Svelte, Angular)
+- 📦 State middleware packages (devtools, validation, persistence)
 - 🔄 Advanced state middleware (sync, analytics)
+- 🔌 Framework adapters (Vue, Svelte, Angular)
+- 🎯 Multi-framework containers (Vue, Vanilla)
 - 🛠️ CLI v2.0 with enhanced features
 - ⚛️ React container optimizations
 
 ### Future Considerations
 - 🧪 Testing and quality tools
 - 📊 Performance monitoring
-- 🌍 Internationalization
 - 🔒 Security enhancements
 - 🏢 Enterprise features
 - 🚀 Edge deployment tools
 - 🤖 AI-powered development
 - 📈 Advanced analytics
+- 🌍 Internationalization
 
 ## 🎯 Success Metrics
 
