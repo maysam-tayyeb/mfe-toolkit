@@ -1,5 +1,5 @@
 import React from 'react';
-import { MFELoader } from '@mfe-toolkit/react';
+import { RegistryMFELoader } from '@/components/RegistryMFELoader';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Info } from 'lucide-react';
@@ -70,7 +70,7 @@ export function ModalServiceDemoPage() {
             </CardHeader>
             <CardContent>
               <div className="border rounded-lg bg-muted/10 min-h-[400px]">
-                <MFELoader
+                <RegistryMFELoader
                   id="mfe-react19-modal-demo"
                   fallback={
                     <div className="flex items-center justify-center h-[400px] text-muted-foreground">

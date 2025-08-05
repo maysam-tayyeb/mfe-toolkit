@@ -24,17 +24,19 @@
 
 .demo-button {
   padding: 0.75rem 1rem;
-  border: 1px solid #ddd;
-  background: white;
+  border: 1px solid var(--border, #ddd);
+  background: var(--card, white);
+  color: var(--card-foreground, #333);
   border-radius: 6px;
   cursor: pointer;
   font-size: 0.875rem;
+  font-weight: 500;
   transition: all 0.2s;
 }
 
 .demo-button:hover {
-  background: #f5f5f5;
-  border-color: #333;
+  background: var(--muted, #f5f5f5);
+  border-color: var(--border, #333);
 }
 
 .demo-button:active {
