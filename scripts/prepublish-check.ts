@@ -18,10 +18,10 @@ interface CheckResult {
 }
 
 const PACKAGES_TO_PUBLISH = [
-  'mfe-dev-kit', // @mfe-toolkit/core
-  'shared',      // @mfe-toolkit/shared
-  'universal-state', // @mfe-toolkit/state
-  'mfe-toolkit-cli', // @mfe-toolkit/cli
+  'mfe-toolkit-core', // @mfe-toolkit/core
+  'shared',           // @mfe-toolkit/shared
+  'universal-state',  // @mfe-toolkit/state
+  'mfe-toolkit-cli',  // @mfe-toolkit/cli
   'mfe-toolkit-react', // @mfe-toolkit/react
 ];
 

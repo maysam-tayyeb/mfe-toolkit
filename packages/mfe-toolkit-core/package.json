@@ -1,13 +1,12 @@
 {
   "name": "@mfe-toolkit/core",
   "version": "0.1.0",
-  "description": "A comprehensive toolkit for building and managing microfrontends with TypeScript and React",
+  "description": "Framework-agnostic core toolkit for building and managing microfrontends",
   "keywords": [
     "microfrontend",
     "mfe",
     "micro-frontend",
     "toolkit",
-    "react",
     "typescript",
     "module-federation",
     "frontend-architecture"
@@ -16,13 +15,13 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/mfe-made-easy.git",
-    "directory": "packages/mfe-dev-kit"
+    "url": "https://github.com/maysam-tayyeb/mfe-toolkit.git",
+    "directory": "packages/mfe-toolkit-core"
   },
   "bugs": {
-    "url": "https://github.com/yourusername/mfe-made-easy/issues"
+    "url": "https://github.com/maysam-tayyeb/mfe-toolkit/issues"
   },
-  "homepage": "https://github.com/yourusername/mfe-made-easy/tree/main/packages/mfe-dev-kit#readme",
+  "homepage": "https://github.com/maysam-tayyeb/mfe-toolkit/tree/main/packages/mfe-toolkit-core#readme",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
@@ -32,9 +31,6 @@
       "import": "./dist/index.js",
       "types": "./dist/index.d.ts"
     }
-  },
-  "bin": {
-    "mfe-manifest": "./dist/cli/manifest-generator.js"
   },
   "files": [
     "dist",

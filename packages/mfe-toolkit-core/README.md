@@ -1,17 +1,17 @@
 # @mfe-toolkit/core
 
-A comprehensive toolkit for building and managing microfrontends with TypeScript and React.
+Framework-agnostic core toolkit for building and managing microfrontends.
 
 ## Features
 
 - 🔧 **Service Container Pattern** - Dependency injection for MFE services
 - 📨 **Event Bus System** - Both legacy and typed event bus for inter-MFE communication
 - 🚨 **Error Handling** - Comprehensive error boundaries and reporting
-- 📦 **Dynamic Loading** - Components for loading MFEs with error recovery
+- 📦 **MFE Module Interface** - Standard interface for MFE modules
 - 📋 **Manifest System** - Validation and migration tools for MFE configurations
 - 🔍 **Developer Tools** - Logging, debugging, and CLI utilities
 - 🎯 **TypeScript First** - Full type safety and IntelliSense support
-- ⚛️ **React 17+ Support** - Works with React 17, 18, and 19
+- 🌐 **Framework Agnostic** - Works with React, Vue, Angular, or Vanilla JS
 
 ## Installation
 
@@ -33,17 +33,22 @@ import type { MFEModule, MFEServices } from '@mfe-toolkit/core';
 const MyMFE: MFEModule = {
   mount: (element: HTMLElement, services: MFEServices) => {
     // Your MFE implementation
-    const { logger, eventBus, notify } = services;
+    const { logger, eventBus, notification } = services;
     
     logger.info('MFE mounted');
     
-    // Render your app
-    const root = ReactDOM.createRoot(element);
-    root.render(<App services={services} />);
+    // Implement your MFE logic here
+    element.innerHTML = '<div>My MFE Content</div>';
+    
+    // Subscribe to events
+    const unsubscribe = eventBus.on('user:action', (data) => {
+      logger.info('Received event:', data);
+    });
     
     // Return unmount function
     return () => {
-      root.unmount();
+      unsubscribe();
+      element.innerHTML = '';
       logger.info('MFE unmounted');
     };
   }
@@ -52,23 +57,7 @@ const MyMFE: MFEModule = {
 export default MyMFE;
 ```
 
-### 2. Load MFEs in Your Container
-
-```tsx
-import { MFELoader } from '@mfe-toolkit/core';
-
-function App() {
-  return (
-    <MFELoader
-      url="http://localhost:8080/my-mfe.js"
-      fallback={<div>Loading MFE...</div>}
-      onError={(error) => console.error('MFE failed to load:', error)}
-    />
-  );
-}
-```
-
-### 3. Use the Event Bus
+### 2. Use the Event Bus
 
 ```typescript
 import { createTypedEventBus } from '@mfe-toolkit/core';

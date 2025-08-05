@@ -4,7 +4,7 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
-      "@mfe-toolkit/core": ["../../packages/mfe-dev-kit/src"],
+      "@mfe-toolkit/core": ["../../packages/mfe-toolkit-core/src"],
       "@mfe-toolkit/shared": ["../../packages/shared/src"]
     }
   },
