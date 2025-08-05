@@ -1,0 +1,24 @@
+{
+  "name": "@mfe/react19-modal-demo",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --port 4001",
+    "build": "tsc && node esbuild.config.js",
+    "preview": "vite preview",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@mfe-toolkit/core": "workspace:*",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@vitejs/plugin-react": "^4.2.1",
+    "esbuild": "^0.25.8",
+    "typescript": "^5.3.3",
+    "vite": "^7.0.6"
+  }
+}

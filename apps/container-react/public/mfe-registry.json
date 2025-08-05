@@ -71,6 +71,18 @@
         "description": "Universal state management demo using Vanilla JavaScript",
         "icon": "🟨"
       }
+    },
+    {
+      "name": "react19-modal-demo",
+      "version": "1.0.0",
+      "url": "http://localhost:8080/service-demos/modal/react19-modal-demo/react19-modal-demo.js",
+      "dependencies": ["react", "react-dom"],
+      "sharedLibs": [],
+      "metadata": {
+        "displayName": "React 19 Modal Demo",
+        "description": "Modal service demonstration using React 19",
+        "icon": "🎭"
+      }
     }
   ],
   "version": "1.0.0",

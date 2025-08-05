@@ -35,6 +35,7 @@ export const Navigation: React.FC = () => {
   const navItems = [
     { path: '/', label: 'Home' },
     { path: '/dashboard', label: 'Dashboard' },
+    { path: '/services/modal', label: 'Modal Service' },
     { path: '/mfe-communication', label: 'MFE Communication' },
     { path: '/universal-state-demo', label: 'State Demo' },
     { path: '/error-boundary-demo', label: 'Error Demo' },
