@@ -3,7 +3,6 @@ import { manifestValidator } from '@mfe-toolkit/core';
 import chalk from 'chalk';
 import fs from 'fs-extra';
 import glob from 'glob';
-import path from 'path';
 
 export const validateCommand = new Command('validate')
   .description('Validate MFE manifests')
@@ -58,7 +57,7 @@ export const validateCommand = new Command('validate')
           }
         } catch (error) {
           hasErrors = true;
-          console.log(chalk.red(`   ❌ Error reading file: ${error.message}`));
+          console.log(chalk.red(`   ❌ Error reading file: ${(error as Error).message}`));
         }
         
         console.log('');

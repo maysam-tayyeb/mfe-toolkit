@@ -1,5 +1,5 @@
 import { Command } from 'commander';
-import { ManifestGenerator } from '@mfe-toolkit/core';
+import { ManifestGenerator } from './manifest-generator';
 import chalk from 'chalk';
 import fs from 'fs-extra';
 import path from 'path';

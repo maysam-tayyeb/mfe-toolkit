@@ -1,9 +1,7 @@
 #!/usr/bin/env node
 
 import { writeFileSync, readFileSync, existsSync } from 'fs';
-import { MFEManifestV2 } from '../types/manifest';
-import { manifestValidator } from '../services/manifest-validator';
-import { manifestMigrator } from '../services/manifest-migrator';
+import { MFEManifestV2, manifestValidator, manifestMigrator } from '@mfe-toolkit/core';
 
 interface GeneratorOptions {
   name: string;
@@ -14,7 +12,7 @@ interface GeneratorOptions {
   migrate?: string;
 }
 
-class ManifestGenerator {
+export class ManifestGenerator {
   generateManifest(options: GeneratorOptions): MFEManifestV2 {
     const { name, version = '1.0.0', framework = 'react', template = 'basic' } = options;
 
@@ -260,7 +258,7 @@ class ManifestGenerator {
 
       if (validation.warnings && validation.warnings.length > 0) {
         console.log('\n⚠️  Warnings:');
-        validation.warnings.forEach((w) => {
+        validation.warnings.forEach((w: any) => {
           console.log(`  - ${w.field}: ${w.message}`);
           if (w.suggestion) {
             console.log(`    💡 ${w.suggestion}`);
@@ -400,11 +398,11 @@ Examples:
 
           if (result.warnings && result.warnings.length > 0) {
             console.log('\n⚠️  Warnings:');
-            result.warnings.forEach((w) => console.log(`  - ${w}`));
+            result.warnings.forEach((w: any) => console.log(`  - ${w}`));
           }
         } else {
           console.error('❌ Migration failed:');
-          result.errors?.forEach((e) => console.error(`  - ${e}`));
+          result.errors?.forEach((e: any) => console.error(`  - ${e}`));
           process.exit(1);
         }
       }
@@ -424,4 +422,3 @@ if (require.main === module) {
   });
 }
 
-export { ManifestGenerator };
