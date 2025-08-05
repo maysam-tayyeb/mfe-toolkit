@@ -194,7 +194,7 @@ docs/
 
 ### Regular Reviews
 
-- Review documentation quarterly
+- Review documentation as needed
 - Update examples when APIs change
 - Remove outdated content
 - Fix broken links
