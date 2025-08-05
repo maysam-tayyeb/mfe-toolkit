@@ -35,7 +35,7 @@ This roadmap combines:
 #### 3. **State Management Migration** ✅
 **Completed**: 2025-01-30
 
-- Migrated from Redux to React Context in container
+- Migrated from Redux to context-based state management in container
 - Implemented isolated state management per MFE
 - Created Universal State Manager with vendor-agnostic abstraction
 - Cross-tab synchronization and persistence
@@ -63,12 +63,44 @@ This roadmap combines:
 - **Universal State Manager**: Cross-MFE application state
 - **Service Injection**: No global pollution, better testability
 - **Dual MFE Loaders**: Temporary solution for re-render issues
+- **Container Architecture**: Framework-agnostic design with React implementation
 
 ---
 
 ## 🚧 In-Progress Work (2025 Q1-Q2)
 
-### Phase 1: Foundation Improvements (Weeks 1-3)
+### Phase 0: Multi-Framework Container Demonstrations 🎯 HIGHEST PRIORITY
+
+#### 0.1 Vue.js Container Application 📋 PLANNED
+- Create `apps/container-vue` with Vue 3 + Vite
+- Implement all container services (auth, modal, notifications, event bus)
+- Port MFELoader functionality to Vue components
+- Demonstrate loading React, Vue, and Vanilla JS MFEs
+- Create `@mfe-toolkit/vue` package with Vue-specific components
+
+#### 0.2 Vanilla JS/TypeScript Container 📋 PLANNED
+- Create `apps/container-vanilla` with pure TypeScript
+- Implement container services without framework dependency
+- Create vanilla JS MFE loader implementation
+- Demonstrate framework independence at container level
+
+#### 0.3 Framework-Specific Toolkit Packages 📋 PLANNED
+- `@mfe-toolkit/vue` - Vue components and composables
+- `@mfe-toolkit/vanilla` - Pure JS/TS utilities
+- Future: `@mfe-toolkit/svelte`, `@mfe-toolkit/angular`, `@mfe-toolkit/solid`
+
+#### 0.4 Container Naming Refactor 📋 PLANNED
+- Rename `apps/container` to `apps/container-react`
+- Update all references in documentation and code
+- Ensure backward compatibility in scripts
+
+#### 0.5 Documentation & Examples 📋 PLANNED
+- Update all examples to show cross-framework loading
+- Create matrix showing which containers can load which MFEs
+- Best practices for framework-agnostic MFE development
+- Container comparison guide
+
+### Phase 1: Foundation Improvements (Weeks 4-6)
 
 #### 1.1 Typed Event System ✅ COMPLETED
 
@@ -86,7 +118,7 @@ This roadmap combines:
 - 📋 Visual regression testing
 - 📋 Contract testing tools
 
-### Phase 2: State Management Middleware (Q1-Q2 2025)
+### Phase 2: State Management Middleware (Q2 2025)
 
 #### Completed Middleware
 - ✅ **@mfe-toolkit/state-middleware-performance** - Performance monitoring (Completed!)
@@ -202,7 +234,7 @@ const validationMiddleware = createValidationMiddleware({
 
 ## 📅 Future Development Phases
 
-### Phase 3: Performance & Architecture (Q2 2025)
+### Phase 3: Performance & Architecture (Q2-Q3 2025)
 
 #### 3.1 Theme Management Migration
 Move theme from Universal State to ContextBridge as UI concern
@@ -234,7 +266,7 @@ Merge MFELoader and IsolatedMFELoader into single configurable component
 - **@mfe-toolkit/state-middleware-analytics** 📊
 - **@mfe-toolkit/state-middleware-encryption** 🔐
 
-### Phase 5: Enterprise Features (Q3-Q4 2025)
+### Phase 5: Enterprise Features (Q4 2025)
 
 #### Plugin Architecture
 ```typescript
@@ -252,7 +284,7 @@ interface MFEPlugin {
 - Circuit breakers
 - MFE Registry Service
 
-### Phase 6: Developer Experience (Q4 2025)
+### Phase 6: Developer Experience (Q4 2025 - Q1 2026)
 
 #### CLI Enhancements
 ```bash

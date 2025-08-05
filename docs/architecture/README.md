@@ -21,7 +21,7 @@ This directory contains architectural documentation for the MFE Made Easy platfo
 Key architectural decisions and their rationale:
 
 - Dynamic imports over Module Federation
-- React Context over Redux
+- Context-based state over Redux
 - Service injection pattern
 - Dual state management approach
 - MFE loader strategies
@@ -79,7 +79,7 @@ Please use the Comprehensive Roadmap for all improvement tracking and planning.
 
 The MFE Made Easy platform implements a microfrontend architecture with:
 
-- **Container Application** - React 19-based shell that orchestrates MFEs
+- **Container Application** - Shell application that orchestrates MFEs
 - **Microfrontends** - Independently deployed frontend modules (React, Vue, Vanilla JS)
 - **ContextBridge Services** - Container UI services (auth, modals, notifications)
 - **Universal State Manager** - Cross-MFE application state with framework adapters

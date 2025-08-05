@@ -72,7 +72,7 @@ const registry = {
 };
 
 // Write the registry
-const outputPath = join(__dirname, '../apps/container/public/mfe-registry-v2-generated.json');
+const outputPath = join(__dirname, '../apps/container-react/public/mfe-registry-v2-generated.json');
 writeFileSync(outputPath, JSON.stringify(registry, null, 2));
 
 console.log(`\n✅ Registry built successfully!`);

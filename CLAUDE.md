@@ -17,7 +17,7 @@ pnpm -r build
 pnpm dev
 
 # Start individual applications
-pnpm dev:container      # Container app on http://localhost:3000
+pnpm dev:container-react  # React container app on http://localhost:3000
 pnpm dev:mfe           # Example MFE on http://localhost:3001
 pnpm dev:react17       # React 17 MFE on http://localhost:3002
 pnpm dev:state-react   # State demo React MFE
@@ -79,7 +79,7 @@ pnpm build
 pnpm -r build
 
 # Preview production build
-cd apps/container && pnpm preview
+cd apps/container-react && pnpm preview
 ```
 
 ## Architecture Overview
@@ -88,7 +88,7 @@ This is a **microfrontend (MFE) monorepo** using pnpm workspaces. The architectu
 
 ### Core Components
 
-1. **Container Application** (`apps/container/`)
+1. **Container Application** (`apps/container-react/`)
    - Main shell application that hosts and orchestrates MFEs
    - React 19 + React Context + Tailwind CSS + ShadCN UI
    - Provides shared services: auth, modal, notifications, event bus, logger
@@ -211,11 +211,11 @@ The toolkit is split into several npm packages under the `@mfe-toolkit` organiza
 
 ### Important File Locations
 
-- Container services: `apps/container/src/services/`
-- Redux slices: `apps/container/src/store/`
+- Container services: `apps/container-react/src/services/`
+- Redux slices: `apps/container-react/src/store/`
 - MFE types: `packages/mfe-toolkit-core/src/types/`
-- Shared components: `apps/container/src/components/ui/`
-- MFE registry: `apps/container/public/mfe-registry.json`
+- Shared components: `apps/container-react/src/components/ui/`
+- MFE registry: `apps/container-react/public/mfe-registry.json`
 
 ### State Management
 
