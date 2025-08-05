@@ -5,8 +5,8 @@
     "paths": {
       "@/*": ["./src/*"],
       "@mfe-toolkit/core": ["../../packages/mfe-toolkit-core/src"],
-      "@mfe-toolkit/shared": ["../../packages/shared/src"],
-      "@mfe-toolkit/state": ["../../packages/universal-state/src"]
+      "@mfe-toolkit/shared": ["../../packages/mfe-toolkit-shared/src"],
+      "@mfe-toolkit/state": ["../../packages/mfe-toolkit-state/src"]
     }
   },
   "include": ["src"],

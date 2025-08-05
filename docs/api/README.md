@@ -13,7 +13,7 @@ Core development kit for building MFEs
 - Service definitions
 - Event bus implementation
 
-### [@mfe/shared](../../packages/shared/README.md)
+### [@mfe-toolkit/shared](../../packages/mfe-toolkit-shared/README.md)
 
 Shared utilities and constants
 

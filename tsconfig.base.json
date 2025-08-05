@@ -19,7 +19,7 @@
     "baseUrl": ".",
     "paths": {
       "@mfe-toolkit/core": ["packages/mfe-toolkit-core/src/index.ts"],
-      "@mfe-toolkit/shared": ["packages/shared/src/index.ts"]
+      "@mfe-toolkit/shared": ["packages/mfe-toolkit-shared/src/index.ts"]
     }
   }
 }

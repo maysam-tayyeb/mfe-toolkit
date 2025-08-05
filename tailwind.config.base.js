@@ -4,7 +4,7 @@ module.exports = {
   content: [
     './index.html',
     './src/**/*.{js,ts,jsx,tsx}',
-    '../../packages/shared/src/**/*.{js,ts,jsx,tsx}',
+    '../../packages/mfe-toolkit-shared/src/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
     container: {

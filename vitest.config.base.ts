@@ -38,9 +38,9 @@ export function createVitestConfig(options: { root: string }) {
     resolve: {
       alias: {
         '@': path.resolve(options.root, './src'),
-        '@mfe-toolkit/core': path.resolve(options.root, '../../packages/mfe-dev-kit/src'),
-        '@mfe-toolkit/shared': path.resolve(options.root, '../../packages/shared/src'),
-        '@mfe-toolkit/state': path.resolve(options.root, '../../packages/universal-state/src'),
+        '@mfe-toolkit/core': path.resolve(options.root, '../../packages/mfe-toolkit-core/src'),
+        '@mfe-toolkit/shared': path.resolve(options.root, '../../packages/mfe-toolkit-shared/src'),
+        '@mfe-toolkit/state': path.resolve(options.root, '../../packages/mfe-toolkit-state/src'),
       },
     },
   });
@@ -80,9 +80,9 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
-      '@mfe-toolkit/core': path.resolve(__dirname, './packages/mfe-dev-kit/src'),
-      '@mfe-toolkit/shared': path.resolve(__dirname, './packages/shared/src'),
-      '@mfe-toolkit/state': path.resolve(__dirname, './packages/universal-state/src'),
+      '@mfe-toolkit/core': path.resolve(__dirname, './packages/mfe-toolkit-core/src'),
+      '@mfe-toolkit/shared': path.resolve(__dirname, './packages/mfe-toolkit-shared/src'),
+      '@mfe-toolkit/state': path.resolve(__dirname, './packages/mfe-toolkit-state/src'),
     },
   },
 });

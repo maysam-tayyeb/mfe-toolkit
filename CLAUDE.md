@@ -167,11 +167,11 @@ The toolkit is split into several npm packages under the `@mfe-toolkit` organiza
    - Support for React, Vue, Vanilla JS/TS templates
    - Manifest generation and validation commands
 
-4. **@mfe-toolkit/shared** (`packages/shared/`)
+4. **@mfe-toolkit/shared** (`packages/mfe-toolkit-shared/`)
    - Common utilities and constants
    - Shared across all packages
 
-5. **@mfe-toolkit/state** (`packages/universal-state/`)
+5. **@mfe-toolkit/state** (`packages/mfe-toolkit-state/`)
    - Framework-agnostic state management
    - Cross-tab synchronization
    - Persistence support
