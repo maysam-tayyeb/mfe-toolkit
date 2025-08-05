@@ -179,14 +179,9 @@ let globalInstance: StateManager | null = null;
 export function getGlobalStateManager(): StateManager {
   if (!globalInstance) {
     globalInstance = new SimpleStateManager();
-
-    // Expose to window for debugging
-    if (typeof window !== 'undefined') {
-      (window as any).__MFE_STATE__ = {
-        manager: globalInstance,
-        getState: () => globalInstance!.getSnapshot(),
-      };
-    }
+    
+    // Log state manager creation for debugging
+    console.log('[StateManager] Initialized SimpleStateManager instance');
   }
   return globalInstance;
 }

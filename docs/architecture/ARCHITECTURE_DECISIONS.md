@@ -165,10 +165,16 @@ MFEs need to communicate without direct dependencies.
 
 **Decision**: Inject services into MFEs at mount time rather than using global objects.
 
-**Date**: January 2025
+**Date**: January 2025 (Fully completed August 2025)
 
 **Context**:
-Originally services were exposed via `window.__MFE_SERVICES__`, creating security and testing issues.
+Originally services and state were exposed via multiple global window properties:
+- `window.__MFE_SERVICES__` - Service instances
+- `window.__EVENT_BUS__` - Event bus instance
+- `window.__REDUX_STORE__` - Redux store
+- `window.__MFE_STATE__` - State manager debugging
+- `window.__MFE_UNIVERSAL_STATE__` - Universal state debugging
+- `window.__STATE_MANAGER_IMPL__` - Implementation tracking
 
 **Decision Rationale**:
 
@@ -176,6 +182,7 @@ Originally services were exposed via `window.__MFE_SERVICES__`, creating securit
 - Easier testing (can mock services)
 - Cleaner API contracts
 - Proper dependency injection
+- Compliance with "no global pollution" policy
 
 **Implementation**:
 
@@ -188,6 +195,12 @@ export default {
   },
 };
 ```
+
+**Completion Notes** (August 2025):
+- All window pollution has been removed from production code
+- Test files now export mocks instead of polluting window
+- Debugging uses console logging instead of window exposure
+- Chrome DevTools integration maintained through proper Valtio devtools
 
 ---
 

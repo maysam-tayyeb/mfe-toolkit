@@ -23,16 +23,13 @@ Object.defineProperty(window, 'ReactDOM', {
   value: {},
 });
 
-// Mock Redux store
-Object.defineProperty(window, '__REDUX_STORE__', {
-  writable: true,
-  value: {
-    getState: vi.fn(() => ({
-      auth: { session: null },
-      modal: { isOpen: false },
-      notification: { notifications: [] },
-    })),
-    dispatch: vi.fn(),
-    subscribe: vi.fn(),
-  },
-});
+// Create mock Redux store for testing
+export const mockReduxStore = {
+  getState: vi.fn(() => ({
+    auth: { session: null },
+    modal: { isOpen: false },
+    notification: { notifications: [] },
+  })),
+  dispatch: vi.fn(),
+  subscribe: vi.fn(),
+};

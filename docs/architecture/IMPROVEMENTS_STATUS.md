@@ -13,14 +13,20 @@ This document tracks the status of architecture improvements identified in the [
 
 ### 1. ✅ Global Window Pollution
 
-**Status**: Completed (2025-01-30)
+**Status**: Completed (2025-08-05)
 **Implementation**:
 
 - Removed `window.__MFE_SERVICES__` assignment
-- Removed `window.__EVENT_BUS__` assignment
+- Removed `window.__EVENT_BUS__` assignment  
 - Removed `window.__REDUX_STORE__` assignment
+- Removed `window.__MFE_STATE__` assignment (from state-demo-react)
+- Removed `window.__MFE_UNIVERSAL_STATE__` assignment (from universal state manager)
+- Removed `window.__STATE_MANAGER_IMPL__` assignment (from container)
+- Updated test setup files to export mocks instead of window pollution
+- Removed obsolete `global.d.ts` and disabled integration tests
 - Implemented proper dependency injection via ContextBridge
 - Services are now passed through component props/mount functions
+- Debugging now uses console logging instead of window exposure
 
 ### 2. 📋 MFE Loading Strategy
 

@@ -34,11 +34,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 - Redux and react-redux dependencies from container
-- Global window assignments (`__MFE_SERVICES__`, `__EVENT_BUS__`, `__REDUX_STORE__`)
+- Global window assignments:
+  - `window.__MFE_SERVICES__` (container and test files)
+  - `window.__EVENT_BUS__` (container)
+  - `window.__REDUX_STORE__` (container and test files)
+  - `window.__MFE_STATE__` (state-demo-react)
+  - `window.__MFE_UNIVERSAL_STATE__` (universal state manager)
+  - `window.__STATE_MANAGER_IMPL__` (container)
 - Redux store implementation (authSlice, modalSlice, notificationSlice)
 - Zustand state demo from React 17 MFE (temporarily)
 - Deprecated EventBusImpl class (replaced with typed implementation)
 - Unused ReactAdapter class from state-demo-react
+- Obsolete `global.d.ts` file from mfe-example
+- Disabled `App.integration.test.tsx.disabled` file
 
 ### Fixed
 
@@ -47,7 +55,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
-- Eliminated global window pollution (addresses Architecture Improvement #1)
+- Fully eliminated global window pollution (addresses Architecture Improvement #1)
+  - No more exposure of services, state, or debugging interfaces via window object
+  - All debugging now uses console logging instead of window exposure
+  - Test mocks exported as modules instead of window pollution
+  - Maintains Chrome DevTools integration through proper Valtio devtools
 - Improved state isolation between MFEs (addresses Architecture Improvement #4)
 
 ## [1.0.0] - 2025-01-29

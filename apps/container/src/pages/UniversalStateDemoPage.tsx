@@ -33,12 +33,8 @@ export const UniversalStateDemoPage: React.FC = () => {
     
     console.log('[UniversalStateDemoPage] State manager type:', manager.constructor.name);
     
-    // Track implementation usage
-    if (typeof window !== 'undefined') {
-      (window as any).__STATE_MANAGER_IMPL__ = manager.constructor.name;
-      // Initialize performance monitoring
-      initStatePerformanceMonitor(manager.constructor.name);
-    }
+    // Initialize performance monitoring
+    initStatePerformanceMonitor(manager.constructor.name);
     
     return manager;
   });

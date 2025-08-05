@@ -572,25 +572,21 @@ export class UniversalStateManager implements StateManager {
   }
 
   private setupDevtools(): void {
-    // Expose state manager to window for debugging
-    (window as any).__MFE_UNIVERSAL_STATE__ = {
-      manager: this,
-      state: this.state,
-      getState: () => this.getSnapshot(),
-      setState: (key: string, value: any) => this.set(key, value, 'devtools'),
-      subscribe: (key: string, callback: StateListener) => this.subscribe(key, callback),
-      mfes: () => Object.values(this.state.mfeRegistry),
-      implementation: 'valtio',
-    };
+    // Log state manager initialization for debugging
+    if (this.config.devtools) {
+      console.log('[UniversalStateManager] Initialized with Valtio implementation', {
+        config: this.config,
+        mfeCount: Object.keys(this.state.mfeRegistry).length,
+        stateKeys: Object.keys(this.state.store).length
+      });
+    }
   }
 
   private logToDevtools(action: string, data: any): void {
     if (!this.config.devtools || typeof window === 'undefined') return;
 
-    // Console logging
-    if (this.config.devtools) {
-      console.log(`[MFE Universal State] ${action}`, data);
-    }
+    // Console logging for debugging
+    console.log(`[UniversalStateManager] ${action}`, data);
   }
 
   private toSerializable(value: any): any {

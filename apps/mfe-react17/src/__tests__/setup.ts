@@ -17,38 +17,35 @@ global.console = {
   debug: vi.fn(),
 };
 
-// Mock MFE services for testing
-Object.defineProperty(window, '__MFE_SERVICES__', {
-  writable: true,
-  value: {
-    logger: {
-      info: vi.fn(),
-      warn: vi.fn(),
-      error: vi.fn(),
-      debug: vi.fn(),
-    },
-    auth: {
-      getSession: vi.fn(() => null),
-      isAuthenticated: vi.fn(() => false),
-      hasPermission: vi.fn(() => false),
-      hasRole: vi.fn(() => false),
-    },
-    eventBus: {
-      emit: vi.fn(),
-      on: vi.fn(() => vi.fn()),
-      once: vi.fn(() => vi.fn()),
-      off: vi.fn(),
-    },
-    modal: {
-      open: vi.fn(),
-      close: vi.fn(),
-    },
-    notification: {
-      show: vi.fn(),
-      success: vi.fn(),
-      error: vi.fn(),
-      warning: vi.fn(),
-      info: vi.fn(),
-    },
+// Create mock MFE services for testing
+export const mockMFEServices = {
+  logger: {
+    info: vi.fn(),
+    warn: vi.fn(),
+    error: vi.fn(),
+    debug: vi.fn(),
   },
-});
+  auth: {
+    getSession: vi.fn(() => null),
+    isAuthenticated: vi.fn(() => false),
+    hasPermission: vi.fn(() => false),
+    hasRole: vi.fn(() => false),
+  },
+  eventBus: {
+    emit: vi.fn(),
+    on: vi.fn(() => vi.fn()),
+    once: vi.fn(() => vi.fn()),
+    off: vi.fn(),
+  },
+  modal: {
+    open: vi.fn(),
+    close: vi.fn(),
+  },
+  notification: {
+    show: vi.fn(),
+    success: vi.fn(),
+    error: vi.fn(),
+    warning: vi.fn(),
+    info: vi.fn(),
+  },
+};
