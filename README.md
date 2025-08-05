@@ -611,7 +611,7 @@ VITE_MFE_REGISTRY_URL=https://cdn.example.com/configs/mfe-registry.json
 
 ## 🚀 Next Steps
 
-- Implement MFE Manifest V2 for better metadata and dependency management
+- ✅ Implement MFE Manifest V2 for better metadata and dependency management (see [Platform Manifest Docs](./docs/platform/manifests/))
 - Add more cross-framework MFE examples
 - Enhance Universal State Manager with more features
 - Configure CI/CD pipeline with GitHub Actions

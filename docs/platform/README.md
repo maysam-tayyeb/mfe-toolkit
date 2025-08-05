@@ -40,6 +40,19 @@ Platform-level state management concepts:
 - Cross-tab synchronization
 - State persistence strategies
 
+## MFE Manifests
+
+### [MFE Manifest Specification](./manifests/)
+
+Platform-level contract for describing microfrontends:
+
+- [Specification](./manifests/specification.md) - Complete V2 manifest format
+- [Quick Start](./manifests/quick-start.md) - Getting started with manifests
+- [Examples](./manifests/examples.md) - Real-world manifest examples
+- [Migration Guide](./manifests/migration-guide.md) - Upgrading from V1 to V2
+- [Validation Guide](./manifests/validation-guide.md) - CI/CD validation setup
+- [Best Practices](./manifests/best-practices.md) - Recommendations and patterns
+
 ## Packages
 
 ### [@mfe-toolkit/core](./packages/core/)

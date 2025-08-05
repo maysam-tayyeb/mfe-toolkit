@@ -9,6 +9,7 @@ Welcome to the MFE Toolkit documentation. This directory contains comprehensive 
 Framework-agnostic documentation for the MFE Toolkit platform, including:
 
 - **Architecture**: Core platform decisions and patterns
+- **Manifests**: MFE specification and validation documentation
 - **Packages**: Documentation for published npm packages (@mfe-toolkit/*)
 - **Roadmap**: Future development plans for toolkit libraries
 
@@ -32,6 +33,7 @@ Framework-specific container implementations:
 
 ### For MFE Developers
 - [Getting Started with MFEs](./platform/guides/getting-started-mfe.md)
+- [MFE Manifest Quick Start](./platform/manifests/quick-start.md)
 - [Available Services](./container-spec/service-contracts.md)
 - [State Management Patterns](./platform/architecture/state-patterns.md)
 
