@@ -31,7 +31,7 @@ The codebase implements a microfrontend architecture using:
 ### 1. **Clean Architecture**
 
 - Well-structured monorepo with clear separation of concerns
-- Dedicated packages for shared functionality (`@mfe/dev-kit`, `@mfe/shared`)
+- Dedicated packages for shared functionality (`@mfe-toolkit/core`, `@mfe/shared`)
 - Consistent naming conventions and file organization
 
 ### 2. **Modern Development Stack**

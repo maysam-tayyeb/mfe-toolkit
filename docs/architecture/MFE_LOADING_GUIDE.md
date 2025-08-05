@@ -193,7 +193,7 @@ eventBus.on('*', (event) => {
 
 ```typescript
 // For stable pages
-import { MFELoader } from '@mfe/dev-kit';
+import { MFELoader } from '@mfe-toolkit/core';
 
 // For event-heavy pages
 import { IsolatedMFELoader } from '@/components/IsolatedMFELoader';

@@ -105,9 +105,12 @@ This is a **microfrontend (MFE) monorepo** using pnpm workspaces. The architectu
    - `mfe-state-demo-vanilla`: Universal state management demo (Vanilla JS)
 
 3. **Shared Packages** (`packages/`)
-   - `mfe-dev-kit`: Core MFE toolkit with types, services, components, and error handling
-   - `shared`: Common utilities and constants
-   - `universal-state`: Cross-framework state management solution
+   - `@mfe-toolkit/core`: Framework-agnostic toolkit with types, services, and utilities
+   - `@mfe-toolkit/react`: React-specific components and hooks (MFELoader, MFEErrorBoundary)
+   - `@mfe-toolkit/cli`: Command-line tools for creating and managing MFEs
+   - `@mfe-toolkit/shared`: Common utilities and constants
+   - `@mfe-toolkit/state`: Cross-framework state management solution
+   - `@mfe/design-system`: Internal UI components (private, not published)
 
 ### Key Services
 
@@ -142,6 +145,43 @@ MFEs are configured via JSON registry files:
 - `public/mfe-registry.{environment}.json` - Environment-specific
 - Configurable via `VITE_MFE_REGISTRY_URL` environment variable
 
+## Package Structure
+
+### Published NPM Packages
+
+The toolkit is split into several npm packages under the `@mfe-toolkit` organization:
+
+1. **@mfe-toolkit/core** (`packages/mfe-toolkit-core/`)
+   - Framework-agnostic core functionality
+   - Event bus, logger, error reporter, service container
+   - MFE types and interfaces
+   - Manifest validation and migration
+
+2. **@mfe-toolkit/react** (`packages/mfe-toolkit-react/`)
+   - React-specific components: MFELoader, MFEErrorBoundary, MFEPage
+   - React Context-based dependency injection
+   - Zustand-based state management helpers
+
+3. **@mfe-toolkit/cli** (`packages/mfe-toolkit-cli/`)
+   - CLI tools for scaffolding new MFEs
+   - Support for React, Vue, Vanilla JS/TS templates
+   - Manifest generation and validation commands
+
+4. **@mfe-toolkit/shared** (`packages/shared/`)
+   - Common utilities and constants
+   - Shared across all packages
+
+5. **@mfe-toolkit/state** (`packages/universal-state/`)
+   - Framework-agnostic state management
+   - Cross-tab synchronization
+   - Persistence support
+
+### Internal Packages
+
+- **@mfe/design-system** (`packages/design-system/`)
+  - Internal UI components for examples
+  - Not published to npm (marked as private)
+
 ## Development Guidelines
 
 ### When Creating New MFEs
@@ -150,7 +190,7 @@ MFEs are configured via JSON registry files:
 2. Export default function that accepts MFE services
 3. Configure Vite to build ES module format
 4. Add to container's MFE registry
-5. Ensure proper TypeScript types from `@mfe/dev-kit`
+5. Ensure proper TypeScript types from `@mfe-toolkit/core`
 
 ### Testing Approach
 
@@ -164,7 +204,7 @@ MFEs are configured via JSON registry files:
 
 - Container services: `apps/container/src/services/`
 - Redux slices: `apps/container/src/store/`
-- MFE types: `packages/mfe-dev-kit/src/types/`
+- MFE types: `packages/mfe-toolkit-core/src/types/`
 - Shared components: `apps/container/src/components/ui/`
 - MFE registry: `apps/container/public/mfe-registry.json`
 

@@ -4,7 +4,7 @@ This directory contains API documentation for all packages in the MFE Made Easy 
 
 ## 📦 Packages
 
-### [@mfe/dev-kit](../../packages/mfe-dev-kit/README.md)
+### [@mfe-toolkit/core](../../packages/mfe-toolkit-core/README.md)
 
 Core development kit for building MFEs
 

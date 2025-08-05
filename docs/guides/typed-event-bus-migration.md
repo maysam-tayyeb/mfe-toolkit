@@ -17,7 +17,7 @@ The MFE platform now includes a fully typed event bus system that provides compi
 The event bus now uses the typed implementation by default:
 
 ```typescript
-import { createEventBus } from '@mfe/dev-kit';
+import { createEventBus } from '@mfe-toolkit/core';
 
 // Creates a typed event bus with migration support
 const eventBus = createEventBus();
@@ -38,7 +38,7 @@ eventBus.typed.emit('user:login', {
 The platform provides a standard set of typed events:
 
 ```typescript
-import type { MFEEventMap } from '@mfe/dev-kit';
+import type { MFEEventMap } from '@mfe-toolkit/core';
 
 // Lifecycle Events
 ('mfe:loaded'); // MFE has been loaded
@@ -117,7 +117,7 @@ For application-specific events, create your own event map:
 
 ```typescript
 // types/app-events.ts
-import type { MFEEventMap } from '@mfe/dev-kit';
+import type { MFEEventMap } from '@mfe-toolkit/core';
 
 export type AppEventMap = MFEEventMap & {
   // Add your custom events
@@ -141,7 +141,7 @@ export type AppEventMap = MFEEventMap & {
 Then use it:
 
 ```typescript
-import { createCustomEventBus } from '@mfe/dev-kit';
+import { createCustomEventBus } from '@mfe-toolkit/core';
 import type { AppEventMap } from './types/app-events';
 
 const eventBus = createCustomEventBus<AppEventMap>();
@@ -161,8 +161,8 @@ eventBus.emit('product:selected', {
 Add runtime validation for critical events:
 
 ```typescript
-import { createTypedEventBus } from '@mfe/dev-kit';
-import type { EventSchema, MFEEventMap } from '@mfe/dev-kit';
+import { createTypedEventBus } from '@mfe-toolkit/core';
+import type { EventSchema, MFEEventMap } from '@mfe-toolkit/core';
 
 const schema: EventSchema<MFEEventMap> = {
   'user:login': (data): data is MFEEventMap['user:login'] => {
@@ -311,7 +311,7 @@ If you get TypeScript errors when using typed events:
 1. Ensure you're importing types correctly:
 
    ```typescript
-   import type { MFEEventMap } from '@mfe/dev-kit';
+   import type { MFEEventMap } from '@mfe-toolkit/core';
    ```
 
 2. Check that event data matches the schema:

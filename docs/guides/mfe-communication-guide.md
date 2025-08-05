@@ -337,7 +337,7 @@ The platform now includes a fully typed event bus that provides compile-time typ
 
 ```typescript
 // types/events.ts
-import type { EventMap } from '@mfe/dev-kit';
+import type { EventMap } from '@mfe-toolkit/core';
 
 export type MyMFEEventMap = EventMap & {
   'inter-mfe.message': {
@@ -364,7 +364,7 @@ export type MyMFEEventMap = EventMap & {
 ### Use Typed Event Bus
 
 ```typescript
-import { createTypedEventBus } from '@mfe/dev-kit';
+import { createTypedEventBus } from '@mfe-toolkit/core';
 import type { MyMFEEventMap } from './types/events';
 
 // Create typed event bus

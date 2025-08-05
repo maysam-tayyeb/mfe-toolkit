@@ -130,7 +130,7 @@ The manifest validator checks:
 If you have a V1 manifest, use the migration tool:
 
 ```typescript
-import { ManifestValidator } from '@mfe/dev-kit';
+import { ManifestValidator } from '@mfe-toolkit/core';
 
 const validator = new ManifestValidator();
 const v2Manifest = validator.migrateToV2(v1Manifest);

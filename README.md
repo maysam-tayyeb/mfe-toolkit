@@ -1,6 +1,6 @@
-# MFE Made Easy - Microfrontend Monorepo
+# MFE Toolkit - Enterprise Microfrontend Development Platform
 
-A complete microfrontend (MFE) architecture built with React 19, Redux Toolkit, and pnpm workspaces. This setup demonstrates dynamic MFE loading, shared services, and a development workflow for building scalable frontend applications.
+A comprehensive toolkit and reference architecture for building production-ready microfrontends. Features framework-agnostic core, React components, CLI tools, and cross-framework state management.
 
 ## ✨ Key Features
 
@@ -68,6 +68,36 @@ A complete microfrontend (MFE) architecture built with React 19, Redux Toolkit, 
 - [State Management Architecture](./docs/architecture/STATE_MANAGEMENT_ARCHITECTURE.md) - ContextBridge vs Universal State Manager
 - [MFE Loading Guide](./docs/architecture/MFE_LOADING_GUIDE.md) - How MFEs are loaded and best practices
 - [Improvements Status](./docs/architecture/IMPROVEMENTS_STATUS.md) - Completed and planned improvements
+
+## 📦 NPM Packages
+
+The toolkit is available as modular npm packages under the `@mfe-toolkit` organization:
+
+### Core Packages
+
+| Package | Description | Version |
+|---------|-------------|---------|
+| [`@mfe-toolkit/core`](./packages/mfe-toolkit-core) | Framework-agnostic core functionality | 0.1.0 |
+| [`@mfe-toolkit/react`](./packages/mfe-toolkit-react) | React components and hooks | 0.1.0 |
+| [`@mfe-toolkit/cli`](./packages/mfe-toolkit-cli) | CLI tools for MFE development | 0.1.0 |
+| [`@mfe-toolkit/shared`](./packages/shared) | Shared utilities and constants | 0.1.0 |
+| [`@mfe-toolkit/state`](./packages/universal-state) | Cross-framework state management | 0.1.0 |
+
+### Installation
+
+```bash
+# Core functionality (required)
+npm install @mfe-toolkit/core
+
+# React components (for React apps)
+npm install @mfe-toolkit/react
+
+# CLI tools (global installation)
+npm install -g @mfe-toolkit/cli
+
+# State management (optional)
+npm install @mfe-toolkit/state
+```
 
 ## 🚀 Quick Start
 

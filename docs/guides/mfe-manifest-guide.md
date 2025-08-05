@@ -460,7 +460,7 @@ mfe-manifest --migrate v1-manifest.json --output v2-manifest.json
 ```yaml
 - name: Validate MFE Manifest
   run: |
-    npm install -g @mfe/dev-kit
+    npm install -g @mfe-toolkit/core
     mfe-manifest --validate src/manifest.json
 ```
 
@@ -479,7 +479,7 @@ done
 ## TypeScript Integration
 
 ```typescript
-import { MFEManifestV2, manifestValidator } from '@mfe/dev-kit';
+import { MFEManifestV2, manifestValidator } from '@mfe-toolkit/core';
 
 // Type-safe manifest creation
 const manifest: MFEManifestV2 = {
