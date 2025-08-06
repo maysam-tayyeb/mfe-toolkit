@@ -318,3 +318,7 @@ If you don't know the correct commands for a project, ask the user and suggest u
 ## JavaScript Best Practices
 
 - **Do not use deprecated functions like String.prototype.substr()**
+
+## Mental Model
+
+- **Think, analyse, plan, then execute**

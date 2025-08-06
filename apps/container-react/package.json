@@ -18,6 +18,7 @@
   "dependencies": {
     "@mfe-toolkit/core": "workspace:*",
     "@mfe-toolkit/react": "workspace:*",
+    "@mfe/design-system": "workspace:*",
     "@mfe/shared": "workspace:*",
     "@mfe-toolkit/state": "workspace:*",
     "@mfe-toolkit/state-middleware-performance": "workspace:*",

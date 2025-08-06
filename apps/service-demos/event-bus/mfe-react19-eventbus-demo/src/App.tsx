@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import type { MFEServices } from '@mfe-toolkit/core';
 
 type AppProps = {
@@ -21,48 +21,53 @@ export default function App({ services }: AppProps) {
     'user:login',
     'user:logout',
     'theme:change',
-    'data:update'
+    'data:update',
   ]);
   const subscriptionsRef = useRef<Array<() => void>>([]);
-  
+
   const { eventBus, logger, notification } = services;
-  
+
   const addMessage = (event: string, data: any, source: string = 'React 19') => {
     const message: EventMessage = {
       id: Date.now().toString(),
       event,
       data,
       timestamp: new Date().toLocaleTimeString(),
-      source
+      source,
     };
-    setMessages(prev => [message, ...prev].slice(0, 10));
+    setMessages((prev) => [message, ...prev].slice(0, 10));
     logger?.info(`EventBus Demo: ${event}`, data);
   };
-  
+
   useEffect(() => {
-    subscriptionsRef.current = subscribedEvents.map(event => 
+    // Clean up old subscriptions first
+    subscriptionsRef.current.forEach((unsubscribe) => unsubscribe());
+    
+    // Create new subscriptions
+    subscriptionsRef.current = subscribedEvents.map((event) =>
       eventBus.on(event, (data: any) => {
         addMessage(event, data, 'External');
       })
     );
-    
+
     return () => {
-      subscriptionsRef.current.forEach(unsubscribe => unsubscribe());
+      subscriptionsRef.current.forEach((unsubscribe) => unsubscribe());
+      subscriptionsRef.current = [];
     };
   }, [subscribedEvents, eventBus]);
-  
+
   const emitEvent = (event: string, data: any) => {
     eventBus.emit(event, data);
     addMessage(event, data, 'React 19 (Self)');
     notification.success(`Event emitted: ${event}`);
   };
-  
+
   const handleEmitCustom = () => {
     if (!customEvent) {
       notification.error('Please enter an event name');
       return;
     }
-    
+
     let data: any = customData;
     try {
       if (customData && (customData.startsWith('{') || customData.startsWith('['))) {
@@ -71,24 +76,24 @@ export default function App({ services }: AppProps) {
     } catch {
       data = customData;
     }
-    
+
     emitEvent(customEvent, data);
     setCustomEvent('');
     setCustomData('');
   };
-  
+
   const handleSubscribe = (event: string) => {
     if (!subscribedEvents.includes(event)) {
-      setSubscribedEvents(prev => [...prev, event]);
+      setSubscribedEvents((prev) => [...prev, event]);
       notification.info(`Subscribed to: ${event}`);
     }
   };
-  
+
   const handleUnsubscribe = (event: string) => {
-    setSubscribedEvents(prev => prev.filter(e => e !== event));
+    setSubscribedEvents((prev) => prev.filter((e) => e !== event));
     notification.info(`Unsubscribed from: ${event}`);
   };
-  
+
   const presetEvents = [
     { name: 'user:login', data: { userId: '123', username: 'john_doe' } },
     { name: 'user:logout', data: { userId: '123' } },
@@ -97,29 +102,22 @@ export default function App({ services }: AppProps) {
     { name: 'navigation:change', data: { path: '/dashboard' } },
     { name: 'modal:open', data: { modalId: 'confirm-dialog' } },
     { name: 'notification:show', data: { type: 'info', message: 'Hello from EventBus!' } },
-    { name: 'settings:update', data: { autoSave: true, language: 'en' } }
+    { name: 'settings:update', data: { autoSave: true, language: 'en' } },
   ];
-  
+
   return (
-    <div className="p-4 space-y-4">
-      <div className="flex items-center justify-between">
-        <h3 className="text-lg font-semibold">Event Bus Demo</h3>
-        <span className="text-xs font-mono bg-muted px-2 py-1 rounded">
-          React {React.version}
-        </span>
-      </div>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="space-y-4">
+    <div className="p-3 space-y-3">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <div className="space-y-3">
           <div>
-            <h4 className="text-sm font-medium mb-2">Emit Events</h4>
+            <h4 className="text-xs font-semibold text-muted-foreground mb-2">EMIT EVENTS</h4>
             <div className="space-y-2">
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-2 gap-1.5">
                 {presetEvents.map(({ name, data }) => (
                   <button
                     key={name}
                     onClick={() => emitEvent(name, data)}
-                    className="px-3 py-1.5 text-xs font-medium bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
+                    className="px-2 py-1 text-[11px] font-medium bg-primary text-primary-foreground rounded hover:bg-primary/90 transition-colors"
                   >
                     {name}
                   </button>
@@ -127,107 +125,239 @@ export default function App({ services }: AppProps) {
               </div>
             </div>
           </div>
-          
+
           <div>
-            <h4 className="text-sm font-medium mb-2">Custom Event</h4>
-            <div className="space-y-2">
+            <h4 className="text-xs font-semibold text-muted-foreground mb-2">CUSTOM EVENT</h4>
+            <div className="space-y-1.5">
               <input
                 type="text"
                 value={customEvent}
                 onChange={(e) => setCustomEvent(e.target.value)}
                 placeholder="Event name (e.g., custom:event)"
-                className="w-full px-3 py-1.5 text-sm rounded-lg border border-border bg-background"
+                className="w-full px-2 py-1 text-xs rounded border border-border bg-background"
               />
               <textarea
                 value={customData}
                 onChange={(e) => setCustomData(e.target.value)}
                 placeholder="Event data (JSON or plain text)"
-                rows={3}
-                className="w-full px-3 py-1.5 text-sm rounded-lg border border-border bg-background"
+                rows={2}
+                className="w-full px-2 py-1 text-xs rounded border border-border bg-background"
               />
               <button
                 onClick={handleEmitCustom}
-                className="w-full px-4 py-2 text-sm font-medium bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
+                className="w-full px-3 py-1.5 text-xs font-medium bg-primary text-primary-foreground rounded hover:bg-primary/90 transition-colors"
               >
                 Emit Custom Event
               </button>
             </div>
           </div>
-          
+
           <div>
-            <h4 className="text-sm font-medium mb-2">Subscriptions</h4>
-            <div className="space-y-2">
-              {subscribedEvents.map(event => (
-                <div key={event} className="flex items-center justify-between p-2 rounded-lg bg-muted/50">
-                  <span className="text-sm font-mono">{event}</span>
-                  <button
-                    onClick={() => handleUnsubscribe(event)}
-                    className="text-xs text-destructive hover:underline"
-                  >
-                    Unsubscribe
-                  </button>
-                </div>
-              ))}
-              {subscribedEvents.length === 0 && (
-                <p className="text-sm text-muted-foreground">No active subscriptions</p>
-              )}
+            <div className="flex items-center justify-between mb-2">
+              <h4 className="text-xs font-semibold text-muted-foreground">SUBSCRIPTIONS</h4>
+              <span className="text-[10px] text-muted-foreground">{subscribedEvents.length} active</span>
             </div>
             
-            <div className="mt-2 space-y-2">
-              <h5 className="text-xs font-medium text-muted-foreground">Quick Subscribe:</h5>
-              <div className="flex flex-wrap gap-1">
-                {['navigation:change', 'modal:open', 'notification:show', 'settings:update']
-                  .filter(e => !subscribedEvents.includes(e))
-                  .map(event => (
-                    <button
-                      key={event}
-                      onClick={() => handleSubscribe(event)}
-                      className="px-2 py-1 text-xs rounded bg-muted hover:bg-muted/80"
-                    >
-                      + {event}
-                    </button>
-                  ))}
+            {/* Active Subscriptions as Pill Badges */}
+            <div className="p-2 bg-muted/30 rounded border border-muted-foreground/10 min-h-[60px]">
+              {subscribedEvents.length === 0 ? (
+                <p className="text-[10px] text-muted-foreground text-center py-2">
+                  No active subscriptions
+                </p>
+              ) : (
+                <div className="flex flex-wrap gap-1">
+                  {subscribedEvents.map(event => {
+                    const [category] = event.split(':');
+                    return (
+                      <div
+                        key={event}
+                        className="group inline-flex items-center gap-1 px-1.5 py-0.5 bg-background border border-border rounded-full hover:border-destructive/50 transition-colors"
+                      >
+                        <div className={`w-1 h-1 rounded-full ${
+                          category === 'user' ? 'bg-blue-500' :
+                          category === 'theme' ? 'bg-green-500' :
+                          category === 'data' ? 'bg-orange-500' :
+                          category === 'navigation' ? 'bg-purple-500' :
+                          'bg-gray-500'
+                        } animate-pulse`} />
+                        <span className="text-[10px] font-mono">{event}</span>
+                        <button
+                          onClick={() => handleUnsubscribe(event)}
+                          className="ml-0.5 text-xs leading-none text-muted-foreground hover:text-destructive transition-colors"
+                          aria-label={`Unsubscribe from ${event}`}
+                        >
+                          ×
+                        </button>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+
+            <div className="mt-2">
+              <p className="text-[10px] text-muted-foreground mb-1">Available events:</p>
+              <div className="flex flex-wrap gap-0.5">
+                {[
+                  'user:login',
+                  'user:logout',
+                  'theme:change',
+                  'data:update',
+                  'navigation:change',
+                  'modal:open',
+                  'notification:show',
+                  'settings:update'
+                ]
+                  .filter((e) => !subscribedEvents.includes(e))
+                  .map((event) => {
+                    const [, action] = event.split(':');
+                    return (
+                      <button
+                        key={event}
+                        onClick={() => handleSubscribe(event)}
+                        className="inline-flex items-center gap-0.5 px-1.5 py-0.5 text-[10px] bg-muted/50 hover:bg-muted rounded-full transition-colors group"
+                      >
+                        <span className="text-muted-foreground group-hover:text-foreground">+</span>
+                        <span className="font-mono">{action}</span>
+                      </button>
+                    );
+                  })}
               </div>
             </div>
           </div>
         </div>
-        
-        <div className="space-y-4">
-          <div>
-            <h4 className="text-sm font-medium mb-2">Event Log</h4>
-            <div className="border border-border rounded-lg p-3 bg-card max-h-96 overflow-y-auto">
+
+        <div className="space-y-3">
+          <div className="bg-background/50 backdrop-blur-sm rounded-lg p-2">
+            <div className="text-[10px] font-semibold text-muted-foreground mb-1.5">MFE EVENT STREAM</div>
+            <div className="border border-border rounded bg-card/80 max-h-56 overflow-y-auto">
               {messages.length === 0 ? (
-                <p className="text-sm text-muted-foreground">No events yet. Emit or receive events to see them here.</p>
+                <div className="flex flex-col items-center justify-center py-6 text-muted-foreground">
+                  <div className="w-8 h-8 rounded-full bg-muted/20 flex items-center justify-center mb-1.5">
+                    <svg className="w-4 h-4 text-muted-foreground/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                  </div>
+                  <p className="text-[10px] font-medium">No events yet</p>
+                  <p className="text-[9px] text-muted-foreground/60">Emit or receive events</p>
+                </div>
               ) : (
-                <div className="space-y-2">
-                  {messages.map(msg => (
-                    <div key={msg.id} className="p-2 rounded bg-muted/30 space-y-1">
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs font-mono font-medium">{msg.event}</span>
-                        <span className="text-xs text-muted-foreground">{msg.timestamp}</span>
+                <div className="divide-y divide-border/30">
+                  {messages.map((msg, index) => {
+                    const [category, ...actionParts] = msg.event.split(':');
+                    const action = actionParts.join(':');
+                    const isLatest = index === 0;
+                    const getCategoryStyle = () => {
+                      switch(category) {
+                        case 'user': return 'text-blue-500 bg-blue-500/10';
+                        case 'container': return 'text-purple-500 bg-purple-500/10';
+                        case 'theme': return 'text-green-500 bg-green-500/10';
+                        case 'data': return 'text-orange-500 bg-orange-500/10';
+                        case 'navigation': return 'text-indigo-500 bg-indigo-500/10';
+                        case 'modal': return 'text-violet-500 bg-violet-500/10';
+                        case 'notification': return 'text-yellow-500 bg-yellow-500/10';
+                        case 'settings': return 'text-emerald-500 bg-emerald-500/10';
+                        case 'config': return 'text-pink-500 bg-pink-500/10';
+                        case 'system': return 'text-cyan-500 bg-cyan-500/10';
+                        case 'mfe': return 'text-fuchsia-500 bg-fuchsia-500/10';
+                        default: return 'text-gray-500 bg-gray-500/10';
+                      }
+                    };
+                    
+                    return (
+                      <div 
+                        key={msg.id} 
+                        className={`group transition-all duration-200 hover:bg-muted/20 ${
+                          isLatest ? 'bg-primary/5' : ''
+                        }`}
+                      >
+                        <div className="p-1.5">
+                          <div className="flex items-start justify-between gap-1">
+                            <div className="flex items-center gap-1 flex-1 min-w-0">
+                              <span className={`inline-flex items-center gap-0.5 px-1 py-0.5 rounded text-[9px] font-semibold ${getCategoryStyle()}`}>
+                                <span className="w-1 h-1 rounded-full bg-current animate-pulse" />
+                                {category?.toUpperCase()}
+                              </span>
+                              {action && (
+                                <span className="text-[10px] font-mono text-foreground/80 truncate">
+                                  {action}
+                                </span>
+                              )}
+                              {msg.source !== 'React 19' && msg.source !== 'React 19 (Self)' && (
+                                <span className="px-1 py-0.5 rounded bg-muted text-[9px] font-medium text-muted-foreground">
+                                  {msg.source}
+                                </span>
+                              )}
+                            </div>
+                            <span className="text-[9px] text-muted-foreground/60 tabular-nums whitespace-nowrap">
+                              {msg.timestamp}
+                            </span>
+                          </div>
+                          {msg.data && (
+                            <div className="mt-1 ml-3">
+                              {typeof msg.data === 'object' ? (
+                                <div className="bg-muted/20 rounded p-1 border border-border/50">
+                                  <pre className="text-[9px] font-mono text-muted-foreground overflow-x-auto">
+                                    {JSON.stringify(msg.data, null, 2)}
+                                  </pre>
+                                </div>
+                              ) : (
+                                <span className="text-[9px] text-muted-foreground">
+                                  = {String(msg.data)}
+                                </span>
+                              )}
+                            </div>
+                          )}
+                        </div>
                       </div>
-                      <div className="text-xs text-muted-foreground">
-                        Source: {msg.source}
-                      </div>
-                      <pre className="text-xs font-mono bg-background p-1 rounded overflow-x-auto">
-                        {typeof msg.data === 'object' ? JSON.stringify(msg.data, null, 2) : msg.data}
-                      </pre>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               )}
             </div>
+            {messages.length > 0 && (
+              <div className="flex items-center justify-between mt-1.5">
+                <span className="text-[9px] text-muted-foreground">
+                  {messages.length} {messages.length === 1 ? 'event' : 'events'} captured
+                </span>
+                <button
+                  onClick={() => setMessages([])}
+                  className="px-1.5 py-0.5 text-[9px] font-medium text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded transition-colors"
+                >
+                  Clear Log
+                </button>
+              </div>
+            )}
           </div>
-          
-          <div className="border border-border rounded-lg p-4 bg-muted/10">
-            <div className="text-sm font-medium mb-2">React 19 Event Bus Features:</div>
-            <ul className="space-y-1 text-sm text-muted-foreground">
-              <li>✅ Pub/sub pattern for decoupled communication</li>
-              <li>✅ Cross-MFE event broadcasting</li>
-              <li>✅ Type-safe event handling</li>
-              <li>✅ Automatic cleanup on unmount</li>
-              <li>✅ Support for any data type</li>
-            </ul>
+
+          <div className="border border-border rounded p-2.5 bg-muted/10">
+            <div className="text-xs font-semibold text-muted-foreground mb-1.5">FEATURES</div>
+            <div className="grid grid-cols-2 gap-x-2 gap-y-0.5 text-[10px] text-muted-foreground">
+              <div className="flex items-center gap-1">
+                <span className="text-green-500">●</span>
+                <span>Pub/sub pattern</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <span className="text-green-500">●</span>
+                <span>Cross-MFE events</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <span className="text-green-500">●</span>
+                <span>Type-safe handling</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <span className="text-green-500">●</span>
+                <span>Auto cleanup</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <span className="text-green-500">●</span>
+                <span>Any data type</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <span className="text-green-500">●</span>
+                <span>Event history</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
