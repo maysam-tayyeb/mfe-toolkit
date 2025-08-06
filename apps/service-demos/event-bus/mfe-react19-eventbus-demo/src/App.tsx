@@ -228,42 +228,106 @@ export default function App({ services }: AppProps) {
         </div>
 
         <div className="space-y-3">
-          <div>
-            <div className="flex items-center justify-between mb-1.5">
-              <h4 className="text-xs font-semibold text-muted-foreground">EVENT LOG</h4>
-              {messages.length > 0 && (
-                <button
-                  onClick={() => setMessages([])}
-                  className="px-1.5 py-0.5 text-[10px] font-medium text-destructive hover:bg-destructive/10 rounded transition-colors"
-                >
-                  Clear
-                </button>
-              )}
-            </div>
-            <div className="border border-border rounded p-2 bg-card max-h-64 overflow-y-auto">
+          <div className="bg-background/50 backdrop-blur-sm rounded-lg p-2">
+            <div className="text-[10px] font-semibold text-muted-foreground mb-1.5">MFE EVENT STREAM</div>
+            <div className="border border-border rounded bg-card/80 max-h-56 overflow-y-auto">
               {messages.length === 0 ? (
-                <p className="text-xs text-muted-foreground text-center py-4">
-                  No events yet. Emit or receive events to see them here.
-                </p>
+                <div className="flex flex-col items-center justify-center py-6 text-muted-foreground">
+                  <div className="w-8 h-8 rounded-full bg-muted/20 flex items-center justify-center mb-1.5">
+                    <svg className="w-4 h-4 text-muted-foreground/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                  </div>
+                  <p className="text-[10px] font-medium">No events yet</p>
+                  <p className="text-[9px] text-muted-foreground/60">Emit or receive events</p>
+                </div>
               ) : (
-                <div className="space-y-1">
-                  {messages.map((msg) => (
-                    <div key={msg.id} className="p-1.5 rounded bg-muted/30 space-y-0.5">
-                      <div className="flex items-center justify-between">
-                        <span className="text-[11px] font-mono font-medium">{msg.event}</span>
-                        <span className="text-[10px] text-muted-foreground">{msg.timestamp}</span>
+                <div className="divide-y divide-border/30">
+                  {messages.map((msg, index) => {
+                    const [category, ...actionParts] = msg.event.split(':');
+                    const action = actionParts.join(':');
+                    const isLatest = index === 0;
+                    const getCategoryStyle = () => {
+                      switch(category) {
+                        case 'user': return 'text-blue-500 bg-blue-500/10';
+                        case 'container': return 'text-purple-500 bg-purple-500/10';
+                        case 'theme': return 'text-green-500 bg-green-500/10';
+                        case 'data': return 'text-orange-500 bg-orange-500/10';
+                        case 'navigation': return 'text-indigo-500 bg-indigo-500/10';
+                        case 'modal': return 'text-violet-500 bg-violet-500/10';
+                        case 'notification': return 'text-yellow-500 bg-yellow-500/10';
+                        case 'settings': return 'text-emerald-500 bg-emerald-500/10';
+                        case 'config': return 'text-pink-500 bg-pink-500/10';
+                        case 'system': return 'text-cyan-500 bg-cyan-500/10';
+                        case 'mfe': return 'text-fuchsia-500 bg-fuchsia-500/10';
+                        default: return 'text-gray-500 bg-gray-500/10';
+                      }
+                    };
+                    
+                    return (
+                      <div 
+                        key={msg.id} 
+                        className={`group transition-all duration-200 hover:bg-muted/20 ${
+                          isLatest ? 'bg-primary/5' : ''
+                        }`}
+                      >
+                        <div className="p-1.5">
+                          <div className="flex items-start justify-between gap-1">
+                            <div className="flex items-center gap-1 flex-1 min-w-0">
+                              <span className={`inline-flex items-center gap-0.5 px-1 py-0.5 rounded text-[9px] font-semibold ${getCategoryStyle()}`}>
+                                <span className="w-1 h-1 rounded-full bg-current animate-pulse" />
+                                {category?.toUpperCase()}
+                              </span>
+                              {action && (
+                                <span className="text-[10px] font-mono text-foreground/80 truncate">
+                                  {action}
+                                </span>
+                              )}
+                              {msg.source !== 'React 19' && msg.source !== 'React 19 (Self)' && (
+                                <span className="px-1 py-0.5 rounded bg-muted text-[9px] font-medium text-muted-foreground">
+                                  {msg.source}
+                                </span>
+                              )}
+                            </div>
+                            <span className="text-[9px] text-muted-foreground/60 tabular-nums whitespace-nowrap">
+                              {msg.timestamp}
+                            </span>
+                          </div>
+                          {msg.data && (
+                            <div className="mt-1 ml-3">
+                              {typeof msg.data === 'object' ? (
+                                <div className="bg-muted/20 rounded p-1 border border-border/50">
+                                  <pre className="text-[9px] font-mono text-muted-foreground overflow-x-auto">
+                                    {JSON.stringify(msg.data, null, 2)}
+                                  </pre>
+                                </div>
+                              ) : (
+                                <span className="text-[9px] text-muted-foreground">
+                                  = {String(msg.data)}
+                                </span>
+                              )}
+                            </div>
+                          )}
+                        </div>
                       </div>
-                      <div className="text-[10px] text-muted-foreground">Source: {msg.source}</div>
-                      <pre className="text-[10px] font-mono bg-background p-0.5 rounded overflow-x-auto">
-                        {typeof msg.data === 'object'
-                          ? JSON.stringify(msg.data, null, 2)
-                          : msg.data}
-                      </pre>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               )}
             </div>
+            {messages.length > 0 && (
+              <div className="flex items-center justify-between mt-1.5">
+                <span className="text-[9px] text-muted-foreground">
+                  {messages.length} {messages.length === 1 ? 'event' : 'events'} captured
+                </span>
+                <button
+                  onClick={() => setMessages([])}
+                  className="px-1.5 py-0.5 text-[9px] font-medium text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded transition-colors"
+                >
+                  Clear Log
+                </button>
+              </div>
+            )}
           </div>
 
           <div className="border border-border rounded p-2.5 bg-muted/10">

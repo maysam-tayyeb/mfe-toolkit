@@ -3,17 +3,11 @@ import { RegistryMFELoader } from '@/components/RegistryMFELoader';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Radio, Send, Trash2, X } from 'lucide-react';
+import { Radio, Send, X } from 'lucide-react';
+import { EventLog, type EventMessage } from '@mfe/design-system';
 import { getMFEServicesSingleton } from '@/services/mfe-services-singleton';
 import { useToast } from '@/components/ui/use-toast';
 
-type EventMessage = {
-  id: string;
-  event: string;
-  data: any;
-  timestamp: string;
-  source: string;
-};
 
 export function EventBusServiceDemoPage() {
   const [containerMessages, setContainerMessages] = useState<EventMessage[]>([]);
@@ -226,88 +220,12 @@ export function EventBusServiceDemoPage() {
             </div>
 
             {/* Container Event Log */}
-            <div>
-              <div className="flex items-center justify-between mb-2">
-                <h4 className="text-xs font-semibold text-muted-foreground">EVENT LOG</h4>
-                <div className="flex items-center gap-2">
-                  <Badge variant="secondary" className="text-[10px] px-1.5 py-0">
-                    {containerMessages.length} events
-                  </Badge>
-                  {containerMessages.length > 0 && (
-                    <Button
-                      onClick={() => setContainerMessages([])}
-                      size="sm"
-                      variant="ghost"
-                      className="h-5 px-1.5 text-xs hover:bg-destructive/10"
-                    >
-                      Clear
-                    </Button>
-                  )}
-                </div>
-              </div>
-              <div className="border border-border rounded-lg bg-card/50 backdrop-blur-sm overflow-hidden">
-                <div className="max-h-64 overflow-y-auto">
-                  {containerMessages.length === 0 ? (
-                    <div className="flex flex-col items-center justify-center py-8 text-muted-foreground">
-                      <Radio className="h-8 w-8 mb-2 opacity-20" />
-                      <p className="text-xs">No events captured yet</p>
-                      <p className="text-[10px] mt-1">Emit events to see them here</p>
-                    </div>
-                  ) : (
-                    <div className="divide-y divide-border/50">
-                      {containerMessages.map((msg, index) => {
-                        const [category, action] = msg.event.split(':');
-                        const categoryColor = 
-                          category === 'user' ? 'text-blue-500' :
-                          category === 'container' ? 'text-purple-500' :
-                          category === 'theme' ? 'text-green-500' :
-                          category === 'data' ? 'text-orange-500' :
-                          category === 'navigation' ? 'text-indigo-500' :
-                          category === 'config' ? 'text-pink-500' :
-                          category === 'system' ? 'text-cyan-500' :
-                          'text-gray-500';
-                        
-                        return (
-                          <div key={msg.id} className="group hover:bg-muted/30 transition-colors">
-                            <div className="p-2">
-                              {/* Event Header */}
-                              <div className="flex items-start justify-between mb-1">
-                                <div className="flex items-center gap-2">
-                                  <span className={`text-[10px] font-semibold ${categoryColor}`}>
-                                    {category?.toUpperCase()}
-                                  </span>
-                                  <span className="text-xs font-mono">{action || msg.event}</span>
-                                  {msg.source !== 'Container' && (
-                                    <Badge variant="outline" className="text-[10px] px-1 py-0">
-                                      {msg.source}
-                                    </Badge>
-                                  )}
-                                </div>
-                                <span className="text-[10px] text-muted-foreground tabular-nums">
-                                  {msg.timestamp}
-                                </span>
-                              </div>
-                              
-                              {/* Event Data */}
-                              {msg.data && (
-                                <div className="mt-1 bg-muted/20 rounded p-1.5">
-                                  <pre className="text-[10px] font-mono text-muted-foreground overflow-x-auto">
-                                    {typeof msg.data === 'object' 
-                                      ? JSON.stringify(msg.data, null, 2)
-                                      : String(msg.data)
-                                    }
-                                  </pre>
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
+            <EventLog
+              messages={containerMessages}
+              onClear={() => setContainerMessages([])}
+              emptyMessage="No events yet"
+              emptySubMessage="Emit events to see them here"
+            />
           </div>
         </CardContent>
       </Card>

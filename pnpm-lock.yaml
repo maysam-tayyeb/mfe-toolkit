@@ -123,6 +123,9 @@ importers:
       '@mfe-toolkit/state-middleware-performance':
         specifier: workspace:*
         version: link:../../packages/mfe-toolkit-state-middleware-performance
+      '@mfe/design-system':
+        specifier: workspace:*
+        version: link:../../packages/design-system
       '@mfe/shared':
         specifier: workspace:*
         version: link:../../packages/shared
