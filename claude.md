@@ -207,7 +207,7 @@ The toolkit is split into several npm packages under the `@mfe-toolkit` organiza
 
 1. Create new app in `apps/` directory following naming convention `mfe-{name}`
 2. Export default function that accepts MFE services
-3. Configure Vite to build ES module format
+3. **Important**: MFEs use esbuild for building (not Vite)
 4. Add to container's MFE registry
 5. Ensure proper TypeScript types from `@mfe-toolkit/core`
 
@@ -336,3 +336,7 @@ If you don't know the correct commands for a project, ask the user and suggest u
 ## Mental Model
 
 - **Think, analyse, plan, then execute**
+
+## Build Process Notes
+
+- **MFEs only use esbuild to build. Important!!!**
