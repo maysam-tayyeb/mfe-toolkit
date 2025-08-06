@@ -6,6 +6,9 @@ export default defineConfig({
   server: {
     port: 3109
   },
+  define: {
+    'process.env': {}
+  },
   build: {
     lib: {
       entry: 'src/main.tsx',
@@ -14,11 +17,12 @@ export default defineConfig({
       formats: ['es']
     },
     rollupOptions: {
-      external: ['react', 'react-dom'],
+      external: ['react', 'react-dom', 'react-dom/client', 'react/jsx-runtime'],
       output: {
         globals: {
           react: 'React',
-          'react-dom': 'ReactDOM'
+          'react-dom': 'ReactDOM',
+          'react-dom/client': 'ReactDOM'
         }
       }
     }

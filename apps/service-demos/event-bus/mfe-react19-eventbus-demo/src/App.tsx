@@ -195,7 +195,7 @@ export default function App({ services }: AppProps) {
         <div className="space-y-4">
           <div>
             <h4 className="text-sm font-medium mb-2">Event Log</h4>
-            <div className="border border-border rounded-lg p-3 bg-card h-96 overflow-y-auto">
+            <div className="border border-border rounded-lg p-3 bg-card max-h-96 overflow-y-auto">
               {messages.length === 0 ? (
                 <p className="text-sm text-muted-foreground">No events yet. Emit or receive events to see them here.</p>
               ) : (
