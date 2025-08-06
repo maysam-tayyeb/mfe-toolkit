@@ -75,15 +75,6 @@ export const Navigation: React.FC = () => {
       ]
     }
   ];
-  
-  // Filter navigation items based on search
-  const filteredSections = navSections.map(section => ({
-    ...section,
-    items: section.items.filter(item => 
-      item.label.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.description?.toLowerCase().includes(searchQuery.toLowerCase())
-    )
-  })).filter(section => section.items.length > 0);
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background border-b shadow-sm">
@@ -146,35 +137,6 @@ export const Navigation: React.FC = () => {
                 </div>
               ))}
             </div>
-            
-            {/* Search Bar */}
-            {!collapsed && (
-              <div className="relative mt-4">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <input
-                  type="text"
-                  placeholder="Search navigation..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className={cn(
-                    "w-full pl-10 pr-3 py-2 text-sm rounded-md",
-                    "bg-background/50 border border-border/50",
-                    "focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/50",
-                    "transition-all duration-300 placeholder:text-muted-foreground/50"
-                  )}
-                />
-                {searchQuery && (
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => setSearchQuery('')}
-                    className="absolute right-1 top-1/2 -translate-y-1/2 h-6 w-6"
-                  >
-                    <X className="h-3 w-3" />
-                  </Button>
-                )}
-              </div>
-            )}
           </div>
 
           {/* Right Side Actions */}
@@ -182,7 +144,7 @@ export const Navigation: React.FC = () => {
             {/* Theme Toggle */}
             <Button
               variant="ghost"
-              size={collapsed ? "icon" : "default"}
+              size="icon"
               onClick={cycleTheme}
               aria-label="Toggle theme"
               className="h-8 w-8"
@@ -199,27 +161,6 @@ export const Navigation: React.FC = () => {
             >
               {mobileMenuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
             </Button>
-            
-            {/* User Profile */}
-            {!collapsed && (
-              <div className="flex items-center gap-3 p-3 rounded-md bg-muted/50 border border-border/50">
-                <div className="h-10 w-10 rounded-md bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center">
-                  <User className="h-5 w-5 text-primary" />
-                </div>
-                <div className="flex-1">
-                  <p className="text-sm font-semibold">Admin User</p>
-                  <p className="text-xs text-muted-foreground">admin@mfe.dev</p>
-                </div>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-8 w-8 hover:bg-destructive/10 hover:text-destructive transition-colors duration-300"
-                  aria-label="Logout"
-                >
-                  <LogOut className="h-4 w-4" />
-                </Button>
-              </div>
-            )}
           </div>
         </div>
 
