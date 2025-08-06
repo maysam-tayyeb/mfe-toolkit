@@ -6,9 +6,9 @@ A comprehensive toolkit and reference architecture for building production-ready
 
 - 🚀 **Dynamic MFE Loading** - Load microfrontends on-demand with ES modules
 - 📡 **Inter-MFE Communication** - Real-time event bus for MFE-to-MFE messaging ([see guide](./docs/mfe-communication-guide.md))
-- 🎯 **Shared Services** - Modal, notification, auth, and logging services
+- 🎯 **Shared Services** - Modal, notification, auth, and logging services ([see demos](./docs/service-demos.md))
 - 📦 **Optimized Bundles** - 96% smaller with import maps (576KB → 14KB)
-- 🔄 **Cross-Version Support** - MFEs with different framework versions work seamlessly together
+- 🔄 **Cross-Framework Support** - React, Vue, and Vanilla JS MFEs work together ([see demos](./docs/service-demos.md))
 - 🛠️ **Modern Tooling** - Vite, TypeScript, pnpm workspaces, and ESBuild
 - 🔧 **Universal State Manager** - Cross-framework state management (React, Vue, Vanilla JS) with proxy-based reactivity and middleware support
 
@@ -67,6 +67,7 @@ A comprehensive toolkit and reference architecture for building production-ready
 - [Architecture Decisions](./docs/architecture/architecture-decisions.md) - Key design choices and rationale
 - [State Management Architecture](./docs/architecture/state-management-architecture.md) - ContextBridge vs Universal State Manager
 - [MFE Loading Guide](./docs/architecture/mfe-loading-guide.md) - How MFEs are loaded and best practices
+- [Service Demonstrations](./docs/service-demos.md) - Interactive demos of all platform services
 - [Comprehensive Roadmap](./docs/architecture/comprehensive-roadmap.md) - Complete development roadmap with completed work and future plans
 
 ## 📦 NPM Packages
@@ -202,6 +203,25 @@ pnpm dev:state-react   # State demo React MFE
 pnpm dev:state-vue     # State demo Vue MFE
 pnpm dev:state-demos   # All state demo MFEs in parallel
 ```
+
+### Service Demonstration MFEs
+
+The platform includes comprehensive service demonstrations across multiple frameworks:
+
+#### Modal Service Demos
+- **React 19**: Full modal capabilities with JSX support
+- **React 17**: Legacy React with text-only content
+- **Vue 3**: Cross-framework integration demo
+- **Vanilla TS**: Lightweight implementation (5KB)
+
+#### Event Bus Demo
+- **React 19**: Interactive pub/sub demonstration with real-time event log
+
+Access demos at:
+- Modal Service: http://localhost:3000/services/modal
+- Event Bus: http://localhost:3000/services/event-bus
+
+See [Service Demonstrations](./docs/service-demos.md) for detailed documentation.
 
 ### Production Mode
 
