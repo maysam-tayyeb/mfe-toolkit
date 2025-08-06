@@ -7,77 +7,31 @@ import { Theme } from '@mfe-toolkit/core';
 import { getThemeService } from '@/services/theme-service';
 import { 
   Moon, Sun, Menu, X, Home, LayoutDashboard, Layers, Radio, 
-  Database, AlertCircle, Package, ChevronRight, Sparkles
+  Database, AlertCircle, Package, ChevronDown, Sparkles
 } from 'lucide-react';
+
+interface NavItem {
+  path: string;
+  label: string;
+  icon?: React.ReactNode;
+}
 
 interface NavSection {
   title: string;
-  items: Array<{
-    path: string;
-    label: string;
-    icon?: React.ReactNode;
-    badge?: string;
-    description?: string;
-  }>;
+  items: NavItem[];
 }
-
-interface NavItemProps {
-  item: NavSection['items'][0];
-  isActive: boolean;
-  collapsed: boolean;
-  onClick?: () => void;
-}
-
-const NavItem: React.FC<NavItemProps> = ({ item, isActive, collapsed, onClick }) => {
-  return (
-    <Link
-      to={item.path}
-      onClick={onClick}
-      className={cn(
-        "group flex items-center gap-3 px-3 py-2 rounded-md transition-colors",
-        isActive
-          ? "bg-primary/10 text-primary"
-          : "hover:bg-muted text-muted-foreground hover:text-foreground",
-        collapsed && "justify-center px-2"
-      )}
-    >
-      {/* Icon */}
-      <div className="flex items-center justify-center">
-        {item.icon}
-      </div>
-      
-      {/* Label */}
-      {!collapsed && (
-        <span className="font-medium text-sm">{item.label}</span>
-      )}
-      
-      {/* Tooltip for collapsed state */}
-      {collapsed && (
-        <div className={cn(
-          "absolute left-full ml-2 px-2 py-1 bg-popover text-popover-foreground rounded shadow-sm",
-          "opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto",
-          "transition-opacity z-50 whitespace-nowrap text-sm"
-        )}>
-          {item.label}
-        </div>
-      )}
-    </Link>
-  );
-};
 
 export const Navigation: React.FC = () => {
   const location = useLocation();
-  const [collapsed, setCollapsed] = useState(false);
   const [theme, setTheme] = useState<Theme>('light');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const themeService = getThemeService();
 
   useEffect(() => {
-    // Subscribe to theme changes from the theme service
     const unsubscribe = themeService.subscribe((newTheme) => {
       setTheme(newTheme);
     });
-
     return unsubscribe;
   }, [themeService]);
 
@@ -85,7 +39,6 @@ export const Navigation: React.FC = () => {
     if (themeService.cycleTheme) {
       themeService.cycleTheme();
     } else {
-      // Fallback for basic light/dark toggle
       const newTheme = theme === 'light' ? 'dark' : 'light';
       themeService.setTheme(newTheme);
     }
@@ -95,175 +48,153 @@ export const Navigation: React.FC = () => {
     {
       title: 'Main',
       items: [
-        { 
-          path: '/', 
-          label: 'Home', 
-          icon: <Home className="h-4 w-4" />
-        },
-        { 
-          path: '/dashboard', 
-          label: 'Dashboard', 
-          icon: <LayoutDashboard className="h-4 w-4" />
-        },
+        { path: '/', label: 'Home', icon: <Home className="h-4 w-4" /> },
+        { path: '/dashboard', label: 'Dashboard', icon: <LayoutDashboard className="h-4 w-4" /> },
       ]
     },
     {
       title: 'Services',
       items: [
-        { 
-          path: '/services/modal', 
-          label: 'Modal', 
-          icon: <Layers className="h-4 w-4" />
-        },
-        { 
-          path: '/services/event-bus', 
-          label: 'Event Bus', 
-          icon: <Radio className="h-4 w-4" />
-        },
+        { path: '/services/modal', label: 'Modal', icon: <Layers className="h-4 w-4" /> },
+        { path: '/services/event-bus', label: 'Event Bus', icon: <Radio className="h-4 w-4" /> },
       ]
     },
     {
       title: 'Features',
       items: [
-        { 
-          path: '/mfe-communication', 
-          label: 'Communication', 
-          icon: <Radio className="h-4 w-4" />
-        },
-        { 
-          path: '/universal-state-demo', 
-          label: 'State', 
-          icon: <Database className="h-4 w-4" />
-        },
-        { 
-          path: '/error-boundary-demo', 
-          label: 'Errors', 
-          icon: <AlertCircle className="h-4 w-4" />
-        },
+        { path: '/mfe-communication', label: 'Communication', icon: <Radio className="h-4 w-4" /> },
+        { path: '/universal-state-demo', label: 'State', icon: <Database className="h-4 w-4" /> },
+        { path: '/error-boundary-demo', label: 'Errors', icon: <AlertCircle className="h-4 w-4" /> },
       ]
     },
     {
       title: 'MFEs',
       items: [
-        {
-          path: `/mfe/${MFE_CONFIG.serviceExplorer.id}`,
-          label: 'Explorer',
-          icon: <Package className="h-4 w-4" />
-        },
-        {
-          path: `/mfe/${MFE_CONFIG.legacyServiceExplorer.id}`,
-          label: 'Legacy',
-          icon: <Package className="h-4 w-4" />
-        },
+        { path: `/mfe/${MFE_CONFIG.serviceExplorer.id}`, label: 'Explorer', icon: <Package className="h-4 w-4" /> },
+        { path: `/mfe/${MFE_CONFIG.legacyServiceExplorer.id}`, label: 'Legacy', icon: <Package className="h-4 w-4" /> },
       ]
     }
   ];
 
   return (
-    <>
-      {/* Mobile Menu Button */}
-      <Button
-        variant="ghost"
-        size="icon"
-        onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-        className="fixed top-4 left-4 z-50 lg:hidden bg-background/80 backdrop-blur-sm border shadow-sm"
-      >
-        {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-      </Button>
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-background border-b shadow-sm">
+      <div className="mx-auto">
+        <div className="flex items-center justify-between h-14 px-4 sm:px-6 lg:px-8">
+          {/* Logo */}
+          <div className="flex items-center">
+            <Link to="/" className="flex items-center gap-2 mr-6">
+              <Sparkles className="h-5 w-5 text-primary" />
+              <span className="font-semibold text-sm hidden sm:block">MFE Platform</span>
+            </Link>
 
-      {/* Mobile Overlay */}
-      {mobileMenuOpen && (
-        <div 
-          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 lg:hidden"
-          onClick={() => setMobileMenuOpen(false)}
-        />
-      )}
+            {/* Desktop Navigation */}
+            <div className="hidden lg:flex items-center space-x-1">
+              {navSections.map((section) => (
+                <div key={section.title} className="relative">
+                  <button
+                    onClick={() => setActiveDropdown(activeDropdown === section.title ? null : section.title)}
+                    className={cn(
+                      "flex items-center gap-1 px-2.5 py-1.5 text-xs font-medium rounded-md transition-colors",
+                      section.items.some(item => location.pathname === item.path)
+                        ? "text-primary bg-primary/10"
+                        : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                    )}
+                  >
+                    {section.title}
+                    <ChevronDown className={cn(
+                      "h-3 w-3 transition-transform",
+                      activeDropdown === section.title && "rotate-180"
+                    )} />
+                  </button>
 
-      {/* Navigation Sidebar */}
-      <nav className={cn(
-        "fixed left-0 top-0 h-full transition-all duration-300 z-50",
-        "bg-background border-r",
-        collapsed ? "w-16" : "w-56",
-        // Mobile styles
-        "lg:translate-x-0",
-        mobileMenuOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
-      )}>
-        <div className="flex flex-col h-full">
-          {/* Header */}
-          <div className="p-3 border-b">
-            <div className="flex items-center justify-between">
-              {!collapsed && (
-                <Link 
-                  to="/" 
-                  className="flex items-center gap-2"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  <Sparkles className="h-5 w-5 text-primary" />
-                  <span className="font-semibold text-sm">MFE Platform</span>
-                </Link>
-              )}
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => setCollapsed(!collapsed)}
-                className="h-8 w-8 hidden lg:flex"
-                aria-label="Toggle sidebar"
-              >
-                {collapsed ? <ChevronRight className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
-              </Button>
+                  {/* Dropdown Menu */}
+                  {activeDropdown === section.title && (
+                    <>
+                      <div 
+                        className="fixed inset-0 z-40" 
+                        onClick={() => setActiveDropdown(null)}
+                      />
+                      <div className="absolute top-full left-0 mt-1 w-44 py-1 bg-popover border rounded-md shadow-lg z-50">
+                        {section.items.map((item) => (
+                          <Link
+                            key={item.path}
+                            to={item.path}
+                            onClick={() => setActiveDropdown(null)}
+                            className={cn(
+                              "flex items-center gap-2 px-3 py-1.5 text-xs transition-colors",
+                              location.pathname === item.path
+                                ? "bg-primary/10 text-primary"
+                                : "hover:bg-muted text-muted-foreground hover:text-foreground"
+                            )}
+                          >
+                            {item.icon}
+                            <span>{item.label}</span>
+                          </Link>
+                        ))}
+                      </div>
+                    </>
+                  )}
+                </div>
+              ))}
             </div>
           </div>
 
-          {/* Navigation Sections */}
-          <div className="flex-1 overflow-y-auto py-2 px-2">
-            {navSections.map((section) => (
-              <div key={section.title} className="mb-4">
-                {!collapsed && (
-                  <h3 className="px-3 text-xs font-medium text-muted-foreground uppercase mb-2">
-                    {section.title}
-                  </h3>
-                )}
-                <div className="space-y-1">
-                  {section.items.map((item) => (
-                    <NavItem
-                      key={item.path}
-                      item={item}
-                      isActive={location.pathname === item.path}
-                      collapsed={collapsed}
-                      onClick={() => setMobileMenuOpen(false)}
-                    />
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Footer */}
-          <div className="border-t p-2">
+          {/* Right Side Actions */}
+          <div className="flex items-center gap-2">
             {/* Theme Toggle */}
             <Button
               variant="ghost"
-              size={collapsed ? "icon" : "sm"}
+              size="icon"
               onClick={cycleTheme}
-              className={cn(
-                "w-full justify-start gap-2",
-                collapsed && "justify-center"
-              )}
-              aria-label="Change theme"
+              aria-label="Toggle theme"
+              className="h-8 w-8"
             >
-              {theme === 'dark' ? 
-                <Sun className="h-4 w-4" /> : 
-                <Moon className="h-4 w-4" />
-              }
-              {!collapsed && (
-                <span className="text-sm">
-                  {theme === 'dark' ? 'Light' : 'Dark'}
-                </span>
-              )}
+              {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+            </Button>
+
+            {/* Mobile Menu Button */}
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="lg:hidden h-8 w-8"
+            >
+              {mobileMenuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
             </Button>
           </div>
         </div>
-      </nav>
-    </>
+
+        {/* Mobile Menu */}
+        {mobileMenuOpen && (
+          <div className="lg:hidden border-t bg-background">
+            <div className="px-2 pt-2 pb-3 space-y-1">
+              {navSections.map((section) => (
+                <div key={section.title} className="mb-2">
+                  <div className="px-3 py-2 text-xs font-semibold text-muted-foreground uppercase">
+                    {section.title}
+                  </div>
+                  {section.items.map((item) => (
+                    <Link
+                      key={item.path}
+                      to={item.path}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className={cn(
+                        "flex items-center gap-2 px-3 py-2 text-sm rounded-md transition-colors",
+                        location.pathname === item.path
+                          ? "bg-primary/10 text-primary"
+                          : "hover:bg-muted text-muted-foreground hover:text-foreground"
+                      )}
+                    >
+                      {item.icon}
+                      <span>{item.label}</span>
+                    </Link>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </nav>
   );
 };

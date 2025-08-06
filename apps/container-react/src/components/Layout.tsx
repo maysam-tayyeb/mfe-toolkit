@@ -7,12 +7,10 @@ import { Toaster } from '@/components/ui/toaster';
 
 export const Layout: React.FC = () => {
   return (
-    <div className="min-h-screen bg-background flex relative">
+    <div className="min-h-screen bg-background">
       <Navigation />
-      <div className="flex-1 lg:ml-56 transition-all duration-300"> {/* ml-56 matches the w-56 width of expanded sidebar */}
-        <main className="px-8 py-8">
-          {/* Add padding-top on mobile to account for mobile menu button */}
-          <div className="lg:hidden h-16" />
+      <div className="pt-14"> {/* Add padding-top to account for fixed navbar */}
+        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <Outlet />
         </main>
       </div>
