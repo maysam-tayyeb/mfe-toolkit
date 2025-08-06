@@ -1,9 +1,78 @@
+import { useState, useEffect, useRef } from 'react';
 import { RegistryMFELoader } from '@/components/RegistryMFELoader';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Radio } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Radio, Send, Trash2 } from 'lucide-react';
+import { getMFEServicesSingleton } from '@/services/mfe-services-singleton';
+import { useToast } from '@/components/ui/use-toast';
+
+type EventMessage = {
+  id: string;
+  event: string;
+  data: any;
+  timestamp: string;
+  source: string;
+};
 
 export function EventBusServiceDemoPage() {
+  const [containerMessages, setContainerMessages] = useState<EventMessage[]>([]);
+  const [subscribedEvents, setSubscribedEvents] = useState<string[]>([
+    'user:login',
+    'user:logout',
+    'theme:change',
+    'data:update'
+  ]);
+  const subscriptionsRef = useRef<Array<() => void>>([]);
+  const { eventBus, logger } = getMFEServicesSingleton();
+  const { toast } = useToast();
+
+  const addContainerMessage = (event: string, data: any, source: string = 'Container') => {
+    const message: EventMessage = {
+      id: Date.now().toString(),
+      event,
+      data,
+      timestamp: new Date().toLocaleTimeString(),
+      source
+    };
+    setContainerMessages(prev => [message, ...prev].slice(0, 10));
+    logger?.info(`Container EventBus: ${event}`, data);
+  };
+
+  useEffect(() => {
+    // Clean up old subscriptions first
+    subscriptionsRef.current.forEach(unsubscribe => unsubscribe());
+    
+    // Create new subscriptions for container
+    subscriptionsRef.current = subscribedEvents.map(event =>
+      eventBus.on(event, (data: any) => {
+        addContainerMessage(event, data, 'MFE');
+      })
+    );
+
+    return () => {
+      subscriptionsRef.current.forEach(unsubscribe => unsubscribe());
+      subscriptionsRef.current = [];
+    };
+  }, [subscribedEvents, eventBus]);
+
+  const emitFromContainer = (event: string, data: any) => {
+    eventBus.emit(event, data);
+    addContainerMessage(event, data, 'Container (Self)');
+    toast({
+      title: 'Event Emitted',
+      description: `Container emitted: ${event}`,
+    });
+  };
+
+  const containerPresetEvents = [
+    { name: 'container:init', data: { version: '1.0.0', timestamp: Date.now() } },
+    { name: 'container:theme', data: { theme: 'system', mode: 'auto' } },
+    { name: 'container:navigate', data: { path: '/services/event-bus', from: 'container' } },
+    { name: 'user:profile', data: { userId: 'admin', role: 'administrator' } },
+    { name: 'config:update', data: { feature: 'eventbus', enabled: true } },
+    { name: 'system:health', data: { status: 'healthy', uptime: 3600 } }
+  ];
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -53,17 +122,129 @@ export function EventBusServiceDemoPage() {
         </CardContent>
       </Card>
 
+      {/* Container Event Controls */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Send className="h-5 w-5" />
+            Container Event Emitter
+          </CardTitle>
+          <CardDescription>
+            Emit events from the container to demonstrate cross-boundary communication
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Container Event Emitters */}
+            <div className="space-y-4">
+              <div>
+                <h4 className="text-sm font-medium mb-2">Emit Container Events</h4>
+                <div className="grid grid-cols-2 gap-2">
+                  {containerPresetEvents.map(({ name, data }) => (
+                    <Button
+                      key={name}
+                      onClick={() => emitFromContainer(name, data)}
+                      size="sm"
+                      variant="outline"
+                      className="text-xs"
+                    >
+                      {name}
+                    </Button>
+                  ))}
+                </div>
+              </div>
+              
+              {/* Container Subscriptions */}
+              <div>
+                <h4 className="text-sm font-medium mb-2">Container Subscriptions</h4>
+                <div className="space-y-2">
+                  {subscribedEvents.map(event => (
+                    <div key={event} className="flex items-center justify-between p-2 rounded-lg bg-muted/50">
+                      <span className="text-sm font-mono">{event}</span>
+                      <button
+                        onClick={() => setSubscribedEvents(prev => prev.filter(e => e !== event))}
+                        className="text-xs text-destructive hover:underline"
+                      >
+                        Unsubscribe
+                      </button>
+                    </div>
+                  ))}
+                </div>
+                <div className="mt-2">
+                  <h5 className="text-xs font-medium text-muted-foreground mb-1">Quick Subscribe:</h5>
+                  <div className="flex flex-wrap gap-1">
+                    {['navigation:change', 'modal:open', 'notification:show', 'settings:update']
+                      .filter(e => !subscribedEvents.includes(e))
+                      .map(event => (
+                        <button
+                          key={event}
+                          onClick={() => setSubscribedEvents(prev => [...prev, event])}
+                          className="px-2 py-1 text-xs rounded bg-muted hover:bg-muted/80"
+                        >
+                          + {event}
+                        </button>
+                      ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Container Event Log */}
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <h4 className="text-sm font-medium">Container Event Log</h4>
+                {containerMessages.length > 0 && (
+                  <Button
+                    onClick={() => setContainerMessages([])}
+                    size="sm"
+                    variant="ghost"
+                    className="h-6 px-2 text-xs"
+                  >
+                    <Trash2 className="h-3 w-3 mr-1" />
+                    Clear
+                  </Button>
+                )}
+              </div>
+              <div className="border border-border rounded-lg p-3 bg-card max-h-64 overflow-y-auto">
+                {containerMessages.length === 0 ? (
+                  <p className="text-sm text-muted-foreground">
+                    No container events yet. Events will appear here when emitted.
+                  </p>
+                ) : (
+                  <div className="space-y-2">
+                    {containerMessages.map(msg => (
+                      <div key={msg.id} className="p-2 rounded bg-muted/30 space-y-1">
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs font-mono font-medium">{msg.event}</span>
+                          <span className="text-xs text-muted-foreground">{msg.timestamp}</span>
+                        </div>
+                        <div className="text-xs text-muted-foreground">
+                          Source: {msg.source}
+                        </div>
+                        <pre className="text-xs font-mono bg-background p-1 rounded overflow-x-auto">
+                          {typeof msg.data === 'object' ? JSON.stringify(msg.data, null, 2) : msg.data}
+                        </pre>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
       {/* Interactive Demo */}
       <div className="space-y-4">
-        <h2 className="text-2xl font-semibold">Interactive Event Bus Demo</h2>
+        <h2 className="text-2xl font-semibold">MFE Event Bus Demo</h2>
         <Card className="relative overflow-hidden">
           <CardHeader>
             <div className="flex items-center justify-between">
-              <CardTitle>React 19 Event Bus Demo</CardTitle>
+              <CardTitle>React 19 MFE Event Demo</CardTitle>
               <Badge variant="default">Interactive</Badge>
             </div>
             <CardDescription>
-              Try emitting and subscribing to events in real-time
+              MFE perspective: Subscribe and emit events that interact with the container above
             </CardDescription>
           </CardHeader>
           <CardContent>

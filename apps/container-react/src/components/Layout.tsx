@@ -9,8 +9,8 @@ export const Layout: React.FC = () => {
   return (
     <div className="min-h-screen bg-background flex relative">
       <Navigation />
-      <div className="flex-1 lg:ml-72 transition-all duration-500"> {/* ml-72 matches the w-72 width of expanded sidebar */}
-        <main className="px-4 py-8 max-w-7xl mx-auto">
+      <div className="flex-1 lg:ml-56 transition-all duration-300"> {/* ml-56 matches the w-56 width of expanded sidebar */}
+        <main className="px-8 py-8">
           {/* Add padding-top on mobile to account for mobile menu button */}
           <div className="lg:hidden h-16" />
           <Outlet />
