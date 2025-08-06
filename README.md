@@ -5,12 +5,13 @@ A comprehensive toolkit and reference architecture for building production-ready
 ## ✨ Key Features
 
 - 🚀 **Dynamic MFE Loading** - Load microfrontends on-demand with ES modules
-- 📡 **Inter-MFE Communication** - Real-time event bus for MFE-to-MFE messaging ([see guide](./docs/mfe-communication-guide.md))
+- 📡 **Inter-MFE Communication** - Real-time event bus for MFE-to-MFE messaging ([see guide](./docs/guides/mfe-communication-guide.md))
 - 🎯 **Shared Services** - Modal, notification, auth, and logging services ([see demos](./docs/service-demos.md))
 - 📦 **Optimized Bundles** - 96% smaller with import maps (576KB → 14KB)
 - 🔄 **Cross-Framework Support** - React, Vue, and Vanilla JS MFEs work together ([see demos](./docs/service-demos.md))
 - 🛠️ **Modern Tooling** - Vite, TypeScript, pnpm workspaces, and ESBuild
 - 🔧 **Universal State Manager** - Cross-framework state management (React, Vue, Vanilla JS) with proxy-based reactivity and middleware support
+- 🎨 **Optimized UI/UX** - Top navigation bar, compact layouts, and responsive design for better screen real estate
 
 ## 🏗️ Architecture Overview
 

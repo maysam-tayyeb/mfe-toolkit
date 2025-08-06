@@ -70,13 +70,26 @@ Located in `apps/service-demos/event-bus/`
 |-----------|----------|-------------|--------------|
 | **React 19** | `mfe-react19-eventbus-demo` | ~5.5KB | Interactive pub/sub demonstration |
 
+### UI/UX Improvements
+
+The Event Bus demo page features an optimized layout design:
+
+1. **Top Navigation Bar** - Replaced sidebar with dropdown navigation to save ~250px horizontal space
+2. **Compact Typography** - Using `text-xs` and `text-sm` for better content density
+3. **3-Column Layout** - Main content (2 cols) + info panel (1 col) for optimal organization
+4. **Tabbed MFE Interface** - Support for multiple MFE demos (React, Vue, Angular - coming soon)
+5. **Container Event Emitter** - Dedicated section for container-to-MFE communication
+6. **Active Subscriptions** - Pill badges with color-coded categories and unsubscribe functionality
+7. **EventLog Component** - Reusable grayscale event stream display with consistent styling
+
 ### Features Demonstrated
 
-1. **Event Emission** - Emit predefined and custom events
-2. **Event Subscription** - Subscribe/unsubscribe to events dynamically
-3. **Event Log** - Real-time display of all events with source tracking
+1. **Event Emission** - Emit predefined and custom events with compact button grid
+2. **Event Subscription** - Subscribe/unsubscribe with visual pill badges
+3. **Event Log** - Real-time display using the reusable EventLog component
 4. **Custom Events** - Create and emit custom events with JSON data
-5. **Cross-MFE Communication** - Shows events from external MFEs
+5. **Cross-MFE Communication** - Container emitter section for boundary testing
+6. **MFE Info Panel** - Details, capabilities, and quick actions in right sidebar
 
 ### Common Event Patterns
 

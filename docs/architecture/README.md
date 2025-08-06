@@ -80,11 +80,17 @@ Please use the Comprehensive Roadmap for all improvement tracking and planning.
 The MFE Made Easy platform implements a microfrontend architecture with:
 
 - **Container Application** - Shell application that orchestrates MFEs
+  - Top navigation bar with dropdown menus for optimal screen real estate
+  - Compact, responsive layouts with max-width constraints
+  - Design system components for consistent UI
 - **Microfrontends** - Independently deployed frontend modules (React, Vue, Vanilla JS)
+  - React 19 Event Bus demo with tabbed interface
+  - Support for multiple MFE demos in single view
 - **ContextBridge Services** - Container UI services (auth, modals, notifications)
 - **Universal State Manager** - Cross-MFE application state with framework adapters
 - **Dynamic Loading** - ES module imports without build-time coupling
 - **Development Kit** - Tools, types, and components for building MFEs
+- **Design System** - Reusable components (EventLog, Card, Grid, etc.)
 
 ## 🔑 Key Principles
 
