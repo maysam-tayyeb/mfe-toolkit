@@ -259,7 +259,7 @@ The container uses a **dynamic registry system** that loads configurations from 
 
 **Registry Features:**
 
-- 📁 Multiple registry files: `mfe-registry.json`, `mfe-registry.{environment}.json`
+- 📁 Single registry file: `mfe-registry.json` (consolidated from multiple files)
 - 🔧 Environment variable: `VITE_MFE_REGISTRY_URL`
 - 🔄 Hot reload support in development
 - 📦 Automatic fallback to hardcoded values if registry fails
@@ -532,9 +532,7 @@ The MFE platform now uses a **dynamic registry system** that loads MFE configura
 
 The container application looks for registry files in the `public` directory:
 
-- `mfe-registry.json` - Default registry
-- `mfe-registry.development.json` - Development environment
-- `mfe-registry.production.json` - Production environment
+- `mfe-registry.json` - Single source of truth for all MFE configurations (V2 Manifest format)
 
 #### Registry JSON Structure
 
@@ -578,9 +576,8 @@ VITE_MFE_REGISTRY_URL=https://cdn.example.com/configs/mfe-registry.json
 #### Loading Order
 
 1. Tries to load from `VITE_MFE_REGISTRY_URL` if set
-2. Falls back to `/mfe-registry.json`
-3. Falls back to `/mfe-registry.{environment}.json`
-4. Uses hardcoded values in development if all fail
+2. Falls back to `/mfe-registry.json` (default)
+3. Uses hardcoded values in development if all fail
 
 #### Registry Features
 
