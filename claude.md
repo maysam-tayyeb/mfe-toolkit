@@ -86,6 +86,15 @@ cd apps/container-react && pnpm preview
 
 This is a **microfrontend (MFE) monorepo** using pnpm workspaces. The architecture consists of:
 
+### UI/UX Design Principles
+
+- **Top Navigation Bar**: Uses dropdown menus for better screen real estate
+- **Compact Layouts**: Optimized font sizes (text-xs, text-sm) for content density
+- **Consistent Spacing**: Smaller padding and margins for efficiency
+- **Page Width**: Constrained to max-w-7xl for better readability
+- **Component Organization**: 3-column layouts for complex interfaces
+- **Visual Hierarchy**: Clear section headers with consistent typography
+
 ### Core Components
 
 1. **Container Application** (`apps/container-react/`)
@@ -96,10 +105,10 @@ This is a **microfrontend (MFE) monorepo** using pnpm workspaces. The architectu
    - MFE registry system for configuration management
    - Uses React Context for state management (AuthContext, UIContext, RegistryContext)
 
-2. **Microfrontends** (`apps/mfe-*/`)
+2. **Microfrontends** (`apps/mfe-*/` and `apps/service-demos/`)
    - `mfe-example`: Demonstrates all MFE services and capabilities
    - `mfe-react17`: Legacy MFE showing cross-version React compatibility
-   - `mfe-event-demo`: Event bus communication demo
+   - `mfe-react19-eventbus-demo`: React 19 Event bus communication demo
    - `mfe-state-demo-react`: Universal state management demo (React)
    - `mfe-state-demo-vue`: Universal state management demo (Vue)
    - `mfe-state-demo-vanilla`: Universal state management demo (Vanilla JS)
@@ -189,6 +198,7 @@ The toolkit is split into several npm packages under the `@mfe-toolkit` organiza
 
 - **@mfe/design-system** (`packages/design-system/`)
   - Internal UI components for examples
+  - Reusable components: Card, InfoBlock, Section, Grid, EventLog
   - Not published to npm (marked as private)
 
 ## Development Guidelines
@@ -215,7 +225,11 @@ The toolkit is split into several npm packages under the `@mfe-toolkit` organiza
 - Redux slices: `apps/container-react/src/store/`
 - MFE types: `packages/mfe-toolkit-core/src/types/`
 - Shared components: `apps/container-react/src/components/ui/`
+- Design system components: `packages/design-system/src/components/`
 - MFE registry: `apps/container-react/public/mfe-registry.json`
+- Navigation: `apps/container-react/src/components/Navigation.tsx` (top nav bar with dropdowns)
+- Layout: `apps/container-react/src/components/Layout.tsx`
+- Event Bus Demo: `apps/container-react/src/pages/services/EventBusServiceDemoPage.tsx`
 
 ### State Management
 
