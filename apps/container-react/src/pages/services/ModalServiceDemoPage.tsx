@@ -82,20 +82,27 @@ export function ModalServiceDemoPage() {
             </CardContent>
           </Card>
 
-          {/* Placeholder for React 17 */}
-          <Card className="relative overflow-hidden opacity-50">
+          {/* React 17 Demo */}
+          <Card className="relative overflow-hidden">
             <CardHeader>
               <div className="flex items-center justify-between">
                 <CardTitle>React 17</CardTitle>
-                <Badge variant="secondary">Coming Soon</Badge>
+                <Badge variant="outline">Legacy</Badge>
               </div>
               <CardDescription>
-                Legacy React support for backward compatibility
+                Legacy React support demonstrating cross-version compatibility
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="border rounded-lg bg-muted/10 min-h-[400px] flex items-center justify-center">
-                <p className="text-muted-foreground">React 17 demo will be added after feedback</p>
+              <div className="border rounded-lg bg-muted/10 min-h-[400px]">
+                <RegistryMFELoader
+                  id="mfe-react17-modal-demo"
+                  fallback={
+                    <div className="flex items-center justify-center h-[400px] text-muted-foreground">
+                      <p>Loading React 17 Modal Demo...</p>
+                    </div>
+                  }
+                />
               </div>
             </CardContent>
           </Card>

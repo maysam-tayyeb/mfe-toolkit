@@ -399,6 +399,59 @@
           "retryDelay": 1000
         }
       }
+    },
+    {
+      "$schema": "https://mfe-made-easy.com/schemas/mfe-manifest-v2.schema.json",
+      "name": "mfe-react17-modal-demo",
+      "version": "1.0.0",
+      "url": "http://localhost:8080/service-demos/modal/mfe-react17-modal-demo/mfe-react17-modal-demo.js",
+      "dependencies": {
+        "runtime": {},
+        "peer": {
+          "react": "^17.0.2",
+          "react-dom": "^17.0.2"
+        }
+      },
+      "compatibility": {
+        "container": ">=1.0.0",
+        "frameworks": {
+          "react": "17.0.2"
+        }
+      },
+      "requirements": {
+        "services": [
+          {
+            "name": "modal",
+            "optional": false
+          },
+          {
+            "name": "notification",
+            "optional": false
+          },
+          {
+            "name": "logger",
+            "optional": true
+          }
+        ]
+      },
+      "metadata": {
+        "displayName": "React 17 Modal Demo",
+        "description": "Modal service demonstration using React 17 - shows cross-version compatibility",
+        "icon": "🎭",
+        "category": "demo",
+        "tags": ["modal", "react17", "service-demo", "legacy", "compatibility"]
+      },
+      "capabilities": {
+        "emits": [],
+        "listens": []
+      },
+      "config": {
+        "loading": {
+          "timeout": 30000,
+          "retries": 3,
+          "retryDelay": 1000
+        }
+      }
     }
   ],
   "config": {
