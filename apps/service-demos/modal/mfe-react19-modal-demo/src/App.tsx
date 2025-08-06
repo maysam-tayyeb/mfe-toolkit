@@ -126,19 +126,82 @@ function App({ services }: AppProps) {
 
   const handleMultipleNotifications = () => {
     addEvent('Showing multiple notifications');
-    notification.info('First', 'This is the first notification');
-    setTimeout(() => notification.success('Second', 'This appears after 1 second'), 1000);
-    setTimeout(() => notification.warning('Third', 'This appears after 2 seconds'), 2000);
+    notification.info('First (React 19)', 'This is the first notification');
+    setTimeout(() => notification.success('Second (React 19)', 'This appears after 1 second'), 1000);
+    setTimeout(() => notification.warning('Third (React 19)', 'This appears after 2 seconds'), 2000);
+    setTimeout(() => notification.error('Fourth (React 19)', 'This appears after 3 seconds'), 3000);
+  };
+
+  const handleNestedModal = () => {
+    addEvent('Opening nested modal demo');
+    modal.open({
+      title: 'Parent Modal (React 19)',
+      content: (
+        <div className="space-y-3">
+          <p>This is the parent modal. Click the button below to open a nested modal.</p>
+          <button
+            onClick={() => {
+              addEvent('Opening nested child modal');
+              modal.open({
+                title: 'Child Modal',
+                content: 'This is a nested modal opened from within another modal!',
+                size: 'sm',
+                onClose: () => addEvent('Child modal closed')
+              });
+            }}
+            className="px-3 py-1.5 text-sm bg-primary text-primary-foreground rounded-md hover:bg-primary/90"
+          >
+            Open Nested Modal
+          </button>
+        </div>
+      ),
+      onClose: () => addEvent('Parent modal closed')
+    });
+  };
+
+  const handleSizeVariations = () => {
+    const sizes: Array<'sm' | 'md' | 'lg' | 'xl'> = ['sm', 'md', 'lg', 'xl'];
+    let index = 0;
+    
+    const showNextSize = () => {
+      if (index < sizes.length) {
+        const size = sizes[index];
+        addEvent(`Opening ${size} modal`);
+        modal.open({
+          title: `Modal Size: ${size.toUpperCase()}`,
+          content: `This is a ${size} sized modal from React 19. Click confirm to see the next size.`,
+          size: size,
+          onConfirm: () => {
+            index++;
+            if (index < sizes.length) {
+              setTimeout(showNextSize, 300);
+            } else {
+              notification.success('Demo Complete', 'You\'ve seen all modal sizes!');
+            }
+          },
+          onClose: () => {
+            addEvent(`${size} modal closed`);
+          }
+        });
+      }
+    };
+    
+    showNextSize();
   };
 
   return (
     <div className="p-4 space-y-4">
-      <h3 className="text-lg font-semibold">React 19 Modal Demo</h3>
+      <div className="flex items-center justify-between">
+        <h3 className="text-lg font-semibold">React 19 Modal Demo</h3>
+        <span className="text-xs font-mono bg-muted px-2 py-1 rounded">
+          React {React.version}
+        </span>
+      </div>
       
       {/* Action Buttons */}
       <div className="space-y-3">
         <div className="text-sm font-medium text-muted-foreground mb-2">Test Modal Service:</div>
-        <div className="flex flex-wrap gap-3">
+        <div className="grid grid-cols-2 gap-3">
           <button 
             onClick={handleSimpleAlert}
             className="px-4 py-2 text-sm font-medium bg-zinc-900 text-zinc-100 dark:bg-zinc-100 dark:text-zinc-900 border border-zinc-900 dark:border-zinc-100 rounded-md hover:bg-zinc-700 hover:text-zinc-100 dark:hover:bg-zinc-300 dark:hover:text-zinc-900 transition-colors"
@@ -168,6 +231,24 @@ function App({ services }: AppProps) {
             className="px-4 py-2 text-sm font-medium bg-zinc-900 text-zinc-100 dark:bg-zinc-100 dark:text-zinc-900 border border-zinc-900 dark:border-zinc-100 rounded-md hover:bg-zinc-700 hover:text-zinc-100 dark:hover:bg-zinc-300 dark:hover:text-zinc-900 transition-colors"
           >
             Error Example
+          </button>
+          <button 
+            onClick={handleMultipleNotifications}
+            className="px-4 py-2 text-sm font-medium bg-zinc-900 text-zinc-100 dark:bg-zinc-100 dark:text-zinc-900 border border-zinc-900 dark:border-zinc-100 rounded-md hover:bg-zinc-700 hover:text-zinc-100 dark:hover:bg-zinc-300 dark:hover:text-zinc-900 transition-colors"
+          >
+            Multiple Notifications
+          </button>
+          <button 
+            onClick={handleNestedModal}
+            className="px-4 py-2 text-sm font-medium bg-zinc-900 text-zinc-100 dark:bg-zinc-100 dark:text-zinc-900 border border-zinc-900 dark:border-zinc-100 rounded-md hover:bg-zinc-700 hover:text-zinc-100 dark:hover:bg-zinc-300 dark:hover:text-zinc-900 transition-colors"
+          >
+            Nested Modals
+          </button>
+          <button 
+            onClick={handleSizeVariations}
+            className="px-4 py-2 text-sm font-medium bg-zinc-900 text-zinc-100 dark:bg-zinc-100 dark:text-zinc-900 border border-zinc-900 dark:border-zinc-100 rounded-md hover:bg-zinc-700 hover:text-zinc-100 dark:hover:bg-zinc-300 dark:hover:text-zinc-900 transition-colors"
+          >
+            Size Variations
           </button>
         </div>
       </div>
