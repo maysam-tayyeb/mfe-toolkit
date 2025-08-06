@@ -268,6 +268,31 @@ function App({ services }: AppProps) {
           </div>
         )}
       </div>
+
+      {/* React 19 Compatibility Info */}
+      <div className="border border-green-200 dark:border-green-800 bg-green-50 dark:bg-green-900/20 rounded-lg p-4">
+        <div className="text-sm font-medium mb-2 text-green-900 dark:text-green-100">
+          React 19 Features & Capabilities
+        </div>
+        <div className="text-xs text-green-800 dark:text-green-200 space-y-1">
+          <p>• This MFE uses React {React.version} with createRoot()</p>
+          <p>• Full support for React components in modal content</p>
+          <p>• Interactive elements with event handlers work perfectly</p>
+          <p>• Nested modals with buttons are fully supported</p>
+          <p>• Rich HTML and JSX content rendering</p>
+        </div>
+        <div className="mt-3 pt-3 border-t border-green-200 dark:border-green-700">
+          <div className="text-xs font-medium text-green-900 dark:text-green-100 mb-1">
+            Advantages over React 17:
+          </div>
+          <ul className="text-xs text-green-800 dark:text-green-200 space-y-1">
+            <li>✓ Automatic batching for better performance</li>
+            <li>✓ Improved Suspense and concurrent features</li>
+            <li>✓ Better server-side rendering support</li>
+            <li>✓ Smaller bundle sizes with new JSX transform</li>
+          </ul>
+        </div>
+      </div>
     </div>
   );
 }
