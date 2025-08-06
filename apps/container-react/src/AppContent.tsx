@@ -7,6 +7,7 @@ import { MFECommunicationPage } from '@/pages/MFECommunicationPage';
 import { UniversalStateDemoPage } from '@/pages/UniversalStateDemoPage';
 import { ErrorBoundaryDemoPage } from '@/pages/ErrorBoundaryDemoPage';
 import { ModalServiceDemoPage } from '@/pages/services/ModalServiceDemoPage';
+import { EventBusServiceDemoPage } from '@/pages/services/EventBusServiceDemoPage';
 import { CompatibleMFELoader } from '@/components/CompatibleMFELoader';
 import { getMFEServicesSingleton } from '@/services/mfe-services-singleton';
 import { useRegistryContext } from '@/contexts/RegistryContext';
@@ -89,6 +90,7 @@ export function AppContent() {
           <Route path="universal-state-demo" element={<UniversalStateDemoPage />} />
           <Route path="error-boundary-demo" element={<ErrorBoundaryDemoPage />} />
           <Route path="services/modal" element={<ModalServiceDemoPage />} />
+          <Route path="services/event-bus" element={<EventBusServiceDemoPage />} />
           <Route path="mfe/:mfeName" element={<MFEPage />} />
         </Route>
       </Routes>

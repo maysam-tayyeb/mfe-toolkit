@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { MFE_CONFIG } from '@mfe/shared';
 import { Theme } from '@mfe-toolkit/core';
 import { getThemeService } from '@/services/theme-service';
-import { Moon, Sun, Menu, X, ChevronRight, Home, LayoutDashboard, Layers, Radio, Database, AlertCircle, Package, BookOpen } from 'lucide-react';
+import { Moon, Sun, Menu, X, Home, LayoutDashboard, Layers, Radio, Database, AlertCircle, Package } from 'lucide-react';
 
 interface NavSection {
   title: string;
@@ -53,6 +53,7 @@ export const Navigation: React.FC = () => {
       title: 'Service Demos',
       items: [
         { path: '/services/modal', label: 'Modal Service', icon: <Layers className="h-4 w-4" /> },
+        { path: '/services/event-bus', label: 'Event Bus', icon: <Radio className="h-4 w-4" /> },
       ]
     },
     {

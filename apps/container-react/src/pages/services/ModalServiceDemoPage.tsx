@@ -1,4 +1,3 @@
-import React from 'react';
 import { RegistryMFELoader } from '@/components/RegistryMFELoader';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -107,38 +106,52 @@ export function ModalServiceDemoPage() {
             </CardContent>
           </Card>
 
-          {/* Placeholder for Vue */}
-          <Card className="relative overflow-hidden opacity-50">
+          {/* Vue 3 Demo */}
+          <Card className="relative overflow-hidden">
             <CardHeader>
               <div className="flex items-center justify-between">
                 <CardTitle>Vue 3</CardTitle>
-                <Badge variant="secondary">Coming Soon</Badge>
+                <Badge variant="outline">Cross-Framework</Badge>
               </div>
               <CardDescription>
-                Vue.js implementation using Composition API
+                Vue.js implementation demonstrating cross-framework integration
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="border rounded-lg bg-muted/10 min-h-[400px] flex items-center justify-center">
-                <p className="text-muted-foreground">Vue demo will be added after feedback</p>
+              <div className="border rounded-lg bg-muted/10 min-h-[400px]">
+                <RegistryMFELoader
+                  id="mfe-vue3-modal-demo"
+                  fallback={
+                    <div className="flex items-center justify-center h-[400px] text-muted-foreground">
+                      <p>Loading Vue 3 Modal Demo...</p>
+                    </div>
+                  }
+                />
               </div>
             </CardContent>
           </Card>
 
-          {/* Placeholder for Vanilla */}
-          <Card className="relative overflow-hidden opacity-50">
+          {/* Vanilla TypeScript Demo */}
+          <Card className="relative overflow-hidden">
             <CardHeader>
               <div className="flex items-center justify-between">
                 <CardTitle>Vanilla TypeScript</CardTitle>
-                <Badge variant="secondary">Coming Soon</Badge>
+                <Badge variant="outline">Lightweight</Badge>
               </div>
               <CardDescription>
-                Pure TypeScript implementation without frameworks
+                Pure TypeScript implementation without any framework
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="border rounded-lg bg-muted/10 min-h-[400px] flex items-center justify-center">
-                <p className="text-muted-foreground">Vanilla TS demo will be added after feedback</p>
+              <div className="border rounded-lg bg-muted/10 min-h-[400px]">
+                <RegistryMFELoader
+                  id="mfe-vanilla-modal-demo"
+                  fallback={
+                    <div className="flex items-center justify-center h-[400px] text-muted-foreground">
+                      <p>Loading Vanilla TS Modal Demo...</p>
+                    </div>
+                  }
+                />
               </div>
             </CardContent>
           </Card>

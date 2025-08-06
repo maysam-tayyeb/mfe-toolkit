@@ -452,6 +452,158 @@
           "retryDelay": 1000
         }
       }
+    },
+    {
+      "$schema": "https://mfe-made-easy.com/schemas/mfe-manifest-v2.schema.json",
+      "name": "mfe-vue3-modal-demo",
+      "version": "1.0.0",
+      "url": "http://localhost:8080/service-demos/modal/mfe-vue3-modal-demo/mfe-vue3-modal-demo.js",
+      "dependencies": {
+        "runtime": {
+          "vue": "*"
+        },
+        "peer": {}
+      },
+      "compatibility": {
+        "container": ">=1.0.0",
+        "frameworks": {
+          "vue": ">=3.4.0"
+        }
+      },
+      "requirements": {
+        "services": [
+          {
+            "name": "modal",
+            "optional": false
+          },
+          {
+            "name": "notification",
+            "optional": false
+          },
+          {
+            "name": "logger",
+            "optional": true
+          }
+        ]
+      },
+      "metadata": {
+        "displayName": "Vue 3 Modal Demo",
+        "description": "Modal service demonstration using Vue 3",
+        "icon": "💚",
+        "category": "demo",
+        "tags": ["modal", "vue3", "service-demo"]
+      },
+      "capabilities": {
+        "emits": [],
+        "listens": []
+      },
+      "config": {
+        "loading": {
+          "timeout": 30000,
+          "retries": 3,
+          "retryDelay": 1000
+        }
+      }
+    },
+    {
+      "$schema": "https://mfe-made-easy.com/schemas/mfe-manifest-v2.schema.json",
+      "name": "mfe-vanilla-modal-demo",
+      "version": "1.0.0",
+      "url": "http://localhost:8080/service-demos/modal/mfe-vanilla-modal-demo/mfe-vanilla-modal-demo.js",
+      "dependencies": {
+        "runtime": {},
+        "peer": {}
+      },
+      "compatibility": {
+        "container": ">=1.0.0"
+      },
+      "requirements": {
+        "services": [
+          {
+            "name": "modal",
+            "optional": false
+          },
+          {
+            "name": "notification",
+            "optional": false
+          },
+          {
+            "name": "logger",
+            "optional": true
+          }
+        ]
+      },
+      "metadata": {
+        "displayName": "Vanilla TS Modal Demo",
+        "description": "Modal service demonstration using Vanilla TypeScript",
+        "icon": "🟨",
+        "category": "demo",
+        "tags": ["modal", "vanilla", "typescript", "service-demo"]
+      },
+      "capabilities": {
+        "emits": [],
+        "listens": []
+      },
+      "config": {
+        "loading": {
+          "timeout": 30000,
+          "retries": 3,
+          "retryDelay": 1000
+        }
+      }
+    },
+    {
+      "$schema": "https://mfe-made-easy.com/schemas/mfe-manifest-v2.schema.json",
+      "name": "mfe-react19-eventbus-demo",
+      "version": "1.0.0",
+      "url": "http://localhost:8080/service-demos/event-bus/mfe-react19-eventbus-demo/mfe-react19-eventbus-demo.js",
+      "dependencies": {
+        "runtime": {},
+        "peer": {
+          "react": "^19.0.0",
+          "react-dom": "^19.0.0"
+        }
+      },
+      "compatibility": {
+        "container": ">=1.0.0",
+        "frameworks": {
+          "react": ">=19.0.0"
+        }
+      },
+      "requirements": {
+        "services": [
+          {
+            "name": "eventBus",
+            "optional": false
+          },
+          {
+            "name": "notification",
+            "optional": false
+          },
+          {
+            "name": "logger",
+            "optional": true
+          }
+        ]
+      },
+      "metadata": {
+        "displayName": "React 19 Event Bus Demo",
+        "description": "Event Bus service demonstration using React 19",
+        "icon": "📡",
+        "category": "demo",
+        "tags": ["eventbus", "react19", "service-demo", "communication"]
+      },
+      "capabilities": {
+        "emits": ["user:login", "user:logout", "theme:change", "data:update"],
+        "listens": ["user:login", "user:logout", "theme:change", "data:update"]
+      },
+      "config": {
+        "loading": {
+          "timeout": 30000,
+          "retries": 3,
+          "retryDelay": 1000
+        }
+      }
     }
   ],
   "config": {

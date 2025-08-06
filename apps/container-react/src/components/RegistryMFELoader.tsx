@@ -2,7 +2,7 @@ import React, { useEffect, useState, useMemo } from 'react';
 import { MFELoader } from '@mfe-toolkit/react';
 import { useRegistry } from '@/hooks/useRegistry';
 import { getMFEServicesSingleton } from '@/services/mfe-services-singleton';
-import type { ManifestV2 } from '@mfe-toolkit/core';
+import type { MFEManifest } from '@mfe-toolkit/core';
 
 interface RegistryMFELoaderProps {
   id: string;
@@ -18,7 +18,7 @@ interface RegistryMFELoaderProps {
 export function RegistryMFELoader({ id, fallback, ...props }: RegistryMFELoaderProps) {
   const { registry, isLoading: registryLoading, error: registryError } = useRegistry();
   const services = useMemo(() => getMFEServicesSingleton(), []);
-  const [manifest, setManifest] = useState<ManifestV2 | null>(null);
+  const [manifest, setManifest] = useState<MFEManifest | null>(null);
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {

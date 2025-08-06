@@ -1,0 +1,24 @@
+{
+  "name": "mfe-vue3-modal-demo",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build",
+    "build:esbuild": "node esbuild.config.js",
+    "preview": "vite preview",
+    "type-check": "vue-tsc --noEmit"
+  },
+  "dependencies": {
+    "@mfe-toolkit/core": "workspace:*",
+    "vue": "^3.4.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.0.0",
+    "esbuild": "^0.25.8",
+    "typescript": "~5.9.2",
+    "vite": "^7.0.6",
+    "vue-tsc": "^2.0.0"
+  }
+}
