@@ -26,14 +26,26 @@ const config = {
   jsx: 'transform',
   jsxFactory: 'React.createElement',
   jsxFragment: 'React.Fragment',
-  inject: ['./react-shim.js'],
+  loader: {
+    '.tsx': 'tsx',
+    '.ts': 'ts',
+    '.jsx': 'jsx',
+    '.js': 'js',
+  },
+  resolveExtensions: ['.tsx', '.ts', '.jsx', '.js'],
 };
 
 try {
-  console.log('🔨 Building React 17 Modal Demo MFE...');
+  console.log('🔨 Building React 17 Modal Demo MFE with esbuild...');
   const result = await build(config);
   console.log('✅ React 17 Modal Demo MFE built successfully!');
   console.log('📦 Bundle created: dist/mfe-react17-modal-demo.js');
+  
+  // Get bundle size
+  const fs = await import('fs');
+  const stats = fs.statSync(path.join(__dirname, 'dist', 'mfe-react17-modal-demo.js'));
+  const fileSizeInKB = (stats.size / 1024).toFixed(2);
+  console.log(`📊 Bundle size: ${fileSizeInKB} KB`);
 } catch (error) {
   console.error('❌ Build failed:', error);
   process.exit(1);
