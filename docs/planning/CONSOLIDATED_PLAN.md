@@ -28,7 +28,158 @@ This document consolidates the Design System Plan and MFE Reorganization Plan in
 - **Buttons**: ShadCN (h-10) vs custom (h-9)
 - **Cards**: Multiple padding standards
 
+## Critical Addition: MFE Development Container
+
+### Problem Statement
+Before creating more MFEs, we need a proper development environment that allows developers to:
+- Develop MFEs in isolation without the main container
+- Test service integrations (modal, notification, eventBus, etc.)
+- Have hot reload and modern DX features
+- Work with any framework (React, Vue, Vanilla JS/TS)
+
+### Proposed Solution: Universal Dev Container
+
+#### Architecture Decision
+**Recommendation**: Single universal development container that works with all frameworks
+
+**Rationale**:
+- Maintains consistency with production container services
+- Reduces maintenance overhead (one container vs multiple)
+- Ensures all MFEs get the same service interfaces
+- Simplifies the development workflow
+
+#### Implementation Strategy
+
+##### Package: `@mfe-toolkit/dev-container`
+```typescript
+// Features
+- Lightweight development server
+- All container services (modal, notification, eventBus, logger, auth, theme)
+- Service testing UI panel
+- Hot module replacement
+- Framework agnostic loading
+- TypeScript support
+```
+
+##### Usage
+```bash
+# In any MFE directory
+npx @mfe-toolkit/dev-container serve
+# or if installed globally
+mfe-dev
+
+# With options
+mfe-dev --port 3000 --services-ui --mock-auth
+```
+
+##### Dev Container UI Layout
+```
+┌─────────────────────────────────────┐
+│  MFE Dev Container - [MFE Name]     │
+├─────────────┬───────────────────────┤
+│             │                       │
+│  Service    │                       │
+│  Tester     │     MFE Content       │
+│  Panel      │                       │
+│             │                       │
+│  - Modals   │                       │
+│  - Toasts   │                       │
+│  - Events   │                       │
+│  - Auth     │                       │
+│  - Theme    │                       │
+│  - State    │                       │
+│             │                       │
+├─────────────┴───────────────────────┤
+│  Event Log / Console                │
+└─────────────────────────────────────┘
+```
+
+##### Service Tester Panel Features
+1. **Modal Tester**
+   - Trigger different modal types
+   - Custom modal content input
+   - Size and variant options
+
+2. **Notification Tester**
+   - Send success/error/warning/info toasts
+   - Custom messages
+   - Duration controls
+
+3. **Event Bus Tester**
+   - Emit custom events
+   - Listen to events
+   - Event history log
+
+4. **Auth Mock**
+   - Toggle authenticated state
+   - Change user roles/permissions
+   - Simulate login/logout
+
+5. **Theme Switcher**
+   - Light/dark mode toggle
+   - Custom theme testing
+
+6. **State Inspector**
+   - View current state
+   - Modify state values
+   - State history
+
+##### Technical Implementation
+```typescript
+// dev-container/src/index.ts
+export class MFEDevContainer {
+  private services: MFEServices;
+  private mfeModule: any;
+  
+  async start(options: DevContainerOptions) {
+    // 1. Initialize services
+    this.services = this.initializeServices();
+    
+    // 2. Create HTML structure
+    this.createDevUI();
+    
+    // 3. Load MFE module
+    this.mfeModule = await this.loadMFE(options.entry);
+    
+    // 4. Mount MFE with services
+    const mountPoint = document.getElementById('mfe-mount');
+    this.mfeModule.mount(mountPoint, this.services);
+    
+    // 5. Setup hot reload
+    if (options.hot) {
+      this.setupHotReload();
+    }
+  }
+}
+```
+
+##### Integration with Build Tools
+- **Vite plugin**: `@mfe-toolkit/vite-plugin-dev-container`
+- **Webpack plugin**: `@mfe-toolkit/webpack-plugin-dev-container`
+- **esbuild plugin**: `@mfe-toolkit/esbuild-plugin-dev-container`
+
 ## Transformation Strategy
+
+### Phase 0: Development Infrastructure (Week 0.5) - NEW PRIORITY
+
+#### 0.1 Create Dev Container Package
+- [ ] Set up `@mfe-toolkit/dev-container` package
+- [ ] Implement core service providers
+- [ ] Create service tester UI
+- [ ] Add hot reload support
+- [ ] Test with existing modal demos
+
+#### 0.2 Create MFE Templates
+- [ ] React 19 MFE template with dev container
+- [ ] React 17 MFE template with dev container
+- [ ] Vue 3 MFE template with dev container
+- [ ] Vanilla TS MFE template with dev container
+
+#### 0.3 Update CLI Tools
+- [ ] Add `mfe-toolkit create` command with templates
+- [ ] Add `mfe-toolkit dev` command for dev container
+- [ ] Add `mfe-toolkit build` command with optimization
+- [ ] Update documentation
 
 ### Phase 1: Foundation & Cleanup (Week 1)
 
