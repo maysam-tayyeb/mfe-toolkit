@@ -13,4 +13,3 @@ export { DevNotificationService } from './services/notification-service';
 export { DevAuthService } from './services/auth-service';
 export { DevThemeService } from './services/theme-service';
 export { DevStateManager } from './services/state-service';
-export { DevDesignSystemService, createDesignSystemService } from './services/design-system-service';

@@ -1,0 +1,245 @@
+/**
+ * Design System CSS
+ * Pure CSS utilities for MFE platform - no JavaScript, no global pollution
+ * These classes are available globally via container's stylesheet
+ */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Component Classes - Framework Agnostic */
+@layer components {
+  /* Card Components */
+  .ds-card {
+    @apply rounded-lg border bg-white dark:bg-gray-800;
+  }
+  
+  .ds-card-padded {
+    @apply ds-card p-6;
+  }
+  
+  .ds-card-compact {
+    @apply ds-card p-4;
+  }
+  
+  .ds-card-elevated {
+    @apply shadow-md;
+  }
+  
+  .ds-card-interactive {
+    @apply hover:shadow-lg transition-shadow cursor-pointer;
+  }
+
+  /* Button Components */
+  .ds-button {
+    @apply inline-flex items-center justify-center font-medium rounded-md transition-colors;
+    @apply h-9 px-4 text-sm;
+  }
+  
+  .ds-button-primary {
+    @apply ds-button bg-blue-600 text-white hover:bg-blue-700;
+  }
+  
+  .ds-button-secondary {
+    @apply ds-button bg-gray-200 text-gray-900 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-gray-600;
+  }
+  
+  .ds-button-outline {
+    @apply ds-button border border-gray-300 bg-transparent hover:bg-gray-100 dark:border-gray-600 dark:hover:bg-gray-800;
+  }
+  
+  .ds-button-ghost {
+    @apply ds-button hover:bg-gray-100 dark:hover:bg-gray-800;
+  }
+  
+  .ds-button-destructive {
+    @apply ds-button bg-red-600 text-white hover:bg-red-700;
+  }
+  
+  .ds-button-sm {
+    @apply h-8 px-3 text-xs;
+  }
+  
+  .ds-button-lg {
+    @apply h-10 px-6;
+  }
+
+  /* Typography */
+  .ds-h1 {
+    @apply text-3xl font-bold tracking-tight;
+  }
+  
+  .ds-h2 {
+    @apply text-2xl font-semibold;
+  }
+  
+  .ds-h3 {
+    @apply text-xl font-semibold;
+  }
+  
+  .ds-h4 {
+    @apply text-lg font-semibold;
+  }
+  
+  .ds-text-muted {
+    @apply text-gray-600 dark:text-gray-400;
+  }
+  
+  .ds-text-small {
+    @apply text-sm;
+  }
+  
+  .ds-text-xs {
+    @apply text-xs;
+  }
+
+  /* Layout Components */
+  .ds-container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+  
+  .ds-container-narrow {
+    @apply max-w-4xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+  
+  .ds-section {
+    @apply py-8 space-y-6;
+  }
+  
+  .ds-grid-2 {
+    @apply grid gap-6 md:grid-cols-2;
+  }
+  
+  .ds-grid-3 {
+    @apply grid gap-6 md:grid-cols-3;
+  }
+  
+  .ds-grid-4 {
+    @apply grid gap-4 md:grid-cols-4;
+  }
+  
+  .ds-stack {
+    @apply space-y-4;
+  }
+  
+  .ds-stack-sm {
+    @apply space-y-2;
+  }
+  
+  .ds-stack-lg {
+    @apply space-y-6;
+  }
+
+  /* Form Elements */
+  .ds-input {
+    @apply w-full px-3 py-2 border rounded-md text-sm;
+    @apply focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500;
+  }
+  
+  .ds-textarea {
+    @apply ds-input min-h-[100px] resize-y;
+  }
+  
+  .ds-label {
+    @apply block text-sm font-medium mb-1;
+  }
+  
+  .ds-form-group {
+    @apply space-y-2;
+  }
+
+  /* Badge/Tag Components */
+  .ds-badge {
+    @apply inline-flex items-center px-2 py-1 rounded text-xs font-medium;
+  }
+  
+  .ds-badge-default {
+    @apply ds-badge bg-gray-200 text-gray-900 dark:bg-gray-700 dark:text-gray-100;
+  }
+  
+  .ds-badge-primary {
+    @apply ds-badge bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200;
+  }
+  
+  .ds-badge-success {
+    @apply ds-badge bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200;
+  }
+  
+  .ds-badge-warning {
+    @apply ds-badge bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200;
+  }
+  
+  .ds-badge-error {
+    @apply ds-badge bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200;
+  }
+
+  /* Alert/Notification Components */
+  .ds-alert {
+    @apply p-4 rounded-lg border;
+  }
+  
+  .ds-alert-info {
+    @apply ds-alert bg-blue-50 border-blue-200 text-blue-900;
+    @apply dark:bg-blue-950 dark:border-blue-800 dark:text-blue-100;
+  }
+  
+  .ds-alert-success {
+    @apply ds-alert bg-green-50 border-green-200 text-green-900;
+    @apply dark:bg-green-950 dark:border-green-800 dark:text-green-100;
+  }
+  
+  .ds-alert-warning {
+    @apply ds-alert bg-yellow-50 border-yellow-200 text-yellow-900;
+    @apply dark:bg-yellow-950 dark:border-yellow-800 dark:text-yellow-100;
+  }
+  
+  .ds-alert-error {
+    @apply ds-alert bg-red-50 border-red-200 text-red-900;
+    @apply dark:bg-red-950 dark:border-red-800 dark:text-red-100;
+  }
+
+  /* List Components */
+  .ds-list {
+    @apply space-y-2;
+  }
+  
+  .ds-list-item {
+    @apply flex items-start gap-2;
+  }
+  
+  .ds-list-disc {
+    @apply list-disc list-inside space-y-1;
+  }
+
+  /* Divider */
+  .ds-divider {
+    @apply border-t my-6;
+  }
+  
+  .ds-divider-vertical {
+    @apply border-l mx-4 h-full;
+  }
+
+  /* Loading States */
+  .ds-skeleton {
+    @apply animate-pulse bg-gray-200 dark:bg-gray-700 rounded;
+  }
+  
+  .ds-spinner {
+    @apply animate-spin h-4 w-4 border-2 border-blue-600 border-t-transparent rounded-full;
+  }
+
+  /* Utility Classes */
+  .ds-truncate {
+    @apply truncate;
+  }
+  
+  .ds-sr-only {
+    @apply sr-only;
+  }
+  
+  .ds-transition {
+    @apply transition-all duration-200 ease-in-out;
+  }
+}

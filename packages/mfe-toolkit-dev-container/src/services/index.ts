@@ -5,7 +5,6 @@
 
 import { EventBus, Logger, ErrorReporter, ServiceContainer, createTypedEventBus } from '@mfe-toolkit/core';
 import type { MFEServices, AuthService, ThemeService } from '@mfe-toolkit/core';
-import { createDesignSystemService } from './design-system-service';
 
 // Import individual service implementations
 import { DevModalService } from './modal-service';
@@ -58,14 +57,6 @@ export function createDevServices(config: DevContainerConfig = {}): MFEServices 
   
   // State Manager
   const stateManager = new DevStateManager();
-  
-  // Design System Service (no global pollution!)
-  const designSystem = createDesignSystemService(config.framework);
-
-  // Initialize design system
-  designSystem.initialize().catch(error => {
-    logger.warn('Failed to initialize design system:', error);
-  });
 
   // Create service container
   const serviceContainer = new ServiceContainer();
@@ -79,7 +70,6 @@ export function createDevServices(config: DevContainerConfig = {}): MFEServices 
   serviceContainer.register('auth', auth);
   serviceContainer.register('theme', theme);
   serviceContainer.register('stateManager', stateManager);
-  serviceContainer.register('designSystem', designSystem);
 
   // Return services object for MFE injection
   return {
@@ -91,7 +81,6 @@ export function createDevServices(config: DevContainerConfig = {}): MFEServices 
     auth,
     theme,
     stateManager,
-    designSystem,
     // Utility function to get all services
     getService: (name: string) => serviceContainer.get(name),
   } as MFEServices;
@@ -119,4 +108,3 @@ export { DevNotificationService } from './notification-service';
 export { DevAuthService } from './auth-service';
 export { DevThemeService } from './theme-service';
 export { DevStateManager } from './state-service';
-export { DevDesignSystemService } from './design-system-service';

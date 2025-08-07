@@ -6,6 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>MFE Container</title>
     
+    <!-- Design System CSS - Pure styles, no JavaScript, no global pollution -->
+    <!-- Loaded from http://localhost:8080/design-system/design-system.css in development -->
+    <link rel="stylesheet" href="http://localhost:8080/design-system/design-system.css" crossorigin="anonymous">
+    
+    <!-- Preload Design System ES Module for MFEs (optional) -->
+    <link rel="modulepreload" href="http://localhost:8080/design-system/design-system.esm.js" crossorigin="anonymous">
+    
     <!-- Import Map for Shared Dependencies -->
     <script type="importmap">
       {
