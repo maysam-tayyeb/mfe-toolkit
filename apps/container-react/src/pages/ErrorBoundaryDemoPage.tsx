@@ -60,17 +60,17 @@ export const ErrorBoundaryDemoPage: React.FC = () => {
   }, []);
 
   return (
-    <div className="space-y-6">
+    <div className="ds-page">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Error Boundary Demo</h1>
+        <h1 className="ds-page-title">Error Boundary Demo</h1>
         <p className="text-muted-foreground mt-2">
           Test error handling and recovery mechanisms for MFEs
         </p>
       </div>
 
       {/* Error Scenarios */}
-      <div className="border rounded-lg p-6">
-        <h2 className="text-xl font-semibold mb-4">Error Scenarios</h2>
+      <div className="ds-card">
+        <h2 className="ds-section-title mb-4">Error Scenarios</h2>
         <div className="grid gap-4 md:grid-cols-2">
           {scenarios.map((scenario) => (
             <div
@@ -91,8 +91,8 @@ export const ErrorBoundaryDemoPage: React.FC = () => {
 
       {/* MFE Loader Test Area */}
       {selectedScenario && (
-        <div className="border rounded-lg p-6">
-          <h2 className="text-xl font-semibold mb-4">MFE Test Area</h2>
+        <div className="ds-card">
+          <h2 className="ds-section-title mb-4">MFE Test Area</h2>
           <p className="text-sm text-muted-foreground mb-4">
             Loading MFE with scenario: <strong>{selectedScenario}</strong>
           </p>
@@ -121,9 +121,9 @@ export const ErrorBoundaryDemoPage: React.FC = () => {
       )}
 
       {/* Error Report Summary */}
-      <div className="border rounded-lg p-6">
+      <div className="ds-card">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-semibold">Error Report Summary</h2>
+          <h2 className="ds-section-title">Error Report Summary</h2>
           <div className="space-x-2">
             <Button
               variant="outline"
@@ -233,8 +233,8 @@ export const ErrorBoundaryDemoPage: React.FC = () => {
       </div>
 
       {/* Features Overview */}
-      <div className="bg-blue-50 dark:bg-blue-950/30 rounded-lg p-6">
-        <h3 className="font-semibold mb-3">Error Handling Features</h3>
+      <div className="ds-card bg-blue-50 dark:bg-blue-950/30">
+        <h3 className="ds-card-title mb-3">Error Handling Features</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
           <div>
             <h4 className="font-medium mb-2">Error Boundaries</h4>

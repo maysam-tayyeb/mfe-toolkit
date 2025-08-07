@@ -176,63 +176,63 @@ For complex interactions, consider:
   };
 
   return (
-    <div className="p-4 space-y-4">
-      <div className="flex items-center justify-between">
-        <h3 className="text-lg font-semibold">React 17 Modal Demo</h3>
+    <div className="ds-card">
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="ds-card-title">React 17 Modal Demo</h3>
         <span className="text-xs font-mono bg-muted px-2 py-1 rounded">
           React {React.version}
         </span>
       </div>
       
       {/* Action Buttons */}
-      <div className="space-y-3">
-        <div className="text-sm font-medium text-muted-foreground mb-2">Test Modal Service:</div>
+      <div className="ds-stack mb-4">
+        <div className="ds-label mb-2">Test Modal Service:</div>
         <div className="grid grid-cols-2 gap-3">
           <button 
             onClick={handleSimpleAlert}
-            className="px-4 py-2 text-sm font-medium bg-zinc-900 text-zinc-100 dark:bg-zinc-100 dark:text-zinc-900 border border-zinc-900 dark:border-zinc-100 rounded-md hover:bg-zinc-700 hover:text-zinc-100 dark:hover:bg-zinc-300 dark:hover:text-zinc-900 transition-colors"
+            className="ds-button-outline"
           >
             Simple Alert
           </button>
           <button 
             onClick={handleConfirmation}
-            className="px-4 py-2 text-sm font-medium bg-zinc-900 text-zinc-100 dark:bg-zinc-100 dark:text-zinc-900 border border-zinc-900 dark:border-zinc-100 rounded-md hover:bg-zinc-700 hover:text-zinc-100 dark:hover:bg-zinc-300 dark:hover:text-zinc-900 transition-colors"
+            className="ds-button-outline"
           >
             Confirmation Dialog
           </button>
           <button 
             onClick={handleFormModal}
-            className="px-4 py-2 text-sm font-medium bg-zinc-900 text-zinc-100 dark:bg-zinc-100 dark:text-zinc-900 border border-zinc-900 dark:border-zinc-100 rounded-md hover:bg-zinc-700 hover:text-zinc-100 dark:hover:bg-zinc-300 dark:hover:text-zinc-900 transition-colors"
+            className="ds-button-outline"
           >
             Form Modal
           </button>
           <button 
             onClick={handleCustomContent}
-            className="px-4 py-2 text-sm font-medium bg-zinc-900 text-zinc-100 dark:bg-zinc-100 dark:text-zinc-900 border border-zinc-900 dark:border-zinc-100 rounded-md hover:bg-zinc-700 hover:text-zinc-100 dark:hover:bg-zinc-300 dark:hover:text-zinc-900 transition-colors"
+            className="ds-button-outline"
           >
             Custom Content
           </button>
           <button 
             onClick={handleErrorDemo}
-            className="px-4 py-2 text-sm font-medium bg-zinc-900 text-zinc-100 dark:bg-zinc-100 dark:text-zinc-900 border border-zinc-900 dark:border-zinc-100 rounded-md hover:bg-zinc-700 hover:text-zinc-100 dark:hover:bg-zinc-300 dark:hover:text-zinc-900 transition-colors"
+            className="ds-button-outline"
           >
             Error Example
           </button>
           <button 
             onClick={handleMultipleNotifications}
-            className="px-4 py-2 text-sm font-medium bg-zinc-900 text-zinc-100 dark:bg-zinc-100 dark:text-zinc-900 border border-zinc-900 dark:border-zinc-100 rounded-md hover:bg-zinc-700 hover:text-zinc-100 dark:hover:bg-zinc-300 dark:hover:text-zinc-900 transition-colors"
+            className="ds-button-outline"
           >
             Multiple Notifications
           </button>
           <button 
             onClick={handleNestedModal}
-            className="px-4 py-2 text-sm font-medium bg-zinc-900 text-zinc-100 dark:bg-zinc-100 dark:text-zinc-900 border border-zinc-900 dark:border-zinc-100 rounded-md hover:bg-zinc-700 hover:text-zinc-100 dark:hover:bg-zinc-300 dark:hover:text-zinc-900 transition-colors"
+            className="ds-button-outline"
           >
             Nested Modals
           </button>
           <button 
             onClick={handleSizeVariations}
-            className="px-4 py-2 text-sm font-medium bg-zinc-900 text-zinc-100 dark:bg-zinc-100 dark:text-zinc-900 border border-zinc-900 dark:border-zinc-100 rounded-md hover:bg-zinc-700 hover:text-zinc-100 dark:hover:bg-zinc-300 dark:hover:text-zinc-900 transition-colors"
+            className="ds-button-outline"
           >
             Size Variations
           </button>
@@ -240,14 +240,14 @@ For complex interactions, consider:
       </div>
 
       {/* Event Log */}
-      <div className="border border-border rounded-lg p-4 bg-card">
-        <div className="text-sm font-medium mb-3">Event Log:</div>
+      <div className="ds-card mb-4">
+        <div className="ds-label mb-3">Event Log:</div>
         {events.length === 0 ? (
-          <div className="text-sm text-muted-foreground">No events yet. Click a button to start.</div>
+          <div className="ds-text-muted ds-text-small">No events yet. Click a button to start.</div>
         ) : (
           <div className="space-y-1">
             {events.map((event, index) => (
-              <div key={index} className="text-sm font-mono text-muted-foreground">
+              <div key={index} className="ds-text-small font-mono ds-text-muted">
                 → {event}
               </div>
             ))}
@@ -256,11 +256,11 @@ For complex interactions, consider:
       </div>
 
       {/* React 17 Info */}
-      <div className="border border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-900/20 rounded-lg p-4">
-        <div className="text-sm font-medium mb-2 text-amber-900 dark:text-amber-100">
+      <div className="ds-card bg-amber-50 dark:bg-amber-900/20 border-amber-200 dark:border-amber-800">
+        <div className="ds-card-title text-amber-900 dark:text-amber-100 mb-2">
           React 17 Compatibility Demo
         </div>
-        <div className="text-xs text-amber-800 dark:text-amber-200 space-y-1">
+        <div className="ds-text-xs text-amber-800 dark:text-amber-200 space-y-1">
           <p>• This MFE uses React {React.version} with ReactDOM.render()</p>
           <p>• Running inside a React 19 container application</p>
           <p>• Full access to all modal service features</p>

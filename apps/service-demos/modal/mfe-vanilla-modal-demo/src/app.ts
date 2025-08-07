@@ -23,13 +23,13 @@ export function createApp(element: HTMLElement, services: MFEServices) {
     
     if (events.length === 0) {
       eventLog.innerHTML = `
-        <div class="text-sm text-muted-foreground">
+        <div class="ds-text-muted ds-text-small">
           No events yet. Click a button to start.
         </div>
       `;
     } else {
       eventLog.innerHTML = events
-        .map(event => `<div class="text-sm font-mono text-muted-foreground">${event}</div>`)
+        .map(event => `<div class="ds-text-small font-mono ds-text-muted">${event}</div>`)
         .join('');
     }
   };
@@ -176,58 +176,58 @@ This is the most lightweight implementation possible!`,
   };
   
   element.innerHTML = `
-    <div class="p-4 space-y-4">
-      <div class="flex items-center justify-between">
-        <h3 class="text-lg font-semibold">Vanilla TS Modal Demo</h3>
+    <div class="ds-card">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="ds-card-title">Vanilla TS Modal Demo</h3>
         <span class="text-xs font-mono bg-muted px-2 py-1 rounded">
           Vanilla TypeScript
         </span>
       </div>
       
-      <div class="space-y-3">
-        <div class="text-sm font-medium text-muted-foreground mb-2">
+      <div class="ds-stack mb-4">
+        <div class="ds-label mb-2">
           Test Modal Service:
         </div>
         <div class="grid grid-cols-2 gap-3" id="button-container">
-          <button id="btn-simple" class="px-4 py-2 text-sm font-medium bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors">
+          <button id="btn-simple" class="ds-button-primary">
             Simple Alert
           </button>
-          <button id="btn-confirm" class="px-4 py-2 text-sm font-medium bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors">
+          <button id="btn-confirm" class="ds-button-primary">
             Confirmation Dialog
           </button>
-          <button id="btn-form" class="px-4 py-2 text-sm font-medium bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors">
+          <button id="btn-form" class="ds-button-primary">
             Form Modal
           </button>
-          <button id="btn-custom" class="px-4 py-2 text-sm font-medium bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors">
+          <button id="btn-custom" class="ds-button-primary">
             Custom Content
           </button>
-          <button id="btn-error" class="px-4 py-2 text-sm font-medium bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors">
+          <button id="btn-error" class="ds-button-primary">
             Error Example
           </button>
-          <button id="btn-notifications" class="px-4 py-2 text-sm font-medium bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors">
+          <button id="btn-notifications" class="ds-button-primary">
             Multiple Notifications
           </button>
-          <button id="btn-nested" class="px-4 py-2 text-sm font-medium bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors">
+          <button id="btn-nested" class="ds-button-primary">
             Nested Modals
           </button>
-          <button id="btn-sizes" class="px-4 py-2 text-sm font-medium bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors">
+          <button id="btn-sizes" class="ds-button-primary">
             Size Variations
           </button>
         </div>
       </div>
       
-      <div class="border border-border rounded-lg p-4 bg-card">
-        <div class="text-sm font-medium mb-3">Event Log:</div>
+      <div class="ds-card mb-4">
+        <div class="ds-label mb-3">Event Log:</div>
         <div id="event-log" class="space-y-1">
-          <div class="text-sm text-muted-foreground">
+          <div class="ds-text-muted ds-text-small">
             No events yet. Click a button to start.
           </div>
         </div>
       </div>
       
-      <div class="border border-border rounded-lg p-4 bg-muted/10">
-        <div class="text-sm font-medium mb-2">Vanilla TypeScript Advantages:</div>
-        <ul class="space-y-1 text-sm text-muted-foreground">
+      <div class="ds-card bg-muted/10">
+        <div class="ds-card-title mb-2">Vanilla TypeScript Advantages:</div>
+        <ul class="space-y-1 ds-text-small ds-text-muted">
           <li>✅ Smallest bundle size (~5-10KB)</li>
           <li>✅ No framework overhead</li>
           <li>✅ Full TypeScript support</li>

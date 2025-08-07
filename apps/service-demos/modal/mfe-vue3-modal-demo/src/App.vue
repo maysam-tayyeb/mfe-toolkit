@@ -1,14 +1,14 @@
 <template>
-  <div class="p-4 space-y-4">
-    <div class="flex items-center justify-between">
-      <h3 class="text-lg font-semibold">Vue 3 Modal Demo</h3>
+  <div class="ds-card">
+    <div class="flex items-center justify-between mb-4">
+      <h3 class="ds-card-title">Vue 3 Modal Demo</h3>
       <span class="text-xs font-mono bg-muted px-2 py-1 rounded">
         Vue {{ vueVersion }}
       </span>
     </div>
 
-    <div class="space-y-3">
-      <div class="text-sm font-medium text-muted-foreground mb-2">
+    <div class="ds-stack mb-4">
+      <div class="ds-label mb-2">
         Test Modal Service:
       </div>
       <div class="grid grid-cols-2 gap-3">
@@ -16,32 +16,32 @@
           v-for="button in buttons"
           :key="button.text"
           @click="button.handler"
-          class="px-4 py-2 text-sm font-medium bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
+          class="ds-button-primary"
         >
           {{ button.text }}
         </button>
       </div>
     </div>
 
-    <div class="border border-border rounded-lg p-4 bg-card">
-      <div class="text-sm font-medium mb-3">Event Log:</div>
+    <div class="ds-card mb-4">
+      <div class="ds-label mb-3">Event Log:</div>
       <div class="space-y-1">
-        <div v-if="events.length === 0" class="text-sm text-muted-foreground">
+        <div v-if="events.length === 0" class="ds-text-muted ds-text-small">
           No events yet. Click a button to start.
         </div>
         <div
           v-for="(event, index) in events"
           :key="index"
-          class="text-sm font-mono text-muted-foreground"
+          class="ds-text-small font-mono ds-text-muted"
         >
           {{ event }}
         </div>
       </div>
     </div>
 
-    <div class="border border-border rounded-lg p-4 bg-muted/10">
-      <div class="text-sm font-medium mb-2">Vue 3 Compatibility:</div>
-      <ul class="space-y-1 text-sm text-muted-foreground">
+    <div class="ds-card bg-muted/10">
+      <div class="ds-card-title mb-2">Vue 3 Compatibility:</div>
+      <ul class="space-y-1 ds-text-small ds-text-muted">
         <li>✅ Basic modal operations work</li>
         <li>⚠️ Cannot pass Vue components as content</li>
         <li>⚠️ Limited to plain text content</li>

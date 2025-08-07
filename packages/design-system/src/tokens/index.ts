@@ -5,57 +5,64 @@
  */
 
 export const typography = {
-  // Heading Levels
-  h1: 'text-3xl font-bold tracking-tight',
-  h2: 'text-2xl font-semibold',
-  h3: 'text-xl font-semibold',
-  h4: 'text-lg font-semibold',
-  h5: 'text-base font-semibold',
-  h6: 'text-sm font-semibold',
+  // Optimized Typography for Screen Real Estate
+  pageTitle: 'text-xl font-bold',  // Main page titles
+  sectionTitle: 'text-base font-semibold',  // Section headers
+  cardTitle: 'text-sm font-medium',  // Card headers
+  body: 'text-sm',  // Body text
+  small: 'text-xs',  // Small text
+  caption: 'text-xs text-slate-500',  // Captions
+  
+  // Legacy heading support (compact sizes)
+  h1: 'text-xl font-bold',
+  h2: 'text-lg font-semibold',
+  h3: 'text-base font-semibold',
+  h4: 'text-sm font-medium',
+  h5: 'text-sm font-medium',
+  h6: 'text-xs font-medium',
 
-  // Body Text
-  body: 'text-base',
+  // Body Text Sizes
+  bodyBase: 'text-base',
   bodySmall: 'text-sm',
   bodyLarge: 'text-lg',
-  caption: 'text-xs text-muted-foreground',
   overline: 'text-xs uppercase tracking-wider',
 
-  // Semantic Typography
-  pageTitle: 'text-3xl font-bold tracking-tight',
-  pageDescription: 'text-muted-foreground mt-2',
-  sectionTitle: 'text-2xl font-semibold',
-  sectionDescription: 'text-sm text-muted-foreground',
-  cardTitle: 'text-lg font-semibold',
-  cardDescription: 'text-sm text-muted-foreground',
+  // Semantic Typography (Compact)
+  pageHeader: 'text-xl font-bold',
+  pageDescription: 'text-sm text-slate-500 mt-1',
+  sectionHeader: 'text-base font-semibold',
+  sectionDescription: 'text-sm text-slate-500',
+  cardHeader: 'text-sm font-medium',
+  cardDescription: 'text-xs text-slate-500',
 } as const;
 
 export const spacing = {
-  // Page Layout
-  page: 'px-4 sm:px-6 lg:px-8 py-6',
-  pageCompact: 'px-4 py-4',
-  section: 'space-y-8',
-  sectionCompact: 'space-y-6',
+  // Page Layout (Compact)
+  page: 'px-4 sm:px-6 lg:px-8 py-4',  // Reduced vertical padding
+  pageCompact: 'px-4 py-3',
+  section: 'space-y-4',  // Reduced from space-y-8
+  sectionCompact: 'space-y-3',
 
-  // Component Spacing
-  card: 'p-6',
-  cardCompact: 'p-4',
-  cardLarge: 'p-8',
+  // Component Spacing (Compact)
+  card: 'p-4',  // Reduced from p-6
+  cardCompact: 'p-3',  // Reduced from p-4
+  cardLarge: 'p-6',  // Reduced from p-8
 
-  // Grid Gaps
+  // Grid Gaps (Compact)
   grid: {
     tight: 'gap-2',
-    compact: 'gap-4',
-    normal: 'gap-6',
-    wide: 'gap-8',
+    compact: 'gap-3',
+    normal: 'gap-4',  // Reduced from gap-6
+    wide: 'gap-6',  // Reduced from gap-8
   },
 
-  // Stack Spacing (vertical)
+  // Stack Spacing (vertical, compact)
   stack: {
     xs: 'space-y-1',
     sm: 'space-y-2',
-    md: 'space-y-4',
-    lg: 'space-y-6',
-    xl: 'space-y-8',
+    md: 'space-y-3',  // Reduced from space-y-4
+    lg: 'space-y-4',  // Reduced from space-y-6
+    xl: 'space-y-6',  // Reduced from space-y-8
   },
 
   // Inline Spacing (horizontal)
@@ -69,10 +76,10 @@ export const spacing = {
 } as const;
 
 export const layout = {
-  // Container Widths
-  container: 'max-w-7xl mx-auto',
-  containerSmall: 'max-w-4xl mx-auto',
-  containerLarge: 'max-w-full',
+  // Container Widths (Centered)
+  container: 'max-w-6xl mx-auto',  // Reduced from 7xl for better centering
+  containerNarrow: 'max-w-4xl mx-auto',
+  containerWide: 'max-w-7xl mx-auto',
 
   // Common Layouts
   centered: 'flex items-center justify-center',
@@ -88,18 +95,26 @@ export const layout = {
 } as const;
 
 export const colors = {
-  // Semantic Colors (use with Tailwind CSS variables)
-  primary: 'bg-primary text-primary-foreground',
-  secondary: 'bg-secondary text-secondary-foreground',
-  muted: 'bg-muted text-muted-foreground',
-  accent: 'bg-accent text-accent-foreground',
-  card: 'bg-card text-card-foreground',
+  // Primary Palette (Blue & Slate)
+  primary: 'bg-blue-500 text-white',
+  primaryHover: 'hover:bg-blue-600',
+  secondary: 'bg-slate-100 text-slate-700 dark:bg-slate-700 dark:text-slate-100',
+  secondaryHover: 'hover:bg-slate-200 dark:hover:bg-slate-600',
   
-  // Status Colors
-  success: 'bg-green-50 text-green-900 dark:bg-green-950 dark:text-green-100',
-  error: 'bg-red-50 text-red-900 dark:bg-red-950 dark:text-red-100',
-  warning: 'bg-yellow-50 text-yellow-900 dark:bg-yellow-950 dark:text-yellow-100',
-  info: 'bg-blue-50 text-blue-900 dark:bg-blue-950 dark:text-blue-100',
+  // Surface Colors
+  surface: 'bg-white dark:bg-slate-800',
+  muted: 'bg-slate-50 dark:bg-slate-900',
+  border: 'border-slate-200 dark:border-slate-700',
+  
+  // Text Colors
+  text: 'text-slate-900 dark:text-slate-100',
+  textMuted: 'text-slate-500 dark:text-slate-400',
+  
+  // Status Colors (Modern Palette)
+  success: 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-200',
+  error: 'bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-200',
+  warning: 'bg-amber-50 text-amber-700 dark:bg-amber-950 dark:text-amber-200',
+  info: 'bg-blue-50 text-blue-700 dark:bg-blue-950 dark:text-blue-200',
 } as const;
 
 export const borders = {

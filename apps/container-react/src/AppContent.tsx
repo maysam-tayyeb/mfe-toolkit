@@ -3,8 +3,6 @@ import { BrowserRouter, Routes, Route, useParams } from 'react-router-dom';
 import { Layout } from '@/components/Layout';
 import { HomePage } from '@/pages/HomePage';
 import { DashboardPage } from '@/pages/DashboardPage';
-import { MFECommunicationPage } from '@/pages/MFECommunicationPage';
-import { UniversalStateDemoPage } from '@/pages/UniversalStateDemoPage';
 import { ErrorBoundaryDemoPage } from '@/pages/ErrorBoundaryDemoPage';
 import { ModalServiceDemoPage } from '@/pages/services/ModalServiceDemoPage';
 import { EventBusServiceDemoPage } from '@/pages/services/EventBusServiceDemoPage';
@@ -86,8 +84,6 @@ export function AppContent() {
         <Route path="/" element={<Layout />}>
           <Route index element={<HomePage />} />
           <Route path="dashboard" element={<DashboardPage />} />
-          <Route path="mfe-communication" element={<MFECommunicationPage />} />
-          <Route path="universal-state-demo" element={<UniversalStateDemoPage />} />
           <Route path="error-boundary-demo" element={<ErrorBoundaryDemoPage />} />
           <Route path="services/modal" element={<ModalServiceDemoPage />} />
           <Route path="services/event-bus" element={<EventBusServiceDemoPage />} />

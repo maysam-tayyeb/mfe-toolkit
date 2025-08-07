@@ -1,7 +1,6 @@
 import React, { useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useUI } from '@/contexts/UIContext';
 import { useRegistry } from '@/hooks/useRegistry';
 import { compatibilityChecker } from '@/services/compatibility-checker';
@@ -123,103 +122,92 @@ export const DashboardPage: React.FC = () => {
 
   if (error) {
     return (
-      <div className="container mx-auto py-8">
-        <Card className="border-red-500">
-          <CardHeader>
-            <CardTitle className="text-red-600">Dashboard Load Error</CardTitle>
-            <CardDescription>{error.message}</CardDescription>
-          </CardHeader>
-          <CardContent>
+      <div className="ds-page">
+        <div className="ds-card border-red-500">
+          <div className="p-3">
+            <h2 className="ds-section-title text-red-600 mb-1">Dashboard Load Error</h2>
+            <p className="text-sm text-gray-600 mb-3">{error.message}</p>
             <Button onClick={reload} variant="outline" size="sm">
               Retry
             </Button>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="space-y-8">
-      <div className="flex items-center justify-between">
+    <div className="ds-page">
+      <div className="flex items-center justify-between mb-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Platform Dashboard</h1>
-          <p className="text-muted-foreground mt-2">
+          <h1 className="ds-page-title text-blue-500">Platform Dashboard</h1>
+          <p className="text-sm text-gray-600 mt-1">
             Monitor and manage your microfrontend platform
           </p>
         </div>
-        <Button onClick={handleReloadRegistry} variant="outline" size="sm">
-          <RefreshCw className="h-4 w-4 mr-2" />
+        <Button onClick={handleReloadRegistry} variant="outline" size="sm" className="h-8">
+          <RefreshCw className="h-3 w-3 mr-1" />
           Refresh
         </Button>
       </div>
 
       {/* Status Overview Cards */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium flex items-center gap-2">
-              <Activity className="h-4 w-4" />
+      <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-4 mb-4">
+        <div className="ds-card">
+          <div className="p-3">
+            <div className="ds-card-title flex items-center gap-2 mb-2">
+              <Activity className="h-4 w-4 text-green-500" />
               Platform Status
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-green-600">Healthy</div>
-            <p className="text-xs text-muted-foreground">All systems operational</p>
-          </CardContent>
-        </Card>
+            </div>
+            <div className="text-lg font-bold text-green-600">Healthy</div>
+            <p className="text-xs text-gray-500">All systems operational</p>
+          </div>
+        </div>
 
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium flex items-center gap-2">
-              <Package className="h-4 w-4" />
+        <div className="ds-card">
+          <div className="p-3">
+            <div className="ds-card-title flex items-center gap-2 mb-2">
+              <Package className="h-4 w-4 text-blue-500" />
               Total MFEs
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{summary.total}</div>
-            <p className="text-xs text-muted-foreground">
+            </div>
+            <div className="text-lg font-bold text-blue-600">{summary.total}</div>
+            <p className="text-xs text-gray-500">
               {summary.compatible} compatible, {summary.warnings} warnings
             </p>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
 
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium flex items-center gap-2">
-              <Shield className="h-4 w-4" />
+        <div className="ds-card">
+          <div className="p-3">
+            <div className="ds-card-title flex items-center gap-2 mb-2">
+              <Shield className="h-4 w-4 text-purple-500" />
               Services
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-green-600">Active</div>
-            <p className="text-xs text-muted-foreground">All services running</p>
-          </CardContent>
-        </Card>
+            </div>
+            <div className="text-lg font-bold text-green-600">Active</div>
+            <p className="text-xs text-gray-500">All services running</p>
+          </div>
+        </div>
 
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium flex items-center gap-2">
-              <Zap className="h-4 w-4" />
+        <div className="ds-card">
+          <div className="p-3">
+            <div className="ds-card-title flex items-center gap-2 mb-2">
+              <Zap className="h-4 w-4 text-yellow-500" />
               Registry
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">V2</div>
-            <p className="text-xs text-muted-foreground">Manifest Schema</p>
-          </CardContent>
-        </Card>
+            </div>
+            <div className="text-lg font-bold text-orange-600">V2</div>
+            <p className="text-xs text-gray-500">Manifest Schema</p>
+          </div>
+        </div>
       </div>
 
       {/* Main Content Grid */}
-      <div className="grid gap-6 lg:grid-cols-3">
+      <div className="grid gap-3 lg:grid-cols-3 mb-4">
         {/* System Health */}
-        <Card>
-          <CardHeader>
-            <CardTitle>System Health</CardTitle>
-            <CardDescription>Core platform services status</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-3">
+        <div className="ds-card">
+          <div className="p-3">
+            <h2 className="ds-section-title mb-1">System Health</h2>
+            <p className="text-xs text-gray-600 mb-3">Core platform services status</p>
+            <div className="space-y-2">
             <div className="flex justify-between items-center">
               <span className="text-sm">Container App</span>
               <Badge variant="default" className="text-xs">
@@ -250,86 +238,87 @@ export const DashboardPage: React.FC = () => {
                 Active
               </Badge>
             </div>
-            <div className="pt-2">
-              <Button onClick={handleTestModal} size="sm" className="w-full">
-                View Detailed Status
-              </Button>
+              <div className="pt-2">
+                <Button onClick={handleTestModal} size="sm" className="w-full h-8">
+                  View Detailed Status
+                </Button>
+              </div>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
 
         {/* Quick Actions */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Quick Actions</CardTitle>
-            <CardDescription>Common platform management tasks</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-2">
-            <Button
-              variant="secondary"
-              size="sm"
-              onClick={handleReloadRegistry}
-              className="w-full justify-start"
-            >
-              <RefreshCw className="h-4 w-4 mr-2" />
-              Reload MFE Registry
-            </Button>
-            <Button
-              variant="secondary"
-              size="sm"
-              onClick={handleClearCache}
-              className="w-full justify-start"
-            >
-              <Settings className="h-4 w-4 mr-2" />
-              Clear Platform Cache
-            </Button>
-            <Button
-              variant="secondary"
-              size="sm"
-              onClick={() => (window.location.href = '/mfe-communication')}
-              className="w-full justify-start"
-            >
-              <Activity className="h-4 w-4 mr-2" />
-              View Event Monitor
-            </Button>
-          </CardContent>
-        </Card>
+        <div className="ds-card">
+          <div className="p-3">
+            <h2 className="ds-section-title mb-1">Quick Actions</h2>
+            <p className="text-xs text-gray-600 mb-3">Common platform management tasks</p>
+            <div className="space-y-2">
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={handleReloadRegistry}
+                className="w-full justify-start h-8"
+              >
+                <RefreshCw className="h-3 w-3 mr-1" />
+                Reload MFE Registry
+              </Button>
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={handleClearCache}
+                className="w-full justify-start h-8"
+              >
+                <Settings className="h-3 w-3 mr-1" />
+                Clear Platform Cache
+              </Button>
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={() => (window.location.href = '/mfe-communication')}
+                className="w-full justify-start h-8"
+              >
+                <Activity className="h-3 w-3 mr-1" />
+                View Event Monitor
+              </Button>
+            </div>
+          </div>
+        </div>
 
         {/* Platform Features */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Platform Features</CardTitle>
-            <CardDescription>Key capabilities and architecture</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-2">
-            <div className="flex items-center gap-2">
-              <CheckCircle2 className="h-4 w-4 text-green-600" />
-              <span className="text-sm">Dynamic MFE Loading</span>
+        <div className="ds-card">
+          <div className="p-3">
+            <h2 className="ds-section-title mb-1">Platform Features</h2>
+            <p className="text-xs text-gray-600 mb-3">Key capabilities and architecture</p>
+            <div className="space-y-2">
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="h-4 w-4 text-green-600" />
+                <span className="text-sm">Dynamic MFE Loading</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="h-4 w-4 text-green-600" />
+                <span className="text-sm">Event-driven Architecture</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="h-4 w-4 text-green-600" />
+                <span className="text-sm">Shared Dependencies</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="h-4 w-4 text-green-600" />
+                <span className="text-sm">Cross-version React Support</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="h-4 w-4 text-green-600" />
+                <span className="text-sm">V2 Manifest Schema</span>
+              </div>
             </div>
-            <div className="flex items-center gap-2">
-              <CheckCircle2 className="h-4 w-4 text-green-600" />
-              <span className="text-sm">Event-driven Architecture</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <CheckCircle2 className="h-4 w-4 text-green-600" />
-              <span className="text-sm">Shared Dependencies</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <CheckCircle2 className="h-4 w-4 text-green-600" />
-              <span className="text-sm">Cross-version React Support</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <CheckCircle2 className="h-4 w-4 text-green-600" />
-              <span className="text-sm">V2 Manifest Schema</span>
-            </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </div>
 
       {/* MFE Registry Status */}
-      <div className="space-y-4">
-        <h2 className="text-2xl font-semibold">MFE Registry Status</h2>
-        <div className="grid gap-4">
+      <div className="mb-4">
+        <h2 className="ds-section-title mb-3">MFE Registry Status</h2>
+        <div className="grid gap-3">
           {Array.from(compatibilityResults.entries()).map(([name, result]) => {
             const manifest = registry.get(name);
             if (!manifest) return null;
@@ -337,42 +326,40 @@ export const DashboardPage: React.FC = () => {
             const isV2 = isMFEManifestV2(manifest);
 
             return (
-              <Card key={name} className={!result.compatible ? 'border-red-500' : ''}>
-                <CardHeader className="pb-3">
-                  <div className="flex items-start justify-between">
+              <div key={name} className={`ds-card ${!result.compatible ? 'border-red-500' : ''}`}>
+                <div className="p-3">
+                  <div className="flex items-start justify-between mb-2">
                     <div className="space-y-1">
                       <div className="flex items-center gap-2">
-                        <Package className="h-5 w-5" />
-                        <CardTitle className="text-lg">
+                        <Package className="h-4 w-4 text-blue-500" />
+                        <span className="ds-card-title">
                           {isV2 && manifest.metadata?.displayName
                             ? manifest.metadata.displayName
                             : name}
-                        </CardTitle>
+                        </span>
                         <Badge variant={isV2 ? 'default' : 'secondary'}>{isV2 ? 'V2' : 'V1'}</Badge>
                         {result.compatible ? (
-                          <CheckCircle2 className="h-5 w-5 text-green-600" />
+                          <CheckCircle2 className="h-4 w-4 text-green-600" />
                         ) : (
-                          <XCircle className="h-5 w-5 text-red-600" />
+                          <XCircle className="h-4 w-4 text-red-600" />
                         )}
                       </div>
-                      <CardDescription>
+                      <p className="text-xs text-gray-600">
                         {isV2 && manifest.metadata?.description
                           ? manifest.metadata.description
                           : `Version ${manifest.version}`}
-                      </CardDescription>
+                      </p>
                     </div>
                     <Badge variant="outline" className="text-xs">
                       v{manifest.version}
                     </Badge>
                   </div>
-                </CardHeader>
 
-                <CardContent>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
                     {/* URL */}
                     <div>
                       <span className="font-medium">URL:</span>
-                      <code className="text-xs ml-2 p-1 bg-muted rounded block mt-1 truncate">
+                      <code className="text-xs ml-2 p-1 bg-slate-100 rounded block mt-1 truncate">
                         {manifest.url}
                       </code>
                     </div>
@@ -381,7 +368,7 @@ export const DashboardPage: React.FC = () => {
                     {isV2 && manifest.compatibility?.container && (
                       <div>
                         <span className="font-medium">Container Required:</span>
-                        <code className="text-xs ml-2 p-1 bg-muted rounded">
+                        <code className="text-xs ml-2 p-1 bg-slate-100 rounded">
                           {manifest.compatibility.container}
                         </code>
                       </div>
@@ -409,7 +396,7 @@ export const DashboardPage: React.FC = () => {
 
                   {/* Errors and Warnings */}
                   {(result.errors.length > 0 || result.warnings.length > 0) && (
-                    <div className="mt-4 space-y-2">
+                    <div className="mt-3 space-y-2">
                       {result.errors.length > 0 && (
                         <div className="flex items-start gap-2">
                           <XCircle className="h-4 w-4 text-red-600 mt-0.5" />
@@ -436,47 +423,45 @@ export const DashboardPage: React.FC = () => {
                       )}
                     </div>
                   )}
-                </CardContent>
-              </Card>
+                </div>
+              </div>
             );
           })}
         </div>
       </div>
 
       {/* Platform Configuration */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Platform Configuration</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 text-sm">
+      <div className="ds-card">
+        <div className="p-3">
+          <h2 className="ds-section-title mb-3">Platform Configuration</h2>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 text-sm">
             <div>
-              <span className="text-muted-foreground">Version:</span>
+              <span className="text-gray-500">Version:</span>
               <p className="font-medium">1.0.0</p>
             </div>
             <div>
-              <span className="text-muted-foreground">Environment:</span>
+              <span className="text-gray-500">Environment:</span>
               <p className="font-medium">Development</p>
             </div>
             <div>
-              <span className="text-muted-foreground">Module Format:</span>
+              <span className="text-gray-500">Module Format:</span>
               <p className="font-medium">ES Modules</p>
             </div>
             <div>
-              <span className="text-muted-foreground">React Version:</span>
+              <span className="text-gray-500">React Version:</span>
               <p className="font-medium">19.0.0</p>
             </div>
             <div>
-              <span className="text-muted-foreground">Container Port:</span>
+              <span className="text-gray-500">Container Port:</span>
               <p className="font-medium">3000</p>
             </div>
             <div>
-              <span className="text-muted-foreground">Registry Type:</span>
+              <span className="text-gray-500">Registry Type:</span>
               <p className="font-medium">V2 Manifest</p>
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </div>
   );
 };

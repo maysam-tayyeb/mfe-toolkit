@@ -2,6 +2,10 @@
  * Design System CSS
  * Pure CSS utilities for MFE platform - no JavaScript, no global pollution
  * These classes are available globally via container's stylesheet
+ * 
+ * Color Palette: Modern Blue & Slate
+ * Typography: Optimized for screen real estate
+ * Layout: Centered, responsive, compact
  */
 
 @tailwind base;
@@ -10,17 +14,25 @@
 
 /* Component Classes - Framework Agnostic */
 @layer components {
-  /* Card Components */
+  /* Card Components - Compact for better screen usage */
   .ds-card {
-    @apply rounded-lg border bg-white dark:bg-gray-800;
+    @apply rounded-lg border border-slate-200 bg-white dark:bg-slate-800 dark:border-slate-700;
   }
   
   .ds-card-padded {
-    @apply ds-card p-6;
+    @apply ds-card p-4;  /* Reduced from p-6 */
   }
   
   .ds-card-compact {
-    @apply ds-card p-4;
+    @apply ds-card p-3;  /* Reduced from p-4 */
+  }
+  
+  .ds-card-header {
+    @apply px-4 py-3 border-b border-slate-200 dark:border-slate-700;
+  }
+  
+  .ds-card-content {
+    @apply p-4;
   }
   
   .ds-card-elevated {
@@ -31,59 +43,80 @@
     @apply hover:shadow-lg transition-shadow cursor-pointer;
   }
 
-  /* Button Components */
+  /* Button Components - Compact sizing */
   .ds-button {
     @apply inline-flex items-center justify-center font-medium rounded-md transition-colors;
-    @apply h-9 px-4 text-sm;
+    @apply h-8 px-3 text-sm;  /* Reduced from h-9 px-4 */
   }
   
   .ds-button-primary {
-    @apply ds-button bg-blue-600 text-white hover:bg-blue-700;
+    @apply ds-button bg-blue-500 text-white hover:bg-blue-600;
   }
   
   .ds-button-secondary {
-    @apply ds-button bg-gray-200 text-gray-900 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-gray-600;
+    @apply ds-button bg-slate-100 text-slate-700 hover:bg-slate-200 dark:bg-slate-700 dark:text-slate-100 dark:hover:bg-slate-600;
   }
   
   .ds-button-outline {
-    @apply ds-button border border-gray-300 bg-transparent hover:bg-gray-100 dark:border-gray-600 dark:hover:bg-gray-800;
+    @apply ds-button border border-slate-300 bg-transparent hover:bg-slate-50 dark:border-slate-600 dark:hover:bg-slate-800;
   }
   
   .ds-button-ghost {
-    @apply ds-button hover:bg-gray-100 dark:hover:bg-gray-800;
+    @apply ds-button hover:bg-slate-100 dark:hover:bg-slate-800;
   }
   
   .ds-button-destructive {
-    @apply ds-button bg-red-600 text-white hover:bg-red-700;
+    @apply ds-button bg-red-500 text-white hover:bg-red-600;
   }
   
   .ds-button-sm {
-    @apply h-8 px-3 text-xs;
+    @apply h-7 px-2 text-xs;  /* Even more compact */
   }
   
   .ds-button-lg {
     @apply h-10 px-6;
   }
 
-  /* Typography */
+  /* Typography - Optimized for screen real estate */
+  .ds-page-title {
+    @apply text-xl font-bold;  /* Main page titles */
+  }
+  
+  .ds-section-title {
+    @apply text-base font-semibold;  /* Section headers */
+  }
+  
+  .ds-card-title {
+    @apply text-sm font-medium;  /* Card headers */
+  }
+  
+  .ds-body {
+    @apply text-sm;  /* Body text */
+  }
+  
+  .ds-caption {
+    @apply text-xs text-slate-500 dark:text-slate-400;  /* Small text/captions */
+  }
+  
+  /* Legacy heading support */
   .ds-h1 {
-    @apply text-3xl font-bold tracking-tight;
+    @apply text-xl font-bold;
   }
   
   .ds-h2 {
-    @apply text-2xl font-semibold;
-  }
-  
-  .ds-h3 {
-    @apply text-xl font-semibold;
-  }
-  
-  .ds-h4 {
     @apply text-lg font-semibold;
   }
   
+  .ds-h3 {
+    @apply text-base font-semibold;
+  }
+  
+  .ds-h4 {
+    @apply text-sm font-medium;
+  }
+  
   .ds-text-muted {
-    @apply text-gray-600 dark:text-gray-400;
+    @apply text-slate-500 dark:text-slate-400;
   }
   
   .ds-text-small {
@@ -94,17 +127,25 @@
     @apply text-xs;
   }
 
-  /* Layout Components */
-  .ds-container {
+  /* Layout Components - Centered and compact */
+  .ds-layout-container {
+    @apply max-w-6xl mx-auto px-4 sm:px-6 lg:px-8;  /* Centered content */
+  }
+  
+  .ds-layout-narrow {
+    @apply max-w-4xl mx-auto px-4 sm:px-6;
+  }
+  
+  .ds-layout-wide {
     @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
   }
   
-  .ds-container-narrow {
-    @apply max-w-4xl mx-auto px-4 sm:px-6 lg:px-8;
+  .ds-page {
+    @apply py-4 space-y-4;  /* Compact page spacing */
   }
   
   .ds-section {
-    @apply py-8 space-y-6;
+    @apply space-y-4;  /* Reduced from space-y-6 */
   }
   
   .ds-grid-2 {
@@ -120,21 +161,26 @@
   }
   
   .ds-stack {
-    @apply space-y-4;
+    @apply space-y-3;  /* Reduced spacing */
   }
   
   .ds-stack-sm {
     @apply space-y-2;
   }
   
+  .ds-stack-xs {
+    @apply space-y-1;
+  }
+  
   .ds-stack-lg {
-    @apply space-y-6;
+    @apply space-y-4;  /* Reduced from space-y-6 */
   }
 
   /* Form Elements */
   .ds-input {
-    @apply w-full px-3 py-2 border rounded-md text-sm;
+    @apply w-full px-3 py-1.5 border border-slate-300 rounded-md text-sm;
     @apply focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500;
+    @apply dark:border-slate-600 dark:bg-slate-800;
   }
   
   .ds-textarea {
@@ -155,7 +201,7 @@
   }
   
   .ds-badge-default {
-    @apply ds-badge bg-gray-200 text-gray-900 dark:bg-gray-700 dark:text-gray-100;
+    @apply ds-badge bg-slate-100 text-slate-700 dark:bg-slate-700 dark:text-slate-100;
   }
   
   .ds-badge-primary {
@@ -163,15 +209,15 @@
   }
   
   .ds-badge-success {
-    @apply ds-badge bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200;
+    @apply ds-badge bg-emerald-100 text-emerald-700 dark:bg-emerald-900 dark:text-emerald-200;
   }
   
   .ds-badge-warning {
-    @apply ds-badge bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200;
+    @apply ds-badge bg-amber-100 text-amber-700 dark:bg-amber-900 dark:text-amber-200;
   }
   
   .ds-badge-error {
-    @apply ds-badge bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200;
+    @apply ds-badge bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-200;
   }
 
   /* Alert/Notification Components */
@@ -180,23 +226,23 @@
   }
   
   .ds-alert-info {
-    @apply ds-alert bg-blue-50 border-blue-200 text-blue-900;
-    @apply dark:bg-blue-950 dark:border-blue-800 dark:text-blue-100;
+    @apply ds-alert bg-blue-50 border-blue-200 text-blue-700;
+    @apply dark:bg-blue-950 dark:border-blue-800 dark:text-blue-200;
   }
   
   .ds-alert-success {
-    @apply ds-alert bg-green-50 border-green-200 text-green-900;
-    @apply dark:bg-green-950 dark:border-green-800 dark:text-green-100;
+    @apply ds-alert bg-emerald-50 border-emerald-200 text-emerald-700;
+    @apply dark:bg-emerald-950 dark:border-emerald-800 dark:text-emerald-200;
   }
   
   .ds-alert-warning {
-    @apply ds-alert bg-yellow-50 border-yellow-200 text-yellow-900;
-    @apply dark:bg-yellow-950 dark:border-yellow-800 dark:text-yellow-100;
+    @apply ds-alert bg-amber-50 border-amber-200 text-amber-700;
+    @apply dark:bg-amber-950 dark:border-amber-800 dark:text-amber-200;
   }
   
   .ds-alert-error {
-    @apply ds-alert bg-red-50 border-red-200 text-red-900;
-    @apply dark:bg-red-950 dark:border-red-800 dark:text-red-100;
+    @apply ds-alert bg-red-50 border-red-200 text-red-700;
+    @apply dark:bg-red-950 dark:border-red-800 dark:text-red-200;
   }
 
   /* List Components */
@@ -223,13 +269,39 @@
 
   /* Loading States */
   .ds-skeleton {
-    @apply animate-pulse bg-gray-200 dark:bg-gray-700 rounded;
+    @apply animate-pulse bg-slate-200 dark:bg-slate-700 rounded;
   }
   
   .ds-spinner {
-    @apply animate-spin h-4 w-4 border-2 border-blue-600 border-t-transparent rounded-full;
+    @apply animate-spin h-4 w-4 border-2 border-blue-500 border-t-transparent rounded-full;
   }
 
+  /* Status Colors */
+  .ds-text-success {
+    @apply text-emerald-600 dark:text-emerald-400;
+  }
+  
+  .ds-text-warning {
+    @apply text-amber-600 dark:text-amber-400;
+  }
+  
+  .ds-text-error {
+    @apply text-red-600 dark:text-red-400;
+  }
+  
+  .ds-text-info {
+    @apply text-blue-600 dark:text-blue-400;
+  }
+  
+  /* Background Colors */
+  .ds-bg-surface {
+    @apply bg-white dark:bg-slate-800;
+  }
+  
+  .ds-bg-muted {
+    @apply bg-slate-50 dark:bg-slate-900;
+  }
+  
   /* Utility Classes */
   .ds-truncate {
     @apply truncate;

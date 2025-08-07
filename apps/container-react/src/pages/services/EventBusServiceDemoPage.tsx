@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { RegistryMFELoader } from '@/components/RegistryMFELoader';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Radio, Send, X } from 'lucide-react';
@@ -78,22 +77,20 @@ export function EventBusServiceDemoPage() {
       </div>
 
       {/* Service Description */}
-      <Card>
-        <CardHeader className="py-3">
-          <CardTitle className="flex items-center gap-2 text-base">
-            <Radio className="h-4 w-4" />
+      <div className="ds-card mb-3">
+        <div className="p-3">
+          <div className="ds-section-title flex items-center gap-2 mb-2">
+            <Radio className="h-4 w-4 text-purple-500" />
             About Event Bus Service
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="text-sm">
-          <p className="text-muted-foreground">
+          </div>
+          <p className="text-sm text-gray-600 mb-2">
             The Event Bus Service enables decoupled communication between MFEs using a publish-subscribe pattern. 
             MFEs can emit events and listen to events without knowing about each other's existence.
           </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             <div>
-              <h4 className="font-semibold mb-1.5 text-sm">Key Features:</h4>
-              <ul className="list-disc list-inside space-y-0.5 text-xs text-muted-foreground">
+              <h4 className="font-semibold mb-1 text-sm">Key Features:</h4>
+              <ul className="list-disc list-inside space-y-0.5 text-xs text-gray-500">
                 <li>Pub/sub pattern for loose coupling</li>
                 <li>Type-safe event handling</li>
                 <li>Event namespacing support</li>
@@ -103,8 +100,8 @@ export function EventBusServiceDemoPage() {
               </ul>
             </div>
             <div>
-              <h4 className="font-semibold mb-1.5 text-sm">API Methods:</h4>
-              <ul className="list-disc list-inside space-y-0.5 text-xs font-mono text-muted-foreground">
+              <h4 className="font-semibold mb-1 text-sm">API Methods:</h4>
+              <ul className="list-disc list-inside space-y-0.5 text-xs font-mono text-gray-500">
                 <li>eventBus.emit(event, data)</li>
                 <li>eventBus.on(event, handler)</li>
                 <li>eventBus.once(event, handler)</li>
@@ -113,21 +110,19 @@ export function EventBusServiceDemoPage() {
               </ul>
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       {/* Container Event Controls */}
-      <Card>
-        <CardHeader className="py-3">
-          <CardTitle className="flex items-center gap-2 text-base">
-            <Send className="h-4 w-4" />
+      <div className="ds-card mb-3">
+        <div className="p-3">
+          <div className="ds-section-title flex items-center gap-2 mb-1">
+            <Send className="h-4 w-4 text-blue-500" />
             Container Event Emitter
-          </CardTitle>
-          <CardDescription className="text-xs">
+          </div>
+          <p className="text-xs text-gray-600 mb-3">
             Emit events from the container to demonstrate cross-boundary communication
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
+          </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Container Event Emitters */}
             <div className="space-y-4">
@@ -166,7 +161,7 @@ export function EventBusServiceDemoPage() {
                   ) : (
                     <div className="flex flex-wrap gap-1.5">
                       {subscribedEvents.map(event => {
-                        const [category, action] = event.split(':');
+                        const [category] = event.split(':');
                         return (
                           <div
                             key={event}
@@ -202,7 +197,7 @@ export function EventBusServiceDemoPage() {
                       .filter(e => !subscribedEvents.includes(e))
                       .slice(0, 6)
                       .map(event => {
-                        const [category, action] = event.split(':');
+                        const [, action] = event.split(':');
                         return (
                           <button
                             key={event}
@@ -227,8 +222,8 @@ export function EventBusServiceDemoPage() {
               emptySubMessage="Emit events to see them here"
             />
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       {/* Interactive MFE Demos */}
       <div className="space-y-3">
@@ -238,17 +233,17 @@ export function EventBusServiceDemoPage() {
         </div>
         
         {/* Tabbed MFE Interface */}
-        <Card className="relative overflow-hidden">
-          <CardHeader className="py-2 border-b">
+        <div className="ds-card relative overflow-hidden">
+          <div className="py-2 px-3 border-b border-gray-200">
             <div className="flex items-center gap-2 overflow-x-auto">
               <button
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-md bg-primary/10 text-primary border border-primary/20 whitespace-nowrap"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded bg-purple-50 text-purple-600 border border-purple-200 whitespace-nowrap"
               >
                 <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
                 React 19 Demo
               </button>
               <button
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-md hover:bg-muted text-muted-foreground border border-transparent whitespace-nowrap"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded hover:bg-slate-50 text-gray-500 border border-transparent whitespace-nowrap"
                 disabled
               >
                 <span className="w-2 h-2 bg-gray-400 rounded-full" />
@@ -256,7 +251,7 @@ export function EventBusServiceDemoPage() {
                 <Badge variant="outline" className="text-[10px] px-1 py-0 ml-1">Coming Soon</Badge>
               </button>
               <button
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-md hover:bg-muted text-muted-foreground border border-transparent whitespace-nowrap"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded hover:bg-slate-50 text-gray-500 border border-transparent whitespace-nowrap"
                 disabled
               >
                 <span className="w-2 h-2 bg-gray-400 rounded-full" />
@@ -264,7 +259,7 @@ export function EventBusServiceDemoPage() {
                 <Badge variant="outline" className="text-[10px] px-1 py-0 ml-1">Coming Soon</Badge>
               </button>
               <button
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-md hover:bg-muted text-muted-foreground border border-transparent whitespace-nowrap"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded hover:bg-slate-50 text-gray-500 border border-transparent whitespace-nowrap"
                 disabled
               >
                 <span className="w-2 h-2 bg-gray-400 rounded-full" />
@@ -272,21 +267,21 @@ export function EventBusServiceDemoPage() {
                 <Badge variant="outline" className="text-[10px] px-1 py-0 ml-1">Coming Soon</Badge>
               </button>
             </div>
-          </CardHeader>
-          <CardContent className="p-0">
-            <div className="grid grid-cols-1 lg:grid-cols-3 divide-x divide-border">
+          </div>
+          <div className="p-0">
+            <div className="grid grid-cols-1 lg:grid-cols-3 divide-x divide-gray-200">
               {/* MFE Container */}
-              <div className="lg:col-span-2 p-4">
+              <div className="lg:col-span-2 p-3">
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <h3 className="text-sm font-semibold">React 19 MFE</h3>
+                    <h3 className="ds-card-title">React 19 MFE</h3>
                     <Badge variant="outline" className="text-[10px]">v{React.version}</Badge>
                   </div>
-                  <div className="border rounded-lg bg-muted/10 min-h-[450px]">
+                  <div className="border border-gray-200 rounded bg-slate-50 min-h-[450px]">
                     <RegistryMFELoader
                       id="mfe-react19-eventbus-demo"
                       fallback={
-                        <div className="flex items-center justify-center h-[450px] text-muted-foreground">
+                        <div className="flex items-center justify-center h-[450px] text-gray-500">
                           <p className="text-sm">Loading React 19 Event Bus Demo...</p>
                         </div>
                       }
@@ -296,32 +291,32 @@ export function EventBusServiceDemoPage() {
               </div>
               
               {/* MFE Info Panel */}
-              <div className="p-4 bg-muted/5">
-                <div className="space-y-4">
+              <div className="p-3 bg-slate-50">
+                <div className="space-y-3">
                   <div>
-                    <h4 className="text-xs font-semibold text-muted-foreground mb-2">MFE DETAILS</h4>
+                    <h4 className="text-xs font-semibold text-gray-500 mb-2 uppercase">MFE Details</h4>
                     <div className="space-y-2">
                       <div className="flex items-center justify-between text-xs">
-                        <span className="text-muted-foreground">Framework:</span>
+                        <span className="text-gray-500">Framework:</span>
                         <Badge variant="secondary" className="text-[10px] px-1.5 py-0">React 19</Badge>
                       </div>
                       <div className="flex items-center justify-between text-xs">
-                        <span className="text-muted-foreground">Bundle Size:</span>
+                        <span className="text-gray-500">Bundle Size:</span>
                         <span className="font-mono">~45KB</span>
                       </div>
                       <div className="flex items-center justify-between text-xs">
-                        <span className="text-muted-foreground">Load Time:</span>
+                        <span className="text-gray-500">Load Time:</span>
                         <span className="font-mono">~120ms</span>
                       </div>
                       <div className="flex items-center justify-between text-xs">
-                        <span className="text-muted-foreground">Status:</span>
+                        <span className="text-gray-500">Status:</span>
                         <span className="text-green-600">● Active</span>
                       </div>
                     </div>
                   </div>
                   
                   <div>
-                    <h4 className="text-xs font-semibold text-muted-foreground mb-2">CAPABILITIES</h4>
+                    <h4 className="text-xs font-semibold text-gray-500 mb-2 uppercase">Capabilities</h4>
                     <div className="space-y-1">
                       <div className="flex items-center gap-1.5 text-xs">
                         <span className="text-green-500">✓</span>
@@ -347,7 +342,7 @@ export function EventBusServiceDemoPage() {
                   </div>
                   
                   <div>
-                    <h4 className="text-xs font-semibold text-muted-foreground mb-2">QUICK ACTIONS</h4>
+                    <h4 className="text-xs font-semibold text-gray-500 mb-2 uppercase">Quick Actions</h4>
                     <div className="space-y-1.5">
                       <Button 
                         size="sm" 
@@ -386,8 +381,8 @@ export function EventBusServiceDemoPage() {
                     </div>
                   </div>
                   
-                  <div className="pt-2 border-t">
-                    <p className="text-[10px] text-muted-foreground">
+                  <div className="pt-2 border-t border-gray-200">
+                    <p className="text-[10px] text-gray-500">
                       This MFE demonstrates event bus communication patterns. 
                       Try emitting events from the container above and watch them appear in the MFE's event log.
                     </p>
@@ -395,23 +390,21 @@ export function EventBusServiceDemoPage() {
                 </div>
               </div>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </div>
 
       {/* Common Use Cases */}
-      <Card>
-        <CardHeader className="py-3">
-          <CardTitle className="text-base">Common Use Cases</CardTitle>
-          <CardDescription className="text-xs">
+      <div className="ds-card mb-3">
+        <div className="p-3">
+          <h2 className="ds-section-title mb-1">Common Use Cases</h2>
+          <p className="text-xs text-gray-600 mb-3">
             Typical scenarios where Event Bus communication is useful
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             <div>
-              <h4 className="font-semibold mb-2">User Authentication</h4>
-              <pre className="bg-muted p-3 rounded text-xs overflow-x-auto">
+              <h4 className="ds-card-title mb-2">User Authentication</h4>
+              <pre className="bg-slate-100 p-3 rounded text-xs overflow-x-auto">
                 <code>{`// Login MFE
 eventBus.emit('user:login', { 
   userId: '123', 
@@ -425,8 +418,8 @@ eventBus.on('user:login', (data) => {
               </pre>
             </div>
             <div>
-              <h4 className="font-semibold mb-2">Theme Changes</h4>
-              <pre className="bg-muted p-3 rounded text-xs overflow-x-auto">
+              <h4 className="ds-card-title mb-2">Theme Changes</h4>
+              <pre className="bg-slate-100 p-3 rounded text-xs overflow-x-auto">
                 <code>{`// Settings MFE
 eventBus.emit('theme:change', { 
   theme: 'dark' 
@@ -439,8 +432,8 @@ eventBus.on('theme:change', (data) => {
               </pre>
             </div>
             <div>
-              <h4 className="font-semibold mb-2">Data Updates</h4>
-              <pre className="bg-muted p-3 rounded text-xs overflow-x-auto">
+              <h4 className="ds-card-title mb-2">Data Updates</h4>
+              <pre className="bg-slate-100 p-3 rounded text-xs overflow-x-auto">
                 <code>{`// Product MFE
 eventBus.emit('product:updated', { 
   id: '456', 
@@ -454,8 +447,8 @@ eventBus.on('product:updated', (data) => {
               </pre>
             </div>
             <div>
-              <h4 className="font-semibold mb-2">Navigation Events</h4>
-              <pre className="bg-muted p-3 rounded text-xs overflow-x-auto">
+              <h4 className="ds-card-title mb-2">Navigation Events</h4>
+              <pre className="bg-slate-100 p-3 rounded text-xs overflow-x-auto">
                 <code>{`// Navigation MFE
 eventBus.emit('nav:goto', { 
   path: '/dashboard' 
@@ -468,35 +461,33 @@ eventBus.on('nav:goto', (data) => {
               </pre>
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       {/* Best Practices */}
-      <Card>
-        <CardHeader className="py-3">
-          <CardTitle className="text-base">Best Practices</CardTitle>
-          <CardDescription className="text-xs">
+      <div className="ds-card">
+        <div className="p-3">
+          <h2 className="ds-section-title mb-1">Best Practices</h2>
+          <p className="text-xs text-gray-600 mb-3">
             Guidelines for effective Event Bus usage
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
+          </p>
+          <div className="space-y-3">
             <div>
-              <h4 className="font-semibold mb-2">Event Naming Convention</h4>
-              <p className="text-sm text-muted-foreground mb-2">
+              <h4 className="ds-card-title mb-2">Event Naming Convention</h4>
+              <p className="text-sm text-gray-600 mb-2">
                 Use namespaced events to avoid conflicts:
               </p>
               <ul className="list-disc list-inside space-y-1 text-sm">
-                <li><code className="bg-muted px-1">domain:action</code> - e.g., user:login, cart:add</li>
-                <li><code className="bg-muted px-1">mfe:domain:action</code> - e.g., checkout:payment:complete</li>
+                <li><code className="bg-slate-100 px-1 rounded">domain:action</code> - e.g., user:login, cart:add</li>
+                <li><code className="bg-slate-100 px-1 rounded">mfe:domain:action</code> - e.g., checkout:payment:complete</li>
               </ul>
             </div>
             <div>
-              <h4 className="font-semibold mb-2">Cleanup</h4>
-              <p className="text-sm text-muted-foreground mb-2">
+              <h4 className="ds-card-title mb-2">Cleanup</h4>
+              <p className="text-sm text-gray-600 mb-2">
                 Always cleanup event listeners to prevent memory leaks:
               </p>
-              <pre className="bg-muted p-3 rounded text-sm overflow-x-auto">
+              <pre className="bg-slate-100 p-3 rounded text-sm overflow-x-auto">
                 <code>{`useEffect(() => {
   const unsubscribe = eventBus.on('event', handler);
   return () => unsubscribe(); // Cleanup
@@ -504,11 +495,11 @@ eventBus.on('nav:goto', (data) => {
               </pre>
             </div>
             <div>
-              <h4 className="font-semibold mb-2">Type Safety</h4>
-              <p className="text-sm text-muted-foreground mb-2">
+              <h4 className="ds-card-title mb-2">Type Safety</h4>
+              <p className="text-sm text-gray-600 mb-2">
                 Define event types for better type safety:
               </p>
-              <pre className="bg-muted p-3 rounded text-sm overflow-x-auto">
+              <pre className="bg-slate-100 p-3 rounded text-sm overflow-x-auto">
                 <code>{`type EventMap = {
   'user:login': { userId: string; username: string };
   'theme:change': { theme: 'light' | 'dark' };
@@ -516,8 +507,8 @@ eventBus.on('nav:goto', (data) => {
               </pre>
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </div>
   );
 }

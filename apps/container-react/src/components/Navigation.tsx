@@ -7,7 +7,7 @@ import { Theme } from '@mfe-toolkit/core';
 import { getThemeService } from '@/services/theme-service';
 import { 
   Moon, Sun, Menu, X, Home, LayoutDashboard, Layers, Radio, 
-  Database, AlertCircle, Package, ChevronDown, Sparkles
+  AlertCircle, Package, ChevronDown, Sparkles
 } from 'lucide-react';
 
 interface NavItem {
@@ -57,14 +57,7 @@ export const Navigation: React.FC = () => {
       items: [
         { path: '/services/modal', label: 'Modal', icon: <Layers className="h-4 w-4" /> },
         { path: '/services/event-bus', label: 'Event Bus', icon: <Radio className="h-4 w-4" /> },
-      ]
-    },
-    {
-      title: 'Features',
-      items: [
-        { path: '/mfe-communication', label: 'Communication', icon: <Radio className="h-4 w-4" /> },
-        { path: '/universal-state-demo', label: 'State', icon: <Database className="h-4 w-4" /> },
-        { path: '/error-boundary-demo', label: 'Errors', icon: <AlertCircle className="h-4 w-4" /> },
+        { path: '/error-boundary-demo', label: 'Error Handling', icon: <AlertCircle className="h-4 w-4" /> },
       ]
     },
     {
