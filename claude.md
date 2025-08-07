@@ -270,6 +270,37 @@ See [State Management Architecture](./docs/architecture/state-management-archite
 - **Service Injection**: No global window pollution, better testability
 - **Dual MFE Loaders**: Temporary solution for handling different re-render scenarios
 
+## Design System
+
+### Architecture
+- **Framework-specific packages**: `@mfe/design-system-react`, `@mfe/design-system-vue`, `@mfe/design-system-vanilla`
+- **Shared tokens**: `@mfe/design-system-tokens` for consistency
+- **Service injection**: Components provided via `services.designSystem`, NOT window/global
+- **No global pollution**: Everything is properly imported and injected
+
+### Usage in MFEs
+```typescript
+// Load design system components
+const components = await services.designSystem.getReactComponents();
+const { Card, Button } = components;
+
+// Always provide fallbacks
+const CardComponent = Card || FallbackCard;
+```
+
+### Key Components
+- **Card**: Standardized card with variants (default, elevated, interactive, bordered)
+- **Button**: Consistent button with h-9 height (not h-10)
+- **Section**: Page section wrapper
+- **Grid**: Responsive grid layouts
+- **InfoBlock**: Information display component
+
+### Development with Design System
+1. Use dev container with design system service enabled
+2. Load components asynchronously
+3. Always provide fallback components
+4. Mark design system as external in build
+
 ### After Making Changes
 
 Always run these commands to ensure code quality:
@@ -327,8 +358,9 @@ If you don't know the correct commands for a project, ask the user and suggest u
 
 ## State Management Principles
 
-- **Strictly no global polutioning. Only use state management**
-- **Never ever do window or global polutioning.**
+- **Strictly no global polluting. Only use state management**
+- **No window or global object pollution - ever**
+- **Design system provided via service injection, not global/window**
 
 ## JavaScript Best Practices
 
