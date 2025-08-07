@@ -336,6 +336,7 @@ If you don't know the correct commands for a project, ask the user and suggest u
 ## Mental Model
 
 - **Think, analyse, plan, then execute**
+- **At no circumstances do hacky work. Always plan and think well, document your tasks and execute.**
 
 ## Build Process Notes
 
