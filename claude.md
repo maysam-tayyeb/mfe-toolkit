@@ -88,10 +88,12 @@ This is a **microfrontend (MFE) monorepo** using pnpm workspaces. The architectu
 
 ### UI/UX Design Principles
 
+- **Zero-Pollution Design System**: CSS-first approach with `ds-*` prefixed classes (ds-page, ds-card, ds-button)
+- **Modern Blue & Slate Palette**: Professional, cohesive color scheme with vibrant accent colors
 - **Top Navigation Bar**: Uses dropdown menus for better screen real estate
-- **Compact Layouts**: Optimized font sizes (text-xs, text-sm) for content density
+- **Centered Layouts**: Content centered with max-w-6xl for optimal readability
+- **Compact Typography**: Optimized font sizes (text-xs, text-sm) for content density
 - **Consistent Spacing**: Smaller padding and margins for efficiency
-- **Page Width**: Constrained to max-w-7xl for better readability
 - **Component Organization**: 3-column layouts for complex interfaces
 - **Visual Hierarchy**: Clear section headers with consistent typography
 
@@ -225,11 +227,14 @@ The toolkit is split into several npm packages under the `@mfe-toolkit` organiza
 - Redux slices: `apps/container-react/src/store/`
 - MFE types: `packages/mfe-toolkit-core/src/types/`
 - Shared components: `apps/container-react/src/components/ui/`
-- Design system components: `packages/design-system/src/components/`
+- Design system styles: `packages/design-system/src/styles/index.css`
+- Design system tokens: `packages/design-system/src/tokens/index.ts`
 - MFE registry: `apps/container-react/public/mfe-registry.json`
-- Navigation: `apps/container-react/src/components/Navigation.tsx` (top nav bar with dropdowns)
-- Layout: `apps/container-react/src/components/Layout.tsx`
+- Navigation: `apps/container-react/src/components/Navigation.tsx` (top nav bar with Services/MFEs sections)
+- Layout: `apps/container-react/src/components/Layout.tsx` (centered content layout)
+- Modal Service Demo: `apps/container-react/src/pages/services/ModalServiceDemoPage.tsx`
 - Event Bus Demo: `apps/container-react/src/pages/services/EventBusServiceDemoPage.tsx`
+- Error Handling Demo: `apps/container-react/src/pages/ErrorBoundaryDemoPage.tsx`
 
 ### State Management
 
@@ -273,33 +278,39 @@ See [State Management Architecture](./docs/architecture/state-management-archite
 ## Design System
 
 ### Architecture
-- **Framework-specific packages**: `@mfe/design-system-react`, `@mfe/design-system-vue`, `@mfe/design-system-vanilla`
-- **Shared tokens**: `@mfe/design-system-tokens` for consistency
-- **Service injection**: Components provided via `services.designSystem`, NOT window/global
-- **No global pollution**: Everything is properly imported and injected
+- **Zero-Pollution Approach**: CSS-first design system with NO global/window variables
+- **CSS Classes**: All styles use `ds-*` prefix (ds-page, ds-card, ds-button, ds-section-title)
+- **Optional ES Modules**: Tokens available via explicit imports, not required for basic usage
+- **Framework-Agnostic**: Works with React, Vue, and Vanilla JS through CSS classes
+- **Modern Blue & Slate Palette**: Professional color scheme with vibrant accents
+
+### Key CSS Classes
+- **ds-page**: Centered page container with max-w-6xl
+- **ds-card**: Card container with padding and border
+- **ds-page-title**: Page-level heading (text-xl, font-bold)
+- **ds-section-title**: Section heading (text-lg, font-semibold) 
+- **ds-card-title**: Card heading (text-base, font-semibold)
+- **ds-button-primary**: Primary button styling
+- **ds-button-outline**: Outlined button variant
+- **ds-text-muted**: Muted text color
+- **ds-text-small**: Small text size
 
 ### Usage in MFEs
-```typescript
-// Load design system components
-const components = await services.designSystem.getReactComponents();
-const { Card, Button } = components;
-
-// Always provide fallbacks
-const CardComponent = Card || FallbackCard;
+```html
+<!-- Direct CSS class usage (recommended) -->
+<div class="ds-page">
+  <h1 class="ds-page-title">Page Title</h1>
+  <div class="ds-card">
+    <h2 class="ds-section-title">Section</h2>
+  </div>
+</div>
 ```
 
-### Key Components
-- **Card**: Standardized card with variants (default, elevated, interactive, bordered)
-- **Button**: Consistent button with h-9 height (not h-10)
-- **Section**: Page section wrapper
-- **Grid**: Responsive grid layouts
-- **InfoBlock**: Information display component
-
-### Development with Design System
-1. Use dev container with design system service enabled
-2. Load components asynchronously
-3. Always provide fallback components
-4. Mark design system as external in build
+### Development Guidelines
+1. Use CSS classes directly - no component imports needed
+2. Classes are provided by container's stylesheet
+3. No global pollution or window variables
+4. Framework-agnostic approach for maximum compatibility
 
 ### After Making Changes
 

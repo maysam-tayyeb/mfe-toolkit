@@ -11,7 +11,8 @@ A comprehensive toolkit and reference architecture for building production-ready
 - 🔄 **Cross-Framework Support** - React, Vue, and Vanilla JS MFEs work together ([see demos](./docs/service-demos.md))
 - 🛠️ **Modern Tooling** - Vite, TypeScript, pnpm workspaces, and ESBuild
 - 🔧 **Universal State Manager** - Cross-framework state management (React, Vue, Vanilla JS) with proxy-based reactivity and middleware support
-- 🎨 **Optimized UI/UX** - Top navigation bar, compact layouts, and responsive design for better screen real estate
+- 🎨 **Zero-Pollution Design System** - Framework-agnostic CSS-first design system with Modern Blue & Slate palette
+- 📐 **Optimized UI/UX** - Top navigation bar, compact layouts, centered content for better screen real estate
 
 ## 🏗️ Architecture Overview
 
@@ -19,8 +20,8 @@ A comprehensive toolkit and reference architecture for building production-ready
 ┌─────────────────────────────────────────────────────────────┐
 │                      Container Application                  │
 │  ┌───────────────────────────────────────────────────────┐  │
-│  │  Navigation | Dashboard | MFE Communication Center    │  │
-│  │  Universal State Demo | Error Boundary Demo           │  │
+│  │  Navigation | Dashboard | Modal Service | Event Bus   │  │
+│  │  Error Handling Demo                                  │  │
 │  └───────────────────────────────────────────────────────┘  │
 │                                                             │
 │  ┌─────────────────────────────────────────────────────┐    │

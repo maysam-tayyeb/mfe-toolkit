@@ -20,6 +20,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Event bus migration adapter for backward compatibility
 - TypedEventDemo component demonstrating typed event usage
 - Comprehensive typed event bus migration guide
+- Zero-pollution design system with CSS-first approach
+- Modern Blue & Slate color palette for professional UI
+- Design system CSS classes with `ds-*` prefix
+- Centered layout patterns with max-w-6xl constraint
 
 ### Changed
 
@@ -28,10 +32,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Modified MFE services to use lazy initialization with context bridge
 - Updated import map to remove Redux dependencies
 - Improved state isolation between container and MFEs
-- Event bus now defaults to typed implementation instead of legacy
-- All event bus tests updated to work with typed implementation
+- Migrated all pages and MFEs to new design system
+- Replaced Card components with ds-card divs
+- Consolidated navigation structure (merged Features into Services)
+- Applied compact typography and spacing throughout
 
 ### Removed
+
+- MFECommunicationPage (legacy page with non-existent MFE references)
+- UniversalStateDemoPage (legacy state demo page)
+- RegistryStatusPage (orphaned page with no routes)
+- HomePage-DesignSystem (experimental design system page)
 
 - Redux and react-redux dependencies from container
 - Global window assignments:
