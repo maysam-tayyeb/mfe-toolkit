@@ -1,6 +1,7 @@
 /**
  * Design System Tokens
  * Centralized design tokens for consistent UI across the MFE platform
+ * These tokens are framework-agnostic and can be used with React, Vue, or Vanilla JS
  */
 
 export const typography = {
@@ -104,12 +105,14 @@ export const colors = {
 export const borders = {
   // Border Styles
   default: 'border',
-  none: 'border-0',
+  borderNone: 'border-0',
   
   // Border Widths
   thin: 'border',
   thick: 'border-2',
-  
+} as const;
+
+export const radius = {
   // Border Radius
   none: 'rounded-none',
   sm: 'rounded-sm',
@@ -153,6 +156,7 @@ export default {
   layout,
   colors,
   borders,
+  radius,
   shadows,
   transitions,
 };

@@ -158,6 +158,35 @@ export class MFEDevContainer {
 - **Webpack plugin**: `@mfe-toolkit/webpack-plugin-dev-container`
 - **esbuild plugin**: `@mfe-toolkit/esbuild-plugin-dev-container`
 
+##### Shared Dependencies Strategy
+
+**Critical Insight**: MFEs expect certain dependencies from the container (React, Vue, design system components). The dev container must provide these.
+
+```typescript
+// dev-container/src/shared-dependencies.ts
+export const sharedDependencies = {
+  react: () => import('react'),
+  'react-dom': () => import('react-dom'),
+  vue: () => import('vue'),
+  '@mfe/design-system': () => import('@mfe/design-system'),
+  '@mfe-toolkit/core': () => import('@mfe-toolkit/core'),
+};
+
+// In dev container HTML
+window.__SHARED_DEPS__ = {
+  'react': React,
+  'react-dom': ReactDOM,
+  'vue': Vue,
+  '@mfe/design-system': DesignSystem
+};
+```
+
+This allows MFEs to:
+1. Use shared React/Vue from container (no duplication)
+2. Access design system components
+3. Maintain small bundle sizes
+4. Ensure version consistency
+
 ## Transformation Strategy
 
 ### Phase 0: Development Infrastructure (Week 0.5) - NEW PRIORITY

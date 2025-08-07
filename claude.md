@@ -328,6 +328,7 @@ If you don't know the correct commands for a project, ask the user and suggest u
 ## State Management Principles
 
 - **Strictly no global polutioning. Only use state management**
+- **Never ever do window or global polutioning.**
 
 ## JavaScript Best Practices
 
