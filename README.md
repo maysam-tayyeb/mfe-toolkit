@@ -48,18 +48,19 @@ A comprehensive toolkit and reference architecture for building production-ready
 │         Static File Server (Port 8080)                      │
 │         Serves Built MFEs from dist/ directory              │
 │  ┌──────────────┐ ┌──────────────┐ ┌─────────────────┐      │
-│  │/mfe-example/ │ │/mfe-react17/ │ │/mfe-state-demo-*│      │
-│  │.js .js.map   │ │.js .js.map   │ │react|vue|vanilla│      │
+│  │/modal-demos/ │ │/eventbus-demo│ │/state-demos/*  │      │
+│  │react|vue|js  │ │.js .js.map   │ │react|vue|vanilla│      │
 │  └──────────────┘ └──────────────┘ └─────────────────┘      │
 └─────────────────────────────────────────────────────────────┘
                               ↓
 ┌─────────────────────────────────────────────────────────────┐
 │                    Microfrontends (MFEs)                    │
 │  ┌──────────────┐ ┌──────────────┐ ┌─────────────────┐      │
-│  │Example MFE   │ │React17 MFE   │ │State Demo MFEs  │      │
-│  │- Services    │ │- Legacy      │ │- React          │      │
-│  │- Event Bus   │ │- Zustand     │ │- Vue            │      │
-│  │- Modals      │ │- Services    │ │- Vanilla JS     │      │
+│  │Modal Demos   │ │EventBus Demo │ │State Demo MFEs  │      │
+│  │- React 19    │ │- React 19    │ │- React          │      │
+│  │- React 17    │ │- Event comm  │ │- Vue            │      │
+│  │- Vue 3       │ │- Services    │ │- Vanilla JS     │      │
+│  │- Vanilla JS  │ │              │ │                 │      │
 │  └──────────────┘ └──────────────┘ └─────────────────┘      │
 └─────────────────────────────────────────────────────────────┘
 ```

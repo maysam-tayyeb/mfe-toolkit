@@ -107,13 +107,12 @@ This is a **microfrontend (MFE) monorepo** using pnpm workspaces. The architectu
    - MFE registry system for configuration management
    - Uses React Context for state management (AuthContext, UIContext, RegistryContext)
 
-2. **Microfrontends** (`apps/mfe-*/` and `apps/service-demos/`)
-   - `mfe-example`: Demonstrates all MFE services and capabilities
-   - `mfe-react17`: Legacy MFE showing cross-version React compatibility
+2. **Microfrontends** (`apps/service-demos/`)
    - `mfe-react19-eventbus-demo`: React 19 Event bus communication demo
-   - `mfe-state-demo-react`: Universal state management demo (React)
-   - `mfe-state-demo-vue`: Universal state management demo (Vue)
-   - `mfe-state-demo-vanilla`: Universal state management demo (Vanilla JS)
+   - `mfe-react19-modal-demo`: React 19 Modal service demo
+   - `mfe-react17-modal-demo`: React 17 Modal service demo (cross-version compatibility)
+   - `mfe-vue3-modal-demo`: Vue 3 Modal service demo
+   - `mfe-vanilla-modal-demo`: Vanilla JS Modal service demo
 
 3. **Shared Packages** (`packages/`)
    - `@mfe-toolkit/core`: Framework-agnostic toolkit with types, services, and utilities
@@ -122,7 +121,8 @@ This is a **microfrontend (MFE) monorepo** using pnpm workspaces. The architectu
    - `@mfe-toolkit/state`: Cross-framework state management solution
    - `@mfe-toolkit/state-middleware-performance`: Performance monitoring middleware for state management
    - `@mfe/shared`: Internal shared utilities for demo apps (private, not published)
-   - `@mfe/design-system`: Internal UI components (private, not published)
+   - `@mfe/design-system`: Framework-agnostic CSS-first design system (private, not published)
+   - `@mfe/design-system-react`: React 19 component wrappers for design system (private, not published)
 
 ### Key Services
 
@@ -199,8 +199,15 @@ The toolkit is split into several npm packages under the `@mfe-toolkit` organiza
   - Not published to npm (marked as private)
 
 - **@mfe/design-system** (`packages/design-system/`)
-  - Internal UI components for examples
-  - Reusable components: Card, InfoBlock, Section, Grid, EventLog
+  - Framework-agnostic CSS-first design system
+  - Provides ds-* prefixed CSS classes and design tokens
+  - No React dependencies, pure CSS + ES modules
+  - Not published to npm (marked as private)
+
+- **@mfe/design-system-react** (`packages/design-system-react/`)
+  - React 19 component wrappers for design system
+  - Components: Card, Button, EventLog, Grid, InfoBlock, Section
+  - Uses container-provided CSS classes (no bundled styles)
   - Not published to npm (marked as private)
 
 ## Development Guidelines
