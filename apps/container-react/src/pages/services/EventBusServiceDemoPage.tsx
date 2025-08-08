@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { RegistryMFELoader } from '@/components/RegistryMFELoader';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import { Radio, Activity, Code, Users, Zap, ChevronRight } from 'lucide-react';
 import { EventLog, Hero, TabGroup, EmptyState, MetricCard, type EventMessage } from '@mfe/design-system-react';
 import { getMFEServicesSingleton } from '@/services/mfe-services-singleton';

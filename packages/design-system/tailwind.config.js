@@ -1,48 +1,16 @@
 /** @type {import('tailwindcss').Config} */
+const baseConfig = require('../../tailwind.config.base.js');
+
 module.exports = {
+  ...baseConfig,
   content: [
     './src/**/*.{ts,tsx,css}',
   ],
-  theme: {
-    extend: {
-      colors: {
-        // These map to CSS variables that the container should define
-        // This allows theming without rebuilding the design system
-        border: 'hsl(var(--border))',
-        input: 'hsl(var(--input))',
-        ring: 'hsl(var(--ring))',
-        background: 'hsl(var(--background))',
-        foreground: 'hsl(var(--foreground))',
-        primary: {
-          DEFAULT: 'hsl(var(--primary))',
-          foreground: 'hsl(var(--primary-foreground))',
-        },
-        secondary: {
-          DEFAULT: 'hsl(var(--secondary))',
-          foreground: 'hsl(var(--secondary-foreground))',
-        },
-        destructive: {
-          DEFAULT: 'hsl(var(--destructive))',
-          foreground: 'hsl(var(--destructive-foreground))',
-        },
-        muted: {
-          DEFAULT: 'hsl(var(--muted))',
-          foreground: 'hsl(var(--muted-foreground))',
-        },
-        accent: {
-          DEFAULT: 'hsl(var(--accent))',
-          foreground: 'hsl(var(--accent-foreground))',
-        },
-        popover: {
-          DEFAULT: 'hsl(var(--popover))',
-          foreground: 'hsl(var(--popover-foreground))',
-        },
-        card: {
-          DEFAULT: 'hsl(var(--card))',
-          foreground: 'hsl(var(--card-foreground))',
-        },
-      },
-    },
-  },
-  plugins: [],
+  // Disable tree-shaking - include all design system classes
+  safelist: [
+    // Generate all ds-* classes regardless of usage
+    { pattern: /^ds-.*/ },
+    // Include all dark mode variants
+    { pattern: /^dark:.*/ },
+  ],
 }

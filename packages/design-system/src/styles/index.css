@@ -178,10 +178,12 @@
   /* Centered page container with optimal reading width */
   .ds-page-container {
     @apply max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4;
+    @apply bg-transparent; /* Ensure it inherits background */
   }
   
   .ds-page {
     @apply py-4 space-y-4;  /* Compact page spacing */
+    @apply bg-transparent; /* Ensure it inherits background */
   }
   
   .ds-section {
