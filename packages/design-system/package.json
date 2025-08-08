@@ -20,10 +20,10 @@
   "scripts": {
     "build": "npm run build:js && npm run build:css",
     "build:js": "tsup",
-    "build:css": "tailwindcss -i src/styles/index.css -o ../../dist/design-system/design-system.css --minify",
+    "build:css": "tailwindcss -i src/styles/index.css -o dist/styles.css --minify",
     "dev": "npm run dev:js & npm run dev:css",
     "dev:js": "tsup --watch",
-    "dev:css": "tailwindcss -i src/styles/index.css -o ../../dist/design-system/design-system.css --watch",
+    "dev:css": "tailwindcss -i src/styles/index.css -o dist/styles.css --watch",
     "type-check": "tsc --noEmit",
     "lint": "eslint src",
     "format": "prettier --write \"src/**/*.{ts,js,json,md,css}\""

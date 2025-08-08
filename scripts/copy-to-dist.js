@@ -8,12 +8,37 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const rootDir = path.join(__dirname, '..');
 
-async function copyMfeDists() {
-  console.log('📦 Copying MFE dist folders to root dist...');
+async function copyToDist() {
+  console.log('📦 Copying build artifacts to root dist...');
 
   // Create root dist directory if it doesn't exist
   const rootDist = path.join(rootDir, 'dist');
   await fs.mkdir(rootDist, { recursive: true });
+
+  // Copy design-system package
+  console.log('\n🎨 Copying design-system...');
+  const designSystemSrc = path.join(rootDir, 'packages', 'design-system', 'dist');
+  const designSystemDest = path.join(rootDist, 'design-system');
+  
+  try {
+    const stat = await fs.stat(designSystemSrc);
+    if (stat.isDirectory()) {
+      // Remove existing target directory if it exists
+      try {
+        await fs.rm(designSystemDest, { recursive: true, force: true });
+      } catch (err) {
+        // Ignore error if directory doesn't exist
+      }
+      
+      // Copy the dist contents
+      await fs.cp(designSystemSrc, designSystemDest, { recursive: true });
+      console.log(`✅ Copied packages/design-system/dist → dist/design-system`);
+    }
+  } catch (err) {
+    console.log(`⏭️  Skipping design-system (no dist directory)`);
+  }
+
+  console.log('\n📦 Copying MFE dist folders...');
 
   // Get all MFE directories
   const appsDir = path.join(rootDir, 'apps');
@@ -111,7 +136,7 @@ async function copyMfeDists() {
 }
 
 // Run the script
-copyMfeDists().catch((err) => {
-  console.error('❌ Error copying MFE dists:', err);
+copyToDist().catch((err) => {
+  console.error('❌ Error copying to dist:', err);
   process.exit(1);
 });
