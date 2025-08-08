@@ -143,7 +143,8 @@ export const Navigation: React.FC = () => {
 
                   {/* Dropdown Menu */}
                   {activeDropdown === section.title && (
-                    <div className="absolute top-full left-0 mt-2 w-48 py-2 bg-white dark:bg-slate-800 rounded-lg shadow-lg border border-slate-200 dark:border-slate-700 z-50">
+                    <div className="absolute top-full left-0 pt-1">
+                      <div className="w-48 py-2 bg-white dark:bg-slate-800 rounded-lg shadow-lg border border-slate-200 dark:border-slate-700">
                       {section.items.map((item) => (
                         <Link
                           key={item.path}
@@ -159,6 +160,7 @@ export const Navigation: React.FC = () => {
                           <span>{item.label}</span>
                         </Link>
                       ))}
+                      </div>
                     </div>
                   )}
                 </div>
