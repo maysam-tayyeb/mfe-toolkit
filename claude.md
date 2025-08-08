@@ -407,3 +407,7 @@ If you don't know the correct commands for a project, ask the user and suggest u
 ## Build Process Notes
 
 - **MFEs only use esbuild to build. Important!!!**
+
+## Updates to Design Changes
+
+- **Ensure applying fundamental design changes only through updating the design system**
