@@ -82,13 +82,22 @@ This is a **microfrontend (MFE) monorepo** using pnpm workspaces. The architectu
 ### UI/UX Design Principles
 
 - **Zero-Pollution Design System**: CSS-first approach with `ds-*` prefixed classes
-- **200+ Utility Classes**: Comprehensive set including heroes, metrics, tabs, semantic colors
-- **Modern Blue & Slate Palette**: Professional color scheme with vibrant accent colors
-- **Top Navigation Bar**: Dropdown menus for better screen real estate utilization
+- **400+ Utility Classes**: Comprehensive set including complete component systems:
+  - Button system (primary, secondary, outline, ghost, danger, success, warning)
+  - Modal system (backdrop, header, body, footer)
+  - Form components (inputs, selects, checkboxes, switches, file uploads)
+  - Navigation system (nav containers, dropdowns, breadcrumbs)
+  - Toast notifications with animations
+  - Interactive components (accordions, tooltips, pagination, sliders)
+  - Layout utilities (flexbox, grid with responsive breakpoints)
+  - Typography system with font weights, line heights, letter spacing
+- **Modern Blue & Slate Palette**: Professional color scheme with semantic variants
+- **Top Navigation Bar**: Dropdown menus with hover interactions
 - **Centered Layouts**: Content centered with max-width for optimal readability
-- **Responsive Design**: Mobile-first approach with adaptive layouts
-- **Component Patterns**: Hero sections, metric cards, tab groups, empty states
+- **Responsive Design**: Mobile-first with `ds-sm:*`, `ds-md:*`, `ds-lg:*` breakpoints
+- **Component Patterns**: Heroes, metrics, features, empty states, loading states
 - **Visual Hierarchy**: Consistent typography scale and semantic spacing
+- **Cross-Framework Ready**: Designed for React and Vue container compatibility
 
 ### Core Components
 
@@ -227,7 +236,7 @@ The toolkit is split into several npm packages under the `@mfe-toolkit` organiza
 - React contexts: `apps/container-react/src/contexts/` (AuthContext, UIContext, RegistryContext)
 - MFE types: `packages/mfe-toolkit-core/src/types/`
 - UI components: `apps/container-react/src/components/ui/`
-- Design system styles: `packages/design-system/src/styles/index.css` (200+ utility classes)
+- Design system styles: `packages/design-system/src/styles/index.css` (400+ utility classes)
 - Design system tokens: `packages/design-system/src/tokens/index.ts`
 - React design components: `packages/design-system-react/src/components/`
 - MFE registry: `apps/container-react/public/mfe-registry.json`
@@ -292,7 +301,7 @@ See [State Management Architecture](./docs/architecture/state-management-archite
 - **Framework-Agnostic**: Works with React, Vue, and Vanilla JS through CSS classes
 - **Modern Blue & Slate Palette**: Professional color scheme with vibrant accents
 
-### Key CSS Classes (200+ available)
+### Key CSS Classes (400+ available)
 
 **Layout & Containers:**
 
@@ -305,13 +314,22 @@ See [State Management Architecture](./docs/architecture/state-management-archite
 
 - `ds-page-title`, `ds-section-title`, `ds-card-title`: Heading hierarchy
 - `ds-text-muted`, `ds-text-small`, `ds-label`: Text variants
+- `ds-font-*`: Font weights (thin to extrabold)
+- `ds-leading-*`: Line heights
+- `ds-tracking-*`: Letter spacing
 
 **Components:**
 
-- `ds-button-primary`, `ds-button-outline`, `ds-button-ghost`: Button styles
+- `ds-btn-primary`, `ds-btn-secondary`, `ds-btn-outline`, `ds-btn-ghost`: Modern button system
+- `ds-btn-danger`, `ds-btn-success`, `ds-btn-warning`: Semantic button variants
+- `ds-btn-sm`, `ds-btn-lg`, `ds-btn-icon`: Size modifiers
 - `ds-badge`, `ds-badge-info`, `ds-badge-success`: Badge variants
 - `ds-tabs`, `ds-tab-active`: Tab navigation
-- `ds-input`, `ds-select`, `ds-textarea`: Form controls
+- `ds-input`, `ds-select`, `ds-textarea`, `ds-checkbox`, `ds-radio`: Form controls
+- `ds-switch`, `ds-switch-on`: Toggle switches
+- `ds-modal-*`: Complete modal system
+- `ds-toast-*`: Toast notifications
+- `ds-dropdown-*`: Dropdown menus
 
 **Semantic Colors:**
 
@@ -324,6 +342,8 @@ See [State Management Architecture](./docs/architecture/state-management-archite
 - `ds-loading-state`, `ds-empty-state`: State displays
 - `ds-hover-scale`, `ds-hover-bg`: Hover effects
 - `ds-spinner`, `ds-spinner-lg`: Loading spinners
+- `ds-animate-in`, `ds-fade-in`, `ds-scale-in`: Animations
+- `ds-transition`: Smooth transitions
 
 ### Usage in MFEs
 
@@ -331,8 +351,24 @@ See [State Management Architecture](./docs/architecture/state-management-archite
 <!-- Direct CSS class usage (recommended) -->
 <div class="ds-page">
   <h1 class="ds-page-title">Page Title</h1>
-  <div class="ds-card">
+  <div class="ds-card-padded ds-card-elevated">
     <h2 class="ds-section-title">Section</h2>
+    <button class="ds-btn-primary">Primary Action</button>
+    <button class="ds-btn-outline">Secondary</button>
+  </div>
+</div>
+
+<!-- Modal Example -->
+<div class="ds-modal-backdrop">
+  <div class="ds-modal">
+    <div class="ds-modal-header">
+      <h2 class="ds-modal-title">Modal Title</h2>
+    </div>
+    <div class="ds-modal-body">Content</div>
+    <div class="ds-modal-footer">
+      <button class="ds-btn-secondary">Cancel</button>
+      <button class="ds-btn-primary">Confirm</button>
+    </div>
   </div>
 </div>
 ```

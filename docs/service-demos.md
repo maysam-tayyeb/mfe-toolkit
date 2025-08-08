@@ -12,11 +12,13 @@ Located in `apps/service-demos/modal/`
 
 ### Design System Integration
 
-The Modal Service demo page uses the new design system with:
+The Modal Service demo page uses the comprehensive design system with:
 - `ds-hero` for gradient hero sections
 - `ds-card` and `ds-card-padded` for content containers
-- `ds-button-primary` and `ds-button-outline` for actions
-- `ds-tabs` for code example navigation
+- `ds-btn-primary`, `ds-btn-outline`, `ds-btn-ghost` for actions (400+ utility classes)
+- `ds-tabs` and `ds-tab-active` for code example navigation
+- `ds-modal-*` classes for modal styling
+- `ds-badge-*` for status indicators
 - Modern Blue & Slate color palette throughout
 
 ### Available Implementations
@@ -79,12 +81,14 @@ Located in `apps/service-demos/event-bus/`
 
 ### Design System Integration
 
-The Event Bus demo page leverages the design system:
-- Responsive layout with `ds-page` container
-- Event log using `ds-card` with proper spacing
-- Action buttons using `ds-button-*` variants
-- Status badges with `ds-badge-*` classes
-- Consistent typography with `ds-section-title` and `ds-text-muted`
+The Event Bus demo page leverages the expanded design system (400+ utilities):
+- Responsive layout with `ds-page` and `ds-page-content` containers
+- Event log using `ds-card-padded` and `ds-card-elevated` for depth
+- Action buttons using `ds-btn-primary`, `ds-btn-secondary`, `ds-btn-outline` variants
+- Status badges with `ds-badge-info`, `ds-badge-success`, `ds-badge-warning` classes
+- Typography with `ds-section-title`, `ds-card-title`, and `ds-text-muted`
+- Grid layouts using `ds-grid` and responsive `ds-md:grid-cols-*` classes
+- Interactive states with `ds-hover-scale` and `ds-transition`
 
 ### Features Demonstrated
 
@@ -241,7 +245,13 @@ pnpm serve
 1. **Bundle Size**: Use ESBuild and mark framework dependencies as external
 2. **Type Safety**: Always type as `MFEModule` from `@mfe-toolkit/core`
 3. **Cleanup**: Properly cleanup in unmount (event listeners, subscriptions)
-4. **Styling**: Use Tailwind utilities from container (bg-primary, text-primary-foreground)
+4. **Styling**: Use design system classes (`ds-*` prefix) from the 400+ utility set:
+   - Buttons: `ds-btn-primary`, `ds-btn-secondary`, `ds-btn-outline`
+   - Cards: `ds-card-padded`, `ds-card-elevated`
+   - Typography: `ds-h1` through `ds-h4`, `ds-text-muted`
+   - Layout: `ds-flex`, `ds-grid`, `ds-container`
+   - Forms: `ds-input`, `ds-select`, `ds-checkbox`
+   - Modals: `ds-modal-backdrop`, `ds-modal-header`, `ds-modal-body`
 5. **Error Handling**: Gracefully handle service unavailability
 6. **Documentation**: Include README explaining capabilities and limitations
 
@@ -269,16 +279,16 @@ grep "process\." dist/*.js
 
 ## Future Enhancements
 
-Following the platform cleanup and design system implementation:
+Following the platform cleanup and expanded design system implementation (400+ utilities):
 
 - [ ] Complete Dev Container for isolated MFE development
-- [ ] Logger Service Demo (all frameworks)
-- [ ] Auth Service Demo (all frameworks)
-- [ ] Error Reporter Demo
-- [ ] Notification Service Demo (standalone, all frameworks)
-- [ ] Theme Service Demo (all frameworks)
-- [ ] Performance Monitoring Dashboard
-- [ ] Cross-tab State Synchronization Demos
+- [ ] Logger Service Demo (all frameworks) - Using `ds-code-block` for log display
+- [ ] Auth Service Demo (all frameworks) - Using `ds-form-*` classes
+- [ ] Error Reporter Demo - Using `ds-callout-danger` for error displays
+- [ ] Notification Service Demo (standalone, all frameworks) - Using `ds-toast-*` classes
+- [ ] Theme Service Demo (all frameworks) - Showcasing all `ds-*` utility classes
+- [ ] Performance Monitoring Dashboard - Using `ds-metric-card` and `ds-progress`
+- [ ] Cross-tab State Synchronization Demos - Using `ds-badge-*` for sync status
 
 ## Related Documentation
 
