@@ -8,5 +8,12 @@ export * from './Section';
 export * from './Grid';
 export * from './EventLog';
 
+// New redesign components
+export * from './components/EmptyState';
+export * from './components/LoadingState';
+export * from './components/TabGroup';
+export * from './components/MetricCard';
+export * from './components/Hero';
+
 // Export type for EventMessage (commonly used)
 export type { EventMessage } from './EventLog';

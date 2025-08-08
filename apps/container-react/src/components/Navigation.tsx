@@ -70,13 +70,13 @@ export const Navigation: React.FC = () => {
   ];
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-background border-b shadow-sm">
+    <nav className="fixed top-0 left-0 right-0 z-50 ds-navbar">
       <div className="mx-auto">
         <div className="flex items-center justify-between h-14 px-4 sm:px-6 lg:px-8">
           {/* Logo */}
           <div className="flex items-center">
             <Link to="/" className="flex items-center gap-2 mr-6">
-              <Sparkles className="h-5 w-5 text-primary" />
+              <Sparkles className="h-5 w-5 ds-accent-primary" />
               <span className="font-semibold text-sm hidden sm:block">MFE Platform</span>
             </Link>
 
@@ -89,8 +89,8 @@ export const Navigation: React.FC = () => {
                     className={cn(
                       "flex items-center gap-1 px-2.5 py-1.5 text-xs font-medium rounded-md transition-colors",
                       section.items.some(item => location.pathname === item.path)
-                        ? "text-primary bg-primary/10"
-                        : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                        ? "ds-accent-primary ds-bg-accent-primary-soft"
+                        : "ds-text-muted hover:ds-text-default ds-hover-bg"
                     )}
                   >
                     {section.title}
@@ -107,7 +107,7 @@ export const Navigation: React.FC = () => {
                         className="fixed inset-0 z-40" 
                         onClick={() => setActiveDropdown(null)}
                       />
-                      <div className="absolute top-full left-0 mt-1 w-44 py-1 bg-popover border rounded-md shadow-lg z-50">
+                      <div className="absolute top-full left-0 mt-1 w-44 py-1 ds-dropdown-menu z-50">
                         {section.items.map((item) => (
                           <Link
                             key={item.path}
@@ -116,8 +116,8 @@ export const Navigation: React.FC = () => {
                             className={cn(
                               "flex items-center gap-2 px-3 py-1.5 text-xs transition-colors",
                               location.pathname === item.path
-                                ? "bg-primary/10 text-primary"
-                                : "hover:bg-muted text-muted-foreground hover:text-foreground"
+                                ? "ds-bg-accent-primary-soft ds-accent-primary"
+                                : "ds-hover-bg ds-text-muted hover:ds-text-default"
                             )}
                           >
                             {item.icon}
@@ -159,11 +159,11 @@ export const Navigation: React.FC = () => {
 
         {/* Mobile Menu */}
         {mobileMenuOpen && (
-          <div className="lg:hidden border-t bg-background">
+          <div className="lg:hidden border-t ds-bg-base">
             <div className="px-2 pt-2 pb-3 space-y-1">
               {navSections.map((section) => (
                 <div key={section.title} className="mb-2">
-                  <div className="px-3 py-2 text-xs font-semibold text-muted-foreground uppercase">
+                  <div className="px-3 py-2 text-xs font-semibold ds-text-muted uppercase">
                     {section.title}
                   </div>
                   {section.items.map((item) => (
@@ -174,8 +174,8 @@ export const Navigation: React.FC = () => {
                       className={cn(
                         "flex items-center gap-2 px-3 py-2 text-sm rounded-md transition-colors",
                         location.pathname === item.path
-                          ? "bg-primary/10 text-primary"
-                          : "hover:bg-muted text-muted-foreground hover:text-foreground"
+                          ? "ds-bg-accent-primary-soft ds-accent-primary"
+                          : "ds-hover-bg ds-text-muted hover:ds-text-default"
                       )}
                     >
                       {item.icon}

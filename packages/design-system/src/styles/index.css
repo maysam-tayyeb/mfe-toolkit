@@ -314,4 +314,351 @@
   .ds-transition {
     @apply transition-all duration-200 ease-in-out;
   }
+
+  /* ==================== NEW REDESIGN CLASSES ==================== */
+  
+  /* Hero Sections */
+  .ds-hero {
+    @apply relative overflow-hidden rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 text-white p-8 mb-6;
+  }
+  
+  .ds-hero-gradient {
+    @apply bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-slate-800 dark:to-slate-900;
+  }
+  
+  .ds-hero-title {
+    @apply text-2xl md:text-3xl font-bold mb-2;
+  }
+  
+  .ds-hero-description {
+    @apply text-lg opacity-90;
+  }
+
+  /* Centering Utilities */
+  .ds-center {
+    @apply flex items-center justify-center;
+  }
+  
+  .ds-center-full {
+    @apply flex items-center justify-center min-h-screen;
+  }
+  
+  .ds-center-content {
+    @apply flex items-center justify-center h-64;
+  }
+
+  /* Enhanced Sections */
+  .ds-section-spacious {
+    @apply py-8 space-y-6;
+  }
+  
+  .ds-container-narrow {
+    @apply max-w-4xl mx-auto px-4 sm:px-6;
+  }
+  
+  .ds-container-wide {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Empty States */
+  .ds-empty-state {
+    @apply ds-center flex-col py-12 px-6 text-center;
+  }
+  
+  .ds-empty-illustration {
+    @apply w-32 h-32 mb-6 opacity-50;
+  }
+  
+  .ds-empty-title {
+    @apply text-lg font-semibold mb-2;
+  }
+  
+  .ds-empty-description {
+    @apply text-sm text-slate-500 dark:text-slate-400 mb-4;
+  }
+
+  /* Loading States */
+  .ds-loading-state {
+    @apply ds-center flex-col py-12;
+  }
+  
+  .ds-spinner-sm {
+    @apply animate-spin h-4 w-4 border-2 border-blue-500 border-t-transparent rounded-full;
+  }
+  
+  .ds-spinner-md {
+    @apply animate-spin h-8 w-8 border-[3px] border-blue-500 border-t-transparent rounded-full;
+  }
+  
+  .ds-spinner-lg {
+    @apply animate-spin h-12 w-12 border-4 border-blue-500 border-t-transparent rounded-full;
+  }
+  
+  .ds-loading-text {
+    @apply text-base font-medium mt-4;
+  }
+  
+  .ds-loading-subtext {
+    @apply text-sm text-slate-500 dark:text-slate-400 mt-1;
+  }
+
+  /* Metric Cards */
+  .ds-metric-card {
+    @apply ds-card p-6 hover:shadow-lg transition-shadow;
+  }
+  
+  .ds-metric-label {
+    @apply text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider;
+  }
+  
+  .ds-metric-value {
+    @apply text-3xl font-bold my-2;
+  }
+  
+  .ds-metric-trend {
+    @apply text-sm font-medium;
+  }
+  
+  .ds-metric-trend-up {
+    @apply text-emerald-600 dark:text-emerald-400;
+  }
+  
+  .ds-metric-trend-down {
+    @apply text-red-600 dark:text-red-400;
+  }
+
+  /* Tab Components */
+  .ds-tab-group {
+    @apply flex border-b border-slate-200 dark:border-slate-700;
+  }
+  
+  .ds-tab {
+    @apply px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-400;
+    @apply hover:text-slate-900 dark:hover:text-slate-100 transition-colors;
+    @apply border-b-2 border-transparent;
+  }
+  
+  .ds-tab-active {
+    @apply text-blue-600 dark:text-blue-400 border-blue-500;
+  }
+  
+  .ds-tab-panel {
+    @apply py-4;
+  }
+
+  /* Event Badges */
+  .ds-event-badge {
+    @apply inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium;
+    @apply bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700;
+  }
+  
+  .ds-event-badge-active {
+    @apply bg-blue-50 dark:bg-blue-950 border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-300;
+  }
+
+  /* Status Indicators */
+  .ds-status-indicator {
+    @apply inline-flex items-center gap-2;
+  }
+  
+  .ds-status-dot {
+    @apply w-2 h-2 rounded-full;
+  }
+  
+  .ds-status-online {
+    @apply bg-emerald-500 animate-pulse;
+  }
+  
+  .ds-status-offline {
+    @apply bg-slate-400;
+  }
+  
+  .ds-status-warning {
+    @apply bg-amber-500 animate-pulse;
+  }
+  
+  .ds-status-error {
+    @apply bg-red-500 animate-pulse;
+  }
+
+  /* Semantic Color Classes */
+  .ds-accent-primary {
+    @apply text-blue-600 dark:text-blue-400;
+  }
+  
+  .ds-accent-success {
+    @apply text-emerald-600 dark:text-emerald-400;
+  }
+  
+  .ds-accent-warning {
+    @apply text-amber-600 dark:text-amber-400;
+  }
+  
+  .ds-accent-danger {
+    @apply text-red-600 dark:text-red-400;
+  }
+  
+  .ds-accent-info {
+    @apply text-cyan-600 dark:text-cyan-400;
+  }
+  
+  .ds-accent-neutral {
+    @apply text-slate-600 dark:text-slate-400;
+  }
+
+  /* Background Accent Colors */
+  .ds-bg-accent-primary-soft {
+    @apply bg-blue-50 dark:bg-blue-950;
+  }
+  
+  .ds-bg-accent-success-soft {
+    @apply bg-emerald-50 dark:bg-emerald-950;
+  }
+  
+  .ds-bg-accent-warning-soft {
+    @apply bg-amber-50 dark:bg-amber-950;
+  }
+  
+  .ds-bg-accent-danger-soft {
+    @apply bg-red-50 dark:bg-red-950;
+  }
+  
+  .ds-bg-accent-info-soft {
+    @apply bg-cyan-50 dark:bg-cyan-950;
+  }
+
+  /* Border Accent Colors */
+  .ds-border-accent-primary {
+    @apply border-blue-200 dark:border-blue-800;
+  }
+  
+  .ds-border-accent-success {
+    @apply border-emerald-200 dark:border-emerald-800;
+  }
+  
+  .ds-border-accent-warning {
+    @apply border-amber-200 dark:border-amber-800;
+  }
+  
+  .ds-border-accent-danger {
+    @apply border-red-200 dark:border-red-800;
+  }
+
+  /* Icon Colors */
+  .ds-icon-primary {
+    @apply text-blue-500;
+  }
+  
+  .ds-icon-success {
+    @apply text-emerald-500;
+  }
+  
+  .ds-icon-warning {
+    @apply text-amber-500;
+  }
+  
+  .ds-icon-danger {
+    @apply text-red-500;
+  }
+  
+  .ds-icon-info {
+    @apply text-cyan-500;
+  }
+  
+  .ds-icon-muted {
+    @apply text-slate-400;
+  }
+
+  /* Enhanced Lists */
+  .ds-list-compact {
+    @apply space-y-1 text-sm;
+  }
+  
+  .ds-list-spaced {
+    @apply space-y-3;
+  }
+  
+  .ds-list-check {
+    @apply space-y-2;
+  }
+  
+  .ds-list-check-item {
+    @apply flex items-start gap-2;
+  }
+  
+  .ds-list-check-icon {
+    @apply text-emerald-500 mt-0.5;
+  }
+
+  /* Data Tables */
+  .ds-table {
+    @apply w-full text-sm;
+  }
+  
+  .ds-table-header {
+    @apply border-b border-slate-200 dark:border-slate-700;
+  }
+  
+  .ds-table-row {
+    @apply border-b border-slate-100 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-900;
+  }
+  
+  .ds-table-cell {
+    @apply px-4 py-3;
+  }
+
+  /* Skeleton Loaders */
+  .ds-skeleton-text {
+    @apply h-4 bg-slate-200 dark:bg-slate-700 rounded animate-pulse;
+  }
+  
+  .ds-skeleton-title {
+    @apply h-6 bg-slate-200 dark:bg-slate-700 rounded animate-pulse;
+  }
+  
+  .ds-skeleton-card {
+    @apply h-32 bg-slate-200 dark:bg-slate-700 rounded-lg animate-pulse;
+  }
+
+  /* Interactive Feedback */
+  .ds-hover-scale {
+    @apply hover:scale-105 transition-transform;
+  }
+  
+  .ds-hover-lift {
+    @apply hover:-translate-y-1 hover:shadow-lg transition-all;
+  }
+  
+  .ds-active-scale {
+    @apply active:scale-95;
+  }
+
+  /* Focus States */
+  .ds-focus-ring {
+    @apply focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2;
+  }
+  
+  .ds-focus-within {
+    @apply focus-within:ring-2 focus-within:ring-blue-500 focus-within:ring-offset-2;
+  }
+
+  /* Spacing Utilities */
+  .ds-mb-xs { @apply mb-2; }
+  .ds-mb-sm { @apply mb-3; }
+  .ds-mb-md { @apply mb-4; }
+  .ds-mb-lg { @apply mb-6; }
+  .ds-mb-xl { @apply mb-8; }
+  
+  .ds-mt-xs { @apply mt-2; }
+  .ds-mt-sm { @apply mt-3; }
+  .ds-mt-md { @apply mt-4; }
+  .ds-mt-lg { @apply mt-6; }
+  .ds-mt-xl { @apply mt-8; }
+
+  /* Grid Gaps */
+  .ds-gap-xs { @apply gap-2; }
+  .ds-gap-sm { @apply gap-3; }
+  .ds-gap-md { @apply gap-4; }
+  .ds-gap-lg { @apply gap-6; }
+  .ds-gap-xl { @apply gap-8; }
 }

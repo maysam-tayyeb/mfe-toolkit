@@ -7,10 +7,10 @@ import { Toaster } from '@/components/ui/toaster';
 
 export const Layout: React.FC = () => {
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-900">
+    <div className="min-h-screen ds-bg-base">
       <Navigation />
       <div className="pt-14"> {/* Add padding-top to account for fixed navbar */}
-        <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4"> {/* Centered, compact */}
+        <main className="ds-page-container"> {/* Using design system page container */}
           <Outlet />
         </main>
       </div>
