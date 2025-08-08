@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import { MFE_CONFIG } from '@mfe/shared';
 import { Theme } from '@mfe-toolkit/core';
 import { getThemeService } from '@/services/theme-service';
 import {
@@ -12,10 +11,7 @@ import {
   X,
   Home,
   LayoutDashboard,
-  Layers,
-  Radio,
   AlertCircle,
-  Package,
   ChevronDown,
   Sparkles,
 } from 'lucide-react';
@@ -65,27 +61,10 @@ export const Navigation: React.FC = () => {
     {
       title: 'Services',
       items: [
-        { path: '/services/modal', label: 'Modal', icon: <Layers className="h-4 w-4" /> },
-        { path: '/services/event-bus', label: 'Event Bus', icon: <Radio className="h-4 w-4" /> },
         {
           path: '/error-boundary-demo',
           label: 'Error Handling',
           icon: <AlertCircle className="h-4 w-4" />,
-        },
-      ],
-    },
-    {
-      title: 'MFEs',
-      items: [
-        {
-          path: `/mfe/${MFE_CONFIG.serviceExplorer.id}`,
-          label: 'Explorer',
-          icon: <Package className="h-4 w-4" />,
-        },
-        {
-          path: `/mfe/${MFE_CONFIG.legacyServiceExplorer.id}`,
-          label: 'Legacy',
-          icon: <Package className="h-4 w-4" />,
         },
       ],
     },
