@@ -10,6 +10,19 @@ The service demos illustrate how the platform's shared services work consistentl
 
 Located in `apps/service-demos/modal/`
 
+### UI/UX Improvements
+
+The Modal Service demo page features a refined layout design:
+
+1. **Improved Hero Section** - Features informative highlights instead of duplicate action buttons:
+   - Framework Agnostic capabilities across React, Vue, and Vanilla JS
+   - Consistent API interface across all MFEs
+   - Zero Pollution through service injection (no global variables)
+2. **Single Demo Section** - Clean "Try It Yourself" area with all modal examples
+3. **Enhanced Information Architecture** - Better separation between features, demos, code examples, and framework implementations
+4. **Tabbed Interface** - Code examples organized in tabs for different modal patterns
+5. **Framework Selector** - Interactive selection for different framework implementations
+
 ### Available Implementations
 
 | Framework | MFE Name | Bundle Size | Key Features | Limitations |
