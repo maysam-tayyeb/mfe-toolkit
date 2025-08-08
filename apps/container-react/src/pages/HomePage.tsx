@@ -88,13 +88,13 @@ export const HomePage: React.FC = () => {
         gradient
         actions={
           <>
-            <Button asChild className="bg-white text-blue-600 hover:bg-gray-100">
+            <Button asChild>
               <Link to="/dashboard">
                 <Sparkles className="h-4 w-4 mr-2" />
                 Explore Platform
               </Link>
             </Button>
-            <Button asChild className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-blue-600">
+            <Button asChild variant="outline">
               <Link to="/services/event-bus">
                 <Radio className="h-4 w-4 mr-2" />
                 Try Event Bus
@@ -302,7 +302,7 @@ export const HomePage: React.FC = () => {
       </div>
 
       {/* Call to Action */}
-      <div className="ds-card-padded ds-bg-accent-primary-soft text-center">
+      <div className="ds-card-padded bg-gradient-to-r from-slate-50 to-slate-100 dark:from-slate-800 dark:to-slate-900 text-center">
         <h2 className="ds-section-title ds-mb-sm">Ready to Build?</h2>
         <p className="text-sm ds-text-muted ds-mb-md">
           Start building scalable microfrontend applications with zero global pollution
