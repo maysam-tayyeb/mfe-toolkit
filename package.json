@@ -29,8 +29,6 @@
     "build:mfes": "pnpm --parallel --filter './apps/mfe-*' --filter './apps/service-demos/**' build && pnpm copy-mfe-dists",
     "copy-mfe-dists": "node scripts/copy-mfe-dists.js",
     "serve": "pnpm dlx serve dist -p 8080 --cors",
-    "serve:mfes": "pnpm dlx serve dist -p 8080 --cors",
-    "serve:mfes:silently": "pnpm dlx serve dist -p 8080 --cors --no-request-logging",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",

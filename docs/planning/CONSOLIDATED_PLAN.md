@@ -221,7 +221,7 @@ pnpm build            # Build packages and MFEs
 pnpm dev:container-react  # Start container app
 
 # Serve MFEs (after build)
-pnpm serve:mfes       # Serve from dist/ on port 8080
+pnpm serve            # Serve from dist/ on port 8080
 
 # Testing
 pnpm test

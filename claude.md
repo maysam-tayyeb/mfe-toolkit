@@ -17,7 +17,7 @@ pnpm build
 pnpm dev:container-react  # React container app on http://localhost:3000
 
 # Serve MFEs (in another terminal)
-pnpm serve:mfes  # Serves from dist/ on http://localhost:8080
+pnpm serve  # Serves from dist/ on http://localhost:8080
 ```
 
 ### Testing

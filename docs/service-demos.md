@@ -129,7 +129,7 @@ unsubscribe();
 pnpm build
 
 # Serve MFEs (in one terminal)
-pnpm serve:mfes
+pnpm serve
 
 # Start container (in another terminal)
 pnpm dev:container-react
@@ -233,7 +233,7 @@ pnpm build
 
 # Add to mfe-registry.json if needed
 # Serve the MFEs
-pnpm serve:mfes
+pnpm serve
 ```
 
 ## Best Practices

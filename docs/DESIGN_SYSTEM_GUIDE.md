@@ -304,7 +304,7 @@ The design system uses CSS variables for theming. These can be overridden in the
 
 ### ES module not loading?
 
-- Verify the serve:mfes script is running (port 8080)
+- Verify the serve script is running (port 8080)
 - Check CORS settings if loading from different domain
 - Module loading is optional - CSS classes work without it
 
