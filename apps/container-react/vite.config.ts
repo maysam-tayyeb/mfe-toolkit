@@ -1,19 +1,27 @@
 import { createViteConfig } from '../../vite.config.base';
-import { defineConfig } from 'vite';
+import path from 'path';
+import fs from 'fs';
+import { Plugin } from 'vite';
 
-const baseConfig = createViteConfig(__dirname, {
-  server: {
-    port: 3000,
+// Plugin to serve design system CSS
+const serveDesignSystem = (): Plugin => ({
+  name: 'serve-design-system',
+  configureServer(server) {
+    server.middlewares.use('/design-system', (req, res, next) => {
+      const filePath = path.join(__dirname, '../../dist/design-system', req.url);
+      if (fs.existsSync(filePath)) {
+        res.setHeader('Content-Type', 'text/css');
+        res.end(fs.readFileSync(filePath));
+      } else {
+        next();
+      }
+    });
   },
 });
 
-export default defineConfig({
-  ...baseConfig,
+export default createViteConfig(__dirname, {
   server: {
-    ...baseConfig.server,
-    fs: {
-      allow: ['../../dist/design-system'],
-    },
+    port: 3000,
   },
-  publicDir: '../../dist',
+  plugins: [serveDesignSystem()],
 });
