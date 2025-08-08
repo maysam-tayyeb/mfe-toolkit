@@ -170,10 +170,12 @@ Dual approach for different concerns:
 
 ### MFE Loading Process
 1. Container loads MFE registry from JSON configuration
-2. MFEs built with esbuild and served from static server (port 8080)
-3. Container dynamically imports MFEs at runtime
-4. Each MFE exports default object with mount/unmount functions
-5. Services injected during mount (no global dependencies)
+2. MFEs built with esbuild to their respective `dist/` folders
+3. `copy-mfe-dists` script copies all MFE builds to root `dist/` folder
+4. Single static server serves all MFEs from `dist/` (port 8080)
+5. Container dynamically imports MFEs at runtime
+6. Each MFE exports default object with mount/unmount functions
+7. Services injected during mount (no global dependencies)
 
 ## Future MFE Organization Plan
 
@@ -213,11 +215,16 @@ MFE Platform
 ```bash
 # Install and build
 pnpm install
-pnpm -r build
+pnpm -r build         # Build all packages
 
 # Development
-pnpm dev              # Start all apps
+pnpm dev              # Start all apps in parallel
 pnpm dev:container-react  # Container only
+
+# Production build & serve
+pnpm build            # Build containers and MFEs
+pnpm copy-mfe-dists   # Copy all MFE builds to root dist/
+pnpm serve:mfes       # Serve from dist/ on port 8080
 
 # Testing
 pnpm test
