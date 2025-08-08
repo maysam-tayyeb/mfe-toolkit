@@ -6,8 +6,8 @@ The MFE Manifest is a platform-level contract that defines how microfrontends de
 
 ### Core Documentation
 
-- [**Manifest V2 Specification**](./specification.md) - Complete technical specification
-- [**Migration Guide**](./migration-guide.md) - Migrating from V1 to V2
+- [**Manifest Specification**](./specification.md) - Complete technical specification
+- [**Migration Guide**](./migration-guide.md) - Legacy migration guide (for historical reference)
 - [**Validation Guide**](./validation-guide.md) - Validating manifests in CI/CD
 
 ### Developer Resources
@@ -36,7 +36,7 @@ MFE manifests serve as the single source of truth for:
 
 ```json
 {
-  "$schema": "https://mfe-made-easy.com/schemas/mfe-manifest-v2.schema.json",
+  "$schema": "https://mfe-made-easy.com/schemas/mfe-manifest.schema.json",
   "name": "checkout-mfe",
   "version": "2.1.0",
   "url": "https://cdn.example.com/mfes/checkout/2.1.0/bundle.js",

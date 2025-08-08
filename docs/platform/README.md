@@ -21,24 +21,13 @@ Key architectural decisions that shape the platform:
 - Service injection pattern for dependency management
 - Framework-agnostic state management
 - Event-driven communication patterns
-
-### [MFE Loading Architecture](./architecture/mfe-loading.md)
-
-How MFEs are loaded and managed:
-
-- ES module loading strategy
 - MFE lifecycle management
 - Error handling and recovery
-- Performance optimization
 
-### [State Management Patterns](./architecture/state-patterns.md)
-
-Platform-level state management concepts:
-
-- ContextBridge pattern for UI services
-- Universal State Manager for application state
-- Cross-tab synchronization
-- State persistence strategies
+For detailed architecture documentation, see:
+- [MFE Loading Guide](../architecture/mfe-loading-guide.md)
+- [State Management Architecture](../architecture/state-management-architecture.md)
+- [Universal State Abstraction](../architecture/universal-state-abstraction.md)
 
 ## MFE Manifests
 
@@ -46,42 +35,51 @@ Platform-level state management concepts:
 
 Platform-level contract for describing microfrontends:
 
-- [Specification](./manifests/specification.md) - Complete V2 manifest format
+- [Specification](./manifests/specification.md) - Complete manifest format
 - [Quick Start](./manifests/quick-start.md) - Getting started with manifests
 - [Examples](./manifests/examples.md) - Real-world manifest examples
-- [Migration Guide](./manifests/migration-guide.md) - Upgrading from V1 to V2
+- [Migration Guide](./manifests/migration-guide.md) - Legacy format migration (historical reference)
 - [Validation Guide](./manifests/validation-guide.md) - CI/CD validation setup
 - [Best Practices](./manifests/best-practices.md) - Recommendations and patterns
 
-## Packages
+## Published Packages
 
-### [@mfe-toolkit/core](./packages/core/)
+The MFE Toolkit provides several npm packages:
+
+### @mfe-toolkit/core
 
 Framework-agnostic core functionality:
-
 - TypeScript types and interfaces
 - Service implementations
 - Event bus
 - Logger
 - Error handling
 
-### [@mfe-toolkit/state](./packages/state/)
+### @mfe-toolkit/state
 
 Cross-framework state management:
-
 - State manager creation
 - Middleware system
 - Framework adapters
 - Persistence plugins
 
-### [@mfe-toolkit/cli](./packages/cli/)
+### @mfe-toolkit/cli
 
 Command-line tools for MFE development:
-
 - MFE scaffolding
 - Manifest generation
 - Development server
 - Build optimization
+
+### @mfe-toolkit/react
+
+React-specific components and hooks:
+- MFELoader component
+- MFEErrorBoundary
+- Service hooks
+- State integration
+
+For package source code, see the [packages directory](../../packages/).
 
 ## Roadmap
 

@@ -1,20 +1,18 @@
-# MFE Manifest V2 Specification
+# MFE Manifest Specification
 
 ## Overview
 
-The MFE Manifest V2 is a JSON-based specification that describes a microfrontend's requirements, capabilities, and metadata. This specification enables containers to load, validate, and integrate MFEs regardless of their implementation framework.
+The MFE Manifest is a JSON-based specification that describes a microfrontend's requirements, capabilities, and metadata. This specification enables containers to load, validate, and integrate MFEs regardless of their implementation framework.
 
-## Schema Version
+## Schema
 
-Current version: **2.0.0**
-
-Schema URL: `https://mfe-made-easy.com/schemas/mfe-manifest-v2.schema.json`
+Schema URL: `https://mfe-made-easy.com/schemas/mfe-manifest.schema.json`
 
 ## Complete Manifest Structure
 
 ```json
 {
-  "$schema": "https://mfe-made-easy.com/schemas/mfe-manifest-v2.schema.json",
+  "$schema": "https://mfe-made-easy.com/schemas/mfe-manifest.schema.json",
   "name": "example-mfe",
   "version": "1.0.0",
   "url": "https://cdn.example.com/mfes/example/1.0.0/bundle.js",

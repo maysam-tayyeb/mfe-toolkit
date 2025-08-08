@@ -1,6 +1,8 @@
 # MFE Manifest Migration Guide
 
-This guide helps you migrate from MFE Manifest V1 to V2. The V2 format provides better type safety, more features, and clearer structure.
+> **Note**: This document is kept for historical reference. The platform now uses a single manifest specification without version tracking.
+
+This guide documents the migration from legacy manifest formats to the current specification. The current format provides better type safety, more features, and clearer structure.
 
 ## Key Changes from V1 to V2
 

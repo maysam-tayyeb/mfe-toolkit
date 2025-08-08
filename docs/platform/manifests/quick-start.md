@@ -10,7 +10,7 @@ Create a `manifest.json` file in your MFE's root directory:
 
 ```json
 {
-  "$schema": "https://mfe-made-easy.com/schemas/mfe-manifest-v2.schema.json",
+  "$schema": "https://mfe-made-easy.com/schemas/mfe-manifest.schema.json",
   "name": "my-first-mfe",
   "version": "1.0.0",
   "url": "http://localhost:3001/my-first-mfe.js",
