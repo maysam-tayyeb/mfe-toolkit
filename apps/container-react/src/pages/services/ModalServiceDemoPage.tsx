@@ -255,20 +255,28 @@ modal.closeAll();`}</code>
         description="Centralized modal management across all MFEs with consistent styling and behavior"
         gradient
       >
-        <div className="ds-mt-lg grid grid-cols-2 md:grid-cols-4 gap-4">
-          {modalExamples.map((example, index) => (
-            <button
-              key={index}
-              onClick={example.action}
-              className="ds-card-compact ds-hover-lift text-left"
-            >
-              <div className={`${example.color} mb-2`}>
-                {example.icon}
-              </div>
-              <h4 className="text-sm font-medium mb-1">{example.title}</h4>
-              <p className="text-xs ds-text-muted">{example.description}</p>
-            </button>
-          ))}
+        <div className="ds-mt-lg grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+          <div className="ds-bg-white/10 rounded-lg p-4">
+            <div className="ds-icon-accent-white mb-2">
+              <Zap className="h-6 w-6 mx-auto" />
+            </div>
+            <h4 className="text-sm font-semibold mb-1">Framework Agnostic</h4>
+            <p className="text-xs opacity-90">Works with React, Vue, and Vanilla JS</p>
+          </div>
+          <div className="ds-bg-white/10 rounded-lg p-4">
+            <div className="ds-icon-accent-white mb-2">
+              <Code className="h-6 w-6 mx-auto" />
+            </div>
+            <h4 className="text-sm font-semibold mb-1">Consistent API</h4>
+            <p className="text-xs opacity-90">Same interface across all MFEs</p>
+          </div>
+          <div className="ds-bg-white/10 rounded-lg p-4">
+            <div className="ds-icon-accent-white mb-2">
+              <Box className="h-6 w-6 mx-auto" />
+            </div>
+            <h4 className="text-sm font-semibold mb-1">Zero Pollution</h4>
+            <p className="text-xs opacity-90">Service injection, no global variables</p>
+          </div>
         </div>
       </Hero>
 
