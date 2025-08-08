@@ -77,7 +77,7 @@ export const Navigation: React.FC = () => {
           <div className="flex items-center">
             <Link to="/" className="flex items-center gap-2 mr-6">
               <Sparkles className="h-5 w-5 ds-accent-primary" />
-              <span className="font-semibold text-sm hidden sm:block">MFE Platform</span>
+              <span className="font-semibold ds-text-sm hidden sm:block">MFE Platform</span>
             </Link>
 
             {/* Desktop Navigation */}
@@ -87,10 +87,10 @@ export const Navigation: React.FC = () => {
                   <button
                     onClick={() => setActiveDropdown(activeDropdown === section.title ? null : section.title)}
                     className={cn(
-                      "flex items-center gap-1 px-2.5 py-1.5 text-xs font-medium rounded-md transition-colors",
+                      "flex items-center gap-1 px-2.5 py-1.5 ds-text-xs font-medium rounded-md transition-colors",
                       section.items.some(item => location.pathname === item.path)
-                        ? "ds-accent-primary ds-bg-accent-primary-soft"
-                        : "ds-text-muted hover:ds-text-default ds-hover-bg"
+                        ? "ds-nav-item-active"
+                        : "ds-nav-item ds-nav-hover"
                     )}
                   >
                     {section.title}
@@ -114,10 +114,10 @@ export const Navigation: React.FC = () => {
                             to={item.path}
                             onClick={() => setActiveDropdown(null)}
                             className={cn(
-                              "flex items-center gap-2 px-3 py-1.5 text-xs transition-colors",
+                              "flex items-center gap-2 px-3 py-1.5 ds-text-xs transition-colors",
                               location.pathname === item.path
-                                ? "ds-bg-accent-primary-soft ds-accent-primary"
-                                : "ds-hover-bg ds-text-muted hover:ds-text-default"
+                                ? "ds-nav-item-active"
+                                : "ds-nav-item ds-nav-hover"
                             )}
                           >
                             {item.icon}
@@ -163,7 +163,7 @@ export const Navigation: React.FC = () => {
             <div className="px-2 pt-2 pb-3 space-y-1">
               {navSections.map((section) => (
                 <div key={section.title} className="mb-2">
-                  <div className="px-3 py-2 text-xs font-semibold ds-text-muted uppercase">
+                  <div className="px-3 py-2 ds-text-xs font-semibold ds-text-muted uppercase">
                     {section.title}
                   </div>
                   {section.items.map((item) => (
@@ -172,10 +172,10 @@ export const Navigation: React.FC = () => {
                       to={item.path}
                       onClick={() => setMobileMenuOpen(false)}
                       className={cn(
-                        "flex items-center gap-2 px-3 py-2 text-sm rounded-md transition-colors",
+                        "flex items-center gap-2 px-3 py-2 ds-text-sm rounded-md transition-colors",
                         location.pathname === item.path
-                          ? "ds-bg-accent-primary-soft ds-accent-primary"
-                          : "ds-hover-bg ds-text-muted hover:ds-text-default"
+                          ? "ds-nav-item-active"
+                          : "ds-nav-item ds-nav-hover"
                       )}
                     >
                       {item.icon}

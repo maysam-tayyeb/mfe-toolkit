@@ -115,16 +115,51 @@
     @apply text-sm font-medium;
   }
   
+  /* Text Colors with Dark Mode Support */
+  .ds-text-primary {
+    @apply text-slate-900 dark:text-slate-100;
+  }
+  
+  .ds-text-secondary {
+    @apply text-slate-700 dark:text-slate-300;
+  }
+  
   .ds-text-muted {
-    @apply text-slate-500 dark:text-slate-400;
+    @apply text-slate-600 dark:text-slate-400;
   }
   
-  .ds-text-small {
-    @apply text-sm;
+  .ds-text-inverse {
+    @apply text-white dark:text-slate-900;
   }
   
+  .ds-text-default {
+    @apply text-slate-900 dark:text-slate-100;
+  }
+  
+  /* Text Sizes with Theme Awareness */
   .ds-text-xs {
-    @apply text-xs;
+    @apply text-xs text-slate-900 dark:text-slate-100;
+  }
+  
+  .ds-text-sm {
+    @apply text-sm text-slate-900 dark:text-slate-100;
+  }
+  
+  .ds-text-base {
+    @apply text-base text-slate-900 dark:text-slate-100;
+  }
+  
+  .ds-text-lg {
+    @apply text-lg text-slate-900 dark:text-slate-100;
+  }
+  
+  .ds-text-xl {
+    @apply text-xl text-slate-900 dark:text-slate-100;
+  }
+  
+  /* Alias for backwards compatibility */
+  .ds-text-small {
+    @apply ds-text-sm;
   }
 
   /* Layout Components - Centered and compact */
@@ -324,11 +359,22 @@
   
   /* Hero Sections */
   .ds-hero {
-    @apply relative overflow-hidden rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 text-white p-8 mb-6;
+    @apply relative overflow-hidden rounded-xl p-8 mb-6;
   }
   
+  /* Dark gradient with light text (default) */
   .ds-hero-gradient {
-    @apply bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-slate-800 dark:to-slate-900;
+    @apply bg-gradient-to-br from-blue-600 to-purple-700 dark:from-blue-700 dark:to-purple-800 text-white;
+  }
+  
+  /* Light gradient with dark text */
+  .ds-hero-light {
+    @apply bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-slate-700 dark:to-slate-800 text-slate-900 dark:text-white;
+  }
+  
+  /* Solid color variants */
+  .ds-hero-primary {
+    @apply bg-blue-600 dark:bg-blue-700 text-white;
   }
   
   .ds-hero-title {
@@ -337,6 +383,57 @@
   
   .ds-hero-description {
     @apply text-lg opacity-90;
+  }
+
+  /* Navigation & Dropdowns */
+  .ds-navbar {
+    @apply bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 shadow-sm;
+  }
+  
+  .ds-dropdown-menu {
+    @apply bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded-md shadow-lg;
+  }
+  
+  .ds-nav-item {
+    @apply text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100;
+  }
+  
+  .ds-nav-item-active {
+    @apply text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20;
+  }
+  
+  .ds-nav-hover {
+    @apply hover:bg-slate-100 dark:hover:bg-slate-700;
+  }
+
+  /* Background Hierarchy */
+  .ds-bg-base {
+    @apply bg-slate-50 dark:bg-slate-900;
+  }
+  
+  .ds-bg-card {
+    @apply bg-white dark:bg-slate-800;
+  }
+  
+  .ds-bg-elevated {
+    @apply bg-white dark:bg-slate-700 shadow-sm;
+  }
+  
+  .ds-bg-muted {
+    @apply bg-slate-100 dark:bg-slate-800;
+  }
+  
+  /* Interactive States */
+  .ds-hover-bg {
+    @apply hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors;
+  }
+  
+  .ds-active {
+    @apply bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400;
+  }
+  
+  .ds-focus-ring {
+    @apply focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900;
   }
 
   /* Centering Utilities */

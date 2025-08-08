@@ -150,7 +150,7 @@ export const HomePage: React.FC = () => {
                   <h3 className="ds-card-title group-hover:ds-accent-primary ds-mb-xs">
                     {feature.title}
                   </h3>
-                  <p className="text-sm ds-text-muted">
+                  <p className="ds-text-sm ds-text-muted">
                     {feature.description}
                   </p>
                 </div>
@@ -169,7 +169,7 @@ export const HomePage: React.FC = () => {
             <Code className="h-5 w-5 ds-icon-primary" />
             <h3 className="ds-section-title">Demo Applications</h3>
           </div>
-          <p className="text-sm ds-text-muted ds-mb-md">
+          <p className="ds-text-sm ds-text-muted ds-mb-md">
             Explore live demonstrations of platform capabilities
           </p>
           <div className="ds-stack-sm">
@@ -179,9 +179,9 @@ export const HomePage: React.FC = () => {
             >
               <div className="flex items-center gap-3">
                 <Database className="h-4 w-4 ds-icon-success" />
-                <span className="text-sm font-medium">State Management</span>
+                <span className="ds-text-sm font-medium">State Management</span>
               </div>
-              <Badge variant="secondary" className="text-xs">Live</Badge>
+              <Badge variant="secondary" className="ds-text-xs">Live</Badge>
             </Link>
             
             <Link
@@ -190,9 +190,9 @@ export const HomePage: React.FC = () => {
             >
               <div className="flex items-center gap-3">
                 <Radio className="h-4 w-4 ds-icon-info" />
-                <span className="text-sm font-medium">Event Communication</span>
+                <span className="ds-text-sm font-medium">Event Communication</span>
               </div>
-              <Badge variant="secondary" className="text-xs">Live</Badge>
+              <Badge variant="secondary" className="ds-text-xs">Live</Badge>
             </Link>
 
             <Link
@@ -201,9 +201,9 @@ export const HomePage: React.FC = () => {
             >
               <div className="flex items-center gap-3">
                 <AlertCircle className="h-4 w-4 ds-icon-danger" />
-                <span className="text-sm font-medium">Error Handling</span>
+                <span className="ds-text-sm font-medium">Error Handling</span>
               </div>
-              <Badge variant="secondary" className="text-xs">Live</Badge>
+              <Badge variant="secondary" className="ds-text-xs">Live</Badge>
             </Link>
           </div>
         </div>
@@ -214,7 +214,7 @@ export const HomePage: React.FC = () => {
             <Layers className="h-5 w-5 ds-icon-warning" />
             <h3 className="ds-section-title">Microfrontends</h3>
           </div>
-          <p className="text-sm ds-text-muted ds-mb-md">
+          <p className="ds-text-sm ds-text-muted ds-mb-md">
             Framework-specific MFE implementations
           </p>
           <div className="ds-stack-sm">
@@ -259,7 +259,7 @@ export const HomePage: React.FC = () => {
             <Globe className="h-5 w-5 ds-icon-success" />
             <h3 className="ds-section-title">Documentation</h3>
           </div>
-          <p className="text-sm ds-text-muted ds-mb-md">
+          <p className="ds-text-sm ds-text-muted ds-mb-md">
             Learn about the platform architecture
           </p>
           <div className="ds-stack-sm">
