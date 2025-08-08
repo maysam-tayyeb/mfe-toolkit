@@ -16,13 +16,8 @@ pnpm -r build
 # Start all applications in parallel (recommended)
 pnpm dev
 
-# Start individual applications
+# Start container application
 pnpm dev:container-react  # React container app on http://localhost:3000
-pnpm dev:mfe           # Example MFE on http://localhost:3001
-pnpm dev:react17       # React 17 MFE on http://localhost:3002
-pnpm dev:state-react   # State demo React MFE
-pnpm dev:state-vue     # State demo Vue MFE
-pnpm dev:state-demos   # All state demo MFEs in parallel
 ```
 
 ### Testing
@@ -88,14 +83,14 @@ This is a **microfrontend (MFE) monorepo** using pnpm workspaces. The architectu
 
 ### UI/UX Design Principles
 
-- **Zero-Pollution Design System**: CSS-first approach with `ds-*` prefixed classes (ds-page, ds-card, ds-button)
-- **Modern Blue & Slate Palette**: Professional, cohesive color scheme with vibrant accent colors
-- **Top Navigation Bar**: Uses dropdown menus for better screen real estate
-- **Centered Layouts**: Content centered with max-w-6xl for optimal readability
-- **Compact Typography**: Optimized font sizes (text-xs, text-sm) for content density
-- **Consistent Spacing**: Smaller padding and margins for efficiency
-- **Component Organization**: 3-column layouts for complex interfaces
-- **Visual Hierarchy**: Clear section headers with consistent typography
+- **Zero-Pollution Design System**: CSS-first approach with `ds-*` prefixed classes
+- **200+ Utility Classes**: Comprehensive set including heroes, metrics, tabs, semantic colors
+- **Modern Blue & Slate Palette**: Professional color scheme with vibrant accent colors
+- **Top Navigation Bar**: Dropdown menus for better screen real estate utilization
+- **Centered Layouts**: Content centered with max-width for optimal readability
+- **Responsive Design**: Mobile-first approach with adaptive layouts
+- **Component Patterns**: Hero sections, metric cards, tab groups, empty states
+- **Visual Hierarchy**: Consistent typography scale and semantic spacing
 
 ### Core Components
 
@@ -205,8 +200,8 @@ The toolkit is split into several npm packages under the `@mfe-toolkit` organiza
   - Not published to npm (marked as private)
 
 - **@mfe/design-system-react** (`packages/design-system-react/`)
-  - React 19 component wrappers for design system
-  - Components: Card, Button, EventLog, Grid, InfoBlock, Section
+  - React 19 components wrapping design system
+  - Components: Hero, MetricCard, TabGroup, EmptyState, LoadingState, EventLog
   - Uses container-provided CSS classes (no bundled styles)
   - Not published to npm (marked as private)
 
@@ -231,14 +226,17 @@ The toolkit is split into several npm packages under the `@mfe-toolkit` organiza
 ### Important File Locations
 
 - Container services: `apps/container-react/src/services/`
-- Redux slices: `apps/container-react/src/store/`
+- React contexts: `apps/container-react/src/contexts/` (AuthContext, UIContext, RegistryContext)
 - MFE types: `packages/mfe-toolkit-core/src/types/`
-- Shared components: `apps/container-react/src/components/ui/`
-- Design system styles: `packages/design-system/src/styles/index.css`
+- UI components: `apps/container-react/src/components/ui/`
+- Design system styles: `packages/design-system/src/styles/index.css` (200+ utility classes)
 - Design system tokens: `packages/design-system/src/tokens/index.ts`
+- React design components: `packages/design-system-react/src/components/`
 - MFE registry: `apps/container-react/public/mfe-registry.json`
-- Navigation: `apps/container-react/src/components/Navigation.tsx` (top nav bar with Services/MFEs sections)
-- Layout: `apps/container-react/src/components/Layout.tsx` (centered content layout)
+- Navigation: `apps/container-react/src/components/Navigation.tsx` (dropdown navigation)
+- Layout: `apps/container-react/src/components/Layout.tsx` (responsive container)
+- HomePage: `apps/container-react/src/pages/HomePage.tsx` (hero, metrics, features)
+- DashboardPage: `apps/container-react/src/pages/DashboardPage.tsx` (platform overview)
 - Modal Service Demo: `apps/container-react/src/pages/services/ModalServiceDemoPage.tsx`
 - Event Bus Demo: `apps/container-react/src/pages/services/EventBusServiceDemoPage.tsx`
 - Error Handling Demo: `apps/container-react/src/pages/ErrorBoundaryDemoPage.tsx`
@@ -291,16 +289,33 @@ See [State Management Architecture](./docs/architecture/state-management-archite
 - **Framework-Agnostic**: Works with React, Vue, and Vanilla JS through CSS classes
 - **Modern Blue & Slate Palette**: Professional color scheme with vibrant accents
 
-### Key CSS Classes
-- **ds-page**: Centered page container with max-w-6xl
-- **ds-card**: Card container with padding and border
-- **ds-page-title**: Page-level heading (text-xl, font-bold)
-- **ds-section-title**: Section heading (text-lg, font-semibold) 
-- **ds-card-title**: Card heading (text-base, font-semibold)
-- **ds-button-primary**: Primary button styling
-- **ds-button-outline**: Outlined button variant
-- **ds-text-muted**: Muted text color
-- **ds-text-small**: Small text size
+### Key CSS Classes (200+ available)
+
+**Layout & Containers:**
+- `ds-page`: Centered page container
+- `ds-card`, `ds-card-padded`, `ds-card-compact`: Card variants
+- `ds-hero`: Gradient hero section
+- `ds-metric-card`: Metric display cards
+
+**Typography:**
+- `ds-page-title`, `ds-section-title`, `ds-card-title`: Heading hierarchy
+- `ds-text-muted`, `ds-text-small`, `ds-label`: Text variants
+
+**Components:**
+- `ds-button-primary`, `ds-button-outline`, `ds-button-ghost`: Button styles
+- `ds-badge`, `ds-badge-info`, `ds-badge-success`: Badge variants
+- `ds-tabs`, `ds-tab-active`: Tab navigation
+- `ds-input`, `ds-select`, `ds-textarea`: Form controls
+
+**Semantic Colors:**
+- `ds-accent-primary`, `ds-accent-success`, `ds-accent-warning`, `ds-accent-danger`
+- `ds-bg-accent-*-soft`: Soft background variants
+- `ds-icon-*`: Icon color utilities
+
+**States & Effects:**
+- `ds-loading-state`, `ds-empty-state`: State displays
+- `ds-hover-scale`, `ds-hover-bg`: Hover effects
+- `ds-spinner`, `ds-spinner-lg`: Loading spinners
 
 ### Usage in MFEs
 ```html
