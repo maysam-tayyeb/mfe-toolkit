@@ -5,16 +5,18 @@ The MFE Manifest is a platform-level contract that defines how microfrontends de
 ## 📚 Documentation Structure
 
 ### Core Documentation
-- [**Manifest V2 Specification**](./specification.md) - Complete technical specification
-- [**Migration Guide**](./migration-guide.md) - Migrating from V1 to V2
+
+- [**Manifest Specification**](./specification.md) - Complete technical specification
 - [**Validation Guide**](./validation-guide.md) - Validating manifests in CI/CD
 
 ### Developer Resources
+
 - [**Quick Start Guide**](./quick-start.md) - Get started with manifests
 - [**Examples**](./examples.md) - Real-world manifest examples
 - [**Best Practices**](./best-practices.md) - Recommendations for manifest design
 
 ### Technical Reference
+
 - [**JSON Schema**](./schema-reference.md) - Complete schema documentation
 - [**TypeScript Types**](./typescript-types.md) - Type definitions and usage
 - [**CLI Reference**](./cli-reference.md) - Manifest CLI tool documentation
@@ -33,7 +35,7 @@ MFE manifests serve as the single source of truth for:
 
 ```json
 {
-  "$schema": "https://mfe-made-easy.com/schemas/mfe-manifest-v2.schema.json",
+  "$schema": "https://mfe-made-easy.com/schemas/mfe-manifest.schema.json",
   "name": "checkout-mfe",
   "version": "2.1.0",
   "url": "https://cdn.example.com/mfes/checkout/2.1.0/bundle.js",
@@ -69,6 +71,7 @@ Containers use manifests to:
 ## 📦 Supported Frameworks
 
 Manifests work with MFEs built in:
+
 - React (16.8+)
 - Vue (3.0+)
 - Angular (12+)
@@ -78,7 +81,6 @@ Manifests work with MFEs built in:
 ## 🔍 Next Steps
 
 - New to manifests? Start with the [Quick Start Guide](./quick-start.md)
-- Migrating existing MFEs? See the [Migration Guide](./migration-guide.md)
 - Building a container? Read the [Container Integration Guide](../../container-spec/manifest-integration.md)
 - Contributing? Check the [Specification](./specification.md)
 

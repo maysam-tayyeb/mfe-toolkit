@@ -15,6 +15,7 @@ This directory contains framework-specific implementations of the MFE container 
 - Full hot module replacement support
 
 **Key Features**:
+
 - ShadCN UI components
 - React Router for navigation
 - Tailwind CSS for styling
@@ -41,31 +42,34 @@ This directory contains framework-specific implementations of the MFE container 
 
 ## Container Comparison
 
-| Feature | React | Vue | Vanilla |
-|---------|-------|-----|---------|
-| Production Ready | ✅ | 🚧 | 🚧 |
-| Bundle Size | ~45KB | TBD | TBD |
-| TypeScript | ✅ | ✅ | ✅ |
-| HMR Support | ✅ | ✅ | ⚠️ |
-| Component Library | ShadCN | TBD | Custom |
-| State Management | Context | Pinia | Native |
-| Routing | React Router | Vue Router | Native |
+| Feature           | React        | Vue        | Vanilla |
+| ----------------- | ------------ | ---------- | ------- |
+| Production Ready  | ✅           | 🚧         | 🚧      |
+| Bundle Size       | ~45KB        | TBD        | TBD     |
+| TypeScript        | ✅           | ✅         | ✅      |
+| HMR Support       | ✅           | ✅         | ⚠️      |
+| Component Library | ShadCN       | TBD        | Custom  |
+| State Management  | Context      | Pinia      | Native  |
+| Routing           | React Router | Vue Router | Native  |
 
 ## Choosing a Container
 
 ### Use React Container if:
+
 - Your team is familiar with React
 - You need production-ready solution today
 - You want extensive component library support
 - You prefer JSX syntax
 
 ### Use Vue Container if:
+
 - Your team prefers Vue's template syntax
 - You want reactive data binding
 - You prefer Composition API patterns
 - You need smaller bundle sizes
 
 ### Use Vanilla Container if:
+
 - You want minimal dependencies
 - Bundle size is critical
 - You need maximum performance

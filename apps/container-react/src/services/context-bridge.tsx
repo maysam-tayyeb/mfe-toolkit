@@ -1,7 +1,13 @@
 import React, { useRef, useImperativeHandle, forwardRef, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useUI } from '@/contexts/UIContext';
-import { AuthService, ModalService, NotificationService, NotificationConfig, ThemeService } from '@mfe-toolkit/core';
+import {
+  AuthService,
+  ModalService,
+  NotificationService,
+  NotificationConfig,
+  ThemeService,
+} from '@mfe-toolkit/core';
 import { getThemeService } from './theme-service';
 
 export interface ContextBridgeRef {

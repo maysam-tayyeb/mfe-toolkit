@@ -11,7 +11,10 @@ A comprehensive toolkit and reference architecture for building production-ready
 - 🔄 **Cross-Framework Support** - React, Vue, and Vanilla JS MFEs work together ([see demos](./docs/service-demos.md))
 - 🛠️ **Modern Tooling** - Vite, TypeScript, pnpm workspaces, and ESBuild
 - 🔧 **Universal State Manager** - Cross-framework state management (React, Vue, Vanilla JS) with proxy-based reactivity and middleware support
-- 🎨 **Optimized UI/UX** - Top navigation bar, compact layouts, and responsive design for better screen real estate
+- 🎨 **Zero-Pollution Design System** - Framework-agnostic CSS-first design system with Modern Blue & Slate palette
+- 📐 **Professional UI/UX** - Hero sections, metric cards, tabs, semantic colors, and responsive layouts
+- 🚫 **No Global Pollution** - Clean architecture with service injection, no window/global variables
+- 📱 **Mobile-Responsive** - Adaptive layouts that work across all device sizes
 
 ## 🏗️ Architecture Overview
 
@@ -19,8 +22,8 @@ A comprehensive toolkit and reference architecture for building production-ready
 ┌─────────────────────────────────────────────────────────────┐
 │                      Container Application                  │
 │  ┌───────────────────────────────────────────────────────┐  │
-│  │  Navigation | Dashboard | MFE Communication Center    │  │
-│  │  Universal State Demo | Error Boundary Demo           │  │
+│  │  Navigation | Dashboard | Modal Service | Event Bus   │  │
+│  │  Error Handling Demo                                  │  │
 │  └───────────────────────────────────────────────────────┘  │
 │                                                             │
 │  ┌─────────────────────────────────────────────────────┐    │
@@ -47,18 +50,19 @@ A comprehensive toolkit and reference architecture for building production-ready
 │         Static File Server (Port 8080)                      │
 │         Serves Built MFEs from dist/ directory              │
 │  ┌──────────────┐ ┌──────────────┐ ┌─────────────────┐      │
-│  │/mfe-example/ │ │/mfe-react17/ │ │/mfe-state-demo-*│      │
-│  │.js .js.map   │ │.js .js.map   │ │react|vue|vanilla│      │
+│  │/modal-demos/ │ │/eventbus-demo│ │/state-demos/*  │      │
+│  │react|vue|js  │ │.js .js.map   │ │react|vue|vanilla│      │
 │  └──────────────┘ └──────────────┘ └─────────────────┘      │
 └─────────────────────────────────────────────────────────────┘
                               ↓
 ┌─────────────────────────────────────────────────────────────┐
 │                    Microfrontends (MFEs)                    │
 │  ┌──────────────┐ ┌──────────────┐ ┌─────────────────┐      │
-│  │Example MFE   │ │React17 MFE   │ │State Demo MFEs  │      │
-│  │- Services    │ │- Legacy      │ │- React          │      │
-│  │- Event Bus   │ │- Zustand     │ │- Vue            │      │
-│  │- Modals      │ │- Services    │ │- Vanilla JS     │      │
+│  │Modal Demos   │ │EventBus Demo │ │State Demo MFEs  │      │
+│  │- React 19    │ │- React 19    │ │- React          │      │
+│  │- React 17    │ │- Event comm  │ │- Vue            │      │
+│  │- Vue 3       │ │- Services    │ │- Vanilla JS     │      │
+│  │- Vanilla JS  │ │              │ │                 │      │
 │  └──────────────┘ └──────────────┘ └─────────────────┘      │
 └─────────────────────────────────────────────────────────────┘
 ```
@@ -77,18 +81,26 @@ The toolkit is available as modular npm packages under the `@mfe-toolkit` organi
 
 ### Core Packages
 
-| Package | Description | Version |
-|---------|-------------|---------|
-| [`@mfe-toolkit/core`](./packages/mfe-toolkit-core) | Framework-agnostic core functionality | 0.1.0 |
-| [`@mfe-toolkit/react`](./packages/mfe-toolkit-react) | React components and hooks | 0.1.0 |
-| [`@mfe-toolkit/cli`](./packages/mfe-toolkit-cli) | CLI tools for MFE development | 0.1.0 |
-| [`@mfe-toolkit/state`](./packages/mfe-toolkit-state) | Cross-framework state management | 0.1.0 |
+| Package                                              | Description                           | Version |
+| ---------------------------------------------------- | ------------------------------------- | ------- |
+| [`@mfe-toolkit/core`](./packages/mfe-toolkit-core)   | Framework-agnostic core functionality | 0.1.0   |
+| [`@mfe-toolkit/react`](./packages/mfe-toolkit-react) | React components and hooks            | 0.1.0   |
+| [`@mfe-toolkit/cli`](./packages/mfe-toolkit-cli)     | CLI tools for MFE development         | 0.1.0   |
+| [`@mfe-toolkit/state`](./packages/mfe-toolkit-state) | Cross-framework state management      | 0.1.0   |
 
 ### Middleware Packages
 
-| Package | Description | Version |
-|---------|-------------|---------|
-| [`@mfe-toolkit/state-middleware-performance`](./packages/mfe-toolkit-state-middleware-performance) | Performance monitoring for state management | 0.1.0 |
+| Package                                                                                            | Description                                 | Version |
+| -------------------------------------------------------------------------------------------------- | ------------------------------------------- | ------- |
+| [`@mfe-toolkit/state-middleware-performance`](./packages/mfe-toolkit-state-middleware-performance) | Performance monitoring for state management | 0.1.0   |
+
+### Internal Packages
+
+| Package                                                      | Description                                       | Status   |
+| ------------------------------------------------------------ | ------------------------------------------------- | -------- |
+| [`@mfe/design-system`](./packages/design-system)             | CSS-first design system with 200+ utility classes | Internal |
+| [`@mfe/design-system-react`](./packages/design-system-react) | React components for design system                | Internal |
+| [`@mfe/shared`](./packages/shared)                           | Shared utilities and constants                    | Internal |
 
 ### Installation
 
@@ -117,9 +129,9 @@ The toolkit includes a powerful state management solution with optional middlewa
 
 ```typescript
 import { createStateManager } from '@mfe-toolkit/state';
-import { 
-  createPerformanceMiddleware, 
-  initStatePerformanceMonitor 
+import {
+  createPerformanceMiddleware,
+  initStatePerformanceMonitor,
 } from '@mfe-toolkit/state-middleware-performance';
 
 // Initialize performance monitoring
@@ -130,9 +142,7 @@ const stateManager = createStateManager({
   devtools: true,
   persistent: true,
   crossTab: true,
-  middleware: [
-    createPerformanceMiddleware()
-  ]
+  middleware: [createPerformanceMiddleware()],
 });
 
 // Use the state manager
@@ -174,8 +184,8 @@ cd mfe-made-easy
 # Install dependencies
 pnpm install
 
-# Build shared packages (required first time)
-pnpm -r build
+# Build packages and MFEs (required first time)
+pnpm build
 ```
 
 ## 🏃‍♂️ Running the Applications
@@ -186,23 +196,11 @@ pnpm -r build
 # Install dependencies (run after cloning)
 pnpm install
 
-# Build all packages (required before first run)
-pnpm -r build
+# Build packages and MFEs (required before first run)
+pnpm build
 
-# Start all applications in parallel (recommended)
-pnpm dev
-```
-
-Or start individually:
-
-```bash
-# Start individual applications
+# Start the container application
 pnpm dev:container-react  # React container app on http://localhost:3000
-pnpm dev:mfe           # Example MFE on http://localhost:3001
-pnpm dev:react17       # React 17 MFE on http://localhost:3002
-pnpm dev:state-react   # State demo React MFE
-pnpm dev:state-vue     # State demo Vue MFE
-pnpm dev:state-demos   # All state demo MFEs in parallel
 ```
 
 ### Service Demonstration MFEs
@@ -210,15 +208,18 @@ pnpm dev:state-demos   # All state demo MFEs in parallel
 The platform includes comprehensive service demonstrations across multiple frameworks:
 
 #### Modal Service Demos
+
 - **React 19**: Full modal capabilities with JSX support
 - **React 17**: Legacy React with text-only content
 - **Vue 3**: Cross-framework integration demo
 - **Vanilla TS**: Lightweight implementation (5KB)
 
 #### Event Bus Demo
+
 - **React 19**: Interactive pub/sub demonstration with real-time event log
 
 Access demos at:
+
 - Modal Service: http://localhost:3000/services/modal
 - Event Bus: http://localhost:3000/services/event-bus
 
@@ -296,23 +297,24 @@ The container uses a **dynamic registry system** that loads configurations from 
 ### Running Tests
 
 ```bash
-# Run all tests
-pnpm test
+# Run tests for all packages
+pnpm test:packages
 
-# Watch mode for tests
-pnpm test:watch
+# Run tests for container app
+pnpm test:container
 
-# Coverage report
-pnpm test:coverage
+# Run tests for a specific package
+pnpm --filter @mfe-toolkit/core test
+pnpm --filter @mfe/container-react test
 
-# Run a single test file
-pnpm vitest src/App.test.tsx
+# Watch mode for specific package tests
+pnpm --filter @mfe/container-react test:watch
 
-# E2E tests with Playwright
-pnpm e2e              # Headless mode
-pnpm e2e:headed      # Headed mode
-pnpm e2e:debug       # Debug mode
-pnpm e2e:report      # View test report
+# Coverage report for specific package
+pnpm --filter @mfe/container-react test:coverage
+
+# Run a single test file (from within package directory)
+cd apps/container-react && pnpm vitest src/App.test.tsx
 ```
 
 ### Testing the MFE Integration
@@ -345,16 +347,18 @@ mfe-made-easy/
 │   ├── container-react/        # React container app (port 3000)
 │   │   ├── src/
 │   │   │   ├── components/     # Navigation, Layout, UI components
-│   │   │   ├── pages/          # Home, Dashboard, MFE Communication
-│   │   │   ├── store/          # Redux slices (auth, modal, notification)
+│   │   │   ├── pages/          # Home, Dashboard, Services pages
+│   │   │   ├── contexts/       # React Context (Auth, UI, Registry)
 │   │   │   └── services/       # MFE services implementation
 │   │   └── package.json
-│   ├── mfe-example/            # Example MFE - demonstrates all services
-│   ├── mfe-react17/            # React 17 compatibility demo
-│   ├── mfe-event-demo/         # Event bus communication demo
-│   ├── mfe-state-demo-react/   # Universal state demo (React)
-│   ├── mfe-state-demo-vue/     # Universal state demo (Vue)
-│   └── mfe-state-demo-vanilla/ # Universal state demo (Vanilla JS)
+│   └── service-demos/          # MFE demonstrations
+│       ├── modal/              # Modal service demos
+│       │   ├── mfe-react19-modal-demo/
+│       │   ├── mfe-react17-modal-demo/
+│       │   ├── mfe-vue3-modal-demo/
+│       │   └── mfe-vanilla-modal-demo/
+│       └── event-bus/          # Event bus demos
+│           └── mfe-react19-eventbus-demo/
 ├── packages/
 │   ├── mfe-toolkit-core/       # Framework-agnostic core
 │   │   └── src/
@@ -364,10 +368,17 @@ mfe-made-easy/
 │   ├── mfe-toolkit-react/      # React-specific components
 │   │   └── src/
 │   │       └── components/     # MFELoader, MFEPage
-│   ├── shared/                 # Common utilities
+│   ├── shared/                 # Internal utilities (private)
 │   │   └── src/
 │   │       ├── utils.ts        # Helper functions
 │   │       └── constants.ts    # Shared constants
+│   ├── design-system/          # CSS-first design system
+│   │   └── src/
+│   │       ├── styles/         # CSS with ds-* classes
+│   │       └── tokens/         # Design tokens
+│   ├── design-system-react/    # React design components
+│   │   └── src/
+│   │       └── components/     # Hero, MetricCard, TabGroup
 │   ├── mfe-toolkit-state/      # Cross-framework state management
 │   │   └── src/
 │   │       ├── StateManager.ts # Core state management
@@ -385,11 +396,6 @@ mfe-made-easy/
 
 - `pnpm dev` - Start all apps in development mode
 - `pnpm dev:container-react` - Start React container app
-- `pnpm dev:mfe` - Start only example MFE
-- `pnpm dev:react17` - Start only React 17 MFE
-- `pnpm dev:state-react` - Start state demo React MFE
-- `pnpm dev:state-vue` - Start state demo Vue MFE
-- `pnpm dev:state-demos` - Start all state demo MFEs
 
 ### Building & Serving
 
@@ -404,10 +410,8 @@ mfe-made-easy/
 - `pnpm format` - Format code with Prettier
 - `pnpm format:check` - Check formatting
 - `pnpm type-check` - TypeScript checking
-- `pnpm test` - Run tests
-- `pnpm test:watch` - Run tests in watch mode
-- `pnpm test:coverage` - Generate coverage report
-- `pnpm validate` - Run all checks (format, lint, type-check, test)
+- `pnpm test:packages` - Run tests for all packages
+- `pnpm test:container` - Run tests for container app
 
 ## 🔧 Development Workflow
 
@@ -435,6 +439,8 @@ mfe-made-easy/
 ✅ **Shared Services**: Auth, Modal, Notification, Event Bus, Logger  
 ✅ **Universal State Manager**: Cross-framework state synchronization with proxy-based reactivity  
 ✅ **Dual MFE Loaders**: Standard and Isolated loaders for different scenarios  
+✅ **Zero-Pollution Design System**: CSS-first with 200+ utility classes  
+✅ **Professional UI/UX**: Hero sections, metric cards, tabs, semantic colors  
 ✅ **Development Mode**: Hot reload for both container and MFEs  
 ✅ **TypeScript**: Full type safety across the monorepo  
 ✅ **Modern Tooling**: Vite, Tailwind CSS, ESLint, Vitest, Playwright
@@ -463,8 +469,8 @@ pnpm dev:react17      # React 17 MFE on :3002
 pnpm lint             # Run linter
 pnpm format           # Format code
 pnpm type-check       # Type checking
-pnpm test             # Run tests
-pnpm validate         # Run all checks
+pnpm test:packages    # Run tests for packages
+pnpm test:container   # Run tests for container
 ```
 
 ### Working with MFEs
@@ -637,6 +643,7 @@ VITE_MFE_REGISTRY_URL=https://cdn.example.com/configs/mfe-registry.json
 - Add performance monitoring and optimization
 
 See our [Comprehensive Roadmap](./docs/architecture/comprehensive-roadmap.md) for exciting upcoming features including:
+
 - 🔍 DevTools middleware for time-travel debugging
 - ✅ Validation middleware for runtime type safety
 - 🔄 Sync middleware for backend integration

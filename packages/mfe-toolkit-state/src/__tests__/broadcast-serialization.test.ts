@@ -129,9 +129,9 @@ describe('BroadcastChannel Serialization', () => {
     // Set a complex value first
     const complexValue = { nested: { array: [1, 2, 3] } };
     manager.set('toDelete', complexValue);
-    
+
     postMessageSpy.mockClear();
-    
+
     // Delete it
     manager.delete('toDelete');
 

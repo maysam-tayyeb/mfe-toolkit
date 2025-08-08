@@ -34,24 +34,24 @@ const MyMFE: MFEModule = {
   mount: (element: HTMLElement, services: MFEServices) => {
     // Your MFE implementation
     const { logger, eventBus, notification } = services;
-    
+
     logger.info('MFE mounted');
-    
+
     // Implement your MFE logic here
     element.innerHTML = '<div>My MFE Content</div>';
-    
+
     // Subscribe to events
     const unsubscribe = eventBus.on('user:action', (data) => {
       logger.info('Received event:', data);
     });
-    
+
     // Return unmount function
     return () => {
       unsubscribe();
       element.innerHTML = '';
       logger.info('MFE unmounted');
     };
-  }
+  },
 };
 
 export default MyMFE;
@@ -77,9 +77,9 @@ eventBus.on('user:login', (data) => {
 });
 
 // Emit events
-eventBus.emit('user:login', { 
-  userId: '123', 
-  timestamp: new Date() 
+eventBus.emit('user:login', {
+  userId: '123',
+  timestamp: new Date(),
 });
 ```
 
@@ -88,6 +88,7 @@ eventBus.emit('user:login', {
 ### Services
 
 #### Logger Service
+
 ```typescript
 import { createLogger } from '@mfe-toolkit/core';
 
@@ -99,6 +100,7 @@ logger.error('Error message', new Error('Something went wrong'));
 ```
 
 #### Error Reporter
+
 ```typescript
 import { getErrorReporter } from '@mfe-toolkit/core';
 
@@ -106,13 +108,14 @@ const errorReporter = getErrorReporter();
 errorReporter.reportError(error, {
   context: 'user-action',
   userId: '123',
-  metadata: { action: 'checkout' }
+  metadata: { action: 'checkout' },
 });
 ```
 
 ### Components
 
 #### MFE Error Boundary
+
 ```tsx
 import { MFEErrorBoundary } from '@mfe-toolkit/core';
 
@@ -123,12 +126,13 @@ import { MFEErrorBoundary } from '@mfe-toolkit/core';
   }}
 >
   <YourMFEComponent />
-</MFEErrorBoundary>
+</MFEErrorBoundary>;
 ```
 
 ### CLI Tools
 
 Generate MFE manifests:
+
 ```bash
 npx mfe-manifest generate
 ```
@@ -169,8 +173,8 @@ const eventBus = createCustomEventBus({
     (eventName, data) => {
       console.log(`Event intercepted: ${eventName}`, data);
       return data; // Can modify data here
-    }
-  ]
+    },
+  ],
 });
 ```
 
@@ -183,8 +187,8 @@ const store = createMFEStore({
   initialState: { count: 0 },
   actions: {
     increment: (state) => ({ count: state.count + 1 }),
-    decrement: (state) => ({ count: state.count - 1 })
-  }
+    decrement: (state) => ({ count: state.count - 1 }),
+  },
 });
 ```
 

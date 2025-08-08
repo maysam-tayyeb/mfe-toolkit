@@ -25,9 +25,9 @@ pnpm add @mfe-toolkit/state-middleware-performance
 
 ```typescript
 import { createStateManager } from '@mfe-toolkit/state';
-import { 
+import {
   createPerformanceMiddleware,
-  initStatePerformanceMonitor 
+  initStatePerformanceMonitor,
 } from '@mfe-toolkit/state-middleware-performance';
 
 // Initialize performance monitoring
@@ -35,9 +35,7 @@ initStatePerformanceMonitor('my-app');
 
 // Create state manager with performance middleware
 const stateManager = createStateManager({
-  middleware: [
-    createPerformanceMiddleware()
-  ]
+  middleware: [createPerformanceMiddleware()],
 });
 ```
 
@@ -49,12 +47,12 @@ import { createPerformanceMiddlewareWithThresholds } from '@mfe-toolkit/state-mi
 const stateManager = createStateManager({
   middleware: [
     createPerformanceMiddlewareWithThresholds({
-      slowUpdateThreshold: 16,     // Log updates slower than 16ms
-      largeObjectThreshold: 1000,  // Log objects larger than 1KB
+      slowUpdateThreshold: 16, // Log updates slower than 16ms
+      largeObjectThreshold: 1000, // Log objects larger than 1KB
       logSlowUpdates: true,
-      logLargeObjects: true
-    })
-  ]
+      logLargeObjects: true,
+    }),
+  ],
 });
 ```
 
@@ -94,6 +92,7 @@ Creates a basic performance monitoring middleware.
 Creates performance middleware with customizable thresholds.
 
 Options:
+
 - `slowUpdateThreshold`: Milliseconds threshold for slow updates (default: 16)
 - `largeObjectThreshold`: Bytes threshold for large objects (default: 1000)
 - `logSlowUpdates`: Whether to log slow updates (default: true)

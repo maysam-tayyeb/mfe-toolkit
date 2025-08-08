@@ -265,8 +265,8 @@ export default {
     const stateManager = getGlobalStateManager({
       middleware: [
         // Optional: Add performance monitoring
-        createPerformanceMiddleware()
-      ]
+        createPerformanceMiddleware(),
+      ],
     });
 
     // Check auth via ContextBridge
@@ -313,17 +313,18 @@ import { createPerformanceMiddleware } from '@mfe-toolkit/state-middleware-perfo
 const stateManager = createStateManager({
   middleware: [
     createPerformanceMiddleware({
-      slowUpdateThreshold: 16,  // Log updates slower than 16ms
-      largeObjectThreshold: 1000  // Log objects larger than 1KB
+      slowUpdateThreshold: 16, // Log updates slower than 16ms
+      largeObjectThreshold: 1000, // Log objects larger than 1KB
     }),
     // Add more middleware as needed
     loggingMiddleware,
-    validationMiddleware
-  ]
+    validationMiddleware,
+  ],
 });
 ```
 
 Available middleware packages:
+
 - `@mfe-toolkit/state-middleware-performance` - Performance monitoring
 - More middleware packages coming soon...
 

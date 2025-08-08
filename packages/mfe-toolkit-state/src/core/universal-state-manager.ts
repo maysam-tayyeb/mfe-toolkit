@@ -11,14 +11,14 @@ import {
 
 /**
  * UniversalStateManager - Cross-framework state management solution
- * 
+ *
  * This implementation uses Valtio as the underlying state management library,
  * but provides a vendor-agnostic API that allows for:
  * 1. Consistent state management across React, Vue, and Vanilla JS
  * 2. Easy migration to different state management solutions if needed
  * 3. Custom middleware, persistence, and cross-tab synchronization
  * 4. Framework-specific adapters without vendor lock-in
- * 
+ *
  * Current implementation: Valtio (proxy-based reactivity)
  */
 
@@ -109,7 +109,7 @@ export class UniversalStateManager implements StateManager {
     this.runMiddleware(event, () => {
       // Update the source before making changes
       this.state._meta.source = source;
-      
+
       // Update state using Valtio proxy
       this.state.store[key] = value;
       this.state._meta.lastUpdate = Date.now();
@@ -126,7 +126,7 @@ export class UniversalStateManager implements StateManager {
           }
         });
       }
-      
+
       // Notify global listeners immediately
       this.notifyGlobalListeners(event);
 
@@ -146,7 +146,7 @@ export class UniversalStateManager implements StateManager {
             source: event.source,
             timestamp: event.timestamp,
           };
-          
+
           this.broadcastChannel.postMessage({
             type: 'STATE_UPDATE',
             event: serializableEvent,
@@ -167,7 +167,7 @@ export class UniversalStateManager implements StateManager {
 
     const previousValue = this.state.store[key];
     delete this.state.store[key];
-    
+
     this.state._meta.lastUpdate = Date.now();
     this.state._meta.updateCount++;
     this.state._meta.source = 'delete';
@@ -192,7 +192,7 @@ export class UniversalStateManager implements StateManager {
         }
       });
     }
-    
+
     // Notify global listeners immediately
     this.notifyGlobalListeners(event);
 
@@ -211,7 +211,7 @@ export class UniversalStateManager implements StateManager {
           source: event.source,
           timestamp: event.timestamp,
         };
-        
+
         this.broadcastChannel.postMessage({
           type: 'STATE_DELETE',
           event: serializableEvent,
@@ -228,12 +228,12 @@ export class UniversalStateManager implements StateManager {
   clear(): void {
     const keys = Object.keys(this.state.store);
     const previousValues: Record<string, unknown> = {};
-    
+
     // Store previous values for notifications
-    keys.forEach(key => {
+    keys.forEach((key) => {
       previousValues[key] = this.state.store[key];
     });
-    
+
     // Clear the store
     this.state.store = {};
     this.state._meta.lastUpdate = Date.now();
@@ -369,7 +369,7 @@ export class UniversalStateManager implements StateManager {
     console.warn(
       `getAdapter() is deprecated. Import adapters directly from '@mfe-toolkit/state' instead.`
     );
-    
+
     switch (framework) {
       case 'react':
       case 'vue':
@@ -388,19 +388,19 @@ export class UniversalStateManager implements StateManager {
   getProxyStore(): Record<string, any> {
     return this.state.store;
   }
-  
+
   // Batch multiple updates (useful for performance)
   batchUpdate(updates: Record<string, any>, source: string = 'batch'): void {
     // Update metadata once
     this.state._meta.source = source;
     this.state._meta.lastUpdate = Date.now();
     this.state._meta.updateCount++;
-    
+
     // Apply all updates at once
     Object.entries(updates).forEach(([key, value]) => {
       const previousValue = this.state.store[key];
       this.state.store[key] = value;
-      
+
       // Notify listeners for each key
       const event: StateChangeEvent = {
         key,
@@ -410,7 +410,7 @@ export class UniversalStateManager implements StateManager {
         timestamp: Date.now(),
         type: 'set',
       };
-      
+
       const keyListenerSet = this.keyListeners.get(key);
       if (keyListenerSet && keyListenerSet.size > 0) {
         keyListenerSet.forEach((listener) => {
@@ -421,10 +421,10 @@ export class UniversalStateManager implements StateManager {
           }
         });
       }
-      
+
       this.notifyGlobalListeners(event);
     });
-    
+
     // Persist all at once if enabled
     if (this.config.persistent && !this.isProcessingBroadcast) {
       Object.entries(updates).forEach(([key, value]) => {
@@ -432,17 +432,17 @@ export class UniversalStateManager implements StateManager {
       });
     }
   }
-  
+
   // Check if a key exists in the store
   has(key: string): boolean {
     return key in this.state.store;
   }
-  
+
   // Get all keys in the store
   keys(): string[] {
     return Object.keys(this.state.store);
   }
-  
+
   // Get the size of the store
   size(): number {
     return Object.keys(this.state.store).length;
@@ -463,7 +463,7 @@ export class UniversalStateManager implements StateManager {
         console.error('Global state listener error:', error);
       }
     });
-    
+
     // Key-specific listeners are notified separately in set/delete/clear methods
     // Don't notify them here to avoid double notifications
   }
@@ -530,7 +530,7 @@ export class UniversalStateManager implements StateManager {
             const stateEvent = event.data.event as StateChangeEvent;
             // Use ref to avoid triggering subscriptions during sync
             ref(this.state.store)[stateEvent.key] = stateEvent.value;
-            
+
             // Notify key-specific listeners
             const keyListenerSet = this.keyListeners.get(stateEvent.key);
             if (keyListenerSet && keyListenerSet.size > 0) {
@@ -542,11 +542,14 @@ export class UniversalStateManager implements StateManager {
                 try {
                   listener(stateEvent.value, crossTabEvent);
                 } catch (error) {
-                  console.error(`[UniversalStateManager] Error in listener for key "${stateEvent.key}":`, error);
+                  console.error(
+                    `[UniversalStateManager] Error in listener for key "${stateEvent.key}":`,
+                    error
+                  );
                 }
               });
             }
-            
+
             // Then trigger global subscriptions
             this.notifyGlobalListeners({
               ...stateEvent,
@@ -564,7 +567,7 @@ export class UniversalStateManager implements StateManager {
             break;
           }
           case 'STATE_CLEAR': {
-            Object.keys(ref(this.state.store)).forEach(key => {
+            Object.keys(ref(this.state.store)).forEach((key) => {
               delete ref(this.state.store)[key];
             });
             break;
@@ -582,7 +585,7 @@ export class UniversalStateManager implements StateManager {
       console.log('[UniversalStateManager] Initialized with Valtio implementation', {
         config: this.config,
         mfeCount: Object.keys(this.state.mfeRegistry).length,
-        stateKeys: Object.keys(this.state.store).length
+        stateKeys: Object.keys(this.state.store).length,
       });
     }
   }
@@ -608,7 +611,7 @@ export class UniversalStateManager implements StateManager {
 
     // Handle arrays
     if (Array.isArray(value)) {
-      return value.map(item => this.toSerializable(item));
+      return value.map((item) => this.toSerializable(item));
     }
 
     // Handle plain objects

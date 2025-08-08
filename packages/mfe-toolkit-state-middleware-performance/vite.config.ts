@@ -14,7 +14,7 @@ export default defineConfig({
       entry: resolve(__dirname, 'src/index.ts'),
       name: 'MFEToolkitStateMiddlewarePerformance',
       formats: ['es', 'umd'],
-      fileName: (format) => format === 'es' ? 'index.es' : 'index.js',
+      fileName: (format) => (format === 'es' ? 'index.es' : 'index.js'),
     },
     rollupOptions: {
       external: ['@mfe-toolkit/state'],

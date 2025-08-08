@@ -12,10 +12,10 @@ export const validateCommand = new Command('validate')
     try {
       // Find manifest files
       let manifestFiles: string[] = files;
-      
+
       if (!manifestFiles.length) {
         manifestFiles = glob.sync(options.pattern, {
-          ignore: ['**/node_modules/**', '**/dist/**']
+          ignore: ['**/node_modules/**', '**/dist/**'],
         });
       }
 
@@ -27,30 +27,30 @@ export const validateCommand = new Command('validate')
       console.log(chalk.blue(`\n🔍 Validating ${manifestFiles.length} manifest(s)...\n`));
 
       let hasErrors = false;
-      
+
       for (const file of manifestFiles) {
         console.log(chalk.gray(`📄 ${file}`));
-        
+
         try {
           const manifest = await fs.readJson(file);
           const result = manifestValidator.validate(manifest);
-          
+
           if (result.valid) {
             console.log(chalk.green(`   ✅ Valid (v${result.version})`));
-            
+
             if (result.warnings && result.warnings.length > 0) {
               console.log(chalk.yellow('   ⚠️  Warnings:'));
-              result.warnings.forEach(warning => {
+              result.warnings.forEach((warning) => {
                 console.log(chalk.yellow(`      - ${warning}`));
               });
             }
           } else {
             hasErrors = true;
             console.log(chalk.red('   ❌ Invalid'));
-            
+
             if (result.errors && result.errors.length > 0) {
               console.log(chalk.red('   Errors:'));
-              result.errors.forEach(error => {
+              result.errors.forEach((error) => {
                 console.log(chalk.red(`      - ${error}`));
               });
             }
@@ -59,7 +59,7 @@ export const validateCommand = new Command('validate')
           hasErrors = true;
           console.log(chalk.red(`   ❌ Error reading file: ${(error as Error).message}`));
         }
-        
+
         console.log('');
       }
 

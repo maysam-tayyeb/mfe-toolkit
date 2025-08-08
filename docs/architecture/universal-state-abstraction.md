@@ -47,10 +47,11 @@ stateManager.set('count', 1);
 if (stateManager instanceof UniversalStateManager) {
   // Access Valtio proxy for fine-grained reactivity
   const proxy = stateManager.getProxyStore();
-  
+
   // Use advanced features
-  const derived = createDerivedState(stateManager, 
-    state => state.firstName + ' ' + state.lastName
+  const derived = createDerivedState(
+    stateManager,
+    (state) => state.firstName + ' ' + state.lastName
   );
 }
 ```
@@ -126,15 +127,15 @@ interface StateManager {
   set<T>(key: string, value: T, source?: string): void;
   delete(key: string): void;
   clear(): void;
-  
+
   // Subscriptions
   subscribe<T>(key: string, listener: StateListener<T>): Unsubscribe;
   subscribeAll(listener: GlobalStateListener): Unsubscribe;
-  
+
   // MFE management
   registerMFE(mfeId: string, metadata?: any): void;
   unregisterMFE(mfeId: string): void;
-  
+
   // Snapshots
   getSnapshot(): Record<string, any>;
   restoreSnapshot(snapshot: Record<string, any>): void;
@@ -162,14 +163,18 @@ interface StateManager {
 The architecture provides multiple extension points:
 
 1. **Middleware System**
+
    ```typescript
-   const middleware = [(event, next) => {
-     console.log('State change:', event);
-     next();
-   }];
+   const middleware = [
+     (event, next) => {
+       console.log('State change:', event);
+       next();
+     },
+   ];
    ```
 
 2. **Custom Adapters**
+
    ```typescript
    const customAdapter = createReactAdapter(stateManager);
    ```
@@ -177,9 +182,7 @@ The architecture provides multiple extension points:
 3. **Enhanced Features**
    ```typescript
    // Leverage implementation specifics
-   const selector = createSelector(stateManager, 
-     state => state.user.preferences
-   );
+   const selector = createSelector(stateManager, (state) => state.user.preferences);
    ```
 
 ## Migration Strategy
@@ -187,6 +190,7 @@ The architecture provides multiple extension points:
 When migrating to a different state management solution:
 
 1. **Implement StateManager Interface**
+
    ```typescript
    export class NewStateManager implements StateManager {
      // New implementation
@@ -194,6 +198,7 @@ When migrating to a different state management solution:
    ```
 
 2. **Update Factory Functions**
+
    ```typescript
    export function createStateManager(config?: StateManagerConfig) {
      return new NewStateManager(config);
@@ -215,15 +220,17 @@ When migrating to a different state management solution:
 ### For MFE Developers
 
 1. **Use the Abstract Interface**
+
    ```typescript
    // Good: Uses abstract interface
    const value = stateManager.get('key');
-   
+
    // Avoid: Implementation-specific
    const proxy = (stateManager as any).state.store;
    ```
 
 2. **Check Capabilities**
+
    ```typescript
    // Check for enhanced features
    if ('getProxyStore' in stateManager) {

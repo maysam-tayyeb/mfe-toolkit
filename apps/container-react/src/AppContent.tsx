@@ -3,11 +3,12 @@ import { BrowserRouter, Routes, Route, useParams } from 'react-router-dom';
 import { Layout } from '@/components/Layout';
 import { HomePage } from '@/pages/HomePage';
 import { DashboardPage } from '@/pages/DashboardPage';
-import { MFECommunicationPage } from '@/pages/MFECommunicationPage';
-import { UniversalStateDemoPage } from '@/pages/UniversalStateDemoPage';
 import { ErrorBoundaryDemoPage } from '@/pages/ErrorBoundaryDemoPage';
-import { ModalServiceDemoPage } from '@/pages/services/ModalServiceDemoPage';
-import { EventBusServiceDemoPage } from '@/pages/services/EventBusServiceDemoPage';
+import { MFERegistryPage } from '@/pages/MFERegistryPage';
+import { EventBusPage } from '@/pages/services/EventBusPage';
+import { NotificationsPage } from '@/pages/services/NotificationsPage';
+import { MetricsPage } from '@/pages/dev/MetricsPage';
+import { SettingsPage } from '@/pages/dev/SettingsPage';
 import { CompatibleMFELoader } from '@/components/CompatibleMFELoader';
 import { getMFEServicesSingleton } from '@/services/mfe-services-singleton';
 import { useRegistryContext } from '@/contexts/RegistryContext';
@@ -86,11 +87,12 @@ export function AppContent() {
         <Route path="/" element={<Layout />}>
           <Route index element={<HomePage />} />
           <Route path="dashboard" element={<DashboardPage />} />
-          <Route path="mfe-communication" element={<MFECommunicationPage />} />
-          <Route path="universal-state-demo" element={<UniversalStateDemoPage />} />
+          <Route path="mfe-registry" element={<MFERegistryPage />} />
           <Route path="error-boundary-demo" element={<ErrorBoundaryDemoPage />} />
-          <Route path="services/modal" element={<ModalServiceDemoPage />} />
-          <Route path="services/event-bus" element={<EventBusServiceDemoPage />} />
+          <Route path="services/event-bus" element={<EventBusPage />} />
+          <Route path="services/notifications" element={<NotificationsPage />} />
+          <Route path="dev/metrics" element={<MetricsPage />} />
+          <Route path="dev/settings" element={<SettingsPage />} />
           <Route path="mfe/:mfeName" element={<MFEPage />} />
         </Route>
       </Routes>

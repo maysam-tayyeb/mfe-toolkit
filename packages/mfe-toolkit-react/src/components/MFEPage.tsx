@@ -9,11 +9,11 @@ interface MFEPageProps {
   isolate?: boolean;
 }
 
-export const MFEPage: React.FC<MFEPageProps> = ({ 
-  manifest, 
-  services, 
+export const MFEPage: React.FC<MFEPageProps> = ({
+  manifest,
+  services,
   fallback,
-  isolate = false 
+  isolate = false,
 }) => {
   return (
     <MFELoader

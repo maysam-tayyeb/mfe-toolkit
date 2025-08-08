@@ -4,20 +4,31 @@ This document provides an overview of all service demonstration MFEs that showca
 
 ## Overview
 
-The service demos illustrate how the platform's shared services work consistently across different frameworks (React 19, React 17, Vue 3, and Vanilla TypeScript). Each service has dedicated demo MFEs that demonstrate both capabilities and limitations.
+The service demos illustrate how the platform's shared services work consistently across different frameworks (React 19, React 17, Vue 3, and Vanilla TypeScript). Following the removal of monolithic MFEs and the implementation of the new design system, these focused demos provide clear examples of service integration patterns.
 
 ## Modal Service Demos
 
 Located in `apps/service-demos/modal/`
 
+### Design System Integration
+
+The Modal Service demo page uses the comprehensive design system with:
+- `ds-hero` for gradient hero sections
+- `ds-card` and `ds-card-padded` for content containers
+- `ds-btn-primary`, `ds-btn-outline`, `ds-btn-ghost` for actions (400+ utility classes)
+- `ds-tabs` and `ds-tab-active` for code example navigation
+- `ds-modal-*` classes for modal styling
+- `ds-badge-*` for status indicators
+- Modern Blue & Slate color palette throughout
+
 ### Available Implementations
 
-| Framework | MFE Name | Bundle Size | Key Features | Limitations |
-|-----------|----------|-------------|--------------|-------------|
-| **React 19** | `mfe-react19-modal-demo` | ~12KB | Full JSX support, all modal features | None |
-| **React 17** | `mfe-react17-modal-demo` | ~143KB | Legacy React support | Plain text content only |
-| **Vue 3** | `mfe-vue3-modal-demo` | ~7KB | Cross-framework integration | Plain text content only |
-| **Vanilla TS** | `mfe-vanilla-modal-demo` | ~5KB | Smallest bundle, no framework | Plain text content only |
+| Framework      | MFE Name                 | Bundle Size | Key Features                         | Limitations             |
+| -------------- | ------------------------ | ----------- | ------------------------------------ | ----------------------- |
+| **React 19**   | `mfe-react19-modal-demo` | ~12KB       | Full JSX support, all modal features | None                    |
+| **React 17**   | `mfe-react17-modal-demo` | ~143KB      | Legacy React support                 | Plain text content only |
+| **Vue 3**      | `mfe-vue3-modal-demo`    | ~7KB        | Cross-framework integration          | Plain text content only |
+| **Vanilla TS** | `mfe-vanilla-modal-demo` | ~5KB        | Smallest bundle, no framework        | Plain text content only |
 
 ### Features Demonstrated
 
@@ -40,9 +51,7 @@ const { modal, notification } = services;
 modal.open({
   title: 'Alert',
   content: 'This is a simple alert',
-  actions: [
-    { label: 'OK', variant: 'default', onClick: () => console.log('Closed') }
-  ]
+  actions: [{ label: 'OK', variant: 'default', onClick: () => console.log('Closed') }],
 });
 
 // Confirmation dialog
@@ -50,7 +59,7 @@ const result = await modal.confirm({
   title: 'Confirm Action',
   content: 'Are you sure?',
   confirmLabel: 'Yes',
-  cancelLabel: 'No'
+  cancelLabel: 'No',
 });
 ```
 
@@ -66,21 +75,20 @@ Located in `apps/service-demos/event-bus/`
 
 ### Available Implementation
 
-| Framework | MFE Name | Bundle Size | Key Features |
-|-----------|----------|-------------|--------------|
-| **React 19** | `mfe-react19-eventbus-demo` | ~5.5KB | Interactive pub/sub demonstration |
+| Framework    | MFE Name                    | Bundle Size | Key Features                      |
+| ------------ | --------------------------- | ----------- | --------------------------------- |
+| **React 19** | `mfe-react19-eventbus-demo` | ~5.5KB      | Interactive pub/sub demonstration |
 
-### UI/UX Improvements
+### Design System Integration
 
-The Event Bus demo page features an optimized layout design:
-
-1. **Top Navigation Bar** - Replaced sidebar with dropdown navigation to save ~250px horizontal space
-2. **Compact Typography** - Using `text-xs` and `text-sm` for better content density
-3. **3-Column Layout** - Main content (2 cols) + info panel (1 col) for optimal organization
-4. **Tabbed MFE Interface** - Support for multiple MFE demos (React, Vue, Angular - coming soon)
-5. **Container Event Emitter** - Dedicated section for container-to-MFE communication
-6. **Active Subscriptions** - Pill badges with color-coded categories and unsubscribe functionality
-7. **EventLog Component** - Reusable grayscale event stream display with consistent styling
+The Event Bus demo page leverages the expanded design system (400+ utilities):
+- Responsive layout with `ds-page` and `ds-page-content` containers
+- Event log using `ds-card-padded` and `ds-card-elevated` for depth
+- Action buttons using `ds-btn-primary`, `ds-btn-secondary`, `ds-btn-outline` variants
+- Status badges with `ds-badge-info`, `ds-badge-success`, `ds-badge-warning` classes
+- Typography with `ds-section-title`, `ds-card-title`, and `ds-text-muted`
+- Grid layouts using `ds-grid` and responsive `ds-md:grid-cols-*` classes
+- Interactive states with `ds-hover-scale` and `ds-transition`
 
 ### Features Demonstrated
 
@@ -121,22 +129,20 @@ unsubscribe();
 ### Development Mode
 
 ```bash
-# Build all service demos
-pnpm --filter './apps/service-demos/**' build
+# Build packages and all MFEs
+pnpm build
 
-# Copy to dist folder
-pnpm copy-mfe-dists
+# Serve MFEs (in one terminal)
+pnpm serve
 
-# Serve MFEs
-pnpm serve:mfes
-
-# Start container
+# Start container (in another terminal)
 pnpm dev:container-react
 ```
 
 ### Accessing Demos
 
 Once running, navigate to:
+
 - **Modal Service Demo**: http://localhost:3000/services/modal
 - **Event Bus Demo**: http://localhost:3000/services/event-bus
 
@@ -155,7 +161,7 @@ export default {
   },
   unmount: () => {
     // Cleanup
-  }
+  },
 };
 ```
 
@@ -217,7 +223,7 @@ const myServiceDemo: MFEModule = {
   },
   unmount: () => {
     // Cleanup
-  }
+  },
 };
 
 export default myServiceDemo;
@@ -226,12 +232,12 @@ export default myServiceDemo;
 ### 4. Build and Register
 
 ```bash
-# Build the demo
+# Build all packages and MFEs
 pnpm build
 
-# Add to mfe-registry.json
-# Copy dist files
-pnpm copy-mfe-dists
+# Add to mfe-registry.json if needed
+# Serve the MFEs
+pnpm serve
 ```
 
 ## Best Practices
@@ -239,7 +245,13 @@ pnpm copy-mfe-dists
 1. **Bundle Size**: Use ESBuild and mark framework dependencies as external
 2. **Type Safety**: Always type as `MFEModule` from `@mfe-toolkit/core`
 3. **Cleanup**: Properly cleanup in unmount (event listeners, subscriptions)
-4. **Styling**: Use Tailwind utilities from container (bg-primary, text-primary-foreground)
+4. **Styling**: Use design system classes (`ds-*` prefix) from the 400+ utility set:
+   - Buttons: `ds-btn-primary`, `ds-btn-secondary`, `ds-btn-outline`
+   - Cards: `ds-card-padded`, `ds-card-elevated`
+   - Typography: `ds-h1` through `ds-h4`, `ds-text-muted`
+   - Layout: `ds-flex`, `ds-grid`, `ds-container`
+   - Forms: `ds-input`, `ds-select`, `ds-checkbox`
+   - Modals: `ds-modal-backdrop`, `ds-modal-header`, `ds-modal-body`
 5. **Error Handling**: Gracefully handle service unavailability
 6. **Documentation**: Include README explaining capabilities and limitations
 
@@ -267,12 +279,16 @@ grep "process\." dist/*.js
 
 ## Future Enhancements
 
-- [ ] Logger Service Demo
-- [ ] Auth Service Demo  
-- [ ] Error Reporter Demo
-- [ ] Notification Service Demo (standalone)
-- [ ] Performance Monitoring Demo
-- [ ] State Management Demo (cross-framework)
+Following the platform cleanup and expanded design system implementation (400+ utilities):
+
+- [ ] Complete Dev Container for isolated MFE development
+- [ ] Logger Service Demo (all frameworks) - Using `ds-code-block` for log display
+- [ ] Auth Service Demo (all frameworks) - Using `ds-form-*` classes
+- [ ] Error Reporter Demo - Using `ds-callout-danger` for error displays
+- [ ] Notification Service Demo (standalone, all frameworks) - Using `ds-toast-*` classes
+- [ ] Theme Service Demo (all frameworks) - Showcasing all `ds-*` utility classes
+- [ ] Performance Monitoring Dashboard - Using `ds-metric-card` and `ds-progress`
+- [ ] Cross-tab State Synchronization Demos - Using `ds-badge-*` for sync status
 
 ## Related Documentation
 

@@ -147,7 +147,7 @@ export default {
       to: 'all',
       message: 'Global update',
     });
-  }
+  },
 };
 ```
 
@@ -174,16 +174,16 @@ export default {
     return {
       unmount: () => {
         unsubscribe();
-      }
+      },
     };
-  }
+  },
 };
 
 // Or in React component within MFE:
 function MyComponent({ services }: { services: MFEServices }) {
   useEffect(() => {
     const { eventBus } = services;
-    
+
     const unsubscribe = eventBus.on('custom.event', (payload) => {
       // Handle event
     });

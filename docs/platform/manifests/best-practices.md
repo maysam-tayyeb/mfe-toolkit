@@ -76,16 +76,16 @@ Always use semantic versioning (semver):
     "peer": {
       // Exact version (rarely needed)
       "package-a": "1.2.3",
-      
+
       // Patch updates allowed
       "package-b": "~1.2.3",
-      
+
       // Minor updates allowed (recommended)
       "package-c": "^1.2.3",
-      
+
       // Range
       "package-d": ">=1.0.0 <2.0.0",
-      
+
       // Multiple versions
       "react": "^18.0.0 || ^19.0.0"
     }
@@ -100,7 +100,7 @@ Always use semantic versioning (semver):
   "compatibility": {
     // ✅ Good - Allows future compatible versions
     "container": ">=1.0.0 <2.0.0",
-    
+
     // ❌ Bad - Too restrictive
     "container": "1.2.3"
   }
@@ -120,14 +120,14 @@ Always use semantic versioning (semver):
       "lodash": "^4.17.21",
       "date-fns": "^3.0.0"
     },
-    
+
     // Peer: Provided by container
     "peer": {
       "react": "^18.0.0 || ^19.0.0",
       "react-dom": "^18.0.0 || ^19.0.0",
       "@mfe-toolkit/core": "^1.0.0"
     },
-    
+
     // Optional: Enhanced features if available
     "optional": {
       "react-query": "^5.0.0",
@@ -164,8 +164,8 @@ Always use semantic versioning (semver):
       {
         "name": "analytics",
         "version": ">=2.0.0",
-        "optional": true,  // Gracefully handle absence
-        "fallback": "console"  // Document fallback behavior
+        "optional": true, // Gracefully handle absence
+        "fallback": "console" // Document fallback behavior
       }
     ]
   }
@@ -207,14 +207,9 @@ Always use semantic versioning (semver):
       "cart:checkout-started",
       "cart:checkout-completed"
     ],
-    
+
     // ❌ Bad - Inconsistent naming
-    "emits": [
-      "addToCart",
-      "cart_removed",
-      "CHECKOUT_START",
-      "checkout.done"
-    ]
+    "emits": ["addToCart", "cart_removed", "CHECKOUT_START", "checkout.done"]
   }
 }
 ```
@@ -258,7 +253,7 @@ Always use semantic versioning (semver):
     // Required fields
     "displayName": "Shopping Cart",
     "description": "E-commerce shopping cart with checkout flow",
-    
+
     // Highly recommended
     "icon": "🛒",
     "author": {
@@ -269,12 +264,12 @@ Always use semantic versioning (semver):
     "license": "MIT",
     "repository": "https://github.com/example/cart-mfe",
     "documentation": "https://docs.example.com/cart-mfe",
-    
+
     // Helpful for discovery
     "tags": ["ecommerce", "cart", "checkout", "payment"],
     "category": "ecommerce",
     "preview": "https://cdn.example.com/previews/cart.png",
-    
+
     // Additional context
     "changelog": "https://github.com/example/cart-mfe/blob/main/CHANGELOG.md",
     "support": "https://support.example.com/cart"
@@ -292,16 +287,16 @@ Always use semantic versioning (semver):
     "csp": {
       // Start restrictive
       "default-src": ["'self'"],
-      
+
       // Only allow what's needed
-      "script-src": ["'self'", "'unsafe-inline'"],  // Avoid unsafe-inline if possible
+      "script-src": ["'self'", "'unsafe-inline'"], // Avoid unsafe-inline if possible
       "style-src": ["'self'", "'unsafe-inline'"],
       "connect-src": ["'self'", "https://api.example.com"],
       "img-src": ["'self'", "https:", "data:"],
       "font-src": ["'self'", "https://fonts.gstatic.com"],
-      
+
       // Security headers
-      "frame-ancestors": ["'none'"],  // Prevent clickjacking
+      "frame-ancestors": ["'none'"], // Prevent clickjacking
       "form-action": ["'self'"]
     }
   }
@@ -315,12 +310,9 @@ Always use semantic versioning (semver):
   "security": {
     // For production builds
     "integrity": "sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC",
-    
+
     // Allowed origins
-    "allowedOrigins": [
-      "https://app.example.com",
-      "https://*.example.com"
-    ]
+    "allowedOrigins": ["https://app.example.com", "https://*.example.com"]
   }
 }
 ```
@@ -332,16 +324,10 @@ Always use semantic versioning (semver):
   "security": {
     "permissions": {
       // Only required permissions
-      "required": [
-        "user:read",
-        "cart:write"
-      ],
-      
+      "required": ["user:read", "cart:write"],
+
       // Optional enhancements
-      "optional": [
-        "analytics:write",
-        "admin:access"
-      ]
+      "optional": ["analytics:write", "admin:access"]
     }
   }
 }
@@ -356,19 +342,19 @@ Always use semantic versioning (semver):
   "config": {
     "loading": {
       // Prioritize critical MFEs
-      "priority": 10,  // Higher = loads first
-      
+      "priority": 10, // Higher = loads first
+
       // Preload if always needed
       "preload": true,
-      
+
       // Lazy load if rarely used
       "lazy": false,
-      
+
       // Mark as critical
-      "critical": true,  // Fail container if MFE fails
-      
+      "critical": true, // Fail container if MFE fails
+
       // Reasonable timeouts
-      "timeout": 30000,  // 30 seconds
+      "timeout": 30000, // 30 seconds
       "retries": 3,
       "retryDelay": 1000
     }
@@ -382,10 +368,10 @@ Always use semantic versioning (semver):
 {
   "requirements": {
     "resources": {
-      "memory": "256MB",     // Expected memory usage
-      "storage": "50MB",     // LocalStorage/IndexedDB
-      "cpu": "medium",       // low, medium, high
-      "network": "moderate"  // minimal, moderate, heavy
+      "memory": "256MB", // Expected memory usage
+      "storage": "50MB", // LocalStorage/IndexedDB
+      "cpu": "medium", // low, medium, high
+      "network": "moderate" // minimal, moderate, heavy
     }
   }
 }
@@ -402,29 +388,29 @@ const isDev = process.env.NODE_ENV === 'development';
 export default {
   name: 'my-mfe',
   version: isDev ? '0.0.0-dev' : process.env.VERSION,
-  url: isDev 
+  url: isDev
     ? 'http://localhost:3001/my-mfe.js'
     : `https://cdn.example.com/mfes/my-mfe/${process.env.VERSION}/bundle.js`,
-  
+
   // Development-specific config
   ...(isDev && {
     config: {
       loading: {
         timeout: 5000,
-        retries: 0
-      }
-    }
+        retries: 0,
+      },
+    },
   }),
-  
+
   // Production-specific config
   ...(!isDev && {
     security: {
       integrity: process.env.SRI_HASH,
       csp: {
-        'script-src': ["'self'"]
-      }
-    }
-  })
+        'script-src': ["'self'"],
+      },
+    },
+  }),
 };
 ```
 
@@ -467,6 +453,7 @@ manifests/
 ### Documentation
 
 Always document:
+
 - **Breaking changes** in changelog
 - **Event changes** in manifest and docs
 - **Service requirements** changes

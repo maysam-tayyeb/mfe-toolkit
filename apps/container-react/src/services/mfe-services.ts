@@ -50,53 +50,45 @@ const createProxiedService = <T extends object>(
         if (!contextBridge) {
           const message = `${serviceName}.${String(prop)} called before context bridge initialization`;
           console.warn(message);
-          
+
           // Return default value if specified
           if (prop in defaultReturnValues) {
             return defaultReturnValues[prop as keyof T];
           }
-          
+
           // For void methods, return undefined
           return undefined;
         }
-        
+
         const service = getService();
         const method = (service as any)[prop];
-        
+
         if (typeof method !== 'function') {
           throw new Error(`${serviceName}.${String(prop)} is not a function`);
         }
-        
+
         return method(...args);
       };
-    }
+    },
   });
 };
 
 const createAuthService = (): AuthService => {
-  return createProxiedService<AuthService>(
-    'AuthService',
-    () => contextBridge!.getAuthService(),
-    {
-      getSession: null,
-      isAuthenticated: false,
-      hasPermission: false,
-      hasRole: false,
-    }
-  );
+  return createProxiedService<AuthService>('AuthService', () => contextBridge!.getAuthService(), {
+    getSession: null,
+    isAuthenticated: false,
+    hasPermission: false,
+    hasRole: false,
+  });
 };
 
 const createModalServiceImpl = (): ModalService => {
-  return createProxiedService<ModalService>(
-    'ModalService',
-    () => contextBridge!.getModalService()
-  );
+  return createProxiedService<ModalService>('ModalService', () => contextBridge!.getModalService());
 };
 
 const createNotificationServiceImpl = (): NotificationService => {
-  return createProxiedService<NotificationService>(
-    'NotificationService',
-    () => contextBridge!.getNotificationService()
+  return createProxiedService<NotificationService>('NotificationService', () =>
+    contextBridge!.getNotificationService()
   );
 };
 
@@ -126,10 +118,13 @@ export const createMFEServices = (): MFEServices => {
   };
 
   // Create error reporter with services
-  services.errorReporter = getErrorReporter({
-    enableConsoleLog: true,
-    maxErrorsPerSession: 100,
-  }, services);
+  services.errorReporter = getErrorReporter(
+    {
+      enableConsoleLog: true,
+      maxErrorsPerSession: 100,
+    },
+    services
+  );
 
   return services;
 };

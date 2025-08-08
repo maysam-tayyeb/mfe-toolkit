@@ -15,54 +15,58 @@ export const createCommand = new Command('create')
   .action(async (name, options) => {
     try {
       // Prompt for missing information
-      const answers = await prompts([
+      const answers = await prompts(
+        [
+          {
+            type: name ? null : 'text',
+            name: 'name',
+            message: 'What is the name of your microfrontend?',
+            initial: name || 'my-mfe',
+            validate: (value) =>
+              /^[a-z0-9-]+$/.test(value) || 'Name must be lowercase with hyphens only',
+          },
+          {
+            type: options.template ? null : 'select',
+            name: 'template',
+            message: 'Which framework would you like to use?',
+            choices: [
+              { title: 'React', value: 'react' },
+              { title: 'Vue 3', value: 'vue' },
+              { title: 'Vanilla TypeScript', value: 'vanilla-ts' },
+              { title: 'Vanilla JavaScript', value: 'vanilla-js' },
+            ],
+            initial: 0,
+          },
+          {
+            type: 'confirm',
+            name: 'includeRouter',
+            message: 'Include routing?',
+            initial: true,
+          },
+          {
+            type: 'confirm',
+            name: 'includeState',
+            message: 'Include state management?',
+            initial: true,
+          },
+        ],
         {
-          type: name ? null : 'text',
-          name: 'name',
-          message: 'What is the name of your microfrontend?',
-          initial: name || 'my-mfe',
-          validate: (value) => /^[a-z0-9-]+$/.test(value) || 'Name must be lowercase with hyphens only'
-        },
-        {
-          type: options.template ? null : 'select',
-          name: 'template',
-          message: 'Which framework would you like to use?',
-          choices: [
-            { title: 'React', value: 'react' },
-            { title: 'Vue 3', value: 'vue' },
-            { title: 'Vanilla TypeScript', value: 'vanilla-ts' },
-            { title: 'Vanilla JavaScript', value: 'vanilla-js' }
-          ],
-          initial: 0
-        },
-        {
-          type: 'confirm',
-          name: 'includeRouter',
-          message: 'Include routing?',
-          initial: true
-        },
-        {
-          type: 'confirm',
-          name: 'includeState',
-          message: 'Include state management?',
-          initial: true
+          onCancel: () => {
+            console.log(chalk.red('✖ Operation cancelled'));
+            process.exit(1);
+          },
         }
-      ], {
-        onCancel: () => {
-          console.log(chalk.red('✖ Operation cancelled'));
-          process.exit(1);
-        }
-      });
+      );
 
       const config = {
         name: answers.name || name,
         template: answers.template || options.template || 'react',
         includeRouter: answers.includeRouter ?? true,
-        includeState: answers.includeState ?? true
+        includeState: answers.includeState ?? true,
       };
 
       console.log(chalk.blue('\n📦 Creating microfrontend...'));
-      
+
       // Create project directory
       const projectPath = path.join(process.cwd(), config.name);
       await fs.ensureDir(projectPath);
@@ -90,7 +94,6 @@ export const createCommand = new Command('create')
       console.log(chalk.gray(`   cd ${config.name}`));
       console.log(chalk.gray('   npm install'));
       console.log(chalk.gray('   npm run dev'));
-
     } catch (error) {
       console.error(chalk.red('✖ Error creating microfrontend:'), error);
       process.exit(1);
@@ -100,7 +103,7 @@ export const createCommand = new Command('create')
 async function createBasicStructure(projectPath: string, config: any) {
   // Create basic directory structure
   await fs.ensureDir(path.join(projectPath, 'src'));
-  
+
   // Create package.json
   const packageJson: {
     name: string;
@@ -118,15 +121,15 @@ async function createBasicStructure(projectPath: string, config: any) {
     scripts: {
       dev: 'vite',
       build: 'vite build',
-      preview: 'vite preview'
+      preview: 'vite preview',
     },
     dependencies: {
-      '@mfe-toolkit/core': '^0.1.0'
+      '@mfe-toolkit/core': '^0.1.0',
     },
     devDependencies: {
       vite: '^5.0.0',
-      typescript: '^5.3.3'
-    }
+      typescript: '^5.3.3',
+    },
   };
 
   if (config.template === 'react') {
@@ -139,8 +142,9 @@ async function createBasicStructure(projectPath: string, config: any) {
   await fs.writeJson(path.join(projectPath, 'package.json'), packageJson, { spaces: 2 });
 
   // Create basic entry file
-  const entryContent = config.template === 'react' 
-    ? `import React from 'react';
+  const entryContent =
+    config.template === 'react'
+      ? `import React from 'react';
 import ReactDOM from 'react-dom/client';
 import type { MFEModule, MFEServices } from '@mfe-toolkit/core';
 
@@ -160,7 +164,7 @@ const mfeModule: MFEModule = {
 };
 
 export default mfeModule;`
-    : `import type { MFEModule, MFEServices } from '@mfe-toolkit/core';
+      : `import type { MFEModule, MFEServices } from '@mfe-toolkit/core';
 
 const mfeModule: MFEModule = {
   mount: (element, services) => {
@@ -181,30 +185,30 @@ export default mfeModule;`;
 
   // Create manifest.json
   const manifest = {
-    "$schema": "https://mfe-toolkit.com/schemas/mfe-manifest-v2.schema.json",
+    $schema: 'https://mfe-toolkit.com/schemas/mfe-manifest-v2.schema.json',
     name: config.name,
-    version: "0.1.0",
+    version: '0.1.0',
     url: `http://localhost:8080/${config.name}/index.js`,
     dependencies: {
       runtime: {},
-      peer: config.template === 'react' ? {
-        react: "^18.0.0",
-        "react-dom": "^18.0.0"
-      } : {}
+      peer:
+        config.template === 'react'
+          ? {
+              react: '^18.0.0',
+              'react-dom': '^18.0.0',
+            }
+          : {},
     },
     compatibility: {
-      container: ">=0.1.0"
+      container: '>=0.1.0',
     },
     requirements: {
-      services: [
-        { name: "logger" },
-        { name: "eventBus" }
-      ]
+      services: [{ name: 'logger' }, { name: 'eventBus' }],
     },
     metadata: {
       displayName: config.name,
-      description: `${config.name} microfrontend`
-    }
+      description: `${config.name} microfrontend`,
+    },
   };
 
   await fs.writeJson(path.join(projectPath, 'manifest.json'), manifest, { spaces: 2 });
