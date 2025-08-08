@@ -26,20 +26,21 @@ const navSections = [
     title: 'Main',
     items: [
       { path: '/', label: 'Home', icon: <Home /> },
-      { path: '/dashboard', label: 'Dashboard', icon: <LayoutDashboard /> }
-    ]
+      { path: '/dashboard', label: 'Dashboard', icon: <LayoutDashboard /> },
+    ],
   },
   {
     title: 'Services',
     items: [
       { path: '/services/modal', label: 'Modal', icon: <Layers /> },
-      { path: '/services/event-bus', label: 'Event Bus', icon: <Radio /> }
-    ]
-  }
+      { path: '/services/event-bus', label: 'Event Bus', icon: <Radio /> },
+    ],
+  },
 ];
 ```
 
 **Benefits:**
+
 - Saves ~250px of horizontal space compared to sidebar
 - Better for wide-screen displays
 - Cleaner mobile experience
@@ -51,14 +52,14 @@ const navSections = [
 
 We use a compact typography scale optimized for information density:
 
-| Element | Class | Size | Usage |
-|---------|-------|------|-------|
-| Page Title | `text-xl` | 20px | Main page headings |
-| Section Title | `text-lg` | 18px | Major section headers |
-| Card Title | `text-base` | 16px | Card and panel headers |
-| Body Text | `text-sm` | 14px | General content |
-| Small Text | `text-xs` | 12px | Labels, captions, metadata |
-| Tiny Text | `text-[10px]` | 10px | Badges, pills, dense data |
+| Element       | Class         | Size | Usage                      |
+| ------------- | ------------- | ---- | -------------------------- |
+| Page Title    | `text-xl`     | 20px | Main page headings         |
+| Section Title | `text-lg`     | 18px | Major section headers      |
+| Card Title    | `text-base`   | 16px | Card and panel headers     |
+| Body Text     | `text-sm`     | 14px | General content            |
+| Small Text    | `text-xs`     | 12px | Labels, captions, metadata |
+| Tiny Text     | `text-[10px]` | 10px | Badges, pills, dense data  |
 
 ### Font Weights
 
@@ -73,13 +74,13 @@ We use a compact typography scale optimized for information density:
 
 We use a compact spacing scale to maximize content area:
 
-| Space | Class | Pixels | Usage |
-|-------|-------|--------|-------|
-| Tiny | `p-1`, `m-1` | 4px | Between inline elements |
-| Small | `p-2`, `m-2` | 8px | Inside compact components |
-| Medium | `p-3`, `m-3` | 12px | Standard component padding |
-| Large | `p-4`, `m-4` | 16px | Page sections |
-| XL | `p-6`, `m-6` | 24px | Major page divisions |
+| Space  | Class        | Pixels | Usage                      |
+| ------ | ------------ | ------ | -------------------------- |
+| Tiny   | `p-1`, `m-1` | 4px    | Between inline elements    |
+| Small  | `p-2`, `m-2` | 8px    | Inside compact components  |
+| Medium | `p-3`, `m-3` | 12px   | Standard component padding |
+| Large  | `p-4`, `m-4` | 16px   | Page sections              |
+| XL     | `p-6`, `m-6` | 24px   | Major page divisions       |
 
 ### Component Spacing
 
@@ -95,9 +96,7 @@ We use a compact spacing scale to maximize content area:
 Constrain content width for better readability:
 
 ```tsx
-<main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-  {/* Content */}
-</main>
+<main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">{/* Content */}</main>
 ```
 
 ### Grid Systems
@@ -108,12 +107,8 @@ Perfect for service demo pages with controls, content, and info panels:
 
 ```tsx
 <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-  <div className="lg:col-span-2">
-    {/* Main content area */}
-  </div>
-  <div>
-    {/* Info/control panel */}
-  </div>
+  <div className="lg:col-span-2">{/* Main content area */}</div>
+  <div>{/* Info/control panel */}</div>
 </div>
 ```
 
@@ -169,6 +164,7 @@ Reusable component for displaying event streams:
 ```
 
 Features:
+
 - Compact message display with `text-xs` typography
 - Grayscale color scheme for minimal distraction
 - Collapsible data payloads
@@ -180,13 +176,13 @@ Features:
 
 We use semantic colors sparingly for important indicators:
 
-| Color | Usage | Classes |
-|-------|-------|---------|
-| Primary | Interactive elements, active states | `text-primary`, `bg-primary` |
-| Muted | Secondary text, borders | `text-muted-foreground`, `border-muted` |
-| Success | Successful operations | `text-green-500`, `bg-green-500/10` |
-| Warning | Warnings, cautions | `text-yellow-500`, `bg-yellow-500/10` |
-| Error | Errors, destructive actions | `text-destructive`, `bg-destructive/10` |
+| Color   | Usage                               | Classes                                 |
+| ------- | ----------------------------------- | --------------------------------------- |
+| Primary | Interactive elements, active states | `text-primary`, `bg-primary`            |
+| Muted   | Secondary text, borders             | `text-muted-foreground`, `border-muted` |
+| Success | Successful operations               | `text-green-500`, `bg-green-500/10`     |
+| Warning | Warnings, cautions                  | `text-yellow-500`, `bg-yellow-500/10`   |
+| Error   | Errors, destructive actions         | `text-destructive`, `bg-destructive/10` |
 
 ### Event Category Colors
 
@@ -200,7 +196,7 @@ const categoryColors = {
   navigation: 'text-purple-500 bg-purple-500/10',
   modal: 'text-violet-500 bg-violet-500/10',
   notification: 'text-yellow-500 bg-yellow-500/10',
-  settings: 'text-emerald-500 bg-emerald-500/10'
+  settings: 'text-emerald-500 bg-emerald-500/10',
 };
 ```
 
@@ -210,13 +206,13 @@ const categoryColors = {
 
 We follow Tailwind's default breakpoints:
 
-| Breakpoint | Min Width | Usage |
-|------------|-----------|-------|
-| `sm` | 640px | Mobile landscape |
-| `md` | 768px | Tablets |
-| `lg` | 1024px | Desktop |
-| `xl` | 1280px | Wide desktop |
-| `2xl` | 1536px | Ultra-wide |
+| Breakpoint | Min Width | Usage            |
+| ---------- | --------- | ---------------- |
+| `sm`       | 640px     | Mobile landscape |
+| `md`       | 768px     | Tablets          |
+| `lg`       | 1024px    | Desktop          |
+| `xl`       | 1280px    | Wide desktop     |
+| `2xl`      | 1536px    | Ultra-wide       |
 
 ### Mobile Optimizations
 
@@ -298,18 +294,14 @@ Located in `apps/container-react/src/components/ui/`:
 ```tsx
 <div className="space-y-3">
   <div>
-    <label className="text-xs font-medium text-muted-foreground">
-      EVENT NAME
-    </label>
+    <label className="text-xs font-medium text-muted-foreground">EVENT NAME</label>
     <input
       type="text"
       className="w-full px-2 py-1 text-xs border rounded"
       placeholder="Enter event name"
     />
   </div>
-  <button className="px-3 py-1.5 text-xs bg-primary text-white rounded">
-    Submit
-  </button>
+  <button className="px-3 py-1.5 text-xs bg-primary text-white rounded">Submit</button>
 </div>
 ```
 
@@ -336,7 +328,9 @@ Located in `apps/container-react/src/components/ui/`:
     <tr className="border-b">
       <td className="py-1">Service A</td>
       <td className="py-1">
-        <Badge variant="success" className="text-[10px]">Active</Badge>
+        <Badge variant="success" className="text-[10px]">
+          Active
+        </Badge>
       </td>
     </tr>
   </tbody>

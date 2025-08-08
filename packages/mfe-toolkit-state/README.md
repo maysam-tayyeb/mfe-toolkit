@@ -31,7 +31,7 @@ const stateManager = createStateManager({
 
 function Counter() {
   const state = useSnapshot(stateManager);
-  
+
   return (
     <button onClick={() => stateManager.state.count++}>
       Count: {state.count}
@@ -53,7 +53,7 @@ import { useSnapshot } from '@mfe-toolkit/state/vue';
 
 const stateManager = createStateManager({
   key: 'app-state',
-  initialState: { count: 0 }
+  initialState: { count: 0 },
 });
 
 const state = useSnapshot(stateManager);
@@ -68,7 +68,7 @@ import { createStateManager } from '@mfe-toolkit/state';
 
 const stateManager = createStateManager({
   key: 'app-state',
-  initialState: { count: 0 }
+  initialState: { count: 0 },
 });
 
 // Subscribe to changes

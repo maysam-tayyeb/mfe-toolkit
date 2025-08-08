@@ -14,7 +14,7 @@ const react19EventBusDemo: MFEModule = {
         <App services={services} />
       </React.StrictMode>
     );
-    
+
     (element as any).__reactRoot = root;
   },
   unmount: () => {

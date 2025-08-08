@@ -51,17 +51,17 @@ import { useEffect, useState } from 'react';
 
 function MyComponent() {
   const [tokens, setTokens] = useState(null);
-  
+
   useEffect(() => {
     // Explicit import - no globals
     import('http://localhost:8080/design-system/design-system.esm.js')
-      .then(module => setTokens(module))
+      .then((module) => setTokens(module))
       .catch(() => console.log('Tokens not available'));
   }, []);
-  
+
   // Use tokens programmatically if needed
   const cardClass = tokens?.patterns.card.elevated || 'ds-card-elevated';
-  
+
   return <div className={cardClass}>Content</div>;
 }
 ```
@@ -86,6 +86,7 @@ function MyComponent() {
 ## Available CSS Classes
 
 ### Cards
+
 - `ds-card` - Base card style
 - `ds-card-padded` - Card with padding
 - `ds-card-compact` - Card with less padding
@@ -93,6 +94,7 @@ function MyComponent() {
 - `ds-card-interactive` - Card with hover effects
 
 ### Buttons
+
 - `ds-button` - Base button (don't use alone)
 - `ds-button-primary` - Primary action button
 - `ds-button-secondary` - Secondary button
@@ -103,12 +105,14 @@ function MyComponent() {
 - `ds-button-lg` - Large size modifier
 
 ### Typography
+
 - `ds-h1` through `ds-h4` - Heading levels
 - `ds-text-muted` - Muted text color
 - `ds-text-small` - Small text size
 - `ds-text-xs` - Extra small text
 
 ### Layout
+
 - `ds-container` - Max-width container
 - `ds-container-narrow` - Narrower container
 - `ds-section` - Section with vertical spacing
@@ -120,12 +124,14 @@ function MyComponent() {
 - `ds-stack-lg` - Large vertical spacing
 
 ### Forms
+
 - `ds-input` - Text input field
 - `ds-textarea` - Textarea field
 - `ds-label` - Form label
 - `ds-form-group` - Form field wrapper
 
 ### Badges
+
 - `ds-badge` - Base badge
 - `ds-badge-default` - Default badge
 - `ds-badge-primary` - Primary badge
@@ -134,12 +140,14 @@ function MyComponent() {
 - `ds-badge-error` - Error badge
 
 ### Alerts
+
 - `ds-alert-info` - Info alert box
 - `ds-alert-success` - Success alert
 - `ds-alert-warning` - Warning alert
 - `ds-alert-error` - Error alert
 
 ### Utilities
+
 - `ds-divider` - Horizontal divider
 - `ds-skeleton` - Loading skeleton
 - `ds-spinner` - Loading spinner
@@ -149,6 +157,7 @@ function MyComponent() {
 ## Framework Examples
 
 ### React
+
 ```tsx
 function ReactExample() {
   return (
@@ -164,6 +173,7 @@ function ReactExample() {
 ```
 
 ### Vue
+
 ```vue
 <template>
   <div class="ds-card-padded">
@@ -177,19 +187,20 @@ function ReactExample() {
 ```
 
 ### Vanilla JavaScript
+
 ```javascript
 function createCard() {
   const card = document.createElement('div');
   card.className = 'ds-card-padded ds-card-elevated';
-  
+
   const title = document.createElement('h3');
   title.className = 'ds-h3';
   title.textContent = 'Vanilla JS Component';
-  
+
   const button = document.createElement('button');
   button.className = 'ds-button-primary';
   button.textContent = 'Click Me';
-  
+
   card.appendChild(title);
   card.appendChild(button);
   return card;
@@ -250,21 +261,25 @@ interface DesignTokens {
 }
 
 // Import with types
-const tokens = await import('http://localhost:8080/design-system/design-system.esm.js') as DesignTokens;
+const tokens = (await import(
+  'http://localhost:8080/design-system/design-system.esm.js'
+)) as DesignTokens;
 ```
 
 ## Environment Configuration
 
 ### Development
+
 ```html
 <!-- Container's index.html -->
-<link rel="stylesheet" href="http://localhost:8080/design-system/design-system.css">
+<link rel="stylesheet" href="http://localhost:8080/design-system/design-system.css" />
 ```
 
 ### Production
+
 ```html
 <!-- Use CDN or production URL -->
-<link rel="stylesheet" href="https://cdn.example.com/design-system/1.0.0/design-system.css">
+<link rel="stylesheet" href="https://cdn.example.com/design-system/1.0.0/design-system.css" />
 ```
 
 ## Customization
@@ -282,16 +297,19 @@ The design system uses CSS variables for theming. These can be overridden in the
 ## Troubleshooting
 
 ### Classes not working?
+
 - Check that container includes the CSS file
 - Verify you're using correct class names (ds- prefix)
 - Check browser console for 404 on CSS file
 
 ### ES module not loading?
+
 - Verify the serve:mfes script is running (port 8080)
 - Check CORS settings if loading from different domain
 - Module loading is optional - CSS classes work without it
 
 ### TypeScript errors?
+
 - Import types from the .d.ts file
 - Use type assertions when importing ES module
 - Remember: CSS classes don't need TypeScript
@@ -299,6 +317,7 @@ The design system uses CSS variables for theming. These can be overridden in the
 ## Summary
 
 The design system provides:
+
 - **Zero global pollution** - No window/global variables
 - **Framework agnostic** - Works with React, Vue, Vanilla JS
 - **CSS-first approach** - Classes always available

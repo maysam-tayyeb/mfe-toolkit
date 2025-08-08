@@ -22,6 +22,7 @@ The MFE Design System uses a consistent 4px-based spacing scale that creates vis
 ## Semantic Spacing Classes
 
 ### Page Layout
+
 ```css
 .ds-page {
   @apply max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6;
@@ -29,33 +30,63 @@ The MFE Design System uses a consistent 4px-based spacing scale that creates vis
 ```
 
 ### Cards
+
 ```css
-.ds-card          { @apply p-6; }    /* Standard padding */
-.ds-card-compact  { @apply p-4; }    /* Compact variant */
-.ds-card-padded   { @apply p-8; }    /* Spacious variant */
+.ds-card {
+  @apply p-6;
+} /* Standard padding */
+.ds-card-compact {
+  @apply p-4;
+} /* Compact variant */
+.ds-card-padded {
+  @apply p-8;
+} /* Spacious variant */
 ```
 
 ### Stacks (Vertical Spacing)
+
 ```css
-.ds-stack-xs  { @apply space-y-1; }  /* 4px between items */
-.ds-stack-sm  { @apply space-y-2; }  /* 8px between items */
-.ds-stack     { @apply space-y-3; }  /* 12px between items */
-.ds-stack-md  { @apply space-y-4; }  /* 16px between items */
-.ds-stack-lg  { @apply space-y-6; }  /* 24px between items */
+.ds-stack-xs {
+  @apply space-y-1;
+} /* 4px between items */
+.ds-stack-sm {
+  @apply space-y-2;
+} /* 8px between items */
+.ds-stack {
+  @apply space-y-3;
+} /* 12px between items */
+.ds-stack-md {
+  @apply space-y-4;
+} /* 16px between items */
+.ds-stack-lg {
+  @apply space-y-6;
+} /* 24px between items */
 ```
 
 ### Grids (Gap Spacing)
+
 ```css
-.ds-grid-tight   { @apply gap-2; }   /* 8px gaps */
-.ds-grid-compact { @apply gap-3; }   /* 12px gaps */
-.ds-grid         { @apply gap-4; }   /* 16px gaps */
-.ds-grid-relaxed { @apply gap-6; }   /* 24px gaps */
-.ds-grid-wide    { @apply gap-8; }   /* 32px gaps */
+.ds-grid-tight {
+  @apply gap-2;
+} /* 8px gaps */
+.ds-grid-compact {
+  @apply gap-3;
+} /* 12px gaps */
+.ds-grid {
+  @apply gap-4;
+} /* 16px gaps */
+.ds-grid-relaxed {
+  @apply gap-6;
+} /* 24px gaps */
+.ds-grid-wide {
+  @apply gap-8;
+} /* 32px gaps */
 ```
 
 ## Common Patterns
 
 ### Card with Content
+
 ```html
 <div class="ds-card">
   <h2 class="ds-card-title mb-2">Card Title</h2>
@@ -69,6 +100,7 @@ The MFE Design System uses a consistent 4px-based spacing scale that creates vis
 ```
 
 ### Form Layout
+
 ```html
 <form class="ds-stack-md">
   <div>
@@ -84,6 +116,7 @@ The MFE Design System uses a consistent 4px-based spacing scale that creates vis
 ```
 
 ### Grid Layout
+
 ```html
 <div class="ds-grid-3 ds-grid-relaxed">
   <div class="ds-card">Content 1</div>

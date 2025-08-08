@@ -18,7 +18,7 @@ export const classNames = {
   cardCompact: 'ds-card-compact',
   cardElevated: 'ds-card ds-card-elevated',
   cardInteractive: 'ds-card ds-card-interactive',
-  
+
   // Buttons
   button: 'ds-button',
   buttonPrimary: 'ds-button-primary',
@@ -26,7 +26,7 @@ export const classNames = {
   buttonOutline: 'ds-button-outline',
   buttonGhost: 'ds-button-ghost',
   buttonDestructive: 'ds-button-destructive',
-  
+
   // Typography
   h1: 'ds-h1',
   h2: 'ds-h2',
@@ -35,7 +35,7 @@ export const classNames = {
   textMuted: 'ds-text-muted',
   textSmall: 'ds-text-small',
   textXs: 'ds-text-xs',
-  
+
   // Layout
   container: 'ds-container',
   containerNarrow: 'ds-container-narrow',
@@ -46,13 +46,13 @@ export const classNames = {
   stack: 'ds-stack',
   stackSm: 'ds-stack-sm',
   stackLg: 'ds-stack-lg',
-  
+
   // Forms
   input: 'ds-input',
   textarea: 'ds-textarea',
   label: 'ds-label',
   formGroup: 'ds-form-group',
-  
+
   // Badges
   badge: 'ds-badge',
   badgeDefault: 'ds-badge-default',
@@ -60,7 +60,7 @@ export const classNames = {
   badgeSuccess: 'ds-badge-success',
   badgeWarning: 'ds-badge-warning',
   badgeError: 'ds-badge-error',
-  
+
   // Alerts
   alert: 'ds-alert',
   alertInfo: 'ds-alert-info',

@@ -18,9 +18,7 @@ Schema URL: `https://mfe-made-easy.com/schemas/mfe-manifest-v2.schema.json`
   "name": "example-mfe",
   "version": "1.0.0",
   "url": "https://cdn.example.com/mfes/example/1.0.0/bundle.js",
-  "alternativeUrls": [
-    "https://backup-cdn.example.com/mfes/example/1.0.0/bundle.js"
-  ],
+  "alternativeUrls": ["https://backup-cdn.example.com/mfes/example/1.0.0/bundle.js"],
   "dependencies": {
     "runtime": {
       "axios": "^1.6.0",
@@ -52,27 +50,14 @@ Schema URL: `https://mfe-made-easy.com/schemas/mfe-manifest-v2.schema.json`
       "components": ["UserProfile", "ShoppingCart"],
       "hooks": ["useUser", "useCart"]
     },
-    "emits": [
-      "user:login",
-      "user:logout",
-      "cart:updated",
-      "cart:checkout"
-    ],
-    "listens": [
-      "app:theme-change",
-      "app:locale-change",
-      "auth:token-refresh"
-    ],
+    "emits": ["user:login", "user:logout", "cart:updated", "cart:checkout"],
+    "listens": ["app:theme-change", "app:locale-change", "auth:token-refresh"],
     "routes": [
       { "path": "/user", "exact": false },
       { "path": "/cart", "exact": true },
       { "path": "/checkout", "exact": true }
     ],
-    "features": [
-      "user-management",
-      "shopping-cart",
-      "checkout-flow"
-    ]
+    "features": ["user-management", "shopping-cart", "checkout-flow"]
   },
   "requirements": {
     "services": [
@@ -97,12 +82,7 @@ Schema URL: `https://mfe-made-easy.com/schemas/mfe-manifest-v2.schema.json`
         "optional": true
       }
     ],
-    "permissions": [
-      "user:read",
-      "user:write",
-      "cart:manage",
-      "order:create"
-    ],
+    "permissions": ["user:read", "user:write", "cart:manage", "order:create"],
     "resources": {
       "memory": "256MB",
       "storage": "50MB",
@@ -195,28 +175,33 @@ Schema URL: `https://mfe-made-easy.com/schemas/mfe-manifest-v2.schema.json`
 ### Root Fields
 
 #### `$schema` (recommended)
+
 - **Type**: `string` (URI)
 - **Description**: Points to the JSON schema for validation
 - **Example**: `"https://mfe-made-easy.com/schemas/mfe-manifest-v2.schema.json"`
 
 #### `name` (required)
+
 - **Type**: `string`
 - **Pattern**: `^[a-zA-Z][a-zA-Z0-9-_]*$`
 - **Description**: Unique identifier for the MFE
 - **Constraints**: Must start with a letter, can contain alphanumeric, hyphens, and underscores
 
 #### `version` (required)
+
 - **Type**: `string`
 - **Format**: Semantic version
 - **Description**: Version of the MFE following semver
 - **Examples**: `"1.0.0"`, `"2.1.0-beta.1"`, `"3.0.0-rc.2"`
 
 #### `url` (required)
+
 - **Type**: `string` (URI)
 - **Description**: Primary URL for loading the MFE bundle
 - **Note**: Should be an absolute URL in production
 
 #### `alternativeUrls` (optional)
+
 - **Type**: `string[]` (array of URIs)
 - **Description**: Fallback URLs for redundancy and failover
 - **Usage**: Container tries these in order if primary URL fails
@@ -224,16 +209,19 @@ Schema URL: `https://mfe-made-easy.com/schemas/mfe-manifest-v2.schema.json`
 ### Dependencies Object
 
 #### `dependencies.runtime` (optional)
+
 - **Type**: `Record<string, VersionRange>`
 - **Description**: Dependencies bundled with the MFE
 - **Note**: These are included in the MFE bundle
 
 #### `dependencies.peer` (optional)
+
 - **Type**: `Record<string, VersionRange>`
 - **Description**: Dependencies expected from the container
 - **Note**: Container must provide these or loading will fail
 
 #### `dependencies.optional` (optional)
+
 - **Type**: `Record<string, VersionRange>`
 - **Description**: Dependencies that enhance functionality if available
 - **Note**: MFE must gracefully handle their absence
@@ -241,22 +229,26 @@ Schema URL: `https://mfe-made-easy.com/schemas/mfe-manifest-v2.schema.json`
 ### Compatibility Object
 
 #### `compatibility.container` (required)
+
 - **Type**: `VersionRange`
 - **Description**: Container version requirement
 - **Examples**: `">=1.0.0"`, `"^2.0.0"`, `">=1.0.0 <3.0.0"`
 
 #### `compatibility.browsers` (optional)
+
 - **Type**: Object with browser version requirements
 - **Properties**: `chrome`, `firefox`, `safari`, `edge`
 - **Format**: Minimum version numbers
 
 #### `compatibility.frameworks` (optional)
+
 - **Type**: Object with framework version requirements
 - **Description**: Framework versions the MFE is compatible with
 
 ### Capabilities Object
 
 #### `capabilities.provides` (optional)
+
 - **Type**: Object describing what the MFE exports
 - **Properties**:
   - `services`: Array of service names
@@ -264,28 +256,33 @@ Schema URL: `https://mfe-made-easy.com/schemas/mfe-manifest-v2.schema.json`
   - `hooks`: Array of hook names
 
 #### `capabilities.emits` (optional)
+
 - **Type**: `string[]`
 - **Description**: Event types this MFE publishes
 - **Format**: Recommended format is `namespace:action`
 
 #### `capabilities.listens` (optional)
+
 - **Type**: `string[]`
 - **Description**: Event types this MFE subscribes to
 - **Format**: Can use wildcards like `user:*`
 
 #### `capabilities.routes` (optional)
+
 - **Type**: Array of route objects
 - **Properties**:
   - `path`: Route path pattern
   - `exact`: Boolean for exact matching
 
 #### `capabilities.features` (optional)
+
 - **Type**: `string[]`
 - **Description**: High-level features provided by the MFE
 
 ### Requirements Object
 
 #### `requirements.services` (required)
+
 - **Type**: Array of service requirement objects
 - **Properties**:
   - `name`: Service identifier
@@ -293,10 +290,12 @@ Schema URL: `https://mfe-made-easy.com/schemas/mfe-manifest-v2.schema.json`
   - `optional`: Boolean (default: false)
 
 #### `requirements.permissions` (optional)
+
 - **Type**: `string[]`
 - **Description**: Permission identifiers required for the MFE to function
 
 #### `requirements.resources` (optional)
+
 - **Type**: Object with resource limits
 - **Properties**:
   - `memory`: Memory limit (e.g., "256MB")
@@ -306,18 +305,22 @@ Schema URL: `https://mfe-made-easy.com/schemas/mfe-manifest-v2.schema.json`
 ### Metadata Object
 
 #### `metadata.displayName` (required)
+
 - **Type**: `string`
 - **Description**: Human-readable name for UI display
 
 #### `metadata.description` (required)
+
 - **Type**: `string`
 - **Description**: Brief description of MFE functionality
 
 #### `metadata.icon` (optional)
+
 - **Type**: `string`
 - **Description**: Icon representation (emoji, URL, or icon name)
 
 #### `metadata.author` (optional)
+
 - **Type**: Object or string
 - **Properties** (if object):
   - `name`: Author name
@@ -325,6 +328,7 @@ Schema URL: `https://mfe-made-easy.com/schemas/mfe-manifest-v2.schema.json`
   - `url`: Author website
 
 #### Additional metadata fields
+
 - `license`: SPDX license identifier
 - `repository`: Source code URL
 - `documentation`: Documentation URL
@@ -335,6 +339,7 @@ Schema URL: `https://mfe-made-easy.com/schemas/mfe-manifest-v2.schema.json`
 ### Configuration Object
 
 #### `config.loading` (optional)
+
 - **Properties**:
   - `timeout`: Max load time in milliseconds
   - `retries`: Number of retry attempts
@@ -345,6 +350,7 @@ Schema URL: `https://mfe-made-easy.com/schemas/mfe-manifest-v2.schema.json`
   - `critical`: Fail container if MFE fails to load
 
 #### `config.runtime` (optional)
+
 - **Properties**:
   - `isolation`: Isolation level ("none", "sandbox", "iframe")
   - `keepAlive`: Keep loaded when not visible
@@ -352,6 +358,7 @@ Schema URL: `https://mfe-made-easy.com/schemas/mfe-manifest-v2.schema.json`
   - `maxInstances`: Maximum number of instances
 
 #### `config.communication` (optional)
+
 - **Properties**:
   - `eventNamespace`: Event prefix for scoping
   - `allowedEvents`: Event patterns allowed
@@ -361,19 +368,23 @@ Schema URL: `https://mfe-made-easy.com/schemas/mfe-manifest-v2.schema.json`
 ### Security Object
 
 #### `security.csp` (optional)
+
 - **Type**: CSP directive object
 - **Description**: Content Security Policy directives
 - **Note**: Values are arrays of sources
 
 #### `security.integrity` (optional)
+
 - **Type**: `string`
 - **Description**: Subresource integrity hash
 
 #### `security.allowedOrigins` (optional)
+
 - **Type**: `string[]`
 - **Description**: Origins allowed to load this MFE
 
 #### `security.permissions` (optional)
+
 - **Properties**:
   - `required`: Permissions that must be granted
   - `optional`: Permissions that enhance functionality
@@ -381,6 +392,7 @@ Schema URL: `https://mfe-made-easy.com/schemas/mfe-manifest-v2.schema.json`
 ### Lifecycle Object
 
 #### `lifecycle.hooks` (optional)
+
 - **Properties**:
   - `beforeMount`: Function name to call before mounting
   - `afterMount`: Function name to call after mounting
@@ -388,6 +400,7 @@ Schema URL: `https://mfe-made-easy.com/schemas/mfe-manifest-v2.schema.json`
   - `afterUnmount`: Function name to call after unmounting
 
 #### `lifecycle.healthCheck` (optional)
+
 - **Properties**:
   - `url`: Health check endpoint path
   - `interval`: Check interval in milliseconds
@@ -395,6 +408,7 @@ Schema URL: `https://mfe-made-easy.com/schemas/mfe-manifest-v2.schema.json`
   - `retries`: Number of retries before marking unhealthy
 
 #### `lifecycle.updates` (optional)
+
 - **Properties**:
   - `strategy`: Update strategy ("auto", "manual")
   - `checkInterval`: Update check interval in milliseconds
@@ -402,6 +416,7 @@ Schema URL: `https://mfe-made-easy.com/schemas/mfe-manifest-v2.schema.json`
 ### Build Information
 
 #### `build` (optional)
+
 - **Properties**:
   - `hash`: Build hash or commit SHA
   - `timestamp`: ISO 8601 build timestamp
@@ -410,6 +425,7 @@ Schema URL: `https://mfe-made-easy.com/schemas/mfe-manifest-v2.schema.json`
 ## Version Range Syntax
 
 Version ranges follow npm's semver syntax:
+
 - `"1.2.3"` - Exact version
 - `"^1.2.3"` - Compatible with 1.x.x
 - `"~1.2.3"` - Approximately 1.2.x
@@ -422,6 +438,7 @@ Version ranges follow npm's semver syntax:
 Recommended format: `namespace:action`
 
 Examples:
+
 - `user:login`
 - `cart:item-added`
 - `app:theme-changed`
@@ -440,6 +457,7 @@ Examples:
 ## Container Behavior
 
 Containers MUST:
+
 1. Validate manifest before loading MFE
 2. Check compatibility requirements
 3. Provide required services
@@ -447,6 +465,7 @@ Containers MUST:
 5. Handle security policies
 
 Containers SHOULD:
+
 1. Cache manifests appropriately
 2. Try alternative URLs on failure
 3. Implement health checks
@@ -456,6 +475,7 @@ Containers SHOULD:
 ## Future Compatibility
 
 The specification is designed for forward compatibility:
+
 - Unknown fields should be preserved but ignored
 - New optional fields can be added without breaking changes
 - Major version changes indicate breaking changes

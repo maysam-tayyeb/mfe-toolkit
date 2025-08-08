@@ -24,10 +24,7 @@ import { MFELoader, MFEProvider } from '@mfe-toolkit/react';
 function App() {
   return (
     <MFEProvider services={services}>
-      <MFELoader
-        url="http://localhost:8080/my-mfe.js"
-        fallback={<div>Loading...</div>}
-      />
+      <MFELoader url="http://localhost:8080/my-mfe.js" fallback={<div>Loading...</div>} />
     </MFEProvider>
   );
 }

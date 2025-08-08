@@ -93,7 +93,7 @@ const IsolatedLoaderStrategy: React.FC<MFELoaderProps> = ({
 
         const error = err instanceof Error ? err : new Error('Unknown error');
         services.logger.error(`[IsolatedLoader] Error loading ${name}:`, error);
-        
+
         // Report error to error reporter
         const errorReporter = services.errorReporter || getErrorReporter({}, services);
         const errorType = error.message.includes('timeout')
@@ -101,11 +101,11 @@ const IsolatedLoaderStrategy: React.FC<MFELoaderProps> = ({
           : error.message.includes('network')
             ? 'network-error'
             : 'load-error';
-        
+
         errorReporter.reportError(name, error, errorType, {
           url,
         });
-        
+
         setError(error);
         setLoading(false);
         onErrorRef.current?.(error);
@@ -412,12 +412,7 @@ const StandardLoaderStrategy: React.FC<MFELoaderProps> = ({
 
 // Unified MFELoader that supports both standard and isolated loading strategies
 export const MFELoader: React.FC<MFELoaderProps> = (props) => {
-  const {
-    errorBoundary = true,
-    isolate = false,
-    errorFallback,
-    ...loaderProps
-  } = props;
+  const { errorBoundary = true, isolate = false, errorFallback, ...loaderProps } = props;
 
   const [retryKey, setRetryKey] = useState(0);
 
@@ -443,7 +438,9 @@ export const MFELoader: React.FC<MFELoaderProps> = (props) => {
         errorFallback ||
         ((error, _errorInfo, retry) => (
           <div className="p-4 bg-red-50 border border-red-200 rounded">
-            <h3 className="text-red-800 font-semibold mb-2">MFE {props.name} crashed unexpectedly</h3>
+            <h3 className="text-red-800 font-semibold mb-2">
+              MFE {props.name} crashed unexpectedly
+            </h3>
             <p className="text-red-600 text-sm">{error.message}</p>
             <button
               onClick={() => {

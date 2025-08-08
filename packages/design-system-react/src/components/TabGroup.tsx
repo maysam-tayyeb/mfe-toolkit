@@ -14,25 +14,20 @@ export interface TabGroupProps {
   onTabChange?: (tabId: string) => void;
 }
 
-export function TabGroup({
-  tabs,
-  defaultTab,
-  className = '',
-  onTabChange
-}: TabGroupProps) {
+export function TabGroup({ tabs, defaultTab, className = '', onTabChange }: TabGroupProps) {
   const [activeTab, setActiveTab] = useState(defaultTab || tabs[0]?.id || '');
-  
+
   const handleTabClick = (tabId: string) => {
     setActiveTab(tabId);
     onTabChange?.(tabId);
   };
-  
-  const activeTabContent = tabs.find(tab => tab.id === activeTab)?.content;
-  
+
+  const activeTabContent = tabs.find((tab) => tab.id === activeTab)?.content;
+
   return (
     <div className={className}>
       <div className="ds-tab-group">
-        {tabs.map(tab => (
+        {tabs.map((tab) => (
           <button
             key={tab.id}
             onClick={() => !tab.disabled && handleTabClick(tab.id)}
@@ -43,9 +38,7 @@ export function TabGroup({
           </button>
         ))}
       </div>
-      <div className="ds-tab-panel">
-        {activeTabContent}
-      </div>
+      <div className="ds-tab-panel">{activeTabContent}</div>
     </div>
   );
 }

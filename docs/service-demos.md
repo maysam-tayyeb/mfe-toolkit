@@ -25,12 +25,12 @@ The Modal Service demo page features a refined layout design:
 
 ### Available Implementations
 
-| Framework | MFE Name | Bundle Size | Key Features | Limitations |
-|-----------|----------|-------------|--------------|-------------|
-| **React 19** | `mfe-react19-modal-demo` | ~12KB | Full JSX support, all modal features | None |
-| **React 17** | `mfe-react17-modal-demo` | ~143KB | Legacy React support | Plain text content only |
-| **Vue 3** | `mfe-vue3-modal-demo` | ~7KB | Cross-framework integration | Plain text content only |
-| **Vanilla TS** | `mfe-vanilla-modal-demo` | ~5KB | Smallest bundle, no framework | Plain text content only |
+| Framework      | MFE Name                 | Bundle Size | Key Features                         | Limitations             |
+| -------------- | ------------------------ | ----------- | ------------------------------------ | ----------------------- |
+| **React 19**   | `mfe-react19-modal-demo` | ~12KB       | Full JSX support, all modal features | None                    |
+| **React 17**   | `mfe-react17-modal-demo` | ~143KB      | Legacy React support                 | Plain text content only |
+| **Vue 3**      | `mfe-vue3-modal-demo`    | ~7KB        | Cross-framework integration          | Plain text content only |
+| **Vanilla TS** | `mfe-vanilla-modal-demo` | ~5KB        | Smallest bundle, no framework        | Plain text content only |
 
 ### Features Demonstrated
 
@@ -53,9 +53,7 @@ const { modal, notification } = services;
 modal.open({
   title: 'Alert',
   content: 'This is a simple alert',
-  actions: [
-    { label: 'OK', variant: 'default', onClick: () => console.log('Closed') }
-  ]
+  actions: [{ label: 'OK', variant: 'default', onClick: () => console.log('Closed') }],
 });
 
 // Confirmation dialog
@@ -63,7 +61,7 @@ const result = await modal.confirm({
   title: 'Confirm Action',
   content: 'Are you sure?',
   confirmLabel: 'Yes',
-  cancelLabel: 'No'
+  cancelLabel: 'No',
 });
 ```
 
@@ -79,9 +77,9 @@ Located in `apps/service-demos/event-bus/`
 
 ### Available Implementation
 
-| Framework | MFE Name | Bundle Size | Key Features |
-|-----------|----------|-------------|--------------|
-| **React 19** | `mfe-react19-eventbus-demo` | ~5.5KB | Interactive pub/sub demonstration |
+| Framework    | MFE Name                    | Bundle Size | Key Features                      |
+| ------------ | --------------------------- | ----------- | --------------------------------- |
+| **React 19** | `mfe-react19-eventbus-demo` | ~5.5KB      | Interactive pub/sub demonstration |
 
 ### UI/UX Improvements
 
@@ -150,6 +148,7 @@ pnpm dev:container-react
 ### Accessing Demos
 
 Once running, navigate to:
+
 - **Modal Service Demo**: http://localhost:3000/services/modal
 - **Event Bus Demo**: http://localhost:3000/services/event-bus
 
@@ -168,7 +167,7 @@ export default {
   },
   unmount: () => {
     // Cleanup
-  }
+  },
 };
 ```
 
@@ -230,7 +229,7 @@ const myServiceDemo: MFEModule = {
   },
   unmount: () => {
     // Cleanup
-  }
+  },
 };
 
 export default myServiceDemo;
@@ -281,7 +280,7 @@ grep "process\." dist/*.js
 ## Future Enhancements
 
 - [ ] Logger Service Demo
-- [ ] Auth Service Demo  
+- [ ] Auth Service Demo
 - [ ] Error Reporter Demo
 - [ ] Notification Service Demo (standalone)
 - [ ] Performance Monitoring Demo

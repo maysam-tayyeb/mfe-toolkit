@@ -4,12 +4,12 @@ export { MFEPage } from './components/MFEPage';
 export { MFEErrorBoundary, withMFEErrorBoundary } from './components/MFEErrorBoundary';
 
 // Services
-export { 
+export {
   MFEServicesProvider,
   MFEServicesProvider as MFEProvider, // alias for backward compatibility
   useMFEServices,
   useMFEService,
-  withMFEServices
+  withMFEServices,
 } from './services/dependency-injection';
 
 // State Management

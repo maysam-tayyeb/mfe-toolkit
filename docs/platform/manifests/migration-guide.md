@@ -7,6 +7,7 @@ This guide helps you migrate from MFE Manifest V1 to V2. The V2 format provides 
 ### 1. Structured Dependencies
 
 **V1 Format:**
+
 ```json
 {
   "dependencies": ["react", "react-dom", "axios"],
@@ -15,6 +16,7 @@ This guide helps you migrate from MFE Manifest V1 to V2. The V2 format provides 
 ```
 
 **V2 Format:**
+
 ```json
 {
   "dependencies": {
@@ -34,6 +36,7 @@ This guide helps you migrate from MFE Manifest V1 to V2. The V2 format provides 
 ### 2. Service Requirements
 
 **V1 Format:**
+
 ```json
 {
   "requiredServices": ["logger", "eventBus"]
@@ -41,6 +44,7 @@ This guide helps you migrate from MFE Manifest V1 to V2. The V2 format provides 
 ```
 
 **V2 Format:**
+
 ```json
 {
   "requirements": {
@@ -63,6 +67,7 @@ This guide helps you migrate from MFE Manifest V1 to V2. The V2 format provides 
 ### 3. Enhanced Metadata
 
 **V1 Format:**
+
 ```json
 {
   "metadata": {
@@ -74,6 +79,7 @@ This guide helps you migrate from MFE Manifest V1 to V2. The V2 format provides 
 ```
 
 **V2 Format:**
+
 ```json
 {
   "metadata": {
@@ -96,6 +102,7 @@ This guide helps you migrate from MFE Manifest V1 to V2. The V2 format provides 
 ### 4. Compatibility Information
 
 **New in V2:**
+
 ```json
 {
   "compatibility": {
@@ -115,6 +122,7 @@ This guide helps you migrate from MFE Manifest V1 to V2. The V2 format provides 
 ### 5. Capabilities Declaration
 
 **New in V2:**
+
 ```json
 {
   "capabilities": {
@@ -125,9 +133,7 @@ This guide helps you migrate from MFE Manifest V1 to V2. The V2 format provides 
     },
     "emits": ["user:login", "user:logout"],
     "listens": ["app:theme-change"],
-    "routes": [
-      { "path": "/user", "exact": false }
-    ],
+    "routes": [{ "path": "/user", "exact": false }],
     "features": ["user-management"]
   }
 }
@@ -274,7 +280,7 @@ Add additional metadata fields:
     "displayName": "My MFE",
     "description": "Description of your MFE",
     "icon": "🚀",
-    
+
     // Add new fields
     "author": {
       "name": "Your Team",
@@ -296,17 +302,9 @@ Document what your MFE provides and consumes:
 ```json
 {
   "capabilities": {
-    "emits": [
-      "mfe:ready",
-      "user:action"
-    ],
-    "listens": [
-      "app:config-change",
-      "theme:change"
-    ],
-    "routes": [
-      { "path": "/my-feature", "exact": true }
-    ]
+    "emits": ["mfe:ready", "user:action"],
+    "listens": ["app:config-change", "theme:change"],
+    "routes": [{ "path": "/my-feature", "exact": true }]
   }
 }
 ```
@@ -337,6 +335,7 @@ Add configuration for how your MFE should be loaded:
 ### React MFE Migration
 
 **V1:**
+
 ```json
 {
   "name": "reactApp",
@@ -353,6 +352,7 @@ Add configuration for how your MFE should be loaded:
 ```
 
 **V2:**
+
 ```json
 {
   "$schema": "https://mfe-made-easy.com/schemas/mfe-manifest-v2.schema.json",
@@ -376,10 +376,7 @@ Add configuration for how your MFE should be loaded:
     }
   },
   "requirements": {
-    "services": [
-      { "name": "logger" },
-      { "name": "eventBus" }
-    ]
+    "services": [{ "name": "logger" }, { "name": "eventBus" }]
   },
   "metadata": {
     "displayName": "React App",
@@ -392,6 +389,7 @@ Add configuration for how your MFE should be loaded:
 ### Vue MFE Migration
 
 **V1:**
+
 ```json
 {
   "name": "vueApp",
@@ -406,6 +404,7 @@ Add configuration for how your MFE should be loaded:
 ```
 
 **V2:**
+
 ```json
 {
   "$schema": "https://mfe-made-easy.com/schemas/mfe-manifest-v2.schema.json",
@@ -427,9 +426,7 @@ Add configuration for how your MFE should be loaded:
     }
   },
   "requirements": {
-    "services": [
-      { "name": "logger" }
-    ]
+    "services": [{ "name": "logger" }]
   },
   "metadata": {
     "displayName": "Vue App",

@@ -7,6 +7,7 @@ The MFE Design System uses a **compact, efficient typography scale** optimized f
 ## Type Scale
 
 ### Size Scale
+
 Our typography uses a modular scale with clear hierarchy:
 
 ```css
@@ -20,6 +21,7 @@ text-3xl:  1.875rem (30px)  /* Hero headings (rarely used) */
 ```
 
 ### Weight Scale
+
 Limited weights for consistency:
 
 ```css
@@ -110,9 +112,7 @@ font-bold:     700  /* Page titles, important */
 ```html
 <div class="ds-card">
   <h2 class="ds-card-title">Analytics Dashboard</h2>
-  <p class="ds-card-description">
-    View your real-time analytics and metrics
-  </p>
+  <p class="ds-card-description">View your real-time analytics and metrics</p>
   <div class="mt-4">
     <p class="text-sm">Active users: 1,234</p>
     <p class="ds-text-xs ds-text-muted">Updated 5 minutes ago</p>
@@ -125,9 +125,7 @@ font-bold:     700  /* Page titles, important */
 ```html
 <section>
   <h2 class="ds-section-title">Service Configuration</h2>
-  <p class="ds-section-description">
-    Configure your MFE services and dependencies
-  </p>
+  <p class="ds-section-description">Configure your MFE services and dependencies</p>
   <!-- Section content -->
 </section>
 ```
@@ -154,19 +152,20 @@ font-bold:     700  /* Page titles, important */
 ## Font Families
 
 ### System Font Stack
+
 We use system fonts for optimal performance and native feel:
 
 ```css
-font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, 
-           "Helvetica Neue", Arial, sans-serif;
+font-sans:
+  -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 ```
 
 ### Monospace (Code)
+
 For code and technical content:
 
 ```css
-font-mono: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", 
-           Consolas, "Courier New", monospace;
+font-mono: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
 ```
 
 ## Line Height
@@ -196,22 +195,26 @@ tracking-widest:  0.1em    /* Very wide */
 ## Best Practices
 
 ### 1. Hierarchy
+
 - Use no more than 3 heading levels per page
 - Maintain consistent size relationships
 - Don't skip heading levels
 
 ### 2. Readability
+
 - Body text: 16px minimum (text-base)
 - Line length: 45-75 characters ideal
 - Adequate line height for body text (1.5)
 - Sufficient contrast (WCAG AA)
 
 ### 3. Consistency
+
 - Use semantic classes, not arbitrary sizes
 - Maintain weight consistency (semibold for headings)
 - Keep decorations minimal (avoid underlines except links)
 
 ### 4. Information Density
+
 - Use compact sizes (text-sm) for secondary info
 - Leverage text-xs for metadata and timestamps
 - Balance density with readability
@@ -226,7 +229,7 @@ Typography automatically scales on smaller screens:
   .ds-page-title {
     @apply text-lg; /* Scale down from text-xl */
   }
-  
+
   .ds-section-title {
     @apply text-base; /* Scale down from text-lg */
   }
@@ -236,16 +239,19 @@ Typography automatically scales on smaller screens:
 ## Accessibility
 
 ### Font Size
+
 - Minimum 14px for body text
 - User can zoom to 200% without horizontal scroll
 - Relative units (rem) for scalability
 
 ### Contrast Ratios
+
 - Normal text: 4.5:1 minimum
 - Large text (18px+): 3:1 minimum
 - Always test with tools
 
 ### Reading Experience
+
 - Adequate line spacing
 - Clear hierarchy
 - Consistent patterns
@@ -253,17 +259,17 @@ Typography automatically scales on smaller screens:
 ## Common Patterns
 
 ### Form Labels
+
 ```html
 <label class="text-sm font-medium">
   Email Address
   <input type="email" class="mt-1" />
 </label>
-<span class="ds-text-xs ds-text-muted">
-  We'll never share your email
-</span>
+<span class="ds-text-xs ds-text-muted"> We'll never share your email </span>
 ```
 
 ### Status Messages
+
 ```html
 <div class="flex items-center gap-2">
   <span class="text-sm font-medium">Status:</span>
@@ -272,15 +278,15 @@ Typography automatically scales on smaller screens:
 ```
 
 ### Metadata Display
+
 ```html
-<div class="ds-text-xs ds-text-muted">
-  Last updated: 5 minutes ago • Version 2.1.0 • 1.2MB
-</div>
+<div class="ds-text-xs ds-text-muted">Last updated: 5 minutes ago • Version 2.1.0 • 1.2MB</div>
 ```
 
 ## Migration Guide
 
 ### From Custom Typography
+
 ```css
 /* Old */
 h1 { font-size: 32px; font-weight: 800; }
@@ -292,6 +298,7 @@ h1 { font-size: 32px; font-weight: 800; }
 ```
 
 ### From Tailwind Arbitrary Values
+
 ```html
 <!-- Old -->
 <h1 class="text-[28px] font-[600]">Title</h1>

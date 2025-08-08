@@ -13,24 +13,14 @@ export function EmptyState({
   description = 'Start by adding your first item',
   icon,
   action,
-  className = ''
+  className = '',
 }: EmptyStateProps) {
   return (
     <div className={`ds-empty-state ${className}`}>
-      {icon && (
-        <div className="ds-empty-illustration">
-          {icon}
-        </div>
-      )}
+      {icon && <div className="ds-empty-illustration">{icon}</div>}
       <h3 className="ds-empty-title">{title}</h3>
-      {description && (
-        <p className="ds-empty-description">{description}</p>
-      )}
-      {action && (
-        <div className="ds-mt-md">
-          {action}
-        </div>
-      )}
+      {description && <p className="ds-empty-description">{description}</p>}
+      {action && <div className="ds-mt-md">{action}</div>}
     </div>
   );
 }

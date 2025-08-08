@@ -5,6 +5,7 @@ This document archives the functionality of the Service Explorer MFEs that were 
 ## Removed MFEs Overview
 
 ### 1. mfe-example (Service Explorer React 19)
+
 - **Location**: `apps/mfe-example/`
 - **Size**: ~585 lines
 - **Port**: 3001
@@ -12,7 +13,8 @@ This document archives the functionality of the Service Explorer MFEs that were 
 - **Bundle Size**: ~14KB
 
 #### Key Features:
-- **Event Bus Demo**: 
+
+- **Event Bus Demo**:
   - Dynamic event listening with subscribe/unsubscribe
   - Custom event emission with JSON payloads
   - Event log showing sent/received events
@@ -49,6 +51,7 @@ This document archives the functionality of the Service Explorer MFEs that were 
   - Statistics tracking
 
 ### 2. mfe-react17 (Legacy Service Explorer)
+
 - **Location**: `apps/mfe-react17/`
 - **Size**: ~500 lines
 - **Port**: 3002
@@ -56,6 +59,7 @@ This document archives the functionality of the Service Explorer MFEs that were 
 - **Bundle Size**: ~159KB
 
 #### Key Features:
+
 - **Cross-version Compatibility**:
   - React 17 running inside React 19 container
   - ReactDOM.render instead of createRoot
@@ -73,12 +77,14 @@ This document archives the functionality of the Service Explorer MFEs that were 
 - **Note**: Zustand state management disabled due to React hooks conflict
 
 ### 3. mfe-event-demo
+
 - **Location**: `apps/mfe-event-demo/`
 - **Size**: ~159 lines
 - **Port**: Not specified
 - **Framework**: React 19
 
 #### Key Features:
+
 - Simple event emitter with instance support
 - Event name and JSON payload input
 - Event log display (keeps last 10 events)
@@ -87,12 +93,14 @@ This document archives the functionality of the Service Explorer MFEs that were 
 - Sent/Received event differentiation with visual indicators
 
 ### 4. mfe-state-demo-react
+
 - **Location**: `apps/mfe-state-demo-react/`
 - **Size**: ~153 lines
 - **Framework**: React 19
 - **Purpose**: Universal state management demo
 
 #### Key Features:
+
 - Cross-framework state synchronization using @mfe-toolkit/state
 - User management with form inputs (name, email)
 - Shared counter with increment functionality
@@ -102,22 +110,26 @@ This document archives the functionality of the Service Explorer MFEs that were 
 - State change logging
 
 ### 5. mfe-state-demo-vue
+
 - **Location**: `apps/mfe-state-demo-vue/`
 - **Framework**: Vue 3
 - **Purpose**: Universal state management demo
 
 #### Key Features:
+
 - Same functionality as React version
 - Proves framework-agnostic state management
 - Vue composition API integration
 - Real-time synchronization with React/Vanilla MFEs
 
 ### 6. mfe-state-demo-vanilla
+
 - **Location**: `apps/mfe-state-demo-vanilla/`
 - **Framework**: Vanilla TypeScript
 - **Purpose**: Universal state management demo
 
 #### Key Features:
+
 - Pure TypeScript implementation
 - No framework dependencies
 - Same state synchronization capabilities
@@ -126,7 +138,9 @@ This document archives the functionality of the Service Explorer MFEs that were 
 ## Common Patterns Observed
 
 ### InfoBlock Component Pattern
+
 All MFEs implemented their own version of InfoBlock:
+
 ```tsx
 const InfoBlock = ({ title, sections, className }) => (
   <div className={`bg-muted/50 rounded-lg p-6 ${className}`}>
@@ -146,7 +160,9 @@ const InfoBlock = ({ title, sections, className }) => (
 ```
 
 ### Event Log Pattern
+
 Consistent event logging UI across all MFEs:
+
 - Timestamp display
 - Event type (sent/received)
 - Event name and payload
@@ -154,15 +170,17 @@ Consistent event logging UI across all MFEs:
 - Clear log functionality
 
 ### Service Integration Pattern
+
 All MFEs followed the same service integration:
+
 ```tsx
 export default function mount(element: HTMLElement, services: MFEServices) {
   // Use services.modal, services.notification, services.eventBus, etc.
   const root = ReactDOM.createRoot(element);
   root.render(<App services={services} />);
-  
+
   return {
-    unmount: () => root.unmount()
+    unmount: () => root.unmount(),
   };
 }
 ```
@@ -172,12 +190,14 @@ export default function mount(element: HTMLElement, services: MFEServices) {
 These monolithic service explorers are being replaced with focused, single-service demos:
 
 ### Old Structure (Removed):
+
 - One MFE demonstrating ALL services
 - 500+ lines per MFE
 - Difficult to understand individual services
 - Duplicate code across framework versions
 
 ### New Structure (Implemented):
+
 - One MFE per service per framework
 - ~200 lines per MFE
 - Clear, focused demonstrations

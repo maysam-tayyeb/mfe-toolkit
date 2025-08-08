@@ -15,7 +15,7 @@ export const Card: React.FC<CardProps> = ({
 }) => {
   // Use ds-* classes from the container's CSS
   let classes = 'ds-card';
-  
+
   // Add variant classes
   if (variant === 'elevated') {
     classes += ' ds-card-elevated';
@@ -24,14 +24,14 @@ export const Card: React.FC<CardProps> = ({
   } else if (variant === 'bordered') {
     classes += ' ds-card-bordered';
   }
-  
+
   // Add padding classes
   if (padding === 'compact') {
     classes += ' ds-card-compact';
   } else if (padding === 'large') {
     classes += ' ds-card-padded';
   }
-  
+
   // Add custom className if provided
   if (className) {
     classes += ' ' + className;
@@ -50,12 +50,12 @@ export interface CardHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
   children?: React.ReactNode;
 }
 
-export const CardHeader: React.FC<CardHeaderProps> = ({ 
+export const CardHeader: React.FC<CardHeaderProps> = ({
   title,
   description,
-  className = '', 
-  children, 
-  ...props 
+  className = '',
+  children,
+  ...props
 }) => {
   if (!title && !description && !children) return null;
 
@@ -76,11 +76,11 @@ export interface CardContentProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
 }
 
-export const CardContent: React.FC<CardContentProps> = ({ 
+export const CardContent: React.FC<CardContentProps> = ({
   spacing: spacingProp = 'normal',
-  className = '', 
-  children, 
-  ...props 
+  className = '',
+  children,
+  ...props
 }) => {
   let spacingClass = '';
   if (spacingProp === 'compact') {
@@ -103,11 +103,11 @@ export interface CardFooterProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
 }
 
-export const CardFooter: React.FC<CardFooterProps> = ({ 
+export const CardFooter: React.FC<CardFooterProps> = ({
   align = 'left',
-  className = '', 
-  children, 
-  ...props 
+  className = '',
+  children,
+  ...props
 }) => {
   const alignClass = {
     left: 'justify-start',
@@ -117,10 +117,7 @@ export const CardFooter: React.FC<CardFooterProps> = ({
   }[align];
 
   return (
-    <div 
-      className={`flex items-center pt-4 border-t ${alignClass} ${className}`.trim()}
-      {...props}
-    >
+    <div className={`flex items-center pt-4 border-t ${alignClass} ${className}`.trim()} {...props}>
       {children}
     </div>
   );

@@ -41,7 +41,7 @@ import { Section } from '@mfe/design-system-react';
 
 <Section title="Settings" description="Manage your preferences">
   {/* Content */}
-</Section>
+</Section>;
 ```
 
 ## Best Practices

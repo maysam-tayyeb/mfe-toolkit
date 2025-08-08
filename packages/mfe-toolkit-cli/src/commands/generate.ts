@@ -21,11 +21,11 @@ export const generateCommand = new Command('generate')
         name: options.name || path.basename(process.cwd()),
         version: options.version,
         framework: options.framework,
-        template: options.template
+        template: options.template,
       });
 
       await fs.writeJson(options.output, manifest, { spaces: 2 });
-      
+
       console.log(chalk.green(`✅ Manifest generated successfully at ${options.output}`));
       console.log(chalk.gray('\n📋 Generated manifest:'));
       console.log(JSON.stringify(manifest, null, 2));

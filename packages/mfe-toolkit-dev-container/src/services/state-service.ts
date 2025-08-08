@@ -16,13 +16,13 @@ export class DevStateManager implements StateManager {
   set<T>(key: string, value: T): void {
     const oldValue = this.state.get(key);
     this.state.set(key, value);
-    
+
     console.log(`[DevStateManager] State updated: ${key}`, { oldValue, newValue: value });
-    
+
     // Notify listeners
     const keyListeners = this.listeners.get(key);
     if (keyListeners) {
-      keyListeners.forEach(listener => {
+      keyListeners.forEach((listener) => {
         try {
           listener(value);
         } catch (error) {
@@ -35,14 +35,14 @@ export class DevStateManager implements StateManager {
   delete(key: string): boolean {
     const existed = this.state.has(key);
     this.state.delete(key);
-    
+
     if (existed) {
       console.log(`[DevStateManager] State deleted: ${key}`);
-      
+
       // Notify listeners with undefined
       const keyListeners = this.listeners.get(key);
       if (keyListeners) {
-        keyListeners.forEach(listener => {
+        keyListeners.forEach((listener) => {
           try {
             listener(undefined);
           } catch (error) {
@@ -51,7 +51,7 @@ export class DevStateManager implements StateManager {
         });
       }
     }
-    
+
     return existed;
   }
 
@@ -62,14 +62,14 @@ export class DevStateManager implements StateManager {
   clear(): void {
     const keys = Array.from(this.state.keys());
     this.state.clear();
-    
+
     console.log('[DevStateManager] State cleared');
-    
+
     // Notify all listeners
-    keys.forEach(key => {
+    keys.forEach((key) => {
       const keyListeners = this.listeners.get(key);
       if (keyListeners) {
-        keyListeners.forEach(listener => {
+        keyListeners.forEach((listener) => {
           try {
             listener(undefined);
           } catch (error) {
@@ -84,13 +84,13 @@ export class DevStateManager implements StateManager {
     if (!this.listeners.has(key)) {
       this.listeners.set(key, new Set());
     }
-    
+
     const keyListeners = this.listeners.get(key)!;
     keyListeners.add(callback);
-    
+
     // Call with current value
     callback(this.state.get(key));
-    
+
     // Return unsubscribe function
     return () => {
       keyListeners.delete(callback);

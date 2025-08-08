@@ -5,6 +5,7 @@ This guide explains how to migrate existing MFEs to use the new design system an
 ## Overview
 
 The migration involves three key changes:
+
 1. Using design system components instead of inline styles
 2. Loading design system via service injection (no global pollution)
 3. Configuring the MFE for the development container
@@ -26,23 +27,23 @@ module.exports = {
   name: 'Your MFE Name',
   framework: 'react19', // or 'react17', 'vue3', 'vanilla'
   entry: './src/main.tsx',
-  
+
   devContainer: {
     port: 3333,
     servicesUI: true,
     services: {
-      designSystem: true // Enable design system
+      designSystem: true, // Enable design system
     },
     sharedDependencies: {
-      'react': '^19.0.0',
+      react: '^19.0.0',
       'react-dom': '^19.0.0',
-      '@mfe/design-system': '*'
-    }
+      '@mfe/design-system': '*',
+    },
   },
-  
+
   build: {
-    externals: ['react', 'react-dom', '@mfe/design-system']
-  }
+    externals: ['react', 'react-dom', '@mfe/design-system'],
+  },
 };
 ```
 
@@ -70,7 +71,7 @@ Load components asynchronously in your MFE:
 ```typescript
 function App({ services }: AppProps) {
   const [designSystem, setDesignSystem] = useState<any>(null);
-  
+
   useEffect(() => {
     const loadDesignSystem = async () => {
       if (services.designSystem) {
@@ -84,10 +85,10 @@ function App({ services }: AppProps) {
     };
     loadDesignSystem();
   }, [services.designSystem]);
-  
+
   // Use components
   const { Card, Button } = designSystem || {};
-  
+
   return (
     <div>
       {Card ? (
@@ -114,13 +115,13 @@ const FallbackCard: React.FC<any> = ({ children, variant = 'default' }) => {
     default: 'border rounded-lg p-6 shadow-sm',
     elevated: 'border rounded-lg p-6 shadow-md',
   };
-  
+
   return <div className={classes[variant]}>{children}</div>;
 };
 
 const FallbackButton: React.FC<any> = ({ children, onClick }) => {
   return (
-    <button 
+    <button
       onClick={onClick}
       className="px-4 py-2 bg-primary text-white rounded hover:bg-primary/90"
     >
@@ -139,13 +140,8 @@ require('esbuild').build({
   entryPoints: ['src/main.ts'],
   bundle: true,
   format: 'esm',
-  external: [
-    'react',
-    'react-dom',
-    '@mfe/design-system',
-    '@mfe-toolkit/core'
-  ],
-  outfile: 'dist/mfe.js'
+  external: ['react', 'react-dom', '@mfe/design-system', '@mfe-toolkit/core'],
+  outfile: 'dist/mfe.js',
 });
 ```
 
@@ -188,16 +184,16 @@ function App({ services }: AppProps) {
 // Using design system with fallbacks
 function App({ services }: AppProps) {
   const [{ Card, Button }, setComponents] = useState<any>({});
-  
+
   useEffect(() => {
     services.designSystem?.getReactComponents()
       .then(setComponents)
       .catch(() => console.warn('Using fallbacks'));
   }, []);
-  
+
   const CardComponent = Card || FallbackCard;
   const ButtonComponent = Button || FallbackButton;
-  
+
   return (
     <CardComponent variant="elevated">
       <h3 className="text-xl font-semibold mb-2">Modal Demo</h3>
@@ -212,16 +208,19 @@ function App({ services }: AppProps) {
 ## Framework-Specific Considerations
 
 ### React (17 & 19)
+
 - Components loaded via `getReactComponents()`
 - Use hooks for async loading
 - Provide React-based fallbacks
 
 ### Vue 3
+
 - Components loaded via `getVueComponents()`
 - Use composition API for loading
 - Register components locally
 
 ### Vanilla TypeScript
+
 - Helpers loaded via `getVanillaHelpers()`
 - Use class generators or DOM manipulation
 - Apply classes directly to elements
@@ -236,15 +235,19 @@ function App({ services }: AppProps) {
 ## Common Issues and Solutions
 
 ### Issue: Design System Not Loading
+
 **Solution**: Ensure `@mfe/design-system` is built and available
 
 ### Issue: TypeScript Errors
+
 **Solution**: Extend MFEServices interface with design system types
 
 ### Issue: Bundle Size Too Large
+
 **Solution**: Mark design system as external in build config
 
 ### Issue: Styles Not Applied
+
 **Solution**: Ensure Tailwind CSS is available in container
 
 ## Benefits of Migration
@@ -268,6 +271,7 @@ After migrating your MFE:
 ## Support
 
 For questions or issues:
+
 - Check the [Design System Architecture](./planning/DESIGN_SYSTEM_ARCHITECTURE.md)
 - Review the [MFE Dev Container docs](./planning/MFE_DEV_CONTAINER_ARCHITECTURE.md)
 - Open an issue in the repository

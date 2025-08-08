@@ -17,11 +17,20 @@ xl:  1280px  /* Extra large devices */
 ## Responsive Grid Classes
 
 ### Column Grids
+
 ```css
-.ds-grid-1  { @apply grid grid-cols-1; }
-.ds-grid-2  { @apply grid grid-cols-1 md:grid-cols-2; }
-.ds-grid-3  { @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3; }
-.ds-grid-4  { @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4; }
+.ds-grid-1 {
+  @apply grid grid-cols-1;
+}
+.ds-grid-2 {
+  @apply grid grid-cols-1 md:grid-cols-2;
+}
+.ds-grid-3 {
+  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3;
+}
+.ds-grid-4 {
+  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4;
+}
 ```
 
 ### Responsive Patterns
@@ -35,14 +44,10 @@ xl:  1280px  /* Extra large devices */
 </div>
 
 <!-- Hide on mobile -->
-<div class="hidden md:block">
-  Desktop only content
-</div>
+<div class="hidden md:block">Desktop only content</div>
 
 <!-- Different padding by screen size -->
-<div class="p-4 md:p-6 lg:p-8">
-  Responsive padding
-</div>
+<div class="p-4 md:p-6 lg:p-8">Responsive padding</div>
 ```
 
 ## Container Widths
@@ -91,6 +96,7 @@ Always design for mobile first, then enhance for larger screens:
 ## Common Responsive Patterns
 
 ### Navigation
+
 ```html
 <!-- Mobile: Hamburger, Desktop: Full menu -->
 <nav class="flex items-center justify-between">
@@ -104,6 +110,7 @@ Always design for mobile first, then enhance for larger screens:
 ```
 
 ### Cards Grid
+
 ```html
 <!-- Responsive card layout -->
 <div class="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
@@ -115,6 +122,7 @@ Always design for mobile first, then enhance for larger screens:
 ```
 
 ### Sidebar Layout
+
 ```html
 <!-- Stacked on mobile, sidebar on desktop -->
 <div class="flex flex-col lg:flex-row gap-6">

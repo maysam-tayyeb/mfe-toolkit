@@ -42,7 +42,7 @@ export default function App({ services }: AppProps) {
   useEffect(() => {
     // Clean up old subscriptions first
     subscriptionsRef.current.forEach((unsubscribe) => unsubscribe());
-    
+
     // Create new subscriptions
     subscriptionsRef.current = subscribedEvents.map((event) =>
       eventBus.on(event, (data: any) => {
@@ -155,9 +155,11 @@ export default function App({ services }: AppProps) {
           <div>
             <div className="flex items-center justify-between mb-2">
               <h4 className="text-xs font-semibold text-muted-foreground">SUBSCRIPTIONS</h4>
-              <span className="text-[10px] text-muted-foreground">{subscribedEvents.length} active</span>
+              <span className="text-[10px] text-muted-foreground">
+                {subscribedEvents.length} active
+              </span>
             </div>
-            
+
             {/* Active Subscriptions as Pill Badges */}
             <div className="p-2 bg-muted/30 rounded border border-muted-foreground/10 min-h-[60px]">
               {subscribedEvents.length === 0 ? (
@@ -166,20 +168,26 @@ export default function App({ services }: AppProps) {
                 </p>
               ) : (
                 <div className="flex flex-wrap gap-1">
-                  {subscribedEvents.map(event => {
+                  {subscribedEvents.map((event) => {
                     const [category] = event.split(':');
                     return (
                       <div
                         key={event}
                         className="group inline-flex items-center gap-1 px-1.5 py-0.5 bg-background border border-border rounded-full hover:border-destructive/50 transition-colors"
                       >
-                        <div className={`w-1 h-1 rounded-full ${
-                          category === 'user' ? 'bg-blue-500' :
-                          category === 'theme' ? 'bg-green-500' :
-                          category === 'data' ? 'bg-orange-500' :
-                          category === 'navigation' ? 'bg-purple-500' :
-                          'bg-gray-500'
-                        } animate-pulse`} />
+                        <div
+                          className={`w-1 h-1 rounded-full ${
+                            category === 'user'
+                              ? 'bg-blue-500'
+                              : category === 'theme'
+                                ? 'bg-green-500'
+                                : category === 'data'
+                                  ? 'bg-orange-500'
+                                  : category === 'navigation'
+                                    ? 'bg-purple-500'
+                                    : 'bg-gray-500'
+                          } animate-pulse`}
+                        />
                         <span className="text-[10px] font-mono">{event}</span>
                         <button
                           onClick={() => handleUnsubscribe(event)}
@@ -206,7 +214,7 @@ export default function App({ services }: AppProps) {
                   'navigation:change',
                   'modal:open',
                   'notification:show',
-                  'settings:update'
+                  'settings:update',
                 ]
                   .filter((e) => !subscribedEvents.includes(e))
                   .map((event) => {
@@ -229,13 +237,25 @@ export default function App({ services }: AppProps) {
 
         <div className="space-y-3">
           <div className="bg-background/50 backdrop-blur-sm rounded-lg p-2">
-            <div className="text-[10px] font-semibold text-muted-foreground mb-1.5">MFE EVENT STREAM</div>
+            <div className="text-[10px] font-semibold text-muted-foreground mb-1.5">
+              MFE EVENT STREAM
+            </div>
             <div className="border border-border rounded bg-card/80 max-h-56 overflow-y-auto">
               {messages.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-6 text-muted-foreground">
                   <div className="w-8 h-8 rounded-full bg-muted/20 flex items-center justify-center mb-1.5">
-                    <svg className="w-4 h-4 text-muted-foreground/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    <svg
+                      className="w-4 h-4 text-muted-foreground/40"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={1.5}
+                        d="M13 10V3L4 14h7v7l9-11h-7z"
+                      />
                     </svg>
                   </div>
                   <p className="text-[10px] font-medium">No events yet</p>
@@ -248,25 +268,37 @@ export default function App({ services }: AppProps) {
                     const action = actionParts.join(':');
                     const isLatest = index === 0;
                     const getCategoryStyle = () => {
-                      switch(category) {
-                        case 'user': return 'text-blue-500 bg-blue-500/10';
-                        case 'container': return 'text-purple-500 bg-purple-500/10';
-                        case 'theme': return 'text-green-500 bg-green-500/10';
-                        case 'data': return 'text-orange-500 bg-orange-500/10';
-                        case 'navigation': return 'text-indigo-500 bg-indigo-500/10';
-                        case 'modal': return 'text-violet-500 bg-violet-500/10';
-                        case 'notification': return 'text-yellow-500 bg-yellow-500/10';
-                        case 'settings': return 'text-emerald-500 bg-emerald-500/10';
-                        case 'config': return 'text-pink-500 bg-pink-500/10';
-                        case 'system': return 'text-cyan-500 bg-cyan-500/10';
-                        case 'mfe': return 'text-fuchsia-500 bg-fuchsia-500/10';
-                        default: return 'text-gray-500 bg-gray-500/10';
+                      switch (category) {
+                        case 'user':
+                          return 'text-blue-500 bg-blue-500/10';
+                        case 'container':
+                          return 'text-purple-500 bg-purple-500/10';
+                        case 'theme':
+                          return 'text-green-500 bg-green-500/10';
+                        case 'data':
+                          return 'text-orange-500 bg-orange-500/10';
+                        case 'navigation':
+                          return 'text-indigo-500 bg-indigo-500/10';
+                        case 'modal':
+                          return 'text-violet-500 bg-violet-500/10';
+                        case 'notification':
+                          return 'text-yellow-500 bg-yellow-500/10';
+                        case 'settings':
+                          return 'text-emerald-500 bg-emerald-500/10';
+                        case 'config':
+                          return 'text-pink-500 bg-pink-500/10';
+                        case 'system':
+                          return 'text-cyan-500 bg-cyan-500/10';
+                        case 'mfe':
+                          return 'text-fuchsia-500 bg-fuchsia-500/10';
+                        default:
+                          return 'text-gray-500 bg-gray-500/10';
                       }
                     };
-                    
+
                     return (
-                      <div 
-                        key={msg.id} 
+                      <div
+                        key={msg.id}
                         className={`group transition-all duration-200 hover:bg-muted/20 ${
                           isLatest ? 'bg-primary/5' : ''
                         }`}
@@ -274,7 +306,9 @@ export default function App({ services }: AppProps) {
                         <div className="p-1.5">
                           <div className="flex items-start justify-between gap-1">
                             <div className="flex items-center gap-1 flex-1 min-w-0">
-                              <span className={`inline-flex items-center gap-0.5 px-1 py-0.5 rounded text-[9px] font-semibold ${getCategoryStyle()}`}>
+                              <span
+                                className={`inline-flex items-center gap-0.5 px-1 py-0.5 rounded text-[9px] font-semibold ${getCategoryStyle()}`}
+                              >
                                 <span className="w-1 h-1 rounded-full bg-current animate-pulse" />
                                 {category?.toUpperCase()}
                               </span>

@@ -3,16 +3,16 @@ import { RegistryMFELoader } from '@/components/RegistryMFELoader';
 import { Badge } from '@/components/ui/badge';
 import { useUI } from '@/contexts/UIContext';
 import { Hero, TabGroup, LoadingState } from '@mfe/design-system-react';
-import { 
-  MessageSquare, 
-  CheckCircle, 
+import {
+  MessageSquare,
+  CheckCircle,
   FileText,
   Sparkles,
   Code,
   Zap,
   Box,
   Globe,
-  ChevronRight
+  ChevronRight,
 } from 'lucide-react';
 
 export function ModalServiceDemoPage() {
@@ -110,29 +110,29 @@ export function ModalServiceDemoPage() {
       title: 'Simple Alert',
       description: 'Basic modal with message',
       action: handleSimpleAlert,
-      color: 'ds-icon-primary'
+      color: 'ds-icon-primary',
     },
     {
       icon: <CheckCircle className="h-5 w-5" />,
       title: 'Confirmation',
       description: 'Yes/No dialog with callbacks',
       action: handleConfirmation,
-      color: 'ds-icon-success'
+      color: 'ds-icon-success',
     },
     {
       icon: <FileText className="h-5 w-5" />,
       title: 'Form Modal',
       description: 'Input fields and validation',
       action: handleFormModal,
-      color: 'ds-icon-warning'
+      color: 'ds-icon-warning',
     },
     {
       icon: <Sparkles className="h-5 w-5" />,
       title: 'Custom Content',
       description: 'Rich content and components',
       action: handleCustomContent,
-      color: 'ds-icon-info'
-    }
+      color: 'ds-icon-info',
+    },
   ];
 
   const codeExamples = [
@@ -147,7 +147,7 @@ export function ModalServiceDemoPage() {
   size: 'sm'
 });`}</code>
         </pre>
-      )
+      ),
     },
     {
       id: 'confirm',
@@ -165,7 +165,7 @@ export function ModalServiceDemoPage() {
   }
 });`}</code>
         </pre>
-      )
+      ),
     },
     {
       id: 'custom',
@@ -183,7 +183,7 @@ export function ModalServiceDemoPage() {
   size: 'lg'
 });`}</code>
         </pre>
-      )
+      ),
     },
     {
       id: 'api',
@@ -202,8 +202,8 @@ modal.close(modalId);
 // Close all modals
 modal.closeAll();`}</code>
         </pre>
-      )
-    }
+      ),
+    },
   ];
 
   const frameworkDemos = [
@@ -214,7 +214,7 @@ modal.closeAll();`}</code>
       badge: 'Latest',
       badgeVariant: 'default' as const,
       registryId: 'mfe-react19-modal-demo',
-      description: 'Modern React with hooks'
+      description: 'Modern React with hooks',
     },
     {
       id: 'react17',
@@ -223,7 +223,7 @@ modal.closeAll();`}</code>
       badge: 'Legacy',
       badgeVariant: 'secondary' as const,
       registryId: 'mfe-react17-modal-demo',
-      description: 'Cross-version compatibility'
+      description: 'Cross-version compatibility',
     },
     {
       id: 'vue3',
@@ -232,7 +232,7 @@ modal.closeAll();`}</code>
       badge: 'Cross-Framework',
       badgeVariant: 'outline' as const,
       registryId: 'mfe-vue3-modal-demo',
-      description: 'Vue.js integration'
+      description: 'Vue.js integration',
     },
     {
       id: 'vanilla',
@@ -241,11 +241,11 @@ modal.closeAll();`}</code>
       badge: 'Lightweight',
       badgeVariant: 'outline' as const,
       registryId: 'mfe-vanilla-modal-demo',
-      description: 'No framework needed'
-    }
+      description: 'No framework needed',
+    },
   ];
 
-  const activeFramework = frameworkDemos.find(f => f.id === activeDemo);
+  const activeFramework = frameworkDemos.find((f) => f.id === activeDemo);
 
   return (
     <div className="ds-page">
@@ -291,16 +291,10 @@ modal.closeAll();`}</code>
               className="ds-card-padded ds-hover-scale group text-left"
             >
               <div className="flex items-center gap-3 mb-3">
-                <div className={`${example.color}`}>
-                  {example.icon}
-                </div>
-                <h3 className="ds-card-title group-hover:ds-accent-primary">
-                  {example.title}
-                </h3>
+                <div className={`${example.color}`}>{example.icon}</div>
+                <h3 className="ds-card-title group-hover:ds-accent-primary">{example.title}</h3>
               </div>
-              <p className="text-sm ds-text-muted mb-3">
-                {example.description}
-              </p>
+              <p className="text-sm ds-text-muted mb-3">{example.description}</p>
               <div className="flex items-center gap-2 text-xs ds-accent-primary">
                 <span>Open Modal</span>
                 <ChevronRight className="h-3 w-3" />
@@ -319,7 +313,7 @@ modal.closeAll();`}</code>
       {/* Framework Demos */}
       <div className="ds-mb-lg">
         <h2 className="ds-section-title ds-mb-md">Framework Implementations</h2>
-        
+
         {/* Framework Selector */}
         <div className="flex flex-wrap gap-2 ds-mb-md">
           {frameworkDemos.map((demo) => (
@@ -327,8 +321,8 @@ modal.closeAll();`}</code>
               key={demo.id}
               onClick={() => setActiveDemo(demo.id)}
               className={`ds-card-compact flex items-center gap-2 px-4 py-2 ${
-                activeDemo === demo.id 
-                  ? 'ds-bg-accent-primary-soft ds-border-accent-primary border-2' 
+                activeDemo === demo.id
+                  ? 'ds-bg-accent-primary-soft ds-border-accent-primary border-2'
                   : 'hover:ds-bg-muted'
               }`}
             >
@@ -348,20 +342,17 @@ modal.closeAll();`}</code>
           <div className="ds-card p-0 overflow-hidden">
             <div className="ds-card-header flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="ds-icon-primary">
-                  {activeFramework.icon}
-                </div>
+                <div className="ds-icon-primary">{activeFramework.icon}</div>
                 <div>
                   <h3 className="ds-card-title">{activeFramework.name} Demo</h3>
                   <p className="text-xs ds-text-muted">{activeFramework.description}</p>
                 </div>
               </div>
-              <Badge variant={activeFramework.badgeVariant}>
-                {activeFramework.badge}
-              </Badge>
+              <Badge variant={activeFramework.badgeVariant}>{activeFramework.badge}</Badge>
             </div>
             <div className="min-h-[400px] ds-bg-muted/30">
               <RegistryMFELoader
+                key={activeFramework.registryId}
                 id={activeFramework.registryId}
                 fallback={
                   <LoadingState

@@ -5,6 +5,7 @@ This specification defines what a container application must provide to host MFE
 ## Overview
 
 A container is the host application that:
+
 - Loads and manages MFE lifecycles
 - Provides core services to MFEs
 - Handles routing and navigation
@@ -28,6 +29,7 @@ Containers must implement and inject these services into MFEs:
 ### 2. MFE Loading
 
 Containers must:
+
 - Load MFEs via ES module dynamic imports
 - Handle MFE lifecycle (mount/unmount)
 - Provide error boundaries
@@ -36,6 +38,7 @@ Containers must:
 ### 3. State Management
 
 Containers must:
+
 - Provide isolated state contexts
 - Support the Universal State Manager
 - Enable cross-tab synchronization
@@ -44,6 +47,7 @@ Containers must:
 ### 4. Routing
 
 Containers must:
+
 - Support MFE-based routing
 - Handle navigation events
 - Maintain browser history

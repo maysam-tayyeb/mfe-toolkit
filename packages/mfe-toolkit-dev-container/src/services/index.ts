@@ -3,7 +3,13 @@
  * Provides all container services for MFE development
  */
 
-import { EventBus, Logger, ErrorReporter, ServiceContainer, createTypedEventBus } from '@mfe-toolkit/core';
+import {
+  EventBus,
+  Logger,
+  ErrorReporter,
+  ServiceContainer,
+  createTypedEventBus,
+} from '@mfe-toolkit/core';
 import type { MFEServices, AuthService, ThemeService } from '@mfe-toolkit/core';
 
 // Import individual service implementations
@@ -39,7 +45,7 @@ export function createDevServices(config: DevContainerConfig = {}): MFEServices 
   // Core services
   const logger = new Logger({
     prefix: '[MFE-DEV]',
-    level: config.enableLogger !== false ? 'debug' : 'warn'
+    level: config.enableLogger !== false ? 'debug' : 'warn',
   });
 
   const eventBus = createTypedEventBus();
@@ -48,19 +54,19 @@ export function createDevServices(config: DevContainerConfig = {}): MFEServices 
   // UI Services
   const modal = new DevModalService();
   const notification = new DevNotificationService();
-  
+
   // Auth Service with mocking
   const auth = new DevAuthService(config.mockAuth);
-  
+
   // Theme Service
   const theme = new DevThemeService(config.theme || 'light');
-  
+
   // State Manager
   const stateManager = new DevStateManager();
 
   // Create service container
   const serviceContainer = new ServiceContainer();
-  
+
   // Register all services
   serviceContainer.register('logger', logger);
   serviceContainer.register('eventBus', eventBus);
@@ -92,13 +98,13 @@ export function createDevServices(config: DevContainerConfig = {}): MFEServices 
  */
 export function initializeDevContainer(config: DevContainerConfig = {}): MFEServices {
   const services = createDevServices(config);
-  
+
   // Attach to window ONLY in dev mode for debugging
   if (process.env.NODE_ENV === 'development') {
     (window as any).__DEV_SERVICES__ = services;
     (window as any).__DEV_CONFIG__ = config;
   }
-  
+
   return services;
 }
 

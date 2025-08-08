@@ -169,6 +169,7 @@ MFEs need to communicate without direct dependencies.
 
 **Context**:
 Originally services and state were exposed via multiple global window properties:
+
 - `window.__MFE_SERVICES__` - Service instances
 - `window.__EVENT_BUS__` - Event bus instance
 - `window.__REDUX_STORE__` - Redux store
@@ -197,6 +198,7 @@ export default {
 ```
 
 **Completion Notes** (August 2025):
+
 - All window pollution has been removed from production code
 - Test files now export mocks instead of polluting window
 - Debugging uses console logging instead of window exposure

@@ -66,9 +66,9 @@ describe('UniversalStateManager (Valtio implementation)', () => {
     it('should track source of changes', () => {
       const listener = vi.fn();
       manager.subscribeAll(listener);
-      
+
       manager.set('test', 'value', 'custom-source');
-      
+
       expect(listener).toHaveBeenCalledWith(
         expect.objectContaining({
           key: 'test',
@@ -83,24 +83,30 @@ describe('UniversalStateManager (Valtio implementation)', () => {
     it('should notify subscribers on value changes', () => {
       const listener = vi.fn();
       const unsubscribe = manager.subscribe('test', listener);
-      
+
       // Reset the mock to ignore the initial call if any
       listener.mockClear();
 
       manager.set('test', 'value1');
       expect(listener).toHaveBeenCalledTimes(1);
-      expect(listener).toHaveBeenCalledWith('value1', expect.objectContaining({
-        key: 'test',
-        value: 'value1',
-      }));
+      expect(listener).toHaveBeenCalledWith(
+        'value1',
+        expect.objectContaining({
+          key: 'test',
+          value: 'value1',
+        })
+      );
 
       manager.set('test', 'value2');
       expect(listener).toHaveBeenCalledTimes(2);
-      expect(listener).toHaveBeenCalledWith('value2', expect.objectContaining({
-        key: 'test',
-        value: 'value2',
-        previousValue: 'value1',
-      }));
+      expect(listener).toHaveBeenCalledWith(
+        'value2',
+        expect.objectContaining({
+          key: 'test',
+          value: 'value2',
+          previousValue: 'value1',
+        })
+      );
 
       unsubscribe();
       manager.set('test', 'value3');
@@ -111,25 +117,28 @@ describe('UniversalStateManager (Valtio implementation)', () => {
     it('should call subscriber immediately with current value', () => {
       manager.set('test', 'existing');
       const listener = vi.fn();
-      
+
       manager.subscribe('test', listener);
-      
-      expect(listener).toHaveBeenCalledWith('existing', expect.objectContaining({
-        key: 'test',
-        value: 'existing',
-        source: 'initial',
-      }));
+
+      expect(listener).toHaveBeenCalledWith(
+        'existing',
+        expect.objectContaining({
+          key: 'test',
+          value: 'existing',
+          source: 'initial',
+        })
+      );
     });
 
     it('should support multiple subscribers per key', () => {
       const listener1 = vi.fn();
       const listener2 = vi.fn();
-      
+
       manager.subscribe('test', listener1);
       manager.subscribe('test', listener2);
-      
+
       manager.set('test', 'value');
-      
+
       expect(listener1).toHaveBeenCalled();
       expect(listener2).toHaveBeenCalled();
     });
@@ -196,7 +205,7 @@ describe('UniversalStateManager (Valtio implementation)', () => {
     it('should create immutable snapshots', () => {
       const obj = { mutable: 'value' };
       manager.set('test', obj);
-      
+
       const snapshot = manager.getSnapshot();
       // Try to modify the snapshot (should not affect the original)
       try {
@@ -204,7 +213,7 @@ describe('UniversalStateManager (Valtio implementation)', () => {
       } catch (e) {
         // Expected - snapshot is immutable
       }
-      
+
       expect(manager.get<any>('test').mutable).toBe('value');
     });
   });
@@ -223,7 +232,7 @@ describe('UniversalStateManager (Valtio implementation)', () => {
 
     it('should load from localStorage on init', () => {
       localStorage.setItem('test:existing', '"loadedValue"');
-      
+
       const persistentManager = new UniversalStateManager({
         persistent: true,
         storagePrefix: 'test',
@@ -235,7 +244,7 @@ describe('UniversalStateManager (Valtio implementation)', () => {
 
     it('should handle invalid JSON in localStorage', () => {
       localStorage.setItem('test:invalid', 'not-json');
-      
+
       const persistentManager = new UniversalStateManager({
         persistent: true,
         storagePrefix: 'test',
@@ -249,7 +258,7 @@ describe('UniversalStateManager (Valtio implementation)', () => {
   describe('Middleware', () => {
     it('should execute middleware before state changes', () => {
       const middleware = vi.fn((event, next) => next());
-      
+
       const managerWithMiddleware = new UniversalStateManager({
         middleware: [middleware],
         persistent: false,
@@ -288,13 +297,13 @@ describe('UniversalStateManager (Valtio implementation)', () => {
 
     it('should execute middleware chain in order', () => {
       const order: number[] = [];
-      
+
       const middleware1 = (event: StateChangeEvent, next: () => void) => {
         order.push(1);
         next();
         order.push(3);
       };
-      
+
       const middleware2 = (event: StateChangeEvent, next: () => void) => {
         order.push(2);
         next();
@@ -320,7 +329,7 @@ describe('UniversalStateManager (Valtio implementation)', () => {
 
       manager.set<User>('user', { name: 'John', age: 30 });
       const user = manager.get<User>('user');
-      
+
       expect(user?.name).toBe('John');
       expect(user?.age).toBe(30);
     });
@@ -349,30 +358,30 @@ describe('UniversalStateManager (Valtio implementation)', () => {
     it('should provide access to proxy store', () => {
       const proxyStore = manager.getProxyStore();
       expect(proxyStore).toBeDefined();
-      
+
       manager.set('test', 'value');
       expect(proxyStore.test).toBe('value');
     });
 
     it('should trigger reactive updates through proxy', async () => {
       const proxyStore = manager.getProxyStore();
-      
+
       // Direct proxy mutations work
       proxyStore.directSet = 'directValue';
       expect(proxyStore.directSet).toBe('directValue');
-      
+
       // Valtio's subscribe function can be used directly for reactive updates
       const { subscribe } = await import('valtio');
       const listener = vi.fn();
-      
+
       subscribe(proxyStore, listener);
-      
+
       // Direct proxy mutation triggers Valtio's subscription
       proxyStore.anotherValue = 'test';
-      
+
       // Wait for Valtio to process the update
-      await new Promise(resolve => setTimeout(resolve, 10));
-      
+      await new Promise((resolve) => setTimeout(resolve, 10));
+
       expect(listener).toHaveBeenCalled();
       expect(proxyStore.anotherValue).toBe('test');
     });
@@ -381,29 +390,27 @@ describe('UniversalStateManager (Valtio implementation)', () => {
   describe('Performance', () => {
     it('should handle many subscribers efficiently', () => {
       const listeners = Array.from({ length: 100 }, () => vi.fn());
-      const unsubscribes = listeners.map((listener, i) => 
-        manager.subscribe(`key${i}`, listener)
-      );
+      const unsubscribes = listeners.map((listener, i) => manager.subscribe(`key${i}`, listener));
 
       const start = performance.now();
-      
+
       // Update all keys
       for (let i = 0; i < 100; i++) {
         manager.set(`key${i}`, i);
       }
-      
+
       const duration = performance.now() - start;
-      
+
       // Should complete in reasonable time (less than 50ms)
       expect(duration).toBeLessThan(50);
-      
+
       // All listeners should be called
       listeners.forEach((listener, i) => {
         expect(listener).toHaveBeenCalledWith(i, expect.any(Object));
       });
 
       // Cleanup
-      unsubscribes.forEach(fn => fn());
+      unsubscribes.forEach((fn) => fn());
     });
 
     it('should batch multiple synchronous updates', () => {

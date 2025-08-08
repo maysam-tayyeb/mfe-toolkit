@@ -19,7 +19,6 @@ interface AppProps {
  * 2. Optional: Import ES module for programmatic token access
  */
 function AppWithDesignSystem({ services }: AppProps) {
-  const [events, setEvents] = useState<string[]>([]);
   const [designTokens, setDesignTokens] = useState<DesignTokens | null>(null);
   const { modal, notification } = services;
 
@@ -28,7 +27,7 @@ function AppWithDesignSystem({ services }: AppProps) {
   useEffect(() => {
     // Explicitly import design system ES module - no global access
     import('http://localhost:8080/design-system/design-system.esm.js')
-      .then(module => {
+      .then((module) => {
         setDesignTokens(module as DesignTokens);
         console.log('Design system tokens loaded:', module.version);
       })
@@ -37,57 +36,39 @@ function AppWithDesignSystem({ services }: AppProps) {
       });
   }, []);
 
-  const addEvent = (event: string) => {
-    setEvents((prev) => [...prev.slice(-4), event]);
-  };
-
   const handleSimpleAlert = () => {
-    addEvent('Opening simple alert');
     modal.open({
       title: 'Simple Alert',
       content: 'This modal uses the design system CSS classes (ds-* prefix)',
       onClose: () => {
-        addEvent('Simple alert closed');
         notification.info('Alert Closed', 'The simple alert was dismissed');
       },
     });
   };
 
   const handleConfirmation = () => {
-    addEvent('Opening confirmation dialog');
     modal.open({
       title: 'Confirm Action',
       content: 'This demo shows how MFEs can use design system without global pollution',
       onConfirm: () => {
-        addEvent('Action confirmed');
         notification.success('Confirmed', 'Action was confirmed successfully');
       },
       onClose: () => {
-        addEvent('Action cancelled');
         notification.warning('Cancelled', 'Action was cancelled');
       },
     });
   };
 
   const handleFormModal = () => {
-    addEvent('Opening form modal');
     const formContent = (
       <div className="ds-stack">
         <div className="ds-form-group">
           <label className="ds-label">Name</label>
-          <input
-            type="text"
-            placeholder="Enter your name"
-            className="ds-input"
-          />
+          <input type="text" placeholder="Enter your name" className="ds-input" />
         </div>
         <div className="ds-form-group">
           <label className="ds-label">Email</label>
-          <input
-            type="email"
-            placeholder="Enter your email"
-            className="ds-input"
-          />
+          <input type="email" placeholder="Enter your email" className="ds-input" />
         </div>
       </div>
     );
@@ -96,24 +77,20 @@ function AppWithDesignSystem({ services }: AppProps) {
       title: 'User Form with Design System',
       content: formContent,
       onConfirm: () => {
-        addEvent('Form submitted');
         notification.success('Form Submitted', 'Your information was saved');
       },
       onClose: () => {
-        addEvent('Form cancelled');
+        // Form cancelled - no action needed
       },
     });
   };
 
   const handleCustomContent = () => {
-    addEvent('Opening custom content modal');
     const customContent = (
       <div className="text-center ds-stack">
         <div className="text-5xl mb-4">🎨</div>
         <h3 className="ds-h3">Design System Integration</h3>
-        <p className="ds-text-muted ds-text-small">
-          This modal demonstrates design system usage
-        </p>
+        <p className="ds-text-muted ds-text-small">This modal demonstrates design system usage</p>
         <ul className="text-left max-w-sm mx-auto ds-list">
           <li className="ds-list-item">
             <span className="text-green-500">✓</span>
@@ -135,9 +112,6 @@ function AppWithDesignSystem({ services }: AppProps) {
       title: 'Design System Features',
       content: customContent,
       size: 'lg',
-      onClose: () => {
-        addEvent('Custom modal closed');
-      },
     });
   };
 
@@ -149,7 +123,7 @@ function AppWithDesignSystem({ services }: AppProps) {
         <p className="ds-text-muted ds-text-small mb-4">
           Using Design System - No Global Pollution
         </p>
-        
+
         {/* Status Indicators */}
         <div className="ds-stack-sm mb-4">
           <div className="ds-alert-info text-xs">
@@ -161,7 +135,7 @@ function AppWithDesignSystem({ services }: AppProps) {
             </div>
           )}
         </div>
-        
+
         {/* Action Buttons */}
         <div className="ds-stack-sm">
           <p className="ds-label">Test Modal Service:</p>
@@ -182,24 +156,6 @@ function AppWithDesignSystem({ services }: AppProps) {
         </div>
       </div>
 
-      {/* Event Log Card */}
-      <div className="ds-card-padded">
-        <p className="ds-label mb-2">Event Log:</p>
-        <div className="ds-stack-sm">
-          {events.length === 0 ? (
-            <p className="ds-text-muted ds-text-small">
-              No events yet. Click a button to start.
-            </p>
-          ) : (
-            events.map((event, index) => (
-              <div key={index} className="ds-text-small font-mono text-gray-600">
-                → {event}
-              </div>
-            ))
-          )}
-        </div>
-      </div>
-
       {/* Info Card */}
       <div className="ds-card-compact">
         <p className="ds-label mb-2">Design System Usage</p>
@@ -210,7 +166,7 @@ function AppWithDesignSystem({ services }: AppProps) {
           <li>• No window/global variables used</li>
           <li>• Framework-agnostic approach</li>
         </ul>
-        
+
         {designTokens && (
           <div className="mt-4 p-2 bg-gray-100 rounded ds-text-xs">
             <strong>Available Patterns:</strong>

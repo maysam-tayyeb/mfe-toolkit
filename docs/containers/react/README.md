@@ -5,6 +5,7 @@ The React container is a production-ready implementation of the MFE container sp
 ## Overview
 
 The React container provides:
+
 - Full implementation of all required services
 - React Context-based state management
 - Modern React patterns and hooks
@@ -29,6 +30,7 @@ cd apps/container-react && pnpm preview
 ### [Architecture Decisions](./architecture/decisions.md)
 
 React-specific architectural choices:
+
 - React Context API for state management
 - Component-based MFE loaders
 - Error boundary strategies
@@ -37,6 +39,7 @@ React-specific architectural choices:
 ### [State Management](./architecture/state-management.md)
 
 How state is managed in the React container:
+
 - Context providers structure
 - Hook-based state access
 - Performance considerations
@@ -47,6 +50,7 @@ How state is managed in the React container:
 ### UI Components
 
 Built with ShadCN UI components:
+
 - Consistent design system
 - Accessibility built-in
 - Dark mode support
@@ -55,6 +59,7 @@ Built with ShadCN UI components:
 ### Routing
 
 React Router v6 integration:
+
 - Nested routes for MFEs
 - Route guards for authentication
 - Lazy loading support
@@ -68,14 +73,14 @@ All services are implemented as React Context providers:
 // Example: Using services in an MFE
 function MyMFE({ services }) {
   const { logger, eventBus, notification } = services;
-  
+
   React.useEffect(() => {
     logger.info('MFE mounted');
-    
+
     const unsubscribe = eventBus.on('user:login', (user) => {
       notification.success(`Welcome ${user.name}!`);
     });
-    
+
     return () => unsubscribe();
   }, []);
 }
@@ -99,6 +104,7 @@ VITE_ENABLE_DEBUG=true
 ### Build Configuration
 
 The React container uses Vite with optimized settings:
+
 - Tree shaking enabled
 - Code splitting for routes
 - CSS extraction and minification

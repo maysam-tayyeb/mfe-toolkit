@@ -5,12 +5,7 @@ export interface GridProps extends React.HTMLAttributes<HTMLDivElement> {
   cols?: 2 | 3 | 4 | 'responsive';
 }
 
-export const Grid: React.FC<GridProps> = ({ 
-  children, 
-  cols = 2, 
-  className = '', 
-  ...props 
-}) => {
+export const Grid: React.FC<GridProps> = ({ children, cols = 2, className = '', ...props }) => {
   // Use ds-* classes from the container's CSS
   const gridClass = {
     2: 'ds-grid-2',

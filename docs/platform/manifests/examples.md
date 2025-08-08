@@ -24,9 +24,7 @@ The absolute minimum required for a React MFE:
     "container": ">=1.0.0"
   },
   "requirements": {
-    "services": [
-      { "name": "logger" }
-    ]
+    "services": [{ "name": "logger" }]
   },
   "metadata": {
     "displayName": "Minimal React MFE",
@@ -68,9 +66,7 @@ For framework-agnostic MFEs:
   "name": "react19-dashboard",
   "version": "2.3.0",
   "url": "https://cdn.example.com/mfes/dashboard/2.3.0/bundle.js",
-  "alternativeUrls": [
-    "https://backup-cdn.example.com/mfes/dashboard/2.3.0/bundle.js"
-  ],
+  "alternativeUrls": ["https://backup-cdn.example.com/mfes/dashboard/2.3.0/bundle.js"],
   "dependencies": {
     "peer": {
       "react": "^19.0.0",
@@ -102,15 +98,8 @@ For framework-agnostic MFEs:
       "components": ["DashboardWidget", "ChartComponent"],
       "hooks": ["useDashboardData", "useMetrics"]
     },
-    "emits": [
-      "dashboard:data-loaded",
-      "dashboard:refresh-requested",
-      "dashboard:export-completed"
-    ],
-    "listens": [
-      "user:preferences-changed",
-      "app:theme-changed"
-    ],
+    "emits": ["dashboard:data-loaded", "dashboard:refresh-requested", "dashboard:export-completed"],
+    "listens": ["user:preferences-changed", "app:theme-changed"],
     "routes": [
       { "path": "/dashboard", "exact": true },
       { "path": "/dashboard/analytics", "exact": true },
@@ -185,17 +174,8 @@ For framework-agnostic MFEs:
       "services": ["cartAPI"],
       "components": ["ShoppingCart", "CartSummary"]
     },
-    "emits": [
-      "cart:item-added",
-      "cart:item-removed",
-      "cart:updated",
-      "cart:checkout-started"
-    ],
-    "listens": [
-      "product:selected",
-      "user:login",
-      "user:logout"
-    ],
+    "emits": ["cart:item-added", "cart:item-removed", "cart:updated", "cart:checkout-started"],
+    "listens": ["product:selected", "user:login", "user:logout"],
     "routes": [
       { "path": "/cart", "exact": true },
       { "path": "/checkout", "exact": false }
@@ -249,18 +229,12 @@ For framework-agnostic MFEs:
     }
   },
   "capabilities": {
-    "routes": [
-      { "path": "/admin", "exact": false }
-    ],
+    "routes": [{ "path": "/admin", "exact": false }],
     "emits": ["admin:settings-changed"],
     "listens": ["user:permissions-changed"]
   },
   "requirements": {
-    "services": [
-      { "name": "logger" },
-      { "name": "auth" },
-      { "name": "api" }
-    ],
+    "services": [{ "name": "logger" }, { "name": "auth" }, { "name": "api" }],
     "permissions": ["admin:access"]
   },
   "metadata": {
@@ -304,11 +278,7 @@ For framework-agnostic MFEs:
       "product:added-to-wishlist",
       "search:performed"
     ],
-    "listens": [
-      "cart:updated",
-      "user:preferences-changed",
-      "filters:changed"
-    ],
+    "listens": ["cart:updated", "user:preferences-changed", "filters:changed"],
     "routes": [
       { "path": "/products", "exact": false },
       { "path": "/search", "exact": true }
@@ -375,12 +345,7 @@ For framework-agnostic MFEs:
     "container": ">=1.0.0"
   },
   "capabilities": {
-    "emits": [
-      "chat:message-sent",
-      "chat:typing",
-      "chat:opened",
-      "chat:closed"
-    ],
+    "emits": ["chat:message-sent", "chat:typing", "chat:opened", "chat:closed"],
     "listens": [
       "chat:message-received",
       "chat:user-joined",
@@ -446,9 +411,7 @@ For framework-agnostic MFEs:
     }
   },
   "capabilities": {
-    "routes": [
-      { "path": "/dashboard", "exact": false }
-    ],
+    "routes": [{ "path": "/dashboard", "exact": false }],
     "features": ["multi-tenant", "customizable", "white-label"]
   },
   "requirements": {
@@ -549,9 +512,7 @@ For framework-agnostic MFEs:
   "name": "pwa-news-reader",
   "version": "2.0.0",
   "url": "https://cdn.news.com/mfes/reader/2.0.0/bundle.js",
-  "alternativeUrls": [
-    "/offline/news-reader.js"
-  ],
+  "alternativeUrls": ["/offline/news-reader.js"],
   "capabilities": {
     "features": ["offline", "push-notifications", "background-sync", "install-prompt"]
   },
@@ -607,10 +568,7 @@ For framework-agnostic MFEs:
     "features": ["debug-panel", "performance-monitor", "event-logger"]
   },
   "requirements": {
-    "services": [
-      { "name": "logger" },
-      { "name": "eventBus" }
-    ]
+    "services": [{ "name": "logger" }, { "name": "eventBus" }]
   },
   "config": {
     "loading": {
@@ -650,6 +608,7 @@ For framework-agnostic MFEs:
 - Keep manifests updated with your code changes
 
 For more information, see:
+
 - [Quick Start Guide](./quick-start.md)
 - [Specification](./specification.md)
 - [Migration Guide](./migration-guide.md)

@@ -11,12 +11,7 @@ const config = {
   outfile: path.join(__dirname, 'dist', 'mfe-react19-modal-demo.js'),
   platform: 'browser',
   target: 'es2020',
-  external: [
-    'react',
-    'react-dom',
-    'react/jsx-runtime',
-    'react/jsx-dev-runtime',
-  ],
+  external: ['react', 'react-dom', 'react/jsx-runtime', 'react/jsx-dev-runtime'],
   define: {
     'process.env.NODE_ENV': '"production"',
     global: 'globalThis',

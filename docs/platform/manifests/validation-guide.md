@@ -5,6 +5,7 @@ This guide explains how to validate MFE manifests during development and in CI/C
 ## Why Validate Manifests?
 
 Manifest validation helps:
+
 - **Catch errors early** - Before deployment or runtime
 - **Ensure compatibility** - Verify container requirements
 - **Maintain consistency** - Enforce standards across teams
@@ -51,7 +52,7 @@ const result = validator.validate(manifest);
 
 if (!result.valid) {
   console.error('Manifest validation failed:');
-  result.errors.forEach(error => {
+  result.errors.forEach((error) => {
     console.error(`- ${error.path}: ${error.message}`);
   });
   process.exit(1);
@@ -60,7 +61,7 @@ if (!result.valid) {
 // Check warnings
 if (result.warnings.length > 0) {
   console.warn('Manifest warnings:');
-  result.warnings.forEach(warning => {
+  result.warnings.forEach((warning) => {
     console.warn(`- ${warning.path}: ${warning.message}`);
   });
 }
@@ -99,26 +100,26 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - uses: actions/setup-node@v4
         with:
           node-version: '18'
-      
+
       - name: Install MFE Toolkit CLI
         run: npm install -g @mfe-toolkit/cli
-      
+
       - name: Find all manifests
         id: find-manifests
         run: |
           echo "manifests=$(find . -name 'manifest.json' -type f | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
-      
+
       - name: Validate manifests
         run: |
           for manifest in ${{ join(fromJson(steps.find-manifests.outputs.manifests), ' ') }}; do
             echo "Validating $manifest"
             mfe-toolkit manifest validate "$manifest" --verbose
           done
-      
+
       - name: Check manifest versions match package.json
         run: |
           for manifest in ${{ join(fromJson(steps.find-manifests.outputs.manifests), ' ') }}; do
@@ -147,7 +148,7 @@ validate-manifests:
     - find . -name 'manifest.json' -type f -exec mfe-toolkit manifest validate {} \;
   only:
     changes:
-      - "**/manifest.json"
+      - '**/manifest.json'
 ```
 
 ### Jenkins Pipeline
@@ -155,7 +156,7 @@ validate-manifests:
 ```groovy
 pipeline {
   agent any
-  
+
   stages {
     stage('Validate Manifests') {
       steps {
@@ -183,34 +184,32 @@ import type { Plugin } from 'vite';
 
 export function validateManifest(): Plugin {
   const validator = new ManifestValidator();
-  
+
   return {
     name: 'validate-manifest',
     buildStart() {
       try {
-        const manifest = JSON.parse(
-          fs.readFileSync('./manifest.json', 'utf8')
-        );
-        
+        const manifest = JSON.parse(fs.readFileSync('./manifest.json', 'utf8'));
+
         const result = validator.validate(manifest);
-        
+
         if (!result.valid) {
           throw new Error(
             'Manifest validation failed:\n' +
-            result.errors.map(e => `- ${e.path}: ${e.message}`).join('\n')
+              result.errors.map((e) => `- ${e.path}: ${e.message}`).join('\n')
           );
         }
-        
+
         if (result.warnings.length > 0) {
           console.warn(
             'Manifest warnings:\n' +
-            result.warnings.map(w => `- ${w.path}: ${w.message}`).join('\n')
+              result.warnings.map((w) => `- ${w.path}: ${w.message}`).join('\n')
           );
         }
       } catch (error) {
         throw new Error(`Failed to validate manifest: ${error.message}`);
       }
-    }
+    },
   };
 }
 
@@ -218,7 +217,7 @@ export function validateManifest(): Plugin {
 import { validateManifest } from './vite-plugin-validate-manifest';
 
 export default {
-  plugins: [validateManifest()]
+  plugins: [validateManifest()],
 };
 ```
 
@@ -233,38 +232,35 @@ class ValidateManifestPlugin {
     this.validator = new ManifestValidator();
     this.manifestPath = options.manifestPath || './manifest.json';
   }
-  
+
   apply(compiler) {
-    compiler.hooks.beforeCompile.tapAsync(
-      'ValidateManifestPlugin',
-      (params, callback) => {
-        try {
-          const manifest = JSON.parse(
-            fs.readFileSync(this.manifestPath, 'utf8')
-          );
-          
-          const result = this.validator.validate(manifest);
-          
-          if (!result.valid) {
-            callback(new Error(
+    compiler.hooks.beforeCompile.tapAsync('ValidateManifestPlugin', (params, callback) => {
+      try {
+        const manifest = JSON.parse(fs.readFileSync(this.manifestPath, 'utf8'));
+
+        const result = this.validator.validate(manifest);
+
+        if (!result.valid) {
+          callback(
+            new Error(
               'Manifest validation failed:\n' +
-              result.errors.map(e => `- ${e.path}: ${e.message}`).join('\n')
-            ));
-            return;
-          }
-          
-          callback();
-        } catch (error) {
-          callback(error);
+                result.errors.map((e) => `- ${e.path}: ${e.message}`).join('\n')
+            )
+          );
+          return;
         }
+
+        callback();
+      } catch (error) {
+        callback(error);
       }
-    );
+    });
   }
 }
 
 // webpack.config.js
 module.exports = {
-  plugins: [new ValidateManifestPlugin()]
+  plugins: [new ValidateManifestPlugin()],
 };
 ```
 
@@ -320,14 +316,16 @@ const requireRepository: ValidationRule = {
     if (!manifest.metadata?.repository) {
       return {
         valid: false,
-        errors: [{
-          path: 'metadata.repository',
-          message: 'Repository URL is required by organization policy'
-        }]
+        errors: [
+          {
+            path: 'metadata.repository',
+            message: 'Repository URL is required by organization policy',
+          },
+        ],
       };
     }
     return { valid: true, errors: [] };
-  }
+  },
 };
 
 // Custom rule: Enforce naming convention
@@ -337,19 +335,21 @@ const namingConvention: ValidationRule = {
     if (!manifest.name.startsWith('org-')) {
       return {
         valid: false,
-        errors: [{
-          path: 'name',
-          message: 'MFE name must start with "org-" prefix'
-        }]
+        errors: [
+          {
+            path: 'name',
+            message: 'MFE name must start with "org-" prefix',
+          },
+        ],
       };
     }
     return { valid: true, errors: [] };
-  }
+  },
 };
 
 // Use custom validator
 const validator = new ManifestValidator({
-  customRules: [requireRepository, namingConvention]
+  customRules: [requireRepository, namingConvention],
 });
 ```
 
@@ -384,6 +384,7 @@ const validator = new ManifestValidator({
 ### Common Errors and Solutions
 
 #### "Invalid manifest version"
+
 ```json
 // ❌ Wrong
 "version": "v1.0.0"
@@ -393,6 +394,7 @@ const validator = new ManifestValidator({
 ```
 
 #### "Invalid URL format"
+
 ```json
 // ❌ Wrong
 "url": "my-mfe.js"
@@ -402,6 +404,7 @@ const validator = new ManifestValidator({
 ```
 
 #### "Unknown service required"
+
 ```json
 // ❌ Wrong
 "services": [{ "name": "unknownService" }]
@@ -411,6 +414,7 @@ const validator = new ManifestValidator({
 ```
 
 #### "Invalid dependency version"
+
 ```json
 // ❌ Wrong
 "react": "latest"
@@ -431,17 +435,15 @@ const cache = new Map();
 const validator = new ManifestValidator();
 
 function validateWithCache(manifest: any) {
-  const hash = createHash('md5')
-    .update(JSON.stringify(manifest))
-    .digest('hex');
-  
+  const hash = createHash('md5').update(JSON.stringify(manifest)).digest('hex');
+
   if (cache.has(hash)) {
     return cache.get(hash);
   }
-  
+
   const result = validator.validate(manifest);
   cache.set(hash, result);
-  
+
   return result;
 }
 ```
@@ -455,20 +457,18 @@ import { glob } from 'glob';
 async function validateAllManifests() {
   const validator = new ManifestValidator();
   const files = await glob('**/manifest.json', {
-    ignore: '**/node_modules/**'
+    ignore: '**/node_modules/**',
   });
-  
+
   const results = await Promise.all(
     files.map(async (file) => {
-      const manifest = JSON.parse(
-        await fs.promises.readFile(file, 'utf8')
-      );
+      const manifest = JSON.parse(await fs.promises.readFile(file, 'utf8'));
       const result = validator.validate(manifest);
       return { file, result };
     })
   );
-  
-  const failures = results.filter(r => !r.result.valid);
+
+  const failures = results.filter((r) => !r.result.valid);
   if (failures.length > 0) {
     console.error('Validation failures:', failures);
     process.exit(1);
@@ -485,6 +485,7 @@ async function validateAllManifests() {
 5. **Document validation requirements** for teams
 
 For more information:
+
 - [Specification](./specification.md) - Complete manifest format
 - [Migration Guide](./migration-guide.md) - Upgrading manifests
 - [Examples](./examples.md) - Real-world manifests

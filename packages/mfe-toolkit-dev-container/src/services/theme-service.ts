@@ -36,7 +36,7 @@ export class DevThemeService implements ThemeService {
 
   onThemeChange(callback: (theme: Theme) => void): () => void {
     this.listeners.add(callback);
-    
+
     // Return unsubscribe function
     return () => {
       this.listeners.delete(callback);
@@ -45,25 +45,25 @@ export class DevThemeService implements ThemeService {
 
   private applyTheme(theme: Theme): void {
     if (typeof document === 'undefined') return;
-    
+
     const root = document.documentElement;
-    
+
     if (theme === 'auto') {
       // Use system preference
       const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
       theme = prefersDark ? 'dark' : 'light';
     }
-    
+
     // Apply theme class to root
     root.classList.remove('light', 'dark');
     root.classList.add(theme);
-    
+
     // Also set data attribute for compatibility
     root.setAttribute('data-theme', theme);
   }
 
   private notifyListeners(theme: Theme): void {
-    this.listeners.forEach(listener => {
+    this.listeners.forEach((listener) => {
       try {
         listener(theme);
       } catch (error) {

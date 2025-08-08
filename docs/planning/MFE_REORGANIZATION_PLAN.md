@@ -1,6 +1,7 @@
 # MFE Reorganization Plan
 
 ## Current Issues
+
 - Service Explorer MFEs are monolithic and demonstrate everything at once
 - Difficult to understand individual service capabilities
 - No clear demonstration of cross-framework compatibility
@@ -9,11 +10,13 @@
 ## New Approach: Cross-Framework Service Demonstrations
 
 ### Core Concept
+
 Instead of creating service-specific MFEs, we'll create container pages that demonstrate each service across all supported frameworks (React 19, React 17, Vue, Vanilla TS) simultaneously.
 
 ### 1. Service Demo Pages (Container)
 
 #### Modal Service Demo Page (`/services/modal`)
+
 - Loads 4 MFEs side-by-side: React 19, React 17, Vue, Vanilla TS
 - Each MFE demonstrates the same modal functionality:
   - **Simple Alert**: Basic modal with OK button
@@ -24,6 +27,7 @@ Instead of creating service-specific MFEs, we'll create container pages that dem
   - **Nested Modals**: Modal within modal patterns
 
 #### Notification Service Demo Page (`/services/notification`)
+
 - Loads 4 framework MFEs demonstrating notifications:
   - **Toast Types**: Success, error, warning, info
   - **Positions**: Different notification positions
@@ -33,6 +37,7 @@ Instead of creating service-specific MFEs, we'll create container pages that dem
   - **Custom Content**: Rich notification content
 
 #### Logger Service Demo Page (`/services/logger`)
+
 - Loads 4 framework MFEs demonstrating logging:
   - **Log Levels**: Debug, info, warn, error
   - **Performance Tracking**: Measure operations
@@ -41,6 +46,7 @@ Instead of creating service-specific MFEs, we'll create container pages that dem
   - **Real-time Updates**: Live log viewing
 
 #### Auth Service Demo Page (`/services/auth`)
+
 - Loads 4 framework MFEs demonstrating authentication:
   - **Session Display**: Current user info
   - **Permission Checks**: Role-based access
@@ -48,6 +54,7 @@ Instead of creating service-specific MFEs, we'll create container pages that dem
   - **Protected Content**: Access control
 
 #### Error Service Demo Page (`/services/error`)
+
 - Loads 4 framework MFEs demonstrating error handling:
   - **Throwing Errors**: Controlled error generation
   - **Error Reporting**: Structured error capture
@@ -55,6 +62,7 @@ Instead of creating service-specific MFEs, we'll create container pages that dem
   - **User Feedback**: Error messaging
 
 #### Theme Service Demo Page (`/services/theme`)
+
 - Loads 4 framework MFEs demonstrating theme service:
   - **Current Theme**: Display active theme
   - **Theme Switching**: Toggle between themes
@@ -91,14 +99,17 @@ apps/
 Keep the existing approach for complete applications:
 
 #### mfe-user-profile
+
 - Uses: Auth, Modal, Notification, Theme
 - Features: View profile, edit in modal, save notifications, theme preferences
 
 #### mfe-shopping-cart
+
 - Uses: Event Bus, State, Notifications
 - Features: Add/remove items, cross-MFE communication, checkout flow
 
 #### mfe-admin-dashboard
+
 - Uses: All services
 - Features: User management, system monitoring, settings
 
@@ -130,12 +141,14 @@ MFE Platform
 ### 5. Implementation Approach: Iterative with Feedback
 
 #### Step-by-Step Process
+
 1. **Implement ONE service demo completely**
 2. **Get feedback and adjust approach**
 3. **Apply learnings to next service**
 4. **Iterate until pattern is refined**
 
 #### Phase 1: Modal Service Demo (Proof of Concept)
+
 1. Create Modal Service Demo page in container
 2. Create React 19 modal demo MFE
 3. **STOP - Get feedback**
@@ -144,11 +157,13 @@ MFE Platform
 6. Update approach based on feedback
 
 #### Phase 2: Apply Learnings
+
 1. Choose next service based on Phase 1 feedback
 2. Implement with improvements from Phase 1
 3. **Get feedback before proceeding**
 
 #### Phase 3: Scale Pattern
+
 1. Once pattern is validated, implement remaining services
 2. Continue getting feedback at each milestone
 3. Adjust plan as needed
@@ -164,6 +179,7 @@ MFE Platform
 ### 7. Technical Implementation Details
 
 #### Service Demo Page Structure
+
 ```tsx
 // Example: ModalServiceDemoPage.tsx
 <div className="grid grid-cols-2 gap-4">
@@ -175,7 +191,9 @@ MFE Platform
 ```
 
 #### Minimal MFE Structure
+
 Each framework-specific MFE should:
+
 - Be under 200 lines of code
 - Focus on demonstrating one service
 - Use the same UI patterns for consistency

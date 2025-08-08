@@ -7,6 +7,7 @@ Cards are container components that group related content and actions. They prov
 ## CSS Classes
 
 ### Base Card
+
 ```css
 .ds-card {
   @apply border rounded-lg p-6 bg-card;
@@ -14,11 +15,18 @@ Cards are container components that group related content and actions. They prov
 ```
 
 ### Variants
+
 ```css
-.ds-card-compact  { @apply p-4; }           /* Less padding */
-.ds-card-padded   { @apply p-8; }           /* More padding */
-.ds-card-elevated { @apply shadow-md; }     /* With shadow */
-.ds-card-interactive { 
+.ds-card-compact {
+  @apply p-4;
+} /* Less padding */
+.ds-card-padded {
+  @apply p-8;
+} /* More padding */
+.ds-card-elevated {
+  @apply shadow-md;
+} /* With shadow */
+.ds-card-interactive {
   @apply hover:shadow-lg transition-shadow cursor-pointer;
 }
 ```
@@ -26,6 +34,7 @@ Cards are container components that group related content and actions. They prov
 ## Usage
 
 ### Basic Card
+
 ```html
 <div class="ds-card">
   <h3 class="ds-card-title">Card Title</h3>
@@ -34,6 +43,7 @@ Cards are container components that group related content and actions. They prov
 ```
 
 ### Card with Actions
+
 ```html
 <div class="ds-card">
   <div class="flex justify-between items-start mb-4">
@@ -49,6 +59,7 @@ Cards are container components that group related content and actions. They prov
 ```
 
 ### Interactive Card
+
 ```html
 <div class="ds-card ds-card-interactive" onclick="handleClick()">
   <h3 class="ds-card-title">Click me</h3>
@@ -64,19 +75,21 @@ import { Card } from '@mfe/design-system-react';
 <Card variant="elevated">
   <h3 class="ds-card-title">React Card</h3>
   <p>Content goes here</p>
-</Card>
+</Card>;
 ```
 
 ### Props
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| variant | 'default' \| 'compact' \| 'elevated' \| 'interactive' | 'default' | Card style variant |
-| className | string | '' | Additional CSS classes |
-| onClick | function | - | Click handler (interactive variant) |
+
+| Prop      | Type                                                  | Default   | Description                         |
+| --------- | ----------------------------------------------------- | --------- | ----------------------------------- |
+| variant   | 'default' \| 'compact' \| 'elevated' \| 'interactive' | 'default' | Card style variant                  |
+| className | string                                                | ''        | Additional CSS classes              |
+| onClick   | function                                              | -         | Click handler (interactive variant) |
 
 ## Examples
 
 ### Stats Card
+
 ```html
 <div class="ds-card-compact">
   <div class="flex justify-between items-center">
@@ -92,15 +105,14 @@ import { Card } from '@mfe/design-system-react';
 ```
 
 ### Feature Card
+
 ```html
 <div class="ds-card">
   <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
     <svg class="text-primary"><!-- Icon --></svg>
   </div>
   <h3 class="ds-card-title mb-2">Feature Name</h3>
-  <p class="text-sm text-muted-foreground">
-    Description of the feature and its benefits.
-  </p>
+  <p class="text-sm text-muted-foreground">Description of the feature and its benefits.</p>
 </div>
 ```
 

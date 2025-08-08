@@ -237,4 +237,3 @@ export interface ReactAdapter extends FrameworkAdapter {
   useGlobalStateListener: typeof useGlobalStateListener;
   useMFERegistration: typeof useMFERegistration;
 }
-

@@ -24,10 +24,7 @@ Create a `manifest.json` file in your MFE's root directory:
     "container": ">=1.0.0"
   },
   "requirements": {
-    "services": [
-      { "name": "logger" },
-      { "name": "eventBus" }
-    ]
+    "services": [{ "name": "logger" }, { "name": "eventBus" }]
   },
   "metadata": {
     "displayName": "My First MFE",
@@ -40,6 +37,7 @@ Create a `manifest.json` file in your MFE's root directory:
 ### Step 2: Understand Required Fields
 
 Every manifest must have:
+
 - `name` - Unique identifier for your MFE
 - `version` - Semantic version (e.g., "1.0.0")
 - `url` - Where to load your MFE from
@@ -110,11 +108,7 @@ Every manifest must have:
     }
   },
   "requirements": {
-    "services": [
-      { "name": "logger" },
-      { "name": "eventBus" },
-      { "name": "auth" }
-    ]
+    "services": [{ "name": "logger" }, { "name": "eventBus" }, { "name": "auth" }]
   },
   "metadata": {
     "displayName": "Shop",
@@ -138,9 +132,7 @@ Every manifest must have:
     "container": ">=1.0.0"
   },
   "requirements": {
-    "services": [
-      { "name": "logger" }
-    ]
+    "services": [{ "name": "logger" }]
   },
   "metadata": {
     "displayName": "Widget",
@@ -159,15 +151,8 @@ Specify which events your MFE emits and listens to:
 ```json
 {
   "capabilities": {
-    "emits": [
-      "user:login",
-      "user:logout",
-      "user:profile-updated"
-    ],
-    "listens": [
-      "app:theme-changed",
-      "app:locale-changed"
-    ]
+    "emits": ["user:login", "user:logout", "user:profile-updated"],
+    "listens": ["app:theme-changed", "app:locale-changed"]
   }
 }
 ```
@@ -214,11 +199,11 @@ Control how your MFE loads:
 {
   "config": {
     "loading": {
-      "timeout": 30000,      // 30 seconds timeout
-      "retries": 3,          // Try 3 times
-      "retryDelay": 1000,    // Wait 1 second between retries
-      "priority": 10,        // Higher priority loads first
-      "preload": true        // Load before needed
+      "timeout": 30000, // 30 seconds timeout
+      "retries": 3, // Try 3 times
+      "retryDelay": 1000, // Wait 1 second between retries
+      "priority": 10, // Higher priority loads first
+      "preload": true // Load before needed
     }
   }
 }
@@ -232,9 +217,9 @@ Configure runtime characteristics:
 {
   "config": {
     "runtime": {
-      "singleton": true,     // Only one instance
-      "keepAlive": true,     // Don't unmount when hidden
-      "isolation": "none"    // No sandboxing
+      "singleton": true, // Only one instance
+      "keepAlive": true, // Don't unmount when hidden
+      "isolation": "none" // No sandboxing
     }
   }
 }
@@ -293,12 +278,12 @@ export default defineConfig({
       entry: './src/main.js',
       name: manifest.name,
       fileName: manifest.name,
-      formats: ['es']
-    }
+      formats: ['es'],
+    },
   },
   define: {
-    '__MFE_MANIFEST__': JSON.stringify(manifest)
-  }
+    __MFE_MANIFEST__: JSON.stringify(manifest),
+  },
 });
 ```
 
@@ -313,14 +298,14 @@ module.exports = {
   output: {
     filename: `${manifest.name}.js`,
     library: {
-      type: 'module'
-    }
+      type: 'module',
+    },
   },
   plugins: [
     new webpack.DefinePlugin({
-      '__MFE_MANIFEST__': JSON.stringify(manifest)
-    })
-  ]
+      __MFE_MANIFEST__: JSON.stringify(manifest),
+    }),
+  ],
 };
 ```
 
@@ -347,9 +332,7 @@ module.exports = {
   "name": "my-mfe",
   "version": "1.0.0",
   "url": "https://cdn.example.com/mfes/my-mfe/1.0.0/bundle.js",
-  "alternativeUrls": [
-    "https://backup-cdn.example.com/mfes/my-mfe/1.0.0/bundle.js"
-  ],
+  "alternativeUrls": ["https://backup-cdn.example.com/mfes/my-mfe/1.0.0/bundle.js"],
   "security": {
     "integrity": "sha384-...",
     "csp": {

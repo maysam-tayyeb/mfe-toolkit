@@ -131,38 +131,48 @@ export const DashboardPage: React.FC = () => {
               <div className="ds-status-dot ds-status-online"></div>
               <span className="text-sm font-medium">Container App</span>
             </div>
-            <Badge variant="default" className="text-xs">Running</Badge>
+            <Badge variant="default" className="text-xs">
+              Running
+            </Badge>
           </div>
           <div className="flex items-center justify-between p-3 ds-card-compact">
             <div className="flex items-center gap-3">
               <div className="ds-status-dot ds-status-online"></div>
               <span className="text-sm font-medium">Event Bus</span>
             </div>
-            <Badge variant="default" className="text-xs">Active</Badge>
+            <Badge variant="default" className="text-xs">
+              Active
+            </Badge>
           </div>
           <div className="flex items-center justify-between p-3 ds-card-compact">
             <div className="flex items-center gap-3">
               <div className="ds-status-dot ds-status-online"></div>
               <span className="text-sm font-medium">Auth Service</span>
             </div>
-            <Badge variant="default" className="text-xs">Connected</Badge>
+            <Badge variant="default" className="text-xs">
+              Connected
+            </Badge>
           </div>
           <div className="flex items-center justify-between p-3 ds-card-compact">
             <div className="flex items-center gap-3">
               <div className="ds-status-dot ds-status-online"></div>
               <span className="text-sm font-medium">Modal Service</span>
             </div>
-            <Badge variant="default" className="text-xs">Ready</Badge>
+            <Badge variant="default" className="text-xs">
+              Ready
+            </Badge>
           </div>
           <div className="flex items-center justify-between p-3 ds-card-compact">
             <div className="flex items-center gap-3">
               <div className="ds-status-dot ds-status-online"></div>
               <span className="text-sm font-medium">Notification Service</span>
             </div>
-            <Badge variant="default" className="text-xs">Active</Badge>
+            <Badge variant="default" className="text-xs">
+              Active
+            </Badge>
           </div>
         </div>
-      )
+      ),
     },
     {
       id: 'configuration',
@@ -194,7 +204,7 @@ export const DashboardPage: React.FC = () => {
             <p className="text-sm font-medium">V2 Manifest</p>
           </div>
         </div>
-      )
+      ),
     },
     {
       id: 'features',
@@ -226,8 +236,8 @@ export const DashboardPage: React.FC = () => {
             <span className="text-sm">Zero Global Pollution</span>
           </div>
         </div>
-      )
-    }
+      ),
+    },
   ];
 
   if (isLoading) {
@@ -284,9 +294,9 @@ export const DashboardPage: React.FC = () => {
         <MetricCard
           label="Total MFEs"
           value={summary.total}
-          trend={{ 
-            value: `${summary.compatible} compatible`, 
-            direction: summary.warnings > 0 ? 'neutral' : 'up' 
+          trend={{
+            value: `${summary.compatible} compatible`,
+            direction: summary.warnings > 0 ? 'neutral' : 'up',
           }}
           icon={<Package className="h-4 w-4" />}
         />
@@ -434,20 +444,27 @@ export const DashboardPage: React.FC = () => {
             const hasWarnings = result.warnings.length > 0;
 
             return (
-              <div 
-                key={name} 
+              <div
+                key={name}
                 className={`ds-card-padded ${
-                  hasErrors ? 'ds-border-accent-danger border-2' : 
-                  hasWarnings ? 'ds-border-accent-warning' : ''
+                  hasErrors
+                    ? 'ds-border-accent-danger border-2'
+                    : hasWarnings
+                      ? 'ds-border-accent-warning'
+                      : ''
                 }`}
               >
                 <div className="flex items-start justify-between ds-mb-sm">
                   <div className="flex items-center gap-3">
-                    <Package className={`h-5 w-5 ${
-                      hasErrors ? 'ds-icon-danger' :
-                      hasWarnings ? 'ds-icon-warning' :
-                      'ds-icon-primary'
-                    }`} />
+                    <Package
+                      className={`h-5 w-5 ${
+                        hasErrors
+                          ? 'ds-icon-danger'
+                          : hasWarnings
+                            ? 'ds-icon-warning'
+                            : 'ds-icon-primary'
+                      }`}
+                    />
                     <div>
                       <div className="flex items-center gap-2">
                         <h3 className="ds-card-title">
@@ -494,21 +511,23 @@ export const DashboardPage: React.FC = () => {
                   )}
                 </div>
 
-                {isV2 && manifest.requirements?.services && manifest.requirements.services.length > 0 && (
-                  <div className="mt-3">
-                    <p className="text-xs ds-text-muted mb-2">Required Services</p>
-                    <div className="flex flex-wrap gap-2">
-                      {manifest.requirements.services
-                        .filter((s) => !s.optional)
-                        .map((service) => (
-                          <Badge key={service.name} variant="outline" className="text-xs">
-                            {service.name}
-                            {service.version && ` (${service.version})`}
-                          </Badge>
-                        ))}
+                {isV2 &&
+                  manifest.requirements?.services &&
+                  manifest.requirements.services.length > 0 && (
+                    <div className="mt-3">
+                      <p className="text-xs ds-text-muted mb-2">Required Services</p>
+                      <div className="flex flex-wrap gap-2">
+                        {manifest.requirements.services
+                          .filter((s) => !s.optional)
+                          .map((service) => (
+                            <Badge key={service.name} variant="outline" className="text-xs">
+                              {service.name}
+                              {service.version && ` (${service.version})`}
+                            </Badge>
+                          ))}
+                      </div>
                     </div>
-                  </div>
-                )}
+                  )}
 
                 {(hasErrors || hasWarnings) && (
                   <div className="mt-3 pt-3 border-t ds-border-accent-neutral">

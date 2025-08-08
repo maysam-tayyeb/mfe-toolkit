@@ -71,6 +71,7 @@ import('remoteMFE/Component'); // Needs configuration at build time
 
 **Context**:
 Originally services and state were exposed via multiple global window properties:
+
 - `window.__MFE_SERVICES__` - Service instances
 - `window.__EVENT_BUS__` - Event bus instance
 - `window.__REDUX_STORE__` - Redux store
@@ -99,6 +100,7 @@ export default {
 ```
 
 **Completion Notes** (August 2025):
+
 - All window pollution has been removed from production code
 - Test files now export mocks instead of polluting window
 - Debugging uses console logging instead of window exposure
@@ -154,14 +156,14 @@ MFEs need both container-provided UI services and shared application state, but 
 const services = {
   modal: { open, close },
   notification: { show, success, error },
-  auth: { getSession, isAuthenticated }
+  auth: { getSession, isAuthenticated },
 };
 
 // Application state (business data)
 const stateManager = createStateManager({
   cart: [],
   user: null,
-  preferences: {}
+  preferences: {},
 });
 ```
 

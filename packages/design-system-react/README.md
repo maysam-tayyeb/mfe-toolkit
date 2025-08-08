@@ -35,19 +35,16 @@ A prominent header section with gradient background and metrics display.
 ```tsx
 import { Hero, MetricCard } from '@mfe/design-system-react';
 
-<Hero
-  title="Dashboard"
-  description="Monitor your application performance"
-  gradient={true}
->
+<Hero title="Dashboard" description="Monitor your application performance" gradient={true}>
   <div className="grid grid-cols-4 gap-4">
     <MetricCard label="Users" value={42} />
     <MetricCard label="Uptime" value="99.9%" />
   </div>
-</Hero>
+</Hero>;
 ```
 
 **Props:**
+
 - `title` (string, required) - Main heading text
 - `description` (string) - Subtitle text
 - `gradient` (boolean) - Enable gradient background
@@ -66,10 +63,11 @@ import { TrendingUp } from 'lucide-react';
   value="$42,000"
   trend={{ value: '+12%', direction: 'up' }}
   icon={<TrendingUp className="h-4 w-4" />}
-/>
+/>;
 ```
 
 **Props:**
+
 - `label` (string, required) - Metric description
 - `value` (string | number, required) - Metric value
 - `trend` (object) - Trend indicator with value and direction
@@ -87,23 +85,24 @@ const tabs = [
   {
     id: 'overview',
     label: 'Overview',
-    content: <OverviewPanel />
+    content: <OverviewPanel />,
   },
   {
     id: 'settings',
     label: 'Settings',
-    content: <SettingsPanel />
-  }
+    content: <SettingsPanel />,
+  },
 ];
 
-<TabGroup 
-  tabs={tabs} 
+<TabGroup
+  tabs={tabs}
   defaultTab="overview"
   onChange={(tabId) => console.log('Tab changed:', tabId)}
-/>
+/>;
 ```
 
 **Props:**
+
 - `tabs` (Array, required) - Tab configuration objects
 - `defaultTab` (string) - Initially active tab ID
 - `onChange` (function) - Callback when tab changes
@@ -121,15 +120,12 @@ import { Inbox } from 'lucide-react';
   title="No messages"
   description="When you receive messages, they'll appear here"
   icon={<Inbox className="h-16 w-16" />}
-  action={
-    <button className="ds-button-primary">
-      Send First Message
-    </button>
-  }
-/>
+  action={<button className="ds-button-primary">Send First Message</button>}
+/>;
 ```
 
 **Props:**
+
 - `title` (string, required) - Empty state heading
 - `description` (string) - Additional context
 - `icon` (ReactNode) - Visual element
@@ -142,14 +138,11 @@ Loading indicator with optional text.
 ```tsx
 import { LoadingState } from '@mfe/design-system-react';
 
-<LoadingState 
-  text="Loading dashboard..."
-  subtext="This may take a few seconds"
-  size="large"
-/>
+<LoadingState text="Loading dashboard..." subtext="This may take a few seconds" size="large" />;
 ```
 
 **Props:**
+
 - `text` (string) - Primary loading message
 - `subtext` (string) - Additional context
 - `size` ('default' | 'large') - Spinner size
@@ -168,25 +161,22 @@ const events = [
     timestamp: new Date(),
     type: 'user:login',
     message: 'User logged in',
-    severity: 'info'
+    severity: 'info',
   },
   {
     id: '2',
     timestamp: new Date(),
     type: 'system:error',
     message: 'Connection failed',
-    severity: 'error'
-  }
+    severity: 'error',
+  },
 ];
 
-<EventLog 
-  events={events}
-  maxHeight="400px"
-  emptyMessage="No events yet"
-/>
+<EventLog events={events} maxHeight="400px" emptyMessage="No events yet" />;
 ```
 
 **Props:**
+
 - `events` (Array, required) - Event objects to display
 - `maxHeight` (string) - Maximum height before scrolling
 - `emptyMessage` (string) - Message when no events
@@ -219,12 +209,12 @@ function Dashboard() {
           <MetricCard label="Revenue" value="$98K" />
         </div>
       </Hero>
-      
+
       <div className="ds-card-padded ds-mt-lg">
-        <TabGroup 
+        <TabGroup
           tabs={[
             { id: 'chart', label: 'Chart', content: <Chart /> },
-            { id: 'table', label: 'Table', content: <Table /> }
+            { id: 'table', label: 'Table', content: <Table /> },
           ]}
         />
       </div>
@@ -243,19 +233,20 @@ import type { HeroProps, MetricCardProps } from '@mfe/design-system-react';
 const heroConfig: HeroProps = {
   title: 'Dashboard',
   description: 'Welcome back',
-  gradient: true
+  gradient: true,
 };
 
 const metricConfig: MetricCardProps = {
   label: 'Total Sales',
   value: 42000,
-  trend: { value: '+12%', direction: 'up' }
+  trend: { value: '+12%', direction: 'up' },
 };
 ```
 
 ## Architecture
 
 These components are thin wrappers that apply the design system CSS classes. They:
+
 - Do NOT include any CSS files
 - Assume the container provides the design system styles globally
 - Use the `ds-*` prefixed classes exclusively

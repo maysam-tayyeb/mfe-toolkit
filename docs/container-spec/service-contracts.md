@@ -139,7 +139,7 @@ services.modal.open({
   content: 'Are you sure you want to proceed?',
   size: 'sm',
   closable: true,
-  onClose: () => console.log('Modal closed')
+  onClose: () => console.log('Modal closed'),
 });
 ```
 
@@ -176,7 +176,7 @@ services.notification.show({
   title: 'Processing',
   message: 'This may take a few moments',
   type: 'info',
-  duration: 5000
+  duration: 5000,
 });
 ```
 
@@ -207,7 +207,7 @@ try {
   services.errorReporter.reportError(error, {
     mfeId: 'example-mfe',
     action: 'riskyOperation',
-    metadata: { attemptCount: 3 }
+    metadata: { attemptCount: 3 },
   });
 }
 ```
@@ -258,34 +258,34 @@ const mockServices = {
     debug: console.debug,
     info: console.info,
     warn: console.warn,
-    error: console.error
+    error: console.error,
   },
   eventBus: {
     emit: () => {},
     on: () => () => {},
     off: () => {},
-    once: () => {}
+    once: () => {},
   },
   auth: {
     getSession: () => null,
     isAuthenticated: () => false,
     hasPermission: () => false,
-    hasRole: () => false
+    hasRole: () => false,
   },
   modal: {
     open: (config) => alert(config.title),
-    close: () => {}
+    close: () => {},
   },
   notification: {
     show: (config) => console.log('Notification:', config),
     success: (title, message) => console.log('Success:', title, message),
     error: (title, message) => console.log('Error:', title, message),
     warning: (title, message) => console.log('Warning:', title, message),
-    info: (title, message) => console.log('Info:', title, message)
+    info: (title, message) => console.log('Info:', title, message),
   },
   errorReporter: {
     reportError: (error, context) => console.error('Error:', error, context),
-    reportWarning: (message, context) => console.warn('Warning:', message, context)
-  }
+    reportWarning: (message, context) => console.warn('Warning:', message, context),
+  },
 };
 ```

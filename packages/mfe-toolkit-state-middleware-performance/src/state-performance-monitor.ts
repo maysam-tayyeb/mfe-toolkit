@@ -77,14 +77,14 @@ export class StatePerformanceMonitor {
   trackStateUpdate(duration: number) {
     this.metrics.stateUpdates++;
     this.updateTimes.push(duration);
-    
+
     // Keep only last 100 update times
     if (this.updateTimes.length > 100) {
       this.updateTimes.shift();
     }
-    
+
     // Calculate average
-    this.metrics.averageUpdateTime = 
+    this.metrics.averageUpdateTime =
       this.updateTimes.reduce((a, b) => a + b, 0) / this.updateTimes.length;
   }
 
@@ -103,8 +103,9 @@ export class StatePerformanceMonitor {
       ...this.metrics,
       sessionDurationMinutes: (this.metrics.sessionDuration / 60000).toFixed(2),
       averageUpdateTimeMs: this.metrics.averageUpdateTime.toFixed(2),
-      memoryUsageMB: this.metrics.memoryUsage ? 
-        (this.metrics.memoryUsage / 1048576).toFixed(2) : 'N/A',
+      memoryUsageMB: this.metrics.memoryUsage
+        ? (this.metrics.memoryUsage / 1048576).toFixed(2)
+        : 'N/A',
     });
 
     // In production, send to analytics service
@@ -115,14 +116,14 @@ export class StatePerformanceMonitor {
       try {
         const key = `state-perf-${this.metrics.implementation}-${Date.now()}`;
         localStorage.setItem(key, JSON.stringify(this.metrics));
-        
+
         // Keep only last 5 sessions
         const perfKeys = Object.keys(localStorage)
-          .filter(k => k.startsWith('state-perf-'))
+          .filter((k) => k.startsWith('state-perf-'))
           .sort();
-        
+
         if (perfKeys.length > 5) {
-          perfKeys.slice(0, -5).forEach(k => localStorage.removeItem(k));
+          perfKeys.slice(0, -5).forEach((k) => localStorage.removeItem(k));
         }
       } catch (e) {
         // Ignore storage errors
@@ -151,21 +152,18 @@ export function getStatePerformanceMonitor(): StatePerformanceMonitor | null {
 }
 
 // Helper to measure state update performance
-export function measureStateUpdate<T>(
-  operation: () => T,
-  operationName?: string
-): T {
+export function measureStateUpdate<T>(operation: () => T, operationName?: string): T {
   const start = performance.now();
   const result = operation();
   const duration = performance.now() - start;
-  
+
   if (monitor) {
     monitor.trackStateUpdate(duration);
     if (operationName) {
       monitor.logCustomMetric(`Operation: ${operationName}`, `${duration.toFixed(2)}ms`);
     }
   }
-  
+
   return result;
 }
 
@@ -176,44 +174,49 @@ export function getPerformanceSummary(): Record<string, any> {
   }
 
   const keys = Object.keys(localStorage)
-    .filter(k => k.startsWith('state-perf-'))
+    .filter((k) => k.startsWith('state-perf-'))
     .sort()
     .reverse()
     .slice(0, 10);
-  
-  const sessions = keys.map(key => {
-    try {
-      return JSON.parse(localStorage.getItem(key) || '{}');
-    } catch {
-      return null;
-    }
-  }).filter(Boolean);
-  
+
+  const sessions = keys
+    .map((key) => {
+      try {
+        return JSON.parse(localStorage.getItem(key) || '{}');
+      } catch {
+        return null;
+      }
+    })
+    .filter(Boolean);
+
   // Group by implementation
-  const byImplementation = sessions.reduce((acc, session) => {
-    const impl = session.implementation;
-    if (!acc[impl]) {
-      acc[impl] = {
-        sessions: 0,
-        totalUpdates: 0,
-        avgUpdateTime: 0,
-        totalErrors: 0,
-      };
-    }
-    
-    acc[impl].sessions++;
-    acc[impl].totalUpdates += session.stateUpdates || 0;
-    acc[impl].avgUpdateTime += session.averageUpdateTime || 0;
-    acc[impl].totalErrors += (session.errors || []).length;
-    
-    return acc;
-  }, {} as Record<string, any>);
-  
+  const byImplementation = sessions.reduce(
+    (acc, session) => {
+      const impl = session.implementation;
+      if (!acc[impl]) {
+        acc[impl] = {
+          sessions: 0,
+          totalUpdates: 0,
+          avgUpdateTime: 0,
+          totalErrors: 0,
+        };
+      }
+
+      acc[impl].sessions++;
+      acc[impl].totalUpdates += session.stateUpdates || 0;
+      acc[impl].avgUpdateTime += session.averageUpdateTime || 0;
+      acc[impl].totalErrors += (session.errors || []).length;
+
+      return acc;
+    },
+    {} as Record<string, any>
+  );
+
   // Calculate averages
-  Object.keys(byImplementation).forEach(impl => {
+  Object.keys(byImplementation).forEach((impl) => {
     const data = byImplementation[impl];
     data.avgUpdateTime = data.avgUpdateTime / data.sessions;
   });
-  
+
   return byImplementation;
 }

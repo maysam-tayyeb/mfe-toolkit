@@ -15,7 +15,7 @@ export class DevNotificationService implements NotificationService {
 
   private ensureNotificationContainer(): void {
     if (typeof document === 'undefined') return;
-    
+
     if (!this.notificationContainer) {
       this.notificationContainer = document.getElementById('dev-notification-container');
       if (!this.notificationContainer) {
@@ -40,7 +40,7 @@ export class DevNotificationService implements NotificationService {
     options?: NotificationOptions
   ): string {
     const notificationId = `notification-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-    
+
     const notification = document.createElement('div');
     notification.id = notificationId;
     notification.style.cssText = `
@@ -48,21 +48,21 @@ export class DevNotificationService implements NotificationService {
       margin-bottom: 0.5rem;
       animation: slideIn 0.3s ease-out;
     `;
-    
+
     const bgColors = {
       info: 'bg-blue-500',
       success: 'bg-green-500',
       warning: 'bg-yellow-500',
       error: 'bg-red-500',
     };
-    
+
     const icons = {
       info: 'ℹ️',
       success: '✅',
       warning: '⚠️',
       error: '❌',
     };
-    
+
     notification.className = `${bgColors[type]} text-white px-4 py-3 rounded-lg shadow-lg flex items-start gap-3 max-w-sm`;
     notification.innerHTML = `
       <span class="text-xl">${icons[type]}</span>
@@ -72,24 +72,24 @@ export class DevNotificationService implements NotificationService {
       </div>
       <button class="text-white hover:text-gray-200" id="${notificationId}-close">✕</button>
     `;
-    
+
     this.notificationContainer?.appendChild(notification);
     this.notifications.set(notificationId, notification);
-    
+
     // Add close button handler
     const closeBtn = notification.querySelector(`#${notificationId}-close`);
     if (closeBtn) {
       closeBtn.addEventListener('click', () => this.dismiss(notificationId));
     }
-    
+
     // Auto dismiss
     const duration = options?.duration ?? 5000;
     if (duration > 0) {
       setTimeout(() => this.dismiss(notificationId), duration);
     }
-    
+
     console.log(`[DevNotificationService] ${type}:`, title, message);
-    
+
     return notificationId;
   }
 

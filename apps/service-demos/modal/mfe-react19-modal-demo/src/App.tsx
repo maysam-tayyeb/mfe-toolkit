@@ -6,60 +6,41 @@ interface AppProps {
 }
 
 function App({ services }: AppProps) {
-  const [events, setEvents] = useState<string[]>([]);
   const { modal, notification } = services;
 
-  const addEvent = (event: string) => {
-    setEvents((prev) => [...prev.slice(-4), event]);
-  };
-
   const handleSimpleAlert = () => {
-    addEvent('Opening simple alert');
     modal.open({
       title: 'Simple Alert',
       content: 'This is a simple alert modal with just an OK button.',
       onClose: () => {
-        addEvent('Simple alert closed');
         notification.info('Alert Closed', 'The simple alert was dismissed');
       },
     });
   };
 
   const handleConfirmation = () => {
-    addEvent('Opening confirmation dialog');
     modal.open({
       title: 'Confirm Action',
       content: 'Are you sure you want to proceed with this action?',
       onConfirm: () => {
-        addEvent('Action confirmed');
         notification.success('Confirmed', 'Action was confirmed successfully');
       },
       onClose: () => {
-        addEvent('Action cancelled');
         notification.warning('Cancelled', 'Action was cancelled');
       },
     });
   };
 
   const handleFormModal = () => {
-    addEvent('Opening form modal');
     const formContent = (
       <div className="space-y-4">
         <div>
           <label className="ds-label">Name</label>
-          <input
-            type="text"
-            placeholder="Enter your name"
-            className="ds-input"
-          />
+          <input type="text" placeholder="Enter your name" className="ds-input" />
         </div>
         <div>
           <label className="ds-label">Email</label>
-          <input
-            type="email"
-            placeholder="Enter your email"
-            className="ds-input"
-          />
+          <input type="email" placeholder="Enter your email" className="ds-input" />
         </div>
       </div>
     );
@@ -68,24 +49,20 @@ function App({ services }: AppProps) {
       title: 'User Form',
       content: formContent,
       onConfirm: () => {
-        addEvent('Form submitted');
         notification.success('Form Submitted', 'Your information was saved');
       },
       onClose: () => {
-        addEvent('Form cancelled');
+        // Form cancelled - no action needed
       },
     });
   };
 
   const handleCustomContent = () => {
-    addEvent('Opening custom content modal');
     const customContent = (
       <div className="text-center space-y-4">
         <div className="text-5xl mb-4">🎉</div>
         <h3 className="text-lg font-semibold">Welcome to Modal Service!</h3>
-        <p className="ds-text-small ds-text-muted">
-          This modal demonstrates custom React content.
-        </p>
+        <p className="ds-text-small ds-text-muted">This modal demonstrates custom React content.</p>
         <ul className="text-left max-w-sm mx-auto space-y-2 ds-text-small">
           <li className="flex items-center gap-2">
             <span className="ds-icon-success">✓</span>
@@ -107,27 +84,23 @@ function App({ services }: AppProps) {
       title: 'Custom Content Modal',
       content: customContent,
       onClose: () => {
-        addEvent('Custom modal closed');
         notification.success('Nice!', 'You explored the custom content modal');
       },
     });
   };
 
   const handleErrorDemo = () => {
-    addEvent('Triggering error notification');
     notification.error('Error Example', 'This is what an error notification looks like');
 
     setTimeout(() => {
       modal.open({
         title: 'Error Details',
         content: 'Something went wrong! This modal appears after the error notification.',
-        onClose: () => addEvent('Error modal closed'),
       });
     }, 1000);
   };
 
   const handleMultipleNotifications = () => {
-    addEvent('Showing multiple notifications');
     notification.info('First (React 19)', 'This is the first notification');
     setTimeout(
       () => notification.success('Second (React 19)', 'This appears after 1 second'),
@@ -141,7 +114,6 @@ function App({ services }: AppProps) {
   };
 
   const handleNestedModal = () => {
-    addEvent('Opening nested modal demo');
     modal.open({
       title: 'Parent Modal (React 19)',
       content: (
@@ -149,12 +121,10 @@ function App({ services }: AppProps) {
           <p>This is the parent modal. Click the button below to open a nested modal.</p>
           <button
             onClick={() => {
-              addEvent('Opening nested child modal');
               modal.open({
                 title: 'Child Modal',
                 content: 'This is a nested modal opened from within another modal!',
                 size: 'sm',
-                onClose: () => addEvent('Child modal closed'),
               });
             }}
             className="ds-button-primary"
@@ -163,7 +133,6 @@ function App({ services }: AppProps) {
           </button>
         </div>
       ),
-      onClose: () => addEvent('Parent modal closed'),
     });
   };
 
@@ -174,7 +143,6 @@ function App({ services }: AppProps) {
     const showNextSize = () => {
       if (index < sizes.length) {
         const size = sizes[index];
-        addEvent(`Opening ${size} modal`);
         modal.open({
           title: `Modal Size: ${size.toUpperCase()}`,
           content: `This is a ${size} sized modal from React 19. Click confirm to see the next size.`,
@@ -186,9 +154,6 @@ function App({ services }: AppProps) {
             } else {
               notification.success('Demo Complete', "You've seen all modal sizes!");
             }
-          },
-          onClose: () => {
-            addEvent(`${size} modal closed`);
           },
         });
       }
@@ -208,73 +173,31 @@ function App({ services }: AppProps) {
       <div className="ds-mb-md">
         <div className="ds-text-small ds-text-muted ds-mb-sm">Test Modal Service:</div>
         <div className="grid grid-cols-2 gap-3">
-          <button
-            onClick={handleSimpleAlert}
-            className="ds-button-primary"
-          >
+          <button onClick={handleSimpleAlert} className="ds-button-primary">
             Simple Alert
           </button>
-          <button
-            onClick={handleConfirmation}
-            className="ds-button-primary"
-          >
+          <button onClick={handleConfirmation} className="ds-button-primary">
             Confirmation Dialog
           </button>
-          <button
-            onClick={handleFormModal}
-            className="ds-button-primary"
-          >
+          <button onClick={handleFormModal} className="ds-button-primary">
             Form Modal
           </button>
-          <button
-            onClick={handleCustomContent}
-            className="ds-button-primary"
-          >
+          <button onClick={handleCustomContent} className="ds-button-primary">
             Custom Content
           </button>
-          <button
-            onClick={handleErrorDemo}
-            className="ds-button-primary"
-          >
+          <button onClick={handleErrorDemo} className="ds-button-primary">
             Error Example
           </button>
-          <button
-            onClick={handleMultipleNotifications}
-            className="ds-button-primary"
-          >
+          <button onClick={handleMultipleNotifications} className="ds-button-primary">
             Multiple Notifications
           </button>
-          <button
-            onClick={handleNestedModal}
-            className="ds-button-primary"
-          >
+          <button onClick={handleNestedModal} className="ds-button-primary">
             Nested Modals
           </button>
-          <button
-            onClick={handleSizeVariations}
-            className="ds-button-primary"
-          >
+          <button onClick={handleSizeVariations} className="ds-button-primary">
             Size Variations
           </button>
         </div>
-      </div>
-
-      {/* Event Log */}
-      <div className="ds-card-compact ds-mb-md">
-        <div className="ds-card-title ds-mb-sm">Event Log:</div>
-        {events.length === 0 ? (
-          <div className="ds-text-small ds-text-muted">
-            No events yet. Click a button to start.
-          </div>
-        ) : (
-          <div className="space-y-1">
-            {events.map((event, index) => (
-              <div key={index} className="ds-text-small font-mono ds-text-muted">
-                → {event}
-              </div>
-            ))}
-          </div>
-        )}
       </div>
 
       {/* React 19 Compatibility Info */}

@@ -20,23 +20,23 @@ interface MFEManifestV2 {
   name: string;
   version: SemanticVersion;
   url: string;
-  
+
   // Dependencies and compatibility
   dependencies: MFEDependencies;
   compatibility: MFECompatibility;
-  
+
   // Capabilities and requirements
   capabilities?: MFECapabilities;
   requirements: MFERequirements;
-  
+
   // Rich metadata
   metadata: MFEMetadata;
-  
+
   // Configuration options
   config?: MFEConfig;
   security?: MFESecurity;
   lifecycle?: MFELifecycle;
-  
+
   // Build and deprecation info
   build?: BuildInfo;
   deprecated?: DeprecationInfo;
@@ -48,7 +48,7 @@ interface MFEManifestV2 {
 All MFEs in `apps/container-react/public/mfe-registry.json` use V2 format:
 
 - ✅ serviceExplorer
-- ✅ legacyServiceExplorer  
+- ✅ legacyServiceExplorer
 - ✅ eventDemo
 - ✅ stateDemoReact
 - ✅ stateDemoVue
@@ -58,6 +58,7 @@ All MFEs in `apps/container-react/public/mfe-registry.json` use V2 format:
 #### 3. Compatibility Checker (`apps/container-react/src/services/compatibility-checker.ts`)
 
 Validates:
+
 - Container version compatibility
 - Required/optional service availability
 - Service version requirements
@@ -178,6 +179,7 @@ Validates:
 ## Migration from V1 to V2
 
 ### V1 Format (Legacy)
+
 ```json
 {
   "name": "example",
@@ -188,6 +190,7 @@ Validates:
 ```
 
 ### V2 Format (Current)
+
 ```json
 {
   "name": "example",

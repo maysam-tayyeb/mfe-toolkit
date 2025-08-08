@@ -9,8 +9,12 @@ export const Layout: React.FC = () => {
   return (
     <div className="min-h-screen ds-bg-base">
       <Navigation />
-      <div className="pt-14"> {/* Add padding-top to account for fixed navbar */}
-        <main className="ds-page-container"> {/* Centered layout from design system */}
+      <div className="pt-14">
+        {' '}
+        {/* Add padding-top to account for fixed navbar */}
+        <main className="ds-page-container">
+          {' '}
+          {/* Centered layout from design system */}
           <Outlet />
         </main>
       </div>

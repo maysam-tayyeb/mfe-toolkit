@@ -7,19 +7,35 @@ Grid components create responsive layouts that automatically adjust based on scr
 ## CSS Classes
 
 ```css
-.ds-grid-1 { @apply grid grid-cols-1; }
-.ds-grid-2 { @apply grid grid-cols-1 md:grid-cols-2; }
-.ds-grid-3 { @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3; }
-.ds-grid-4 { @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4; }
+.ds-grid-1 {
+  @apply grid grid-cols-1;
+}
+.ds-grid-2 {
+  @apply grid grid-cols-1 md:grid-cols-2;
+}
+.ds-grid-3 {
+  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3;
+}
+.ds-grid-4 {
+  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4;
+}
 ```
 
 ## Gap Variants
 
 ```css
-.ds-grid-tight   { @apply gap-2; }
-.ds-grid-compact { @apply gap-3; }
-.ds-grid         { @apply gap-4; } /* Default */
-.ds-grid-relaxed { @apply gap-6; }
+.ds-grid-tight {
+  @apply gap-2;
+}
+.ds-grid-compact {
+  @apply gap-3;
+}
+.ds-grid {
+  @apply gap-4;
+} /* Default */
+.ds-grid-relaxed {
+  @apply gap-6;
+}
 ```
 
 ## Usage
@@ -42,7 +58,7 @@ import { Grid } from '@mfe/design-system-react';
   <Card>Item 1</Card>
   <Card>Item 2</Card>
   <Card>Item 3</Card>
-</Grid>
+</Grid>;
 ```
 
 ## Best Practices

@@ -16,9 +16,9 @@ const buildOptions = {
     '.ts': 'ts',
   },
   define: {
-    'process.env.NODE_ENV': '"production"'
+    'process.env.NODE_ENV': '"production"',
   },
-  jsx: 'automatic'
+  jsx: 'automatic',
 };
 
 esbuild.build(buildOptions).catch(() => process.exit(1));

@@ -7,6 +7,7 @@ This document consolidates the Design System Plan and MFE Reorganization Plan in
 ## Current State Assessment
 
 ### Pain Points
+
 1. **Monolithic Service Explorers**: Current service explorer MFEs (500+ lines each) demonstrate everything at once
 2. **UI Inconsistencies**: Multiple implementations of same components (InfoBlock, buttons, cards)
 3. **Typography Chaos**: Inconsistent heading sizes and font weights across MFEs
@@ -17,12 +18,14 @@ This document consolidates the Design System Plan and MFE Reorganization Plan in
 ### Identified Patterns
 
 #### Typography Inconsistencies
+
 - **Page titles**: text-3xl vs text-2xl
 - **Section headers**: text-2xl vs text-xl vs text-lg
 - **Card titles**: text-xl vs text-lg vs text-sm
 - **Font weights**: font-bold vs font-semibold vs font-medium
 
 #### Component Duplications
+
 - **InfoBlock**: 3+ different implementations
 - **EventLog**: Duplicate implementations
 - **Buttons**: ShadCN (h-10) vs custom (h-9)
@@ -31,7 +34,9 @@ This document consolidates the Design System Plan and MFE Reorganization Plan in
 ## Critical Addition: MFE Development Container 🚧 IN PROGRESS
 
 ### Problem Statement
+
 Before creating more MFEs, we need a proper development environment that allows developers to:
+
 - Develop MFEs in isolation without the main container
 - Test service integrations (modal, notification, eventBus, etc.)
 - Have hot reload and modern DX features
@@ -40,9 +45,11 @@ Before creating more MFEs, we need a proper development environment that allows 
 ### Proposed Solution: Universal Dev Container
 
 #### Architecture Decision
+
 **Recommendation**: Single universal development container that works with all frameworks
 
 **Rationale**:
+
 - Maintains consistency with production container services
 - Reduces maintenance overhead (one container vs multiple)
 - Ensures all MFEs get the same service interfaces
@@ -51,6 +58,7 @@ Before creating more MFEs, we need a proper development environment that allows 
 #### Implementation Strategy
 
 ##### Package: `@mfe-toolkit/dev-container`
+
 ```typescript
 // Features
 - Lightweight development server
@@ -62,6 +70,7 @@ Before creating more MFEs, we need a proper development environment that allows 
 ```
 
 ##### Usage
+
 ```bash
 # In any MFE directory
 npx @mfe-toolkit/dev-container serve
@@ -73,6 +82,7 @@ mfe-dev --port 3000 --services-ui --mock-auth
 ```
 
 ##### Dev Container UI Layout
+
 ```
 ┌─────────────────────────────────────┐
 │  MFE Dev Container - [MFE Name]     │
@@ -95,6 +105,7 @@ mfe-dev --port 3000 --services-ui --mock-auth
 ```
 
 ##### Service Tester Panel Features
+
 1. **Modal Tester**
    - Trigger different modal types
    - Custom modal content input
@@ -125,26 +136,27 @@ mfe-dev --port 3000 --services-ui --mock-auth
    - State history
 
 ##### Technical Implementation
+
 ```typescript
 // dev-container/src/index.ts
 export class MFEDevContainer {
   private services: MFEServices;
   private mfeModule: any;
-  
+
   async start(options: DevContainerOptions) {
     // 1. Initialize services
     this.services = this.initializeServices();
-    
+
     // 2. Create HTML structure
     this.createDevUI();
-    
+
     // 3. Load MFE module
     this.mfeModule = await this.loadMFE(options.entry);
-    
+
     // 4. Mount MFE with services
     const mountPoint = document.getElementById('mfe-mount');
     this.mfeModule.mount(mountPoint, this.services);
-    
+
     // 5. Setup hot reload
     if (options.hot) {
       this.setupHotReload();
@@ -154,6 +166,7 @@ export class MFEDevContainer {
 ```
 
 ##### Integration with Build Tools
+
 - **Vite plugin**: `@mfe-toolkit/vite-plugin-dev-container`
 - **Webpack plugin**: `@mfe-toolkit/webpack-plugin-dev-container`
 - **esbuild plugin**: `@mfe-toolkit/esbuild-plugin-dev-container`
@@ -174,14 +187,15 @@ export const sharedDependencies = {
 
 // In dev container HTML
 window.__SHARED_DEPS__ = {
-  'react': React,
+  react: React,
   'react-dom': ReactDOM,
-  'vue': Vue,
-  '@mfe/design-system': DesignSystem
+  vue: Vue,
+  '@mfe/design-system': DesignSystem,
 };
 ```
 
 This allows MFEs to:
+
 1. Use shared React/Vue from container (no duplication)
 2. Access design system components
 3. Maintain small bundle sizes
@@ -192,6 +206,7 @@ This allows MFEs to:
 ### Phase 0: Development Infrastructure (Week 0.5) - NEW PRIORITY
 
 #### 0.1 Create Dev Container Package
+
 - [ ] Set up `@mfe-toolkit/dev-container` package
 - [ ] Implement core service providers
 - [ ] Create service tester UI
@@ -199,12 +214,14 @@ This allows MFEs to:
 - [ ] Test with existing modal demos
 
 #### 0.2 Create MFE Templates
+
 - [ ] React 19 MFE template with dev container
 - [ ] React 17 MFE template with dev container
 - [ ] Vue 3 MFE template with dev container
 - [ ] Vanilla TS MFE template with dev container
 
 #### 0.3 Update CLI Tools
+
 - [ ] Add `mfe-toolkit create` command with templates
 - [ ] Add `mfe-toolkit dev` command for dev container
 - [ ] Add `mfe-toolkit build` command with optimization
@@ -213,12 +230,14 @@ This allows MFEs to:
 ### Phase 1: Foundation & Cleanup (Week 1) ✅ COMPLETED
 
 #### 1.1 Documentation & Archival ✅ COMPLETED
+
 - [x] Create docs/planning/ and docs/archive/ directories
 - [x] Document existing Service Explorer MFEs
 - [x] Document Event Demo and State Demo MFEs
 - [x] Archive implementation patterns for reference
 
 #### 1.2 Design System Foundation ✅ COMPLETED
+
 Create `@mfe/design-system` package with:
 
 ```typescript
@@ -230,7 +249,7 @@ export const typography = {
   cardTitle: 'text-lg font-semibold',
   body: 'text-base',
   small: 'text-sm',
-  caption: 'text-xs text-muted-foreground'
+  caption: 'text-xs text-muted-foreground',
 };
 
 // Spacing tokens
@@ -243,18 +262,20 @@ export const spacing = {
     xs: 'space-y-1',
     sm: 'space-y-2',
     md: 'space-y-4',
-    lg: 'space-y-6'
+    lg: 'space-y-6',
   },
   grid: {
     tight: 'gap-2',
     normal: 'gap-4',
-    wide: 'gap-6'
-  }
+    wide: 'gap-6',
+  },
 };
 ```
 
 #### 1.3 Core Components ✅ COMPLETED
+
 Implement unified components:
+
 - **Card**: Single source with variants (default, compact, elevated, interactive) ✅
 - **InfoBlock**: Standardized implementation ✅
 - **Button**: Consistent heights and variants ✅
@@ -265,6 +286,7 @@ Implement unified components:
 ### Phase 2: MFE Reorganization (Week 2) ⚠️ PARTIALLY COMPLETED
 
 #### 2.1 Service Demo Structure ⚠️ PARTIAL
+
 Transform from monolithic explorers to focused demos:
 
 ```
@@ -293,6 +315,7 @@ apps/service-demos/
 ```
 
 #### 2.2 Container Service Pages
+
 Create dedicated pages that load framework demos side-by-side:
 
 ```tsx
@@ -300,33 +323,19 @@ Create dedicated pages that load framework demos side-by-side:
 export function ModalServiceDemoPage() {
   return (
     <div className="grid grid-cols-2 gap-4">
-      <MFELoader 
-        id="react19-modal-demo" 
-        title="React 19"
-        className="border rounded-lg p-4" 
-      />
-      <MFELoader 
-        id="react17-modal-demo" 
-        title="React 17"
-        className="border rounded-lg p-4" 
-      />
-      <MFELoader 
-        id="vue-modal-demo" 
-        title="Vue 3"
-        className="border rounded-lg p-4" 
-      />
-      <MFELoader 
-        id="vanilla-modal-demo" 
-        title="Vanilla TS"
-        className="border rounded-lg p-4" 
-      />
+      <MFELoader id="react19-modal-demo" title="React 19" className="border rounded-lg p-4" />
+      <MFELoader id="react17-modal-demo" title="React 17" className="border rounded-lg p-4" />
+      <MFELoader id="vue-modal-demo" title="Vue 3" className="border rounded-lg p-4" />
+      <MFELoader id="vanilla-modal-demo" title="Vanilla TS" className="border rounded-lg p-4" />
     </div>
   );
 }
 ```
 
 #### 2.3 MFE Implementation Guidelines
+
 Each service demo MFE should:
+
 - Be under 200 lines of code
 - Focus on ONE service only
 - Use design system components
@@ -336,12 +345,14 @@ Each service demo MFE should:
 ### Phase 3: Migration & Integration (Week 3)
 
 #### 3.1 Container Application Updates
+
 - [ ] Replace inline component implementations with design system
 - [ ] Update all pages to use standardized layouts
 - [ ] Implement new service demo pages
 - [ ] Update navigation structure
 
 #### 3.2 MFE Migration Order
+
 1. **Remove old MFEs** (after documentation):
    - mfe-example (585 lines)
    - mfe-react17 (500 lines)
@@ -356,6 +367,7 @@ Each service demo MFE should:
    - Apply pattern to other services
 
 #### 3.3 Navigation Reorganization
+
 ```
 MFE Platform
 ├── Home
@@ -379,6 +391,7 @@ MFE Platform
 ### Phase 4: Documentation & Polish (Week 4)
 
 #### 4.1 Documentation Structure
+
 ```
 docs/
 ├── planning/
@@ -400,7 +413,9 @@ docs/
 ```
 
 #### 4.2 Component Documentation Template
+
 Each component should have:
+
 - Overview and use cases
 - Props API documentation
 - Usage examples (all frameworks)
@@ -410,6 +425,7 @@ Each component should have:
 ## Implementation Checklist
 
 ### Immediate Tasks (Today)
+
 - [x] Document Service Explorer MFEs
 - [ ] Complete documentation of remaining MFEs
 - [ ] Create design system package structure
@@ -417,24 +433,28 @@ Each component should have:
 - [ ] Remove documented MFEs
 
 ### Week 1 Deliverables
+
 - [ ] Design system foundation complete
 - [ ] Core components implemented
 - [ ] First service demo (Modal) created
 - [ ] Container page for Modal service
 
 ### Week 2 Deliverables
+
 - [ ] All service demos implemented
 - [ ] Container pages for all services
 - [ ] Navigation updated
 - [ ] Old MFEs removed
 
 ### Week 3 Deliverables
+
 - [ ] Design system applied everywhere
 - [ ] All inconsistencies resolved
 - [ ] Cross-framework testing complete
 - [ ] Performance optimized
 
 ### Week 4 Deliverables
+
 - [ ] Documentation complete
 - [ ] Migration guide published
 - [ ] Team training materials ready
@@ -443,12 +463,14 @@ Each component should have:
 ## Success Metrics
 
 ### Quantitative
+
 - **Code Reduction**: 50% less duplicate code
 - **Bundle Size**: 30% smaller overall
 - **Component Reuse**: 100% design system adoption
 - **MFE Size**: Average <200 lines per MFE
 
 ### Qualitative
+
 - **Developer Experience**: Clear, focused examples
 - **Visual Consistency**: Unified look and feel
 - **Maintainability**: Single source of truth for components
@@ -457,12 +479,14 @@ Each component should have:
 ## Risk Mitigation
 
 ### Potential Risks
+
 1. **Breaking Changes**: Mitigate with thorough testing
 2. **Learning Curve**: Address with documentation and examples
 3. **Performance Impact**: Monitor bundle sizes continuously
 4. **Framework Conflicts**: Test cross-framework compatibility early
 
 ### Rollback Plan
+
 - Git branch strategy allows easy rollback
 - Incremental migration reduces risk
 - Old MFEs archived, not deleted initially

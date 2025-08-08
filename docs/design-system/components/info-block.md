@@ -21,9 +21,15 @@ InfoBlocks display structured information with icons, titles, and descriptions. 
 ## Variants
 
 ```css
-.ds-info-block-horizontal { /* Icon beside content */ }
-.ds-info-block-centered   { /* Centered alignment */ }
-.ds-info-block-compact    { /* Smaller spacing */ }
+.ds-info-block-horizontal {
+  /* Icon beside content */
+}
+.ds-info-block-centered {
+  /* Centered alignment */
+}
+.ds-info-block-compact {
+  /* Smaller spacing */
+}
 ```
 
 ## React Component
@@ -36,7 +42,7 @@ import { InfoBlock } from '@mfe/design-system-react';
   title="Feature Name"
   description="Feature description"
   variant="horizontal"
-/>
+/>;
 ```
 
 ## Best Practices

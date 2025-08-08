@@ -38,12 +38,12 @@ const messages = [
 
 ## Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| messages | EventMessage[] | [] | Array of event messages |
-| onClear | function | - | Clear button handler |
-| emptyMessage | string | 'No events' | Empty state message |
-| maxHeight | string | '300px' | Maximum height before scroll |
+| Prop         | Type           | Default     | Description                  |
+| ------------ | -------------- | ----------- | ---------------------------- |
+| messages     | EventMessage[] | []          | Array of event messages      |
+| onClear      | function       | -           | Clear button handler         |
+| emptyMessage | string         | 'No events' | Empty state message          |
+| maxHeight    | string         | '300px'     | Maximum height before scroll |
 
 ## Event Message Format
 

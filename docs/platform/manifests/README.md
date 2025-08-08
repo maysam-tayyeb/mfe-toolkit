@@ -5,16 +5,19 @@ The MFE Manifest is a platform-level contract that defines how microfrontends de
 ## 📚 Documentation Structure
 
 ### Core Documentation
+
 - [**Manifest V2 Specification**](./specification.md) - Complete technical specification
 - [**Migration Guide**](./migration-guide.md) - Migrating from V1 to V2
 - [**Validation Guide**](./validation-guide.md) - Validating manifests in CI/CD
 
 ### Developer Resources
+
 - [**Quick Start Guide**](./quick-start.md) - Get started with manifests
 - [**Examples**](./examples.md) - Real-world manifest examples
 - [**Best Practices**](./best-practices.md) - Recommendations for manifest design
 
 ### Technical Reference
+
 - [**JSON Schema**](./schema-reference.md) - Complete schema documentation
 - [**TypeScript Types**](./typescript-types.md) - Type definitions and usage
 - [**CLI Reference**](./cli-reference.md) - Manifest CLI tool documentation
@@ -69,6 +72,7 @@ Containers use manifests to:
 ## 📦 Supported Frameworks
 
 Manifests work with MFEs built in:
+
 - React (16.8+)
 - Vue (3.0+)
 - Angular (12+)

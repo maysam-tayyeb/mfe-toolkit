@@ -16,9 +16,7 @@ export const Section: React.FC<SectionProps> = ({
   ...props
 }) => {
   // Use ds-* classes from the container's CSS
-  const wrapperClass = variant === 'muted' 
-    ? 'ds-section bg-muted/50 rounded-lg p-6' 
-    : 'ds-section';
+  const wrapperClass = variant === 'muted' ? 'ds-section bg-muted/50 rounded-lg p-6' : 'ds-section';
 
   return (
     <section className={`${wrapperClass} ${className}`.trim()} {...props}>

@@ -14,6 +14,6 @@ export default defineConfig({
   esbuildOptions: (options) => {
     options.banner = {
       js: '/* Design System - Zero Pollution CSS + ES Modules */',
-    }
+    };
   },
 });

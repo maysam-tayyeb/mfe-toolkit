@@ -7,18 +7,21 @@ The MFE Design System is a **zero-pollution, CSS-first** design system that prov
 ## 🎯 Core Principles
 
 ### 1. Zero Global Pollution
+
 - No window or global object modifications
 - No side effects on import
 - Pure CSS classes with `ds-` prefix
 - Services injected at runtime, not globally
 
 ### 2. CSS-First Approach
+
 - All styling through CSS classes
 - Framework components are thin wrappers
 - Works with any framework or vanilla JS
 - No CSS-in-JS or runtime styling
 
 ### 3. Modern Blue & Slate Palette
+
 - Professional color scheme
 - Consistent use of HSL values
 - Full dark mode support
@@ -27,14 +30,18 @@ The MFE Design System is a **zero-pollution, CSS-first** design system that prov
 ## 📦 Package Structure
 
 ### @mfe/design-system
+
 Framework-agnostic CSS and design tokens:
+
 - CSS utility classes (`ds-*` prefix)
 - Design tokens (colors, typography, spacing)
 - No framework dependencies
 - Pure CSS output
 
 ### @mfe/design-system-react
+
 Optional React 19 component wrappers:
+
 - Thin wrappers around CSS classes
 - TypeScript support
 - No bundled CSS (uses container styles)
@@ -48,14 +55,12 @@ Optional React 19 component wrappers:
 <!-- Any framework or vanilla HTML -->
 <div class="ds-page">
   <h1 class="ds-page-title">Page Title</h1>
-  
+
   <div class="ds-card">
     <h2 class="ds-section-title">Section</h2>
     <p class="ds-text-muted">Description text</p>
-    
-    <button class="ds-button-primary">
-      Primary Action
-    </button>
+
+    <button class="ds-button-primary">Primary Action</button>
   </div>
 </div>
 ```
@@ -69,14 +74,12 @@ function MyComponent() {
   return (
     <div className="ds-page">
       <h1 className="ds-page-title">Page Title</h1>
-      
+
       <Card>
         <h2 className="ds-section-title">Section</h2>
         <p className="ds-text-muted">Description text</p>
-        
-        <Button variant="primary">
-          Primary Action
-        </Button>
+
+        <Button variant="primary">Primary Action</Button>
       </Card>
     </div>
   );
@@ -86,14 +89,18 @@ function MyComponent() {
 ## 📚 Documentation Structure
 
 ### [Foundations](./foundations/)
+
 Core design principles and tokens:
+
 - [Colors](./foundations/colors.md) - Color system and themes
 - [Typography](./foundations/typography.md) - Type scale and text styles
 - [Spacing](./foundations/spacing.md) - Spacing system and layout
 - [Responsive](./foundations/responsive.md) - Breakpoints and responsive design
 
 ### [Components](./components/)
+
 Individual component documentation:
+
 - [Card](./components/card.md) - Container component with variants
 - [Button](./components/button.md) - Interactive button styles
 - [EventLog](./components/event-log.md) - Event display component
@@ -102,7 +109,9 @@ Individual component documentation:
 - [Grid](./components/grid.md) - Responsive grid layouts
 
 ### [Guidelines](./guidelines/)
+
 Best practices and guides:
+
 - [Accessibility](./guidelines/accessibility.md) - A11y best practices
 - [Patterns](./guidelines/patterns.md) - Common UI patterns
 - [Migration](./guidelines/migration.md) - Migrating from legacy components
@@ -110,11 +119,13 @@ Best practices and guides:
 ## 🎨 Key CSS Classes
 
 ### Layout
+
 - `ds-page` - Page container with max-width
 - `ds-container` - Content container
 - `ds-section` - Section wrapper
 
 ### Typography
+
 - `ds-page-title` - Main page heading (text-xl)
 - `ds-section-title` - Section heading (text-lg)
 - `ds-card-title` - Card heading (text-base)
@@ -122,12 +133,14 @@ Best practices and guides:
 - `ds-text-small` - Small text size
 
 ### Components
+
 - `ds-card` - Card container
 - `ds-button-primary` - Primary button
 - `ds-button-outline` - Outlined button
 - `ds-badge` - Badge component
 
 ### Grid
+
 - `ds-grid-2` - 2-column grid
 - `ds-grid-3` - 3-column grid
 - `ds-grid-4` - 4-column grid
@@ -155,6 +168,7 @@ See the [Migration Guide](./guidelines/migration.md) for detailed instructions.
 ### Design Tokens
 
 Design tokens are defined in `packages/design-system/src/tokens/`:
+
 - Colors: HSL-based color system
 - Typography: Font sizes and weights
 - Spacing: Consistent spacing scale
@@ -170,18 +184,18 @@ Design tokens are defined in `packages/design-system/src/tokens/`:
     <h1 class="ds-page-title">Dashboard</h1>
     <p class="ds-text-muted">Welcome to your dashboard</p>
   </header>
-  
+
   <div class="ds-grid-3">
     <div class="ds-card">
       <h2 class="ds-card-title">Analytics</h2>
       <p>Your analytics data here</p>
     </div>
-    
+
     <div class="ds-card">
       <h2 class="ds-card-title">Reports</h2>
       <p>Latest reports</p>
     </div>
-    
+
     <div class="ds-card">
       <h2 class="ds-card-title">Settings</h2>
       <p>Configure your preferences</p>

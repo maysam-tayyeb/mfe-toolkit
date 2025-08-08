@@ -6,43 +6,33 @@ interface AppProps {
 }
 
 function App({ services }: AppProps) {
-  const [events, setEvents] = useState<string[]>([]);
   const { modal, notification } = services;
-  
-  const addEvent = (event: string) => {
-    setEvents(prev => [...prev.slice(-4), event]);
-  };
 
   const handleSimpleAlert = () => {
-    addEvent('Opening simple alert');
     modal.open({
       title: 'Simple Alert (React 17)',
       content: 'This is a simple alert modal from a React 17 MFE with just an OK button.',
       onClose: () => {
-        addEvent('Simple alert closed');
         notification.info('Alert Closed', 'The simple alert was dismissed');
-      }
+      },
     });
   };
 
   const handleConfirmation = () => {
-    addEvent('Opening confirmation dialog');
     modal.open({
       title: 'Confirm Action (React 17)',
-      content: 'Are you sure you want to proceed with this action? This modal is rendered from a React 17 MFE.',
+      content:
+        'Are you sure you want to proceed with this action? This modal is rendered from a React 17 MFE.',
       onConfirm: () => {
-        addEvent('Action confirmed');
         notification.success('Confirmed', 'Action was confirmed successfully from React 17');
       },
       onClose: () => {
-        addEvent('Action cancelled');
         notification.warning('Cancelled', 'Action was cancelled');
-      }
+      },
     });
   };
 
   const handleFormModal = () => {
-    addEvent('Opening form modal');
     // React 17 MFEs must pass plain text strings to the modal service
     const formContent = `This is a form modal from React ${React.version} MFE.
 
@@ -58,17 +48,15 @@ For interactive forms and rich content, React 17 MFEs should:
       content: formContent,
       size: 'md',
       onConfirm: () => {
-        addEvent('Form submitted');
         notification.success('Form Submitted', 'Your information was saved from React 17 MFE');
       },
       onClose: () => {
-        addEvent('Form cancelled');
-      }
+        // Form cancelled - no action needed
+      },
     });
   };
 
   const handleCustomContent = () => {
-    addEvent('Opening custom content modal');
     // React 17 MFEs must pass plain text strings to the modal service
     const customContent = `🎉 React 17 Modal Service!
 
@@ -93,16 +81,14 @@ Limitations:
       content: customContent,
       size: 'lg',
       onClose: () => {
-        addEvent('Custom modal closed');
         notification.success('Nice!', 'You explored the React 17 custom content modal');
-      }
+      },
     });
   };
 
   const handleErrorDemo = () => {
-    addEvent('Triggering error notification');
     notification.error('Error Example', 'This is an error notification from React 17 MFE');
-    
+
     setTimeout(() => {
       modal.open({
         title: 'Error Details (React 17)',
@@ -112,21 +98,24 @@ Error: Example error from React 17 MFE
 
 This error was triggered from a React ${React.version} MFE.
 The modal service works across React versions, but only supports plain text content for React 17 MFEs.`,
-        onClose: () => addEvent('Error modal closed')
       });
     }, 1000);
   };
 
   const handleMultipleNotifications = () => {
-    addEvent('Showing multiple notifications');
     notification.info('First (React 17)', 'This is the first notification');
-    setTimeout(() => notification.success('Second (React 17)', 'This appears after 1 second'), 1000);
-    setTimeout(() => notification.warning('Third (React 17)', 'This appears after 2 seconds'), 2000);
+    setTimeout(
+      () => notification.success('Second (React 17)', 'This appears after 1 second'),
+      1000
+    );
+    setTimeout(
+      () => notification.warning('Third (React 17)', 'This appears after 2 seconds'),
+      2000
+    );
     setTimeout(() => notification.error('Fourth (React 17)', 'This appears after 3 seconds'), 3000);
   };
 
   const handleNestedModal = () => {
-    addEvent('Opening nested modal demo');
     modal.open({
       title: 'Parent Modal (React 17)',
       content: `This is the parent modal from React ${React.version}.
@@ -141,18 +130,16 @@ For complex interactions, consider:
 • Using the event bus for communication
 • Building modals within the MFE itself
 • Using the notification service for feedback`,
-      onClose: () => addEvent('Parent modal closed')
     });
   };
 
   const handleSizeVariations = () => {
     const sizes: Array<'sm' | 'md' | 'lg' | 'xl'> = ['sm', 'md', 'lg', 'xl'];
     let index = 0;
-    
+
     const showNextSize = () => {
       if (index < sizes.length) {
         const size = sizes[index];
-        addEvent(`Opening ${size} modal`);
         modal.open({
           title: `Modal Size: ${size.toUpperCase()}`,
           content: `This is a ${size} sized modal from React 17. Click confirm to see the next size.`,
@@ -162,16 +149,13 @@ For complex interactions, consider:
             if (index < sizes.length) {
               setTimeout(showNextSize, 300);
             } else {
-              notification.success('Demo Complete', 'You\'ve seen all modal sizes!');
+              notification.success('Demo Complete', "You've seen all modal sizes!");
             }
           },
-          onClose: () => {
-            addEvent(`${size} modal closed`);
-          }
         });
       }
     };
-    
+
     showNextSize();
   };
 
@@ -179,80 +163,38 @@ For complex interactions, consider:
     <div className="ds-card">
       <div className="flex items-center justify-between mb-4">
         <h3 className="ds-card-title">React 17 Modal Demo</h3>
-        <span className="text-xs font-mono bg-muted px-2 py-1 rounded">
-          React {React.version}
-        </span>
+        <span className="text-xs font-mono bg-muted px-2 py-1 rounded">React {React.version}</span>
       </div>
-      
+
       {/* Action Buttons */}
       <div className="ds-stack mb-4">
         <div className="ds-label mb-2">Test Modal Service:</div>
         <div className="grid grid-cols-2 gap-3">
-          <button 
-            onClick={handleSimpleAlert}
-            className="ds-button-outline"
-          >
+          <button onClick={handleSimpleAlert} className="ds-button-outline">
             Simple Alert
           </button>
-          <button 
-            onClick={handleConfirmation}
-            className="ds-button-outline"
-          >
+          <button onClick={handleConfirmation} className="ds-button-outline">
             Confirmation Dialog
           </button>
-          <button 
-            onClick={handleFormModal}
-            className="ds-button-outline"
-          >
+          <button onClick={handleFormModal} className="ds-button-outline">
             Form Modal
           </button>
-          <button 
-            onClick={handleCustomContent}
-            className="ds-button-outline"
-          >
+          <button onClick={handleCustomContent} className="ds-button-outline">
             Custom Content
           </button>
-          <button 
-            onClick={handleErrorDemo}
-            className="ds-button-outline"
-          >
+          <button onClick={handleErrorDemo} className="ds-button-outline">
             Error Example
           </button>
-          <button 
-            onClick={handleMultipleNotifications}
-            className="ds-button-outline"
-          >
+          <button onClick={handleMultipleNotifications} className="ds-button-outline">
             Multiple Notifications
           </button>
-          <button 
-            onClick={handleNestedModal}
-            className="ds-button-outline"
-          >
+          <button onClick={handleNestedModal} className="ds-button-outline">
             Nested Modals
           </button>
-          <button 
-            onClick={handleSizeVariations}
-            className="ds-button-outline"
-          >
+          <button onClick={handleSizeVariations} className="ds-button-outline">
             Size Variations
           </button>
         </div>
-      </div>
-
-      {/* Event Log */}
-      <div className="ds-card mb-4">
-        <div className="ds-label mb-3">Event Log:</div>
-        {events.length === 0 ? (
-          <div className="ds-text-muted ds-text-small">No events yet. Click a button to start.</div>
-        ) : (
-          <div className="space-y-1">
-            {events.map((event, index) => (
-              <div key={index} className="ds-text-small font-mono ds-text-muted">
-                → {event}
-              </div>
-            ))}
-          </div>
-        )}
       </div>
 
       {/* React 17 Info */}

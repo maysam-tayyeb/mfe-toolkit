@@ -34,11 +34,7 @@ export const Button: React.FC<ButtonProps> = ({
   const classes = [variantClass, sizeClass, className].filter(Boolean).join(' ');
 
   return (
-    <button
-      className={classes}
-      disabled={disabled}
-      {...props}
-    >
+    <button className={classes} disabled={disabled} {...props}>
       {children}
     </button>
   );
@@ -92,7 +88,7 @@ export const ButtonGroup: React.FC<ButtonGroupProps> = ({
   ...props
 }) => {
   const orientationClass = orientation === 'horizontal' ? 'flex-row' : 'flex-col';
-  
+
   const spacingClass = {
     tight: orientation === 'horizontal' ? 'space-x-1' : 'space-y-1',
     normal: orientation === 'horizontal' ? 'space-x-2' : 'space-y-2',
@@ -100,10 +96,7 @@ export const ButtonGroup: React.FC<ButtonGroupProps> = ({
   }[spacing];
 
   return (
-    <div
-      className={`flex ${orientationClass} ${spacingClass} ${className}`.trim()}
-      {...props}
-    >
+    <div className={`flex ${orientationClass} ${spacingClass} ${className}`.trim()} {...props}>
       {children}
     </div>
   );

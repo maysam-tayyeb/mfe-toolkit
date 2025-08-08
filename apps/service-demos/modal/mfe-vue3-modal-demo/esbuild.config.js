@@ -15,8 +15,8 @@ const buildOptions = {
   },
   external: [],
   define: {
-    'process.env.NODE_ENV': '"production"'
-  }
+    'process.env.NODE_ENV': '"production"',
+  },
 };
 
 esbuild.build(buildOptions).catch(() => process.exit(1));

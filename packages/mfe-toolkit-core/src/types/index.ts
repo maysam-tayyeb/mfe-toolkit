@@ -137,4 +137,3 @@ export interface MFEModule {
   mount: (element: HTMLElement, services: MFEServices) => void;
   unmount: () => void;
 }
-

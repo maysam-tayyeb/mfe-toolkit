@@ -9,7 +9,7 @@ class MockBroadcastChannel {
   name: string;
   onmessage: ((event: MessageEvent) => void) | null = null;
   onmessageerror: ((event: MessageEvent) => void) | null = null;
-  
+
   constructor(name: string) {
     this.name = name;
     // Register this channel
@@ -18,12 +18,12 @@ class MockBroadcastChannel {
     }
     channels.get(name)!.add(this);
   }
-  
+
   postMessage(message: any) {
     // Broadcast to all other channels with the same name
     const channelSet = channels.get(this.name);
     if (channelSet) {
-      channelSet.forEach(channel => {
+      channelSet.forEach((channel) => {
         if (channel !== this && channel.onmessage) {
           // Simulate async message delivery
           setTimeout(() => {
@@ -34,7 +34,7 @@ class MockBroadcastChannel {
       });
     }
   }
-  
+
   close() {
     // Unregister this channel
     const channelSet = channels.get(this.name);
@@ -45,15 +45,15 @@ class MockBroadcastChannel {
       }
     }
   }
-  
+
   addEventListener() {
     // No-op for tests
   }
-  
+
   removeEventListener() {
     // No-op for tests
   }
-  
+
   dispatchEvent() {
     return true;
   }

@@ -35,16 +35,16 @@ export class DevContainerServer {
   private setupMiddleware(): void {
     // Enable CORS for all origins in dev
     this.app.use(cors());
-    
+
     // Parse JSON bodies
     this.app.use(express.json());
-    
+
     // Serve static files from MFE dist
     const mfeDistPath = path.join(this.config.mfePath, 'dist');
     if (fs.existsSync(mfeDistPath)) {
       this.app.use('/mfe', express.static(mfeDistPath));
     }
-    
+
     // Serve node_modules for shared dependencies
     const nodeModulesPath = path.join(process.cwd(), 'node_modules');
     this.app.use('/node_modules', express.static(nodeModulesPath));
@@ -55,30 +55,30 @@ export class DevContainerServer {
     this.app.get('/health', (req, res) => {
       res.json({ status: 'ok', mfe: this.config.mfeConfig.name });
     });
-    
+
     // MFE config endpoint
     this.app.get('/api/mfe-config', (req, res) => {
       res.json(this.config.mfeConfig);
     });
-    
+
     // Shared dependencies endpoint
     this.app.get('/api/shared-deps', (req, res) => {
       const deps = this.config.mfeConfig.devContainer?.sharedDependencies || {};
       res.json(deps);
     });
-    
+
     // Service status endpoint
     this.app.get('/api/services', (req, res) => {
       const services = this.config.mfeConfig.devContainer?.services || {};
       res.json(services);
     });
-    
+
     // Main HTML page
     this.app.get('/', (req, res) => {
       const html = this.generateHTML();
       res.send(html);
     });
-    
+
     // Services UI (if enabled)
     if (this.config.servicesUI) {
       this.app.get('/services-ui', (req, res) => {
@@ -92,7 +92,7 @@ export class DevContainerServer {
     const { mfeConfig } = this.config;
     const framework = mfeConfig.framework || 'vanilla';
     const sharedDeps = mfeConfig.devContainer?.sharedDependencies || {};
-    
+
     return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -100,13 +100,21 @@ export class DevContainerServer {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${mfeConfig.displayName || mfeConfig.name} - Dev Container</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  ${framework.includes('react') ? `
+  ${
+    framework.includes('react')
+      ? `
   <script crossorigin src="https://unpkg.com/react@${sharedDeps.react || '19.0.0'}/umd/react.development.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@${sharedDeps['react-dom'] || '19.0.0'}/umd/react-dom.development.js"></script>
-  ` : ''}
-  ${framework.includes('vue') ? `
+  `
+      : ''
+  }
+  ${
+    framework.includes('vue')
+      ? `
   <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-  ` : ''}
+  `
+      : ''
+  }
   <style>
     @keyframes slideIn {
       from { transform: translateX(100%); opacity: 0; }
@@ -131,11 +139,15 @@ export class DevContainerServer {
         </span>
       </div>
       <div class="flex items-center gap-2">
-        ${this.config.servicesUI ? `
+        ${
+          this.config.servicesUI
+            ? `
         <a href="/services-ui" target="_blank" class="text-xs px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">
           Services UI
         </a>
-        ` : ''}
+        `
+            : ''
+        }
         <span class="text-xs px-2 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded">
           Port: ${this.config.port || 3333}
         </span>
@@ -281,12 +293,12 @@ export class DevContainerServer {
 
   private setupWebSocket(): void {
     if (!this.config.hot) return;
-    
+
     this.wss = new WebSocketServer({ server: this.server });
-    
+
     this.wss.on('connection', (ws) => {
       console.log(chalk.gray('WebSocket client connected'));
-      
+
       ws.on('error', (error) => {
         console.error(chalk.red('WebSocket error:'), error);
       });
@@ -295,9 +307,10 @@ export class DevContainerServer {
 
   public notifyReload(): void {
     if (!this.wss) return;
-    
+
     this.wss.clients.forEach((client) => {
-      if (client.readyState === 1) { // WebSocket.OPEN
+      if (client.readyState === 1) {
+        // WebSocket.OPEN
         client.send('reload');
       }
     });
@@ -305,29 +318,31 @@ export class DevContainerServer {
 
   public async start(): Promise<void> {
     const port = this.config.port || 3333;
-    
+
     return new Promise((resolve, reject) => {
       this.server = createServer(this.app);
-      
+
       this.server.listen(port, () => {
         console.log(chalk.green(`\n✨ MFE Dev Container started!`));
-        console.log(chalk.cyan(`\n  MFE: ${this.config.mfeConfig.displayName || this.config.mfeConfig.name}`));
+        console.log(
+          chalk.cyan(`\n  MFE: ${this.config.mfeConfig.displayName || this.config.mfeConfig.name}`)
+        );
         console.log(chalk.cyan(`  URL: http://localhost:${port}`));
-        
+
         if (this.config.servicesUI) {
           console.log(chalk.cyan(`  Services UI: http://localhost:${port}/services-ui`));
         }
-        
+
         if (this.config.hot) {
           console.log(chalk.yellow(`  Hot reload: enabled`));
           this.setupWebSocket();
         }
-        
+
         console.log(chalk.gray(`\n  Press Ctrl+C to stop\n`));
-        
+
         resolve();
       });
-      
+
       this.server.on('error', reject);
     });
   }

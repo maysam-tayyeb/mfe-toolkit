@@ -23,23 +23,23 @@ The theme service is available through the MFE services:
 export default {
   mount: (element, services) => {
     const themeService = services.theme;
-    
+
     // Get current theme
     const currentTheme = themeService?.getTheme() || 'light';
-    
+
     // Set a theme
     themeService?.setTheme('dark');
-    
+
     // Subscribe to theme changes
     const unsubscribe = themeService?.subscribe((theme) => {
       console.log('Theme changed to:', theme);
     });
-    
+
     // Clean up
     return () => {
       unsubscribe?.();
     };
-  }
+  },
 };
 ```
 
@@ -50,15 +50,15 @@ import { useEffect, useState } from 'react';
 
 function ThemedComponent({ services }) {
   const [theme, setTheme] = useState(services.theme?.getTheme() || 'light');
-  
+
   useEffect(() => {
     const unsubscribe = services.theme?.subscribe((newTheme) => {
       setTheme(newTheme);
     });
-    
+
     return unsubscribe;
   }, [services.theme]);
-  
+
   return (
     <div className={`theme-aware-component ${theme}`}>
       Current theme: {theme}
@@ -93,10 +93,10 @@ export interface ThemeService {
   getTheme: () => Theme;
   setTheme: (theme: Theme) => void;
   subscribe: (callback: (theme: Theme) => void) => () => void;
-  
+
   // Optional methods for multi-theme support
-  getAvailableThemes?: () => Theme[];  // List all available themes
-  cycleTheme?: () => void;             // Cycle to next theme
+  getAvailableThemes?: () => Theme[]; // List all available themes
+  cycleTheme?: () => void; // Cycle to next theme
 }
 ```
 
@@ -150,7 +150,7 @@ Themes are also applied as data attributes for more specific targeting:
 
 ```css
 /* Target specific themes */
-[data-theme="high-contrast"] {
+[data-theme='high-contrast'] {
   --background: #ffffff;
   --foreground: #000000;
   --border-width: 3px;
@@ -158,7 +158,7 @@ Themes are also applied as data attributes for more specific targeting:
 }
 
 /* Component-specific theme styles */
-[data-theme="dark"] .card {
+[data-theme='dark'] .card {
   box-shadow: 0 4px 6px rgba(255, 255, 255, 0.1);
 }
 ```
@@ -168,6 +168,7 @@ Themes are also applied as data attributes for more specific targeting:
 ### Theme Persistence
 
 The theme service automatically:
+
 - Saves the user's theme preference to localStorage
 - Restores the theme on page reload
 - Falls back to system preference if no saved preference exists
@@ -191,10 +192,10 @@ The service updates the meta theme-color for mobile browsers:
 ```typescript
 // Automatically sets theme color for mobile browser UI
 const themeColors = {
-  'light': '#ffffff',
-  'dark': '#000000',
-  'blue': '#1e40af',
-  'sepia': '#f5e6d3',
+  light: '#ffffff',
+  dark: '#000000',
+  blue: '#1e40af',
+  sepia: '#f5e6d3',
 };
 ```
 
@@ -217,14 +218,20 @@ services.theme?.setTheme('dark');
 ### Adding More Themes
 
 1. Configure the theme service with your themes:
+
    ```typescript
    configureThemeService(['light', 'dark', 'blue', 'sepia']);
    ```
 
 2. Add corresponding CSS:
+
    ```css
-   .blue { /* blue theme styles */ }
-   .sepia { /* sepia theme styles */ }
+   .blue {
+     /* blue theme styles */
+   }
+   .sepia {
+     /* sepia theme styles */
+   }
    ```
 
 3. Update UI to handle theme selection:
@@ -335,7 +342,7 @@ The theme is applied immediately on page load, but you can add a loading state:
 
 ```css
 /* Hide content until theme is applied */
-body:not([class*="theme"]) {
+body:not([class*='theme']) {
   visibility: hidden;
 }
 ```

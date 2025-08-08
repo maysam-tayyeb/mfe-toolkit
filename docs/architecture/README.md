@@ -7,6 +7,7 @@ This directory contains architectural documentation for the MFE Made Easy platfo
 ### [Comprehensive Roadmap](./comprehensive-roadmap.md)
 
 **This is the main roadmap document** that consolidates all improvement tracking and future development plans. It includes:
+
 - ✅ Completed improvements and achievements
 - 🚧 In-progress work and current priorities
 - 📅 Future development phases (Q1-Q4 2025 and beyond)
@@ -52,7 +53,6 @@ Design principles for vendor-agnostic state management:
 - Migration capabilities
 - Implementation flexibility
 - Future-proofing strategies
-
 
 ## 📚 Reference Documents
 

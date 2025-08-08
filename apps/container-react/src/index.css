@@ -3,79 +3,79 @@
 /* Modern Blue & Slate Color Palette */
 :root {
   /* Backgrounds */
-  --background: 210 40% 98%;  /* slate-50 */
-  --foreground: 215 20% 15%;  /* slate-900 */
-  
+  --background: 210 40% 98%; /* slate-50 */
+  --foreground: 215 20% 15%; /* slate-900 */
+
   /* Card & Surface */
-  --card: 0 0% 100%;  /* white */
-  --card-foreground: 215 20% 15%;  /* slate-900 */
-  --popover: 0 0% 100%;  /* white */
-  --popover-foreground: 215 20% 15%;  /* slate-900 */
-  
+  --card: 0 0% 100%; /* white */
+  --card-foreground: 215 20% 15%; /* slate-900 */
+  --popover: 0 0% 100%; /* white */
+  --popover-foreground: 215 20% 15%; /* slate-900 */
+
   /* Primary (Blue) */
-  --primary: 217 91% 60%;  /* blue-500 */
-  --primary-foreground: 0 0% 100%;  /* white */
-  
+  --primary: 217 91% 60%; /* blue-500 */
+  --primary-foreground: 0 0% 100%; /* white */
+
   /* Secondary (Slate) */
-  --secondary: 214 32% 91%;  /* slate-100 */
-  --secondary-foreground: 215 25% 27%;  /* slate-700 */
-  
+  --secondary: 214 32% 91%; /* slate-100 */
+  --secondary-foreground: 215 25% 27%; /* slate-700 */
+
   /* Muted */
-  --muted: 210 40% 96%;  /* slate-100 */
-  --muted-foreground: 215 16% 47%;  /* slate-500 */
-  
+  --muted: 210 40% 96%; /* slate-100 */
+  --muted-foreground: 215 16% 47%; /* slate-500 */
+
   /* Accent */
-  --accent: 210 40% 96%;  /* slate-100 */
-  --accent-foreground: 215 20% 15%;  /* slate-900 */
-  
+  --accent: 210 40% 96%; /* slate-100 */
+  --accent-foreground: 215 20% 15%; /* slate-900 */
+
   /* Destructive (Red) */
-  --destructive: 0 84% 60%;  /* red-500 */
-  --destructive-foreground: 0 0% 100%;  /* white */
-  
+  --destructive: 0 84% 60%; /* red-500 */
+  --destructive-foreground: 0 0% 100%; /* white */
+
   /* Borders & Inputs */
-  --border: 214 32% 91%;  /* slate-200 */
-  --input: 214 32% 91%;  /* slate-200 */
-  --ring: 217 91% 60%;  /* blue-500 */
-  
+  --border: 214 32% 91%; /* slate-200 */
+  --input: 214 32% 91%; /* slate-200 */
+  --ring: 217 91% 60%; /* blue-500 */
+
   /* Border Radius */
   --radius: 0.5rem;
 }
 
 .dark {
   /* Backgrounds */
-  --background: 222 47% 11%;  /* slate-900 */
-  --foreground: 210 40% 98%;  /* slate-50 */
-  
+  --background: 222 47% 11%; /* slate-900 */
+  --foreground: 210 40% 98%; /* slate-50 */
+
   /* Card & Surface */
-  --card: 217 33% 17%;  /* slate-800 */
-  --card-foreground: 210 40% 98%;  /* slate-50 */
-  --popover: 217 33% 17%;  /* slate-800 */
-  --popover-foreground: 210 40% 98%;  /* slate-50 */
-  
+  --card: 217 33% 17%; /* slate-800 */
+  --card-foreground: 210 40% 98%; /* slate-50 */
+  --popover: 217 33% 17%; /* slate-800 */
+  --popover-foreground: 210 40% 98%; /* slate-50 */
+
   /* Primary (Blue) */
-  --primary: 217 91% 60%;  /* blue-500 */
-  --primary-foreground: 0 0% 100%;  /* white */
-  
+  --primary: 217 91% 60%; /* blue-500 */
+  --primary-foreground: 0 0% 100%; /* white */
+
   /* Secondary (Slate) */
-  --secondary: 215 25% 27%;  /* slate-700 */
-  --secondary-foreground: 210 40% 96%;  /* slate-100 */
-  
+  --secondary: 215 25% 27%; /* slate-700 */
+  --secondary-foreground: 210 40% 96%; /* slate-100 */
+
   /* Muted */
-  --muted: 217 33% 17%;  /* slate-800 */
-  --muted-foreground: 215 20% 65%;  /* slate-400 */
-  
+  --muted: 217 33% 17%; /* slate-800 */
+  --muted-foreground: 215 20% 65%; /* slate-400 */
+
   /* Accent */
-  --accent: 217 33% 17%;  /* slate-800 */
-  --accent-foreground: 210 40% 98%;  /* slate-50 */
-  
+  --accent: 217 33% 17%; /* slate-800 */
+  --accent-foreground: 210 40% 98%; /* slate-50 */
+
   /* Destructive (Red) */
-  --destructive: 0 84% 60%;  /* red-500 */
-  --destructive-foreground: 0 0% 100%;  /* white */
-  
+  --destructive: 0 84% 60%; /* red-500 */
+  --destructive-foreground: 0 0% 100%; /* white */
+
   /* Borders & Inputs */
-  --border: 215 25% 27%;  /* slate-700 */
-  --input: 215 25% 27%;  /* slate-700 */
-  --ring: 217 91% 60%;  /* blue-500 */
+  --border: 215 25% 27%; /* slate-700 */
+  --input: 215 25% 27%; /* slate-700 */
+  --ring: 217 91% 60%; /* blue-500 */
 }
 
 /* Global styles */

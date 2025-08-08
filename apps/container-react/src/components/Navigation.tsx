@@ -5,9 +5,19 @@ import { Button } from '@/components/ui/button';
 import { MFE_CONFIG } from '@mfe/shared';
 import { Theme } from '@mfe-toolkit/core';
 import { getThemeService } from '@/services/theme-service';
-import { 
-  Moon, Sun, Menu, X, Home, LayoutDashboard, Layers, Radio, 
-  AlertCircle, Package, ChevronDown, Sparkles
+import {
+  Moon,
+  Sun,
+  Menu,
+  X,
+  Home,
+  LayoutDashboard,
+  Layers,
+  Radio,
+  AlertCircle,
+  Package,
+  ChevronDown,
+  Sparkles,
 } from 'lucide-react';
 
 interface NavItem {
@@ -50,23 +60,35 @@ export const Navigation: React.FC = () => {
       items: [
         { path: '/', label: 'Home', icon: <Home className="h-4 w-4" /> },
         { path: '/dashboard', label: 'Dashboard', icon: <LayoutDashboard className="h-4 w-4" /> },
-      ]
+      ],
     },
     {
       title: 'Services',
       items: [
         { path: '/services/modal', label: 'Modal', icon: <Layers className="h-4 w-4" /> },
         { path: '/services/event-bus', label: 'Event Bus', icon: <Radio className="h-4 w-4" /> },
-        { path: '/error-boundary-demo', label: 'Error Handling', icon: <AlertCircle className="h-4 w-4" /> },
-      ]
+        {
+          path: '/error-boundary-demo',
+          label: 'Error Handling',
+          icon: <AlertCircle className="h-4 w-4" />,
+        },
+      ],
     },
     {
       title: 'MFEs',
       items: [
-        { path: `/mfe/${MFE_CONFIG.serviceExplorer.id}`, label: 'Explorer', icon: <Package className="h-4 w-4" /> },
-        { path: `/mfe/${MFE_CONFIG.legacyServiceExplorer.id}`, label: 'Legacy', icon: <Package className="h-4 w-4" /> },
-      ]
-    }
+        {
+          path: `/mfe/${MFE_CONFIG.serviceExplorer.id}`,
+          label: 'Explorer',
+          icon: <Package className="h-4 w-4" />,
+        },
+        {
+          path: `/mfe/${MFE_CONFIG.legacyServiceExplorer.id}`,
+          label: 'Legacy',
+          icon: <Package className="h-4 w-4" />,
+        },
+      ],
+    },
   ];
 
   return (
@@ -85,28 +107,29 @@ export const Navigation: React.FC = () => {
               {navSections.map((section) => (
                 <div key={section.title} className="relative">
                   <button
-                    onClick={() => setActiveDropdown(activeDropdown === section.title ? null : section.title)}
+                    onClick={() =>
+                      setActiveDropdown(activeDropdown === section.title ? null : section.title)
+                    }
                     className={cn(
-                      "flex items-center gap-1 px-2.5 py-1.5 ds-text-xs font-medium rounded-md transition-colors",
-                      section.items.some(item => location.pathname === item.path)
-                        ? "ds-nav-item-active"
-                        : "ds-nav-item ds-nav-hover"
+                      'flex items-center gap-1 px-2.5 py-1.5 ds-text-xs font-medium rounded-md transition-colors',
+                      section.items.some((item) => location.pathname === item.path)
+                        ? 'ds-nav-item-active'
+                        : 'ds-nav-item ds-nav-hover'
                     )}
                   >
                     {section.title}
-                    <ChevronDown className={cn(
-                      "h-3 w-3 transition-transform",
-                      activeDropdown === section.title && "rotate-180"
-                    )} />
+                    <ChevronDown
+                      className={cn(
+                        'h-3 w-3 transition-transform',
+                        activeDropdown === section.title && 'rotate-180'
+                      )}
+                    />
                   </button>
 
                   {/* Dropdown Menu */}
                   {activeDropdown === section.title && (
                     <>
-                      <div 
-                        className="fixed inset-0 z-40" 
-                        onClick={() => setActiveDropdown(null)}
-                      />
+                      <div className="fixed inset-0 z-40" onClick={() => setActiveDropdown(null)} />
                       <div className="absolute top-full left-0 mt-1 w-44 py-1 ds-dropdown-menu z-50">
                         {section.items.map((item) => (
                           <Link
@@ -114,10 +137,10 @@ export const Navigation: React.FC = () => {
                             to={item.path}
                             onClick={() => setActiveDropdown(null)}
                             className={cn(
-                              "flex items-center gap-2 px-3 py-1.5 ds-text-xs transition-colors",
+                              'flex items-center gap-2 px-3 py-1.5 ds-text-xs transition-colors',
                               location.pathname === item.path
-                                ? "ds-nav-item-active"
-                                : "ds-nav-item ds-nav-hover"
+                                ? 'ds-nav-item-active'
+                                : 'ds-nav-item ds-nav-hover'
                             )}
                           >
                             {item.icon}
@@ -172,10 +195,10 @@ export const Navigation: React.FC = () => {
                       to={item.path}
                       onClick={() => setMobileMenuOpen(false)}
                       className={cn(
-                        "flex items-center gap-2 px-3 py-2 ds-text-sm rounded-md transition-colors",
+                        'flex items-center gap-2 px-3 py-2 ds-text-sm rounded-md transition-colors',
                         location.pathname === item.path
-                          ? "ds-nav-item-active"
-                          : "ds-nav-item ds-nav-hover"
+                          ? 'ds-nav-item-active'
+                          : 'ds-nav-item ds-nav-hover'
                       )}
                     >
                       {item.icon}

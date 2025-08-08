@@ -40,43 +40,43 @@ export const HomePage: React.FC = () => {
       title: 'Dynamic Loading',
       description: 'ES modules with on-demand loading',
       color: 'ds-icon-primary',
-      link: '/services/loader'
+      link: '/services/loader',
     },
     {
       icon: <Database className="h-5 w-5" />,
       title: 'Universal State',
       description: 'Cross-MFE & cross-tab sync',
       color: 'ds-icon-success',
-      link: '/universal-state-demo'
+      link: '/universal-state-demo',
     },
     {
       icon: <Radio className="h-5 w-5" />,
       title: 'Event System',
       description: 'Type-safe pub/sub communication',
       color: 'ds-icon-info',
-      link: '/services/event-bus'
+      link: '/services/event-bus',
     },
     {
       icon: <Blocks className="h-5 w-5" />,
       title: 'Any Framework',
       description: 'React, Vue, Angular, Vanilla JS',
       color: 'ds-icon-warning',
-      link: '/dashboard'
+      link: '/dashboard',
     },
     {
       icon: <Shield className="h-5 w-5" />,
       title: 'Error Boundaries',
       description: 'Isolate failures, keep running',
       color: 'ds-icon-danger',
-      link: '/error-boundary-demo'
+      link: '/error-boundary-demo',
     },
     {
       icon: <GitBranch className="h-5 w-5" />,
       title: 'Independent Deploy',
       description: 'Deploy MFEs separately',
       color: 'ds-accent-neutral',
-      link: '/dashboard'
-    }
+      link: '/dashboard',
+    },
   ];
 
   return (
@@ -137,22 +137,14 @@ export const HomePage: React.FC = () => {
         <h2 className="ds-section-title ds-mb-md ds-center">Core Platform Features</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {features.map((feature, index) => (
-            <Link
-              key={index}
-              to={feature.link}
-              className="ds-card-padded ds-hover-lift group"
-            >
+            <Link key={index} to={feature.link} className="ds-card-padded ds-hover-lift group">
               <div className="flex items-start gap-4">
-                <div className={`${feature.color} ds-mt-xs`}>
-                  {feature.icon}
-                </div>
+                <div className={`${feature.color} ds-mt-xs`}>{feature.icon}</div>
                 <div className="flex-1">
                   <h3 className="ds-card-title group-hover:ds-accent-primary ds-mb-xs">
                     {feature.title}
                   </h3>
-                  <p className="ds-text-sm ds-text-muted">
-                    {feature.description}
-                  </p>
+                  <p className="ds-text-sm ds-text-muted">{feature.description}</p>
                 </div>
                 <ArrowRight className="h-4 w-4 ds-text-muted opacity-0 group-hover:opacity-100 transition-opacity" />
               </div>
@@ -181,9 +173,11 @@ export const HomePage: React.FC = () => {
                 <Database className="h-4 w-4 ds-icon-success" />
                 <span className="ds-text-sm font-medium">State Management</span>
               </div>
-              <Badge variant="secondary" className="ds-text-xs">Live</Badge>
+              <Badge variant="secondary" className="ds-text-xs">
+                Live
+              </Badge>
             </Link>
-            
+
             <Link
               to="/mfe-communication"
               className="ds-card-compact ds-hover-scale flex items-center justify-between group"
@@ -192,7 +186,9 @@ export const HomePage: React.FC = () => {
                 <Radio className="h-4 w-4 ds-icon-info" />
                 <span className="ds-text-sm font-medium">Event Communication</span>
               </div>
-              <Badge variant="secondary" className="ds-text-xs">Live</Badge>
+              <Badge variant="secondary" className="ds-text-xs">
+                Live
+              </Badge>
             </Link>
 
             <Link
@@ -203,7 +199,9 @@ export const HomePage: React.FC = () => {
                 <AlertCircle className="h-4 w-4 ds-icon-danger" />
                 <span className="ds-text-sm font-medium">Error Handling</span>
               </div>
-              <Badge variant="secondary" className="ds-text-xs">Live</Badge>
+              <Badge variant="secondary" className="ds-text-xs">
+                Live
+              </Badge>
             </Link>
           </div>
         </div>
@@ -226,7 +224,9 @@ export const HomePage: React.FC = () => {
                 <Package className="h-4 w-4 ds-icon-primary" />
                 <span className="text-sm font-medium">Service Explorer</span>
               </div>
-              <Badge variant="outline" className="text-xs">React 19</Badge>
+              <Badge variant="outline" className="text-xs">
+                React 19
+              </Badge>
             </Link>
 
             <Link
@@ -237,7 +237,9 @@ export const HomePage: React.FC = () => {
                 <Zap className="h-4 w-4 ds-icon-warning" />
                 <span className="text-sm font-medium">Legacy Explorer</span>
               </div>
-              <Badge variant="outline" className="text-xs">React 17</Badge>
+              <Badge variant="outline" className="text-xs">
+                React 17
+              </Badge>
             </Link>
 
             <Link
@@ -248,7 +250,9 @@ export const HomePage: React.FC = () => {
                 <Activity className="h-4 w-4 ds-icon-info" />
                 <span className="text-sm font-medium">Event Demo</span>
               </div>
-              <Badge variant="outline" className="text-xs">Events</Badge>
+              <Badge variant="outline" className="text-xs">
+                Events
+              </Badge>
             </Link>
           </div>
         </div>
@@ -259,9 +263,7 @@ export const HomePage: React.FC = () => {
             <Globe className="h-5 w-5 ds-icon-success" />
             <h3 className="ds-section-title">Documentation</h3>
           </div>
-          <p className="ds-text-sm ds-text-muted ds-mb-md">
-            Learn about the platform architecture
-          </p>
+          <p className="ds-text-sm ds-text-muted ds-mb-md">Learn about the platform architecture</p>
           <div className="ds-stack-sm">
             <a
               href="/docs/getting-started"

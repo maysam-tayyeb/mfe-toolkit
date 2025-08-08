@@ -26,7 +26,7 @@ export class DevAuthService implements AuthService {
 
   constructor(mockConfig?: boolean | AuthMockConfig) {
     this.eventBus = new EventBus();
-    
+
     if (mockConfig === true) {
       // Default mock auth
       this.isAuthenticated = true;
@@ -54,7 +54,7 @@ export class DevAuthService implements AuthService {
 
   async login(credentials: any): Promise<void> {
     console.log('[DevAuthService] Login attempt:', credentials);
-    
+
     // Simulate login
     this.isAuthenticated = true;
     this.currentUser = {
@@ -64,19 +64,19 @@ export class DevAuthService implements AuthService {
     };
     this.roles = ['user'];
     this.permissions = ['read', 'write'];
-    
+
     this.eventBus.emit('auth:login', { user: this.currentUser });
   }
 
   async logout(): Promise<void> {
     console.log('[DevAuthService] Logout');
-    
+
     const previousUser = this.currentUser;
     this.isAuthenticated = false;
     this.currentUser = null;
     this.roles = [];
     this.permissions = [];
-    
+
     this.eventBus.emit('auth:logout', { user: previousUser });
   }
 
@@ -109,10 +109,10 @@ export class DevAuthService implements AuthService {
     const handler = (event: any) => {
       callback(event.user || null);
     };
-    
+
     this.eventBus.on('auth:login', handler);
     this.eventBus.on('auth:logout', handler);
-    
+
     // Return unsubscribe function
     return () => {
       this.eventBus.off('auth:login', handler);

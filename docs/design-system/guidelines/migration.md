@@ -17,20 +17,20 @@ This guide helps you migrate from custom components, ShadCN UI, or inline styles
 
 ### From ShadCN UI
 
-| ShadCN Component | Design System Equivalent |
-|-----------------|-------------------------|
-| `<Card>` from ui/card | `<div class="ds-card">` |
+| ShadCN Component          | Design System Equivalent             |
+| ------------------------- | ------------------------------------ |
+| `<Card>` from ui/card     | `<div class="ds-card">`              |
 | `<Button>` from ui/button | `<button class="ds-button-primary">` |
-| `<Badge>` from ui/badge | `<span class="ds-badge">` |
-| `<Alert>` from ui/alert | `<div class="ds-alert">` |
+| `<Badge>` from ui/badge   | `<span class="ds-badge">`            |
+| `<Alert>` from ui/alert   | `<div class="ds-alert">`             |
 
 ### From Custom Components
 
 ```tsx
 // Before: Custom InfoBlock
-<InfoBlock 
-  icon={icon} 
-  title={title} 
+<InfoBlock
+  icon={icon}
+  title={title}
   description={desc}
   customClass="my-info"
 />
@@ -48,6 +48,7 @@ This guide helps you migrate from custom components, ShadCN UI, or inline styles
 ## Class Name Updates
 
 ### Typography
+
 ```css
 /* Before */
 .heading-lg { font-size: 24px; font-weight: 700; }
@@ -59,6 +60,7 @@ This guide helps you migrate from custom components, ShadCN UI, or inline styles
 ```
 
 ### Spacing
+
 ```css
 /* Before */
 .card { padding: 24px; margin-bottom: 16px; }
@@ -69,6 +71,7 @@ This guide helps you migrate from custom components, ShadCN UI, or inline styles
 ```
 
 ### Colors
+
 ```css
 /* Before */
 .primary-btn { background: #3B82F6; }
@@ -197,16 +200,19 @@ import { Card, Button } from '@mfe/design-system-react';
 ## Troubleshooting
 
 ### Styles Not Applied
+
 - Ensure container provides design system CSS
 - Check class name spelling (ds- prefix)
 - Verify no CSS specificity conflicts
 
 ### React Components Not Found
+
 - Install @mfe/design-system-react
 - Check import paths
 - Ensure React 19 compatibility
 
 ### Layout Issues
+
 - Use design system spacing classes
 - Check responsive utilities
 - Verify grid/flex patterns

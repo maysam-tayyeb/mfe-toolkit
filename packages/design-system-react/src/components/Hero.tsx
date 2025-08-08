@@ -15,22 +15,16 @@ export function Hero({
   actions,
   gradient = false,
   className = '',
-  children
+  children,
 }: HeroProps) {
   const heroClass = gradient ? 'ds-hero ds-hero-gradient' : 'ds-hero';
-  
+
   return (
     <div className={`${heroClass} ${className}`}>
       <div>
         <h1 className="ds-hero-title">{title}</h1>
-        {description && (
-          <p className="ds-hero-description">{description}</p>
-        )}
-        {actions && (
-          <div className="ds-mt-lg ds-flex ds-gap-sm">
-            {actions}
-          </div>
-        )}
+        {description && <p className="ds-hero-description">{description}</p>}
+        {actions && <div className="ds-mt-lg ds-flex ds-gap-sm">{actions}</div>}
       </div>
       {children}
     </div>

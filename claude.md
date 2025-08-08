@@ -195,7 +195,7 @@ The toolkit is split into several npm packages under the `@mfe-toolkit` organiza
 
 - **@mfe/design-system** (`packages/design-system/`)
   - Framework-agnostic CSS-first design system
-  - Provides ds-* prefixed CSS classes and design tokens
+  - Provides ds-\* prefixed CSS classes and design tokens
   - No React dependencies, pure CSS + ES modules
   - Not published to npm (marked as private)
 
@@ -258,16 +258,20 @@ The platform uses a dual state management approach:
    - Extensible with middleware (performance monitoring, logging, etc.)
 
 **State Middleware Usage:**
+
 ```typescript
 import { createStateManager } from '@mfe-toolkit/state';
-import { createPerformanceMiddleware, initStatePerformanceMonitor } from '@mfe-toolkit/state-middleware-performance';
+import {
+  createPerformanceMiddleware,
+  initStatePerformanceMonitor,
+} from '@mfe-toolkit/state-middleware-performance';
 
 // Initialize performance monitoring
 initStatePerformanceMonitor('my-app');
 
 // Create state manager with middleware
 const stateManager = createStateManager({
-  middleware: [createPerformanceMiddleware()]
+  middleware: [createPerformanceMiddleware()],
 });
 ```
 
@@ -283,6 +287,7 @@ See [State Management Architecture](./docs/architecture/state-management-archite
 ## Design System
 
 ### Architecture
+
 - **Zero-Pollution Approach**: CSS-first design system with NO global/window variables
 - **CSS Classes**: All styles use `ds-*` prefix (ds-page, ds-card, ds-button, ds-section-title)
 - **Optional ES Modules**: Tokens available via explicit imports, not required for basic usage
@@ -292,32 +297,38 @@ See [State Management Architecture](./docs/architecture/state-management-archite
 ### Key CSS Classes (200+ available)
 
 **Layout & Containers:**
+
 - `ds-page`: Centered page container
 - `ds-card`, `ds-card-padded`, `ds-card-compact`: Card variants
 - `ds-hero`: Gradient hero section
 - `ds-metric-card`: Metric display cards
 
 **Typography:**
+
 - `ds-page-title`, `ds-section-title`, `ds-card-title`: Heading hierarchy
 - `ds-text-muted`, `ds-text-small`, `ds-label`: Text variants
 
 **Components:**
+
 - `ds-button-primary`, `ds-button-outline`, `ds-button-ghost`: Button styles
 - `ds-badge`, `ds-badge-info`, `ds-badge-success`: Badge variants
 - `ds-tabs`, `ds-tab-active`: Tab navigation
 - `ds-input`, `ds-select`, `ds-textarea`: Form controls
 
 **Semantic Colors:**
+
 - `ds-accent-primary`, `ds-accent-success`, `ds-accent-warning`, `ds-accent-danger`
 - `ds-bg-accent-*-soft`: Soft background variants
 - `ds-icon-*`: Icon color utilities
 
 **States & Effects:**
+
 - `ds-loading-state`, `ds-empty-state`: State displays
 - `ds-hover-scale`, `ds-hover-bg`: Hover effects
 - `ds-spinner`, `ds-spinner-lg`: Loading spinners
 
 ### Usage in MFEs
+
 ```html
 <!-- Direct CSS class usage (recommended) -->
 <div class="ds-page">
@@ -329,6 +340,7 @@ See [State Management Architecture](./docs/architecture/state-management-archite
 ```
 
 ### Development Guidelines
+
 1. Use CSS classes directly - no component imports needed
 2. Classes are provided by container's stylesheet
 3. No global pollution or window variables

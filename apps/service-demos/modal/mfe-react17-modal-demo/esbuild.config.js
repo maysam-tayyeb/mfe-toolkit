@@ -40,7 +40,7 @@ try {
   const result = await build(config);
   console.log('✅ React 17 Modal Demo MFE built successfully!');
   console.log('📦 Bundle created: dist/mfe-react17-modal-demo.js');
-  
+
   // Get bundle size
   const fs = await import('fs');
   const stats = fs.statSync(path.join(__dirname, 'dist', 'mfe-react17-modal-demo.js'));

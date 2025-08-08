@@ -9,6 +9,7 @@ This document outlines a comprehensive redesign of the MFE platform's user inter
 ### Major Issues Identified
 
 #### 1. EventBusServiceDemoPage Problems
+
 - **Information overload**: Too much text, lists, and buttons competing for attention
 - **Poor visual hierarchy**: Mixed text sizes (text-xs, text-sm, text-base) without clear purpose
 - **Color chaos**: Random use of purple, blue, gray, green, orange without semantic meaning
@@ -16,6 +17,7 @@ This document outlines a comprehensive redesign of the MFE platform's user inter
 - **Confusing UI structure**: Complex nested grids, unclear section boundaries
 
 #### 2. Platform-Wide Inconsistencies
+
 - **Loading states**: Different spinner implementations (h-8, h-12, h-16)
 - **Centering patterns**: `flex items-center justify-center` repeated 12+ times
 - **Color usage**: Direct Tailwind colors instead of semantic classes
@@ -142,6 +144,7 @@ This document outlines a comprehensive redesign of the MFE platform's user inter
 ### Phase 3: Component Standards
 
 #### Loading States
+
 ```html
 <div class="ds-loading-state">
   <div class="ds-spinner-lg"></div>
@@ -151,29 +154,25 @@ This document outlines a comprehensive redesign of the MFE platform's user inter
 ```
 
 #### Empty States
+
 ```html
 <div class="ds-empty-state">
   <div class="ds-empty-illustration">
     <!-- SVG illustration -->
   </div>
   <h3 class="ds-empty-title">No events yet</h3>
-  <p class="ds-empty-description">
-    Start by emitting your first event
-  </p>
-  <button class="ds-button-primary">
-    Emit First Event
-  </button>
+  <p class="ds-empty-description">Start by emitting your first event</p>
+  <button class="ds-button-primary">Emit First Event</button>
 </div>
 ```
 
 #### Metric Cards
+
 ```html
 <div class="ds-metric-card">
   <div class="ds-metric-label">Total Users</div>
   <div class="ds-metric-value">1,234</div>
-  <div class="ds-metric-trend ds-accent-success">
-    ↑ 12% from last week
-  </div>
+  <div class="ds-metric-trend ds-accent-success">↑ 12% from last week</div>
 </div>
 ```
 
@@ -181,18 +180,19 @@ This document outlines a comprehensive redesign of the MFE platform's user inter
 
 ### Semantic Palette
 
-| Purpose | Class | Color | Usage |
-|---------|-------|-------|-------|
-| Primary | `ds-accent-primary` | Blue | Primary actions, links |
+| Purpose | Class               | Color | Usage                          |
+| ------- | ------------------- | ----- | ------------------------------ |
+| Primary | `ds-accent-primary` | Blue  | Primary actions, links         |
 | Success | `ds-accent-success` | Green | Positive states, confirmations |
-| Warning | `ds-accent-warning` | Amber | Caution, attention needed |
-| Danger | `ds-accent-danger` | Red | Errors, destructive actions |
-| Info | `ds-accent-info` | Cyan | Informational messages |
-| Neutral | `ds-accent-neutral` | Slate | Default states, borders |
+| Warning | `ds-accent-warning` | Amber | Caution, attention needed      |
+| Danger  | `ds-accent-danger`  | Red   | Errors, destructive actions    |
+| Info    | `ds-accent-info`    | Cyan  | Informational messages         |
+| Neutral | `ds-accent-neutral` | Slate | Default states, borders        |
 
 ### Background Variants
 
 Each accent color has three variants:
+
 - **Solid**: Full color background
 - **Soft**: 10% opacity background
 - **Ghost**: Hover state only
@@ -201,42 +201,45 @@ Each accent color has three variants:
 
 ### Simplified Hierarchy
 
-| Level | Class | Size | Weight | Usage |
-|-------|-------|------|--------|-------|
-| Hero | `ds-hero-title` | 2xl | Bold | Page heroes only |
-| Page | `ds-page-title` | xl | Bold | Page titles |
-| Section | `ds-section-title` | lg | Semibold | Major sections |
-| Card | `ds-card-title` | base | Semibold | Card headers |
-| Body | `ds-body` | sm | Normal | Default text |
-| Caption | `ds-caption` | xs | Normal | Secondary info |
+| Level   | Class              | Size | Weight   | Usage            |
+| ------- | ------------------ | ---- | -------- | ---------------- |
+| Hero    | `ds-hero-title`    | 2xl  | Bold     | Page heroes only |
+| Page    | `ds-page-title`    | xl   | Bold     | Page titles      |
+| Section | `ds-section-title` | lg   | Semibold | Major sections   |
+| Card    | `ds-card-title`    | base | Semibold | Card headers     |
+| Body    | `ds-body`          | sm   | Normal   | Default text     |
+| Caption | `ds-caption`       | xs   | Normal   | Secondary info   |
 
 ## Spacing System
 
 ### Consistent Scale
 
-| Size | Value | Usage |
-|------|-------|-------|
-| xs | 0.5rem (8px) | Inline spacing |
-| sm | 1rem (16px) | Compact spacing |
-| md | 1.5rem (24px) | Standard spacing |
-| lg | 2rem (32px) | Section spacing |
-| xl | 3rem (48px) | Major sections |
+| Size | Value         | Usage            |
+| ---- | ------------- | ---------------- |
+| xs   | 0.5rem (8px)  | Inline spacing   |
+| sm   | 1rem (16px)   | Compact spacing  |
+| md   | 1.5rem (24px) | Standard spacing |
+| lg   | 2rem (32px)   | Section spacing  |
+| xl   | 3rem (48px)   | Major sections   |
 
 ## Files Affected
 
 ### High Priority (Major Changes)
+
 1. EventBusServiceDemoPage.tsx - Complete redesign
 2. HomePage.tsx - Visual refresh
 3. DashboardPage.tsx - Metric cards
 4. design-system/styles/index.css - New classes
 
 ### Medium Priority (Updates)
+
 5. ModalServiceDemoPage.tsx - Simplification
 6. All UI components (button, badge, card, etc.)
 7. Navigation and Layout components
 8. Error boundaries and loaders
 
 ### Low Priority (Alignment)
+
 9. MFE demo applications
 10. Documentation updates
 11. Test file updates
@@ -244,12 +247,14 @@ Each accent color has three variants:
 ## Success Metrics
 
 ### Quantitative
+
 - 50% reduction in CSS classes per component
 - 100% semantic color usage
 - Consistent spacing scale across all pages
 - Single loading/empty state pattern
 
 ### Qualitative
+
 - Professional, modern appearance
 - Clear visual hierarchy
 - Intuitive navigation
@@ -258,22 +263,24 @@ Each accent color has three variants:
 
 ## Timeline
 
-| Week | Phase | Deliverables |
-|------|-------|--------------|
-| 1 | Design System | New CSS classes, React components |
-| 2 | Major Pages | EventBus, Home, Dashboard redesigns |
-| 3 | Components | UI component updates, MFE demos |
-| 4 | Polish | Testing, documentation, refinements |
+| Week | Phase         | Deliverables                        |
+| ---- | ------------- | ----------------------------------- |
+| 1    | Design System | New CSS classes, React components   |
+| 2    | Major Pages   | EventBus, Home, Dashboard redesigns |
+| 3    | Components    | UI component updates, MFE demos     |
+| 4    | Polish        | Testing, documentation, refinements |
 
 ## Risk Mitigation
 
 ### Potential Issues
+
 1. **Breaking changes**: Use feature flags for gradual rollout
 2. **Performance impact**: Monitor bundle size and render times
 3. **Browser compatibility**: Test across all supported browsers
 4. **Accessibility**: Ensure WCAG compliance throughout
 
 ### Rollback Plan
+
 - Git branching strategy for easy reversion
 - Component-by-component migration
 - A/B testing for major changes
@@ -283,6 +290,7 @@ Each accent color has three variants:
 This redesign will transform the MFE platform from its current inconsistent state into a professional, scalable, and delightful user experience. By focusing on semantic design, consistent patterns, and clear visual hierarchy, we'll create a platform that's both beautiful and functional.
 
 The investment in this redesign will pay dividends in:
+
 - Reduced development time (reusable patterns)
 - Improved user satisfaction (better UX)
 - Easier maintenance (consistent codebase)
@@ -290,6 +298,6 @@ The investment in this redesign will pay dividends in:
 
 ---
 
-*Document Version: 1.0*  
-*Last Updated: 2025-01-08*  
-*Status: In Progress*
+_Document Version: 1.0_  
+_Last Updated: 2025-01-08_  
+_Status: In Progress_

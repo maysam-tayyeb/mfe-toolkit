@@ -6,7 +6,7 @@ const vue3ModalDemo = {
   mount: (element: HTMLElement, services: MFEServices) => {
     const app = createApp(App, { services });
     app.mount(element);
-    
+
     (element as any).__vueApp = app;
   },
   unmount: (element: HTMLElement) => {

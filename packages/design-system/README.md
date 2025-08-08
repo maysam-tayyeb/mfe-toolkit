@@ -40,12 +40,12 @@ This design system follows a **CSS-first approach** with zero global pollution:
     <h1 class="ds-hero-title">Welcome</h1>
     <p class="ds-hero-description">Build amazing MFEs</p>
   </div>
-  
+
   <!-- Card variants -->
   <div class="ds-card">Standard card</div>
   <div class="ds-card-padded">More padding</div>
   <div class="ds-card-compact">Less padding</div>
-  
+
   <!-- Metric cards -->
   <div class="ds-metric-card">
     <div class="ds-metric-value">42</div>
@@ -91,7 +91,7 @@ This design system follows a **CSS-first approach** with zero global pollution:
 </div>
 
 <!-- Form controls -->
-<input class="ds-input" placeholder="Enter text">
+<input class="ds-input" placeholder="Enter text" />
 <select class="ds-select">
   <option>Option 1</option>
 </select>
@@ -171,27 +171,27 @@ This design system follows a **CSS-first approach** with zero global pollution:
 ```html
 <!DOCTYPE html>
 <html>
-<head>
-  <!-- Design system CSS is provided by container -->
-  <link rel="stylesheet" href="/design-system.css">
-</head>
-<body>
-  <div class="ds-page">
-    <div class="ds-hero">
-      <h1 class="ds-hero-title">My App</h1>
-    </div>
-    
-    <div class="ds-card-padded">
-      <h2 class="ds-section-title">Features</h2>
-      <div class="ds-grid-3">
-        <div class="ds-metric-card">
-          <div class="ds-metric-value">99%</div>
-          <div class="ds-metric-label">Uptime</div>
+  <head>
+    <!-- Design system CSS is provided by container -->
+    <link rel="stylesheet" href="/design-system.css" />
+  </head>
+  <body>
+    <div class="ds-page">
+      <div class="ds-hero">
+        <h1 class="ds-hero-title">My App</h1>
+      </div>
+
+      <div class="ds-card-padded">
+        <h2 class="ds-section-title">Features</h2>
+        <div class="ds-grid-3">
+          <div class="ds-metric-card">
+            <div class="ds-metric-value">99%</div>
+            <div class="ds-metric-label">Uptime</div>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</body>
+  </body>
 </html>
 ```
 
@@ -203,11 +203,9 @@ function Dashboard() {
     <div className="ds-page">
       <div className="ds-hero">
         <h1 className="ds-hero-title">Dashboard</h1>
-        <p className="ds-hero-description">
-          Monitor your application
-        </p>
+        <p className="ds-hero-description">Monitor your application</p>
       </div>
-      
+
       <div className="ds-grid-3 ds-mt-lg">
         <MetricCard value="42" label="Users" />
         <MetricCard value="99%" label="Uptime" />
@@ -226,11 +224,9 @@ function Dashboard() {
     <div class="ds-hero">
       <h1 class="ds-hero-title">{{ title }}</h1>
     </div>
-    
+
     <div class="ds-card-padded">
-      <button class="ds-button-primary" @click="handleClick">
-        Click Me
-      </button>
+      <button class="ds-button-primary" @click="handleClick">Click Me</button>
     </div>
   </div>
 </template>

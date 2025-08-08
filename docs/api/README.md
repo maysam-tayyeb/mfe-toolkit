@@ -59,7 +59,7 @@ interface ErrorReporter {
     context?: ErrorContext,
     errorInfo?: ErrorInfo
   ): ErrorReport | null;
-  
+
   getErrors(): ErrorReport[];
   getErrorsByMFE(mfeName: string): ErrorReport[];
   getErrorCounts(): Record<string, number>;
@@ -104,13 +104,9 @@ export default {
     try {
       // Your MFE logic
     } catch (error) {
-      services.errorReporter?.reportError(
-        'my-mfe',
-        error as Error,
-        'runtime-error'
-      );
+      services.errorReporter?.reportError('my-mfe', error as Error, 'runtime-error');
     }
-  }
+  },
 };
 ```
 
@@ -148,19 +144,19 @@ export default {
   mount(element: HTMLElement, services: MFEServices) {
     // Get shared state
     const userPrefs = services.stateManager?.get('userPreferences');
-    
+
     // Set shared state
     services.stateManager?.set('theme', 'dark', 'my-mfe');
-    
+
     // Subscribe to changes
     const unsubscribe = services.stateManager?.subscribe('theme', (value) => {
       console.log('Theme changed to:', value);
     });
-    
+
     return () => {
       unsubscribe?.();
     };
-  }
+  },
 };
 ```
 

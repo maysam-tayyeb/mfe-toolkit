@@ -9,23 +9,24 @@ export class ThemeServiceImpl implements ThemeService {
 
   constructor(themes: Theme[] = ['light', 'dark']) {
     this.availableThemes = themes;
-    
+
     // Initialize theme from localStorage or system preference
     const savedTheme = localStorage.getItem('theme') as Theme | null;
     const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    
+
     // Validate saved theme is still available
     if (savedTheme && this.availableThemes.includes(savedTheme)) {
       this.currentTheme = savedTheme;
     } else {
       // Fallback to system preference or first available theme
-      this.currentTheme = systemPrefersDark && this.availableThemes.includes('dark') 
-        ? 'dark' 
-        : this.availableThemes[0];
+      this.currentTheme =
+        systemPrefersDark && this.availableThemes.includes('dark')
+          ? 'dark'
+          : this.availableThemes[0];
     }
-    
+
     this.applyTheme(this.currentTheme);
-    
+
     // Listen for system theme changes
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
       if (!localStorage.getItem('theme')) {
@@ -65,7 +66,7 @@ export class ThemeServiceImpl implements ThemeService {
     this.listeners.add(callback);
     // Call immediately with current theme
     callback(this.currentTheme);
-    
+
     // Return unsubscribe function
     return () => {
       this.listeners.delete(callback);
@@ -74,27 +75,27 @@ export class ThemeServiceImpl implements ThemeService {
 
   private applyTheme(theme: Theme): void {
     const root = document.documentElement;
-    
+
     // Remove all theme classes
-    this.availableThemes.forEach(t => {
+    this.availableThemes.forEach((t) => {
       root.classList.remove(t);
     });
-    
+
     // Add current theme class
     root.classList.add(theme);
-    
+
     // Also set as data attribute for more flexible CSS targeting
     root.setAttribute('data-theme', theme);
-    
+
     // Update meta theme-color for mobile browsers
     const metaThemeColor = document.querySelector('meta[name="theme-color"]');
     if (metaThemeColor) {
       // Use theme-specific colors or fallback to light/dark defaults
       const themeColors: Record<string, string> = {
-        'light': '#ffffff',
-        'dark': '#000000',
-        'blue': '#1e40af',
-        'sepia': '#f5e6d3',
+        light: '#ffffff',
+        dark: '#000000',
+        blue: '#1e40af',
+        sepia: '#f5e6d3',
         // Add more theme colors as needed
       };
       metaThemeColor.setAttribute('content', themeColors[theme] || '#ffffff');
@@ -102,7 +103,7 @@ export class ThemeServiceImpl implements ThemeService {
   }
 
   private notifyListeners(theme: Theme): void {
-    this.listeners.forEach(listener => {
+    this.listeners.forEach((listener) => {
       try {
         listener(theme);
       } catch (error) {

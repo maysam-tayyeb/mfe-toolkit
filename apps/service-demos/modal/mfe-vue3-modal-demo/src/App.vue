@@ -23,21 +23,6 @@
       </div>
     </div>
 
-    <div class="ds-card mb-4">
-      <div class="ds-label mb-3">Event Log:</div>
-      <div class="space-y-1">
-        <div v-if="events.length === 0" class="ds-text-muted ds-text-small">
-          No events yet. Click a button to start.
-        </div>
-        <div
-          v-for="(event, index) in events"
-          :key="index"
-          class="ds-text-small font-mono ds-text-muted"
-        >
-          {{ event }}
-        </div>
-      </div>
-    </div>
 
     <div class="ds-card bg-muted/10">
       <div class="ds-card-title mb-2">Vue 3 Compatibility:</div>
@@ -60,65 +45,45 @@ const props = defineProps<{
   services: MFEServices
 }>();
 
-const events = ref<string[]>([]);
 const { modal, notification, logger } = props.services;
 
-const addEvent = (event: string) => {
-  const timestamp = new Date().toLocaleTimeString();
-  events.value.unshift(`[${timestamp}] ${event}`);
-  if (events.value.length > 5) {
-    events.value = events.value.slice(0, 5);
-  }
-  logger?.info(`Vue3 Modal Demo: ${event}`);
-};
-
 const handleSimpleAlert = () => {
-  addEvent('Opening simple alert...');
   (modal as any).open({
     title: 'Simple Alert',
     content: 'This is a simple alert from Vue 3 MFE. Notice that we can only pass plain text content.',
     actions: [
       {
         label: 'OK',
-        variant: 'default',
-        onClick: () => {
-          addEvent('Alert closed');
-        }
+        variant: 'default'
       }
     ]
   });
 };
 
 const handleConfirmation = async () => {
-  addEvent('Opening confirmation dialog...');
   const result = await (modal as any).confirm({
     title: 'Confirmation Required',
     content: 'Are you sure you want to proceed? This action demonstrates Vue 3 MFE integration with the modal service.',
     confirmLabel: 'Yes, Proceed',
     cancelLabel: 'Cancel'
   });
-  addEvent(result ? 'User confirmed' : 'User cancelled');
+  // Handle confirmation result if needed
 };
 
 const handleFormModal = () => {
-  addEvent('Opening form modal...');
   (modal as any).open({
     title: 'Form Modal (Limited)',
     content: 'Vue 3 MFEs cannot render actual form components in the modal. This is a limitation when crossing framework boundaries. Only plain text content is supported.',
     actions: [
       {
         label: 'Understood',
-        variant: 'default',
-        onClick: () => {
-          addEvent('Form modal closed');
-        }
+        variant: 'default'
       }
     ]
   });
 };
 
 const handleCustomContent = () => {
-  addEvent('Opening custom content modal...');
   (modal as any).open({
     title: 'Custom Content (Text Only)',
     content: `Vue 3 Integration Details:
@@ -134,17 +99,13 @@ This demonstrates the limitations when passing content from Vue to React.`,
     actions: [
       {
         label: 'Close',
-        variant: 'default',
-        onClick: () => {
-          addEvent('Custom modal closed');
-        }
+        variant: 'default'
       }
     ]
   });
 };
 
 const handleErrorExample = () => {
-  addEvent('Showing error example...');
   notification.error('Error from Vue 3 MFE! This is a cross-framework notification.');
   (modal as any).open({
     title: 'Error Example',
@@ -153,17 +114,13 @@ const handleErrorExample = () => {
     actions: [
       {
         label: 'OK',
-        variant: 'destructive',
-        onClick: () => {
-          addEvent('Error modal closed');
-        }
+        variant: 'destructive'
       }
     ]
   });
 };
 
 const handleMultipleNotifications = () => {
-  addEvent('Showing multiple notifications...');
   notification.success('Success notification from Vue 3!');
   setTimeout(() => notification.info('Info notification from Vue 3!'), 500);
   setTimeout(() => notification.warning('Warning notification from Vue 3!'), 1000);
@@ -171,25 +128,19 @@ const handleMultipleNotifications = () => {
 };
 
 const handleNestedModals = () => {
-  addEvent('Opening nested modal attempt...');
   (modal as any).open({
     title: 'Nested Modals Not Supported',
     content: 'Vue 3 MFEs cannot create nested modals because we cannot pass interactive content (buttons) to trigger nested modals. This is a framework boundary limitation.',
     actions: [
       {
         label: 'Understood',
-        variant: 'default',
-        onClick: () => {
-          addEvent('Nested modal info closed');
-        }
+        variant: 'default'
       }
     ]
   });
 };
 
 const handleSizeVariations = async () => {
-  addEvent('Showing size variations...');
-  
   const sizes: Array<'sm' | 'md' | 'lg' | 'xl'> = ['sm', 'md', 'lg', 'xl'];
   
   for (const size of sizes) {
@@ -203,7 +154,6 @@ const handleSizeVariations = async () => {
             label: 'Next',
             variant: 'default',
             onClick: () => {
-              addEvent(`Closed ${size} modal`);
               resolve();
             }
           }

@@ -2,7 +2,14 @@ import React, { useState, useEffect, useRef } from 'react';
 import { RegistryMFELoader } from '@/components/RegistryMFELoader';
 import { Badge } from '@/components/ui/badge';
 import { Radio, Activity, Code, Users, Zap, ChevronRight } from 'lucide-react';
-import { EventLog, Hero, TabGroup, EmptyState, MetricCard, type EventMessage } from '@mfe/design-system-react';
+import {
+  EventLog,
+  Hero,
+  TabGroup,
+  EmptyState,
+  MetricCard,
+  type EventMessage,
+} from '@mfe/design-system-react';
 import { getMFEServicesSingleton } from '@/services/mfe-services-singleton';
 import { useToast } from '@/components/ui/use-toast';
 
@@ -12,7 +19,7 @@ export function EventBusServiceDemoPage() {
     'user:login',
     'user:logout',
     'theme:change',
-    'data:update'
+    'data:update',
   ]);
   const [eventCount, setEventCount] = useState(0);
   const [activeConnections] = useState(1);
@@ -26,26 +33,26 @@ export function EventBusServiceDemoPage() {
       event,
       data,
       timestamp: new Date().toLocaleTimeString(),
-      source
+      source,
     };
-    setContainerMessages(prev => [message, ...prev].slice(0, 10));
-    setEventCount(prev => prev + 1);
+    setContainerMessages((prev) => [message, ...prev].slice(0, 10));
+    setEventCount((prev) => prev + 1);
     logger?.info(`Container EventBus: ${event}`, data);
   };
 
   useEffect(() => {
     // Clean up old subscriptions first
-    subscriptionsRef.current.forEach(unsubscribe => unsubscribe());
-    
+    subscriptionsRef.current.forEach((unsubscribe) => unsubscribe());
+
     // Create new subscriptions for container
-    subscriptionsRef.current = subscribedEvents.map(event =>
+    subscriptionsRef.current = subscribedEvents.map((event) =>
       eventBus.on(event, (data: any) => {
         addContainerMessage(event, data, 'MFE');
       })
     );
 
     return () => {
-      subscriptionsRef.current.forEach(unsubscribe => unsubscribe());
+      subscriptionsRef.current.forEach((unsubscribe) => unsubscribe());
       subscriptionsRef.current = [];
     };
   }, [subscribedEvents, eventBus]);
@@ -60,10 +67,26 @@ export function EventBusServiceDemoPage() {
   };
 
   const quickEvents = [
-    { icon: <Users className="h-4 w-4" />, name: 'user:login', data: { userId: 'admin', role: 'administrator' } },
-    { icon: <Activity className="h-4 w-4" />, name: 'system:health', data: { status: 'healthy', uptime: 3600 } },
-    { icon: <Zap className="h-4 w-4" />, name: 'theme:change', data: { theme: 'dark', mode: 'auto' } },
-    { icon: <Code className="h-4 w-4" />, name: 'config:update', data: { feature: 'eventbus', enabled: true } },
+    {
+      icon: <Users className="h-4 w-4" />,
+      name: 'user:login',
+      data: { userId: 'admin', role: 'administrator' },
+    },
+    {
+      icon: <Activity className="h-4 w-4" />,
+      name: 'system:health',
+      data: { status: 'healthy', uptime: 3600 },
+    },
+    {
+      icon: <Zap className="h-4 w-4" />,
+      name: 'theme:change',
+      data: { theme: 'dark', mode: 'auto' },
+    },
+    {
+      icon: <Code className="h-4 w-4" />,
+      name: 'config:update',
+      data: { feature: 'eventbus', enabled: true },
+    },
   ];
 
   const codeExamples = [
@@ -78,7 +101,7 @@ eventBus.emit('user:login', {
   username: 'john' 
 });`}</code>
         </pre>
-      )
+      ),
     },
     {
       id: 'subscribe',
@@ -95,7 +118,7 @@ useEffect(() => {
   return () => unsubscribe();
 }, []);`}</code>
         </pre>
-      )
+      ),
     },
     {
       id: 'once',
@@ -107,7 +130,7 @@ eventBus.once('app:ready', () => {
   console.log('App is ready');
 });`}</code>
         </pre>
-      )
+      ),
     },
     {
       id: 'wildcard',
@@ -119,8 +142,8 @@ eventBus.on('user:*', (event, data) => {
   console.log(\`User event: \${event}\`, data);
 });`}</code>
         </pre>
-      )
-    }
+      ),
+    },
   ];
 
   return (
@@ -156,7 +179,7 @@ eventBus.on('user:*', (event, data) => {
       {/* Interactive Playground */}
       <div className="ds-card-padded">
         <h2 className="ds-section-title ds-mb-md">Interactive Playground</h2>
-        
+
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Controls */}
           <div>
@@ -190,15 +213,14 @@ eventBus.on('user:*', (event, data) => {
                 />
               ) : (
                 <div className="flex flex-wrap gap-2">
-                  {subscribedEvents.map(event => (
-                    <div
-                      key={event}
-                      className="ds-event-badge ds-event-badge-active"
-                    >
+                  {subscribedEvents.map((event) => (
+                    <div key={event} className="ds-event-badge ds-event-badge-active">
                       <div className="ds-status-dot ds-status-online" />
                       <span className="font-mono text-xs">{event}</span>
                       <button
-                        onClick={() => setSubscribedEvents(prev => prev.filter(e => e !== event))}
+                        onClick={() =>
+                          setSubscribedEvents((prev) => prev.filter((e) => e !== event))
+                        }
                         className="ml-1 ds-text-muted hover:ds-accent-danger"
                       >
                         ×
@@ -237,7 +259,7 @@ eventBus.on('user:*', (event, data) => {
           <h2 className="ds-section-title">Live MFE Demo</h2>
           <Badge variant="secondary">React {React.version}</Badge>
         </div>
-        
+
         <div className="ds-card p-0 overflow-hidden">
           <RegistryMFELoader
             id="mfe-react19-eventbus-demo"

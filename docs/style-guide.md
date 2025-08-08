@@ -28,6 +28,7 @@ This guide ensures consistency across all documentation in the MFE Toolkit proje
 ### Directory Names
 
 Always use kebab-case for directories:
+
 - ✅ `container-spec/`
 - ✅ `platform-docs/`
 - ❌ `Container_Spec/`
@@ -41,9 +42,11 @@ Always use kebab-case for directories:
 - Use sentence case for subheadings (H2 and below)
 
 ```markdown
-# MFE Toolkit Documentation    <!-- Title case -->
-## Getting started             <!-- Sentence case -->
-### Install dependencies       <!-- Sentence case -->
+# MFE Toolkit Documentation <!-- Title case -->
+
+## Getting started <!-- Sentence case -->
+
+### Install dependencies <!-- Sentence case -->
 ```
 
 ### Code Examples
@@ -74,9 +77,11 @@ const loadMFE = async (url) => {
 
 ```markdown
 <!-- Good -->
+
 See the [architecture decisions](./architecture/architecture-decisions.md) for more details.
 
 <!-- Bad -->
+
 Click [here](./architecture/architecture-decisions.md) for more info.
 ```
 

@@ -19,19 +19,19 @@ interface CheckResult {
 
 const PACKAGES_TO_PUBLISH = [
   'mfe-toolkit-core', // @mfe-toolkit/core
-  'shared',           // @mfe-toolkit/shared
-  'universal-state',  // @mfe-toolkit/state
-  'mfe-toolkit-cli',  // @mfe-toolkit/cli
+  'shared', // @mfe-toolkit/shared
+  'universal-state', // @mfe-toolkit/state
+  'mfe-toolkit-cli', // @mfe-toolkit/cli
   'mfe-toolkit-react', // @mfe-toolkit/react
 ];
 
 function checkPackage(packageDir: string): CheckResult {
   const packagePath = join(process.cwd(), 'packages', packageDir);
   const packageJsonPath = join(packagePath, 'package.json');
-  
+
   const result: CheckResult = {
     package: packageDir,
-    checks: []
+    checks: [],
   };
 
   // Check 1: package.json exists
@@ -39,7 +39,7 @@ function checkPackage(packageDir: string): CheckResult {
     result.checks.push({
       name: 'package.json exists',
       passed: false,
-      message: 'package.json not found'
+      message: 'package.json not found',
     });
     return result;
   }
@@ -51,7 +51,7 @@ function checkPackage(packageDir: string): CheckResult {
   result.checks.push({
     name: 'Has @mfe-toolkit scope',
     passed: hasCorrectScope,
-    message: hasCorrectScope ? packageJson.name : `Invalid name: ${packageJson.name}`
+    message: hasCorrectScope ? packageJson.name : `Invalid name: ${packageJson.name}`,
   });
 
   // Check 3: Has version
@@ -59,7 +59,7 @@ function checkPackage(packageDir: string): CheckResult {
   result.checks.push({
     name: 'Has version',
     passed: hasVersion,
-    message: packageJson.version || 'No version specified'
+    message: packageJson.version || 'No version specified',
   });
 
   // Check 4: Has description
@@ -67,7 +67,7 @@ function checkPackage(packageDir: string): CheckResult {
   result.checks.push({
     name: 'Has description',
     passed: hasDescription,
-    message: hasDescription ? '✓' : 'No description'
+    message: hasDescription ? '✓' : 'No description',
   });
 
   // Check 5: Has main/module/types fields
@@ -75,7 +75,7 @@ function checkPackage(packageDir: string): CheckResult {
   result.checks.push({
     name: 'Has entry points',
     passed: hasEntryPoints,
-    message: hasEntryPoints ? '✓' : 'Missing main/module/types fields'
+    message: hasEntryPoints ? '✓' : 'Missing main/module/types fields',
   });
 
   // Check 6: Has LICENSE file
@@ -83,7 +83,7 @@ function checkPackage(packageDir: string): CheckResult {
   result.checks.push({
     name: 'Has LICENSE file',
     passed: hasLicense,
-    message: hasLicense ? '✓' : 'LICENSE file missing'
+    message: hasLicense ? '✓' : 'LICENSE file missing',
   });
 
   // Check 7: Has README.md
@@ -91,7 +91,7 @@ function checkPackage(packageDir: string): CheckResult {
   result.checks.push({
     name: 'Has README.md',
     passed: hasReadme,
-    message: hasReadme ? '✓' : 'README.md missing'
+    message: hasReadme ? '✓' : 'README.md missing',
   });
 
   // Check 8: Has files field
@@ -99,7 +99,7 @@ function checkPackage(packageDir: string): CheckResult {
   result.checks.push({
     name: 'Has files field',
     passed: hasFilesField,
-    message: hasFilesField ? '✓' : 'No files field specified'
+    message: hasFilesField ? '✓' : 'No files field specified',
   });
 
   // Check 9: Has publishConfig
@@ -107,7 +107,7 @@ function checkPackage(packageDir: string): CheckResult {
   result.checks.push({
     name: 'Has publishConfig',
     passed: hasPublishConfig,
-    message: hasPublishConfig ? '✓' : 'No publishConfig.access specified'
+    message: hasPublishConfig ? '✓' : 'No publishConfig.access specified',
   });
 
   // Check 10: Has repository info
@@ -115,7 +115,7 @@ function checkPackage(packageDir: string): CheckResult {
   result.checks.push({
     name: 'Has repository info',
     passed: hasRepository,
-    message: hasRepository ? '✓' : 'No repository/homepage specified'
+    message: hasRepository ? '✓' : 'No repository/homepage specified',
   });
 
   return result;
@@ -142,11 +142,11 @@ function runChecks() {
     result.checks.push({
       name: 'Has build output',
       passed: hasBuild,
-      message: hasBuild ? '✓' : 'No dist folder - run build first'
+      message: hasBuild ? '✓' : 'No dist folder - run build first',
     });
 
     // Check if any check failed
-    if (result.checks.some(check => !check.passed)) {
+    if (result.checks.some((check) => !check.passed)) {
       allPassed = false;
     }
   }
@@ -155,7 +155,7 @@ function runChecks() {
   for (const result of results) {
     console.log(`\n📦 ${result.package}`);
     console.log('─'.repeat(40));
-    
+
     for (const check of result.checks) {
       const icon = check.passed ? '✅' : '❌';
       const message = check.message ? ` - ${check.message}` : '';

@@ -5,25 +5,15 @@ export interface LoadingStateProps {
   className?: string;
 }
 
-export function LoadingState({
-  size = 'md',
-  text,
-  subtext,
-  className = ''
-}: LoadingStateProps) {
-  const spinnerClass = size === 'sm' ? 'ds-spinner-sm' : 
-                       size === 'lg' ? 'ds-spinner-lg' : 
-                       'ds-spinner-md';
-  
+export function LoadingState({ size = 'md', text, subtext, className = '' }: LoadingStateProps) {
+  const spinnerClass =
+    size === 'sm' ? 'ds-spinner-sm' : size === 'lg' ? 'ds-spinner-lg' : 'ds-spinner-md';
+
   return (
     <div className={`ds-loading-state ${className}`}>
       <div className={spinnerClass}></div>
-      {text && (
-        <p className="ds-loading-text">{text}</p>
-      )}
-      {subtext && (
-        <p className="ds-loading-subtext">{subtext}</p>
-      )}
+      {text && <p className="ds-loading-text">{text}</p>}
+      {subtext && <p className="ds-loading-subtext">{subtext}</p>}
     </div>
   );
 }

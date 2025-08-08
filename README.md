@@ -81,26 +81,26 @@ The toolkit is available as modular npm packages under the `@mfe-toolkit` organi
 
 ### Core Packages
 
-| Package | Description | Version |
-|---------|-------------|---------|
-| [`@mfe-toolkit/core`](./packages/mfe-toolkit-core) | Framework-agnostic core functionality | 0.1.0 |
-| [`@mfe-toolkit/react`](./packages/mfe-toolkit-react) | React components and hooks | 0.1.0 |
-| [`@mfe-toolkit/cli`](./packages/mfe-toolkit-cli) | CLI tools for MFE development | 0.1.0 |
-| [`@mfe-toolkit/state`](./packages/mfe-toolkit-state) | Cross-framework state management | 0.1.0 |
+| Package                                              | Description                           | Version |
+| ---------------------------------------------------- | ------------------------------------- | ------- |
+| [`@mfe-toolkit/core`](./packages/mfe-toolkit-core)   | Framework-agnostic core functionality | 0.1.0   |
+| [`@mfe-toolkit/react`](./packages/mfe-toolkit-react) | React components and hooks            | 0.1.0   |
+| [`@mfe-toolkit/cli`](./packages/mfe-toolkit-cli)     | CLI tools for MFE development         | 0.1.0   |
+| [`@mfe-toolkit/state`](./packages/mfe-toolkit-state) | Cross-framework state management      | 0.1.0   |
 
 ### Middleware Packages
 
-| Package | Description | Version |
-|---------|-------------|---------|
-| [`@mfe-toolkit/state-middleware-performance`](./packages/mfe-toolkit-state-middleware-performance) | Performance monitoring for state management | 0.1.0 |
+| Package                                                                                            | Description                                 | Version |
+| -------------------------------------------------------------------------------------------------- | ------------------------------------------- | ------- |
+| [`@mfe-toolkit/state-middleware-performance`](./packages/mfe-toolkit-state-middleware-performance) | Performance monitoring for state management | 0.1.0   |
 
 ### Internal Packages
 
-| Package | Description | Status |
-|---------|-------------|--------|
-| [`@mfe/design-system`](./packages/design-system) | CSS-first design system with 200+ utility classes | Internal |
-| [`@mfe/design-system-react`](./packages/design-system-react) | React components for design system | Internal |
-| [`@mfe/shared`](./packages/shared) | Shared utilities and constants | Internal |
+| Package                                                      | Description                                       | Status   |
+| ------------------------------------------------------------ | ------------------------------------------------- | -------- |
+| [`@mfe/design-system`](./packages/design-system)             | CSS-first design system with 200+ utility classes | Internal |
+| [`@mfe/design-system-react`](./packages/design-system-react) | React components for design system                | Internal |
+| [`@mfe/shared`](./packages/shared)                           | Shared utilities and constants                    | Internal |
 
 ### Installation
 
@@ -129,9 +129,9 @@ The toolkit includes a powerful state management solution with optional middlewa
 
 ```typescript
 import { createStateManager } from '@mfe-toolkit/state';
-import { 
-  createPerformanceMiddleware, 
-  initStatePerformanceMonitor 
+import {
+  createPerformanceMiddleware,
+  initStatePerformanceMonitor,
 } from '@mfe-toolkit/state-middleware-performance';
 
 // Initialize performance monitoring
@@ -142,9 +142,7 @@ const stateManager = createStateManager({
   devtools: true,
   persistent: true,
   crossTab: true,
-  middleware: [
-    createPerformanceMiddleware()
-  ]
+  middleware: [createPerformanceMiddleware()],
 });
 
 // Use the state manager
@@ -217,15 +215,18 @@ pnpm dev:container-react  # React container app on http://localhost:3000
 The platform includes comprehensive service demonstrations across multiple frameworks:
 
 #### Modal Service Demos
+
 - **React 19**: Full modal capabilities with JSX support
 - **React 17**: Legacy React with text-only content
 - **Vue 3**: Cross-framework integration demo
 - **Vanilla TS**: Lightweight implementation (5KB)
 
 #### Event Bus Demo
+
 - **React 19**: Interactive pub/sub demonstration with real-time event log
 
 Access demos at:
+
 - Modal Service: http://localhost:3000/services/modal
 - Event Bus: http://localhost:3000/services/event-bus
 
@@ -650,6 +651,7 @@ VITE_MFE_REGISTRY_URL=https://cdn.example.com/configs/mfe-registry.json
 - Add performance monitoring and optimization
 
 See our [Comprehensive Roadmap](./docs/architecture/comprehensive-roadmap.md) for exciting upcoming features including:
+
 - 🔍 DevTools middleware for time-travel debugging
 - ✅ Validation middleware for runtime type safety
 - 🔄 Sync middleware for backend integration

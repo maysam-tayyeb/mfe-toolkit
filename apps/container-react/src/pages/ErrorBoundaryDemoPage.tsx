@@ -4,9 +4,9 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { getMFEServicesSingleton } from '@/services/mfe-services-singleton';
 import { Hero, MetricCard, TabGroup, EmptyState } from '@mfe/design-system-react';
-import { 
-  AlertCircle, 
-  XCircle, 
+import {
+  AlertCircle,
+  XCircle,
   Shield,
   RefreshCw,
   Wifi,
@@ -18,7 +18,7 @@ import {
   ChevronRight,
   Trash2,
   Eye,
-  EyeOff
+  EyeOff,
 } from 'lucide-react';
 
 // Fake MFE URLs for testing different error scenarios
@@ -43,7 +43,7 @@ export const ErrorBoundaryDemoPage: React.FC = () => {
       description: 'Simulates a network error when loading MFE',
       url: ERROR_SCENARIOS.networkError,
       icon: <Wifi className="h-5 w-5" />,
-      color: 'ds-icon-danger'
+      color: 'ds-icon-danger',
     },
     {
       id: 'invalidModule',
@@ -51,7 +51,7 @@ export const ErrorBoundaryDemoPage: React.FC = () => {
       description: "MFE that doesn't export proper mount function",
       url: ERROR_SCENARIOS.invalidModule,
       icon: <FileX className="h-5 w-5" />,
-      color: 'ds-icon-warning'
+      color: 'ds-icon-warning',
     },
     {
       id: 'timeoutError',
@@ -59,7 +59,7 @@ export const ErrorBoundaryDemoPage: React.FC = () => {
       description: 'MFE that takes too long to load',
       url: ERROR_SCENARIOS.timeoutError,
       icon: <Clock className="h-5 w-5" />,
-      color: 'ds-icon-info'
+      color: 'ds-icon-info',
     },
     {
       id: 'crashingMFE',
@@ -67,7 +67,7 @@ export const ErrorBoundaryDemoPage: React.FC = () => {
       description: 'MFE that crashes after mounting',
       url: ERROR_SCENARIOS.crashingMFE,
       icon: <Zap className="h-5 w-5" />,
-      color: 'ds-icon-danger'
+      color: 'ds-icon-danger',
     },
   ];
 
@@ -79,7 +79,7 @@ export const ErrorBoundaryDemoPage: React.FC = () => {
   // Refresh component to show updated error counts
   useEffect(() => {
     const interval = setInterval(() => {
-      setRefreshKey(prev => prev + 1);
+      setRefreshKey((prev) => prev + 1);
     }, 2000); // Refresh every 2 seconds
 
     return () => clearInterval(interval);
@@ -94,8 +94,8 @@ export const ErrorBoundaryDemoPage: React.FC = () => {
       content: (
         <div className="space-y-4">
           <p className="text-sm ds-text-muted">
-            React Error Boundaries catch JavaScript errors anywhere in the MFE component tree,
-            log those errors, and display a fallback UI instead of crashing.
+            React Error Boundaries catch JavaScript errors anywhere in the MFE component tree, log
+            those errors, and display a fallback UI instead of crashing.
           </p>
           <ul className="ds-list-check">
             <li className="ds-list-check-item">
@@ -120,7 +120,7 @@ export const ErrorBoundaryDemoPage: React.FC = () => {
             </li>
           </ul>
         </div>
-      )
+      ),
     },
     {
       id: 'reporting',
@@ -128,8 +128,8 @@ export const ErrorBoundaryDemoPage: React.FC = () => {
       content: (
         <div className="space-y-4">
           <p className="text-sm ds-text-muted">
-            Centralized error reporting system that collects, categorizes, and analyzes
-            errors across all MFEs for better observability.
+            Centralized error reporting system that collects, categorizes, and analyzes errors
+            across all MFEs for better observability.
           </p>
           <ul className="ds-list-check">
             <li className="ds-list-check-item">
@@ -154,7 +154,7 @@ export const ErrorBoundaryDemoPage: React.FC = () => {
             </li>
           </ul>
         </div>
-      )
+      ),
     },
     {
       id: 'recovery',
@@ -162,8 +162,8 @@ export const ErrorBoundaryDemoPage: React.FC = () => {
       content: (
         <div className="space-y-4">
           <p className="text-sm ds-text-muted">
-            Multiple recovery strategies ensure the platform remains functional even when
-            individual MFEs fail.
+            Multiple recovery strategies ensure the platform remains functional even when individual
+            MFEs fail.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
@@ -184,7 +184,7 @@ export const ErrorBoundaryDemoPage: React.FC = () => {
             </div>
           </div>
         </div>
-      )
+      ),
     },
     {
       id: 'monitoring',
@@ -219,17 +219,22 @@ export const ErrorBoundaryDemoPage: React.FC = () => {
             </div>
           </div>
         </div>
-      )
-    }
+      ),
+    },
   ];
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case 'critical': return 'ds-bg-accent-danger-soft ds-accent-danger';
-      case 'high': return 'ds-bg-accent-warning-soft ds-accent-warning';
-      case 'medium': return 'bg-yellow-50 text-yellow-700';
-      case 'low': return 'bg-gray-50 text-gray-700';
-      default: return 'bg-gray-50 text-gray-700';
+      case 'critical':
+        return 'ds-bg-accent-danger-soft ds-accent-danger';
+      case 'high':
+        return 'ds-bg-accent-warning-soft ds-accent-warning';
+      case 'medium':
+        return 'bg-yellow-50 text-yellow-700';
+      case 'low':
+        return 'bg-gray-50 text-gray-700';
+      default:
+        return 'bg-gray-50 text-gray-700';
     }
   };
 
@@ -245,7 +250,10 @@ export const ErrorBoundaryDemoPage: React.FC = () => {
           <MetricCard
             label="Total Errors"
             value={errorSummary.totalErrors}
-            trend={{ value: 'tracked', direction: errorSummary.totalErrors > 0 ? 'down' : 'neutral' }}
+            trend={{
+              value: 'tracked',
+              direction: errorSummary.totalErrors > 0 ? 'down' : 'neutral',
+            }}
             icon={<AlertCircle className="h-4 w-4" />}
           />
           <MetricCard
@@ -278,20 +286,16 @@ export const ErrorBoundaryDemoPage: React.FC = () => {
               key={scenario.id}
               onClick={() => setSelectedScenario(scenario.id)}
               className={`ds-card-padded ds-hover-scale text-left ${
-                selectedScenario === scenario.id 
-                  ? 'ds-border-accent-primary border-2 ds-bg-accent-primary-soft' 
+                selectedScenario === scenario.id
+                  ? 'ds-border-accent-primary border-2 ds-bg-accent-primary-soft'
                   : ''
               }`}
             >
               <div className="flex items-center gap-3 mb-3">
-                <div className={scenario.color}>
-                  {scenario.icon}
-                </div>
+                <div className={scenario.color}>{scenario.icon}</div>
                 <h3 className="ds-card-title">{scenario.name}</h3>
               </div>
-              <p className="text-sm ds-text-muted mb-3">
-                {scenario.description}
-              </p>
+              <p className="text-sm ds-text-muted mb-3">{scenario.description}</p>
               <div className="flex items-center gap-2 text-xs ds-accent-primary">
                 <span>{selectedScenario === scenario.id ? 'Selected' : 'Select'}</span>
                 <ChevronRight className="h-3 w-3" />
@@ -311,11 +315,7 @@ export const ErrorBoundaryDemoPage: React.FC = () => {
                 Testing scenario: <span className="font-semibold">{selectedScenario}</span>
               </p>
             </div>
-            <Button
-              onClick={() => setSelectedScenario('')}
-              variant="outline"
-              size="sm"
-            >
+            <Button onClick={() => setSelectedScenario('')} variant="outline" size="sm">
               <XCircle className="h-4 w-4 mr-2" />
               Clear
             </Button>
@@ -359,14 +359,18 @@ export const ErrorBoundaryDemoPage: React.FC = () => {
               variant="outline"
               size="sm"
             >
-              {errorReportVisible ? <EyeOff className="h-4 w-4 mr-2" /> : <Eye className="h-4 w-4 mr-2" />}
+              {errorReportVisible ? (
+                <EyeOff className="h-4 w-4 mr-2" />
+              ) : (
+                <Eye className="h-4 w-4 mr-2" />
+              )}
               {errorReportVisible ? 'Hide' : 'Show'} Details
             </Button>
             <Button
               onClick={() => {
                 errorReporter.clearErrors();
                 setErrorReportVisible(false);
-                setRefreshKey(prev => prev + 1);
+                setRefreshKey((prev) => prev + 1);
               }}
               variant="outline"
               size="sm"
@@ -389,7 +393,9 @@ export const ErrorBoundaryDemoPage: React.FC = () => {
                 {Object.entries(errorSummary.errorsByType).map(([type, count]) => (
                   <div key={type} className="flex items-center justify-between">
                     <span className="text-sm">{type}</span>
-                    <Badge variant="secondary" className="text-xs">{count}</Badge>
+                    <Badge variant="secondary" className="text-xs">
+                      {count}
+                    </Badge>
                   </div>
                 ))}
               </div>
@@ -406,8 +412,8 @@ export const ErrorBoundaryDemoPage: React.FC = () => {
                 {Object.entries(errorSummary.errorsBySeverity).map(([severity, count]) => (
                   <div key={severity} className="flex items-center justify-between">
                     <span className="text-sm capitalize">{severity}</span>
-                    <Badge 
-                      variant={severity === 'critical' ? 'destructive' : 'secondary'} 
+                    <Badge
+                      variant={severity === 'critical' ? 'destructive' : 'secondary'}
                       className="text-xs"
                     >
                       {count}
@@ -428,7 +434,9 @@ export const ErrorBoundaryDemoPage: React.FC = () => {
                 {Object.entries(errorSummary.errorsByMFE).map(([mfe, count]) => (
                   <div key={mfe} className="flex items-center justify-between">
                     <span className="text-sm truncate">{mfe}</span>
-                    <Badge variant="secondary" className="text-xs">{count}</Badge>
+                    <Badge variant="secondary" className="text-xs">
+                      {count}
+                    </Badge>
                   </div>
                 ))}
               </div>
@@ -449,8 +457,8 @@ export const ErrorBoundaryDemoPage: React.FC = () => {
             ) : (
               <div className="space-y-3 max-h-96 overflow-y-auto">
                 {errorReporter.getErrors().map((error) => (
-                  <div 
-                    key={error.id} 
+                  <div
+                    key={error.id}
                     className={`ds-card-compact ${
                       error.severity === 'critical' ? 'border-red-500' : ''
                     }`}
@@ -458,9 +466,7 @@ export const ErrorBoundaryDemoPage: React.FC = () => {
                     <div className="flex items-start justify-between mb-2">
                       <div className="flex items-center gap-2">
                         <span className="font-medium text-sm">{error.mfeName}</span>
-                        <Badge 
-                          className={`text-xs ${getSeverityColor(error.severity)}`}
-                        >
+                        <Badge className={`text-xs ${getSeverityColor(error.severity)}`}>
                           {error.severity}
                         </Badge>
                         <Badge variant="outline" className="text-xs">

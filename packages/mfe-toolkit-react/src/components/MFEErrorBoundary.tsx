@@ -42,15 +42,10 @@ export class MFEErrorBoundary extends Component<Props, State> {
     // Report error using error reporter
     if (services) {
       const errorReporter = getErrorReporter({}, services);
-      errorReporter.reportError(
-        mfeName,
-        error,
-        'runtime-error',
-        { 
-          retryCount,
-          componentStack: errorInfo?.componentStack || undefined
-        }
-      );
+      errorReporter.reportError(mfeName, error, 'runtime-error', {
+        retryCount,
+        componentStack: errorInfo?.componentStack || undefined,
+      });
     }
 
     // Log to MFE logger service if available
