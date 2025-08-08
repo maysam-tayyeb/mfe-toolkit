@@ -190,7 +190,7 @@ export const Navigation: React.FC = () => {
               variant="ghost"
               size="icon"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden h-8 w-8 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-all"
+              className="block lg:!hidden h-8 w-8 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-all"
             >
               {mobileMenuOpen ? <X className="h-4 w-4 text-slate-800 dark:text-slate-200" /> : <Menu className="h-4 w-4 text-slate-800 dark:text-slate-200" />}
             </Button>
