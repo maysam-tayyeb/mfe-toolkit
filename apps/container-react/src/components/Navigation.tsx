@@ -149,6 +149,7 @@ export const Navigation: React.FC = () => {
                         <Link
                           key={item.path}
                           to={item.path}
+                          onClick={() => setActiveDropdown(null)}
                           className={cn(
                             'flex items-center gap-2.5 px-3 py-2 text-xs font-medium rounded-md transition-all duration-150',
                             location.pathname === item.path
