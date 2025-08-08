@@ -4,6 +4,11 @@ import { Layout } from '@/components/Layout';
 import { HomePage } from '@/pages/HomePage';
 import { DashboardPage } from '@/pages/DashboardPage';
 import { ErrorBoundaryDemoPage } from '@/pages/ErrorBoundaryDemoPage';
+import { MFERegistryPage } from '@/pages/MFERegistryPage';
+import { EventBusPage } from '@/pages/services/EventBusPage';
+import { NotificationsPage } from '@/pages/services/NotificationsPage';
+import { MetricsPage } from '@/pages/dev/MetricsPage';
+import { SettingsPage } from '@/pages/dev/SettingsPage';
 import { CompatibleMFELoader } from '@/components/CompatibleMFELoader';
 import { getMFEServicesSingleton } from '@/services/mfe-services-singleton';
 import { useRegistryContext } from '@/contexts/RegistryContext';
@@ -82,7 +87,12 @@ export function AppContent() {
         <Route path="/" element={<Layout />}>
           <Route index element={<HomePage />} />
           <Route path="dashboard" element={<DashboardPage />} />
+          <Route path="mfe-registry" element={<MFERegistryPage />} />
           <Route path="error-boundary-demo" element={<ErrorBoundaryDemoPage />} />
+          <Route path="services/event-bus" element={<EventBusPage />} />
+          <Route path="services/notifications" element={<NotificationsPage />} />
+          <Route path="dev/metrics" element={<MetricsPage />} />
+          <Route path="dev/settings" element={<SettingsPage />} />
           <Route path="mfe/:mfeName" element={<MFEPage />} />
         </Route>
       </Routes>
