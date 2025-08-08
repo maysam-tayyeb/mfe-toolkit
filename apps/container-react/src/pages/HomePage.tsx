@@ -88,13 +88,13 @@ export const HomePage: React.FC = () => {
         gradient
         actions={
           <>
-            <Button asChild>
+            <Button asChild className="bg-white text-blue-600 hover:bg-gray-100">
               <Link to="/dashboard">
                 <Sparkles className="h-4 w-4 mr-2" />
                 Explore Platform
               </Link>
             </Button>
-            <Button asChild variant="outline">
+            <Button asChild className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-blue-600">
               <Link to="/services/event-bus">
                 <Radio className="h-4 w-4 mr-2" />
                 Try Event Bus

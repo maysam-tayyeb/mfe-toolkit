@@ -361,12 +361,12 @@
 
   /* Hero Sections */
   .ds-hero {
-    @apply relative overflow-hidden rounded-xl p-8 mb-6;
+    @apply relative overflow-hidden rounded-xl p-8 mb-6 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700;
   }
 
-  /* Dark gradient with light text (default) */
+  /* Simple accent background */
   .ds-hero-gradient {
-    @apply bg-gradient-to-br from-blue-600 to-purple-700 dark:from-blue-700 dark:to-purple-800 text-white;
+    @apply bg-blue-600 dark:bg-blue-700 text-white border-0;
   }
 
   /* Light gradient with dark text */

@@ -100,16 +100,16 @@ export const Navigation: React.FC = () => {
   ];
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm border-b border-slate-200 dark:border-slate-700 shadow-sm">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-white dark:bg-slate-900 backdrop-blur-sm border-b border-slate-200 dark:border-slate-700 shadow-sm">
       <div className="mx-auto">
         <div className="flex items-center justify-between h-14 px-4 sm:px-6 lg:px-8">
           {/* Logo */}
           <div className="flex items-center">
             <Link to="/" className="flex items-center gap-2 mr-8 group">
-              <div className="p-1.5 rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 group-hover:from-blue-600 group-hover:to-blue-700 transition-all transform group-hover:scale-105">
+              <div className="p-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 transition-all transform group-hover:scale-105">
                 <Sparkles className="h-4 w-4 text-white" />
               </div>
-              <span className="font-bold text-sm hidden sm:block bg-gradient-to-r from-blue-600 to-blue-700 dark:from-blue-400 dark:to-blue-500 bg-clip-text text-transparent">MFE Platform</span>
+              <span className="font-bold text-sm hidden sm:block" style={{ color: theme === 'dark' ? '#ffffff' : '#0f172a' }}>MFE Platform</span>
             </Link>
 
             {/* Desktop Navigation */}
@@ -125,10 +125,10 @@ export const Navigation: React.FC = () => {
                       setActiveDropdown(activeDropdown === section.title ? null : section.title)
                     }
                     className={cn(
-                      'flex items-center gap-1 px-3 py-1.5 text-xs font-medium rounded-lg transition-all duration-200',
+                      'flex items-center gap-1 px-3 py-1.5 text-xs font-semibold rounded-lg transition-all duration-200',
                       section.items.some((item) => location.pathname.startsWith(item.path))
-                        ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-sm'
-                        : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-300 dark:hover:text-slate-100 dark:hover:bg-slate-700/50'
+                        ? 'bg-blue-600 text-white shadow-sm'
+                        : 'text-slate-800 hover:text-black hover:bg-slate-100/80 dark:text-slate-200 dark:hover:text-white dark:hover:bg-slate-700/50'
                     )}
                   >
                     {section.title}
@@ -151,10 +151,10 @@ export const Navigation: React.FC = () => {
                             to={item.path}
                             onClick={() => setActiveDropdown(null)}
                             className={cn(
-                              'flex items-center gap-2.5 px-3 py-2 text-xs rounded-md transition-all duration-150',
+                              'flex items-center gap-2.5 px-3 py-2 text-xs font-medium rounded-md transition-all duration-150',
                               location.pathname === item.path
-                                ? 'bg-gradient-to-r from-blue-50 to-blue-100 text-blue-700 dark:from-blue-900/30 dark:to-blue-800/30 dark:text-blue-400'
-                                : 'text-slate-700 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-700/50'
+                                ? 'bg-blue-600 text-white font-semibold dark:bg-blue-700'
+                                : 'text-slate-800 hover:text-black hover:bg-slate-100 dark:text-slate-200 dark:hover:text-white dark:hover:bg-slate-700/70'
                             )}
                           >
                             {item.icon}
@@ -181,8 +181,8 @@ export const Navigation: React.FC = () => {
               className="h-8 w-8 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-all"
             >
               {theme === 'dark' ? 
-                <Sun className="h-4 w-4 text-amber-500" /> : 
-                <Moon className="h-4 w-4 text-slate-600" />
+                <Sun className="h-4 w-4 text-amber-400" /> : 
+                <Moon className="h-4 w-4 text-slate-800" />
               }
             </Button>
 
@@ -193,7 +193,7 @@ export const Navigation: React.FC = () => {
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="lg:hidden h-8 w-8 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-all"
             >
-              {mobileMenuOpen ? <X className="h-4 w-4 text-slate-600 dark:text-slate-400" /> : <Menu className="h-4 w-4 text-slate-600 dark:text-slate-400" />}
+              {mobileMenuOpen ? <X className="h-4 w-4 text-slate-800 dark:text-slate-200" /> : <Menu className="h-4 w-4 text-slate-800 dark:text-slate-200" />}
             </Button>
           </div>
         </div>
@@ -204,7 +204,7 @@ export const Navigation: React.FC = () => {
             <div className="px-3 pt-3 pb-4 space-y-2">
               {navSections.map((section) => (
                 <div key={section.title} className="mb-2">
-                  <div className="px-3 py-2 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                  <div className="px-3 py-2 text-xs font-bold text-slate-700 dark:text-slate-200 uppercase tracking-wider">
                     {section.title}
                   </div>
                   {section.items.map((item) => (
@@ -213,10 +213,10 @@ export const Navigation: React.FC = () => {
                       to={item.path}
                       onClick={() => setMobileMenuOpen(false)}
                       className={cn(
-                        'flex items-center gap-2.5 px-3 py-2.5 text-sm rounded-lg transition-all',
+                        'flex items-center gap-2.5 px-3 py-2.5 text-sm font-medium rounded-lg transition-all',
                         location.pathname === item.path
-                          ? 'bg-gradient-to-r from-blue-50 to-blue-100 text-blue-700 dark:from-blue-900/30 dark:to-blue-800/30 dark:text-blue-400'
-                          : 'text-slate-700 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-700/50'
+                          ? 'bg-blue-600 text-white font-semibold dark:bg-blue-700'
+                          : 'text-slate-800 hover:text-black hover:bg-slate-100 dark:text-slate-200 dark:hover:text-white dark:hover:bg-slate-700/70'
                       )}
                     >
                       {item.icon}
