@@ -15,11 +15,6 @@
     "noFallthroughCasesInSwitch": true,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "baseUrl": ".",
-    "paths": {
-      "@mfe-toolkit/core": ["packages/mfe-toolkit-core/src/index.ts"],
-      "@mfe/shared": ["packages/shared/src/index.ts"]
-    }
+    "forceConsistentCasingInFileNames": true
   }
 }
