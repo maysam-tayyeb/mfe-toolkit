@@ -38,7 +38,6 @@ Platform-level contract for describing microfrontends:
 - [Specification](./manifests/specification.md) - Complete manifest format
 - [Quick Start](./manifests/quick-start.md) - Getting started with manifests
 - [Examples](./manifests/examples.md) - Real-world manifest examples
-- [Migration Guide](./manifests/migration-guide.md) - Legacy format migration (historical reference)
 - [Validation Guide](./manifests/validation-guide.md) - CI/CD validation setup
 - [Best Practices](./manifests/best-practices.md) - Recommendations and patterns
 

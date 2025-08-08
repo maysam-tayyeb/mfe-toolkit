@@ -7,7 +7,6 @@ The MFE Manifest is a platform-level contract that defines how microfrontends de
 ### Core Documentation
 
 - [**Manifest Specification**](./specification.md) - Complete technical specification
-- [**Migration Guide**](./migration-guide.md) - Legacy migration guide (for historical reference)
 - [**Validation Guide**](./validation-guide.md) - Validating manifests in CI/CD
 
 ### Developer Resources
@@ -82,7 +81,6 @@ Manifests work with MFEs built in:
 ## 🔍 Next Steps
 
 - New to manifests? Start with the [Quick Start Guide](./quick-start.md)
-- Migrating existing MFEs? See the [Migration Guide](./migration-guide.md)
 - Building a container? Read the [Container Integration Guide](../../container-spec/manifest-integration.md)
 - Contributing? Check the [Specification](./specification.md)
 
