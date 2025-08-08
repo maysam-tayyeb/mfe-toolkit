@@ -1,8 +1,8 @@
-# MFE Manifest V2 Implementation
+# MFE Manifest Specification
 
 ## Overview
 
-The MFE Manifest V2 is a comprehensive specification for describing microfrontends with full type safety, validation support, and extensibility. It provides rich metadata for dependency management, compatibility checking, and enhanced UI display.
+The MFE Manifest is a comprehensive specification for describing microfrontends with full type safety, validation support, and extensibility. It provides rich metadata for dependency management, compatibility checking, and enhanced UI display.
 
 ## Implementation Status
 
@@ -12,10 +12,10 @@ The MFE Manifest V2 is a comprehensive specification for describing microfronten
 
 #### 1. Type System (`packages/mfe-toolkit-core/src/types/manifest.ts`)
 
-The V2 manifest includes comprehensive type definitions:
+The manifest includes comprehensive type definitions:
 
 ```typescript
-interface MFEManifestV2 {
+interface MFEManifest {
   // Core identification
   name: string;
   version: SemanticVersion;
@@ -45,7 +45,7 @@ interface MFEManifestV2 {
 
 #### 2. Registry Configuration
 
-All MFEs in `apps/container-react/public/mfe-registry.json` use V2 format:
+All MFEs in `apps/container-react/public/mfe-registry.json` use the standard manifest format:
 
 - ✅ serviceExplorer
 - ✅ legacyServiceExplorer
@@ -67,9 +67,9 @@ Validates:
 
 #### 4. UI Integration
 
-- **Dashboard Page**: Shows V2 badges and compatibility status
-- **Registry Status Page**: Displays detailed V2 manifest information
-- **MFE Loader**: Uses V2 metadata for enhanced error handling
+- **Dashboard Page**: Shows compatibility status and metadata
+- **Registry Status Page**: Displays detailed manifest information
+- **MFE Loader**: Uses manifest metadata for enhanced error handling
 
 ## Key Features
 
@@ -176,20 +176,9 @@ Validates:
 }
 ```
 
-## Migration from V1 to V2
+## Manifest Format
 
-### V1 Format (Legacy)
-
-```json
-{
-  "name": "example",
-  "version": "1.0.0",
-  "url": "/mfe.js",
-  "dependencies": ["react", "react-dom"]
-}
-```
-
-### V2 Format (Current)
+### Complete Example
 
 ```json
 {
@@ -219,20 +208,19 @@ Validates:
 ## Type Guards
 
 ```typescript
-import { isMFEManifestV2, isMFEManifestV1 } from '@mfe-toolkit/core';
+import { isMFEManifest } from '@mfe-toolkit/core';
 
-// Check manifest version
-if (isMFEManifestV2(manifest)) {
-  // Access V2-specific properties
+// Validate manifest structure
+if (isMFEManifest(manifest)) {
+  // Access manifest properties
   console.log(manifest.metadata.displayName);
   console.log(manifest.requirements.services);
 } else {
-  // Handle V1 manifest
-  console.log('Legacy V1 manifest detected');
+  console.log('Invalid manifest structure');
 }
 ```
 
-## Benefits of V2
+## Benefits
 
 1. **Better Dependency Management**: Distinguishes between runtime, peer, and optional dependencies
 2. **Version Compatibility**: Semantic versioning for all dependencies and requirements
@@ -245,16 +233,16 @@ if (isMFEManifestV2(manifest)) {
 
 ## Usage in Container
 
-The container application automatically detects and handles both V1 and V2 manifests:
+The container application validates and processes manifests:
 
 ```typescript
 // In CompatibilityChecker
-if (!isMFEManifestV2(manifest)) {
-  warnings.push('MFE uses legacy V1 manifest format. Consider upgrading to V2.');
-  return { compatible: true, errors, warnings };
+if (!isMFEManifest(manifest)) {
+  errors.push('Invalid manifest structure');
+  return { compatible: false, errors, warnings };
 }
 
-// V2-specific validation
+// Compatibility validation
 if (manifest.compatibility?.container) {
   if (!semver.satisfies(containerVersion, manifest.compatibility.container)) {
     errors.push(`Container version incompatible`);
@@ -265,7 +253,6 @@ if (manifest.compatibility?.container) {
 ## Future Enhancements
 
 - [ ] JSON Schema validation for manifests
-- [ ] Automated V1 to V2 migration tool
 - [ ] Manifest signing and verification
 - [ ] Runtime capability negotiation
 - [ ] Dynamic service version resolution

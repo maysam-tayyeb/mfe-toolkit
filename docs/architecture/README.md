@@ -54,6 +54,15 @@ Design principles for vendor-agnostic state management:
 - Implementation flexibility
 - Future-proofing strategies
 
+### [MFE Manifest Specification](./mfe-manifest.md)
+
+Comprehensive specification for MFE manifests:
+
+- Type-safe manifest structure
+- Dependency and compatibility management
+- Service requirements and capabilities
+- Rich metadata for UI display
+
 ## 📚 Reference Documents
 
 ### [Architecture Analysis Report](./architecture-analysis-report.md)

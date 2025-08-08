@@ -103,7 +103,7 @@ Framework-specific container implementations:
 
 ### Current Focus
 
-- 🔧 MFE Manifest v2 implementation
+- 🔧 MFE Manifest implementation
 - 🧪 Testing infrastructure
 
 ### Next Up
