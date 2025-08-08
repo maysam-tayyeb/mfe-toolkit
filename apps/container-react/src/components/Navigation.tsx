@@ -119,11 +119,12 @@ export const Navigation: React.FC = () => {
                   {index > 0 && (
                     <div className="h-4 w-px bg-slate-200 dark:bg-slate-700 mx-1" />
                   )}
-                  <div className="relative">
+                  <div 
+                    className="relative"
+                    onMouseEnter={() => setActiveDropdown(section.title)}
+                    onMouseLeave={() => setActiveDropdown(null)}
+                  >
                   <button
-                    onClick={() =>
-                      setActiveDropdown(activeDropdown === section.title ? null : section.title)
-                    }
                     className={cn(
                       'flex items-center gap-1 px-3 py-1.5 text-xs font-semibold rounded-lg transition-all duration-200',
                       section.items.some((item) => location.pathname.startsWith(item.path))
@@ -142,27 +143,23 @@ export const Navigation: React.FC = () => {
 
                   {/* Dropdown Menu */}
                   {activeDropdown === section.title && (
-                    <>
-                      <div className="fixed inset-0 z-40" onClick={() => setActiveDropdown(null)} />
-                      <div className="absolute top-full left-0 mt-2 w-48 py-2 bg-white dark:bg-slate-800 rounded-lg shadow-lg border border-slate-200 dark:border-slate-700 z-50">
-                        {section.items.map((item) => (
-                          <Link
-                            key={item.path}
-                            to={item.path}
-                            onClick={() => setActiveDropdown(null)}
-                            className={cn(
-                              'flex items-center gap-2.5 px-3 py-2 text-xs font-medium rounded-md transition-all duration-150',
-                              location.pathname === item.path
-                                ? 'bg-blue-600 text-white font-semibold dark:bg-blue-700'
-                                : 'text-slate-800 hover:text-black hover:bg-slate-100 dark:text-slate-200 dark:hover:text-white dark:hover:bg-slate-700/70'
-                            )}
-                          >
-                            {item.icon}
-                            <span>{item.label}</span>
-                          </Link>
-                        ))}
-                      </div>
-                    </>
+                    <div className="absolute top-full left-0 mt-2 w-48 py-2 bg-white dark:bg-slate-800 rounded-lg shadow-lg border border-slate-200 dark:border-slate-700 z-50">
+                      {section.items.map((item) => (
+                        <Link
+                          key={item.path}
+                          to={item.path}
+                          className={cn(
+                            'flex items-center gap-2.5 px-3 py-2 text-xs font-medium rounded-md transition-all duration-150',
+                            location.pathname === item.path
+                              ? 'bg-blue-600 text-white font-semibold dark:bg-blue-700'
+                              : 'text-slate-800 hover:text-black hover:bg-slate-100 dark:text-slate-200 dark:hover:text-white dark:hover:bg-slate-700/70'
+                          )}
+                        >
+                          {item.icon}
+                          <span>{item.label}</span>
+                        </Link>
+                      ))}
+                    </div>
                   )}
                 </div>
                 </React.Fragment>
