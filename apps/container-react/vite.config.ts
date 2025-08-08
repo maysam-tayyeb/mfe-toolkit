@@ -12,4 +12,14 @@ export default defineConfig({
   server: {
     port: 3000,
   },
+  build: {
+    rollupOptions: {
+      external: [
+        // Mark design-system as external so it uses import map
+        '@mfe/design-system',
+        '@mfe/design-system/tokens',
+        '@mfe/design-system/patterns',
+      ],
+    },
+  },
 });

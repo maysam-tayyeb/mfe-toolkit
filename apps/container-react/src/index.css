@@ -1,8 +1,5 @@
 @import 'tailwindcss';
 
-/* Import Design System CSS */
-@import '@mfe/design-system/styles.css';
-
 /* Modern Blue & Slate Color Palette */
 :root {
   /* Backgrounds */
