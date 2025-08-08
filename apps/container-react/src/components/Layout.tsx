@@ -10,7 +10,7 @@ export const Layout: React.FC = () => {
     <div className="min-h-screen ds-bg-base">
       <Navigation />
       <div className="pt-14"> {/* Add padding-top to account for fixed navbar */}
-        <main className="ds-page-container"> {/* Using design system page container */}
+        <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4"> {/* Centered, compact */}
           <Outlet />
         </main>
       </div>
