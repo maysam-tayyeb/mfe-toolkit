@@ -257,7 +257,7 @@ describe('UniversalStateManager (Valtio implementation)', () => {
 
   describe('Middleware', () => {
     it('should execute middleware before state changes', () => {
-      const middleware = vi.fn((event, next) => next());
+      const middleware = vi.fn((_event, next) => next());
 
       const managerWithMiddleware = new UniversalStateManager({
         middleware: [middleware],
@@ -298,13 +298,13 @@ describe('UniversalStateManager (Valtio implementation)', () => {
     it('should execute middleware chain in order', () => {
       const order: number[] = [];
 
-      const middleware1 = (event: StateChangeEvent, next: () => void) => {
+      const middleware1 = (_event: StateChangeEvent, next: () => void) => {
         order.push(1);
         next();
         order.push(3);
       };
 
-      const middleware2 = (event: StateChangeEvent, next: () => void) => {
+      const middleware2 = (_event: StateChangeEvent, next: () => void) => {
         order.push(2);
         next();
       };
@@ -339,7 +339,7 @@ describe('UniversalStateManager (Valtio implementation)', () => {
         count: number;
       }
 
-      const listener = vi.fn((value: Counter, event: StateChangeEvent<Counter>) => {});
+      const listener = vi.fn((_value: Counter, _event: StateChangeEvent<Counter>) => {});
       manager.subscribe<Counter>('counter', listener);
 
       manager.set<Counter>('counter', { count: 1 });

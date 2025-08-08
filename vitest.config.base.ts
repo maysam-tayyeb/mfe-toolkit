@@ -52,9 +52,8 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'happy-dom',
-    setupFiles: ['./vitest.setup.ts'],
     include: ['**/src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
-    exclude: ['node_modules', 'dist', '.idea', '.git', '.cache', 'e2e'],
+    exclude: ['node_modules', 'dist', '.idea', '.git', '.cache'],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html', 'lcov'],
@@ -67,7 +66,6 @@ export default defineConfig({
         '**/__tests__/**',
         '**/*.test.*',
         '**/ui/**',
-        'e2e/',
       ],
       thresholds: {
         branches: 80,

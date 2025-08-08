@@ -297,23 +297,24 @@ The container uses a **dynamic registry system** that loads configurations from 
 ### Running Tests
 
 ```bash
-# Run all tests
-pnpm test
+# Run tests for all packages
+pnpm test:packages
 
-# Watch mode for tests
-pnpm test:watch
+# Run tests for container app
+pnpm test:container
 
-# Coverage report
-pnpm test:coverage
+# Run tests for a specific package
+pnpm --filter @mfe-toolkit/core test
+pnpm --filter @mfe/container-react test
 
-# Run a single test file
-pnpm vitest src/App.test.tsx
+# Watch mode for specific package tests
+pnpm --filter @mfe/container-react test:watch
 
-# E2E tests with Playwright
-pnpm e2e              # Headless mode
-pnpm e2e:headed      # Headed mode
-pnpm e2e:debug       # Debug mode
-pnpm e2e:report      # View test report
+# Coverage report for specific package
+pnpm --filter @mfe/container-react test:coverage
+
+# Run a single test file (from within package directory)
+cd apps/container-react && pnpm vitest src/App.test.tsx
 ```
 
 ### Testing the MFE Integration
@@ -409,10 +410,8 @@ mfe-made-easy/
 - `pnpm format` - Format code with Prettier
 - `pnpm format:check` - Check formatting
 - `pnpm type-check` - TypeScript checking
-- `pnpm test` - Run tests
-- `pnpm test:watch` - Run tests in watch mode
-- `pnpm test:coverage` - Generate coverage report
-- `pnpm validate` - Run all checks (format, lint, type-check, test)
+- `pnpm test:packages` - Run tests for all packages
+- `pnpm test:container` - Run tests for container app
 
 ## 🔧 Development Workflow
 
@@ -470,8 +469,8 @@ pnpm dev:react17      # React 17 MFE on :3002
 pnpm lint             # Run linter
 pnpm format           # Format code
 pnpm type-check       # Type checking
-pnpm test             # Run tests
-pnpm validate         # Run all checks
+pnpm test:packages    # Run tests for packages
+pnpm test:container   # Run tests for container
 ```
 
 ### Working with MFEs

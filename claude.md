@@ -23,23 +23,24 @@ pnpm serve  # Serves from dist/ on http://localhost:8080
 ### Testing
 
 ```bash
-# Run all tests
-pnpm test
+# Run tests for all packages
+pnpm test:packages
 
-# Watch mode for tests
-pnpm test:watch
+# Run tests for container app
+pnpm test:container
 
-# Coverage report
-pnpm test:coverage
+# Run tests for a specific package
+pnpm --filter @mfe-toolkit/core test
+pnpm --filter @mfe/container-react test
 
-# Run a single test file
-pnpm vitest src/App.test.tsx
+# Watch mode for specific package tests
+pnpm --filter @mfe/container-react test:watch
 
-# E2E tests with Playwright
-pnpm e2e              # Headless mode
-pnpm e2e:headed      # Headed mode
-pnpm e2e:debug       # Debug mode
-pnpm e2e:report      # View test report
+# Coverage report for specific package
+pnpm --filter @mfe/container-react test:coverage
+
+# Run a single test file (from within package directory)
+cd apps/container-react && pnpm vitest src/App.test.tsx
 ```
 
 ### Code Quality
@@ -367,7 +368,7 @@ If you don't know the correct commands for a project, ask the user and suggest u
 
 - **Always test code before commit**
   - Run tests for changed files to ensure they work correctly
-  - Use `pnpm test` to run all tests before pushing
+  - Use `pnpm test:packages` or `pnpm test:container` to run relevant tests before pushing
   - Never commit untested code
 - **Always format code before commit**
   - Use `pnpm format` to ensure consistent code formatting
