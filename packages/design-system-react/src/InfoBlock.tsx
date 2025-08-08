@@ -1,5 +1,4 @@
 import React from 'react';
-import { cn } from '@mfe/shared';
 
 export interface InfoSection {
   label: string;
@@ -17,24 +16,25 @@ export const InfoBlock: React.FC<InfoBlockProps> = ({
   title,
   sections,
   columns = 3,
-  className,
+  className = '',
   ...props
 }) => {
+  // Use ds-* grid classes from the container's CSS
   const gridClass = {
-    1: 'grid-cols-1',
-    2: 'grid-cols-1 md:grid-cols-2',
-    3: 'grid-cols-1 md:grid-cols-3',
-    4: 'grid-cols-1 md:grid-cols-4',
+    1: 'grid grid-cols-1',
+    2: 'ds-grid-2',
+    3: 'ds-grid-3',
+    4: 'ds-grid-4',
   }[columns];
 
   return (
-    <div className={cn('bg-muted/50 rounded-lg p-6', className)} {...props}>
-      <h3 className="font-semibold mb-3">{title}</h3>
-      <div className={cn('grid gap-4 text-sm', gridClass)}>
+    <div className={`ds-card bg-muted/50 ${className}`.trim()} {...props}>
+      <h3 className="ds-card-title mb-3">{title}</h3>
+      <div className={`${gridClass} gap-4 text-sm`}>
         {sections.map((section, index) => (
           <div key={index}>
-            <span className="text-muted-foreground">{section.label}:</span>
-            <p className={cn('font-medium', section.highlight && 'text-primary')}>
+            <span className="ds-text-muted">{section.label}:</span>
+            <p className={`font-medium ${section.highlight ? 'text-primary' : ''}`.trim()}>
               {section.value}
             </p>
           </div>

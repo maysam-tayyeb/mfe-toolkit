@@ -3,7 +3,7 @@ import { RegistryMFELoader } from '@/components/RegistryMFELoader';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Radio, Send, X } from 'lucide-react';
-import { EventLog, type EventMessage } from '@mfe/design-system';
+import { EventLog, type EventMessage } from '@mfe/design-system-react';
 import { getMFEServicesSingleton } from '@/services/mfe-services-singleton';
 import { useToast } from '@/components/ui/use-toast';
 

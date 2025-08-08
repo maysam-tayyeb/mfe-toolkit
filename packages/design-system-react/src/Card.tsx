@@ -1,6 +1,4 @@
 import React from 'react';
-import { cn } from '@mfe/shared';
-import { spacing, typography } from '../tokens';
 
 export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   variant?: 'default' | 'compact' | 'elevated' | 'interactive' | 'bordered';
@@ -11,37 +9,36 @@ export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
 export const Card: React.FC<CardProps> = ({
   variant = 'default',
   padding = 'normal',
-  className,
+  className = '',
   children,
   ...props
 }) => {
-  const baseStyles = 'rounded-lg bg-card text-card-foreground';
+  // Use ds-* classes from the container's CSS
+  let classes = 'ds-card';
   
-  const variantStyles = {
-    default: 'border shadow-sm',
-    compact: 'border',
-    elevated: 'border shadow-md',
-    interactive: 'border shadow-sm hover:shadow-md transition-shadow cursor-pointer',
-    bordered: 'border-2',
-  };
-
-  const paddingStyles = {
-    none: '',
-    compact: spacing.cardCompact,
-    normal: spacing.card,
-    large: spacing.cardLarge,
-  };
+  // Add variant classes
+  if (variant === 'elevated') {
+    classes += ' ds-card-elevated';
+  } else if (variant === 'interactive') {
+    classes += ' ds-card-interactive';
+  } else if (variant === 'bordered') {
+    classes += ' ds-card-bordered';
+  }
+  
+  // Add padding classes
+  if (padding === 'compact') {
+    classes += ' ds-card-compact';
+  } else if (padding === 'large') {
+    classes += ' ds-card-padded';
+  }
+  
+  // Add custom className if provided
+  if (className) {
+    classes += ' ' + className;
+  }
 
   return (
-    <div 
-      className={cn(
-        baseStyles,
-        variantStyles[variant],
-        paddingStyles[padding],
-        className
-      )} 
-      {...props}
-    >
+    <div className={classes} {...props}>
       {children}
     </div>
   );
@@ -56,18 +53,18 @@ export interface CardHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
 export const CardHeader: React.FC<CardHeaderProps> = ({ 
   title,
   description,
-  className, 
+  className = '', 
   children, 
   ...props 
 }) => {
   if (!title && !description && !children) return null;
 
   return (
-    <div className={cn('space-y-1.5', className)} {...props}>
+    <div className={`mb-4 ${className}`} {...props}>
       {children || (
         <>
-          {title && <h3 className={typography.cardTitle}>{title}</h3>}
-          {description && <p className={typography.cardDescription}>{description}</p>}
+          {title && <h3 className="ds-card-title">{title}</h3>}
+          {description && <p className="ds-text-muted ds-text-small mt-1">{description}</p>}
         </>
       )}
     </div>
@@ -81,19 +78,21 @@ export interface CardContentProps extends React.HTMLAttributes<HTMLDivElement> {
 
 export const CardContent: React.FC<CardContentProps> = ({ 
   spacing: spacingProp = 'normal',
-  className, 
+  className = '', 
   children, 
   ...props 
 }) => {
-  const spacingStyles = {
-    none: '',
-    compact: spacing.stack.sm,
-    normal: spacing.stack.md,
-    large: spacing.stack.lg,
-  };
+  let spacingClass = '';
+  if (spacingProp === 'compact') {
+    spacingClass = 'ds-stack-sm';
+  } else if (spacingProp === 'normal') {
+    spacingClass = 'ds-stack';
+  } else if (spacingProp === 'large') {
+    spacingClass = 'ds-stack-lg';
+  }
 
   return (
-    <div className={cn(spacingStyles[spacingProp], className)} {...props}>
+    <div className={`${spacingClass} ${className}`.trim()} {...props}>
       {children}
     </div>
   );
@@ -106,24 +105,20 @@ export interface CardFooterProps extends React.HTMLAttributes<HTMLDivElement> {
 
 export const CardFooter: React.FC<CardFooterProps> = ({ 
   align = 'left',
-  className, 
+  className = '', 
   children, 
   ...props 
 }) => {
-  const alignStyles = {
+  const alignClass = {
     left: 'justify-start',
     center: 'justify-center',
     right: 'justify-end',
     between: 'justify-between',
-  };
+  }[align];
 
   return (
     <div 
-      className={cn(
-        'flex items-center pt-4 border-t',
-        alignStyles[align],
-        className
-      )} 
+      className={`flex items-center pt-4 border-t ${alignClass} ${className}`.trim()}
       {...props}
     >
       {children}

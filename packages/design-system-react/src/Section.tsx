@@ -1,6 +1,4 @@
 import React from 'react';
-import { cn } from '@mfe/shared';
-import { textStyles } from '../patterns';
 
 export interface SectionProps extends React.HTMLAttributes<HTMLElement> {
   title?: string;
@@ -14,17 +12,20 @@ export const Section: React.FC<SectionProps> = ({
   subtitle,
   children,
   variant = 'default',
-  className,
+  className = '',
   ...props
 }) => {
-  const wrapperClass = variant === 'muted' ? 'bg-muted/50 rounded-lg p-6 space-y-6' : 'space-y-6';
+  // Use ds-* classes from the container's CSS
+  const wrapperClass = variant === 'muted' 
+    ? 'ds-section bg-muted/50 rounded-lg p-6' 
+    : 'ds-section';
 
   return (
-    <section className={cn(wrapperClass, className)} {...props}>
+    <section className={`${wrapperClass} ${className}`.trim()} {...props}>
       {(title || subtitle) && (
-        <div>
-          {title && <h2 className={textStyles.h2}>{title}</h2>}
-          {subtitle && <p className={textStyles.subtitle}>{subtitle}</p>}
+        <div className="mb-6">
+          {title && <h2 className="ds-section-title">{title}</h2>}
+          {subtitle && <p className="ds-text-muted mt-2">{subtitle}</p>}
         </div>
       )}
       {children}
