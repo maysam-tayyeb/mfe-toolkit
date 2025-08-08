@@ -408,6 +408,74 @@
     @apply hover:bg-slate-100 dark:hover:bg-slate-700;
   }
 
+  /* New Reusable Navigation Patterns */
+  .ds-nav-button {
+    @apply flex items-center gap-1 px-3 py-1.5 text-xs font-semibold rounded-lg transition-all duration-200;
+  }
+
+  .ds-nav-button-active {
+    @apply ds-nav-button bg-blue-600 text-white shadow-sm dark:bg-blue-700;
+  }
+
+  .ds-nav-button-inactive {
+    @apply ds-nav-button text-slate-800 hover:text-black hover:bg-slate-100/80 dark:text-slate-200 dark:hover:text-white dark:hover:bg-slate-700/50;
+  }
+
+  .ds-dropdown-item {
+    @apply flex items-center gap-2.5 px-3 py-2 text-xs font-medium rounded-md transition-all duration-150;
+  }
+
+  .ds-dropdown-item-active {
+    @apply ds-dropdown-item bg-blue-600 text-white font-semibold dark:bg-blue-700;
+  }
+
+  .ds-dropdown-item-inactive {
+    @apply ds-dropdown-item text-slate-800 hover:text-black hover:bg-slate-100 dark:text-slate-200 dark:hover:text-white dark:hover:bg-slate-700/70;
+  }
+
+  .ds-nav-divider {
+    @apply h-4 w-px bg-slate-200 dark:bg-slate-700 mx-1;
+  }
+
+  .ds-navbar-blur {
+    @apply bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm;
+  }
+
+  .ds-dropdown-wrapper {
+    @apply absolute top-full left-0 pt-1;
+  }
+
+  /* Logo Styles */
+  .ds-logo-icon {
+    @apply p-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 transition-all transform hover:scale-105;
+  }
+
+  .ds-logo-text {
+    @apply font-bold text-sm text-slate-900 dark:text-white;
+  }
+
+  /* Subtle Gradients */
+  .ds-gradient-subtle {
+    @apply bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-800 dark:to-slate-900;
+  }
+
+  .ds-gradient-subtle-horizontal {
+    @apply bg-gradient-to-r from-slate-50 to-slate-100 dark:from-slate-800 dark:to-slate-900;
+  }
+
+  /* High Contrast Text Utilities */
+  .ds-text-contrast-high {
+    @apply text-slate-900 dark:text-white;
+  }
+
+  .ds-text-contrast-medium {
+    @apply text-slate-800 dark:text-slate-200;
+  }
+
+  .ds-text-contrast-low {
+    @apply text-slate-600 dark:text-slate-400;
+  }
+
   /* Background Hierarchy */
   .ds-bg-base {
     @apply bg-slate-50 dark:bg-slate-900;
