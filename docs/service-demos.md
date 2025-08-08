@@ -125,16 +125,13 @@ unsubscribe();
 ### Development Mode
 
 ```bash
-# Build all service demos
-pnpm --filter './apps/service-demos/**' build
+# Build packages and all MFEs
+pnpm build
 
-# Copy to dist folder
-pnpm copy-mfe-dists
-
-# Serve MFEs
+# Serve MFEs (in one terminal)
 pnpm serve:mfes
 
-# Start container
+# Start container (in another terminal)
 pnpm dev:container-react
 ```
 
@@ -231,12 +228,12 @@ export default myServiceDemo;
 ### 4. Build and Register
 
 ```bash
-# Build the demo
+# Build all packages and MFEs
 pnpm build
 
-# Add to mfe-registry.json
-# Copy dist files
-pnpm copy-mfe-dists
+# Add to mfe-registry.json if needed
+# Serve the MFEs
+pnpm serve:mfes
 ```
 
 ## Best Practices

@@ -10,14 +10,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 # Install dependencies (run after cloning)
 pnpm install
 
-# Build all packages (required before first run)
-pnpm -r build
-
-# Start all applications in parallel (recommended)
-pnpm dev
+# Build packages and MFEs (required before first run)
+pnpm build
 
 # Start container application
 pnpm dev:container-react  # React container app on http://localhost:3000
+
+# Serve MFEs (in another terminal)
+pnpm serve:mfes  # Serves from dist/ on http://localhost:8080
 ```
 
 ### Testing
@@ -67,11 +67,8 @@ pnpm validate
 ### Building
 
 ```bash
-# Build all packages
+# Build packages and MFEs
 pnpm build
-
-# Build in dependency order
-pnpm -r build
 
 # Preview production build
 cd apps/container-react && pnpm preview

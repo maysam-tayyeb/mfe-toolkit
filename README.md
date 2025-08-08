@@ -184,8 +184,8 @@ cd mfe-made-easy
 # Install dependencies
 pnpm install
 
-# Build shared packages (required first time)
-pnpm -r build
+# Build packages and MFEs (required first time)
+pnpm build
 ```
 
 ## 🏃‍♂️ Running the Applications
@@ -196,17 +196,10 @@ pnpm -r build
 # Install dependencies (run after cloning)
 pnpm install
 
-# Build all packages (required before first run)
-pnpm -r build
+# Build packages and MFEs (required before first run)
+pnpm build
 
-# Start all applications in parallel (recommended)
-pnpm dev
-```
-
-Or start individually:
-
-```bash
-# Start individual applications
+# Start the container application
 pnpm dev:container-react  # React container app on http://localhost:3000
 ```
 

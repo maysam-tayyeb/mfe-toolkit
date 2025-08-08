@@ -215,15 +215,12 @@ MFE Platform
 ```bash
 # Install and build
 pnpm install
-pnpm -r build         # Build all packages
+pnpm build            # Build packages and MFEs
 
 # Development
-pnpm dev              # Start all apps in parallel
-pnpm dev:container-react  # Container only
+pnpm dev:container-react  # Start container app
 
-# Production build & serve
-pnpm build            # Build containers and MFEs
-pnpm copy-mfe-dists   # Copy all MFE builds to root dist/
+# Serve MFEs (after build)
 pnpm serve:mfes       # Serve from dist/ on port 8080
 
 # Testing
