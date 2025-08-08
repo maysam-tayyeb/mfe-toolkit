@@ -4,24 +4,20 @@ This document provides an overview of all service demonstration MFEs that showca
 
 ## Overview
 
-The service demos illustrate how the platform's shared services work consistently across different frameworks (React 19, React 17, Vue 3, and Vanilla TypeScript). Each service has dedicated demo MFEs that demonstrate both capabilities and limitations.
+The service demos illustrate how the platform's shared services work consistently across different frameworks (React 19, React 17, Vue 3, and Vanilla TypeScript). Following the removal of monolithic MFEs and the implementation of the new design system, these focused demos provide clear examples of service integration patterns.
 
 ## Modal Service Demos
 
 Located in `apps/service-demos/modal/`
 
-### UI/UX Improvements
+### Design System Integration
 
-The Modal Service demo page features a refined layout design:
-
-1. **Improved Hero Section** - Features informative highlights instead of duplicate action buttons:
-   - Framework Agnostic capabilities across React, Vue, and Vanilla JS
-   - Consistent API interface across all MFEs
-   - Zero Pollution through service injection (no global variables)
-2. **Single Demo Section** - Clean "Try It Yourself" area with all modal examples
-3. **Enhanced Information Architecture** - Better separation between features, demos, code examples, and framework implementations
-4. **Tabbed Interface** - Code examples organized in tabs for different modal patterns
-5. **Framework Selector** - Interactive selection for different framework implementations
+The Modal Service demo page uses the new design system with:
+- `ds-hero` for gradient hero sections
+- `ds-card` and `ds-card-padded` for content containers
+- `ds-button-primary` and `ds-button-outline` for actions
+- `ds-tabs` for code example navigation
+- Modern Blue & Slate color palette throughout
 
 ### Available Implementations
 
@@ -81,17 +77,14 @@ Located in `apps/service-demos/event-bus/`
 | ------------ | --------------------------- | ----------- | --------------------------------- |
 | **React 19** | `mfe-react19-eventbus-demo` | ~5.5KB      | Interactive pub/sub demonstration |
 
-### UI/UX Improvements
+### Design System Integration
 
-The Event Bus demo page features an optimized layout design:
-
-1. **Top Navigation Bar** - Replaced sidebar with dropdown navigation to save ~250px horizontal space
-2. **Compact Typography** - Using `text-xs` and `text-sm` for better content density
-3. **3-Column Layout** - Main content (2 cols) + info panel (1 col) for optimal organization
-4. **Tabbed MFE Interface** - Support for multiple MFE demos (React, Vue, Angular - coming soon)
-5. **Container Event Emitter** - Dedicated section for container-to-MFE communication
-6. **Active Subscriptions** - Pill badges with color-coded categories and unsubscribe functionality
-7. **EventLog Component** - Reusable grayscale event stream display with consistent styling
+The Event Bus demo page leverages the design system:
+- Responsive layout with `ds-page` container
+- Event log using `ds-card` with proper spacing
+- Action buttons using `ds-button-*` variants
+- Status badges with `ds-badge-*` classes
+- Consistent typography with `ds-section-title` and `ds-text-muted`
 
 ### Features Demonstrated
 
@@ -279,12 +272,16 @@ grep "process\." dist/*.js
 
 ## Future Enhancements
 
-- [ ] Logger Service Demo
-- [ ] Auth Service Demo
+Following the platform cleanup and design system implementation:
+
+- [ ] Complete Dev Container for isolated MFE development
+- [ ] Logger Service Demo (all frameworks)
+- [ ] Auth Service Demo (all frameworks)
 - [ ] Error Reporter Demo
-- [ ] Notification Service Demo (standalone)
-- [ ] Performance Monitoring Demo
-- [ ] State Management Demo (cross-framework)
+- [ ] Notification Service Demo (standalone, all frameworks)
+- [ ] Theme Service Demo (all frameworks)
+- [ ] Performance Monitoring Dashboard
+- [ ] Cross-tab State Synchronization Demos
 
 ## Related Documentation
 
