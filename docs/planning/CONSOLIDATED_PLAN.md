@@ -73,14 +73,23 @@ The design system has been fully implemented with:
 - **LoadingState**: Loading indicators
 - **EventLog**: Event stream display
 
-## MFE Development Container Architecture 🚧 IN PROGRESS
+## MFE Development Container Architecture ⏸️ POSTPONED
 
 ### Problem Statement
 MFEs cannot be developed independently without the main container, limiting developer productivity and testing capabilities.
 
-### Solution: Universal Dev Container
+### Status Update (2025-08-08)
+**Decision**: Development container implementation has been postponed. The initial implementation revealed fundamental architectural issues that need to be addressed after creating actual MFEs. The package has been removed to avoid confusion.
 
-A single, framework-agnostic development container (`@mfe-toolkit/dev-container`) that provides:
+### Revised Approach
+1. **First**: Create service demo MFEs using the main container
+2. **Learn**: Understand actual MFE requirements and pain points
+3. **Design**: Create a proper dev container based on real-world needs
+4. **Implement**: Build the dev container with lessons learned
+
+### Future Solution: Universal Dev Container
+
+When reimplemented, the dev container will provide:
 
 #### Core Features
 - Lightweight development server
@@ -90,52 +99,16 @@ A single, framework-agnostic development container (`@mfe-toolkit/dev-container`
 - Framework agnostic loading
 - TypeScript support
 
-#### UI Layout
-```
-┌─────────────────────────────────────┐
-│  MFE Dev Container - [MFE Name]     │
-├─────────────┬───────────────────────┤
-│  Service    │                       │
-│  Tester     │     MFE Content       │
-│  Panel      │                       │
-│             │                       │
-│  - Modals   │                       │
-│  - Toasts   │                       │
-│  - Events   │                       │
-│  - Auth     │                       │
-│  - Theme    │                       │
-│  - State    │                       │
-├─────────────┴───────────────────────┤
-│  Event Log / Console                │
-└─────────────────────────────────────┘
-```
+#### Service Integration Requirements (Learned from Initial Attempt)
+- Browser-compatible service bundles (not Node.js modules)
+- Proper ES module endpoints for service injection
+- Clear separation between server and client code
+- Service implementations that work in browser context
 
-#### Service Tester Features
-1. **Modal Tester**: Trigger different modal types, sizes, custom content
-2. **Notification Tester**: Send toasts with various types and durations
-3. **Event Bus Tester**: Emit/listen to events, view history
-4. **Auth Mock**: Toggle auth state, change roles/permissions
-5. **Theme Switcher**: Light/dark mode toggle
-6. **State Inspector**: View and modify state values
-
-### Usage Pattern
-```bash
-# In any MFE directory
-npx @mfe-toolkit/dev-container
-
-# With options
-npx @mfe-toolkit/dev-container --port 3000 --services-ui --mock-auth
-```
-
-### Implementation Status
-- ✅ Package structure created
-- ✅ HTML template with full UI
-- ✅ TypeScript configuration
-- 🚧 Express dev server implementation
-- 🚧 Service implementations
-- 🚧 MFE loader functionality
-- ⏳ WebSocket for real-time updates
-- ⏳ CLI integration
+### Implementation Timeline
+- ⏸️ **Postponed**: Dev container implementation
+- 🎯 **Next Priority**: Create first service demo MFE
+- 📅 **Future**: Redesign dev container based on MFE requirements
 
 ## Platform Architecture
 
@@ -252,22 +225,24 @@ pnpm validate        # Run all checks
 ## Implementation Roadmap
 
 ### Immediate Priorities (This Week)
-1. **Complete Dev Container Core**
-   - [ ] Express dev server
-   - [ ] Service implementations
-   - [ ] MFE loader functionality
-   - [ ] WebSocket integration
+1. **Create First Service Demo MFE**
+   - [ ] Modal service demo with React 19
+   - [ ] Test service injection pattern
+   - [ ] Validate MFE loading process
+   - [ ] Document patterns and requirements
 
-2. **Documentation Cleanup**
+2. **Documentation Updates**
    - [x] Consolidate planning docs
+   - [x] Update dev container status (postponed)
    - [ ] Update architecture guides
    - [ ] Remove outdated references
 
 ### Next Week
-1. **Test Dev Container**
-   - [ ] With existing modal demos
-   - [ ] Hot reload verification
-   - [ ] Service compatibility
+1. **Expand Service Demos**
+   - [ ] Create React 17 modal demo (cross-version testing)
+   - [ ] Create Vue 3 modal demo (cross-framework testing)
+   - [ ] Create Vanilla JS modal demo (no framework)
+   - [ ] Add notification service demos
 
 2. **Create MFE Templates**
    - [ ] React 19 template
@@ -295,7 +270,7 @@ pnpm validate        # Run all checks
 - **Documentation**: Comprehensive guides created
 
 ### Target Metrics
-- **MFE Development Time**: 50% reduction with dev container
+- **MFE Development Time**: 50% reduction (future goal with dev container)
 - **Service Integration**: 100% framework parity
 - **Developer Experience**: Simplified setup and testing
 - **Platform Stability**: Zero global pollution issues
@@ -307,7 +282,7 @@ pnpm validate        # Run all checks
 2. **React Context over Redux**: Better isolation, simpler state management
 3. **Service Injection Pattern**: No global pollution, better testability
 4. **CSS-First Design System**: Maximum compatibility, zero JavaScript overhead
-5. **Universal Dev Container**: Single solution for all frameworks
+5. **Dev Container Postponement**: Build MFEs first to understand real requirements
 
 ### Technology Choices
 - **Container**: React 19 + Tailwind + ShadCN UI
@@ -341,7 +316,6 @@ packages/
 ├── mfe-toolkit-react/       # React-specific components
 ├── mfe-toolkit-cli/         # CLI tools
 ├── mfe-toolkit-state/       # State management
-├── mfe-toolkit-dev-container/ # Dev container (in progress)
 ├── design-system/           # CSS-first design system
 └── design-system-react/     # React component wrappers
 ```
@@ -360,7 +334,7 @@ apps/container-react/
 
 ## Conclusion
 
-The MFE platform has undergone significant transformation with the removal of monolithic MFEs, implementation of a zero-pollution design system, and plans for a universal development container. This consolidated documentation serves as the single source of truth for the platform's architecture, guidelines, and future direction.
+The MFE platform has undergone significant transformation with the removal of monolithic MFEs and implementation of a zero-pollution design system. The development container has been postponed to allow for a better understanding of requirements through actual MFE implementation. This consolidated documentation serves as the single source of truth for the platform's architecture, guidelines, and future direction.
 
 The focus remains on:
 - Developer experience through better tooling
