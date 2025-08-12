@@ -18,11 +18,12 @@ export const EventOrchestrator: React.FC<EventOrchestratorProps> = ({ services }
   const [orders, setOrders] = useState<Order[]>([]);
   const [totalProcessed, setTotalProcessed] = useState(0);
   const [currentProcessing, setCurrentProcessing] = useState<string | null>(null);
-  const processingTimeoutsRef = useRef<Map<string, NodeJS.Timeout>>(new Map());
+  const processingTimeoutsRef = useRef<Map<string, { timeout1?: NodeJS.Timeout; timeout2?: NodeJS.Timeout }>>(new Map());
+  const processedOrdersRef = useRef<Set<string>>(new Set());
 
   const processOrder = (orderId: string) => {
     // Prevent processing the same order multiple times
-    if (processingTimeoutsRef.current.has(orderId)) {
+    if (processingTimeoutsRef.current.has(orderId) || processedOrdersRef.current.has(orderId)) {
       return;
     }
     
@@ -40,11 +41,19 @@ export const EventOrchestrator: React.FC<EventOrchestratorProps> = ({ services }
     }, 500);
     
     const timeout2 = setTimeout(() => {
+      // Check if this order hasn't been completed already
+      if (processedOrdersRef.current.has(orderId)) {
+        return;
+      }
+      
       setOrders(prev => prev.map(order => 
         order.id === orderId ? { ...order, status: 'fulfilled' } : order
       ));
       setTotalProcessed(prev => prev + 1);
       setCurrentProcessing(null);
+      
+      // Mark as processed before emitting events
+      processedOrdersRef.current.add(orderId);
       
       // Emit completion events
       services.eventBus.emit('email:sent', { orderId, type: 'confirmation' });
@@ -54,8 +63,8 @@ export const EventOrchestrator: React.FC<EventOrchestratorProps> = ({ services }
       processingTimeoutsRef.current.delete(orderId);
     }, 2000);
     
-    // Store the timeouts to prevent duplicate processing
-    processingTimeoutsRef.current.set(orderId, timeout2);
+    // Store both timeouts to prevent duplicate processing
+    processingTimeoutsRef.current.set(orderId, { timeout1, timeout2 });
     
     services.logger.info(`[Order Processor] Processing order ${orderId}`);
   };
@@ -131,8 +140,12 @@ export const EventOrchestrator: React.FC<EventOrchestratorProps> = ({ services }
       unsubscribes.forEach(unsub => unsub());
       
       // Clear all processing timeouts
-      processingTimeoutsRef.current.forEach(timeout => clearTimeout(timeout));
+      processingTimeoutsRef.current.forEach(timeouts => {
+        if (timeouts.timeout1) clearTimeout(timeouts.timeout1);
+        if (timeouts.timeout2) clearTimeout(timeouts.timeout2);
+      });
       processingTimeoutsRef.current.clear();
+      processedOrdersRef.current.clear();
       
       services.eventBus.emit('mfe:unloaded', { 
         name: 'order-processor'
