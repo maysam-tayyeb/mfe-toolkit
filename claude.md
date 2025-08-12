@@ -82,22 +82,25 @@ This is a **microfrontend (MFE) monorepo** using pnpm workspaces. The architectu
 ### UI/UX Design Principles
 
 - **Zero-Pollution Design System**: CSS-first approach with `ds-*` prefixed classes
-- **400+ Utility Classes**: Comprehensive set including complete component systems:
+- **500+ Utility Classes**: Comprehensive set including complete component systems:
   - Button system (primary, secondary, outline, ghost, danger, success, warning)
   - Modal system (backdrop, header, body, footer)
   - Form components (inputs, selects, checkboxes, switches, file uploads)
   - Navigation system (nav containers, dropdowns, breadcrumbs)
   - Toast notifications with animations
-  - Interactive components (accordions, tooltips, pagination, sliders)
+  - Alert and badge components
   - Layout utilities (flexbox, grid with responsive breakpoints)
   - Typography system with font weights, line heights, letter spacing
+  - Complete spacing system (margin, padding, gap utilities)
+  - Position and display utilities
+  - Border, shadow, and visual effects
 - **Modern Blue & Slate Palette**: Professional color scheme with semantic variants
 - **Top Navigation Bar**: Dropdown menus with hover interactions
 - **Centered Layouts**: Content centered with max-width for optimal readability
 - **Responsive Design**: Mobile-first with `ds-sm:*`, `ds-md:*`, `ds-lg:*` breakpoints
-- **Component Patterns**: Heroes, metrics, features, empty states, loading states
+- **Component Patterns**: Heroes, metrics, features, empty states, loading states, error boundaries
 - **Visual Hierarchy**: Consistent typography scale and semantic spacing
-- **Cross-Framework Ready**: Designed for React and Vue container compatibility
+- **Cross-Framework Ready**: Designed for React, Vue, and Vanilla JS container compatibility
 
 ### Core Components
 
@@ -236,7 +239,7 @@ The toolkit is split into several npm packages under the `@mfe-toolkit` organiza
 - React contexts: `apps/container-react/src/contexts/` (AuthContext, UIContext, RegistryContext)
 - MFE types: `packages/mfe-toolkit-core/src/types/`
 - UI components: `apps/container-react/src/components/ui/`
-- Design system styles: `packages/design-system/src/styles/index.css` (400+ utility classes)
+- Design system styles: `packages/design-system/src/styles/index.css` (500+ utility classes)
 - Design system tokens: `packages/design-system/src/tokens/index.ts`
 - React design components: `packages/design-system-react/src/components/`
 - MFE registry: `apps/container-react/public/mfe-registry.json`
@@ -301,46 +304,76 @@ See [State Management Architecture](./docs/architecture/state-management-archite
 - **Framework-Agnostic**: Works with React, Vue, and Vanilla JS through CSS classes
 - **Modern Blue & Slate Palette**: Professional color scheme with vibrant accents
 
-### Key CSS Classes (400+ available)
+### Key CSS Classes (500+ available)
 
 **Layout & Containers:**
-
 - `ds-page`: Centered page container
 - `ds-card`, `ds-card-padded`, `ds-card-compact`: Card variants
-- `ds-hero`: Gradient hero section
+- `ds-hero`, `ds-hero-gradient`: Hero sections
 - `ds-metric-card`: Metric display cards
+- `ds-grid`, `ds-grid-cols-[1-6]`: Grid system
+- `ds-flex`, `ds-flex-row`, `ds-flex-col`: Flexbox utilities
 
 **Typography:**
-
 - `ds-page-title`, `ds-section-title`, `ds-card-title`: Heading hierarchy
-- `ds-text-muted`, `ds-text-small`, `ds-label`: Text variants
-- `ds-font-*`: Font weights (thin to extrabold)
-- `ds-leading-*`: Line heights
-- `ds-tracking-*`: Letter spacing
+- `ds-text-xs`, `ds-text-sm`, `ds-text-lg`, `ds-text-xl`, `ds-text-2xl`, `ds-text-3xl`: Text sizes
+- `ds-font-normal`, `ds-font-medium`, `ds-font-semibold`, `ds-font-bold`: Font weights
+- `ds-leading-none`, `ds-leading-tight`, `ds-leading-normal`: Line heights
+- `ds-text-left`, `ds-text-center`, `ds-text-right`: Text alignment
+- `ds-truncate`, `ds-break-words`: Text overflow
 
 **Components:**
-
-- `ds-btn-primary`, `ds-btn-secondary`, `ds-btn-outline`, `ds-btn-ghost`: Modern button system
-- `ds-btn-danger`, `ds-btn-success`, `ds-btn-warning`: Semantic button variants
-- `ds-btn-sm`, `ds-btn-lg`, `ds-btn-icon`: Size modifiers
+- `ds-btn-primary`, `ds-btn-secondary`, `ds-btn-outline`, `ds-btn-ghost`: Button variants
+- `ds-btn-danger`, `ds-btn-success`, `ds-btn-warning`: Semantic buttons
+- `ds-btn-sm`, `ds-btn-lg`: Size modifiers
 - `ds-badge`, `ds-badge-info`, `ds-badge-success`: Badge variants
 - `ds-tabs`, `ds-tab-active`: Tab navigation
 - `ds-input`, `ds-select`, `ds-textarea`, `ds-checkbox`, `ds-radio`: Form controls
-- `ds-switch`, `ds-switch-on`: Toggle switches
-- `ds-modal-*`: Complete modal system
-- `ds-toast-*`: Toast notifications
+- `ds-modal-*`: Complete modal system (backdrop, content, header, footer)
+- `ds-toast-*`: Toast notifications with animations
 - `ds-dropdown-*`: Dropdown menus
+- `ds-alert-*`: Alert components
+
+**Spacing:**
+- `ds-m-[0-4]`, `ds-mt-*`, `ds-mb-*`, `ds-ml-*`, `ds-mr-*`: Margins
+- `ds-p-[0-6]`, `ds-px-*`, `ds-py-*`, `ds-pt-*`, `ds-pb-*`: Padding
+- `ds-space-x-[1-4]`, `ds-space-y-[1-6]`: Space between utilities
+- `ds-gap-[1-8]`: Gap utilities for grid/flex
+
+**Layout Utilities:**
+- `ds-w-full`, `ds-w-auto`, `ds-w-[1-16]`, `ds-w-1/2`, `ds-w-1/3`: Width utilities
+- `ds-h-full`, `ds-h-screen`, `ds-h-[1-16]`: Height utilities
+- `ds-min-h-screen`, `ds-max-h-96`: Min/max height
+- `ds-items-start`, `ds-items-center`, `ds-items-end`: Flex alignment
+- `ds-justify-start`, `ds-justify-center`, `ds-justify-between`: Flex justification
+
+**Position & Display:**
+- `ds-relative`, `ds-absolute`, `ds-fixed`, `ds-sticky`: Position utilities
+- `ds-top-0`, `ds-right-0`, `ds-bottom-0`, `ds-left-0`: Position values
+- `ds-block`, `ds-inline-block`, `ds-inline`, `ds-hidden`: Display utilities
+- `ds-z-[0-50]`: Z-index utilities
+
+**Visual Effects:**
+- `ds-border`, `ds-border-2`, `ds-border-t`, `ds-border-b`: Border utilities
+- `ds-rounded`, `ds-rounded-md`, `ds-rounded-lg`, `ds-rounded-full`: Border radius
+- `ds-shadow-sm`, `ds-shadow`, `ds-shadow-md`, `ds-shadow-lg`: Shadows
+- `ds-opacity-[0-100]`: Opacity utilities
+- `ds-transition-all`, `ds-transition-colors`: Transitions
+- `ds-cursor-pointer`, `ds-cursor-not-allowed`: Cursor utilities
+
+**Responsive Utilities:**
+- `ds-sm:*`, `ds-md:*`, `ds-lg:*`: Responsive breakpoints for all utilities
+- `ds-sm:grid-cols-2`, `ds-md:grid-cols-3`, `ds-lg:grid-cols-4`: Responsive grids
 
 **Semantic Colors:**
-
 - `ds-accent-primary`, `ds-accent-success`, `ds-accent-warning`, `ds-accent-danger`
 - `ds-bg-accent-*-soft`: Soft background variants
 - `ds-icon-*`: Icon color utilities
+- `ds-text-muted`: Muted text color
 
 **States & Effects:**
-
 - `ds-loading-state`, `ds-empty-state`: State displays
-- `ds-hover-scale`, `ds-hover-bg`: Hover effects
+- `ds-hover-scale`, `ds-hover-lift`: Hover effects
 - `ds-spinner`, `ds-spinner-lg`: Loading spinners
 - `ds-animate-in`, `ds-fade-in`, `ds-scale-in`: Animations
 - `ds-transition`: Smooth transitions
