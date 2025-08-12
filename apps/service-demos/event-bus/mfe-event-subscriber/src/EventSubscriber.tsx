@@ -1,265 +1,186 @@
 import React, { useState, useEffect, useRef } from 'react';
 import type { MFEServices } from '@mfe-toolkit/core';
 
-type ReceivedEvent = {
+type ServiceNotification = {
   id: string;
-  type: string;
-  data: any;
+  service: string;
+  message: string;
   timestamp: string;
-  isNew?: boolean;
+  type: 'info' | 'success' | 'warning' | 'error';
+  icon: string;
 };
 
 type EventSubscriberProps = {
   services: MFEServices;
 };
 
-const MAX_EVENTS = 10;
+const MAX_NOTIFICATIONS = 8;
 
 export const EventSubscriber: React.FC<EventSubscriberProps> = ({ services }) => {
-  const [events, setEvents] = useState<ReceivedEvent[]>([]);
-  const [receivedCount, setReceivedCount] = useState(0);
-  const [isTyping, setIsTyping] = useState(false);
-  const [typingUser, setTypingUser] = useState<string | null>(null);
-  const [connectionStatus, setConnectionStatus] = useState<'connected' | 'listening'>('connected');
-  const typingTimeoutRef = useRef<NodeJS.Timeout>();
-  const eventContainerRef = useRef<HTMLDivElement>(null);
+  const [notifications, setNotifications] = useState<ServiceNotification[]>([]);
+  const [notificationCount, setNotificationCount] = useState(0);
 
   useEffect(() => {
     const subscriptions: Array<() => void> = [];
 
-    const addEvent = (type: string, data: any) => {
-      const newEvent: ReceivedEvent = {
+    const addNotification = (service: string, message: string, type: ServiceNotification['type'] = 'info', icon: string = '📬') => {
+      const newNotification: ServiceNotification = {
         id: `${Date.now()}-${Math.random()}`,
-        type,
-        data,
+        service,
+        message,
         timestamp: new Date().toLocaleTimeString(),
-        isNew: true
+        type,
+        icon
       };
 
-      setEvents(prev => {
-        const updated = [newEvent, ...prev].slice(0, MAX_EVENTS);
-        
-        setTimeout(() => {
-          setEvents(current => 
-            current.map(e => e.id === newEvent.id ? { ...e, isNew: false } : e)
-          );
-        }, 500);
-        
-        return updated;
-      });
+      setNotifications(prev => [newNotification, ...prev].slice(0, MAX_NOTIFICATIONS));
+      setNotificationCount(prev => prev + 1);
       
-      setReceivedCount(prev => prev + 1);
-      setConnectionStatus('listening');
-      setTimeout(() => setConnectionStatus('connected'), 200);
-      
-      services.logger.info(`[Subscriber] Received event: ${type}`, data);
+      services.logger.info(`[Service Notifications] ${service}: ${message}`);
     };
 
+    // Order events
     subscriptions.push(
-      services.eventBus.on('chat:message', (payload) => {
-        addEvent('chat:message', payload.data);
-        // Show notification for chat messages
-        if (services.notifications) {
-          services.notifications.addNotification({
-            type: 'info',
-            title: 'New Message',
-            message: payload.data?.text || 'New message received'
-          });
-        }
+      services.eventBus.on('order:placed', (payload) => {
+        addNotification('Order Service', `New order received with ${payload.data?.items || 0} items`, 'success', '📦');
+        addNotification('Inventory', 'Checking stock availability', 'info', '📊');
+        addNotification('Payment', `Processing payment of $${payload.data?.total || 0}`, 'info', '💳');
       })
     );
 
     subscriptions.push(
-      services.eventBus.on('chat:reaction', (payload) => {
-        addEvent('chat:reaction', payload.data);
+      services.eventBus.on('order:cancelled', (payload) => {
+        addNotification('Order Service', `Order ${payload.data?.orderId} cancelled`, 'warning', '❌');
+      })
+    );
+
+    // Cart events
+    subscriptions.push(
+      services.eventBus.on('cart:item-added', (payload) => {
+        addNotification('Cart Service', `Added ${payload.data?.productId} to cart`, 'success', '🛒');
+        addNotification('Analytics', 'Tracked add-to-cart event', 'info', '📈');
+      })
+    );
+
+    // Inventory events
+    subscriptions.push(
+      services.eventBus.on('inventory:check', (payload) => {
+        addNotification('Inventory', `Verifying stock for order ${payload.data?.orderId}`, 'info', '📦');
       })
     );
 
     subscriptions.push(
-      services.eventBus.on('chat:typing', (payload) => {
-        const { user, isTyping: typing } = payload.data;
-        
-        if (typing) {
-          setIsTyping(true);
-          setTypingUser(user);
-          
-          if (typingTimeoutRef.current) {
-            clearTimeout(typingTimeoutRef.current);
-          }
-          
-          typingTimeoutRef.current = setTimeout(() => {
-            setIsTyping(false);
-            setTypingUser(null);
-          }, 3000);
-        } else {
-          setIsTyping(false);
-          setTypingUser(null);
-          if (typingTimeoutRef.current) {
-            clearTimeout(typingTimeoutRef.current);
-          }
-        }
+      services.eventBus.on('inventory:restock', (payload) => {
+        addNotification('Inventory', `Restocking items from cancelled order`, 'info', '♻️');
       })
     );
 
+    // Payment events
     subscriptions.push(
-      services.eventBus.on('system:alert', (payload) => {
-        addEvent('system:alert', payload.data);
+      services.eventBus.on('payment:process', (payload) => {
+        addNotification('Payment Gateway', `Processing payment for ${payload.data?.orderId}`, 'info', '💰');
+        setTimeout(() => {
+          addNotification('Payment Gateway', 'Payment confirmed', 'success', '✅');
+        }, 1500);
       })
     );
 
+    // Email events
     subscriptions.push(
-      services.eventBus.on('system:error', (payload) => {
-        addEvent('system:error', payload.data);
-        // Show notification for errors
-        if (services.notifications) {
-          services.notifications.addNotification({
-            type: 'error',
-            title: 'System Error Received',
-            message: payload.data?.message || 'An error event was received'
-          });
-        }
+      services.eventBus.on('email:sent', (payload) => {
+        const emailType = payload.data?.type || 'notification';
+        const messages: Record<string, string> = {
+          confirmation: 'Order confirmation email sent',
+          cancellation: 'Cancellation email sent',
+          notification: 'Email notification sent'
+        };
+        addNotification('Email Service', messages[emailType] || 'Email sent', 'success', '📧');
       })
     );
 
+    // Analytics events
     subscriptions.push(
-      services.eventBus.on('user:login', (payload) => {
-        addEvent('user:login', payload.data);
-        // Show notification for user login
-        if (services.notifications) {
-          services.notifications.addNotification({
-            type: 'info',
-            title: 'User Login Event',
-            message: `User ${payload.data?.username || 'unknown'} logged in`
-          });
-        }
+      services.eventBus.on('analytics:track', (payload) => {
+        addNotification('Analytics', `Event "${payload.data?.event}" tracked`, 'info', '📊');
       })
     );
 
+    // Coupon events
     subscriptions.push(
-      services.eventBus.on('state:update', (payload) => {
-        addEvent('state:update', payload.data);
+      services.eventBus.on('order:coupon-applied', (payload) => {
+        addNotification('Promotions', `Coupon ${payload.data?.code} applied (${payload.data?.discount}% off)`, 'success', '🎟️');
+        addNotification('Pricing', 'Recalculating order total', 'info', '🧮');
       })
     );
 
+    // Shipping events
     subscriptions.push(
-      services.eventBus.on('custom:event', (payload) => {
-        addEvent('custom:event', payload.data);
+      services.eventBus.on('order:shipping-updated', (payload) => {
+        addNotification('Shipping', `Updated to ${payload.data?.method} shipping ($${payload.data?.cost})`, 'info', '🚚');
       })
     );
 
     services.eventBus.emit('mfe:ready', { 
-      name: 'event-subscriber',
-      capabilities: ['receive', 'display']
-    });
-
-    services.eventBus.emit('user:seen', { 
-      timestamp: Date.now()
+      name: 'service-notifications',
+      capabilities: ['monitor', 'display']
     });
 
     return () => {
       subscriptions.forEach(unsubscribe => unsubscribe());
-      if (typingTimeoutRef.current) {
-        clearTimeout(typingTimeoutRef.current);
-      }
       services.eventBus.emit('mfe:unloaded', { 
-        name: 'event-subscriber'
+        name: 'service-notifications'
       });
     };
-  }, [services]); // Remove receivedCount from dependencies to prevent re-mounting
+  }, [services]);
 
-  const getEventIcon = (type: string) => {
-    const iconMap: Record<string, string> = {
-      'chat:message': '💬',
-      'chat:reaction': '👍',
-      'chat:typing': '⌨️',
-      'system:alert': '🔔',
-      'system:error': '❌',
-      'user:login': '👤',
-      'state:update': '🔄',
-      'custom:event': '⚡'
-    };
-    return iconMap[type] || '📦';
-  };
-
-  const getEventColor = (type: string) => {
-    if (type.startsWith('chat:')) return 'ds-alert-info';
-    if (type.startsWith('system:error')) return 'ds-alert-danger';
-    if (type.startsWith('system:')) return 'ds-alert-warning';
-    if (type.startsWith('user:')) return 'ds-alert-success';
-    return 'ds-alert';
-  };
-
-  const formatEventData = (data: any) => {
-    if (typeof data === 'string') return data;
-    if (data.text) return data.text;
-    if (data.message) return data.message;
-    if (data.emoji) return `Reaction: ${data.emoji}`;
-    if (data.username) return `User: ${data.username}`;
-    if (data.component) return `Component: ${data.component}`;
-    return JSON.stringify(data, null, 2);
+  const getNotificationColor = (type: ServiceNotification['type']) => {
+    switch (type) {
+      case 'success': return 'ds-alert-success';
+      case 'warning': return 'ds-alert-warning';
+      case 'error': return 'ds-alert-danger';
+      default: return 'ds-alert-info';
+    }
   };
 
   return (
     <div className="ds-card ds-p-4">
       <div className="ds-flex ds-justify-between ds-items-center ds-mb-4">
-        <h4 className="ds-card-title ds-mb-0">📻 Event Subscriber</h4>
-        <div className="ds-flex ds-gap-2">
-          <span className="ds-badge-info">📬 Received: {receivedCount}</span>
-          {connectionStatus === 'listening' && (
-            <span className="ds-badge-success ds-animate-pulse">🎧 Listening</span>
-          )}
-        </div>
+        <h4 className="ds-card-title ds-mb-0">🔔 Service Notifications</h4>
+        <span className="ds-badge-info">Total: {notificationCount}</span>
       </div>
 
-      {isTyping && typingUser && (
-        <div className="ds-alert-warning ds-mb-3 ds-animate-in">
-          <span className="ds-animate-pulse">⌨️ {typingUser} is typing...</span>
-        </div>
-      )}
-
-      <div 
-        ref={eventContainerRef}
-        className="ds-space-y-2 ds-max-h-64 ds-overflow-y-auto ds-mb-3"
-      >
-        {events.length === 0 ? (
+      <div className="ds-space-y-2 ds-max-h-64 ds-overflow-y-auto">
+        {notifications.length === 0 ? (
           <div className="ds-empty-state ds-py-8 ds-text-center">
-            <p className="ds-text-muted ds-text-sm">📡 Waiting for events...</p>
+            <p className="ds-text-muted ds-text-sm">📡 Monitoring services...</p>
             <p className="ds-text-xs ds-text-muted ds-mt-1">
-              Events will appear here when received
+              Service notifications will appear here
             </p>
           </div>
         ) : (
-          events.map(event => (
+          notifications.map(notification => (
             <div
-              key={event.id}
-              className={`
-                ${getEventColor(event.type)} 
-                ds-p-2 ds-rounded ds-text-sm
-                ${event.isNew ? 'ds-animate-in ds-ring-2 ds-ring-accent-primary' : ''}
-              `}
+              key={notification.id}
+              className={`${getNotificationColor(notification.type)} ds-p-2 ds-rounded ds-text-sm`}
             >
-              <div className="ds-flex ds-justify-between ds-items-start ds-mb-1">
-                <span className="ds-font-medium">
-                  {getEventIcon(event.type)} {event.type}
-                </span>
-                <span className="ds-text-xs ds-text-muted">{event.timestamp}</span>
-              </div>
-              <div className="ds-text-xs ds-break-words">
-                {formatEventData(event.data)}
+              <div className="ds-flex ds-justify-between ds-items-start">
+                <div className="ds-flex ds-items-start ds-gap-2">
+                  <span>{notification.icon}</span>
+                  <div>
+                    <div className="ds-font-medium ds-text-xs">{notification.service}</div>
+                    <div className="ds-text-xs">{notification.message}</div>
+                  </div>
+                </div>
+                <span className="ds-text-xs ds-text-muted">{notification.timestamp}</span>
               </div>
             </div>
           ))
         )}
       </div>
 
-      <div className="ds-border-t ds-pt-2">
+      <div className="ds-border-t ds-pt-2 ds-mt-3">
         <div className="ds-text-xs ds-text-muted ds-space-y-1">
-          <p>📡 Subscribed to events:</p>
-          <div className="ds-flex ds-flex-wrap ds-gap-1">
-            {['chat:*', 'system:*', 'user:*', 'state:*', 'custom:*'].map(pattern => (
-              <span key={pattern} className="ds-badge ds-badge-sm">{pattern}</span>
-            ))}
-          </div>
+          <p>📡 Monitoring: Order, Payment, Inventory, Email, Analytics</p>
         </div>
       </div>
     </div>

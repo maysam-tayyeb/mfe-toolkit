@@ -257,18 +257,18 @@ export const EventBusPageV2: React.FC = () => {
             <div className="ds-grid ds-grid-cols-2 ds-gap-2 ds-p-2 ds-w-full">
               <MFECard 
                 id="mfe-event-publisher" 
-                title="Publisher" 
+                title="Order Actions" 
                 badge="ds-bg-green-500"
                 onQuickAction={(action) => quickEmit(action.type, action.data)}
               />
               <MFECard 
                 id="mfe-event-subscriber" 
-                title="Subscriber" 
+                title="Service Notifications" 
                 badge="ds-bg-blue-500"
               />
               <MFECard 
                 id="mfe-event-orchestrator" 
-                title="Orchestrator" 
+                title="Order Processor" 
                 badge="ds-bg-purple-500"
                 className="ds-col-span-2"
               />
@@ -279,18 +279,18 @@ export const EventBusPageV2: React.FC = () => {
             <div className="ds-flex ds-flex-col ds-gap-2 ds-p-2 ds-w-full ds-overflow-y-auto">
               <MFECard 
                 id="mfe-event-publisher" 
-                title="Publisher" 
+                title="Order Actions" 
                 badge="ds-bg-green-500"
                 onQuickAction={(action) => quickEmit(action.type, action.data)}
               />
               <MFECard 
                 id="mfe-event-subscriber" 
-                title="Subscriber" 
+                title="Service Notifications" 
                 badge="ds-bg-blue-500"
               />
               <MFECard 
                 id="mfe-event-orchestrator" 
-                title="Orchestrator" 
+                title="Order Processor" 
                 badge="ds-bg-purple-500"
               />
             </div>
@@ -315,7 +315,7 @@ export const EventBusPageV2: React.FC = () => {
                 {selectedMFE === 'publisher' && (
                   <MFECard 
                     id="mfe-event-publisher" 
-                    title="Publisher" 
+                    title="Order Actions" 
                     badge="ds-bg-green-500"
                     fullHeight
                     onQuickAction={(action) => quickEmit(action.type, action.data)}
@@ -324,7 +324,7 @@ export const EventBusPageV2: React.FC = () => {
                 {selectedMFE === 'subscriber' && (
                   <MFECard 
                     id="mfe-event-subscriber" 
-                    title="Subscriber" 
+                    title="Service Notifications" 
                     badge="ds-bg-blue-500"
                     fullHeight
                   />
@@ -332,7 +332,7 @@ export const EventBusPageV2: React.FC = () => {
                 {selectedMFE === 'orchestrator' && (
                   <MFECard 
                     id="mfe-event-orchestrator" 
-                    title="Orchestrator" 
+                    title="Order Processor" 
                     badge="ds-bg-purple-500"
                     fullHeight
                   />

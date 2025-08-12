@@ -5,265 +5,183 @@ type EventOrchestratorProps = {
   services: MFEServices;
 };
 
-type WorkerStatus = {
+type OrderStatus = 'pending' | 'processing' | 'fulfilled' | 'cancelled';
+
+type Order = {
   id: string;
-  lastActivity: string;
-  eventsProcessed: number;
-  status: 'idle' | 'busy' | 'error';
+  status: OrderStatus;
+  items: number;
+  timestamp: string;
 };
 
 export const EventOrchestrator: React.FC<EventOrchestratorProps> = ({ services }) => {
-  const [workers, setWorkers] = useState<WorkerStatus[]>([
-    { id: 'worker-a', lastActivity: '-', eventsProcessed: 0, status: 'idle' },
-    { id: 'worker-b', lastActivity: '-', eventsProcessed: 0, status: 'idle' }
-  ]);
-  const [currentPattern, setCurrentPattern] = useState<'broadcast' | 'round-robin' | 'load-balance'>('broadcast');
-  const [totalDispatched, setTotalDispatched] = useState(0);
-  const [lastDispatchedEvent, setLastDispatchedEvent] = useState<string | null>(null);
-  const [roundRobinIndex, setRoundRobinIndex] = useState(0);
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [totalProcessed, setTotalProcessed] = useState(0);
+  const [currentProcessing, setCurrentProcessing] = useState<string | null>(null);
 
-  const dispatchToWorker = (workerId: string, eventType: string, data: any) => {
-    services.eventBus.emit(`worker:${workerId}:task`, {
-      type: eventType,
-      data,
-      timestamp: Date.now()
-    });
-
-    setWorkers(prev => prev.map(w => 
-      w.id === workerId 
-        ? { ...w, status: 'busy', lastActivity: new Date().toLocaleTimeString(), eventsProcessed: w.eventsProcessed + 1 }
-        : w
-    ));
-
+  const processOrder = (orderId: string) => {
+    setCurrentProcessing(orderId);
+    
+    // Simulate order processing workflow
     setTimeout(() => {
-      setWorkers(prev => prev.map(w => 
-        w.id === workerId ? { ...w, status: 'idle' } : w
+      setOrders(prev => prev.map(order => 
+        order.id === orderId ? { ...order, status: 'processing' } : order
       ));
+      
+      // Emit events for services
+      services.eventBus.emit('inventory:check', { orderId });
+      services.eventBus.emit('payment:process', { orderId });
     }, 500);
-
-    services.logger.info(`[Orchestrator] Dispatched to ${workerId}:`, { eventType, data });
+    
+    setTimeout(() => {
+      setOrders(prev => prev.map(order => 
+        order.id === orderId ? { ...order, status: 'fulfilled' } : order
+      ));
+      setTotalProcessed(prev => prev + 1);
+      setCurrentProcessing(null);
+      
+      // Emit completion events
+      services.eventBus.emit('email:sent', { orderId, type: 'confirmation' });
+      services.eventBus.emit('analytics:track', { event: 'order_completed', orderId });
+    }, 2000);
+    
+    services.logger.info(`[Order Processor] Processing order ${orderId}`);
   };
 
-  const handleBroadcast = () => {
-    const data = { 
-      message: 'Broadcast message to all workers',
-      pattern: 'broadcast',
-      timestamp: Date.now()
-    };
+  const cancelOrder = (orderId: string) => {
+    setOrders(prev => prev.map(order => 
+      order.id === orderId ? { ...order, status: 'cancelled' } : order
+    ));
     
-    workers.forEach(worker => {
-      dispatchToWorker(worker.id, 'orchestrator:broadcast', data);
-    });
+    services.eventBus.emit('order:cancelled', { orderId });
+    services.eventBus.emit('inventory:restock', { orderId });
+    services.eventBus.emit('email:sent', { orderId, type: 'cancellation' });
     
-    setTotalDispatched(prev => prev + workers.length);
-    setLastDispatchedEvent('Broadcast to All');
-    
-    services.notifications?.addNotification({
-      type: 'info',
-      title: 'Broadcast Sent',
-      message: `Event sent to ${workers.length} workers`
-    });
+    services.logger.info(`[Order Processor] Cancelled order ${orderId}`);
   };
 
-  const handleRoundRobin = () => {
-    const worker = workers[roundRobinIndex];
-    const data = { 
-      message: `Round-robin message ${roundRobinIndex + 1}`,
-      pattern: 'round-robin',
-      workerIndex: roundRobinIndex
-    };
-    
-    dispatchToWorker(worker.id, 'orchestrator:round-robin', data);
-    
-    setRoundRobinIndex((prev) => (prev + 1) % workers.length);
-    setTotalDispatched(prev => prev + 1);
-    setLastDispatchedEvent(`Round Robin → ${worker.id}`);
-  };
-
-  const handleLoadBalance = () => {
-    const idleWorker = workers.find(w => w.status === 'idle');
-    const leastBusyWorker = workers.reduce((prev, curr) => 
-      curr.eventsProcessed < prev.eventsProcessed ? curr : prev
-    );
-    
-    const selectedWorker = idleWorker || leastBusyWorker;
-    const data = { 
-      message: 'Load balanced task',
-      pattern: 'load-balance',
-      selectedBy: idleWorker ? 'idle-first' : 'least-busy'
-    };
-    
-    dispatchToWorker(selectedWorker.id, 'orchestrator:load-balance', data);
-    
-    setTotalDispatched(prev => prev + 1);
-    setLastDispatchedEvent(`Load Balance → ${selectedWorker.id}`);
-  };
-
-  const handleSequentialBurst = () => {
-    const events = [
-      { type: 'task:start', data: { task: 'Process batch' } },
-      { type: 'task:progress', data: { progress: 25 } },
-      { type: 'task:progress', data: { progress: 50 } },
-      { type: 'task:progress', data: { progress: 75 } },
-      { type: 'task:complete', data: { result: 'Success' } }
-    ];
-
-    events.forEach((event, index) => {
-      setTimeout(() => {
-        const worker = workers[index % workers.length];
-        dispatchToWorker(worker.id, event.type, event.data);
-      }, index * 200);
-    });
-
-    setTotalDispatched(prev => prev + events.length);
-    setLastDispatchedEvent('Sequential Burst');
-  };
-
-  const handleChaosTest = () => {
-    const eventTypes = ['error', 'warning', 'info', 'debug', 'critical'];
-    const randomEvents = 10;
-    
-    for (let i = 0; i < randomEvents; i++) {
-      setTimeout(() => {
-        const randomWorker = workers[Math.floor(Math.random() * workers.length)];
-        const randomType = eventTypes[Math.floor(Math.random() * eventTypes.length)];
-        
-        dispatchToWorker(randomWorker.id, `chaos:${randomType}`, {
-          index: i,
-          random: Math.random(),
-          timestamp: Date.now()
-        });
-      }, i * 100);
+  const getStatusColor = (status: OrderStatus) => {
+    switch (status) {
+      case 'pending': return 'ds-badge-warning';
+      case 'processing': return 'ds-badge-info';
+      case 'fulfilled': return 'ds-badge-success';
+      case 'cancelled': return 'ds-badge-danger';
+      default: return 'ds-badge';
     }
-
-    setTotalDispatched(prev => prev + randomEvents);
-    setLastDispatchedEvent('Chaos Test (10 events)');
   };
+
+  const getStatusIcon = (status: OrderStatus) => {
+    switch (status) {
+      case 'pending': return '⏳';
+      case 'processing': return '⚙️';
+      case 'fulfilled': return '✅';
+      case 'cancelled': return '❌';
+      default: return '📦';
+    }
+  };
+
 
   useEffect(() => {
     const unsubscribes: Array<() => void> = [];
 
+    // Listen for new orders
     unsubscribes.push(
-      services.eventBus.on('worker:status', (payload) => {
-        const { workerId, status } = payload.data;
-        setWorkers(prev => prev.map(w => 
-          w.id === workerId ? { ...w, status } : w
-        ));
+      services.eventBus.on('order:placed', (payload) => {
+        const orderId = `ORD-${Date.now().toString(36).toUpperCase()}`;
+        const newOrder: Order = {
+          id: orderId,
+          status: 'pending',
+          items: payload.data?.items || Math.floor(Math.random() * 5) + 1,
+          timestamp: new Date().toLocaleTimeString()
+        };
+        
+        setOrders(prev => [newOrder, ...prev].slice(0, 5)); // Keep last 5 orders
+        
+        // Auto-process after a short delay
+        setTimeout(() => processOrder(orderId), 1000);
       })
     );
-
+    
     unsubscribes.push(
-      services.eventBus.on('worker:complete', (payload) => {
-        const { workerId } = payload.data;
-        setWorkers(prev => prev.map(w => 
-          w.id === workerId 
-            ? { ...w, status: 'idle', lastActivity: new Date().toLocaleTimeString() }
-            : w
-        ));
+      services.eventBus.on('order:cancelled', (payload) => {
+        if (payload.data?.orderId && orders.find(o => o.id === payload.data.orderId)) {
+          cancelOrder(payload.data.orderId);
+        }
       })
     );
 
     services.eventBus.emit('mfe:ready', { 
-      name: 'event-orchestrator',
-      capabilities: ['coordinate', 'distribute', 'monitor']
+      name: 'order-processor',
+      capabilities: ['process', 'track', 'fulfill']
     });
 
     return () => {
       unsubscribes.forEach(unsub => unsub());
       services.eventBus.emit('mfe:unloaded', { 
-        name: 'event-orchestrator'
+        name: 'order-processor'
       });
     };
-  }, [services]); // Remove totalDispatched from dependencies to prevent re-mounting
+  }, [services, orders]); // Include orders to have access to current orders
 
   return (
     <div className="ds-card ds-p-4">
       <div className="ds-flex ds-justify-between ds-items-center ds-mb-4">
-        <h4 className="ds-card-title ds-mb-0">🎛️ Event Orchestrator</h4>
-        <span className="ds-badge-primary">📊 Dispatched: {totalDispatched}</span>
+        <h4 className="ds-card-title ds-mb-0">📦 Order Processor</h4>
+        <span className="ds-badge-primary">✅ Fulfilled: {totalProcessed}</span>
       </div>
 
-      {lastDispatchedEvent && (
-        <div className="ds-alert-success ds-mb-3 ds-text-xs ds-animate-in">
-          Last: <strong>{lastDispatchedEvent}</strong>
+      {currentProcessing && (
+        <div className="ds-alert-info ds-mb-3 ds-text-xs ds-animate-pulse">
+          Processing order: <strong>{currentProcessing}</strong>
         </div>
       )}
 
       <div className="ds-space-y-3">
-        <div>
-          <p className="ds-text-sm ds-text-muted ds-mb-2">Distribution Patterns:</p>
-          <div className="ds-grid ds-grid-cols-1 ds-gap-2">
-            <button
-              onClick={handleBroadcast}
-              className={`ds-btn-${currentPattern === 'broadcast' ? 'primary' : 'outline'} ds-btn-sm ds-w-full`}
-              onMouseEnter={() => setCurrentPattern('broadcast')}
-            >
-              📢 Broadcast to All
-            </button>
-            <button
-              onClick={handleRoundRobin}
-              className={`ds-btn-${currentPattern === 'round-robin' ? 'primary' : 'outline'} ds-btn-sm ds-w-full`}
-              onMouseEnter={() => setCurrentPattern('round-robin')}
-            >
-              🔄 Round Robin (Next: {workers[roundRobinIndex].id})
-            </button>
-            <button
-              onClick={handleLoadBalance}
-              className={`ds-btn-${currentPattern === 'load-balance' ? 'primary' : 'outline'} ds-btn-sm ds-w-full`}
-              onMouseEnter={() => setCurrentPattern('load-balance')}
-            >
-              ⚖️ Load Balance
-            </button>
+        {orders.length === 0 ? (
+          <div className="ds-empty-state ds-py-8 ds-text-center">
+            <p className="ds-text-muted ds-text-sm">📦 No orders to process</p>
+            <p className="ds-text-xs ds-text-muted ds-mt-1">
+              Orders will appear here when placed
+            </p>
           </div>
-        </div>
-
-        <div>
-          <p className="ds-text-sm ds-text-muted ds-mb-2">Advanced Patterns:</p>
-          <div className="ds-grid ds-grid-cols-2 ds-gap-2">
-            <button
-              onClick={handleSequentialBurst}
-              className="ds-btn-secondary ds-btn-sm"
-            >
-              📈 Sequential
-            </button>
-            <button
-              onClick={handleChaosTest}
-              className="ds-btn-danger ds-btn-sm"
-            >
-              🎲 Chaos Test
-            </button>
-          </div>
-        </div>
-
-        <div className="ds-border-t ds-pt-3">
-          <p className="ds-text-sm ds-font-medium ds-mb-2">Worker Status:</p>
+        ) : (
           <div className="ds-space-y-2">
-            {workers.map(worker => (
-              <div key={worker.id} className="ds-flex ds-justify-between ds-items-center ds-text-xs">
-                <span className="ds-font-medium">{worker.id}</span>
-                <div className="ds-flex ds-gap-2 ds-items-center">
-                  <span className={`ds-badge ds-badge-sm ${
-                    worker.status === 'idle' ? 'ds-badge-success' : 
-                    worker.status === 'busy' ? 'ds-badge-warning' : 
-                    'ds-badge-danger'
-                  }`}>
-                    {worker.status}
-                  </span>
-                  <span className="ds-text-muted">
-                    Processed: {worker.eventsProcessed}
-                  </span>
-                  <span className="ds-text-muted">
-                    Last: {worker.lastActivity}
-                  </span>
+            <p className="ds-text-sm ds-text-muted ds-mb-2">Recent Orders:</p>
+            {orders.map(order => (
+              <div key={order.id} className="ds-border ds-rounded ds-p-2">
+                <div className="ds-flex ds-justify-between ds-items-center">
+                  <div className="ds-flex ds-items-center ds-gap-2">
+                    <span className="ds-text-sm ds-font-medium">{order.id}</span>
+                    <span className="ds-text-xs ds-text-muted">({order.items} items)</span>
+                  </div>
+                  <div className="ds-flex ds-items-center ds-gap-2">
+                    <span className={`ds-badge ds-badge-sm ${getStatusColor(order.status)}`}>
+                      {getStatusIcon(order.status)} {order.status}
+                    </span>
+                    <span className="ds-text-xs ds-text-muted">{order.timestamp}</span>
+                  </div>
                 </div>
+                {order.status === 'pending' && (
+                  <div className="ds-mt-2">
+                    <button 
+                      onClick={() => cancelOrder(order.id)}
+                      className="ds-btn-danger ds-btn-sm"
+                    >
+                      Cancel Order
+                    </button>
+                  </div>
+                )}
               </div>
             ))}
           </div>
-        </div>
-
-        <div className="ds-text-xs ds-text-muted">
-          <p>🎯 Coordinating {workers.length} workers</p>
-          <p>📡 Pattern: {currentPattern}</p>
+        )}
+        
+        <div className="ds-border-t ds-pt-2">
+          <div className="ds-text-xs ds-text-muted">
+            <p>🏭 Processing orders automatically</p>
+            <p>📧 Sending notifications to services</p>
+            <p>📊 Tracking order lifecycle events</p>
+          </div>
         </div>
       </div>
     </div>
