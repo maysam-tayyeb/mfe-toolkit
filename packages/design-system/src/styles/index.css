@@ -486,7 +486,7 @@
   }
 
   .ds-nav-logo-group {
-    @apply flex items-center gap-2 mr-8 group;
+    @apply flex items-center gap-2 mr-8;
   }
 
   .ds-nav-desktop {
@@ -563,7 +563,7 @@
 
   /* Feature Cards */
   .ds-feature-card {
-    @apply ds-card-compact ds-hover-scale flex items-center justify-between group cursor-pointer;
+    @apply ds-card-compact ds-hover-scale flex items-center justify-between cursor-pointer;
   }
 
   .ds-feature-icon-wrapper {
@@ -1044,7 +1044,7 @@
   .ds-toast {
     @apply min-w-[300px] max-w-[420px] p-4 rounded-lg shadow-lg;
     @apply bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700;
-    @apply animate-in slide-in-from-right;
+    animation: slide-in-from-right 0.3s ease-out;
   }
 
   .ds-toast-success {
@@ -1969,7 +1969,7 @@
   }
 
   .ds-accordion-content {
-    @apply overflow-hidden text-sm transition-all data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down;
+    @apply overflow-hidden text-sm transition-all;
   }
 
   /* Pagination */
@@ -2113,5 +2113,494 @@
 
   .ds-callout-content {
     @apply text-sm text-slate-600 dark:text-slate-400;
+  }
+
+  /* ============================
+     CONTAINER-SPECIFIC PATTERNS
+     These patterns are primarily for container applications
+     ============================ */
+  
+  /* ============================
+     Loading States
+     ============================ */
+  
+  /* Full-screen loading state for initial app load */
+  .ds-loading-fullscreen {
+    @apply flex items-center justify-center min-h-screen;
+  }
+
+  /* In-place loading state for components */
+  .ds-loading-container {
+    @apply flex items-center justify-center h-64;
+  }
+
+  /* Loading wrapper for centering spinner and text */
+  .ds-loading-wrapper {
+    @apply text-center;
+  }
+
+  /* Enhanced spinner states */
+  .ds-spinner-primary {
+    @apply ds-spinner border-blue-500;
+  }
+
+  .ds-spinner-secondary {
+    @apply ds-spinner border-slate-400;
+  }
+
+  /* ============================
+     MFE-Specific Patterns
+     ============================ */
+  
+  /* MFE boundary wrapper for isolation */
+  .ds-mfe-boundary {
+    @apply relative isolate;
+  }
+
+  /* MFE error state display */
+  .ds-mfe-error {
+    @apply ds-empty-state;
+  }
+
+  .ds-mfe-error-text {
+    @apply text-red-600 dark:text-red-400;
+  }
+
+  /* MFE not found state */
+  .ds-mfe-not-found {
+    @apply ds-empty-state;
+  }
+
+  .ds-mfe-not-found-text {
+    @apply ds-text-muted;
+  }
+
+  /* ============================
+     Feature Cards & CTAs
+     ============================ */
+  
+  /* Clickable feature card for navigation */
+  .ds-feature-card-link {
+    @apply ds-card-padded ds-hover-lift cursor-pointer flex items-center justify-between;
+  }
+
+  /* Feature grid layout */
+  .ds-feature-grid {
+    @apply grid grid-cols-2 md:grid-cols-4 gap-4;
+  }
+
+  /* CTA (Call-to-Action) section */
+  .ds-cta-section {
+    @apply ds-card-padded bg-gradient-to-r from-slate-50 to-slate-100 dark:from-slate-800 dark:to-slate-900 text-center;
+  }
+
+  .ds-cta-title {
+    @apply ds-section-title mb-2;
+  }
+
+  .ds-cta-description {
+    @apply ds-text-muted mb-4;
+  }
+
+  .ds-cta-button-group {
+    @apply flex gap-3 justify-center;
+  }
+
+  /* ============================
+     Console/Log Components
+     ============================ */
+  
+  /* Log/console container */
+  .ds-log-container {
+    @apply border border-slate-200 dark:border-slate-700 rounded-lg p-4 max-h-96 overflow-y-auto bg-slate-50 dark:bg-slate-900;
+  }
+
+  /* Individual log entry */
+  .ds-log-entry {
+    @apply p-2 bg-white dark:bg-slate-800 rounded text-sm font-mono mb-2 border border-slate-100 dark:border-slate-700;
+  }
+
+  /* Log entry variants */
+  .ds-log-entry-info {
+    @apply ds-log-entry border-l-4 border-l-blue-500;
+  }
+
+  .ds-log-entry-success {
+    @apply ds-log-entry border-l-4 border-l-green-500;
+  }
+
+  .ds-log-entry-warning {
+    @apply ds-log-entry border-l-4 border-l-yellow-500;
+  }
+
+  .ds-log-entry-error {
+    @apply ds-log-entry border-l-4 border-l-red-500;
+  }
+
+  /* Log timestamp */
+  .ds-log-timestamp {
+    @apply text-xs text-slate-500 dark:text-slate-400 mr-2;
+  }
+
+  /* Log message */
+  .ds-log-message {
+    @apply text-slate-700 dark:text-slate-200;
+  }
+
+  /* ============================
+     State Change Displays
+     ============================ */
+  
+  /* State change container */
+  .ds-state-container {
+    @apply border border-slate-200 dark:border-slate-700 rounded-lg p-4 bg-slate-50 dark:bg-slate-900;
+  }
+
+  /* State display grid */
+  .ds-state-grid {
+    @apply grid grid-cols-1 md:grid-cols-2 gap-4;
+  }
+
+  /* State item */
+  .ds-state-item {
+    @apply p-3 bg-white dark:bg-slate-800 rounded border border-slate-100 dark:border-slate-700;
+  }
+
+  .ds-state-key {
+    @apply text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1;
+  }
+
+  .ds-state-value {
+    @apply text-sm font-mono text-slate-700 dark:text-slate-200;
+  }
+
+  /* ============================
+     Registry Display
+     ============================ */
+  
+  /* Registry container */
+  .ds-registry-container {
+    @apply space-y-4;
+  }
+
+  /* Registry item card */
+  .ds-registry-item {
+    @apply ds-card-padded hover:shadow-md transition-shadow;
+  }
+
+  .ds-registry-header {
+    @apply flex items-start justify-between mb-3;
+  }
+
+  .ds-registry-title {
+    @apply ds-section-title flex items-center gap-2;
+  }
+
+  .ds-registry-metadata {
+    @apply grid grid-cols-2 md:grid-cols-4 gap-3 text-sm;
+  }
+
+  .ds-registry-meta-item {
+    @apply flex flex-col;
+  }
+
+  .ds-registry-meta-label {
+    @apply text-xs text-slate-500 dark:text-slate-400 mb-1;
+  }
+
+  .ds-registry-meta-value {
+    @apply font-medium text-slate-700 dark:text-slate-200;
+  }
+
+  /* ============================
+     Service Demo Layouts
+     ============================ */
+  
+  /* Service demo container */
+  .ds-service-demo {
+    @apply space-y-6;
+  }
+
+  /* Service demo section */
+  .ds-service-section {
+    @apply ds-card-padded;
+  }
+
+  .ds-service-title {
+    @apply ds-section-title mb-4;
+  }
+
+  /* Service controls */
+  .ds-service-controls {
+    @apply flex flex-wrap gap-3 mb-4;
+  }
+
+  /* Service output */
+  .ds-service-output {
+    @apply ds-log-container;
+  }
+
+  /* ============================
+     Navigation Extensions
+     ============================ */
+  
+  /* Mobile menu backdrop */
+  .ds-mobile-backdrop {
+    @apply fixed inset-0 bg-black bg-opacity-50 z-40;
+  }
+
+  /* Mobile menu panel */
+  .ds-mobile-panel {
+    @apply fixed top-0 right-0 h-full w-64 bg-white dark:bg-slate-800 shadow-xl z-50;
+  }
+
+  /* ============================
+     Dashboard Components
+     ============================ */
+  
+  /* Dashboard grid */
+  .ds-dashboard-grid {
+    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4;
+  }
+
+  /* Dashboard stat card */
+  .ds-dashboard-stat {
+    @apply ds-card-padded;
+  }
+
+  .ds-dashboard-stat-label {
+    @apply text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1;
+  }
+
+  .ds-dashboard-stat-value {
+    @apply text-2xl font-bold text-slate-900 dark:text-slate-100;
+  }
+
+  .ds-dashboard-stat-trend {
+    @apply text-xs mt-2;
+  }
+
+  .ds-dashboard-stat-trend-up {
+    @apply ds-dashboard-stat-trend text-green-600 dark:text-green-400;
+  }
+
+  .ds-dashboard-stat-trend-down {
+    @apply ds-dashboard-stat-trend text-red-600 dark:text-red-400;
+  }
+
+  /* ============================
+     Error Boundary Styles
+     ============================ */
+  
+  /* Error boundary container */
+  .ds-error-boundary {
+    @apply p-6 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg;
+  }
+
+  .ds-error-title {
+    @apply text-lg font-semibold text-red-800 dark:text-red-200 mb-2;
+  }
+
+  .ds-error-message {
+    @apply text-sm text-red-700 dark:text-red-300 mb-4;
+  }
+
+  .ds-error-stack {
+    @apply text-xs font-mono bg-red-100 dark:bg-red-900/30 p-3 rounded overflow-x-auto;
+  }
+
+  .ds-error-actions {
+    @apply flex gap-3 mt-4;
+  }
+
+  /* ============================
+     Platform Metrics
+     ============================ */
+  
+  /* Metrics container */
+  .ds-metrics-container {
+    @apply grid grid-cols-2 md:grid-cols-4 gap-4 mb-6;
+  }
+
+  /* Metric card enhanced */
+  .ds-metric-card-enhanced {
+    @apply ds-metric-card relative overflow-hidden;
+  }
+
+  .ds-metric-background {
+    @apply absolute inset-0 opacity-5;
+  }
+
+  .ds-metric-icon {
+    @apply text-2xl mb-2;
+  }
+
+  /* ============================
+     Settings & Configuration
+     ============================ */
+  
+  /* Settings section */
+  .ds-settings-section {
+    @apply ds-card-padded mb-4;
+  }
+
+  .ds-settings-header {
+    @apply border-b border-slate-200 dark:border-slate-700 pb-3 mb-4;
+  }
+
+  .ds-settings-title {
+    @apply ds-section-title;
+  }
+
+  .ds-settings-description {
+    @apply text-sm text-slate-600 dark:text-slate-400 mt-1;
+  }
+
+  /* Settings form */
+  .ds-settings-form {
+    @apply space-y-4;
+  }
+
+  .ds-settings-group {
+    @apply space-y-2;
+  }
+
+  .ds-settings-label {
+    @apply ds-label block;
+  }
+
+  .ds-settings-input {
+    @apply ds-input w-full;
+  }
+
+  .ds-settings-hint {
+    @apply text-xs text-slate-500 dark:text-slate-400 mt-1;
+  }
+
+  /* ============================
+     Container Utility Patterns
+     ============================ */
+  
+  /* Container max widths */
+  .ds-container-xs {
+    @apply max-w-xs mx-auto;
+  }
+
+  .ds-container-sm {
+    @apply max-w-sm mx-auto;
+  }
+
+  .ds-container-md {
+    @apply max-w-md mx-auto;
+  }
+
+  .ds-container-lg {
+    @apply max-w-lg mx-auto;
+  }
+
+  .ds-container-xl {
+    @apply max-w-xl mx-auto;
+  }
+
+  /* Height utilities specific to containers */
+  .ds-h-16 {
+    @apply h-16;
+  }
+
+  .ds-h-64 {
+    @apply h-64;
+  }
+
+  .ds-h-96 {
+    height: 24rem;
+  }
+
+  /* Specific margins for container layouts */
+  .ds-mb-2 {
+    @apply mb-2;
+  }
+
+  .ds-mb-3 {
+    @apply mb-3;
+  }
+
+  .ds-mb-4 {
+    @apply mb-4;
+  }
+
+  .ds-mb-6 {
+    @apply mb-6;
+  }
+
+  .ds-mt-1 {
+    @apply mt-1;
+  }
+
+  .ds-mt-2 {
+    @apply mt-2;
+  }
+
+  .ds-mt-4 {
+    @apply mt-4;
+  }
+
+  /* Specific paddings for container layouts */
+  .ds-p-2 {
+    @apply p-2;
+  }
+
+  .ds-p-3 {
+    @apply p-3;
+  }
+
+  .ds-p-4 {
+    @apply p-4;
+  }
+
+  .ds-p-6 {
+    @apply p-6;
+  }
+
+  .ds-pb-3 {
+    @apply pb-3;
+  }
+
+  /* Text size utilities for containers */
+  .ds-text-2xl {
+    @apply text-2xl;
+  }
+
+  .ds-text-xs {
+    @apply text-xs;
+  }
+
+  /* Specific gap utilities */
+  .ds-gap-2 {
+    @apply gap-2;
+  }
+
+  .ds-gap-3 {
+    @apply gap-3;
+  }
+
+  .ds-gap-4 {
+    @apply gap-4;
+  }
+
+  /* Space utilities */
+  .ds-space-y-2 > * + * {
+    @apply mt-2;
+  }
+
+  .ds-space-y-3 > * + * {
+    @apply mt-3;
+  }
+
+  .ds-space-y-4 > * + * {
+    @apply mt-4;
+  }
+
+  .ds-space-y-6 > * + * {
+    @apply mt-6;
   }
 }
