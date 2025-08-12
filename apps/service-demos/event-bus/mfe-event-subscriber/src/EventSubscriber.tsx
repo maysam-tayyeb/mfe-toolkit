@@ -19,6 +19,7 @@ const MAX_NOTIFICATIONS = 8;
 export const EventSubscriber: React.FC<EventSubscriberProps> = ({ services }) => {
   const [notifications, setNotifications] = useState<ServiceNotification[]>([]);
   const [notificationCount, setNotificationCount] = useState(0);
+  const paymentTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     const subscriptions: Array<() => void> = [];
@@ -79,8 +80,16 @@ export const EventSubscriber: React.FC<EventSubscriberProps> = ({ services }) =>
     subscriptions.push(
       services.eventBus.on('payment:process', (payload) => {
         addNotification('Payment Gateway', `Processing payment for ${payload.data?.orderId}`, 'info', '💰');
-        setTimeout(() => {
-          addNotification('Payment Gateway', 'Payment confirmed', 'success', '✅');
+        
+        // Clear any existing payment confirmation timeout
+        if (paymentTimeoutRef.current) {
+          clearTimeout(paymentTimeoutRef.current);
+        }
+        
+        // Set a new timeout for payment confirmation
+        paymentTimeoutRef.current = setTimeout(() => {
+          addNotification('Payment Gateway', `Payment confirmed for ${payload.data?.orderId}`, 'success', '✅');
+          paymentTimeoutRef.current = null;
         }, 1500);
       })
     );
@@ -127,6 +136,12 @@ export const EventSubscriber: React.FC<EventSubscriberProps> = ({ services }) =>
 
     return () => {
       subscriptions.forEach(unsubscribe => unsubscribe());
+      
+      // Clear payment timeout if it exists
+      if (paymentTimeoutRef.current) {
+        clearTimeout(paymentTimeoutRef.current);
+      }
+      
       services.eventBus.emit('mfe:unloaded', { 
         name: 'service-notifications'
       });

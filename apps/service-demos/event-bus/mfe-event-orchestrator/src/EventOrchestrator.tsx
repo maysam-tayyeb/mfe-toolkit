@@ -104,7 +104,7 @@ export const EventOrchestrator: React.FC<EventOrchestratorProps> = ({ services }
     
     unsubscribes.push(
       services.eventBus.on('order:cancelled', (payload) => {
-        if (payload.data?.orderId && orders.find(o => o.id === payload.data.orderId)) {
+        if (payload.data?.orderId) {
           cancelOrder(payload.data.orderId);
         }
       })
@@ -121,7 +121,7 @@ export const EventOrchestrator: React.FC<EventOrchestratorProps> = ({ services }
         name: 'order-processor'
       });
     };
-  }, [services, orders]); // Include orders to have access to current orders
+  }, [services]); // Remove orders from dependencies to prevent re-subscriptions
 
   return (
     <div className="ds-card ds-p-4">
