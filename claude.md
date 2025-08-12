@@ -217,6 +217,49 @@ The toolkit is split into several npm packages under the `@mfe-toolkit` organiza
 
 ## Development Guidelines
 
+### 🔴 CRITICAL DESIGN SYSTEM RULES - READ THIS FIRST!
+
+**ABSOLUTELY NO UI CHANGES WITHOUT DESIGN SYSTEM UPDATE**
+
+1. **ALL UI changes MUST go through the design system FIRST**
+   - NEVER add inline styles
+   - NEVER create ad-hoc CSS classes
+   - NEVER modify styles directly in components
+   - ALWAYS update the design system packages first
+
+2. **Before ANY UI work:**
+   - Check if `@mfe/design-system` has the utility you need
+   - If not, ADD IT TO THE DESIGN SYSTEM FIRST
+   - Build the design system: `pnpm --filter @mfe/design-system build`
+   - Only then use the new classes in your component
+
+3. **What NOT to do (FORBIDDEN):**
+
+   ```tsx
+   // ❌ NEVER DO THIS - Inline styles
+   <div style={{ margin: '10px', padding: '20px' }}>
+
+   // ❌ NEVER DO THIS - Custom CSS classes
+   <div className="my-custom-class">
+
+   // ❌ NEVER DO THIS - Tailwind classes not from design system
+   <div className="bg-blue-500 p-4">
+
+   // ✅ ALWAYS DO THIS - Use design system classes
+   <div className="ds-card ds-p-4 ds-bg-accent-primary-soft">
+   ```
+
+4. **Design System Workflow (MANDATORY):**
+   - Step 1: Identify UI requirement
+   - Step 2: Check design system for existing utilities
+   - Step 3: If missing, update `packages/design-system/src/styles/index.css`
+   - Step 4: Build design system: `pnpm build:packages`
+   - Step 5: Use the new `ds-*` classes in your component
+   - Step 6: Test that styles work correctly
+   - Step 7: Commit both design system and component changes together
+
+**I understand that ANY change of layout and style MUST be done through the design system. Any new UI must first update the design system. This is non-negotiable.**
+
 ### When Creating New MFEs
 
 1. Create new app in `apps/` directory following naming convention `mfe-{name}`
@@ -232,6 +275,31 @@ The toolkit is split into several npm packages under the `@mfe-toolkit` organiza
 - Test files follow `*.test.tsx` or `*.spec.tsx` pattern
 - Setup files located in `src/__tests__/setup.ts`
 - Coverage thresholds: 80% for all metrics
+
+#### Test Commands
+
+```bash
+# Run all tests (packages + container)
+pnpm test
+
+# Run tests for packages only
+pnpm test:packages
+
+# Run tests for container only
+pnpm test:container
+
+# Run tests for specific package with watch
+pnpm --filter @mfe-toolkit/core test:watch
+
+# Run coverage for specific package
+pnpm --filter @mfe/container-react test:coverage
+
+# Run single test file
+cd apps/container-react && pnpm vitest src/App.test.tsx
+
+# Run all validations before commit
+pnpm validate  # Runs format, lint, type-check, and test
+```
 
 ### Important File Locations
 
@@ -307,6 +375,7 @@ See [State Management Architecture](./docs/architecture/state-management-archite
 ### Key CSS Classes (500+ available)
 
 **Layout & Containers:**
+
 - `ds-page`: Centered page container
 - `ds-card`, `ds-card-padded`, `ds-card-compact`: Card variants
 - `ds-hero`, `ds-hero-gradient`: Hero sections
@@ -315,6 +384,7 @@ See [State Management Architecture](./docs/architecture/state-management-archite
 - `ds-flex`, `ds-flex-row`, `ds-flex-col`: Flexbox utilities
 
 **Typography:**
+
 - `ds-page-title`, `ds-section-title`, `ds-card-title`: Heading hierarchy
 - `ds-text-xs`, `ds-text-sm`, `ds-text-lg`, `ds-text-xl`, `ds-text-2xl`, `ds-text-3xl`: Text sizes
 - `ds-font-normal`, `ds-font-medium`, `ds-font-semibold`, `ds-font-bold`: Font weights
@@ -323,6 +393,7 @@ See [State Management Architecture](./docs/architecture/state-management-archite
 - `ds-truncate`, `ds-break-words`: Text overflow
 
 **Components:**
+
 - `ds-btn-primary`, `ds-btn-secondary`, `ds-btn-outline`, `ds-btn-ghost`: Button variants
 - `ds-btn-danger`, `ds-btn-success`, `ds-btn-warning`: Semantic buttons
 - `ds-btn-sm`, `ds-btn-lg`: Size modifiers
@@ -335,12 +406,14 @@ See [State Management Architecture](./docs/architecture/state-management-archite
 - `ds-alert-*`: Alert components
 
 **Spacing:**
+
 - `ds-m-[0-4]`, `ds-mt-*`, `ds-mb-*`, `ds-ml-*`, `ds-mr-*`: Margins
 - `ds-p-[0-6]`, `ds-px-*`, `ds-py-*`, `ds-pt-*`, `ds-pb-*`: Padding
 - `ds-space-x-[1-4]`, `ds-space-y-[1-6]`: Space between utilities
 - `ds-gap-[1-8]`: Gap utilities for grid/flex
 
 **Layout Utilities:**
+
 - `ds-w-full`, `ds-w-auto`, `ds-w-[1-16]`, `ds-w-1/2`, `ds-w-1/3`: Width utilities
 - `ds-h-full`, `ds-h-screen`, `ds-h-[1-16]`: Height utilities
 - `ds-min-h-screen`, `ds-max-h-96`: Min/max height
@@ -348,12 +421,14 @@ See [State Management Architecture](./docs/architecture/state-management-archite
 - `ds-justify-start`, `ds-justify-center`, `ds-justify-between`: Flex justification
 
 **Position & Display:**
+
 - `ds-relative`, `ds-absolute`, `ds-fixed`, `ds-sticky`: Position utilities
 - `ds-top-0`, `ds-right-0`, `ds-bottom-0`, `ds-left-0`: Position values
 - `ds-block`, `ds-inline-block`, `ds-inline`, `ds-hidden`: Display utilities
 - `ds-z-[0-50]`: Z-index utilities
 
 **Visual Effects:**
+
 - `ds-border`, `ds-border-2`, `ds-border-t`, `ds-border-b`: Border utilities
 - `ds-rounded`, `ds-rounded-md`, `ds-rounded-lg`, `ds-rounded-full`: Border radius
 - `ds-shadow-sm`, `ds-shadow`, `ds-shadow-md`, `ds-shadow-lg`: Shadows
@@ -362,16 +437,19 @@ See [State Management Architecture](./docs/architecture/state-management-archite
 - `ds-cursor-pointer`, `ds-cursor-not-allowed`: Cursor utilities
 
 **Responsive Utilities:**
+
 - `ds-sm:*`, `ds-md:*`, `ds-lg:*`: Responsive breakpoints for all utilities
 - `ds-sm:grid-cols-2`, `ds-md:grid-cols-3`, `ds-lg:grid-cols-4`: Responsive grids
 
 **Semantic Colors:**
+
 - `ds-accent-primary`, `ds-accent-success`, `ds-accent-warning`, `ds-accent-danger`
 - `ds-bg-accent-*-soft`: Soft background variants
 - `ds-icon-*`: Icon color utilities
 - `ds-text-muted`: Muted text color
 
 **States & Effects:**
+
 - `ds-loading-state`, `ds-empty-state`: State displays
 - `ds-hover-scale`, `ds-hover-lift`: Hover effects
 - `ds-spinner`, `ds-spinner-lg`: Loading spinners
@@ -487,6 +565,43 @@ If you don't know the correct commands for a project, ask the user and suggest u
 
 - **MFEs only use esbuild to build. Important!!!**
 
-## Updates to Design Changes
+## 🚨 DESIGN SYSTEM IS LAW
 
-- **Ensure applying fundamental design changes only through updating the design system**
+### The Golden Rule
+
+**ANY change of layout and style MUST be done through the design system. Any new UI MUST first update the design system. This is ABSOLUTE.**
+
+### Why This Matters
+
+1. **Consistency**: All MFEs share the same design language
+2. **Maintainability**: Changes in one place affect all components
+3. **No Pollution**: Zero global styles, zero inline styles
+4. **Framework Agnostic**: Works across React, Vue, and Vanilla JS
+
+### Common Violations to Avoid
+
+```tsx
+// ❌ VIOLATION: Adding styles directly
+const MyComponent = () => <div style={{ marginTop: '20px' }}>Content</div>;
+
+// ❌ VIOLATION: Using non-design-system classes
+const MyComponent = () => <div className="mt-5 bg-blue-600">Content</div>;
+
+// ❌ VIOLATION: Creating custom CSS
+const styles = {
+  container: { padding: '1rem' },
+};
+
+// ✅ CORRECT: Using design system
+const MyComponent = () => <div className="ds-mt-4 ds-bg-accent-primary ds-p-4">Content</div>;
+```
+
+### If You Need a New Style
+
+1. **STOP** - Do not add it to your component
+2. **UPDATE** - Add it to `packages/design-system/src/styles/index.css`
+3. **BUILD** - Run `pnpm build:packages`
+4. **USE** - Now use the new `ds-*` class in your component
+5. **COMMIT** - Include both design system and component changes
+
+**Remember: The design system is not optional. It is the ONLY way to style UI components.**
