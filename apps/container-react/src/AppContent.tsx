@@ -5,7 +5,7 @@ import { HomePage } from '@/pages/HomePage';
 import { DashboardPage } from '@/pages/DashboardPage';
 import { ErrorBoundaryDemoPage } from '@/pages/ErrorBoundaryDemoPage';
 import { MFERegistryPage } from '@/pages/MFERegistryPage';
-import { EventBusPageV2 as EventBusPage } from '@/pages/services/EventBusPageV2';
+import { EventBusPageV3 as EventBusPage } from '@/pages/services/EventBusPageV3';
 import { NotificationsPage } from '@/pages/services/NotificationsPage';
 import { MetricsPage } from '@/pages/dev/MetricsPage';
 import { SettingsPage } from '@/pages/dev/SettingsPage';

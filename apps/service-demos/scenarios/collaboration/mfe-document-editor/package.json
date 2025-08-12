@@ -1,0 +1,16 @@
+{
+  "name": "mfe-document-editor",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "node build.js"
+  },
+  "dependencies": {
+    "vue": "^3.4.21"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.0.4",
+    "esbuild": "^0.20.0",
+    "esbuild-plugin-vue3": "^0.4.2"
+  }
+}

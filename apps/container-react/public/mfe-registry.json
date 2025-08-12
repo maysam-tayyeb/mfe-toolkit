@@ -2,8 +2,58 @@
   "$schema": "https://mfe-made-easy.com/schemas/mfe-registry.schema.json",
   "version": "2.0.0",
   "environment": "development",
-  "lastUpdated": "2025-07-30T05:33:11.660Z",
+  "lastUpdated": "2025-08-12T14:30:00.000Z",
   "mfes": [
+    {
+      "name": "mfe-document-editor",
+      "url": "http://localhost:8080/scenarios/collaboration/mfe-document-editor.js",
+      "version": "1.0.0",
+      "description": "Document editor for real-time collaboration",
+      "requirements": {
+        "services": [
+          { "name": "eventBus", "optional": false },
+          { "name": "notifications", "optional": true }
+        ]
+      },
+      "metadata": {
+        "framework": "vue",
+        "category": "collaboration",
+        "capabilities": ["edit", "share", "collaborate"]
+      }
+    },
+    {
+      "name": "mfe-activity-feed",
+      "url": "http://localhost:8080/scenarios/collaboration/mfe-activity-feed.js",
+      "version": "1.0.0",
+      "description": "Real-time activity feed for collaboration",
+      "requirements": {
+        "services": [
+          { "name": "eventBus", "optional": false }
+        ]
+      },
+      "metadata": {
+        "framework": "react",
+        "category": "collaboration",
+        "capabilities": ["monitor", "display"]
+      }
+    },
+    {
+      "name": "mfe-online-users",
+      "url": "http://localhost:8080/scenarios/collaboration/mfe-online-users.js",
+      "version": "1.0.0",
+      "description": "Online users display for collaboration",
+      "requirements": {
+        "services": [
+          { "name": "eventBus", "optional": false },
+          { "name": "notifications", "optional": true }
+        ]
+      },
+      "metadata": {
+        "framework": "vanilla",
+        "category": "collaboration",
+        "capabilities": ["presence", "status"]
+      }
+    },
     {
       "name": "mfe-event-publisher",
       "url": "http://localhost:8080/service-demos/event-bus/mfe-event-publisher/mfe-event-publisher.js",
