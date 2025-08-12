@@ -88,12 +88,23 @@ export const EventBusPageV2: React.FC = () => {
       }
       
       const eventTime = Date.now();
+      
+      // Infer source from event type
+      let source = payload.source || 'System';
+      if (payload.type?.startsWith('order:') || payload.type?.startsWith('cart:')) {
+        source = 'Order Actions';
+      } else if (payload.type?.startsWith('payment:') || payload.type?.startsWith('inventory:') || payload.type?.startsWith('email:') || payload.type?.startsWith('analytics:')) {
+        source = 'Order Processor';
+      } else if (payload.type?.startsWith('worker:')) {
+        source = 'Event Bus';
+      }
+      
       const newEvent: EventMessage = {
         id: `evt-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
         event: payload.type || 'unknown',
         data: payload.data,
         timestamp: new Date().toLocaleTimeString(),
-        source: payload.source || 'System'
+        source
       };
 
       setEvents(prev => {
