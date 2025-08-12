@@ -3,7 +3,65 @@
   "version": "2.0.0",
   "environment": "development",
   "lastUpdated": "2025-07-30T05:33:11.660Z",
-  "mfes": [],
+  "mfes": [
+    {
+      "name": "mfe-event-publisher",
+      "url": "http://localhost:8080/service-demos/event-bus/mfe-event-publisher/mfe-event-publisher.js",
+      "version": "1.0.0",
+      "description": "Event publisher demo MFE for showcasing event bus",
+      "requirements": {
+        "services": [
+          { "name": "eventBus", "optional": false },
+          { "name": "logger", "optional": false },
+          { "name": "notifications", "optional": true }
+        ]
+      },
+      "metadata": {
+        "framework": "react",
+        "category": "service-demo",
+        "service": "event-bus",
+        "capabilities": ["emit", "custom-events"]
+      }
+    },
+    {
+      "name": "mfe-event-subscriber",
+      "url": "http://localhost:8080/service-demos/event-bus/mfe-event-subscriber/mfe-event-subscriber.js",
+      "version": "1.0.0",
+      "description": "Event subscriber demo MFE for receiving events",
+      "requirements": {
+        "services": [
+          { "name": "eventBus", "optional": false },
+          { "name": "logger", "optional": false },
+          { "name": "notifications", "optional": true }
+        ]
+      },
+      "metadata": {
+        "framework": "react",
+        "category": "service-demo",
+        "service": "event-bus",
+        "capabilities": ["receive", "display"]
+      }
+    },
+    {
+      "name": "mfe-event-orchestrator",
+      "url": "http://localhost:8080/service-demos/event-bus/mfe-event-orchestrator/mfe-event-orchestrator.js",
+      "version": "1.0.0",
+      "description": "Event orchestrator demo MFE for coordinating workers",
+      "requirements": {
+        "services": [
+          { "name": "eventBus", "optional": false },
+          { "name": "logger", "optional": false },
+          { "name": "notifications", "optional": true }
+        ]
+      },
+      "metadata": {
+        "framework": "react",
+        "category": "service-demo",
+        "service": "event-bus",
+        "capabilities": ["coordinate", "distribute", "monitor"]
+      }
+    }
+  ],
   "config": {
     "defaultLoading": {
       "timeout": 30000,

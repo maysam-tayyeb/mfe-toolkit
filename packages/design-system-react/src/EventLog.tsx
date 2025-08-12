@@ -37,15 +37,18 @@ export const EventLog: React.FC<EventLogProps> = ({
   // Extract unique categories and their counts
   const categoryStats = useMemo(() => {
     const stats = new Map<string, number>();
-    messages.forEach((msg) => {
-      const [category] = msg.event.split(':');
-      stats.set(category, (stats.get(category) || 0) + 1);
-    });
+    if (messages && Array.isArray(messages)) {
+      messages.forEach((msg) => {
+        const [category] = msg.event.split(':');
+        stats.set(category, (stats.get(category) || 0) + 1);
+      });
+    }
     return Array.from(stats.entries()).sort((a, b) => b[1] - a[1]);
   }, [messages]);
 
   // Filter messages based on search and category
   const filteredMessages = useMemo(() => {
+    if (!messages || !Array.isArray(messages)) return [];
     return messages.filter((msg) => {
       const [category] = msg.event.split(':');
       const matchesSearch =
@@ -104,7 +107,7 @@ export const EventLog: React.FC<EventLogProps> = ({
           )}
         </div>
         <div className="flex items-center gap-2">
-          {showSearch && messages.length > 0 && (
+          {showSearch && messages && messages.length > 0 && (
             <input
               type="text"
               value={searchTerm}
@@ -113,7 +116,7 @@ export const EventLog: React.FC<EventLogProps> = ({
               className="px-2 py-0.5 text-xs rounded border border-border bg-background/50 placeholder:text-muted-foreground/30 focus:outline-none focus:border-muted-foreground/50 w-24"
             />
           )}
-          {onClear && messages.length > 0 && (
+          {onClear && messages && messages.length > 0 && (
             <button
               onClick={onClear}
               className="text-xs text-muted-foreground/60 hover:text-muted-foreground transition-colors"
@@ -135,7 +138,7 @@ export const EventLog: React.FC<EventLogProps> = ({
                 : 'bg-muted/50 text-muted-foreground hover:bg-muted'
             }`}
           >
-            All ({messages.length})
+            All ({messages?.length || 0})
           </button>
           {categoryStats.map(([category, count]) => (
             <button

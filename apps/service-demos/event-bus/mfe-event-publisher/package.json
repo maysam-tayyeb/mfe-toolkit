@@ -1,0 +1,22 @@
+{
+  "name": "mfe-event-publisher",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "node build.js",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@mfe-toolkit/core": "workspace:*",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@vitejs/plugin-react": "^4.2.1",
+    "esbuild": "^0.25.8",
+    "typescript": "~5.8.3",
+    "vite": "^7.0.6"
+  }
+}
