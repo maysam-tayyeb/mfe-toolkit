@@ -1010,17 +1010,53 @@
   .ds-modal-backdrop {
     @apply fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4;
   }
+  
+  /* Enhanced modal overlay with higher opacity */
+  .ds-modal-overlay {
+    @apply fixed inset-0 z-50 bg-black/80;
+  }
 
   .ds-modal {
     @apply bg-white dark:bg-slate-800 rounded-lg shadow-xl max-w-lg w-full max-h-[90vh] flex flex-col;
+  }
+  
+  /* Modal content container with consistent spacing */
+  .ds-modal-content {
+    @apply grid gap-4 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-6 shadow-lg rounded-lg;
+  }
+  
+  /* Centered modal positioning for non-flexbox containers */
+  .ds-modal-centered {
+    position: fixed !important;
+    left: 50% !important;
+    top: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    z-index: 50 !important;
+    max-width: 32rem !important; /* max-w-lg equivalent */
+    width: calc(100% - 2rem) !important; /* w-full with padding */
   }
 
   .ds-modal-header {
     @apply px-6 py-4 border-b border-slate-200 dark:border-slate-700;
   }
+  
+  /* Header content layout */
+  .ds-modal-header-content {
+    @apply flex flex-col space-y-1.5 text-center sm:text-left;
+  }
 
   .ds-modal-title {
     @apply text-lg font-semibold;
+  }
+  
+  /* Title text styling */
+  .ds-modal-title-text {
+    @apply text-lg font-semibold leading-none tracking-tight;
+  }
+  
+  /* Modal description text */
+  .ds-modal-description {
+    @apply text-sm text-slate-600 dark:text-slate-400;
   }
 
   .ds-modal-body {
@@ -1030,10 +1066,60 @@
   .ds-modal-footer {
     @apply px-6 py-4 border-t border-slate-200 dark:border-slate-700 flex justify-end gap-2;
   }
+  
+  /* Footer content layout with responsive behavior */
+  .ds-modal-footer-content {
+    @apply flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2;
+  }
 
   .ds-modal-close {
     @apply absolute top-4 right-4 h-8 w-8 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700;
     @apply flex items-center justify-center transition-colors;
+  }
+  
+  /* Close button with accessibility features */
+  .ds-modal-close-btn {
+    @apply absolute right-4 top-4 rounded-sm opacity-70 transition-opacity;
+    @apply hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2;
+    @apply disabled:pointer-events-none;
+  }
+  
+  /* Modal animations - fade */
+  .ds-modal-fade-in {
+    animation: fadeIn 0.2s ease-out;
+  }
+  
+  .ds-modal-fade-out {
+    animation: fadeOut 0.2s ease-out;
+  }
+  
+  /* Modal animations - zoom */
+  .ds-modal-zoom-in {
+    animation: zoomIn 0.2s ease-out;
+  }
+  
+  .ds-modal-zoom-out {
+    animation: zoomOut 0.2s ease-out;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  @keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+  }
+  
+  @keyframes zoomIn {
+    from { transform: translate(-50%, -50%) scale(0.95); }
+    to { transform: translate(-50%, -50%) scale(1); }
+  }
+  
+  @keyframes zoomOut {
+    from { transform: translate(-50%, -50%) scale(1); }
+    to { transform: translate(-50%, -50%) scale(0.95); }
   }
 
   /* Toast/Notification System */
