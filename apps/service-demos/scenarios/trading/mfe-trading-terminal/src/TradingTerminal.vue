@@ -148,45 +148,45 @@
 
     <!-- Positions -->
     <div class="ds-mt-4 ds-p-3 ds-border ds-rounded-lg">
-      <h5 class="ds-text-sm ds-font-semibold ds-mb-3">Open Positions</h5>
-      
-      <div v-if="positions.length === 0" class="ds-text-center ds-py-4 ds-text-muted ds-text-sm">
-        No open positions
-      </div>
-      
-      <div v-else class="ds-grid ds-grid-cols-3 ds-gap-2">
-        <div 
-          v-for="position in positions" 
-          :key="position.symbol"
-          class="ds-p-2 ds-border ds-rounded ds-text-xs"
-        >
-          <div class="ds-flex ds-justify-between ds-items-center">
-            <div>
-              <span class="ds-font-medium">{{ position.symbol }}</span>
-              <div class="ds-text-muted">{{ position.shares }} shares</div>
-            </div>
-            <div class="ds-text-right">
-              <div :class="position.pnl >= 0 ? 'ds-text-success' : 'ds-text-danger'">
-                {{ position.pnl >= 0 ? '+' : '' }}{{ position.pnl.toFixed(2) }}%
+        <h5 class="ds-text-sm ds-font-semibold ds-mb-3">Open Positions</h5>
+        
+        <div v-if="positions.length === 0" class="ds-text-center ds-py-4 ds-text-muted ds-text-sm">
+          No open positions
+        </div>
+        
+        <div v-else class="ds-grid ds-grid-cols-3 ds-gap-2">
+          <div 
+            v-for="position in positions" 
+            :key="position.symbol"
+            class="ds-p-2 ds-border ds-rounded ds-text-xs"
+          >
+            <div class="ds-flex ds-justify-between ds-items-center">
+              <div>
+                <span class="ds-font-medium">{{ position.symbol }}</span>
+                <div class="ds-text-muted">{{ position.shares }} shares</div>
               </div>
-              <div class="ds-text-muted">${{ position.value.toFixed(2) }}</div>
+              <div class="ds-text-right">
+                <div :class="position.pnl >= 0 ? 'ds-text-success' : 'ds-text-danger'">
+                  {{ position.pnl >= 0 ? '+' : '' }}{{ position.pnl.toFixed(2) }}%
+                </div>
+                <div class="ds-text-muted">${{ position.value.toFixed(2) }}</div>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
 
     <!-- Quick Actions -->
     <div class="ds-mt-4 ds-flex ds-gap-2">
-      <button @click="closeAllPositions" class="ds-btn-outline ds-btn-sm">
-        🚪 Close All
-      </button>
-      <button @click="cancelPendingOrders" class="ds-btn-outline ds-btn-sm">
-        ❌ Cancel Pending
-      </button>
-      <button @click="refreshPortfolio" class="ds-btn-outline ds-btn-sm">
-        🔄 Refresh
-      </button>
+        <button @click="closeAllPositions" class="ds-btn-outline ds-btn-sm">
+          🚪 Close All
+        </button>
+        <button @click="cancelPendingOrders" class="ds-btn-outline ds-btn-sm">
+          ❌ Cancel Pending
+        </button>
+        <button @click="refreshPortfolio" class="ds-btn-outline ds-btn-sm">
+          🔄 Refresh
+        </button>
     </div>
   </div>
 </template>
