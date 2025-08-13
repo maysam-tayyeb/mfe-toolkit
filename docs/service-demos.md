@@ -171,10 +171,10 @@ export default {
 
 ### Build Configuration
 
-All demos use ESBuild for optimal bundle sizes:
+All demos use tsup for optimal bundle sizes:
 
 ```javascript
-// esbuild.config.js
+// tsup.config.js
 {
   format: 'esm',
   external: ['react', 'react-dom', 'vue'], // Framework deps external
@@ -212,7 +212,7 @@ mkdir -p apps/service-demos/{service-name}/mfe-{framework}-{service}-demo
 ### 2. Essential Files
 
 - `package.json` - Dependencies and build scripts
-- `esbuild.config.js` - Build configuration
+- `tsup.config.js` - Build configuration
 - `src/main.ts(x)` - MFE entry point with MFEModule export
 - `src/App.tsx/.vue/.ts` - Main component
 

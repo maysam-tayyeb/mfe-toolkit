@@ -14,7 +14,7 @@ The migration involves three key changes:
 
 - Design system packages built: `@mfe/design-system`
 - Dev container package available: `@mfe-toolkit/dev-container`
-- MFE using esbuild for bundling
+- MFE using tsup for bundling
 
 ## Step-by-Step Migration
 
@@ -133,15 +133,16 @@ const FallbackButton: React.FC<any> = ({ children, onClick }) => {
 
 ### Step 5: Update Build Configuration
 
-Update your `esbuild.config.js` to mark design system as external:
+Update your `tsup.config.js` to mark design system as external:
 
 ```javascript
-require('esbuild').build({
-  entryPoints: ['src/main.ts'],
-  bundle: true,
-  format: 'esm',
+import { defineConfig } from 'tsup';
+
+export default defineConfig({
+  entry: ['src/main.ts'],
+  format: ['esm'],
   external: ['react', 'react-dom', '@mfe/design-system', '@mfe-toolkit/core'],
-  outfile: 'dist/mfe.js',
+  outDir: 'dist',
 });
 ```
 

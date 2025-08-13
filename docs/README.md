@@ -1,17 +1,20 @@
 # MFE Toolkit Documentation
 
-Welcome to the MFE Toolkit documentation. This directory contains comprehensive documentation organized into three main sections:
+Welcome to the MFE Toolkit documentation. This directory contains comprehensive documentation for the microfrontend platform.
 
 ## 📚 Documentation Structure
 
-### 🎯 [Platform Documentation](./platform/)
+### 🎯 [Unified Roadmap & Planning](./ROADMAP.md)
 
-Framework-agnostic documentation for the MFE Toolkit platform, including:
+**Single source of truth** for the platform's current state, active development, and future vision. Consolidates all planning and roadmap documentation.
+
+### 📦 [Platform Documentation](./platform/)
+
+Framework-agnostic documentation for the MFE Toolkit platform:
 
 - **Architecture**: Core platform decisions and patterns
 - **Manifests**: MFE specification and validation documentation
 - **Packages**: Documentation for published npm packages (@mfe-toolkit/\*)
-- **Roadmap**: Future development plans for toolkit libraries
 
 ### 📋 [Container Specification](./container-spec/)
 
@@ -20,14 +23,6 @@ Defines what a container application must provide to host MFEs:
 - **Requirements**: Services and capabilities containers must implement
 - **Service Contracts**: Detailed API specifications
 - **Compliance Testing**: How to verify container compatibility
-
-### 🚀 [Container Implementations](./containers/)
-
-Framework-specific container implementations:
-
-- **[React Container](./containers/react/)**: Production-ready React 19 implementation
-- **Vue Container** (coming soon): Vue 3 implementation
-- **Vanilla Container** (coming soon): Pure JavaScript implementation
 
 ## 🔍 Quick Navigation
 
@@ -41,7 +36,6 @@ Framework-specific container implementations:
 ### For Container Developers
 
 - [Container Requirements](./container-spec/requirements.md)
-- [React Container Setup](./containers/react/setup.md)
 - [Creating a New Container](./container-spec/creating-containers.md)
 
 ### For Library Contributors
@@ -53,7 +47,7 @@ Framework-specific container implementations:
 ## 📖 Key Documentation
 
 ### Planning & Architecture
-- [Consolidated Platform Plan](./planning/CONSOLIDATED_PLAN.md) - Single source of truth for platform state and direction
+- **[Unified Roadmap](./ROADMAP.md)** - Consolidated roadmap and planning document
 - [Service Demonstrations](./service-demos.md) - Overview of all service demo MFEs
 - [Design System Guide](./design-system/) - CSS-first design system documentation
 - [Architecture Decisions](./architecture/architecture-decisions.md) - Core platform decisions

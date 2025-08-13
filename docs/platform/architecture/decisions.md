@@ -34,7 +34,7 @@ The team needed to choose between Module Federation (build-time integration) and
 We chose dynamic imports for several compelling reasons:
 
 1. **True Independence**: Each MFE can be developed, built, and deployed completely independently without any build-time coupling
-2. **Technology Freedom**: Teams can use any build tool (Webpack, Vite, Rollup, esbuild) or framework version
+2. **Technology Freedom**: We recommend tsup/esbuild for optimal bundle sizes, but teams can use any build tool as long as it outputs ES Modules
 3. **Deployment Flexibility**: MFEs can be hosted on different domains, CDNs, or edge locations
 4. **Simpler Mental Model**: It's just loading JavaScript files - no complex configuration or coordination needed
 5. **Multi-Team Scalability**: Perfect for scenarios where different companies or teams own different MFEs
