@@ -94,7 +94,6 @@ export const EventBusPageV3: React.FC = () => {
   const [containerPayload, setContainerPayload] = useState('{"message": "Hello from Container!"}');
   const [listeningEvents, setListeningEvents] = useState<string[]>([
     'playground:*',    // Listen to all playground events
-    'container:*',     // Listen to all container events
     'trade:*',         // Listen to trading events
     'market:*'         // Listen to market events
   ]);

@@ -137,6 +137,7 @@ function EventPlayground(props: { services: MFEServices }) {
   // Subscribe to some default events
   createEffect(() => {
     subscribeToEvent('playground:*');
+    subscribeToEvent('container:*');
     subscribeToEvent('system:*');
   });
   
