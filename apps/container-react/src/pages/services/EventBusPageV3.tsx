@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useUI } from '@/contexts/UIContext';
 import { RegistryMFELoader } from '@/components/RegistryMFELoader';
 import { EventLog, TabGroup } from '@mfe/design-system-react';
@@ -71,6 +72,7 @@ const MAX_RENDERED_EVENTS = 50; // Maximum number of events to render at once
 export const EventBusPageV3: React.FC = () => {
   const { addNotification } = useUI();
   const services = useMemo(() => getMFEServicesSingleton(), []);
+  const [searchParams, setSearchParams] = useSearchParams();
   
   // Core state
   const [activeScenario, setActiveScenario] = useState<string>('trading');
@@ -99,6 +101,16 @@ export const EventBusPageV3: React.FC = () => {
   ]);
   const [newListener, setNewListener] = useState('');
   const [containerEventHistory, setContainerEventHistory] = useState<EventMessage[]>([]);
+  
+  // Tab state - get initial tab from URL or default to 'dashboard'
+  const initialTab = searchParams.get('tab') || 'dashboard';
+  const [activeTab, setActiveTab] = useState<string>(initialTab);
+  
+  // Sync tab state with URL
+  const handleTabChange = (tabId: string) => {
+    setActiveTab(tabId);
+    setSearchParams({ tab: tabId });
+  };
   
   // Container playground functions
   const sendContainerEvent = () => {
@@ -216,6 +228,14 @@ export const EventBusPageV3: React.FC = () => {
       }
     }
   }, [layoutMode, selectedMFE, activeScenario]);
+  
+  // Sync tab state with URL changes (e.g., browser back/forward)
+  useEffect(() => {
+    const tabFromUrl = searchParams.get('tab');
+    if (tabFromUrl && tabFromUrl !== activeTab) {
+      setActiveTab(tabFromUrl);
+    }
+  }, [searchParams]);
 
   // Metrics state
   const [metrics, setMetrics] = useState({
@@ -879,6 +899,8 @@ const MyTradingComponent: React.FC<{ services: MFEServices }> = ({ services }) =
 
       {/* Tabs for Trading Terminal Demo and Playground */}
       <TabGroup
+        activeTab={activeTab}
+        onTabChange={handleTabChange}
         tabs={[
           {
             id: 'dashboard',

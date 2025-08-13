@@ -10,15 +10,21 @@ export interface Tab {
 export interface TabGroupProps {
   tabs: Tab[];
   defaultTab?: string;
+  activeTab?: string; // For controlled mode
   className?: string;
   onTabChange?: (tabId: string) => void;
 }
 
-export function TabGroup({ tabs, defaultTab, className = '', onTabChange }: TabGroupProps) {
-  const [activeTab, setActiveTab] = useState(defaultTab || tabs[0]?.id || '');
+export function TabGroup({ tabs, defaultTab, activeTab: controlledActiveTab, className = '', onTabChange }: TabGroupProps) {
+  const [internalActiveTab, setInternalActiveTab] = useState(defaultTab || tabs[0]?.id || '');
+  
+  // Use controlled tab if provided, otherwise use internal state
+  const activeTab = controlledActiveTab !== undefined ? controlledActiveTab : internalActiveTab;
 
   const handleTabClick = (tabId: string) => {
-    setActiveTab(tabId);
+    if (controlledActiveTab === undefined) {
+      setInternalActiveTab(tabId);
+    }
     onTabChange?.(tabId);
   };
 
