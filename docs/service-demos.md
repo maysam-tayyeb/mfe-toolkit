@@ -1,107 +1,63 @@
-# Service Demonstrations
+# Service Demonstrations - Implementation Guide
 
-This document provides an overview of all service demonstration MFEs that showcase the platform's shared services across different frameworks.
+This document provides **technical implementation details** for existing service demonstration MFEs. For roadmap and planning information, see [ROADMAP.md](./ROADMAP.md).
 
 ## Overview
 
-The service demos illustrate how the platform's shared services work consistently across different frameworks (React 19, React 17, Vue 3, and Vanilla TypeScript). Following the removal of monolithic MFEs and the implementation of the new design system, these focused demos provide clear examples of service integration patterns.
+Service demos are working examples that showcase the platform's shared services across different frameworks. They demonstrate real-world integration patterns and best practices.
 
-## Modal Service Demos
+## Modal Service Demos (Planned)
 
-Located in `apps/service-demos/modal/`
+**Status**: Planned for Q1 2025 - See [ROADMAP.md](./ROADMAP.md#modal-service-demos) for details.
 
-### Design System Integration
-
-The Modal Service demo page uses the comprehensive design system with:
-- `ds-hero` for gradient hero sections
-- `ds-card` and `ds-card-padded` for content containers
-- `ds-btn-primary`, `ds-btn-outline`, `ds-btn-ghost` for actions (500+ utility classes)
-- `ds-tabs` and `ds-tab-active` for code example navigation
-- `ds-modal-*` classes for modal styling
-- `ds-badge-*` for status indicators
-- Modern Blue & Slate color palette throughout
-
-### Available Implementations
-
-| Framework      | MFE Name                 | Bundle Size | Key Features                         | Limitations             |
-| -------------- | ------------------------ | ----------- | ------------------------------------ | ----------------------- |
-| **React 19**   | `mfe-react19-modal-demo` | ~12KB       | Full JSX support, all modal features | None                    |
-| **React 17**   | `mfe-react17-modal-demo` | ~143KB      | Legacy React support                 | Plain text content only |
-| **Vue 3**      | `mfe-vue3-modal-demo`    | ~7KB        | Cross-framework integration          | Plain text content only |
-| **Vanilla TS** | `mfe-vanilla-modal-demo` | ~5KB        | Smallest bundle, no framework        | Plain text content only |
-
-### Features Demonstrated
-
-1. **Simple Alert** - Basic modal with customizable button
-2. **Confirmation Dialog** - Two-button modal with callbacks
-3. **Form Modal** - Demonstrates content limitations in cross-framework scenarios
-4. **Custom Content** - Shows framework-specific content capabilities
-5. **Error Example** - Modal with error variant and notification integration
-6. **Multiple Notifications** - Triggers various notification types
-7. **Nested Modals** - Demonstrates modal stacking (React 19 only)
-8. **Size Variations** - Shows all modal sizes (sm, md, lg, xl)
-
-### Usage Example
+### Usage Pattern (When Implemented)
 
 ```typescript
-// In any MFE
+// Service injection pattern for modal usage
 const { modal, notification } = services;
 
 // Simple alert
 modal.open({
   title: 'Alert',
   content: 'This is a simple alert',
-  actions: [{ label: 'OK', variant: 'default', onClick: () => console.log('Closed') }],
+  actions: [{ label: 'OK', variant: 'default' }],
 });
 
 // Confirmation dialog
 const result = await modal.confirm({
   title: 'Confirm Action',
   content: 'Are you sure?',
-  confirmLabel: 'Yes',
-  cancelLabel: 'No',
 });
 ```
 
-### Cross-Framework Limitations
-
-- **React 19**: Full capabilities - can pass JSX components as content
-- **React 17, Vue 3, Vanilla TS**: Limited to plain text content when interacting with React 19 container
-- All frameworks can use callbacks and promises normally
-
-## Event Bus Service Demos ✅ COMPLETED
+## Event Bus Service Demos (Completed)
 
 Located in `apps/service-demos/event-bus/`
 
-### Available Implementations
+### Trading Scenario Implementation
 
-| Framework      | MFE Name                    | Bundle Size | Key Features                                     |
-| -------------- | --------------------------- | ----------- | ------------------------------------------------ |
-| **React 19**   | `mfe-market-watch`          | ~8KB        | Real-time stock ticker with price updates       |
-| **Vue 3**      | `mfe-trading-terminal`      | ~10KB       | Full order placement and portfolio management   |
-| **Vanilla JS** | `mfe-analytics-engine`      | ~6KB        | Performance metrics and portfolio analysis      |
-| **Solid.js**   | `mfe-event-playground`      | ~7KB        | Interactive event testing and debugging         |
-| **React 19**   | `mfe-react19-eventbus-demo` | ~5.5KB      | Original interactive pub/sub demonstration      |
+**Path**: `apps/service-demos/event-bus/scenarios/trading/`
 
-### Design System Integration
+| MFE Name               | Framework   | Purpose                                          |
+| ---------------------- | ----------- | ------------------------------------------------ |
+| `mfe-market-watch`     | React       | Real-time stock ticker with price updates       |
+| `mfe-trading-terminal` | Vue 3       | Order placement and portfolio management        |
+| `mfe-analytics-engine` | Vanilla TS  | Performance metrics and portfolio analysis      |
 
-The Event Bus demo page leverages the expanded design system (400+ utilities):
-- Responsive layout with `ds-page` and `ds-page-content` containers
-- Event log using `ds-card-padded` and `ds-card-elevated` for depth
-- Action buttons using `ds-btn-primary`, `ds-btn-secondary`, `ds-btn-outline` variants
-- Status badges with `ds-badge-info`, `ds-badge-success`, `ds-badge-warning` classes
-- Typography with `ds-section-title`, `ds-card-title`, and `ds-text-muted`
-- Grid layouts using `ds-grid` and responsive `ds-md:grid-cols-*` classes
-- Interactive states with `ds-hover-scale` and `ds-transition`
+### Interactive Tools
 
-### Features Demonstrated
+**Path**: `apps/service-demos/event-bus/`
 
-1. **Event Emission** - Emit predefined and custom events with compact button grid
-2. **Event Subscription** - Subscribe/unsubscribe with visual pill badges
-3. **Event Log** - Real-time display using the reusable EventLog component
-4. **Custom Events** - Create and emit custom events with JSON data
-5. **Cross-MFE Communication** - Container emitter section for boundary testing
-6. **MFE Info Panel** - Details, capabilities, and quick actions in right sidebar
+| MFE Name               | Framework   | Purpose                                          |
+| ---------------------- | ----------- | ------------------------------------------------ |
+| `mfe-event-playground` | Solid.js    | Interactive event testing and debugging tool    |
+
+### Key Features Demonstrated
+
+1. **Cross-Framework Communication** - React, Vue, Solid.js, and Vanilla TS MFEs communicating seamlessly
+2. **Real-Time Data Sync** - Market data updates propagated across all MFEs
+3. **Event-Driven Architecture** - Decoupled MFEs using pub/sub pattern
+4. **Service Injection** - No global pollution, services injected at mount time
 
 ### Common Event Patterns
 
@@ -118,185 +74,129 @@ eventBus.emit('theme:change', { theme: 'dark' });
 unsubscribe();
 ```
 
-### Predefined Events
+### Trading Scenario Events
 
-- `user:login` / `user:logout` - Authentication events
-- `theme:change` - Theme switching
-- `data:update` - Data synchronization
-- `navigation:change` - Route changes
-- `modal:open` - Modal triggers
-- `notification:show` - Notification displays
-- `settings:update` - Settings changes
+- `market:update` - Real-time price updates
+- `order:placed` / `order:filled` - Trading actions
+- `portfolio:update` - Portfolio value changes
+- `analytics:metrics` - Performance calculations
 
 ## Running Service Demos
 
-### Development Mode
-
 ```bash
-# Build packages and all MFEs
+# Build and serve
 pnpm build
-
-# Serve MFEs (in one terminal)
-pnpm serve
-
-# Start container (in another terminal)
-pnpm dev:container-react
+pnpm serve        # Terminal 1: Serves MFEs on :8080
+pnpm dev:container-react  # Terminal 2: Container on :3000
 ```
 
-### Accessing Demos
+**Event Bus Demo**: http://localhost:3000/services/event-bus
 
-Once running, navigate to:
+## Implementation Patterns
 
-- **Modal Service Demo**: http://localhost:3000/services/modal
-- **Event Bus Demo**: http://localhost:3000/services/event-bus
-
-## Architecture
-
-### Service Injection
-
-Services are injected into MFEs at mount time, preventing global scope pollution:
-
-```typescript
-// MFE receives services during mount
-export default {
-  mount: (element: HTMLElement, services: MFEServices) => {
-    const { modal, notification, eventBus, logger } = services;
-    // Use services here
-  },
-  unmount: () => {
-    // Cleanup
-  },
-};
-```
-
-### Build Configuration
-
-All demos use tsup for optimal bundle sizes:
-
-```javascript
-// tsup.config.js
-{
-  format: 'esm',
-  external: ['react', 'react-dom', 'vue'], // Framework deps external
-  minify: true,
-  target: 'es2020'
-}
-```
-
-### Registry Configuration
-
-Service demos are registered in `mfe-registry.json`:
-
-```json
-{
-  "name": "mfe-vue3-modal-demo",
-  "version": "1.0.0",
-  "url": "http://localhost:8080/service-demos/modal/mfe-vue3-modal-demo/mfe-vue3-modal-demo.js",
-  "requirements": {
-    "services": [
-      { "name": "modal", "optional": false },
-      { "name": "notification", "optional": false }
-    ]
-  }
-}
-```
-
-## Adding New Service Demos
-
-### 1. Create MFE Structure
-
-```bash
-mkdir -p apps/service-demos/{service-name}/mfe-{framework}-{service}-demo
-```
-
-### 2. Essential Files
-
-- `package.json` - Dependencies and build scripts
-- `tsup.config.js` - Build configuration
-- `src/main.ts(x)` - MFE entry point with MFEModule export
-- `src/App.tsx/.vue/.ts` - Main component
-
-### 3. MFE Module Pattern
+### Service Injection Pattern
 
 ```typescript
 import type { MFEModule, MFEServices } from '@mfe-toolkit/core';
 
-const myServiceDemo: MFEModule = {
+const mfeDemo: MFEModule = {
   mount: (element: HTMLElement, services: MFEServices) => {
-    // Initialize and render
+    const { eventBus, logger } = services;
+    // Implementation
+    return () => {/* cleanup */};
   },
-  unmount: () => {
-    // Cleanup
-  },
+  unmount: () => {/* additional cleanup */}
 };
 
-export default myServiceDemo;
+export default mfeDemo;
 ```
 
-### 4. Build and Register
+### Build Configuration
+
+Service demos use either tsup (recommended) or esbuild:
+
+```javascript
+// tsup.config.js (recommended)
+import { defineConfig } from 'tsup';
+
+export default defineConfig({
+  entry: ['src/main.ts'],
+  format: 'esm',
+  external: ['react', 'react-dom', 'vue', 'solid-js'],
+  minify: true,
+  target: 'es2020'
+});
+
+// Or build.js with esbuild (for Vue compatibility)
+const esbuild = require('esbuild');
+
+esbuild.build({
+  entryPoints: ['src/main.ts'],
+  bundle: true,
+  format: 'esm',
+  external: ['react', 'react-dom', 'vue'],
+  minify: true,
+  outfile: 'dist/mfe.js'
+});
+```
+
+### Registry Entry Example
+
+```json
+{
+  "name": "mfe-trading-terminal",
+  "url": "http://localhost:8080/service-demos/event-bus/scenarios/trading/mfe-trading-terminal/dist/mfe-trading-terminal.js",
+  "framework": "vue3"
+}
+```
+
+## Creating New Service Demos
+
+### Quick Start
 
 ```bash
-# Build all packages and MFEs
-pnpm build
+# 1. Create MFE directory
+mkdir -p apps/service-demos/event-bus/mfe-{framework}-demo
 
-# Add to mfe-registry.json if needed
-# Serve the MFEs
-pnpm serve
+# 2. Add package.json with build script
+# 3. Create tsup.config.js (or build.js for Vue)
+# 4. Implement src/main.ts with MFEModule export
+# 5. Add to mfe-registry.json
+# 6. Build and test
+pnpm build && pnpm serve
 ```
 
 ## Best Practices
 
-1. **Bundle Size**: Use ESBuild and mark framework dependencies as external
-2. **Type Safety**: Always type as `MFEModule` from `@mfe-toolkit/core`
-3. **Cleanup**: Properly cleanup in unmount (event listeners, subscriptions)
-4. **Styling**: Use design system classes (`ds-*` prefix) from the 400+ utility set:
-   - Buttons: `ds-btn-primary`, `ds-btn-secondary`, `ds-btn-outline`
-   - Cards: `ds-card-padded`, `ds-card-elevated`
-   - Typography: `ds-h1` through `ds-h4`, `ds-text-muted`
-   - Layout: `ds-flex`, `ds-grid`, `ds-container`
-   - Forms: `ds-input`, `ds-select`, `ds-checkbox`
-   - Modals: `ds-modal-backdrop`, `ds-modal-header`, `ds-modal-body`
-5. **Error Handling**: Gracefully handle service unavailability
-6. **Documentation**: Include README explaining capabilities and limitations
+1. **Bundle Size**: Mark framework dependencies as external
+2. **Type Safety**: Use `MFEModule` type from `@mfe-toolkit/core`
+3. **Cleanup**: Remove event listeners and subscriptions in unmount
+4. **Styling**: Use design system `ds-*` classes (500+ utilities available)
+5. **Error Handling**: Check service availability before use
+6. **Build Tool**: Prefer tsup, use esbuild for Vue if needed
 
 ## Troubleshooting
 
 ### Common Issues
 
 1. **"process is not defined"**: Add `define: { 'process.env': {} }` to build config
-2. **"Vue is not defined"**: Ensure Vue is in container's import map
-3. **Large bundle size**: Check that framework deps are marked as external
-4. **Styling issues**: Use theme-aware Tailwind classes, not custom colors
+2. **Framework not found**: Ensure framework is in container's import map and marked as external
+3. **Large bundle**: Check externals configuration
+4. **Build errors**: Use tsup for React/Solid.js, esbuild with Vue plugin for Vue
 
-### Debug Commands
+### Verification
 
 ```bash
-# Check bundle size
+# Check bundle size (should be < 15KB)
 ls -lh dist/*.js
-
-# Verify external deps
-grep -o "^import.*from" dist/*.js | head -5
-
-# Check for process references
-grep "process\." dist/*.js
 ```
 
 ## Future Enhancements
 
-Following the platform cleanup and expanded design system implementation (400+ utilities):
-
-- [ ] Complete Dev Container for isolated MFE development
-- [ ] Logger Service Demo (all frameworks) - Using `ds-code-block` for log display
-- [ ] Auth Service Demo (all frameworks) - Using `ds-form-*` classes
-- [ ] Error Reporter Demo - Using `ds-callout-danger` for error displays
-- [ ] Notification Service Demo (standalone, all frameworks) - Using `ds-toast-*` classes
-- [ ] Theme Service Demo (all frameworks) - Showcasing all `ds-*` utility classes
-- [ ] Performance Monitoring Dashboard - Using `ds-metric-card` and `ds-progress`
-- [ ] Cross-tab State Synchronization Demos - Using `ds-badge-*` for sync status
+See [ROADMAP.md](./ROADMAP.md#active-development-q1-2025) for the complete list of planned service demos and their timeline.
 
 ## Related Documentation
 
-- [Modal Service API](./api/modal-service.md)
-- [Event Bus API](./api/event-bus.md)
-- [MFE Communication Guide](./mfe-communication-guide.md)
+- [ROADMAP.md](./ROADMAP.md) - Platform roadmap and planning
+- [CLAUDE.md](../CLAUDE.md) - Development guidelines
 - [Architecture Decisions](./architecture/architecture-decisions.md)

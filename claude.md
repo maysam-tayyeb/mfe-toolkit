@@ -77,7 +77,7 @@ cd apps/container-react && pnpm preview
 
 ## Architecture Overview
 
-This is a **microfrontend (MFE) monorepo** using pnpm workspaces. The architecture consists of:
+This is a **microfrontend (MFE) monorepo** using pnpm workspaces. The architecture demonstrates real-world scenarios with a trading platform example, showcasing event-driven communication between MFEs.
 
 ### Supported Frameworks
 
@@ -120,11 +120,12 @@ This is a **microfrontend (MFE) monorepo** using pnpm workspaces. The architectu
    - Uses React Context for state management (AuthContext, UIContext, RegistryContext)
 
 2. **Microfrontends** (`apps/service-demos/`)
-   - `mfe-react19-eventbus-demo`: React 19 Event bus communication demo
-   - `mfe-react19-modal-demo`: React 19 Modal service demo
-   - `mfe-react17-modal-demo`: React 17 Modal service demo (cross-version compatibility)
-   - `mfe-vue3-modal-demo`: Vue 3 Modal service demo
-   - `mfe-vanilla-modal-demo`: Vanilla JS Modal service demo
+   - Event Bus Demos:
+     - `mfe-event-playground`: Solid.js interactive event testing tool
+     - Trading Scenario MFEs:
+       - `mfe-market-watch`: React market data viewer
+       - `mfe-trading-terminal`: Vue 3 trading interface
+       - `mfe-analytics-engine`: Vanilla TypeScript analytics processor
 
 3. **Shared Packages** (`packages/`)
    - `@mfe-toolkit/core`: Framework-agnostic toolkit with types, services, and utilities
@@ -157,9 +158,10 @@ Services are injected into MFEs at mount time (no global window pollution):
 
 ### MFE Loading Components
 
-- **MFELoader**: Standard loader with error boundaries and retry mechanisms
-- **IsolatedMFELoader**: For pages with frequent re-renders (prevents flickering)
-- Both include comprehensive error handling and recovery
+- **RegistryMFELoader**: Loads MFEs from registry configuration
+- **CompatibleMFELoader**: Legacy support for older MFE formats
+- **MFEErrorBoundary**: Comprehensive error handling and recovery
+- All loaders include retry mechanisms and fallback UI
 
 ### Registry System
 
@@ -269,16 +271,26 @@ The toolkit is split into several npm packages under the `@mfe-toolkit` organiza
 
 ### When Creating New MFEs
 
-1. Create new app in `apps/` directory following naming convention `mfe-{name}`
-2. Export default function that accepts MFE services
-3. **Important**: MFEs use tsup or esbuild for building (not Vite)
-   - tsup is preferred for React, Solid.js, and Vanilla JS MFEs
-   - esbuild is used for Vue MFEs (for plugin compatibility)
-4. Add to container's MFE registry
+1. Create new app in `apps/service-demos/` directory following naming convention `mfe-{name}`
+2. Export default function that accepts MFE services:
+   ```typescript
+   export default function ({ eventBus, logger, modal, notification }: MFEServices) {
+     return {
+       mount: (element: HTMLElement) => { /* mount logic */ },
+       unmount: () => { /* cleanup logic */ }
+     };
+   }
+   ```
+3. **Build Configuration**: 
+   - **tsup is the primary bundler** for all MFEs
+   - Use tsup for React, Solid.js, and Vanilla TypeScript MFEs
+   - Use tsup or esbuild for Vue MFEs (for Vue plugin compatibility if needed)
+   - Mark React, Vue, Solid.js as external dependencies
+4. Add to container's MFE registry (`apps/container-react/public/mfe-registry.json`)
 5. Ensure proper TypeScript types from `@mfe-toolkit/core`
-6. **Framework Options**: React, Vue, Vanilla JS, or Solid.js
+6. **Framework Options**: React, Vue 3, Solid.js, or Vanilla TypeScript
    - All frameworks use shared dependencies via import map
-   - Mark framework dependencies as external in build config
+   - No bundling of framework code in MFE builds
 
 ### Testing Approach
 
@@ -313,6 +325,22 @@ cd apps/container-react && pnpm vitest src/App.test.tsx
 pnpm validate  # Runs format, lint, type-check, and test
 ```
 
+### MFE Demo Applications
+
+**Event Bus Trading Scenario** (`apps/service-demos/event-bus/scenarios/trading/`):
+- `mfe-market-watch`: React-based market data display with real-time updates
+- `mfe-trading-terminal`: Vue 3 trading interface for order placement
+- `mfe-analytics-engine`: Vanilla TypeScript analytics processor
+
+**Interactive Tools** (`apps/service-demos/event-bus/`):
+- `mfe-event-playground`: Solid.js event testing and debugging tool
+
+These MFEs demonstrate:
+- Cross-framework communication via Event Bus
+- Real-time data synchronization
+- Service injection patterns
+- Framework-agnostic design system usage
+
 ### Important File Locations
 
 - Container services: `apps/container-react/src/services/`
@@ -327,9 +355,13 @@ pnpm validate  # Runs format, lint, type-check, and test
 - Layout: `apps/container-react/src/components/Layout.tsx` (responsive container)
 - HomePage: `apps/container-react/src/pages/HomePage.tsx` (hero, metrics, features)
 - DashboardPage: `apps/container-react/src/pages/DashboardPage.tsx` (platform overview)
-- Modal Service Demo: `apps/container-react/src/pages/services/ModalServiceDemoPage.tsx`
-- Event Bus Demo: `apps/container-react/src/pages/services/EventBusServiceDemoPage.tsx`
+- Event Bus Demo: `apps/container-react/src/pages/services/EventBusPageV3.tsx`
+- Notifications Demo: `apps/container-react/src/pages/services/NotificationsPage.tsx`
 - Error Handling Demo: `apps/container-react/src/pages/ErrorBoundaryDemoPage.tsx`
+- MFE Registry: `apps/container-react/src/pages/MFERegistryPage.tsx`
+- Dashboard: `apps/container-react/src/pages/DashboardPage.tsx`
+- Metrics Page: `apps/container-react/src/pages/dev/MetricsPage.tsx`
+- Settings Page: `apps/container-react/src/pages/dev/SettingsPage.tsx`
 
 ### State Management
 
@@ -372,7 +404,8 @@ See [State Management Architecture](./docs/architecture/state-management-archite
 - **Dynamic Imports over Module Federation**: Better independence, no build-time coupling
 - **React Context over Redux**: Better isolation, simpler state management
 - **Service Injection**: No global window pollution, better testability
-- **Dual MFE Loaders**: Temporary solution for handling different re-render scenarios
+- **CSS-first Design System**: Framework-agnostic, zero JavaScript pollution
+- **TypeScript-first**: Full type safety across all packages and MFEs
 
 ## Design System
 
@@ -380,7 +413,7 @@ See [State Management Architecture](./docs/architecture/state-management-archite
 
 - **Zero-Pollution Approach**: CSS-first design system with NO global/window variables
 - **CSS Classes**: All styles use `ds-*` prefix (ds-page, ds-card, ds-button, ds-section-title)
-- **Optional ES Modules**: Tokens available via explicit imports, not required for basic usage
+- **No JavaScript Required**: Pure CSS implementation, no runtime dependencies
 - **Framework-Agnostic**: Works with React, Vue, Solid.js, and Vanilla JS through CSS classes
 - **Modern Blue & Slate Palette**: Professional color scheme with vibrant accents
 
@@ -496,12 +529,12 @@ See [State Management Architecture](./docs/architecture/state-management-archite
 </div>
 ```
 
-### Development Guidelines
+### CSS Class Usage Guidelines
 
-1. Use CSS classes directly - no component imports needed
-2. Classes are provided by container's stylesheet
-3. No global pollution or window variables
-4. Framework-agnostic approach for maximum compatibility
+1. **Use CSS classes directly** - All UI styling through `ds-*` prefixed classes
+2. **Classes are provided by container** - Loaded once, available to all MFEs
+3. **No JavaScript components** - Pure CSS approach, no framework coupling
+4. **Framework-agnostic** - Same classes work in React, Vue, Solid.js, and Vanilla
 
 ### After Making Changes
 
@@ -562,7 +595,7 @@ If you don't know the correct commands for a project, ask the user and suggest u
 
 - **Strictly no global polluting. Only use state management**
 - **No window or global object pollution - ever**
-- **Design system provided via service injection, not global/window**
+- **Design system provided via CSS classes, not component libraries**
 
 ## JavaScript Best Practices
 
@@ -575,8 +608,12 @@ If you don't know the correct commands for a project, ask the user and suggest u
 
 ## Build Process Notes
 
-- **MFEs use tsup (powered by esbuild) or esbuild directly for building**
-- **tsup is preferred for most MFEs, esbuild for Vue MFEs**
+- **MFEs use tsup as the primary bundler** (powered by esbuild under the hood)
+- **Container uses Vite** for development and production builds
+- **Packages use tsup** for library builds
+- All MFEs are built to ES modules format
+- Shared dependencies are marked as external and loaded via import maps
+- tsup provides better TypeScript support, cleaner output, and simpler configuration than raw esbuild
 
 ## 🚨 DESIGN SYSTEM IS LAW
 
