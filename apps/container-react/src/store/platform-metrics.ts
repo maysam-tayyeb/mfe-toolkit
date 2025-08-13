@@ -15,7 +15,7 @@ export type PlatformMetrics = {
 const defaultMetrics: PlatformMetrics = {
   bundleReduction: 97,
   frameworkAgnostic: true,
-  demonstratedFrameworks: ['React', 'Vue', 'Vanilla JS', 'Any JS Framework'],
+  demonstratedFrameworks: ['React', 'Vue', 'Solid.js', 'Vanilla JS', 'Any JS Framework'],
   stateSyncLatency: 0,
   typeSafetyCoverage: 100,
   activeMFEs: 0,

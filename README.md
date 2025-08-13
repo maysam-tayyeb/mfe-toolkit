@@ -60,9 +60,9 @@ A comprehensive toolkit and reference architecture for building production-ready
 │  ┌──────────────┐ ┌──────────────┐ ┌─────────────────┐      │
 │  │Modal Demos   │ │EventBus Demo │ │State Demo MFEs  │      │
 │  │- React 19    │ │- React 19    │ │- React          │      │
-│  │- React 17    │ │- Event comm  │ │- Vue            │      │
-│  │- Vue 3       │ │- Services    │ │- Vanilla JS     │      │
-│  │- Vanilla JS  │ │              │ │                 │      │
+│  │- React 17    │ │- Vue 3       │ │- Vue            │      │
+│  │- Vue 3       │ │- Solid.js    │ │- Solid.js       │      │
+│  │- Vanilla JS  │ │- Vanilla JS  │ │- Vanilla JS     │      │
 │  └──────────────┘ └──────────────┘ └─────────────────┘      │
 └─────────────────────────────────────────────────────────────┘
 ```
@@ -212,6 +212,7 @@ The platform includes comprehensive service demonstrations across multiple frame
 - **React 19**: Full modal capabilities with JSX support
 - **React 17**: Legacy React with text-only content
 - **Vue 3**: Cross-framework integration demo
+- **Solid.js**: High-performance reactive framework demo
 - **Vanilla TS**: Lightweight implementation (5KB)
 
 #### Event Bus Demo

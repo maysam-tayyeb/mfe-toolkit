@@ -21,7 +21,7 @@ stateManager.set('key', 'value');
 
 ### 2. **Framework Agnostic**
 
-The same API works across React, Vue, and Vanilla JavaScript:
+The same API works across React, Vue, Solid.js, and Vanilla JavaScript:
 
 ```typescript
 // React

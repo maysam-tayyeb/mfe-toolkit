@@ -107,7 +107,7 @@ This is a **microfrontend (MFE) monorepo** using pnpm workspaces. The architectu
 - **Responsive Design**: Mobile-first with `ds-sm:*`, `ds-md:*`, `ds-lg:*` breakpoints
 - **Component Patterns**: Heroes, metrics, features, empty states, loading states, error boundaries
 - **Visual Hierarchy**: Consistent typography scale and semantic spacing
-- **Cross-Framework Ready**: Designed for React, Vue, and Vanilla JS container compatibility
+- **Cross-Framework Ready**: Designed for React, Vue, Solid.js, and Vanilla JS container compatibility
 
 ### Core Components
 
@@ -189,7 +189,7 @@ The toolkit is split into several npm packages under the `@mfe-toolkit` organiza
 
 3. **@mfe-toolkit/cli** (`packages/mfe-toolkit-cli/`)
    - CLI tools for scaffolding new MFEs
-   - Support for React, Vue, Vanilla JS/TS templates
+   - Support for React, Vue, Solid.js, Vanilla JS/TS templates
    - Manifest generation and validation commands
 
 4. **@mfe-toolkit/state** (`packages/mfe-toolkit-state/`)
@@ -343,7 +343,7 @@ The platform uses a dual state management approach:
 2. **Universal State Manager** (Application State)
    - Shared business/application state between MFEs
    - Cross-tab synchronization and persistence
-   - Framework-agnostic (React, Vue, Vanilla JS)
+   - Framework-agnostic (React, Vue, Solid.js, Vanilla JS)
    - Reactive subscriptions for state changes
    - Extensible with middleware (performance monitoring, logging, etc.)
 
@@ -381,7 +381,7 @@ See [State Management Architecture](./docs/architecture/state-management-archite
 - **Zero-Pollution Approach**: CSS-first design system with NO global/window variables
 - **CSS Classes**: All styles use `ds-*` prefix (ds-page, ds-card, ds-button, ds-section-title)
 - **Optional ES Modules**: Tokens available via explicit imports, not required for basic usage
-- **Framework-Agnostic**: Works with React, Vue, and Vanilla JS through CSS classes
+- **Framework-Agnostic**: Works with React, Vue, Solid.js, and Vanilla JS through CSS classes
 - **Modern Blue & Slate Palette**: Professional color scheme with vibrant accents
 
 ### Key CSS Classes (500+ available)
@@ -589,7 +589,7 @@ If you don't know the correct commands for a project, ask the user and suggest u
 1. **Consistency**: All MFEs share the same design language
 2. **Maintainability**: Changes in one place affect all components
 3. **No Pollution**: Zero global styles, zero inline styles
-4. **Framework Agnostic**: Works across React, Vue, and Vanilla JS
+4. **Framework Agnostic**: Works across React, Vue, Solid.js, and Vanilla JS
 
 ### Common Violations to Avoid
 

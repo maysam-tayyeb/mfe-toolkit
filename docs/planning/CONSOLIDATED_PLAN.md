@@ -25,7 +25,12 @@ This document consolidates all planning and architecture documentation for the M
 #### Service Demo MFEs
 Located in `apps/service-demos/`:
 - **Modal Service**: React 19, React 17, Vue 3, Vanilla JS demos
-- **Event Bus**: React 19 demo
+- **Event Bus**: 
+  - Event Bus V3 Page with Trading Terminal Demo
+  - Market Watch MFE (React 19)
+  - Trading Terminal MFE (Vue 3) 
+  - Analytics Engine MFE (Vanilla JS)
+  - Event Playground MFE (Solid.js)
 
 #### Core Infrastructure
 - **Container Application**: React 19 + React Context + Tailwind CSS + ShadCN UI
@@ -72,6 +77,48 @@ The design system has been fully implemented with:
 - **EmptyState**: Empty state displays with icons
 - **LoadingState**: Loading indicators
 - **EventLog**: Event stream display
+
+## Event Bus System Architecture ✅ COMPLETED (November 2024)
+
+### Implementation Overview
+The Event Bus system has been fully implemented with comprehensive demos showcasing real-world communication patterns between MFEs.
+
+### Key Features Delivered
+
+#### 1. Event Bus V3 Demo Page
+- **Interactive Trading Terminal Scenario**: Complete stock trading simulation
+- **Event Playground**: Live testing environment for event patterns
+- **Real-time Event Visualization**: Comprehensive event logging and monitoring
+- **Routable Tabs**: URL-based navigation with `?tab=` parameters
+
+#### 2. Multi-Framework MFE Demonstrations
+- **Market Watch** (React 19): Real-time stock ticker with price updates
+- **Trading Terminal** (Vue 3): Full order placement and portfolio management
+- **Analytics Engine** (Vanilla JS): Performance metrics and analysis
+- **Event Playground** (Solid.js): Interactive event testing and debugging
+
+#### 3. Pattern Matching System
+- **Wildcard Support**: Patterns like `market:*`, `trade:*`, `playground:*`
+- **Smart Filtering**: Prevents duplicate logging of self-sent events
+- **Efficient Subscription**: Uses global wildcard with client-side filtering
+
+#### 4. Event Communication Patterns
+```javascript
+// Stock Selection Flow
+Market Watch → market:stock-selected → Trading Terminal
+
+// Trade Execution Flow  
+Trading Terminal → trade:placed → Analytics Engine → analytics:updated
+
+// Price Alert Flow
+Market Watch → market:price-alert → All Subscribers
+```
+
+### Technical Achievements
+- **3-Column Layout**: Organized Event Emitter, Listeners, and History panels
+- **Duplicate Prevention**: Smart filtering for pattern-matched events
+- **Build System Fix**: Migrated Solid.js from tsup to esbuild for JSX support
+- **URL Routing**: Tab state synchronized with browser navigation
 
 ## MFE Development Container Architecture ⏸️ POSTPONED
 
@@ -268,6 +315,10 @@ pnpm validate        # Run all checks
 - **Code Reduction**: 50%+ less duplicate code
 - **Bundle Sizes**: 30% smaller with shared dependencies
 - **Documentation**: Comprehensive guides created
+- **Event Bus System**: Full implementation with 5 framework demos
+- **Pattern Matching**: Wildcard event subscriptions working
+- **Multi-Framework Support**: React, Vue, Vanilla JS, and Solid.js MFEs
+- **URL Routing**: Tab-based navigation with browser history support
 
 ### Target Metrics
 - **MFE Development Time**: 50% reduction (future goal with dev container)

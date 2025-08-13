@@ -22,6 +22,7 @@ Create a comprehensive, framework-agnostic toolkit that enables teams to build, 
 - ✅ `@mfe-toolkit/react` - React adapters and components (v0.1.0)
 - ✅ `@mfe-toolkit/state` - Cross-framework state management (v0.1.0)
 - ✅ `@mfe-toolkit/state-middleware-performance` - Performance monitoring (v0.1.0)
+- ✅ `@mfe-toolkit/cli` - CLI tools for scaffolding and development (v0.1.0)
 
 ## 🚧 In Progress (Q1 2025)
 
@@ -55,9 +56,16 @@ Create a comprehensive, framework-agnostic toolkit that enables teams to build, 
 
 ### CLI Enhancements
 
-**@mfe-toolkit/cli v2.0**
+**@mfe-toolkit/cli v1.0** ✅ COMPLETED
 
-- Interactive MFE scaffolding
+- ✅ Basic MFE scaffolding (React, Vue, Vanilla JS/TS templates)
+- ✅ Support for multiple frameworks
+- ✅ TypeScript configuration
+- ✅ Published to npm (v0.1.0)
+
+**@mfe-toolkit/cli v2.0** 📋 PLANNED
+
+- Interactive MFE scaffolding wizard
 - Manifest generation and validation
 - Development server with HMR
 - Build optimization tools

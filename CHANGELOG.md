@@ -7,7 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Added
+### Added - November 2024
+
+- **Event Bus V3 Demo Page** with interactive Trading Terminal scenario
+- **Multi-framework MFE demos**:
+  - Market Watch MFE (React 19) - Real-time stock ticker with price updates
+  - Trading Terminal MFE (Vue 3) - Complete order placement system
+  - Analytics Engine MFE (Vanilla JS) - Performance metrics and portfolio analysis
+  - Event Playground MFE (Solid.js) - Interactive event testing and debugging
+- **Pattern matching for event subscriptions** - Support for wildcard patterns like `playground:*`, `market:*`
+- **Routable tabs with URL parameters** - Direct linking to specific demo tabs via `?tab=` parameter
+- **3-column layout for Event Playground** - Better organization of event controls and history
+- **Duplicate event prevention** - Smart filtering to prevent echo in pattern subscriptions
+- **Event history tracking** - Local event history for both container and MFE playgrounds
+- **Progress Log documentation** - Comprehensive tracking of development milestones
+
+### Added - August 2024
 
 - React Context-based state management for container app
 - AuthContext for authentication state management
@@ -27,7 +42,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Independent design system with tsup build system
 - Proper dark mode support with class-based selectors
 
-### Changed
+### Changed - November 2024
+
+- **Enhanced TabGroup component** - Added controlled mode support for URL-based tab navigation
+- **Improved Event Bus architecture** - Better separation between demo scenarios and playground
+- **Updated build configuration** - Migrated Solid.js MFE from tsup to esbuild for proper JSX support
+
+### Changed - August 2024
 
 - Migrated container app from Redux Toolkit to React Context API
 - Updated all container components to use contexts instead of Redux
@@ -64,7 +85,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Obsolete `global.d.ts` file from mfe-example
 - Disabled `App.integration.test.tsx.disabled` file
 
-### Fixed
+### Fixed - November 2024
+
+- **Pattern matching for wildcard event subscriptions** - Event bus now properly handles patterns like `container:*`
+- **Duplicate event logging** - Prevented echo when MFEs send events matching their own listening patterns
+- **Solid.js JSX compilation** - Fixed build errors by switching to esbuild with proper plugin support
+- **Tab state synchronization** - Browser navigation now correctly updates active tab
+
+### Fixed - August 2024
 
 - React 17 MFE loading error caused by React hooks conflict
 - Context bridge initialization timing issues

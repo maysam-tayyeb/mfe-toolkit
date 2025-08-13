@@ -15,7 +15,7 @@ Located in `apps/service-demos/modal/`
 The Modal Service demo page uses the comprehensive design system with:
 - `ds-hero` for gradient hero sections
 - `ds-card` and `ds-card-padded` for content containers
-- `ds-btn-primary`, `ds-btn-outline`, `ds-btn-ghost` for actions (400+ utility classes)
+- `ds-btn-primary`, `ds-btn-outline`, `ds-btn-ghost` for actions (500+ utility classes)
 - `ds-tabs` and `ds-tab-active` for code example navigation
 - `ds-modal-*` classes for modal styling
 - `ds-badge-*` for status indicators
@@ -69,15 +69,19 @@ const result = await modal.confirm({
 - **React 17, Vue 3, Vanilla TS**: Limited to plain text content when interacting with React 19 container
 - All frameworks can use callbacks and promises normally
 
-## Event Bus Service Demo
+## Event Bus Service Demos ✅ COMPLETED
 
 Located in `apps/service-demos/event-bus/`
 
-### Available Implementation
+### Available Implementations
 
-| Framework    | MFE Name                    | Bundle Size | Key Features                      |
-| ------------ | --------------------------- | ----------- | --------------------------------- |
-| **React 19** | `mfe-react19-eventbus-demo` | ~5.5KB      | Interactive pub/sub demonstration |
+| Framework      | MFE Name                    | Bundle Size | Key Features                                     |
+| -------------- | --------------------------- | ----------- | ------------------------------------------------ |
+| **React 19**   | `mfe-market-watch`          | ~8KB        | Real-time stock ticker with price updates       |
+| **Vue 3**      | `mfe-trading-terminal`      | ~10KB       | Full order placement and portfolio management   |
+| **Vanilla JS** | `mfe-analytics-engine`      | ~6KB        | Performance metrics and portfolio analysis      |
+| **Solid.js**   | `mfe-event-playground`      | ~7KB        | Interactive event testing and debugging         |
+| **React 19**   | `mfe-react19-eventbus-demo` | ~5.5KB      | Original interactive pub/sub demonstration      |
 
 ### Design System Integration
 

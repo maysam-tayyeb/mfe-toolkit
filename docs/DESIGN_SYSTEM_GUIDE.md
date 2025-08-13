@@ -2,7 +2,7 @@
 
 ## Overview
 
-The MFE Design System provides a framework-agnostic set of **400+ CSS utilities** and optional JavaScript tokens for building consistent UIs across all microfrontends. It follows a **zero global pollution** principle - no window objects, no global variables. The comprehensive utility set ensures complete cross-framework compatibility for React, Vue, and Vanilla JavaScript implementations.
+The MFE Design System provides a framework-agnostic set of **500+ CSS utilities** and optional JavaScript tokens for building consistent UIs across all microfrontends. It follows a **zero global pollution** principle - no window objects, no global variables. The comprehensive utility set ensures complete cross-framework compatibility for React, Vue, Solid.js, and Vanilla JavaScript implementations.
 
 ## Architecture
 
@@ -594,11 +594,11 @@ The design system provides:
 
 - **400+ CSS Utility Classes** - Comprehensive set for all UI needs
 - **Zero global pollution** - No window/global variables
-- **Framework agnostic** - Works with React, Vue, Vanilla JS
+- **Framework agnostic** - Works with React, Vue, Solid.js, Vanilla JS
 - **CSS-first approach** - Classes always available
 - **Optional ES modules** - For programmatic access
 - **Explicit imports** - MFEs control their dependencies
-- **Cross-framework compatibility** - Designed for both React and Vue containers
+- **Cross-framework compatibility** - Designed for React, Vue, Solid.js, and Vanilla JS containers
 - **Complete component systems** - Buttons, modals, forms, navigation, and more
 - **Responsive utilities** - Mobile-first with breakpoint variants
 - **Dark mode support** - Full dark mode compatibility
