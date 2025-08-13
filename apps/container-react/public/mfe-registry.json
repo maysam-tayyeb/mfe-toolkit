@@ -71,6 +71,23 @@
         "category": "developer-tools",
         "capabilities": ["emit", "listen", "debug", "monitor"]
       }
+    },
+    {
+      "name": "mfe-notification-react19",
+      "url": "http://localhost:8080/service-demos/notifications/mfe-notification-react19/mfe-notification-react19.js",
+      "version": "1.0.0",
+      "description": "React 19 notification service demo",
+      "requirements": {
+        "services": [
+          { "name": "notification", "optional": false }
+        ]
+      },
+      "metadata": {
+        "framework": "react",
+        "frameworkVersion": "19",
+        "category": "service-demos",
+        "capabilities": ["notify", "test"]
+      }
     }
   ],
   "config": {

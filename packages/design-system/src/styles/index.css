@@ -3431,4 +3431,37 @@
   .ds-code-block {
     @apply block font-mono text-xs p-2 bg-slate-100 dark:bg-slate-800 rounded overflow-x-auto;
   }
+
+  /* Additional Tailwind-to-DS utilities for Notification components */
+  .ds-grid { @apply grid; }
+  .ds-gap-4 { @apply gap-4; }
+  .ds-gap-3 { @apply gap-3; }
+  .ds-md\:grid-cols-2 { @apply md:grid-cols-2; }
+  .ds-flex { @apply flex; }
+  .ds-items-start { @apply items-start; }
+  .ds-flex-1 { @apply flex-1; }
+  .ds-font-medium { @apply font-medium; }
+  .ds-mb-1 { @apply mb-1; }
+  .ds-mb-3 { @apply mb-3; }
+  .ds-mb-4 { @apply mb-4; }
+  .ds-mb-6 { @apply mb-6; }
+  .ds-mt-1 { @apply mt-1; }
+  .ds-mr-1 { @apply mr-1; }
+  .ds-mr-1\.5 { @apply mr-1.5; }
+  .ds-mr-2 { @apply mr-2; }
+  .ds-text-sm { @apply text-sm; }
+  .ds-text-slate-600 { @apply text-slate-600; }
+  .ds-dark\:text-slate-400 { @apply dark:text-slate-400; }
+  .ds-h-3 { @apply h-3; }
+  .ds-h-4 { @apply h-4; }
+  .ds-h-5 { @apply h-5; }
+  .ds-w-3 { @apply w-3; }
+  .ds-w-4 { @apply w-4; }
+  .ds-w-5 { @apply w-5; }
+  .ds-space-y-4 { @apply space-y-4; }
+  .ds-text-green-600 { @apply text-green-600; }
+  .ds-text-red-600 { @apply text-red-600; }
+  .ds-text-amber-600 { @apply text-amber-600; }
+  .ds-text-blue-600 { @apply text-blue-600; }
+  .ds-text-lg { @apply text-lg; }
 }
