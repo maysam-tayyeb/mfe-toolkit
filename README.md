@@ -8,9 +8,9 @@ A comprehensive toolkit and reference architecture for building production-ready
 - 📡 **Inter-MFE Communication** - Real-time event bus for MFE-to-MFE messaging ([see guide](./docs/guides/mfe-communication-guide.md))
 - 🎯 **Shared Services** - Modal, notification, auth, and logging services ([see demos](./docs/service-demos.md))
 - 📦 **Optimized Bundles** - 96% smaller with import maps (576KB → 14KB)
-- 🔄 **Cross-Framework Support** - React, Vue, and Vanilla JS MFEs work together ([see demos](./docs/service-demos.md))
+- 🔄 **Cross-Framework Support** - React, Vue, Solid.js, and Vanilla JS MFEs work together ([see demos](./docs/service-demos.md))
 - 🛠️ **Modern Tooling** - Vite, TypeScript, pnpm workspaces, and ESBuild
-- 🔧 **Universal State Manager** - Cross-framework state management (React, Vue, Vanilla JS) with proxy-based reactivity and middleware support
+- 🔧 **Universal State Manager** - Cross-framework state management (React, Vue, Solid.js, Vanilla JS) with proxy-based reactivity and middleware support
 - 🎨 **Zero-Pollution Design System** - Framework-agnostic CSS-first design system with Modern Blue & Slate palette
 - 📐 **Professional UI/UX** - Hero sections, metric cards, tabs, semantic colors, and responsive layouts
 - 🚫 **No Global Pollution** - Clean architecture with service injection, no window/global variables
@@ -648,7 +648,8 @@ See our [Comprehensive Roadmap](./docs/architecture/comprehensive-roadmap.md) fo
 - ✅ Validation middleware for runtime type safety
 - 🔄 Sync middleware for backend integration
 - 📊 Analytics middleware for usage insights
-- 🚀 Framework adapters for Svelte, Angular, SolidJS
+- 🚀 Framework adapters for Svelte and Angular
+- ✅ Solid.js support now included!
 - And much more!
 
 ## 🤝 Contributing

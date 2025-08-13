@@ -79,6 +79,13 @@ cd apps/container-react && pnpm preview
 
 This is a **microfrontend (MFE) monorepo** using pnpm workspaces. The architecture consists of:
 
+### Supported Frameworks
+
+- **React 19**: Primary framework for container and many MFEs
+- **Vue 3**: Full support with shared dependencies via import map
+- **Vanilla JavaScript/TypeScript**: Zero-dependency MFEs
+- **Solid.js**: Reactive framework with fine-grained reactivity for high-performance MFEs
+
 ### UI/UX Design Principles
 
 - **Zero-Pollution Design System**: CSS-first approach with `ds-*` prefixed classes
@@ -267,6 +274,9 @@ The toolkit is split into several npm packages under the `@mfe-toolkit` organiza
 3. **Important**: MFEs use esbuild for building (not Vite)
 4. Add to container's MFE registry
 5. Ensure proper TypeScript types from `@mfe-toolkit/core`
+6. **Framework Options**: React, Vue, Vanilla JS, or Solid.js
+   - All frameworks use shared dependencies via import map
+   - Mark framework dependencies as external in build config
 
 ### Testing Approach
 
