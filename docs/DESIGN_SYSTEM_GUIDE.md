@@ -2,25 +2,28 @@
 
 ## Overview
 
-The MFE Design System provides a framework-agnostic set of **500+ CSS utilities** and optional JavaScript tokens for building consistent UIs across all microfrontends. It follows a **zero global pollution** principle - no window objects, no global variables. The comprehensive utility set ensures complete cross-framework compatibility for React, Vue, Solid.js, and Vanilla JavaScript implementations.
+The MFE Design System provides a framework-agnostic set of **500+ CSS utilities** for building consistent UIs across all microfrontends. It follows a **zero global pollution** principle with a pure CSS-first approach. The comprehensive utility set ensures complete cross-framework compatibility for React, Vue, Solid.js, and Vanilla JavaScript implementations.
 
 ## Architecture
 
 ### How It Works
 
-1. **CSS Classes**: Provided globally via container's stylesheet
-2. **ES Modules**: Optional tokens for programmatic use
-3. **No Service Injection**: MFEs explicitly import what they need
-4. **No Global Pollution**: Everything is explicit, no magic
+1. **CSS Classes**: Provided via container's stylesheet (loaded once)
+2. **Pure CSS**: No JavaScript required for styling
+3. **No Global Pollution**: CSS-only approach, no window/global variables
+4. **Framework Agnostic**: Same classes work everywhere
 
-### File Structure
+### Package Structure
 
 ```
-/dist/design-system/
-├── design-system.css        # Tailwind-based utility classes
-├── design-system.esm.js     # ES module with tokens/patterns
-├── design-system.d.ts       # TypeScript definitions
-└── manifest.json            # Version and metadata
+packages/design-system/
+├── src/
+│   ├── styles/
+│   │   └── index.css        # All CSS utilities (Tailwind-based)
+│   └── tokens/
+│       └── index.ts         # Optional design tokens (rarely used)
+└── dist/
+    └── design-system.css    # Built CSS file
 ```
 
 ## Usage Patterns
@@ -42,48 +45,29 @@ function MyComponent() {
 }
 ```
 
-### Pattern 2: With ES Module Tokens (Optional)
+### Pattern 2: Build-Time Import (Within Monorepo)
 
-For programmatic access to design tokens:
+If building within the monorepo, you can import the CSS directly:
 
-```tsx
-import { useEffect, useState } from 'react';
-
-function MyComponent() {
-  const [tokens, setTokens] = useState(null);
-
-  useEffect(() => {
-    // Explicit import - no globals
-    import('http://localhost:8080/design-system/design-system.esm.js')
-      .then((module) => setTokens(module))
-      .catch(() => console.log('Tokens not available'));
-  }, []);
-
-  // Use tokens programmatically if needed
-  const cardClass = tokens?.patterns.card.elevated || 'ds-card-elevated';
-
-  return <div className={cardClass}>Content</div>;
-}
+```css
+/* In your MFE's main entry file */
+@import '@mfe/design-system/dist/design-system.css';
 ```
 
-### Pattern 3: Build-Time Import (Monorepo)
-
-If your MFE is in the same monorepo:
-
 ```tsx
-// Import at build time - bundled with your MFE
-import { patterns, classNames } from '@mfe/design-system';
-
+// Then use classes normally in components
 function MyComponent() {
   return (
-    <div className={patterns.card.elevated}>
-      <button className={classNames.buttonPrimary}>Click</button>
+    <div className="ds-card-elevated">
+      <button className="ds-btn-primary">Click</button>
     </div>
   );
 }
 ```
 
-## Available CSS Classes (400+ Utilities)
+**Note**: This is rarely needed as the container provides the CSS globally.
+
+## Available CSS Classes (500+ Utilities)
 
 ### Cards
 
@@ -115,14 +99,8 @@ function MyComponent() {
 #### Button Groups
 - `ds-btn-group` - Container for grouped buttons
 
-#### Legacy Button Classes (Deprecated)
-- `ds-button-primary` - Use `ds-btn-primary` instead
-- `ds-button-secondary` - Use `ds-btn-secondary` instead
-- `ds-button-outline` - Use `ds-btn-outline` instead
-- `ds-button-ghost` - Use `ds-btn-ghost` instead
-- `ds-button-destructive` - Use `ds-btn-danger` instead
-- `ds-button-sm` - Use `ds-btn-sm` instead
-- `ds-button-lg` - Use `ds-btn-lg` instead
+#### Note on Button Classes
+Both `ds-button-*` and `ds-btn-*` variants exist for compatibility. The `ds-btn-*` variants are preferred for consistency.
 
 ### Typography
 
@@ -439,7 +417,7 @@ function ReactExample() {
       <h3 className="ds-h3">React Component</h3>
       <div className="ds-stack">
         <input className="ds-input" placeholder="Enter text" />
-        <button className="ds-button-primary">Submit</button>
+        <button className="ds-btn-primary">Submit</button>
       </div>
     </div>
   );
@@ -454,7 +432,7 @@ function ReactExample() {
     <h3 class="ds-h3">Vue Component</h3>
     <div class="ds-stack">
       <input class="ds-input" placeholder="Enter text" />
-      <button class="ds-button-primary">Submit</button>
+      <button class="ds-btn-primary">Submit</button>
     </div>
   </div>
 </template>
@@ -472,7 +450,7 @@ function createCard() {
   title.textContent = 'Vanilla JS Component';
 
   const button = document.createElement('button');
-  button.className = 'ds-button-primary';
+  button.className = 'ds-btn-primary';
   button.textContent = 'Click Me';
 
   card.appendChild(title);
@@ -513,48 +491,50 @@ import { Card, Button } from '@company/design-system';
 // New (class-based)
 // No imports needed for CSS
 <div className="ds-card-padded ds-card-elevated">
-  <button className="ds-button-primary">Click</button>
+  <button className="ds-btn-primary">Click</button>
 </div>
 ```
 
 ## TypeScript Support
 
-When using the ES module:
+The design system is CSS-only, so TypeScript support is minimal. You can optionally create type-safe constants:
 
 ```typescript
-// Type definition for design tokens
-interface DesignTokens {
-  patterns: {
-    card: Record<string, string>;
-    button: Record<string, string>;
-    layout: Record<string, string>;
-  };
-  classNames: Record<string, string>;
-  tokens: Record<string, any>;
-  version: string;
-}
+// Type-safe class name constants (optional)
+const DESIGN_SYSTEM_CLASSES = {
+  card: 'ds-card-padded ds-card-elevated',
+  button: {
+    primary: 'ds-btn-primary',
+    secondary: 'ds-btn-secondary',
+  },
+} as const;
 
-// Import with types
-const tokens = (await import(
-  'http://localhost:8080/design-system/design-system.esm.js'
-)) as DesignTokens;
+// Use in components
+function MyComponent() {
+  return (
+    <div className={DESIGN_SYSTEM_CLASSES.card}>
+      <button className={DESIGN_SYSTEM_CLASSES.button.primary}>
+        Click
+      </button>
+    </div>
+  );
+}
 ```
 
 ## Environment Configuration
 
 ### Development
 
-```html
-<!-- Container's index.html -->
-<link rel="stylesheet" href="http://localhost:8080/design-system/design-system.css" />
+The container application automatically includes the design system CSS:
+
+```typescript
+// In container's main.tsx or index.css
+import '@mfe/design-system/dist/design-system.css';
 ```
 
 ### Production
 
-```html
-<!-- Use CDN or production URL -->
-<link rel="stylesheet" href="https://cdn.example.com/design-system/1.0.0/design-system.css" />
-```
+The design system CSS is bundled with the container application during build.
 
 ## Customization
 
@@ -576,28 +556,22 @@ The design system uses CSS variables for theming. These can be overridden in the
 - Verify you're using correct class names (ds- prefix)
 - Check browser console for 404 on CSS file
 
-### ES module not loading?
+### TypeScript autocomplete?
 
-- Verify the serve script is running (port 8080)
-- Check CORS settings if loading from different domain
-- Module loading is optional - CSS classes work without it
-
-### TypeScript errors?
-
-- Import types from the .d.ts file
-- Use type assertions when importing ES module
-- Remember: CSS classes don't need TypeScript
+- CSS classes don't have built-in TypeScript support
+- Consider creating a constants file with class names for type safety
+- VS Code extensions like "Tailwind CSS IntelliSense" can help with autocomplete
 
 ## Summary
 
 The design system provides:
 
-- **400+ CSS Utility Classes** - Comprehensive set for all UI needs
+- **500+ CSS Utility Classes** - Comprehensive set for all UI needs
 - **Zero global pollution** - No window/global variables
 - **Framework agnostic** - Works with React, Vue, Solid.js, Vanilla JS
 - **CSS-first approach** - Classes always available
-- **Optional ES modules** - For programmatic access
-- **Explicit imports** - MFEs control their dependencies
+- **Pure CSS approach** - No JavaScript required
+- **Container-provided** - CSS loaded once, available to all MFEs
 - **Cross-framework compatibility** - Designed for React, Vue, Solid.js, and Vanilla JS containers
 - **Complete component systems** - Buttons, modals, forms, navigation, and more
 - **Responsive utilities** - Mobile-first with breakpoint variants
