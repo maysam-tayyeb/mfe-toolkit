@@ -141,7 +141,7 @@ export const MarketWatch: React.FC<MarketWatchProps> = ({ services }) => {
   });
 
   return (
-    <div className="ds-card ds-p-4">
+    <div className="ds-p-4">
       <div className="ds-flex ds-justify-between ds-items-center ds-mb-4">
         <h4 className="ds-card-title ds-mb-0">📈 Market Watch</h4>
         <div className="ds-flex ds-gap-2">

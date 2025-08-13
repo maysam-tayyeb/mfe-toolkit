@@ -47,7 +47,7 @@ export class AnalyticsEngine {
 
   private render(): void {
     const html = `
-      <div class="ds-card ds-p-4">
+      <div class="ds-p-4">
         <div class="ds-flex ds-justify-between ds-items-center ds-mb-4">
           <h4 class="ds-card-title ds-mb-0">📊 Analytics Engine</h4>
           <div class="ds-flex ds-gap-2">
