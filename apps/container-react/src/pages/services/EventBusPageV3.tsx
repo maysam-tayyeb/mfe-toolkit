@@ -88,7 +88,6 @@ export const EventBusPageV3: React.FC = () => {
   const [isDraggingApi, setIsDraggingApi] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState<string>('all');
-  const [tradingTerminalHeight, setTradingTerminalHeight] = useState<number | null>(null);
   
   // Initialize selectedMFE when switching to focus mode
   useEffect(() => {
@@ -221,31 +220,6 @@ export const EventBusPageV3: React.FC = () => {
 
   const currentScenario = scenarios.find(s => s.id === activeScenario)!;
 
-  // Measure Trading Terminal height and apply to Market Watch
-  useEffect(() => {
-    if (layoutMode === 'grid') {
-      const checkHeights = () => {
-        const tradingTerminalCard = document.querySelector('[data-mfe-id="mfe-trading-terminal"]');
-        const marketWatchCard = document.querySelector('[data-mfe-id="mfe-market-watch"]');
-        
-        if (tradingTerminalCard && marketWatchCard) {
-          const height = tradingTerminalCard.getBoundingClientRect().height;
-          setTradingTerminalHeight(height);
-        }
-      };
-
-      // Check initially and after a delay to ensure MFEs are loaded
-      checkHeights();
-      const timeout = setTimeout(checkHeights, 500);
-      const interval = setInterval(checkHeights, 1000);
-
-      return () => {
-        clearTimeout(timeout);
-        clearInterval(interval);
-      };
-    }
-  }, [layoutMode]);
-
   return (
     <div className="ds-page" style={{ 
       paddingBottom: showEventLog ? `${eventLogHeight}vh` : showApiReference ? `${apiReferenceHeight}vh` : '0',
@@ -326,6 +300,17 @@ export const EventBusPageV3: React.FC = () => {
             </div>
             <div className="ds-p-4 ds-overflow-y-auto ds-flex-1">
               <div className="ds-space-y-4">
+                {/* Introduction */}
+                <div className="ds-p-3 ds-bg-blue-50 ds-rounded-lg ds-border ds-border-blue-200">
+                  <h5 className="ds-text-sm ds-font-semibold ds-mb-2 ds-text-blue-800">🚀 Event Bus Overview</h5>
+                  <div className="ds-text-xs ds-text-blue-700">
+                    The Event Bus enables decoupled communication between MFEs using a publish-subscribe pattern. 
+                    MFEs can emit events without knowing who will consume them, and subscribe to events without 
+                    knowing who produces them. This creates a flexible, scalable architecture where MFEs remain 
+                    independent yet collaborative.
+                  </div>
+                </div>
+
                 {/* Basic Methods */}
                 <div>
                   <h5 className="ds-text-sm ds-font-semibold ds-mb-3 ds-text-primary">Core Methods</h5>
@@ -372,68 +357,255 @@ unsubscribe();`}
                         Wildcard subscription to monitor all events. Useful for debugging.
                       </div>
                     </div>
+
+                    <div className="ds-p-3 ds-bg-slate-50 ds-rounded-lg">
+                      <div className="ds-text-xs ds-font-semibold ds-mb-2">One-Time Event Listener</div>
+                      <pre className="ds-text-xs ds-bg-white ds-p-2 ds-rounded ds-border">
+{`services.eventBus.once('event:type', (payload) => {
+  console.log('This fires only once:', payload);
+});`}
+                      </pre>
+                      <div className="ds-text-xs ds-text-muted ds-mt-2">
+                        Subscribe to an event that automatically unsubscribes after first trigger.
+                      </div>
+                    </div>
+
+                    <div className="ds-p-3 ds-bg-slate-50 ds-rounded-lg">
+                      <div className="ds-text-xs ds-font-semibold ds-mb-2">Remove All Listeners</div>
+                      <pre className="ds-text-xs ds-bg-white ds-p-2 ds-rounded ds-border">
+{`// Remove all listeners for a specific event
+services.eventBus.off('event:type');
+
+// Remove all listeners for all events
+services.eventBus.off('*');`}
+                      </pre>
+                      <div className="ds-text-xs ds-text-muted ds-mt-2">
+                        Clean up multiple subscriptions at once. Useful in cleanup scenarios.
+                      </div>
+                    </div>
                   </div>
                 </div>
 
                 {/* Event Patterns */}
                 <div>
-                  <h5 className="ds-text-sm ds-font-semibold ds-mb-3 ds-text-primary">Trading Dashboard Events</h5>
-                  <div className="ds-grid ds-grid-cols-3 ds-gap-3">
-                    <div className="ds-p-3 ds-border ds-rounded-lg">
-                      <div className="ds-text-xs ds-font-semibold ds-text-green-600 ds-mb-2">Market Events</div>
-                      <div className="ds-space-y-1 ds-text-xs">
-                        <code className="ds-block">market:stock-selected</code>
-                        <code className="ds-block">market:price-alert</code>
-                        <code className="ds-block">market:volume-spike</code>
-                        <code className="ds-block">market:watchlist-updated</code>
+                  <h5 className="ds-text-sm ds-font-semibold ds-mb-3 ds-text-primary">📊 Trading Dashboard Events</h5>
+                  <div className="ds-space-y-3">
+                    <div className="ds-p-3 ds-border ds-border-green-200 ds-bg-green-50 ds-rounded-lg">
+                      <div className="ds-text-xs ds-font-semibold ds-text-green-700 ds-mb-2">📈 Market Watch Events (React MFE)</div>
+                      <div className="ds-grid ds-grid-cols-2 ds-gap-3">
+                        <div>
+                          <code className="ds-text-xs ds-font-mono ds-text-green-800">market:stock-selected</code>
+                          <div className="ds-text-xs ds-text-green-600 ds-mt-1">
+                            Fired when user clicks on a stock. Payload: {`{symbol, name, price, change}`}
+                          </div>
+                        </div>
+                        <div>
+                          <code className="ds-text-xs ds-font-mono ds-text-green-800">market:price-alert</code>
+                          <div className="ds-text-xs ds-text-green-600 ds-mt-1">
+                            Random price updates every 2s. Payload: {`{symbol, price, change}`}
+                          </div>
+                        </div>
+                        <div>
+                          <code className="ds-text-xs ds-font-mono ds-text-green-800">market:volume-spike</code>
+                          <div className="ds-text-xs ds-text-green-600 ds-mt-1">
+                            Unusual volume detected. Payload: {`{symbol, volume, timestamp}`}
+                          </div>
+                        </div>
+                        <div>
+                          <code className="ds-text-xs ds-font-mono ds-text-green-800">market:watchlist-updated</code>
+                          <div className="ds-text-xs ds-text-green-600 ds-mt-1">
+                            Watchlist changed. Payload: {`{action, symbol, watchlist[]}`}
+                          </div>
+                        </div>
                       </div>
                     </div>
                     
-                    <div className="ds-p-3 ds-border ds-rounded-lg">
-                      <div className="ds-text-xs ds-font-semibold ds-text-blue-600 ds-mb-2">Trade Events</div>
-                      <div className="ds-space-y-1 ds-text-xs">
-                        <code className="ds-block">trade:placed</code>
-                        <code className="ds-block">trade:executed</code>
-                        <code className="ds-block">trade:cancelled</code>
-                        <code className="ds-block">trade:positions-closed</code>
+                    <div className="ds-p-3 ds-border ds-border-blue-200 ds-bg-blue-50 ds-rounded-lg">
+                      <div className="ds-text-xs ds-font-semibold ds-text-blue-700 ds-mb-2">💹 Trading Terminal Events (Vue MFE)</div>
+                      <div className="ds-grid ds-grid-cols-2 ds-gap-3">
+                        <div>
+                          <code className="ds-text-xs ds-font-mono ds-text-blue-800">trade:placed</code>
+                          <div className="ds-text-xs ds-text-blue-600 ds-mt-1">
+                            Order submitted. Payload: {`{orderId, symbol, action, quantity, price}`}
+                          </div>
+                        </div>
+                        <div>
+                          <code className="ds-text-xs ds-font-mono ds-text-blue-800">trade:executed</code>
+                          <div className="ds-text-xs ds-text-blue-600 ds-mt-1">
+                            Order filled. Payload: {`{orderId, symbol, action, quantity, price, total}`}
+                          </div>
+                        </div>
+                        <div>
+                          <code className="ds-text-xs ds-font-mono ds-text-blue-800">trade:cancelled</code>
+                          <div className="ds-text-xs ds-text-blue-600 ds-mt-1">
+                            Order cancelled. Payload: {`{orderId, symbol, reason}`}
+                          </div>
+                        </div>
+                        <div>
+                          <code className="ds-text-xs ds-font-mono ds-text-blue-800">trade:positions-closed</code>
+                          <div className="ds-text-xs ds-text-blue-600 ds-mt-1">
+                            All positions closed. Payload: {`{count, timestamp}`}
+                          </div>
+                        </div>
+                        <div>
+                          <code className="ds-text-xs ds-font-mono ds-text-blue-800">trade:portfolio-refreshed</code>
+                          <div className="ds-text-xs ds-text-blue-600 ds-mt-1">
+                            Portfolio updated. Payload: {`{positions, totalValue}`}
+                          </div>
+                        </div>
                       </div>
                     </div>
                     
-                    <div className="ds-p-3 ds-border ds-rounded-lg">
-                      <div className="ds-text-xs ds-font-semibold ds-text-purple-600 ds-mb-2">Analytics Events</div>
-                      <div className="ds-space-y-1 ds-text-xs">
-                        <code className="ds-block">analytics:market-status</code>
-                        <code className="ds-block">analytics:sentiment-change</code>
-                        <code className="ds-block">analytics:risk-alert</code>
-                        <code className="ds-block">analytics:report-generated</code>
+                    <div className="ds-p-3 ds-border ds-border-purple-200 ds-bg-purple-50 ds-rounded-lg">
+                      <div className="ds-text-xs ds-font-semibold ds-text-purple-700 ds-mb-2">📊 Analytics Engine Events (Vanilla TS MFE)</div>
+                      <div className="ds-grid ds-grid-cols-2 ds-gap-3">
+                        <div>
+                          <code className="ds-text-xs ds-font-mono ds-text-purple-800">analytics:market-status</code>
+                          <div className="ds-text-xs ds-text-purple-600 ds-mt-1">
+                            Market metrics update (every 5s). Payload: {`{sentiment, volatility, momentum, riskLevel}`}
+                          </div>
+                        </div>
+                        <div>
+                          <code className="ds-text-xs ds-font-mono ds-text-purple-800">analytics:sentiment-change</code>
+                          <div className="ds-text-xs ds-text-purple-600 ds-mt-1">
+                            Market sentiment shift. Payload: {`{from, to, confidence}`}
+                          </div>
+                        </div>
+                        <div>
+                          <code className="ds-text-xs ds-font-mono ds-text-purple-800">analytics:risk-alert</code>
+                          <div className="ds-text-xs ds-text-purple-600 ds-mt-1">
+                            Risk level warning. Payload: {`{level, message, symbols[]}`}
+                          </div>
+                        </div>
+                        <div>
+                          <code className="ds-text-xs ds-font-mono ds-text-purple-800">analytics:report-generated</code>
+                          <div className="ds-text-xs ds-text-purple-600 ds-mt-1">
+                            Report ready. Payload: {`{type, url, timestamp}`}
+                          </div>
+                        </div>
                       </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Advanced Patterns */}
+                <div>
+                  <h5 className="ds-text-sm ds-font-semibold ds-mb-3 ds-text-primary">🔧 Advanced Patterns</h5>
+                  <div className="ds-space-y-3">
+                    <div className="ds-p-3 ds-bg-yellow-50 ds-rounded-lg ds-border ds-border-yellow-200">
+                      <div className="ds-text-xs ds-font-semibold ds-mb-2 ds-text-yellow-800">Event Filtering</div>
+                      <pre className="ds-text-xs ds-bg-white ds-p-2 ds-rounded ds-border">
+{`// Subscribe only to specific stock events
+services.eventBus.on('market:*', (payload) => {
+  if (payload.data?.symbol === 'AAPL') {
+    handleAppleEvents(payload);
+  }
+});`}
+                      </pre>
+                    </div>
+
+                    <div className="ds-p-3 ds-bg-yellow-50 ds-rounded-lg ds-border ds-border-yellow-200">
+                      <div className="ds-text-xs ds-font-semibold ds-mb-2 ds-text-yellow-800">Request-Response Pattern</div>
+                      <pre className="ds-text-xs ds-bg-white ds-p-2 ds-rounded ds-border">
+{`// MFE A: Request data
+services.eventBus.emit('data:request', {
+  requestId: 'req-123',
+  type: 'portfolio'
+});
+
+// MFE B: Respond to request
+services.eventBus.on('data:request', (payload) => {
+  services.eventBus.emit('data:response', {
+    requestId: payload.data.requestId,
+    data: getPortfolioData()
+  });
+});`}
+                      </pre>
+                    </div>
+
+                    <div className="ds-p-3 ds-bg-yellow-50 ds-rounded-lg ds-border ds-border-yellow-200">
+                      <div className="ds-text-xs ds-font-semibold ds-mb-2 ds-text-yellow-800">Event Chaining</div>
+                      <pre className="ds-text-xs ds-bg-white ds-p-2 ds-rounded ds-border">
+{`// Chain multiple events for workflows
+services.eventBus.on('trade:executed', async (payload) => {
+  // Update analytics
+  await updateMetrics(payload.data);
+  services.eventBus.emit('analytics:updated', {
+    tradeId: payload.data.orderId
+  });
+  
+  // Trigger risk assessment
+  services.eventBus.emit('risk:assess', {
+    portfolio: getCurrentPortfolio()
+  });
+});`}
+                      </pre>
                     </div>
                   </div>
                 </div>
 
                 {/* Best Practices */}
                 <div>
-                  <h5 className="ds-text-sm ds-font-semibold ds-mb-3 ds-text-primary">Best Practices</h5>
+                  <h5 className="ds-text-sm ds-font-semibold ds-mb-3 ds-text-primary">✨ Best Practices & Tips</h5>
                   <div className="ds-grid ds-grid-cols-2 ds-gap-3">
-                    <div className="ds-p-3 ds-bg-green-50 ds-rounded-lg">
-                      <div className="ds-text-xs ds-font-semibold ds-text-green-700 ds-mb-2">✅ Do</div>
-                      <ul className="ds-text-xs ds-space-y-1">
+                    <div className="ds-p-3 ds-bg-green-50 ds-rounded-lg ds-border ds-border-green-200">
+                      <div className="ds-text-xs ds-font-semibold ds-text-green-700 ds-mb-2">✅ Do's</div>
+                      <ul className="ds-text-xs ds-space-y-1 ds-text-green-600">
                         <li>• Use namespaced events (e.g., 'module:action')</li>
                         <li>• Always unsubscribe when component unmounts</li>
                         <li>• Include timestamp in event payload</li>
                         <li>• Handle errors gracefully in subscribers</li>
+                        <li>• Document your event contracts</li>
+                        <li>• Use TypeScript interfaces for payloads</li>
+                        <li>• Implement retry logic for critical events</li>
+                        <li>• Log events in development mode</li>
                       </ul>
                     </div>
                     
-                    <div className="ds-p-3 ds-bg-red-50 ds-rounded-lg">
-                      <div className="ds-text-xs ds-font-semibold ds-text-red-700 ds-mb-2">❌ Don't</div>
-                      <ul className="ds-text-xs ds-space-y-1">
+                    <div className="ds-p-3 ds-bg-red-50 ds-rounded-lg ds-border ds-border-red-200">
+                      <div className="ds-text-xs ds-font-semibold ds-text-red-700 ds-mb-2">❌ Don'ts</div>
+                      <ul className="ds-text-xs ds-space-y-1 ds-text-red-600">
                         <li>• Don't use generic event names</li>
                         <li>• Don't forget to clean up subscriptions</li>
                         <li>• Don't emit sensitive data in events</li>
                         <li>• Don't create circular event chains</li>
+                        <li>• Don't rely on event ordering</li>
+                        <li>• Don't mutate event payload objects</li>
+                        <li>• Don't emit events in tight loops</li>
+                        <li>• Don't assume events will always arrive</li>
                       </ul>
                     </div>
+                  </div>
+                </div>
+
+                {/* Performance Tips */}
+                <div>
+                  <h5 className="ds-text-sm ds-font-semibold ds-mb-3 ds-text-primary">⚡ Performance Optimization</h5>
+                  <div className="ds-p-3 ds-bg-orange-50 ds-rounded-lg ds-border ds-border-orange-200">
+                    <ul className="ds-text-xs ds-space-y-2 ds-text-orange-700">
+                      <li>
+                        <strong>Debounce High-Frequency Events:</strong> Use debouncing for events that fire rapidly
+                        <pre className="ds-text-xs ds-bg-white ds-p-2 ds-rounded ds-border ds-mt-1">
+{`const debouncedEmit = debounce((data) => {
+  services.eventBus.emit('search:query', data);
+}, 300);`}
+                        </pre>
+                      </li>
+                      <li>
+                        <strong>Batch Events:</strong> Combine multiple related events into one
+                        <pre className="ds-text-xs ds-bg-white ds-p-2 ds-rounded ds-border ds-mt-1">
+{`services.eventBus.emit('trades:batch', {
+  trades: [trade1, trade2, trade3]
+});`}
+                        </pre>
+                      </li>
+                      <li>
+                        <strong>Use Event Pools:</strong> Reuse event objects to reduce garbage collection
+                      </li>
+                      <li>
+                        <strong>Implement Event Throttling:</strong> Limit event emission rate for non-critical updates
+                      </li>
+                    </ul>
                   </div>
                 </div>
 
@@ -649,8 +821,6 @@ const MyTradingComponent: React.FC<{ services: MFEServices }> = ({ services }) =
             
             {currentScenario.mfes.map((mfe, index) => {
               const isFullWidth = mfe.position === 'full-width';
-              const isMarketWatch = mfe.id === 'mfe-market-watch';
-              const isTradingTerminal = mfe.id === 'mfe-trading-terminal';
               
               return (
                 <div
@@ -660,18 +830,12 @@ const MyTradingComponent: React.FC<{ services: MFEServices }> = ({ services }) =
                       ? (selectedMFE === mfe.id ? 'ds-block' : 'ds-hidden')
                       : (isFullWidth && layoutMode === 'grid' ? 'ds-col-span-2' : '')
                   }
-                  data-mfe-id={mfe.id}
-                  style={
-                    layoutMode === 'grid' && isMarketWatch && tradingTerminalHeight
-                      ? { height: `${tradingTerminalHeight}px` }
-                      : {}
-                  }
                 >
                   <MFECard 
                     id={mfe.id}
                     title={mfe.title}
                     framework={mfe.framework}
-                    fullHeight={layoutMode === 'focus' || (layoutMode === 'grid' && isMarketWatch && !!tradingTerminalHeight)}
+                    fullHeight={layoutMode === 'focus'}
                   />
                 </div>
               );
@@ -694,9 +858,9 @@ const MFECard: React.FC<{
 }> = ({ id, title, framework, className = '', fullHeight = false }) => {
   const getFrameworkBadge = (framework: 'react' | 'vue' | 'vanilla') => {
     const badges = {
-      react: { color: 'ds-bg-blue-500', icon: '⚛️', name: 'React' },
-      vue: { color: 'ds-bg-green-500', icon: '💚', name: 'Vue' },
-      vanilla: { color: 'ds-bg-yellow-600', icon: '📦', name: 'Vanilla' }
+      react: { color: 'ds-bg-blue-500', icon: '⚛️', name: 'React MFE' },
+      vue: { color: 'ds-bg-green-500', icon: '💚', name: 'Vue MFE' },
+      vanilla: { color: 'ds-bg-yellow-600', icon: '📦', name: 'Vanilla MFE' }
     };
     return badges[framework];
   };

@@ -141,8 +141,8 @@ export const MarketWatch: React.FC<MarketWatchProps> = ({ services }) => {
   });
 
   return (
-    <div className="ds-p-4 ds-h-full ds-flex ds-flex-col">
-      <div className="ds-flex ds-justify-between ds-items-center ds-mb-4 ds-flex-shrink-0">
+    <div className="ds-p-4">
+      <div className="ds-flex ds-justify-between ds-items-center ds-mb-4">
         <h4 className="ds-card-title ds-mb-0">📈 Market Watch</h4>
         <div className="ds-flex ds-gap-2">
           <button 
@@ -166,7 +166,7 @@ export const MarketWatch: React.FC<MarketWatchProps> = ({ services }) => {
         </div>
       </div>
 
-      <div className="ds-space-y-2 ds-flex-1 ds-overflow-y-auto">
+      <div className="ds-space-y-2">
         {sortedStocks.map(stock => (
           <div
             key={stock.symbol}
@@ -211,7 +211,7 @@ export const MarketWatch: React.FC<MarketWatchProps> = ({ services }) => {
         ))}
       </div>
 
-      <div className="ds-mt-4 ds-p-3 ds-bg-slate-50 ds-rounded-lg ds-flex-shrink-0">
+      <div className="ds-mt-4 ds-p-3 ds-bg-slate-50 ds-rounded-lg">
         <div className="ds-flex ds-justify-between ds-items-center">
           <div className="ds-text-xs ds-text-muted">
             📊 {stocks.filter(s => s.change >= 0).length} advancing • 
