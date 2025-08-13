@@ -89,6 +89,62 @@ export const EventBusPageV3: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState<string>('all');
   
+  // Container playground state
+  const [containerEventName, setContainerEventName] = useState('container:test');
+  const [containerPayload, setContainerPayload] = useState('{"message": "Hello from Container!"}');
+  const [listeningEvents, setListeningEvents] = useState<string[]>([]);
+  const [newListener, setNewListener] = useState('');
+  
+  // Container playground functions
+  const sendContainerEvent = () => {
+    try {
+      const payload = JSON.parse(containerPayload);
+      services.eventBus.emit(containerEventName, payload);
+      addNotification({
+        type: 'success',
+        title: 'Event Sent',
+        message: `Event "${containerEventName}" emitted from container`
+      });
+    } catch (error) {
+      addNotification({
+        type: 'error',
+        title: 'Invalid JSON',
+        message: 'Please enter valid JSON in the payload field'
+      });
+    }
+  };
+  
+  const addContainerListener = () => {
+    if (newListener && !listeningEvents.includes(newListener)) {
+      setListeningEvents([...listeningEvents, newListener]);
+      setNewListener('');
+    }
+  };
+  
+  const removeContainerListener = (eventPattern: string) => {
+    setListeningEvents(listeningEvents.filter(e => e !== eventPattern));
+  };
+  
+  // Subscribe to container playground events
+  useEffect(() => {
+    const unsubscribes: Array<() => void> = [];
+    
+    listeningEvents.forEach(eventPattern => {
+      const unsubscribe = services.eventBus.on(eventPattern, (payload) => {
+        addNotification({
+          type: 'info',
+          title: `Event Received: ${eventPattern}`,
+          message: JSON.stringify(payload, null, 2).substring(0, 100)
+        });
+      });
+      unsubscribes.push(unsubscribe);
+    });
+    
+    return () => {
+      unsubscribes.forEach(unsub => unsub());
+    };
+  }, [listeningEvents, services, addNotification]);
+  
   // Initialize selectedMFE when switching to focus mode
   useEffect(() => {
     if (layoutMode === 'focus' && !selectedMFE) {
@@ -864,16 +920,116 @@ const MyTradingComponent: React.FC<{ services: MFEServices }> = ({ services }) =
                     <span className="ds-text-lg">🚀</span>
                     <div>
                       <div className="ds-font-semibold">Interactive Event Bus Playground</div>
-                      <div className="ds-text-sm ds-text-muted">Test event emission and subscription with Solid.js MFE</div>
+                      <div className="ds-text-sm ds-text-muted">Test event emission and subscription from both Container and MFEs</div>
                     </div>
                   </div>
                 </div>
-
-                <div className="ds-flex ds-justify-end ds-mb-4">
-                  <span className="ds-badge ds-badge-primary">Solid.js MFE</span>
+                
+                {/* Container Event Playground */}
+                <div className="ds-card ds-p-4">
+                  <div className="ds-flex ds-justify-between ds-items-center ds-mb-4">
+                    <h4 className="ds-card-title ds-mb-0">🏠 Container Event Controls</h4>
+                    <span className="ds-badge ds-badge-info">React Container</span>
+                  </div>
+                  
+                  <div className="ds-grid ds-grid-cols-2 ds-gap-4">
+                    {/* Container Event Emitter */}
+                    <div className="ds-p-3 ds-border ds-rounded-lg">
+                      <h5 className="ds-text-sm ds-font-semibold ds-mb-3">📤 Event Emitter</h5>
+                      
+                      <div className="ds-space-y-3">
+                        <div>
+                          <label className="ds-text-xs ds-text-muted ds-block ds-mb-1">Event Name</label>
+                          <input
+                            type="text"
+                            className="ds-input ds-input-sm"
+                            value={containerEventName}
+                            onChange={(e) => setContainerEventName(e.target.value)}
+                            placeholder="e.g., container:test"
+                          />
+                        </div>
+                        
+                        <div>
+                          <label className="ds-text-xs ds-text-muted ds-block ds-mb-1">
+                            Payload (JSON)
+                          </label>
+                          <textarea
+                            className="ds-textarea ds-textarea-sm"
+                            rows={3}
+                            value={containerPayload}
+                            onChange={(e) => setContainerPayload(e.target.value)}
+                            placeholder='{"message": "Hello World"}'
+                          />
+                        </div>
+                        
+                        <button
+                          className="ds-btn-primary ds-btn-sm ds-w-full"
+                          onClick={sendContainerEvent}
+                        >
+                          Send Event
+                        </button>
+                      </div>
+                    </div>
+                    
+                    {/* Container Event Listeners */}
+                    <div className="ds-p-3 ds-border ds-rounded-lg">
+                      <h5 className="ds-text-sm ds-font-semibold ds-mb-3">📥 Event Listeners</h5>
+                      
+                      <div className="ds-space-y-3">
+                        <div>
+                          <label className="ds-text-xs ds-text-muted ds-block ds-mb-1">Add Listener</label>
+                          <div className="ds-flex ds-gap-2">
+                            <input
+                              type="text"
+                              className="ds-input ds-input-sm ds-flex-1"
+                              value={newListener}
+                              onChange={(e) => setNewListener(e.target.value)}
+                              placeholder="Event pattern..."
+                              onKeyDown={(e) => e.key === 'Enter' && addContainerListener()}
+                            />
+                            <button
+                              className="ds-btn-secondary ds-btn-sm"
+                              onClick={addContainerListener}
+                              disabled={!newListener.trim()}
+                            >
+                              Add
+                            </button>
+                          </div>
+                        </div>
+                        
+                        <div>
+                          <label className="ds-text-xs ds-text-muted ds-block ds-mb-1">Active Listeners</label>
+                          {listeningEvents.length > 0 ? (
+                            <div className="ds-flex ds-flex-wrap ds-gap-1">
+                              {listeningEvents.map((eventPattern) => (
+                                <div key={eventPattern} className="ds-badge ds-badge-sm ds-badge-info ds-flex ds-items-center ds-gap-1">
+                                  <span className="ds-text-xs">{eventPattern}</span>
+                                  <button
+                                    className="ds-text-xs ds-opacity-70 ds-hover:opacity-100"
+                                    onClick={() => removeContainerListener(eventPattern)}
+                                    aria-label={`Stop listening to ${eventPattern}`}
+                                  >
+                                    ✕
+                                  </button>
+                                </div>
+                              ))}
+                            </div>
+                          ) : (
+                            <p className="ds-text-muted ds-text-xs">No active listeners</p>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="ds-mt-3 ds-p-2 ds-bg-accent-primary-soft ds-rounded ds-text-xs">
+                    <p className="ds-text-center">
+                      💡 <strong>Tip:</strong> Container events can communicate with all MFEs. Try sending events between the container and Solid.js MFE below!
+                    </p>
+                  </div>
                 </div>
 
-                {/* Playground MFE will be loaded here */}
+                {/* Solid.js MFE Playground */}
                 <div className="ds-card">
                   <RegistryMFELoader id="mfe-event-playground" />
                 </div>
