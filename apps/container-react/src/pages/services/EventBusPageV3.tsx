@@ -98,12 +98,24 @@ export const EventBusPageV3: React.FC = () => {
     'market:*'         // Listen to market events
   ]);
   const [newListener, setNewListener] = useState('');
+  const [containerEventHistory, setContainerEventHistory] = useState<EventMessage[]>([]);
   
   // Container playground functions
   const sendContainerEvent = () => {
     try {
       const payload = JSON.parse(containerPayload);
       services.eventBus.emit(containerEventName, payload);
+      
+      // Add to container event history
+      const newEvent: EventMessage = {
+        id: `${Date.now()}-${Math.random()}`,
+        event: containerEventName,
+        data: payload,
+        timestamp: new Date().toLocaleTimeString(),
+        source: 'sent'
+      };
+      setContainerEventHistory(prev => [newEvent, ...prev].slice(0, 20));
+      
       addNotification({
         type: 'success',
         title: 'Event Sent',
@@ -129,19 +141,65 @@ export const EventBusPageV3: React.FC = () => {
     setListeningEvents(listeningEvents.filter(e => e !== eventPattern));
   };
   
+  // Helper to check if event matches pattern
+  const matchesPattern = (eventName: string, pattern: string): boolean => {
+    if (pattern === eventName) return true;
+    if (pattern.endsWith(':*')) {
+      const prefix = pattern.slice(0, -2);
+      return eventName.startsWith(prefix + ':');
+    }
+    return false;
+  };
+
   // Subscribe to container playground events
   useEffect(() => {
     const unsubscribes: Array<() => void> = [];
     
     listeningEvents.forEach(eventPattern => {
-      const unsubscribe = services.eventBus.on(eventPattern, (payload) => {
-        addNotification({
-          type: 'info',
-          title: `Event Received: ${eventPattern}`,
-          message: JSON.stringify(payload, null, 2).substring(0, 100)
+      // If it's a pattern, subscribe to all events and filter
+      if (eventPattern.endsWith(':*')) {
+        const unsubscribe = services.eventBus.on('*', (payload) => {
+          const actualEventName = payload.type || payload.eventName || 'unknown';
+          if (matchesPattern(actualEventName, eventPattern)) {
+            // Add to container event history
+            const newEvent: EventMessage = {
+              id: `${Date.now()}-${Math.random()}`,
+              event: actualEventName,
+              data: payload.data || payload,
+              timestamp: new Date().toLocaleTimeString(),
+              source: 'received'
+            };
+            setContainerEventHistory(prev => [newEvent, ...prev].slice(0, 20));
+            
+            addNotification({
+              type: 'info',
+              title: `Event Received: ${actualEventName}`,
+              message: `Matched pattern: ${eventPattern}`
+            });
+          }
         });
-      });
-      unsubscribes.push(unsubscribe);
+        unsubscribes.push(unsubscribe);
+      } else {
+        // For exact event names, subscribe directly
+        const unsubscribe = services.eventBus.on(eventPattern, (payload) => {
+          // Add to container event history
+          const newEvent: EventMessage = {
+            id: `${Date.now()}-${Math.random()}`,
+            event: payload.type || eventPattern,
+            data: payload.data || payload,
+            timestamp: new Date().toLocaleTimeString(),
+            source: 'received'
+          };
+          setContainerEventHistory(prev => [newEvent, ...prev].slice(0, 20));
+          
+          addNotification({
+            type: 'info',
+            title: `Event Received: ${eventPattern}`,
+            message: JSON.stringify(payload, null, 2).substring(0, 100)
+          });
+        });
+        unsubscribes.push(unsubscribe);
+      }
     });
     
     return () => {
@@ -819,12 +877,12 @@ const MyTradingComponent: React.FC<{ services: MFEServices }> = ({ services }) =
 
       </div>
 
-      {/* Tabs for Dashboard and Playground */}
+      {/* Tabs for Trading Terminal Demo and Playground */}
       <TabGroup
         tabs={[
           {
             id: 'dashboard',
-            label: '📊 Dashboard',
+            label: '📊 Trading Terminal Demo',
             content: (
               <>
                 {/* Scenario Description */}
@@ -936,7 +994,7 @@ const MyTradingComponent: React.FC<{ services: MFEServices }> = ({ services }) =
                     <span className="ds-badge ds-badge-info">React Container</span>
                   </div>
                   
-                  <div className="ds-grid ds-grid-cols-2 ds-gap-4">
+                  <div className="ds-grid ds-grid-cols-3 ds-gap-4">
                     {/* Container Event Emitter */}
                     <div className="ds-p-3 ds-border ds-rounded-lg">
                       <h5 className="ds-text-sm ds-font-semibold ds-mb-3">📤 Event Emitter</h5>
@@ -1023,6 +1081,52 @@ const MyTradingComponent: React.FC<{ services: MFEServices }> = ({ services }) =
                           )}
                         </div>
                       </div>
+                    </div>
+                    
+                    {/* Container Event History */}
+                    <div className="ds-p-3 ds-border ds-rounded-lg">
+                      <div className="ds-flex ds-justify-between ds-items-center ds-mb-3">
+                        <h5 className="ds-text-sm ds-font-semibold">📜 Event History</h5>
+                        <button
+                          className="ds-btn-outline ds-btn-sm"
+                          onClick={() => setContainerEventHistory([])}
+                          disabled={containerEventHistory.length === 0}
+                        >
+                          Clear
+                        </button>
+                      </div>
+                      
+                      {containerEventHistory.length > 0 ? (
+                        <div className="ds-space-y-2 ds-max-h-64 ds-overflow-y-auto">
+                          {containerEventHistory.map((event) => (
+                            <div
+                              key={event.id}
+                              className={`ds-p-2 ds-rounded ds-border ds-text-xs ${
+                                event.source === 'sent' 
+                                  ? 'ds-bg-accent-primary-soft ds-border-accent-primary' 
+                                  : 'ds-bg-accent-success-soft ds-border-accent-success'
+                              }`}
+                            >
+                              <div className="ds-flex ds-justify-between ds-items-start ds-mb-1">
+                                <div className="ds-flex ds-items-center ds-gap-2">
+                                  <span className="ds-font-medium">
+                                    {event.source === 'sent' ? '📤' : '📥'}
+                                  </span>
+                                  <span className="ds-font-mono">{event.event}</span>
+                                </div>
+                                <span className="ds-text-muted">{event.timestamp}</span>
+                              </div>
+                              <pre className="ds-text-xs ds-bg-surface ds-p-1 ds-rounded ds-overflow-x-auto">
+                                {JSON.stringify(event.data, null, 2)}
+                              </pre>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <p className="ds-text-muted ds-text-xs ds-text-center ds-py-4">
+                          No events yet. Send an event or add a listener!
+                        </p>
+                      )}
                     </div>
                   </div>
                   

@@ -33,6 +33,19 @@ function EventPlayground(props: { services: MFEServices }) {
   // Store subscription cleanup functions
   const subscriptions = new Map<string, () => void>();
   
+  // Track recently sent events to avoid duplicate logging
+  const recentlySentEvents = new Map<string, any>();
+  
+  // Helper to check if event matches pattern
+  const matchesPattern = (eventName: string, pattern: string): boolean => {
+    if (pattern === eventName) return true;
+    if (pattern.endsWith(':*')) {
+      const prefix = pattern.slice(0, -2);
+      return eventName.startsWith(prefix + ':');
+    }
+    return false;
+  };
+  
   // Validate JSON payload
   createEffect(() => {
     try {
@@ -62,6 +75,15 @@ function EventPlayground(props: { services: MFEServices }) {
       const payload = JSON.parse(payloadText());
       const name = eventName();
       
+      // Track this event as recently sent
+      const eventKey = `${name}:${JSON.stringify(payload)}`;
+      recentlySentEvents.set(eventKey, Date.now());
+      
+      // Clean up old entries after 200ms
+      setTimeout(() => {
+        recentlySentEvents.delete(eventKey);
+      }, 200);
+      
       eventBus.emit(name, payload);
       
       addEvent({
@@ -78,28 +100,60 @@ function EventPlayground(props: { services: MFEServices }) {
     }
   };
   
-  // Subscribe to an event
+  // Subscribe to an event or pattern
   const subscribeToEvent = (eventToListen: string) => {
     if (subscriptions.has(eventToListen)) {
       logger?.warn(`Already listening to: ${eventToListen}`);
       return;
     }
     
-    const unsubscribe = eventBus.on(eventToListen, (payload) => {
-      addEvent({
-        id: `${Date.now()}-${Math.random()}`,
-        timestamp: new Date().toLocaleTimeString(),
-        eventName: eventToListen,
-        payload,
-        source: 'received'
+    // If it's a pattern, subscribe to all events and filter
+    if (eventToListen.endsWith(':*')) {
+      const unsubscribe = eventBus.on('*', (payload) => {
+        const actualEventName = payload.type || payload.eventName || 'unknown';
+        const eventData = payload.data || payload;
+        
+        // Check if this was recently sent by this MFE
+        const eventKey = `${actualEventName}:${JSON.stringify(eventData)}`;
+        if (recentlySentEvents.has(eventKey)) {
+          // Skip this event as it was just sent by us
+          return;
+        }
+        
+        if (matchesPattern(actualEventName, eventToListen)) {
+          addEvent({
+            id: `${Date.now()}-${Math.random()}`,
+            timestamp: new Date().toLocaleTimeString(),
+            eventName: actualEventName,
+            payload: eventData,
+            source: 'received'
+          });
+          
+          logger?.info(`Received event: ${actualEventName} (matched pattern: ${eventToListen})`, payload);
+        }
       });
       
-      logger?.info(`Received event: ${eventToListen}`, payload);
-    });
-    
-    subscriptions.set(eventToListen, unsubscribe);
-    setListeningTo(prev => [...prev, eventToListen]);
-    logger?.info(`Started listening to: ${eventToListen}`);
+      subscriptions.set(eventToListen, unsubscribe);
+      setListeningTo(prev => [...prev, eventToListen]);
+      logger?.info(`Started listening to pattern: ${eventToListen}`);
+    } else {
+      // For exact event names, subscribe directly
+      const unsubscribe = eventBus.on(eventToListen, (payload) => {
+        addEvent({
+          id: `${Date.now()}-${Math.random()}`,
+          timestamp: new Date().toLocaleTimeString(),
+          eventName: eventToListen,
+          payload: payload.data || payload,
+          source: 'received'
+        });
+        
+        logger?.info(`Received event: ${eventToListen}`, payload);
+      });
+      
+      subscriptions.set(eventToListen, unsubscribe);
+      setListeningTo(prev => [...prev, eventToListen]);
+      logger?.info(`Started listening to: ${eventToListen}`);
+    }
   };
   
   // Unsubscribe from an event
@@ -151,7 +205,7 @@ function EventPlayground(props: { services: MFEServices }) {
         </div>
       </div>
 
-      <div class="ds-grid ds-grid-cols-2 ds-gap-4">
+      <div class="ds-grid ds-grid-cols-3 ds-gap-4">
         {/* Event Emitter */}
         <div class="ds-p-3 ds-border ds-rounded-lg">
           <h5 class="ds-text-sm ds-font-semibold ds-mb-3">📤 Event Emitter</h5>
@@ -245,10 +299,9 @@ function EventPlayground(props: { services: MFEServices }) {
             </div>
           </div>
         </div>
-      </div>
-      
-      {/* Event History */}
-      <div class="ds-mt-4 ds-p-3 ds-border ds-rounded-lg">
+        
+        {/* Event History */}
+        <div class="ds-p-3 ds-border ds-rounded-lg">
         <div class="ds-flex ds-justify-between ds-items-center ds-mb-3">
           <h5 class="ds-text-sm ds-font-semibold">📜 Event History</h5>
           <button
@@ -292,6 +345,7 @@ function EventPlayground(props: { services: MFEServices }) {
             No events yet. Send an event or add a listener!
           </p>
         )}
+        </div>
       </div>
       
       {/* Footer Info */}
