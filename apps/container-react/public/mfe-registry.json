@@ -55,6 +55,108 @@
       }
     },
     {
+      "name": "mfe-device-control",
+      "url": "http://localhost:8080/scenarios/smart-home/mfe-device-control.js",
+      "version": "1.0.0",
+      "description": "Smart home device control panel",
+      "requirements": {
+        "services": [
+          { "name": "eventBus", "optional": false },
+          { "name": "notifications", "optional": true }
+        ]
+      },
+      "metadata": {
+        "framework": "react",
+        "category": "smart-home",
+        "capabilities": ["control", "monitor", "automate"]
+      }
+    },
+    {
+      "name": "mfe-sensor-monitor",
+      "url": "http://localhost:8080/scenarios/smart-home/mfe-sensor-monitor.js",
+      "version": "1.0.0",
+      "description": "Real-time sensor monitoring dashboard",
+      "requirements": {
+        "services": [
+          { "name": "eventBus", "optional": false },
+          { "name": "notifications", "optional": true }
+        ]
+      },
+      "metadata": {
+        "framework": "vue",
+        "category": "smart-home",
+        "capabilities": ["monitor", "alert", "analyze"]
+      }
+    },
+    {
+      "name": "mfe-automation-rules",
+      "url": "http://localhost:8080/scenarios/smart-home/mfe-automation-rules.js",
+      "version": "1.0.0",
+      "description": "Automation rules and scenarios manager",
+      "requirements": {
+        "services": [
+          { "name": "eventBus", "optional": false },
+          { "name": "notifications", "optional": true }
+        ]
+      },
+      "metadata": {
+        "framework": "vanilla",
+        "category": "smart-home",
+        "capabilities": ["automate", "schedule", "trigger"]
+      }
+    },
+    {
+      "name": "mfe-market-watch",
+      "url": "http://localhost:8080/scenarios/trading/mfe-market-watch.js",
+      "version": "1.0.0",
+      "description": "Real-time stock market watch with price updates",
+      "requirements": {
+        "services": [
+          { "name": "eventBus", "optional": false },
+          { "name": "notifications", "optional": true }
+        ]
+      },
+      "metadata": {
+        "framework": "react",
+        "category": "trading",
+        "capabilities": ["monitor", "track", "alert"]
+      }
+    },
+    {
+      "name": "mfe-trading-terminal",
+      "url": "http://localhost:8080/scenarios/trading/mfe-trading-terminal.js",
+      "version": "1.0.0",
+      "description": "Advanced trading terminal for order execution",
+      "requirements": {
+        "services": [
+          { "name": "eventBus", "optional": false },
+          { "name": "notifications", "optional": true }
+        ]
+      },
+      "metadata": {
+        "framework": "vue",
+        "category": "trading",
+        "capabilities": ["trade", "order", "portfolio"]
+      }
+    },
+    {
+      "name": "mfe-analytics-engine",
+      "url": "http://localhost:8080/scenarios/trading/mfe-analytics-engine.js",
+      "version": "1.0.0",
+      "description": "Real-time market analytics and insights",
+      "requirements": {
+        "services": [
+          { "name": "eventBus", "optional": false },
+          { "name": "notifications", "optional": true }
+        ]
+      },
+      "metadata": {
+        "framework": "vanilla",
+        "category": "trading",
+        "capabilities": ["analyze", "report", "predict"]
+      }
+    },
+    {
       "name": "mfe-event-publisher",
       "url": "http://localhost:8080/service-demos/event-bus/mfe-event-publisher/mfe-event-publisher.js",
       "version": "1.0.0",

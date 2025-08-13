@@ -31,47 +31,14 @@ type Scenario = {
 // Scenario configurations
 const scenarios: Scenario[] = [
   {
-    id: 'collaboration',
-    name: 'Live Collaboration',
-    description: 'Real-time document collaboration workspace',
-    icon: '👥',
+    id: 'trading',
+    name: 'Stock Trading Dashboard',
+    description: 'Real-time stock market trading platform with analytics',
+    icon: '📈',
     mfes: [
-      { id: 'mfe-document-editor', title: 'Document Editor', framework: 'vue' },
-      { id: 'mfe-activity-feed', title: 'Activity Feed', framework: 'react' },
-      { id: 'mfe-online-users', title: 'Online Users', framework: 'vanilla' }
-    ]
-  },
-  {
-    id: 'smart-home',
-    name: 'Smart Home',
-    description: 'IoT device control and monitoring',
-    icon: '🏠',
-    mfes: [
-      { id: 'mfe-device-control', title: 'Device Control', framework: 'react' },
-      { id: 'mfe-sensor-monitor', title: 'Sensor Monitor', framework: 'vue' },
-      { id: 'mfe-automation-rules', title: 'Automation Rules', framework: 'vanilla', position: 'full-width' }
-    ]
-  },
-  {
-    id: 'live-stream',
-    name: 'Live Stream',
-    description: 'Broadcasting and viewer engagement platform',
-    icon: '🎥',
-    mfes: [
-      { id: 'mfe-stream-control', title: 'Stream Control', framework: 'vanilla' },
-      { id: 'mfe-chat-reactions', title: 'Chat & Reactions', framework: 'vue' },
-      { id: 'mfe-stream-analytics', title: 'Analytics', framework: 'react', position: 'full-width' }
-    ]
-  },
-  {
-    id: 'e-commerce',
-    name: 'E-commerce',
-    description: 'Order processing and service notifications',
-    icon: '🛒',
-    mfes: [
-      { id: 'mfe-event-publisher', title: 'Order Actions', framework: 'react' },
-      { id: 'mfe-event-subscriber', title: 'Service Notifications', framework: 'react' },
-      { id: 'mfe-event-orchestrator', title: 'Order Processor', framework: 'react', position: 'full-width' }
+      { id: 'mfe-market-watch', title: 'Market Watch', framework: 'react' },
+      { id: 'mfe-trading-terminal', title: 'Trading Terminal', framework: 'vue' },
+      { id: 'mfe-analytics-engine', title: 'Analytics Engine', framework: 'vanilla', position: 'full-width' }
     ]
   }
 ];
@@ -103,13 +70,23 @@ export const EventBusPageV3: React.FC = () => {
   const services = useMemo(() => getMFEServicesSingleton(), []);
   
   // Core state
-  const [activeScenario, setActiveScenario] = useState<string>('collaboration');
+  const [activeScenario, setActiveScenario] = useState<string>('trading');
   const [events, setEvents] = useState<EventMessage[]>(() => StorageManager.load(STORAGE_KEY));
   const [layoutMode, setLayoutMode] = useState<LayoutMode>('grid');
   const [selectedMFE, setSelectedMFE] = useState<string | null>(null);
   const [showEventLog, setShowEventLog] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState<string>('all');
+  
+  // Initialize selectedMFE when switching to focus mode
+  useEffect(() => {
+    if (layoutMode === 'focus' && !selectedMFE) {
+      const currentScenario = scenarios.find(s => s.id === activeScenario);
+      if (currentScenario && currentScenario.mfes.length > 0) {
+        setSelectedMFE(currentScenario.mfes[0].id);
+      }
+    }
+  }, [layoutMode, selectedMFE, activeScenario]);
 
   // Metrics state
   const [metrics, setMetrics] = useState({
@@ -123,8 +100,11 @@ export const EventBusPageV3: React.FC = () => {
   // Event handling
   useEffect(() => {
     const handleEvent = (payload: any) => {
-      // Filter out lifecycle events
-      if (payload.type?.startsWith('mfe:') || payload.type === 'user:seen') {
+      // Debug logging
+      console.log('Event received:', payload);
+      
+      // Filter out lifecycle events and internal events
+      if (payload.type?.startsWith('mfe:')) {
         return;
       }
       
@@ -135,21 +115,10 @@ export const EventBusPageV3: React.FC = () => {
       const eventType = payload.type || '';
       
       // Map events to their sources based on scenario
-      if (activeScenario === 'collaboration') {
-        if (eventType.startsWith('document:')) source = 'Document Editor';
-        else if (eventType.startsWith('activity:')) source = 'Activity Feed';
-        else if (eventType.startsWith('user:')) source = 'Online Users';
-      } else if (activeScenario === 'smart-home') {
-        if (eventType.startsWith('device:')) source = 'Device Control';
-        else if (eventType.startsWith('sensor:')) source = 'Sensor Monitor';
-        else if (eventType.startsWith('automation:')) source = 'Automation Rules';
-      } else if (activeScenario === 'live-stream') {
-        if (eventType.startsWith('stream:')) source = 'Stream Control';
-        else if (eventType.startsWith('chat:') || eventType.startsWith('reaction:')) source = 'Chat & Reactions';
-        else if (eventType.startsWith('analytics:')) source = 'Analytics';
-      } else if (activeScenario === 'e-commerce') {
-        if (eventType.startsWith('order:') || eventType.startsWith('cart:')) source = 'Order Actions';
-        else if (eventType.startsWith('payment:') || eventType.startsWith('inventory:') || eventType.startsWith('email:')) source = 'Order Processor';
+      if (activeScenario === 'trading') {
+        if (eventType.startsWith('market:')) source = 'Market Watch';
+        else if (eventType.startsWith('trade:')) source = 'Trading Terminal';
+        else if (eventType.startsWith('analytics:')) source = 'Analytics Engine';
       }
       
       const newEvent: EventMessage = {
@@ -216,7 +185,66 @@ export const EventBusPageV3: React.FC = () => {
   const currentScenario = scenarios.find(s => s.id === activeScenario)!;
 
   return (
-    <div className="ds-page">
+    <div className="ds-page" style={{ 
+      paddingBottom: showEventLog ? '320px' : '0',
+      transition: 'padding-bottom 0.3s ease'
+    }}>
+      {/* Fixed Event Log Toggle Button */}
+      <button
+        className="ds-fixed ds-bottom-4 ds-right-4 ds-z-50 ds-btn-primary ds-btn-sm ds-shadow-lg"
+        onClick={() => setShowEventLog(!showEventLog)}
+        style={{ 
+          position: 'fixed',
+          bottom: showEventLog ? '320px' : '1rem',
+          right: '1rem',
+          zIndex: 50,
+          transition: 'bottom 0.3s ease'
+        }}
+      >
+        <span className="ds-icon">{showEventLog ? '📋 Hide' : '📋 Show'}</span> Event Log
+      </button>
+
+      {/* Fixed Event Log Panel */}
+      {showEventLog && (
+        <div 
+          className="ds-fixed ds-bottom-0 ds-left-0 ds-right-0 ds-z-40 ds-shadow-xl"
+          style={{
+            position: 'fixed',
+            bottom: 0,
+            left: 0,
+            right: 0,
+            zIndex: 40,
+            maxHeight: '300px',
+            backgroundColor: 'white'
+          }}
+        >
+          <div className="ds-card ds-p-0 ds-m-0 ds-rounded-none">
+            <div className="ds-px-4 ds-py-2 ds-border-b ds-bg-slate-50">
+              <div className="ds-flex ds-items-center ds-justify-between">
+                <h4 className="ds-text-sm ds-font-semibold">📋 Event Log ({filteredEvents.length})</h4>
+                <div className="ds-flex ds-gap-2">
+                  <button 
+                    onClick={clearEvents}
+                    className="ds-btn-outline ds-btn-sm"
+                  >
+                    Clear
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div className="ds-p-3" style={{ maxHeight: '250px', overflowY: 'auto' }}>
+              <EventLog
+                messages={filteredEvents}
+                onClear={clearEvents}
+                showSearch={true}
+                showStats={false}
+                maxHeight="max-h-48"
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Header */}
       <div className="ds-mb-6">
         <div className="ds-flex ds-justify-between ds-items-start ds-mb-4">
@@ -244,19 +272,7 @@ export const EventBusPageV3: React.FC = () => {
           </div>
         </div>
 
-        {/* Scenario Tabs */}
-        <div className="ds-tabs">
-          {scenarios.map(scenario => (
-            <button
-              key={scenario.id}
-              className={`ds-tab ${activeScenario === scenario.id ? 'ds-tab-active' : ''}`}
-              onClick={() => setActiveScenario(scenario.id)}
-            >
-              <span className="ds-mr-2">{scenario.icon}</span>
-              {scenario.name}
-            </button>
-          ))}
-        </div>
+        {/* Scenario Display */}
         
         {/* Scenario Description */}
         <div className="ds-alert-info ds-mt-4">
@@ -291,49 +307,20 @@ export const EventBusPageV3: React.FC = () => {
               <span className="ds-icon">◻</span> Focus Mode
             </button>
           </div>
-          <button
-            className="ds-btn-outline ds-btn-sm"
-            onClick={() => setShowEventLog(!showEventLog)}
-          >
-            <span className="ds-icon">{showEventLog ? '◀' : '▶'}</span>
-            {showEventLog ? 'Hide' : 'Show'} Event Log
-          </button>
         </div>
       </div>
 
       {/* Main Content */}
-      <div className="ds-flex ds-gap-4">
+      <div className="ds-space-y-4">
         {/* MFE Container */}
-        <div className={`ds-flex-1 ${showEventLog ? '' : 'ds-w-full'}`}>
-          {layoutMode === 'grid' && (
-            <div className="ds-grid ds-grid-cols-2 ds-gap-3">
-              {currentScenario.mfes.map(mfe => (
-                <MFECard 
-                  key={mfe.id}
-                  id={mfe.id}
-                  title={mfe.title}
-                  framework={mfe.framework}
-                  className={mfe.position === 'full-width' ? 'ds-col-span-2' : ''}
-                />
-              ))}
-            </div>
-          )}
-
-          {layoutMode === 'stacked' && (
-            <div className="ds-flex ds-flex-col ds-gap-3">
-              {currentScenario.mfes.map(mfe => (
-                <MFECard 
-                  key={mfe.id}
-                  id={mfe.id}
-                  title={mfe.title}
-                  framework={mfe.framework}
-                />
-              ))}
-            </div>
-          )}
-
-          {layoutMode === 'focus' && (
-            <div className="ds-space-y-4">
+        <div className="ds-w-full">
+          {/* Render all MFEs but control visibility/layout with CSS */}
+          <div className={
+            layoutMode === 'grid' ? 'ds-grid ds-grid-cols-2 ds-gap-3' :
+            layoutMode === 'stacked' ? 'ds-flex ds-flex-col ds-gap-3' :
+            'ds-space-y-4'
+          }>
+            {layoutMode === 'focus' && (
               <div className="ds-flex ds-gap-2">
                 {currentScenario.mfes.map(mfe => (
                   <button
@@ -345,31 +332,28 @@ export const EventBusPageV3: React.FC = () => {
                   </button>
                 ))}
               </div>
-              {selectedMFE && (
+            )}
+            
+            {currentScenario.mfes.map(mfe => (
+              <div
+                key={`${activeScenario}-${mfe.id}`} // Key includes scenario to force remount on scenario change
+                className={
+                  layoutMode === 'focus' 
+                    ? (selectedMFE === mfe.id ? 'ds-block' : 'ds-hidden')
+                    : (mfe.position === 'full-width' && layoutMode === 'grid' ? 'ds-col-span-2' : '')
+                }
+              >
                 <MFECard 
-                  id={selectedMFE}
-                  title={currentScenario.mfes.find(m => m.id === selectedMFE)?.title || ''}
-                  framework={currentScenario.mfes.find(m => m.id === selectedMFE)?.framework || 'react'}
-                  fullHeight
+                  id={mfe.id}
+                  title={mfe.title}
+                  framework={mfe.framework}
+                  fullHeight={layoutMode === 'focus'}
                 />
-              )}
-            </div>
-          )}
+              </div>
+            ))}
+          </div>
         </div>
 
-        {/* Event Log */}
-        {showEventLog && (
-          <div className="ds-w-96">
-            <EventLog
-              events={filteredEvents}
-              onClear={clearEvents}
-              searchTerm={searchTerm}
-              onSearchChange={setSearchTerm}
-              filterType={filterType}
-              onFilterChange={setFilterType}
-            />
-          </div>
-        )}
       </div>
 
       {/* Quick Actions */}

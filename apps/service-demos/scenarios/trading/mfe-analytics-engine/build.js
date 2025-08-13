@@ -1,17 +1,14 @@
 const esbuild = require('esbuild');
-const path = require('path');
 
 async function build() {
   try {
     await esbuild.build({
-      entryPoints: ['src/main.tsx'],
+      entryPoints: ['src/main.ts'],
       bundle: true,
       format: 'esm',
       platform: 'browser',
-      outfile: 'dist/mfe-activity-feed.js',
-      external: [],
+      outfile: 'dist/mfe-analytics-engine.js',
       loader: {
-        '.tsx': 'tsx',
         '.ts': 'ts'
       },
       define: {
@@ -22,7 +19,7 @@ async function build() {
       target: 'es2020'
     });
     
-    console.log('✅ mfe-activity-feed built successfully');
+    console.log('✅ mfe-analytics-engine built successfully');
   } catch (error) {
     console.error('❌ Build failed:', error);
     process.exit(1);

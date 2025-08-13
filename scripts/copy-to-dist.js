@@ -83,7 +83,7 @@ async function copyToDist() {
     if (stat.isDirectory()) {
       console.log('\n📦 Copying service demo MFEs...');
 
-      // Get all service categories (modal, notification, etc.)
+      // Get all service categories (modal, notification, scenarios, etc.)
       const serviceCategories = await fs.readdir(serviceDemosDir);
 
       for (const category of serviceCategories) {
@@ -91,38 +91,89 @@ async function copyToDist() {
         const categoryStat = await fs.stat(categoryPath);
 
         if (categoryStat.isDirectory()) {
-          // Get all demo MFEs in this category
-          const demoMfes = await fs.readdir(categoryPath);
-
-          for (const demoMfe of demoMfes) {
-            const demoPath = path.join(categoryPath, demoMfe);
-            const demoDistPath = path.join(demoPath, 'dist');
-
-            try {
-              const distStat = await fs.stat(demoDistPath);
-              if (distStat.isDirectory()) {
-                // Create nested structure in dist to match the URL path
-                const targetPath = path.join(rootDist, 'service-demos', category, demoMfe);
-
-                // Remove existing target directory if it exists
-                try {
-                  await fs.rm(targetPath, { recursive: true, force: true });
-                } catch (err) {
-                  // Ignore error if directory doesn't exist
+          // Special handling for scenarios folder
+          if (category === 'scenarios') {
+            console.log('\n🎬 Copying scenario MFEs...');
+            
+            // Get all scenario subdirectories (collaboration, smart-home, etc.)
+            const scenarios = await fs.readdir(categoryPath);
+            
+            for (const scenario of scenarios) {
+              const scenarioPath = path.join(categoryPath, scenario);
+              const scenarioStat = await fs.stat(scenarioPath);
+              
+              if (scenarioStat.isDirectory()) {
+                // Get all MFEs in this scenario
+                const scenarioMfes = await fs.readdir(scenarioPath);
+                
+                for (const scenarioMfe of scenarioMfes) {
+                  const mfePath = path.join(scenarioPath, scenarioMfe);
+                  const mfeDistPath = path.join(mfePath, 'dist');
+                  
+                  try {
+                    const distStat = await fs.stat(mfeDistPath);
+                    if (distStat.isDirectory()) {
+                      // Create nested structure in dist to match the URL path
+                      const targetPath = path.join(rootDist, 'scenarios', scenario);
+                      
+                      // Ensure parent directories exist
+                      await fs.mkdir(targetPath, { recursive: true });
+                      
+                      // Copy the dist contents directly to the scenario folder
+                      // The MFE files should be in the scenario folder, not in a subfolder
+                      const files = await fs.readdir(mfeDistPath);
+                      for (const file of files) {
+                        const srcFile = path.join(mfeDistPath, file);
+                        const destFile = path.join(targetPath, file);
+                        await fs.cp(srcFile, destFile, { recursive: true });
+                      }
+                      
+                      console.log(
+                        `✅ Copied scenarios/${scenario}/${scenarioMfe}/dist → dist/scenarios/${scenario}/`
+                      );
+                    }
+                  } catch (err) {
+                    // MFE doesn't have a dist directory, skip it
+                    console.log(`⏭️  Skipping scenarios/${scenario}/${scenarioMfe} (no dist directory)`);
+                  }
                 }
-
-                // Ensure parent directories exist
-                await fs.mkdir(path.dirname(targetPath), { recursive: true });
-
-                // Copy the dist contents
-                await fs.cp(demoDistPath, targetPath, { recursive: true });
-                console.log(
-                  `✅ Copied service-demos/${category}/${demoMfe}/dist → dist/service-demos/${category}/${demoMfe}`
-                );
               }
-            } catch (err) {
-              // Demo doesn't have a dist directory, skip it
-              console.log(`⏭️  Skipping ${category}/${demoMfe} (no dist directory)`);
+            }
+          } else {
+            // Regular service demo handling
+            // Get all demo MFEs in this category
+            const demoMfes = await fs.readdir(categoryPath);
+
+            for (const demoMfe of demoMfes) {
+              const demoPath = path.join(categoryPath, demoMfe);
+              const demoDistPath = path.join(demoPath, 'dist');
+
+              try {
+                const distStat = await fs.stat(demoDistPath);
+                if (distStat.isDirectory()) {
+                  // Create nested structure in dist to match the URL path
+                  const targetPath = path.join(rootDist, 'service-demos', category, demoMfe);
+
+                  // Remove existing target directory if it exists
+                  try {
+                    await fs.rm(targetPath, { recursive: true, force: true });
+                  } catch (err) {
+                    // Ignore error if directory doesn't exist
+                  }
+
+                  // Ensure parent directories exist
+                  await fs.mkdir(path.dirname(targetPath), { recursive: true });
+
+                  // Copy the dist contents
+                  await fs.cp(demoDistPath, targetPath, { recursive: true });
+                  console.log(
+                    `✅ Copied service-demos/${category}/${demoMfe}/dist → dist/service-demos/${category}/${demoMfe}`
+                  );
+                }
+              } catch (err) {
+                // Demo doesn't have a dist directory, skip it
+                console.log(`⏭️  Skipping ${category}/${demoMfe} (no dist directory)`);
+              }
             }
           }
         }

@@ -1,0 +1,19 @@
+{
+  "name": "mfe-trading-terminal",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "node build.js",
+    "dev": "node build.js --watch"
+  },
+  "dependencies": {
+    "@mfe-toolkit/core": "workspace:*",
+    "vue": "^3.4.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.0.0",
+    "esbuild": "^0.19.0",
+    "esbuild-plugin-vue3": "^0.4.0",
+    "typescript": "^5.3.0"
+  }
+}

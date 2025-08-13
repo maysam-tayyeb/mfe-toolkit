@@ -8,7 +8,7 @@ async function build() {
       bundle: true,
       format: 'esm',
       platform: 'browser',
-      outfile: '../../../../dist/scenarios/collaboration/mfe-online-users.js',
+      outfile: 'dist/mfe-online-users.js',
       external: [],
       loader: {
         '.ts': 'ts'

@@ -9,7 +9,7 @@ async function build() {
       bundle: true,
       format: 'esm',
       platform: 'browser',
-      outfile: '../../../../dist/scenarios/collaboration/mfe-document-editor.js',
+      outfile: 'dist/mfe-document-editor.js',
       plugins: [vuePlugin()],
       external: [],
       loader: {
