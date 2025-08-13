@@ -75,6 +75,7 @@ export const EventBusPageV3: React.FC = () => {
   const [layoutMode, setLayoutMode] = useState<LayoutMode>('grid');
   const [selectedMFE, setSelectedMFE] = useState<string | null>(null);
   const [showEventLog, setShowEventLog] = useState(true);
+  const [showApiReference, setShowApiReference] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState<string>('all');
   
@@ -166,16 +167,6 @@ export const EventBusPageV3: React.FC = () => {
     });
   }, [events, searchTerm, filterType]);
 
-  // Quick emit helper
-  const quickEmit = (type: string, data: any) => {
-    services.eventBus.emit(type, data);
-    addNotification({
-      type: 'success',
-      title: 'Event Emitted',
-      message: `${type} event sent`
-    });
-  };
-
   const clearEvents = () => {
     setEvents([]);
     StorageManager.save(STORAGE_KEY, []);
@@ -203,6 +194,95 @@ export const EventBusPageV3: React.FC = () => {
       >
         <span className="ds-icon">{showEventLog ? '📋 Hide' : '📋 Show'}</span> Event Log
       </button>
+
+      {/* API Reference Button */}
+      <button
+        className="ds-fixed ds-top-4 ds-right-4 ds-z-40 ds-btn-outline ds-btn-sm"
+        onClick={() => setShowApiReference(!showApiReference)}
+        style={{ 
+          position: 'fixed',
+          top: '1rem',
+          right: '1rem',
+          zIndex: 40
+        }}
+      >
+        <span className="ds-icon">📚</span> API
+      </button>
+
+      {/* API Reference Panel */}
+      {showApiReference && (
+        <div 
+          className="ds-fixed ds-top-16 ds-right-4 ds-z-40 ds-card ds-p-4 ds-shadow-lg"
+          style={{
+            position: 'fixed',
+            top: '4rem',
+            right: '1rem',
+            zIndex: 40,
+            maxWidth: '400px',
+            maxHeight: '500px',
+            overflowY: 'auto',
+            backgroundColor: 'white'
+          }}
+        >
+          <div className="ds-flex ds-justify-between ds-items-center ds-mb-3">
+            <h4 className="ds-text-sm ds-font-semibold">Event Bus API Reference</h4>
+            <button 
+              onClick={() => setShowApiReference(false)}
+              className="ds-text-muted ds-hover-text-primary"
+            >
+              ✕
+            </button>
+          </div>
+          
+          <div className="ds-space-y-3 ds-text-xs">
+            <div>
+              <div className="ds-font-semibold ds-text-primary ds-mb-1">Emit Event</div>
+              <code className="ds-block ds-p-2 ds-bg-slate-50 ds-rounded">
+                services.eventBus.emit('event:type', {'{'}<br/>
+                &nbsp;&nbsp;data: 'payload'<br/>
+                {'}'});
+              </code>
+            </div>
+
+            <div>
+              <div className="ds-font-semibold ds-text-primary ds-mb-1">Subscribe to Event</div>
+              <code className="ds-block ds-p-2 ds-bg-slate-50 ds-rounded">
+                const unsub = services.eventBus.on(<br/>
+                &nbsp;&nbsp;'event:type',<br/>
+                &nbsp;&nbsp;(payload) => {'{'}<br/>
+                &nbsp;&nbsp;&nbsp;&nbsp;console.log(payload.data);<br/>
+                &nbsp;&nbsp;{'}'}<br/>
+                );
+              </code>
+            </div>
+
+            <div>
+              <div className="ds-font-semibold ds-text-primary ds-mb-1">Subscribe to All Events</div>
+              <code className="ds-block ds-p-2 ds-bg-slate-50 ds-rounded">
+                services.eventBus.on('*', handler);
+              </code>
+            </div>
+
+            <div>
+              <div className="ds-font-semibold ds-text-primary ds-mb-1">Unsubscribe</div>
+              <code className="ds-block ds-p-2 ds-bg-slate-50 ds-rounded">
+                const unsub = services.eventBus.on(...);<br/>
+                // Later...<br/>
+                unsub();
+              </code>
+            </div>
+
+            <div className="ds-border-t ds-pt-3">
+              <div className="ds-font-semibold ds-mb-2">Common Event Patterns</div>
+              <div className="ds-space-y-1">
+                <div><code className="ds-text-xs">market:*</code> - Market data events</div>
+                <div><code className="ds-text-xs">trade:*</code> - Trading events</div>
+                <div><code className="ds-text-xs">analytics:*</code> - Analytics events</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Fixed Event Log Panel */}
       {showEventLog && (
@@ -354,38 +434,6 @@ export const EventBusPageV3: React.FC = () => {
           </div>
         </div>
 
-      </div>
-
-      {/* Quick Actions */}
-      <div className="ds-mt-6 ds-p-4 ds-bg-slate-50 ds-rounded-lg">
-        <div className="ds-flex ds-items-center ds-justify-between">
-          <div className="ds-flex ds-items-center ds-gap-4">
-            <span className="ds-text-sm ds-text-muted">Quick Actions:</span>
-            <button 
-              className="ds-btn-outline ds-btn-sm"
-              onClick={() => quickEmit('test:ping', { timestamp: Date.now() })}
-            >
-              Ping
-            </button>
-            <button 
-              className="ds-btn-outline ds-btn-sm"
-              onClick={() => quickEmit('test:broadcast', { message: 'Hello all MFEs!' })}
-            >
-              Broadcast
-            </button>
-            <button 
-              className="ds-btn-danger ds-btn-sm"
-              onClick={clearEvents}
-            >
-              Clear Events
-            </button>
-          </div>
-          <div className="ds-text-xs ds-text-muted">
-            <span className="ds-badge ds-mr-2">Ctrl+K</span>Search •
-            <span className="ds-badge ds-mx-2">Ctrl+E</span>Emit •
-            <span className="ds-badge ds-mx-2">Ctrl+L</span>Clear
-          </div>
-        </div>
       </div>
     </div>
   );
