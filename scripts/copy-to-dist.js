@@ -91,50 +91,91 @@ async function copyToDist() {
         const categoryStat = await fs.stat(categoryPath);
 
         if (categoryStat.isDirectory()) {
-          // Special handling for scenarios folder
-          if (category === 'scenarios') {
-            console.log('\n🎬 Copying scenario MFEs...');
+          // Handle event-bus category which may contain scenarios
+          if (category === 'event-bus') {
+            // Get all items in event-bus directory
+            const eventBusItems = await fs.readdir(categoryPath);
             
-            // Get all scenario subdirectories (collaboration, smart-home, etc.)
-            const scenarios = await fs.readdir(categoryPath);
-            
-            for (const scenario of scenarios) {
-              const scenarioPath = path.join(categoryPath, scenario);
-              const scenarioStat = await fs.stat(scenarioPath);
+            for (const item of eventBusItems) {
+              const itemPath = path.join(categoryPath, item);
+              const itemStat = await fs.stat(itemPath);
               
-              if (scenarioStat.isDirectory()) {
-                // Get all MFEs in this scenario
-                const scenarioMfes = await fs.readdir(scenarioPath);
-                
-                for (const scenarioMfe of scenarioMfes) {
-                  const mfePath = path.join(scenarioPath, scenarioMfe);
-                  const mfeDistPath = path.join(mfePath, 'dist');
+              if (itemStat.isDirectory()) {
+                // Check if this is the scenarios folder
+                if (item === 'scenarios') {
+                  console.log('\n🎬 Copying event-bus scenario MFEs...');
+                  
+                  // Get all scenario subdirectories (collaboration, smart-home, trading, etc.)
+                  const scenarios = await fs.readdir(itemPath);
+                  
+                  for (const scenario of scenarios) {
+                    const scenarioPath = path.join(itemPath, scenario);
+                    const scenarioStat = await fs.stat(scenarioPath);
+                    
+                    if (scenarioStat.isDirectory()) {
+                      // Get all MFEs in this scenario
+                      const scenarioMfes = await fs.readdir(scenarioPath);
+                      
+                      for (const scenarioMfe of scenarioMfes) {
+                        const mfePath = path.join(scenarioPath, scenarioMfe);
+                        const mfeDistPath = path.join(mfePath, 'dist');
+                        
+                        try {
+                          const distStat = await fs.stat(mfeDistPath);
+                          if (distStat.isDirectory()) {
+                            // Create nested structure in dist to match the URL path
+                            const targetPath = path.join(rootDist, 'event-bus', 'scenarios', scenario);
+                            
+                            // Ensure parent directories exist
+                            await fs.mkdir(targetPath, { recursive: true });
+                            
+                            // Copy the dist contents directly to the scenario folder
+                            const files = await fs.readdir(mfeDistPath);
+                            for (const file of files) {
+                              const srcFile = path.join(mfeDistPath, file);
+                              const destFile = path.join(targetPath, file);
+                              await fs.cp(srcFile, destFile, { recursive: true });
+                            }
+                            
+                            console.log(
+                              `✅ Copied event-bus/scenarios/${scenario}/${scenarioMfe}/dist → dist/event-bus/scenarios/${scenario}/`
+                            );
+                          }
+                        } catch (err) {
+                          // MFE doesn't have a dist directory, skip it
+                          console.log(`⏭️  Skipping event-bus/scenarios/${scenario}/${scenarioMfe} (no dist directory)`);
+                        }
+                      }
+                    }
+                  }
+                } else {
+                  // Regular MFE in event-bus folder (not in scenarios)
+                  const mfeDistPath = path.join(itemPath, 'dist');
                   
                   try {
                     const distStat = await fs.stat(mfeDistPath);
                     if (distStat.isDirectory()) {
-                      // Create nested structure in dist to match the URL path
-                      const targetPath = path.join(rootDist, 'scenarios', scenario);
+                      const targetPath = path.join(rootDist, 'service-demos', 'event-bus', item);
                       
-                      // Ensure parent directories exist
-                      await fs.mkdir(targetPath, { recursive: true });
-                      
-                      // Copy the dist contents directly to the scenario folder
-                      // The MFE files should be in the scenario folder, not in a subfolder
-                      const files = await fs.readdir(mfeDistPath);
-                      for (const file of files) {
-                        const srcFile = path.join(mfeDistPath, file);
-                        const destFile = path.join(targetPath, file);
-                        await fs.cp(srcFile, destFile, { recursive: true });
+                      // Remove existing target directory if it exists
+                      try {
+                        await fs.rm(targetPath, { recursive: true, force: true });
+                      } catch (err) {
+                        // Ignore error if directory doesn't exist
                       }
                       
+                      // Ensure parent directories exist
+                      await fs.mkdir(path.dirname(targetPath), { recursive: true });
+                      
+                      // Copy the dist contents
+                      await fs.cp(mfeDistPath, targetPath, { recursive: true });
                       console.log(
-                        `✅ Copied scenarios/${scenario}/${scenarioMfe}/dist → dist/scenarios/${scenario}/`
+                        `✅ Copied service-demos/event-bus/${item}/dist → dist/service-demos/event-bus/${item}`
                       );
                     }
                   } catch (err) {
                     // MFE doesn't have a dist directory, skip it
-                    console.log(`⏭️  Skipping scenarios/${scenario}/${scenarioMfe} (no dist directory)`);
+                    console.log(`⏭️  Skipping event-bus/${item} (no dist directory)`);
                   }
                 }
               }

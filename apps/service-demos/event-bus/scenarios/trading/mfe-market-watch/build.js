@@ -8,8 +8,8 @@ async function build() {
       bundle: true,
       format: 'esm',
       platform: 'browser',
-      outfile: 'dist/mfe-activity-feed.js',
-      external: [],
+      outfile: 'dist/mfe-market-watch.js',
+      external: ['react', 'react-dom', 'react-dom/client', 'react/jsx-runtime', 'react/jsx-dev-runtime'],
       loader: {
         '.tsx': 'tsx',
         '.ts': 'ts'
@@ -22,7 +22,7 @@ async function build() {
       target: 'es2020'
     });
     
-    console.log('✅ mfe-activity-feed built successfully');
+    console.log('✅ mfe-market-watch built successfully');
   } catch (error) {
     console.error('❌ Build failed:', error);
     process.exit(1);

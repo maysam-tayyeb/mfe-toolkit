@@ -9,7 +9,7 @@ async function build() {
       format: 'esm',
       platform: 'browser',
       outfile: 'dist/mfe-device-control.js',
-      external: ['react', 'react-dom'],
+      external: ['react', 'react-dom', 'react-dom/client', 'react/jsx-runtime', 'react/jsx-dev-runtime'],
       loader: {
         '.tsx': 'tsx',
         '.ts': 'ts'

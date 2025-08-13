@@ -6,7 +6,7 @@
   "mfes": [
     {
       "name": "mfe-document-editor",
-      "url": "http://localhost:8080/scenarios/collaboration/mfe-document-editor.js",
+      "url": "http://localhost:8080/event-bus/scenarios/collaboration/mfe-document-editor.js",
       "version": "1.0.0",
       "description": "Document editor for real-time collaboration",
       "requirements": {
@@ -23,7 +23,7 @@
     },
     {
       "name": "mfe-activity-feed",
-      "url": "http://localhost:8080/scenarios/collaboration/mfe-activity-feed.js",
+      "url": "http://localhost:8080/event-bus/scenarios/collaboration/mfe-activity-feed.js",
       "version": "1.0.0",
       "description": "Real-time activity feed for collaboration",
       "requirements": {
@@ -39,7 +39,7 @@
     },
     {
       "name": "mfe-online-users",
-      "url": "http://localhost:8080/scenarios/collaboration/mfe-online-users.js",
+      "url": "http://localhost:8080/event-bus/scenarios/collaboration/mfe-online-users.js",
       "version": "1.0.0",
       "description": "Online users display for collaboration",
       "requirements": {
@@ -56,7 +56,7 @@
     },
     {
       "name": "mfe-device-control",
-      "url": "http://localhost:8080/scenarios/smart-home/mfe-device-control.js",
+      "url": "http://localhost:8080/event-bus/scenarios/smart-home/mfe-device-control.js",
       "version": "1.0.0",
       "description": "Smart home device control panel",
       "requirements": {
@@ -73,7 +73,7 @@
     },
     {
       "name": "mfe-sensor-monitor",
-      "url": "http://localhost:8080/scenarios/smart-home/mfe-sensor-monitor.js",
+      "url": "http://localhost:8080/event-bus/scenarios/smart-home/mfe-sensor-monitor.js",
       "version": "1.0.0",
       "description": "Real-time sensor monitoring dashboard",
       "requirements": {
@@ -90,7 +90,7 @@
     },
     {
       "name": "mfe-automation-rules",
-      "url": "http://localhost:8080/scenarios/smart-home/mfe-automation-rules.js",
+      "url": "http://localhost:8080/event-bus/scenarios/smart-home/mfe-automation-rules.js",
       "version": "1.0.0",
       "description": "Automation rules and scenarios manager",
       "requirements": {
@@ -107,7 +107,7 @@
     },
     {
       "name": "mfe-market-watch",
-      "url": "http://localhost:8080/scenarios/trading/mfe-market-watch.js",
+      "url": "http://localhost:8080/event-bus/scenarios/trading/mfe-market-watch.js",
       "version": "1.0.0",
       "description": "Real-time stock market watch with price updates",
       "requirements": {
@@ -124,7 +124,7 @@
     },
     {
       "name": "mfe-trading-terminal",
-      "url": "http://localhost:8080/scenarios/trading/mfe-trading-terminal.js",
+      "url": "http://localhost:8080/event-bus/scenarios/trading/mfe-trading-terminal.js",
       "version": "1.0.0",
       "description": "Advanced trading terminal for order execution",
       "requirements": {
@@ -141,7 +141,7 @@
     },
     {
       "name": "mfe-analytics-engine",
-      "url": "http://localhost:8080/scenarios/trading/mfe-analytics-engine.js",
+      "url": "http://localhost:8080/event-bus/scenarios/trading/mfe-analytics-engine.js",
       "version": "1.0.0",
       "description": "Real-time market analytics and insights",
       "requirements": {
@@ -154,63 +154,6 @@
         "framework": "vanilla",
         "category": "trading",
         "capabilities": ["analyze", "report", "predict"]
-      }
-    },
-    {
-      "name": "mfe-event-publisher",
-      "url": "http://localhost:8080/service-demos/event-bus/mfe-event-publisher/mfe-event-publisher.js",
-      "version": "1.0.0",
-      "description": "Event publisher demo MFE for showcasing event bus",
-      "requirements": {
-        "services": [
-          { "name": "eventBus", "optional": false },
-          { "name": "logger", "optional": false },
-          { "name": "notifications", "optional": true }
-        ]
-      },
-      "metadata": {
-        "framework": "react",
-        "category": "service-demo",
-        "service": "event-bus",
-        "capabilities": ["emit", "custom-events"]
-      }
-    },
-    {
-      "name": "mfe-event-subscriber",
-      "url": "http://localhost:8080/service-demos/event-bus/mfe-event-subscriber/mfe-event-subscriber.js",
-      "version": "1.0.0",
-      "description": "Event subscriber demo MFE for receiving events",
-      "requirements": {
-        "services": [
-          { "name": "eventBus", "optional": false },
-          { "name": "logger", "optional": false },
-          { "name": "notifications", "optional": true }
-        ]
-      },
-      "metadata": {
-        "framework": "react",
-        "category": "service-demo",
-        "service": "event-bus",
-        "capabilities": ["receive", "display"]
-      }
-    },
-    {
-      "name": "mfe-event-orchestrator",
-      "url": "http://localhost:8080/service-demos/event-bus/mfe-event-orchestrator/mfe-event-orchestrator.js",
-      "version": "1.0.0",
-      "description": "Event orchestrator demo MFE for coordinating workers",
-      "requirements": {
-        "services": [
-          { "name": "eventBus", "optional": false },
-          { "name": "logger", "optional": false },
-          { "name": "notifications", "optional": true }
-        ]
-      },
-      "metadata": {
-        "framework": "react",
-        "category": "service-demo",
-        "service": "event-bus",
-        "capabilities": ["coordinate", "distribute", "monitor"]
       }
     }
   ],

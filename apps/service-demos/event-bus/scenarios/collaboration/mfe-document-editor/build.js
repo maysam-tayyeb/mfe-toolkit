@@ -1,4 +1,5 @@
 const esbuild = require('esbuild');
+const vuePlugin = require('esbuild-plugin-vue3');
 const path = require('path');
 
 async function build() {
@@ -8,10 +9,12 @@ async function build() {
       bundle: true,
       format: 'esm',
       platform: 'browser',
-      outfile: 'dist/mfe-online-users.js',
-      external: [],
+      outfile: 'dist/mfe-document-editor.js',
+      plugins: [vuePlugin()],
+      external: ['react', 'react-dom', 'react-dom/client', 'react/jsx-runtime', 'react/jsx-dev-runtime', 'vue'],
       loader: {
-        '.ts': 'ts'
+        '.ts': 'ts',
+        '.vue': 'ts'
       },
       define: {
         'process.env.NODE_ENV': '"production"'
@@ -21,7 +24,7 @@ async function build() {
       target: 'es2020'
     });
     
-    console.log('✅ mfe-online-users built successfully');
+    console.log('✅ mfe-document-editor built successfully');
   } catch (error) {
     console.error('❌ Build failed:', error);
     process.exit(1);

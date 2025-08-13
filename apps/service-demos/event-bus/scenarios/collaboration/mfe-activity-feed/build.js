@@ -4,13 +4,14 @@ const path = require('path');
 async function build() {
   try {
     await esbuild.build({
-      entryPoints: ['src/main.ts'],
+      entryPoints: ['src/main.tsx'],
       bundle: true,
       format: 'esm',
       platform: 'browser',
-      outfile: 'dist/mfe-automation-rules.js',
-      external: [],
+      outfile: 'dist/mfe-activity-feed.js',
+      external: ['react', 'react-dom', 'react-dom/client', 'react/jsx-runtime', 'react/jsx-dev-runtime'],
       loader: {
+        '.tsx': 'tsx',
         '.ts': 'ts'
       },
       define: {
@@ -21,7 +22,7 @@ async function build() {
       target: 'es2020'
     });
     
-    console.log('✅ mfe-automation-rules built successfully');
+    console.log('✅ mfe-activity-feed built successfully');
   } catch (error) {
     console.error('❌ Build failed:', error);
     process.exit(1);

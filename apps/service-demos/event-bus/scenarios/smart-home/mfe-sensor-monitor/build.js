@@ -9,9 +9,9 @@ async function build() {
       bundle: true,
       format: 'esm',
       platform: 'browser',
-      outfile: 'dist/mfe-document-editor.js',
+      outfile: 'dist/mfe-sensor-monitor.js',
       plugins: [vuePlugin()],
-      external: [],
+      external: ['react', 'react-dom', 'react-dom/client', 'react/jsx-runtime', 'react/jsx-dev-runtime', 'vue'],
       loader: {
         '.ts': 'ts',
         '.vue': 'ts'
@@ -24,7 +24,7 @@ async function build() {
       target: 'es2020'
     });
     
-    console.log('✅ mfe-document-editor built successfully');
+    console.log('✅ mfe-sensor-monitor built successfully');
   } catch (error) {
     console.error('❌ Build failed:', error);
     process.exit(1);
