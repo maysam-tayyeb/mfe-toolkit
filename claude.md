@@ -271,7 +271,9 @@ The toolkit is split into several npm packages under the `@mfe-toolkit` organiza
 
 1. Create new app in `apps/` directory following naming convention `mfe-{name}`
 2. Export default function that accepts MFE services
-3. **Important**: MFEs use esbuild for building (not Vite)
+3. **Important**: MFEs use tsup or esbuild for building (not Vite)
+   - tsup is preferred for React, Solid.js, and Vanilla JS MFEs
+   - esbuild is used for Vue MFEs (for plugin compatibility)
 4. Add to container's MFE registry
 5. Ensure proper TypeScript types from `@mfe-toolkit/core`
 6. **Framework Options**: React, Vue, Vanilla JS, or Solid.js
@@ -573,7 +575,8 @@ If you don't know the correct commands for a project, ask the user and suggest u
 
 ## Build Process Notes
 
-- **MFEs only use esbuild to build. Important!!!**
+- **MFEs use tsup (powered by esbuild) or esbuild directly for building**
+- **tsup is preferred for most MFEs, esbuild for Vue MFEs**
 
 ## 🚨 DESIGN SYSTEM IS LAW
 

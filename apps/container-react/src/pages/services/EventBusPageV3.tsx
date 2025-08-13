@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useUI } from '@/contexts/UIContext';
 import { RegistryMFELoader } from '@/components/RegistryMFELoader';
-import { EventLog } from '@mfe/design-system-react';
+import { EventLog, TabGroup } from '@mfe/design-system-react';
 import { getMFEServicesSingleton } from '@/services/mfe-services-singleton';
 
 // Types
@@ -757,93 +757,133 @@ const MyTradingComponent: React.FC<{ services: MFEServices }> = ({ services }) =
           </div>
         </div>
 
-        {/* Scenario Display */}
-        
-        {/* Scenario Description */}
-        <div className="ds-alert-info ds-mt-4">
-          <div className="ds-flex ds-items-center ds-gap-2">
-            <span className="ds-text-lg">{currentScenario.icon}</span>
-            <div>
-              <div className="ds-font-semibold">{currentScenario.name}</div>
-              <div className="ds-text-sm ds-text-muted">{currentScenario.description}</div>
-            </div>
-          </div>
-        </div>
-
-        {/* Layout Controls */}
-        <div className="ds-flex ds-justify-between ds-items-center ds-mt-4">
-          <div className="ds-flex ds-gap-2">
-            <button
-              className={`ds-btn-sm ${layoutMode === 'grid' ? 'ds-btn-primary' : 'ds-btn-outline'}`}
-              onClick={() => setLayoutMode('grid')}
-            >
-              <span className="ds-icon">⊞</span> Grid Layout
-            </button>
-            <button
-              className={`ds-btn-sm ${layoutMode === 'stacked' ? 'ds-btn-primary' : 'ds-btn-outline'}`}
-              onClick={() => setLayoutMode('stacked')}
-            >
-              <span className="ds-icon">☰</span> Stacked Layout
-            </button>
-            <button
-              className={`ds-btn-sm ${layoutMode === 'focus' ? 'ds-btn-primary' : 'ds-btn-outline'}`}
-              onClick={() => setLayoutMode('focus')}
-            >
-              <span className="ds-icon">◻</span> Focus Mode
-            </button>
-          </div>
-        </div>
       </div>
 
-      {/* Main Content */}
-      <div className="ds-space-y-4">
-        {/* MFE Container */}
-        <div className="ds-w-full">
-          {/* Render all MFEs but control visibility/layout with CSS */}
-          <div className={
-            layoutMode === 'grid' ? 'ds-grid ds-grid-cols-2 ds-gap-3' :
-            layoutMode === 'stacked' ? 'ds-flex ds-flex-col ds-gap-3' :
-            'ds-space-y-4'
-          }>
-            {layoutMode === 'focus' && (
-              <div className="ds-flex ds-gap-2">
-                {currentScenario.mfes.map(mfe => (
-                  <button
-                    key={mfe.id}
-                    className={`ds-btn-sm ${selectedMFE === mfe.id ? 'ds-btn-primary' : 'ds-btn-outline'}`}
-                    onClick={() => setSelectedMFE(mfe.id)}
-                  >
-                    {mfe.title}
-                  </button>
-                ))}
-              </div>
-            )}
-            
-            {currentScenario.mfes.map((mfe, index) => {
-              const isFullWidth = mfe.position === 'full-width';
-              
-              return (
-                <div
-                  key={`${activeScenario}-${mfe.id}`} // Key includes scenario to force remount on scenario change
-                  className={
-                    layoutMode === 'focus' 
-                      ? (selectedMFE === mfe.id ? 'ds-block' : 'ds-hidden')
-                      : (isFullWidth && layoutMode === 'grid' ? 'ds-col-span-2' : '')
-                  }
-                >
-                  <MFECard 
-                    id={mfe.id}
-                    title={mfe.title}
-                    framework={mfe.framework}
-                    fullHeight={layoutMode === 'focus'}
-                  />
+      {/* Tabs for Dashboard and Playground */}
+      <TabGroup
+        tabs={[
+          {
+            id: 'dashboard',
+            label: '📊 Dashboard',
+            content: (
+              <>
+                {/* Scenario Description */}
+                <div className="ds-alert-info ds-mb-4">
+                  <div className="ds-flex ds-items-center ds-gap-2">
+                    <span className="ds-text-lg">{currentScenario.icon}</span>
+                    <div>
+                      <div className="ds-font-semibold">{currentScenario.name}</div>
+                      <div className="ds-text-sm ds-text-muted">{currentScenario.description}</div>
+                    </div>
+                  </div>
                 </div>
-              );
-            })}
-          </div>
-        </div>
 
-      </div>
+                {/* Layout Controls */}
+                <div className="ds-flex ds-justify-between ds-items-center ds-mb-4">
+                  <div className="ds-flex ds-gap-2">
+                    <button
+                      className={`ds-btn-sm ${layoutMode === 'grid' ? 'ds-btn-primary' : 'ds-btn-outline'}`}
+                      onClick={() => setLayoutMode('grid')}
+                    >
+                      <span className="ds-icon">⊞</span> Grid Layout
+                    </button>
+                    <button
+                      className={`ds-btn-sm ${layoutMode === 'stacked' ? 'ds-btn-primary' : 'ds-btn-outline'}`}
+                      onClick={() => setLayoutMode('stacked')}
+                    >
+                      <span className="ds-icon">☰</span> Stacked Layout
+                    </button>
+                    <button
+                      className={`ds-btn-sm ${layoutMode === 'focus' ? 'ds-btn-primary' : 'ds-btn-outline'}`}
+                      onClick={() => setLayoutMode('focus')}
+                    >
+                      <span className="ds-icon">◻</span> Focus Mode
+                    </button>
+                  </div>
+                  <div className="ds-flex ds-gap-2">
+                    <span className="ds-badge ds-badge-info">React MFE</span>
+                    <span className="ds-badge ds-badge-success">Vue MFE</span>
+                    <span className="ds-badge ds-badge-warning">Vanilla MFE</span>
+                  </div>
+                </div>
+
+                {/* MFE Container */}
+                <div className="ds-w-full">
+                  <div className={
+                    layoutMode === 'grid' ? 'ds-grid ds-grid-cols-2 ds-gap-3' :
+                    layoutMode === 'stacked' ? 'ds-flex ds-flex-col ds-gap-3' :
+                    'ds-space-y-4'
+                  }>
+                    {layoutMode === 'focus' && (
+                      <div className="ds-flex ds-gap-2 ds-mb-4">
+                        {currentScenario.mfes.map(mfe => (
+                          <button
+                            key={mfe.id}
+                            className={`ds-btn-sm ${selectedMFE === mfe.id ? 'ds-btn-primary' : 'ds-btn-outline'}`}
+                            onClick={() => setSelectedMFE(mfe.id)}
+                          >
+                            {mfe.title}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                    
+                    {currentScenario.mfes.map((mfe, index) => {
+                      const isFullWidth = mfe.position === 'full-width';
+                      
+                      return (
+                        <div
+                          key={`${activeScenario}-${mfe.id}`}
+                          className={
+                            layoutMode === 'focus' 
+                              ? (selectedMFE === mfe.id ? 'ds-block' : 'ds-hidden')
+                              : (isFullWidth && layoutMode === 'grid' ? 'ds-col-span-2' : '')
+                          }
+                        >
+                          <MFECard 
+                            id={mfe.id}
+                            title={mfe.title}
+                            framework={mfe.framework}
+                            fullHeight={layoutMode === 'focus'}
+                          />
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              </>
+            )
+          },
+          {
+            id: 'playground',
+            label: '🎮 Playground',
+            content: (
+              <div className="ds-space-y-4">
+                <div className="ds-alert-info">
+                  <div className="ds-flex ds-items-center ds-gap-2">
+                    <span className="ds-text-lg">🚀</span>
+                    <div>
+                      <div className="ds-font-semibold">Interactive Event Bus Playground</div>
+                      <div className="ds-text-sm ds-text-muted">Test event emission and subscription with Solid.js MFE</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="ds-flex ds-justify-end ds-mb-4">
+                  <span className="ds-badge ds-badge-primary">Solid.js MFE</span>
+                </div>
+
+                {/* Playground MFE will be loaded here */}
+                <div className="ds-card">
+                  <RegistryMFELoader id="mfe-event-playground" />
+                </div>
+              </div>
+            )
+          }
+        ]}
+        defaultTab="dashboard"
+        className="ds-mt-4"
+      />
     </div>
   );
 };

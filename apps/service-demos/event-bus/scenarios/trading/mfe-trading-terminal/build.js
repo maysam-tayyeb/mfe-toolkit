@@ -10,10 +10,10 @@ async function build() {
       platform: 'browser',
       outfile: 'dist/mfe-trading-terminal.js',
       external: ['vue'],
-      plugins: [vuePlugin()],
       loader: {
         '.ts': 'ts'
       },
+      plugins: [vuePlugin()],
       define: {
         'process.env.NODE_ENV': '"production"'
       },

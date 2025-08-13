@@ -54,6 +54,23 @@
         "category": "trading",
         "capabilities": ["analyze", "report", "predict"]
       }
+    },
+    {
+      "name": "mfe-event-playground",
+      "url": "http://localhost:8080/event-bus/mfe-event-playground.js",
+      "version": "1.0.0",
+      "description": "Interactive event bus playground for testing and debugging",
+      "requirements": {
+        "services": [
+          { "name": "eventBus", "optional": false },
+          { "name": "logger", "optional": true }
+        ]
+      },
+      "metadata": {
+        "framework": "solid",
+        "category": "developer-tools",
+        "capabilities": ["emit", "listen", "debug", "monitor"]
+      }
     }
   ],
   "config": {
