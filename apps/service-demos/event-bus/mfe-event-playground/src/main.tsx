@@ -20,6 +20,7 @@ function EventPlayground(props: { services: MFEServices }) {
   const [listeningTo, setListeningTo] = createSignal<string[]>([]);
   const [newListener, setNewListener] = createSignal('');
   const [isValidJson, setIsValidJson] = createSignal(true);
+  const [eventCount, setEventCount] = createSignal(0);
   
   // Store subscription cleanup functions
   const subscriptions = new Map<string, () => void>();
@@ -46,6 +47,7 @@ function EventPlayground(props: { services: MFEServices }) {
       const name = eventName();
       
       eventBus.emit(name, payload);
+      setEventCount(prev => prev + 1);
       logger?.info(`Sent event: ${name}`, payload);
     } catch (error) {
       logger?.error('Failed to send event', error);
@@ -60,6 +62,7 @@ function EventPlayground(props: { services: MFEServices }) {
     }
     
     const unsubscribe = eventBus.on(eventToListen, (payload) => {
+      setEventCount(prev => prev + 1);
       logger?.info(`Received event: ${eventToListen}`, payload);
     });
     
@@ -101,106 +104,117 @@ function EventPlayground(props: { services: MFEServices }) {
   });
   
   return (
-    <div class="ds-flex ds-flex-col ds-gap-4">
-      {/* Header */}
-      <div class="ds-card-padded">
-        <h2 class="ds-section-title ds-mb-2">🎮 Event Bus Playground</h2>
-        <p class="ds-text-muted">
-          Interactive event bus testing powered by Solid.js
-        </p>
-      </div>
-      
-      {/* Event Emitter */}
-      <div class="ds-card-padded">
-        <h3 class="ds-card-title ds-mb-3">📤 Event Emitter</h3>
-        
-        <div class="ds-flex ds-flex-col ds-gap-3">
-          <div>
-            <label class="ds-label">Event Name</label>
-            <input
-              type="text"
-              class="ds-input"
-              value={eventName()}
-              onInput={(e) => setEventName(e.currentTarget.value)}
-              placeholder="e.g., playground:test"
-            />
-          </div>
-          
-          <div>
-            <label class="ds-label">
-              Payload (JSON)
-              {!isValidJson() && (
-                <span class="ds-text-danger ds-ml-2">Invalid JSON</span>
-              )}
-            </label>
-            <textarea
-              class="ds-textarea"
-              rows="4"
-              value={payloadText()}
-              onInput={(e) => setPayloadText(e.currentTarget.value)}
-              placeholder='{"message": "Hello World"}'
-            />
-          </div>
-          
-          <button
-            class="ds-btn-primary"
-            onClick={sendEvent}
-            disabled={!isValidJson()}
-          >
-            Send Event
-          </button>
+    <div class="ds-p-4">
+      <div class="ds-flex ds-justify-between ds-items-center ds-mb-4">
+        <h4 class="ds-card-title ds-mb-0">🎮 Event Bus Playground</h4>
+        <div class="ds-flex ds-gap-2">
+          <span class="ds-badge ds-badge-info">Events: {eventCount()}</span>
+          <span class="ds-badge ds-badge-success">Solid.js MFE</span>
         </div>
       </div>
-      
-      {/* Event Listeners */}
-      <div class="ds-card-padded">
-        <h3 class="ds-card-title ds-mb-3">📥 Event Listeners</h3>
-        
-        <div class="ds-flex ds-flex-col ds-gap-3">
-          <div class="ds-flex ds-gap-2">
-            <input
-              type="text"
-              class="ds-input ds-flex-1"
-              value={newListener()}
-              onInput={(e) => setNewListener(e.currentTarget.value)}
-              placeholder="Event name to listen for..."
-              onKeyDown={(e) => e.key === 'Enter' && addListener()}
-            />
+
+      <div class="ds-grid ds-grid-cols-2 ds-gap-4">
+        {/* Event Emitter */}
+        <div class="ds-p-3 ds-border ds-rounded-lg">
+          <h5 class="ds-text-sm ds-font-semibold ds-mb-3">📤 Event Emitter</h5>
+          
+          <div class="ds-space-y-3">
+            <div>
+              <label class="ds-text-xs ds-text-muted ds-block ds-mb-1">Event Name</label>
+              <input
+                type="text"
+                class="ds-input ds-input-sm"
+                value={eventName()}
+                onInput={(e) => setEventName(e.currentTarget.value)}
+                placeholder="e.g., playground:test"
+              />
+            </div>
+            
+            <div>
+              <label class="ds-text-xs ds-text-muted ds-block ds-mb-1">
+                Payload (JSON)
+                {!isValidJson() && (
+                  <span class="ds-text-danger ds-ml-2">Invalid JSON</span>
+                )}
+              </label>
+              <textarea
+                class="ds-textarea ds-textarea-sm"
+                rows="3"
+                value={payloadText()}
+                onInput={(e) => setPayloadText(e.currentTarget.value)}
+                placeholder='{"message": "Hello World"}'
+              />
+            </div>
+            
             <button
-              class="ds-btn-secondary"
-              onClick={addListener}
-              disabled={!newListener().trim()}
+              class="ds-btn-primary ds-btn-sm ds-w-full"
+              onClick={sendEvent}
+              disabled={!isValidJson()}
             >
-              Add Listener
+              Send Event
             </button>
           </div>
+        </div>
+        
+        {/* Event Listeners */}
+        <div class="ds-p-3 ds-border ds-rounded-lg">
+          <h5 class="ds-text-sm ds-font-semibold ds-mb-3">📥 Event Listeners</h5>
           
-          {listeningTo().length > 0 ? (
-            <div class="ds-flex ds-flex-wrap ds-gap-2">
-              <For each={listeningTo()}>
-                {(listener) => (
-                  <div class="ds-badge ds-badge-info ds-flex ds-items-center ds-gap-1">
-                    <span>{listener}</span>
-                    <button
-                      class="ds-text-xs ds-opacity-70 ds-hover:opacity-100"
-                      onClick={() => unsubscribeFromEvent(listener)}
-                      aria-label={`Stop listening to ${listener}`}
-                    >
-                      ✕
-                    </button>
-                  </div>
-                )}
-              </For>
+          <div class="ds-space-y-3">
+            <div>
+              <label class="ds-text-xs ds-text-muted ds-block ds-mb-1">Add Listener</label>
+              <div class="ds-flex ds-gap-2">
+                <input
+                  type="text"
+                  class="ds-input ds-input-sm ds-flex-1"
+                  value={newListener()}
+                  onInput={(e) => setNewListener(e.currentTarget.value)}
+                  placeholder="Event pattern..."
+                  onKeyDown={(e) => e.key === 'Enter' && addListener()}
+                />
+                <button
+                  class="ds-btn-secondary ds-btn-sm"
+                  onClick={addListener}
+                  disabled={!newListener().trim()}
+                >
+                  Add
+                </button>
+              </div>
             </div>
-          ) : (
-            <p class="ds-text-muted ds-text-sm">No active listeners</p>
-          )}
+            
+            <div>
+              <label class="ds-text-xs ds-text-muted ds-block ds-mb-1">Active Listeners</label>
+              {listeningTo().length > 0 ? (
+                <div class="ds-flex ds-flex-wrap ds-gap-1">
+                  <For each={listeningTo()}>
+                    {(listener) => (
+                      <div class="ds-badge ds-badge-sm ds-badge-info ds-flex ds-items-center ds-gap-1">
+                        <span class="ds-text-xs">{listener}</span>
+                        <button
+                          class="ds-text-xs ds-opacity-70 ds-hover:opacity-100"
+                          onClick={() => unsubscribeFromEvent(listener)}
+                          aria-label={`Stop listening to ${listener}`}
+                        >
+                          ✕
+                        </button>
+                      </div>
+                    )}
+                  </For>
+                </div>
+              ) : (
+                <p class="ds-text-muted ds-text-xs">No active listeners</p>
+              )}
+            </div>
+          </div>
         </div>
       </div>
       
-      {/* Solid.js Badge */}
-      <div class="ds-text-center ds-text-sm ds-text-muted">
-        Powered by <span class="ds-badge ds-badge-info">Solid.js MFE</span>
+      {/* Footer Info */}
+      <div class="ds-mt-4 ds-p-3 ds-bg-accent-primary-soft ds-rounded ds-text-xs">
+        <p class="ds-text-center">
+          💡 <strong>Tip:</strong> Events are displayed in the container's Event Log below. 
+          Use this playground to test event patterns and payloads.
+        </p>
       </div>
     </div>
   );
