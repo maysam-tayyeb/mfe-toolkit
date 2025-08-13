@@ -11,21 +11,12 @@ interface MFEServices {
   };
 }
 
-interface EventEntry {
-  id: string;
-  timestamp: string;
-  eventName: string;
-  payload: any;
-  source: 'sent' | 'received';
-}
-
 function EventPlayground(props: { services: MFEServices }) {
   const { eventBus, logger } = props.services;
   
   // Signals for state management
   const [eventName, setEventName] = createSignal('playground:test');
   const [payloadText, setPayloadText] = createSignal('{"message": "Hello from Solid.js!"}');
-  const [events, setEvents] = createSignal<EventEntry[]>([]);
   const [listeningTo, setListeningTo] = createSignal<string[]>([]);
   const [newListener, setNewListener] = createSignal('');
   const [isValidJson, setIsValidJson] = createSignal(true);
@@ -43,14 +34,6 @@ function EventPlayground(props: { services: MFEServices }) {
     }
   });
   
-  // Add event to history
-  const addEvent = (entry: EventEntry) => {
-    setEvents(prev => {
-      const newEvents = [entry, ...prev];
-      return newEvents.slice(0, 50); // Keep last 50 events
-    });
-  };
-  
   // Send event
   const sendEvent = () => {
     if (!isValidJson()) {
@@ -63,15 +46,6 @@ function EventPlayground(props: { services: MFEServices }) {
       const name = eventName();
       
       eventBus.emit(name, payload);
-      
-      addEvent({
-        id: `${Date.now()}-${Math.random()}`,
-        timestamp: new Date().toLocaleTimeString(),
-        eventName: name,
-        payload,
-        source: 'sent'
-      });
-      
       logger?.info(`Sent event: ${name}`, payload);
     } catch (error) {
       logger?.error('Failed to send event', error);
@@ -86,14 +60,6 @@ function EventPlayground(props: { services: MFEServices }) {
     }
     
     const unsubscribe = eventBus.on(eventToListen, (payload) => {
-      addEvent({
-        id: `${Date.now()}-${Math.random()}`,
-        timestamp: new Date().toLocaleTimeString(),
-        eventName: eventToListen,
-        payload,
-        source: 'received'
-      });
-      
       logger?.info(`Received event: ${eventToListen}`, payload);
     });
     
@@ -120,12 +86,6 @@ function EventPlayground(props: { services: MFEServices }) {
       subscribeToEvent(listener);
       setNewListener('');
     }
-  };
-  
-  // Clear events
-  const clearEvents = () => {
-    setEvents([]);
-    logger?.info('Cleared event history');
   };
   
   // Cleanup on unmount
@@ -236,53 +196,6 @@ function EventPlayground(props: { services: MFEServices }) {
             <p class="ds-text-muted ds-text-sm">No active listeners</p>
           )}
         </div>
-      </div>
-      
-      {/* Event History */}
-      <div class="ds-card-padded">
-        <div class="ds-flex ds-justify-between ds-items-center ds-mb-3">
-          <h3 class="ds-card-title">📜 Event History</h3>
-          <button
-            class="ds-btn-outline ds-btn-sm"
-            onClick={clearEvents}
-            disabled={events().length === 0}
-          >
-            Clear
-          </button>
-        </div>
-        
-        {events().length > 0 ? (
-          <div class="ds-space-y-2 ds-max-h-96 ds-overflow-y-auto">
-            <For each={events()}>
-              {(event) => (
-                <div
-                  class={`ds-p-3 ds-rounded ds-border ${
-                    event.source === 'sent' 
-                      ? 'ds-bg-accent-primary-soft ds-border-accent-primary' 
-                      : 'ds-bg-accent-success-soft ds-border-accent-success'
-                  }`}
-                >
-                  <div class="ds-flex ds-justify-between ds-items-start ds-mb-1">
-                    <div class="ds-flex ds-items-center ds-gap-2">
-                      <span class="ds-text-sm ds-font-semibold">
-                        {event.source === 'sent' ? '📤 Sent' : '📥 Received'}
-                      </span>
-                      <span class="ds-text-sm ds-font-mono">{event.eventName}</span>
-                    </div>
-                    <span class="ds-text-xs ds-text-muted">{event.timestamp}</span>
-                  </div>
-                  <pre class="ds-text-xs ds-bg-surface ds-p-2 ds-rounded ds-overflow-x-auto">
-                    {JSON.stringify(event.payload, null, 2)}
-                  </pre>
-                </div>
-              )}
-            </For>
-          </div>
-        ) : (
-          <div class="ds-empty-state">
-            <p class="ds-text-muted">No events yet. Send an event or add a listener!</p>
-          </div>
-        )}
       </div>
       
       {/* Solid.js Badge */}
