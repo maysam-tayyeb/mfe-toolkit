@@ -1,0 +1,100 @@
+{
+  "$schema": "https://mfe-made-easy.com/schemas/mfe-manifest-v2.schema.json",
+  "name": "mfe-trading-terminal",
+  "version": "1.0.0",
+  "url": "http://localhost:8080/service-demos/event-bus/scenarios/trading/mfe-trading-terminal/mfe-trading-terminal.js",
+  "alternativeUrls": [
+    "https://cdn.example.com/mfe-trading-terminal/1.0.0/main.js"
+  ],
+  "dependencies": {
+    "runtime": {
+      "vue": "^3.0.0"
+    },
+    "peer": {
+      "@mfe-toolkit/core": "^0.1.0"
+    },
+    "optional": {}
+  },
+  "compatibility": {
+    "container": "^1.0.0",
+    "browsers": {
+      "chrome": ">=90",
+      "firefox": ">=88",
+      "safari": ">=14",
+      "edge": ">=90"
+    },
+    "frameworks": {
+      "vue": "^3.0.0"
+    }
+  },
+  "capabilities": {
+    "emits": [
+      "trading:order-placed",
+      "trading:order-cancelled",
+      "trading:order-modified",
+      "trading:order-filled"
+    ],
+    "listens": [
+      "market:price-update",
+      "market:stock-selected",
+      "analytics:portfolio-analyzed"
+    ],
+    "features": [
+      "order-placement",
+      "portfolio-management",
+      "real-time-trading",
+      "order-tracking"
+    ]
+  },
+  "requirements": {
+    "services": [
+      {
+        "name": "eventBus",
+        "optional": false
+      },
+      {
+        "name": "logger",
+        "optional": true
+      }
+    ],
+    "permissions": [],
+    "features": []
+  },
+  "metadata": {
+    "displayName": "Trading Terminal",
+    "description": "Trading interface for order placement built with Vue 3",
+    "icon": "💹",
+    "author": {
+      "name": "MFE Toolkit Team"
+    },
+    "category": "service-demos",
+    "tags": [
+      "trading",
+      "orders",
+      "vue3",
+      "real-time"
+    ]
+  },
+  "config": {
+    "loading": {
+      "timeout": 30000,
+      "retries": 3,
+      "retryDelay": 1000,
+      "priority": 5,
+      "preload": false,
+      "lazy": true
+    },
+    "runtime": {
+      "isolation": "none",
+      "keepAlive": false,
+      "singleton": true
+    },
+    "communication": {
+      "eventNamespace": "trading"
+    }
+  },
+  "build": {
+    "time": "2025-01-14T00:00:00.000Z",
+    "env": "development"
+  }
+}

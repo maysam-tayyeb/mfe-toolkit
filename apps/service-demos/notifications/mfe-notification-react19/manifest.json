@@ -1,0 +1,88 @@
+{
+  "$schema": "https://mfe-made-easy.com/schemas/mfe-manifest-v2.schema.json",
+  "name": "mfe-notification-react19",
+  "version": "1.0.0",
+  "url": "http://localhost:8080/service-demos/notifications/mfe-notification-react19/mfe-notification-react19.js",
+  "alternativeUrls": [
+    "https://cdn.example.com/mfe-notification-react19/1.0.0/main.js"
+  ],
+  "dependencies": {
+    "runtime": {
+      "react": "^19.0.0",
+      "react-dom": "^19.0.0"
+    },
+    "peer": {
+      "@mfe-toolkit/core": "^0.1.0"
+    },
+    "optional": {}
+  },
+  "compatibility": {
+    "container": "^1.0.0",
+    "browsers": {
+      "chrome": ">=90",
+      "firefox": ">=88",
+      "safari": ">=14",
+      "edge": ">=90"
+    },
+    "frameworks": {
+      "react": "^19.0.0"
+    }
+  },
+  "capabilities": {
+    "emits": [
+      "notification:test-triggered"
+    ],
+    "listens": [],
+    "features": [
+      "notification-testing",
+      "custom-notifications"
+    ]
+  },
+  "requirements": {
+    "services": [
+      {
+        "name": "notification",
+        "optional": false
+      }
+    ],
+    "permissions": [],
+    "features": []
+  },
+  "metadata": {
+    "displayName": "React 19 Notification Demo",
+    "description": "Notification service demonstration MFE built with React 19",
+    "icon": "🔔",
+    "author": {
+      "name": "MFE Toolkit Team"
+    },
+    "category": "service-demos",
+    "tags": [
+      "notification",
+      "demo",
+      "react19",
+      "service"
+    ]
+  },
+  "config": {
+    "loading": {
+      "timeout": 30000,
+      "retries": 3,
+      "retryDelay": 1000,
+      "priority": 5,
+      "preload": false,
+      "lazy": true
+    },
+    "runtime": {
+      "isolation": "none",
+      "keepAlive": false,
+      "singleton": true
+    },
+    "communication": {
+      "eventNamespace": "notification-demo"
+    }
+  },
+  "build": {
+    "time": "2025-01-14T00:00:00.000Z",
+    "env": "development"
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "$schema": "https://mfe-made-easy.com/schemas/mfe-manifest-v2.schema.json",
+  "name": "mfe-event-playground",
+  "version": "1.0.0",
+  "url": "http://localhost:8080/service-demos/event-bus/mfe-event-playground/mfe-event-playground.js",
+  "alternativeUrls": [
+    "https://cdn.example.com/mfe-event-playground/1.0.0/main.js"
+  ],
+  "dependencies": {
+    "runtime": {
+      "solid-js": "^1.8.0"
+    },
+    "peer": {
+      "@mfe-toolkit/core": "^0.1.0"
+    },
+    "optional": {}
+  },
+  "compatibility": {
+    "container": "^1.0.0",
+    "browsers": {
+      "chrome": ">=90",
+      "firefox": ">=88",
+      "safari": ">=14",
+      "edge": ">=90"
+    },
+    "frameworks": {
+      "solid-js": "^1.8.0"
+    }
+  },
+  "capabilities": {
+    "emits": [
+      "playground:test",
+      "playground:event-sent",
+      "playground:listener-added",
+      "playground:listener-removed"
+    ],
+    "listens": [
+      "*"
+    ],
+    "features": [
+      "event-testing",
+      "event-monitoring",
+      "json-validation",
+      "wildcard-subscriptions"
+    ]
+  },
+  "requirements": {
+    "services": [
+      {
+        "name": "eventBus",
+        "optional": false
+      },
+      {
+        "name": "logger",
+        "optional": true
+      }
+    ],
+    "permissions": [],
+    "features": []
+  },
+  "metadata": {
+    "displayName": "Event Playground",
+    "description": "Interactive event testing and monitoring tool built with Solid.js",
+    "icon": "🎮",
+    "author": {
+      "name": "MFE Toolkit Team"
+    },
+    "category": "service-demos",
+    "tags": [
+      "event-bus",
+      "testing",
+      "solid-js",
+      "monitoring",
+      "interactive"
+    ]
+  },
+  "config": {
+    "loading": {
+      "timeout": 30000,
+      "retries": 3,
+      "retryDelay": 1000,
+      "priority": 5,
+      "preload": false,
+      "lazy": true
+    },
+    "runtime": {
+      "isolation": "none",
+      "keepAlive": false,
+      "singleton": true
+    },
+    "communication": {
+      "eventNamespace": "playground"
+    }
+  },
+  "build": {
+    "time": "2025-01-14T00:00:00.000Z",
+    "env": "development"
+  }
+}

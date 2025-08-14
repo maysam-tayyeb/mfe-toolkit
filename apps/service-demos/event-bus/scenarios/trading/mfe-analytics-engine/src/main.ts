@@ -1,26 +1,27 @@
 import { AnalyticsEngine } from './AnalyticsEngine';
-import type { MFEMount, MFEUnmount, MFEServices } from '@mfe-toolkit/core';
+import type { MFEModuleV2, MFEServiceContainer } from '@mfe-toolkit/core';
 
 let instance: AnalyticsEngine | null = null;
 
-export default {
-  mount: ((container: HTMLElement, services: MFEServices) => {
-    instance = new AnalyticsEngine(container, services);
-    
-    return {
-      unmount: () => {
-        if (instance) {
-          instance.destroy();
-          instance = null;
-        }
-      }
-    };
-  }) as MFEMount,
+const module: MFEModuleV2 = {
+  metadata: {
+    name: 'mfe-analytics-engine',
+    version: '1.0.0',
+    requiredServices: ['eventBus'],
+    capabilities: ['real-time-analytics', 'portfolio-analysis', 'trend-detection', 'performance-metrics']
+  },
+
+  mount: async (element: HTMLElement, container: MFEServiceContainer) => {
+    const services = container.getAllServices();
+    instance = new AnalyticsEngine(element, services);
+  },
   
-  unmount: (() => {
+  unmount: async (_container: MFEServiceContainer) => {
     if (instance) {
       instance.destroy();
       instance = null;
     }
-  }) as MFEUnmount
+  }
 };
+
+export default module;

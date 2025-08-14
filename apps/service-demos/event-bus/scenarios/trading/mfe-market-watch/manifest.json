@@ -1,0 +1,100 @@
+{
+  "$schema": "https://mfe-made-easy.com/schemas/mfe-manifest-v2.schema.json",
+  "name": "mfe-market-watch",
+  "version": "1.0.0",
+  "url": "http://localhost:8080/service-demos/event-bus/scenarios/trading/mfe-market-watch/mfe-market-watch.js",
+  "alternativeUrls": [
+    "https://cdn.example.com/mfe-market-watch/1.0.0/main.js"
+  ],
+  "dependencies": {
+    "runtime": {
+      "react": "^18.0.0 || ^19.0.0",
+      "react-dom": "^18.0.0 || ^19.0.0"
+    },
+    "peer": {
+      "@mfe-toolkit/core": "^0.1.0"
+    },
+    "optional": {}
+  },
+  "compatibility": {
+    "container": "^1.0.0",
+    "browsers": {
+      "chrome": ">=90",
+      "firefox": ">=88",
+      "safari": ">=14",
+      "edge": ">=90"
+    },
+    "frameworks": {
+      "react": "^18.0.0 || ^19.0.0"
+    }
+  },
+  "capabilities": {
+    "emits": [
+      "market:price-update",
+      "market:stock-selected",
+      "market:data-refreshed"
+    ],
+    "listens": [
+      "trading:order-placed",
+      "trading:order-filled",
+      "analytics:trend-identified"
+    ],
+    "features": [
+      "real-time-prices",
+      "market-data-display",
+      "stock-monitoring",
+      "price-alerts"
+    ]
+  },
+  "requirements": {
+    "services": [
+      {
+        "name": "eventBus",
+        "optional": false
+      },
+      {
+        "name": "logger",
+        "optional": true
+      }
+    ],
+    "permissions": [],
+    "features": []
+  },
+  "metadata": {
+    "displayName": "Market Watch",
+    "description": "Real-time market data viewer built with React",
+    "icon": "📈",
+    "author": {
+      "name": "MFE Toolkit Team"
+    },
+    "category": "service-demos",
+    "tags": [
+      "market-data",
+      "trading",
+      "react",
+      "real-time"
+    ]
+  },
+  "config": {
+    "loading": {
+      "timeout": 30000,
+      "retries": 3,
+      "retryDelay": 1000,
+      "priority": 5,
+      "preload": false,
+      "lazy": true
+    },
+    "runtime": {
+      "isolation": "none",
+      "keepAlive": false,
+      "singleton": true
+    },
+    "communication": {
+      "eventNamespace": "market"
+    }
+  },
+  "build": {
+    "time": "2025-01-14T00:00:00.000Z",
+    "env": "development"
+  }
+}

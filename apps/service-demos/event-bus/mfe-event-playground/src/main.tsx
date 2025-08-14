@@ -1,15 +1,6 @@
 import { createSignal, createEffect, onCleanup, For } from 'solid-js';
 import { render } from 'solid-js/web';
-import type { EventBus } from '@mfe-toolkit/core';
-
-interface MFEServices {
-  eventBus: EventBus;
-  logger?: {
-    info: (message: string, data?: any) => void;
-    warn: (message: string, data?: any) => void;
-    error: (message: string, error?: any) => void;
-  };
-}
+import type { EventBus, MFEModuleV2, MFEServiceContainer, MFEServices } from '@mfe-toolkit/core';
 
 interface EventEntry {
   id: string;
@@ -362,21 +353,31 @@ function EventPlayground(props: { services: MFEServices }) {
 // MFE Module Export
 let cleanup: (() => void) | null = null;
 
-export default {
-  mount: (container: HTMLElement, services: MFEServices) => {
+const module: MFEModuleV2 = {
+  metadata: {
+    name: 'mfe-event-playground',
+    version: '1.0.0',
+    requiredServices: ['eventBus'],
+    capabilities: ['event-testing', 'event-monitoring', 'json-validation', 'wildcard-subscriptions']
+  },
+
+  mount: async (element: HTMLElement, container: MFEServiceContainer) => {
+    const services = container.getAllServices();
     if (!services?.eventBus) {
       console.error('Event Bus service is required');
       return;
     }
     
-    cleanup = render(() => <EventPlayground services={services} />, container);
+    cleanup = render(() => <EventPlayground services={services} />, element);
     services.logger?.info('Event Playground MFE mounted (Solid.js)');
   },
   
-  unmount: () => {
+  unmount: async (_container: MFEServiceContainer) => {
     if (cleanup) {
       cleanup();
       cleanup = null;
     }
   }
 };
+
+export default module;
