@@ -9,7 +9,6 @@ interface GeneratorOptions {
   framework?: 'react' | 'vue' | 'angular' | 'vanilla';
   output?: string;
   template?: 'basic' | 'full';
-  migrate?: string;
 }
 
 export class ManifestGenerator {
@@ -206,15 +205,7 @@ export class ManifestGenerator {
           i++;
           break;
 
-        case '--migrate':
-        case '-m':
-          options.migrate = nextArg;
-          i++;
-          break;
 
-        case '--examples':
-          this.showExamples();
-          return;
 
         case '--validate':
           this.validateManifest(nextArg);
@@ -222,11 +213,6 @@ export class ManifestGenerator {
       }
     }
 
-    // Handle migration
-    if (options.migrate) {
-      this.migrateManifest(options.migrate, options.output);
-      return;
-    }
 
     // Validate required options
     if (!options.name) {
@@ -277,9 +263,7 @@ Options:
   -f, --framework <framework> Framework: react, vue, angular, vanilla (default: react)
   -t, --template <template>   Template: basic, full (default: basic)
   -o, --output <path>         Output file path (default: <name>.manifest.json)
-  -m, --migrate <path>        Migrate existing V1 manifest to V2
   --validate <path>           Validate an existing manifest
-  --examples                  Show example manifests
   -h, --help                  Show this help message
 
 Examples:
@@ -292,18 +276,11 @@ Examples:
   # Output to stdout
   mfe-manifest --name test-app --output -
 
-  # Migrate existing manifest
-  mfe-manifest --migrate old-manifest.json --output new-manifest.json
-
   # Validate manifest
   mfe-manifest --validate my-app.manifest.json
 `);
   }
 
-  private showExamples() {
-    console.log('Example MFE Manifests:\n');
-    console.log('Use --generate to create a new manifest');
-  }
 
   private validateManifest(path: string) {
     if (!path) {
@@ -330,10 +307,6 @@ Examples:
     }
   }
 
-  private migrateManifest(_inputPath: string, _outputPath?: string) {
-    console.log('Migration is no longer needed - all manifests use the current format.');
-    process.exit(0);
-  }
 }
 
 // Run if called directly
