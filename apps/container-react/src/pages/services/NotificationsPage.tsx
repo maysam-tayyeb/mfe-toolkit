@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useUI } from '@/contexts/UIContext';
-import { Button } from '@/components/ui/button';
-import { Bell, CheckCircle, AlertCircle, Info, AlertTriangle } from 'lucide-react';
 import { TabGroup } from '@mfe/design-system-react';
 import { RegistryMFELoader } from '@/components/RegistryMFELoader';
 
@@ -62,28 +60,28 @@ export const NotificationsPage: React.FC = () => {
       type: 'success' as const,
       title: 'Success Notification',
       message: 'This is a success notification example',
-      icon: <CheckCircle className="ds-h-5 ds-w-5" />,
+      icon: '✓',
       color: 'ds-text-green-600'
     },
     {
       type: 'error' as const,
       title: 'Error Notification',
       message: 'This is an error notification example',
-      icon: <AlertCircle className="ds-h-5 ds-w-5" />,
+      icon: '⚠',
       color: 'ds-text-red-600'
     },
     {
       type: 'warning' as const,
       title: 'Warning Notification',
       message: 'This is a warning notification example',
-      icon: <AlertTriangle className="ds-h-5 ds-w-5" />,
+      icon: '⚠',
       color: 'ds-text-amber-600'
     },
     {
       type: 'info' as const,
       title: 'Info Notification',
       message: 'This is an info notification example',
-      icon: <Info className="ds-h-5 ds-w-5" />,
+      icon: 'ℹ',
       color: 'ds-text-blue-600'
     }
   ];
@@ -102,21 +100,20 @@ export const NotificationsPage: React.FC = () => {
             <div key={notification.type} className="ds-card-compact">
               <div className="ds-flex ds-items-start ds-gap-3">
                 <div className={`ds-mt-1 ${notification.color}`}>
-                  {notification.icon}
+                  <span className="ds-text-lg">{notification.icon}</span>
                 </div>
                 <div className="ds-flex-1">
                   <h3 className="ds-font-medium ds-mb-1">{notification.title}</h3>
                   <p className="ds-text-sm ds-text-slate-600 ds-dark:text-slate-400 ds-mb-3">
                     {notification.message}
                   </p>
-                  <Button
-                    size="sm"
-                    variant="outline"
+                  <button
+                    className="ds-btn-outline ds-btn-sm"
                     onClick={() => handleTestNotification(notification.type, notification.title, notification.message)}
                   >
-                    <Bell className="ds-h-3 ds-w-3 ds-mr-1.5" />
+                    <span className="ds-mr-2">🔔</span>
                     Test {notification.type}
-                  </Button>
+                  </button>
                 </div>
               </div>
             </div>
@@ -166,10 +163,10 @@ export const NotificationsPage: React.FC = () => {
               required
             />
           </div>
-          <Button type="submit">
-            <Bell className="ds-h-4 ds-w-4 ds-mr-2" />
+          <button type="submit" className="ds-btn-primary">
+            <span className="ds-mr-2">🔔</span>
             Send Custom Notification
-          </Button>
+          </button>
         </form>
       </div>
     </div>
