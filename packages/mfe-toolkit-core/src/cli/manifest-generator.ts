@@ -1,9 +1,8 @@
 #!/usr/bin/env node
 
 import { writeFileSync, readFileSync, existsSync } from 'fs';
-import { MFEManifestV2 } from '../types/manifest';
+import { MFEManifest } from '../types/manifest';
 import { manifestValidator } from '../services/manifest-validator';
-import { manifestMigrator } from '../services/manifest-migrator';
 
 interface GeneratorOptions {
   name: string;
@@ -15,10 +14,10 @@ interface GeneratorOptions {
 }
 
 class ManifestGenerator {
-  generateManifest(options: GeneratorOptions): MFEManifestV2 {
+  generateManifest(options: GeneratorOptions): MFEManifest {
     const { name, version = '1.0.0', framework = 'react', template = 'basic' } = options;
 
-    const baseManifest: MFEManifestV2 = {
+    const baseManifest: MFEManifest = {
       $schema: 'https://mfe-made-easy.com/schemas/mfe-manifest-v2.schema.json',
       name,
       version,
@@ -262,9 +261,6 @@ class ManifestGenerator {
         console.log('\n⚠️  Warnings:');
         validation.warnings.forEach((w) => {
           console.log(`  - ${w.field}: ${w.message}`);
-          if (w.suggestion) {
-            console.log(`    💡 ${w.suggestion}`);
-          }
         });
       }
     }
@@ -306,16 +302,8 @@ Examples:
   }
 
   private showExamples() {
-    const examples = manifestMigrator.generateExamples();
-
     console.log('Example MFE Manifests:\n');
-
-    Object.entries(examples).forEach(([name, manifest]) => {
-      console.log(`## ${name}`);
-      console.log('```json');
-      console.log(JSON.stringify(manifest, null, 2));
-      console.log('```\n');
-    });
+    console.log('Use --generate to create a new manifest');
   }
 
   private validateManifest(path: string) {
@@ -343,75 +331,9 @@ Examples:
     }
   }
 
-  private migrateManifest(inputPath: string, outputPath?: string) {
-    if (!existsSync(inputPath)) {
-      console.error(`Error: File not found: ${inputPath}`);
-      process.exit(1);
-    }
-
-    try {
-      const content = readFileSync(inputPath, 'utf-8');
-      const oldManifest = JSON.parse(content);
-
-      // Check if it's a registry or single manifest
-      const isRegistry = Array.isArray(oldManifest.mfes) || Array.isArray(oldManifest);
-
-      if (isRegistry) {
-        const result = manifestMigrator.migrateRegistry(oldManifest);
-        const report = manifestMigrator.generateReport(result);
-
-        if (outputPath && outputPath !== '-') {
-          // Save report
-          writeFileSync(outputPath.replace(/\.json$/, '-report.md'), report);
-
-          // Save migrated registry if successful
-          if (result.success && result.registry) {
-            writeFileSync(outputPath, JSON.stringify(result.registry, null, 2));
-            console.log(`✅ Registry migrated successfully: ${outputPath}`);
-            console.log(
-              `📄 Migration report saved: ${outputPath.replace(/\.json$/, '-report.md')}`
-            );
-          }
-        } else {
-          console.log(report);
-        }
-
-        process.exit(result.success ? 0 : 1);
-      } else {
-        // Single manifest
-        const validation = manifestValidator.validate(oldManifest);
-
-        if (validation.version === 'v2') {
-          console.log('ℹ️  Manifest is already in V2 format');
-          process.exit(0);
-        }
-
-        const result = manifestMigrator.migrateManifest(oldManifest);
-
-        if (result.success && result.manifest) {
-          const output = outputPath || inputPath.replace(/\.json$/, '.v2.json');
-
-          if (output === '-') {
-            console.log(JSON.stringify(result.manifest, null, 2));
-          } else {
-            writeFileSync(output, JSON.stringify(result.manifest, null, 2));
-            console.log(`✅ Manifest migrated successfully: ${output}`);
-          }
-
-          if (result.warnings && result.warnings.length > 0) {
-            console.log('\n⚠️  Warnings:');
-            result.warnings.forEach((w) => console.log(`  - ${w}`));
-          }
-        } else {
-          console.error('❌ Migration failed:');
-          result.errors?.forEach((e) => console.error(`  - ${e}`));
-          process.exit(1);
-        }
-      }
-    } catch (error) {
-      console.error(`Error: ${error}`);
-      process.exit(1);
-    }
+  private migrateManifest(_inputPath: string, _outputPath?: string) {
+    console.log('Migration is no longer needed - all manifests use the current format.');
+    process.exit(0);
   }
 }
 

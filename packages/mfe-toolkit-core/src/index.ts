@@ -1,7 +1,7 @@
 // Types
 export * from './types';
 export * from './types/events';
-export { MFEModule } from './types/mfe-module';
+export type { MFEModule } from './types/mfe-module';
 export * from './services/service-container';
 
 // Services
@@ -42,12 +42,6 @@ export {
   manifestValidator,
   type ValidationResult,
 } from './services/manifest-validator';
-export {
-  ManifestMigrator,
-  manifestMigrator,
-  type MigrationResult,
-  type RegistryMigrationResult,
-} from './services/manifest-migrator';
 
 // Utilities
 export * from './utils';
