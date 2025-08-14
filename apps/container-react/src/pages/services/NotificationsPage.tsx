@@ -95,7 +95,7 @@ export const NotificationsPage: React.FC = () => {
     <div className="ds-p-4">
       <div className="ds-mb-6">
         <h2 className="ds-section-title ds-mb-6">Notification Types</h2>
-        <div className="ds-grid ds-gap-4 ds-md:grid-cols-2">
+        <div className="ds-grid ds-grid-cols-2 ds-gap-4">
           {notificationTypes.map((notification) => (
             <div key={notification.type} className="ds-card-compact">
               <div className="ds-flex ds-items-start ds-gap-3">
@@ -132,7 +132,7 @@ export const NotificationsPage: React.FC = () => {
             formData.get('message') as string
           );
         }} className="ds-space-y-4">
-          <div className="ds-grid ds-gap-4 ds-md:grid-cols-2">
+          <div className="ds-grid ds-grid-cols-2 ds-gap-4">
             <div>
               <label className="ds-label">Type</label>
               <select name="type" className="ds-select">
