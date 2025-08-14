@@ -1,9 +1,8 @@
 import { EventBus } from '../types';
-import { createMigrationEventBus } from './event-bus-migration';
-import type { MFEEventMap } from '../types/events';
+import { createTypedEventBus } from './typed-event-bus';
 
 /**
- * Create an event bus instance
+ * Create an event bus instance with typed events
  *
  * @param options - Configuration options
  * @param options.source - Source identifier for events
@@ -11,8 +10,8 @@ import type { MFEEventMap } from '../types/events';
  * @returns EventBus instance with typed implementation
  */
 export const createEventBus = (options?: { source?: string; debug?: boolean }): EventBus => {
-  // Always return migration adapter that supports both typed and untyped usage
-  return createMigrationEventBus<MFEEventMap>({
+  // Return typed event bus that implements the EventBus interface
+  return createTypedEventBus({
     source: options?.source || 'mfe-platform',
     debug: options?.debug || false,
   });

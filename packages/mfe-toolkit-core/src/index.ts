@@ -19,13 +19,6 @@ export {
   type EventBusStats,
 } from './services/typed-event-bus';
 export {
-  createMigrationEventBus,
-  EventBusMigrationAdapter,
-  EventUsageAnalyzer,
-  createAnalyzingEventBus,
-  generateMigrationGuide,
-} from './services/event-bus-migration';
-export {
   createMFERegistry,
   MFERegistryService,
   type RegistryConfig,
