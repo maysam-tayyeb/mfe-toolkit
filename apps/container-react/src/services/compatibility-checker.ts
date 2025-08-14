@@ -30,10 +30,10 @@ export class CompatibilityChecker {
     const errors: string[] = [];
     const warnings: string[] = [];
 
-    // Handle V1 manifests with basic checks
+    // All manifests must be V2 now
     if (!isMFEManifestV2(manifest)) {
-      warnings.push('MFE uses legacy V1 manifest format. Consider upgrading to V2.');
-      return { compatible: true, errors, warnings };
+      errors.push('Invalid manifest format. V2 manifest required.');
+      return { compatible: false, errors, warnings };
     }
 
     // Check container version compatibility

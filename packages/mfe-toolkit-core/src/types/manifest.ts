@@ -329,24 +329,12 @@ export interface MFEManifestV2 {
 }
 
 /**
- * Legacy MFE Manifest (for backward compatibility)
+ * MFE Manifest is now V2 only
  */
-export interface MFEManifestV1 {
-  name: string;
-  version: string;
-  url: string;
-  dependencies?: string[];
-  sharedLibs?: string[];
-  metadata?: Record<string, any>;
-}
+export type MFEManifest = MFEManifestV2;
 
 /**
- * Union type for all manifest versions
- */
-export type MFEManifest = MFEManifestV2 | MFEManifestV1;
-
-/**
- * Type guard to check if manifest is V2
+ * Type guard to check if manifest is V2 (always true now)
  */
 export function isMFEManifestV2(manifest: MFEManifest): manifest is MFEManifestV2 {
   return (
@@ -354,13 +342,6 @@ export function isMFEManifestV2(manifest: MFEManifest): manifest is MFEManifestV
     typeof manifest.dependencies === 'object' &&
     'runtime' in manifest.dependencies
   );
-}
-
-/**
- * Type guard to check if manifest is V1
- */
-export function isMFEManifestV1(manifest: MFEManifest): manifest is MFEManifestV1 {
-  return !isMFEManifestV2(manifest);
 }
 
 /**

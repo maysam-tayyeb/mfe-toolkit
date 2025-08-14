@@ -1,7 +1,6 @@
 // Re-export manifest types
 export type {
   MFEManifest,
-  MFEManifestV1,
   MFEManifestV2,
   MFERegistry,
   MFEDependencies,
@@ -14,7 +13,7 @@ export type {
   MFELifecycle,
 } from './manifest';
 
-export { isMFEManifestV1, isMFEManifestV2 } from './manifest';
+export { isMFEManifestV2 } from './manifest';
 
 // Re-export error reporter types
 export type { ErrorReport } from '../services/error-reporter';
@@ -133,7 +132,4 @@ export interface ThemeService {
   cycleTheme?: () => void; // Optional: Cycle to next theme
 }
 
-export interface MFEModule {
-  mount: (element: HTMLElement, services: MFEServices) => void;
-  unmount: () => void;
-}
+// Legacy MFEModule replaced by MFEModuleV2 - see types/mfe-module.ts

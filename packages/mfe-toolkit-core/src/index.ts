@@ -1,6 +1,8 @@
 // Types
 export * from './types';
 export * from './types/events';
+export * from './types/mfe-module';
+export * from './services/service-container';
 
 // Services
 export { createLogger } from './services/logger';

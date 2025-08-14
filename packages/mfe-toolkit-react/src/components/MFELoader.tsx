@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
-import { MFEServices, MFEModule } from '../types';
+import { MFEServices, MFEModuleV2, MFEServiceContainer } from '../types';
+import { createServiceContainer } from '@mfe-toolkit/core';
 import { MFEErrorBoundary } from './MFEErrorBoundary';
 import { getErrorReporter } from '../services/error-reporter';
 
@@ -34,6 +35,7 @@ const IsolatedLoaderStrategy: React.FC<MFELoaderProps> = ({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
   const mfeInstanceRef = useRef<any>(null);
+  const serviceContainerRef = useRef<MFEServiceContainer | null>(null);
   const cleanupRef = useRef<(() => void) | null>(null);
 
   // Use ref to avoid stale closure
@@ -70,7 +72,9 @@ const IsolatedLoaderStrategy: React.FC<MFELoaderProps> = ({
           containerRef.current.appendChild(mfeContainer);
 
           services.logger.info(`[IsolatedLoader] Mounting ${name}`);
-          module.default.mount(mfeContainer, services);
+          const container = createServiceContainer(services);
+          serviceContainerRef.current = container;
+          await module.default.mount(mfeContainer, container);
           mfeInstanceRef.current = module.default;
 
           // Store cleanup function
@@ -78,7 +82,9 @@ const IsolatedLoaderStrategy: React.FC<MFELoaderProps> = ({
             cleanupRef.current = () => {
               try {
                 services.logger.debug(`[IsolatedLoader] Unmounting ${name}`);
-                module.default.unmount(mfeContainer);
+                const unmountContainer = serviceContainerRef.current || createServiceContainer(services);
+                module.default.unmount(unmountContainer);
+                serviceContainerRef.current = null;
               } catch (err) {
                 services.logger.error(`Error unmounting ${name}:`, err);
               }
@@ -186,7 +192,8 @@ const StandardLoaderStrategy: React.FC<MFELoaderProps> = ({
     error: null,
     retryCount: 0,
   });
-  const mfeRef = useRef<MFEModule | null>(null);
+  const mfeRef = useRef<MFEModuleV2 | null>(null);
+  const serviceContainerRef = useRef<MFEServiceContainer | null>(null);
   const mountedRef = useRef<boolean>(false);
   const loadingRef = useRef<boolean>(false);
   const retryTimeoutRef = useRef<NodeJS.Timeout | undefined>(undefined);
@@ -213,7 +220,7 @@ const StandardLoaderStrategy: React.FC<MFELoaderProps> = ({
       services.logger.info(`Loading MFE ${name} from URL: ${url}`);
       const mfeModule = await import(/* @vite-ignore */ url);
 
-      const mfe = mfeModule.default as MFEModule;
+      const mfe = mfeModule.default as MFEModuleV2;
 
       if (!mfe || typeof mfe.mount !== 'function') {
         throw new Error(`MFE ${name} does not export a valid module with mount function`);
@@ -236,12 +243,14 @@ const StandardLoaderStrategy: React.FC<MFELoaderProps> = ({
         }, 5000);
 
         // Use requestAnimationFrame to ensure DOM is ready
-        requestAnimationFrame(() => {
+        requestAnimationFrame(async () => {
           if (containerRef.current && mfeRef.current && !mountedRef.current) {
             try {
               console.log(`[MFELoader] Mounting MFE ${name} to container`);
               services.logger.info(`Mounting MFE ${name}`);
-              mfeRef.current.mount(containerRef.current, services);
+              const container = createServiceContainer(services);
+              serviceContainerRef.current = container;
+              await mfeRef.current.mount(containerRef.current, container);
               mountedRef.current = true;
               clearTimeout(mountTimeout);
               resolve();
@@ -326,8 +335,10 @@ const StandardLoaderStrategy: React.FC<MFELoaderProps> = ({
       if (mfeRef.current && mfeRef.current.unmount && mountedRef.current) {
         try {
           services.logger.info(`Unmounting previous MFE ${prevNameRef.current}`);
-          mfeRef.current.unmount();
+          const container = serviceContainerRef.current || createServiceContainer(services);
+          mfeRef.current.unmount(container);
           mountedRef.current = false;
+          serviceContainerRef.current = null;
           mfeRef.current = null;
         } catch (err) {
           services.logger.error(`Error unmounting MFE ${prevNameRef.current}:`, err);
@@ -360,7 +371,9 @@ const StandardLoaderStrategy: React.FC<MFELoaderProps> = ({
       if (mfeRef.current && mfeRef.current.unmount && mountedRef.current) {
         try {
           services.logger.info(`Component unmounting, cleaning up MFE ${name}`);
-          mfeRef.current.unmount();
+          const container = serviceContainerRef.current || createServiceContainer(services);
+          mfeRef.current.unmount(container);
+          serviceContainerRef.current = null;
         } catch (err) {
           services.logger.error(`Error unmounting MFE ${name}:`, err);
         }
