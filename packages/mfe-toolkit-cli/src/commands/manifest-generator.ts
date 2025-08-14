@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { writeFileSync, readFileSync, existsSync } from 'fs';
-import { MFEManifestV2, manifestValidator, manifestMigrator } from '@mfe-toolkit/core';
+import { MFEManifest, manifestValidator, manifestMigrator } from '@mfe-toolkit/core';
 
 interface GeneratorOptions {
   name: string;
@@ -13,10 +13,10 @@ interface GeneratorOptions {
 }
 
 export class ManifestGenerator {
-  generateManifest(options: GeneratorOptions): MFEManifestV2 {
+  generateManifest(options: GeneratorOptions): MFEManifest {
     const { name, version = '1.0.0', framework = 'react', template = 'basic' } = options;
 
-    const baseManifest: MFEManifestV2 = {
+    const baseManifest: MFEManifest = {
       $schema: 'https://mfe-toolkit.com/schemas/mfe-manifest-v2.schema.json',
       name,
       version,
@@ -280,7 +280,7 @@ Options:
   -f, --framework <framework> Framework: react, vue, angular, vanilla (default: react)
   -t, --template <template>   Template: basic, full (default: basic)
   -o, --output <path>         Output file path (default: <name>.manifest.json)
-  -m, --migrate <path>        Migrate existing V1 manifest to V2
+  -m, --migrate <path>        Migrate existing manifest to current format
   --validate <path>           Validate an existing manifest
   --examples                  Show example manifests
   -h, --help                  Show this help message
@@ -380,7 +380,7 @@ Examples:
         const validation = manifestValidator.validate(oldManifest);
 
         if (validation.version === 'v2') {
-          console.log('ℹ️  Manifest is already in V2 format');
+          console.log('ℹ️  Manifest is already in current format');
           process.exit(0);
         }
 

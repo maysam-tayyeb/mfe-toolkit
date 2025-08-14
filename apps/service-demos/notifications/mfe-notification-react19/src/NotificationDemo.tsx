@@ -49,7 +49,7 @@ export const NotificationDemo: React.FC<{ services: MFEServices }> = ({ services
 
   const handleTestNotification = (type: NotificationType, title: string, message: string) => {
     if (services.notification) {
-      services.notification.add({ type, title, message });
+      services.notification.show({ type, title, message });
     }
   };
 
