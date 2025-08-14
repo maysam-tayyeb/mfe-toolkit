@@ -6,18 +6,17 @@ export * from './services/service-container';
 
 // Services
 export { createLogger } from './services/logger';
-export { createEventBus } from './services/event-bus';
 export {
-  createTypedEventBus,
+  createEventBus,
   createCustomEventBus,
-  TypedEventBusImpl,
-  type TypedEventBus,
-  type TypedEventHandler,
+  EventBusImpl,
+  type EventBusExtended,
+  type EventHandler,
   type AnyEventHandler,
   type EventInterceptor,
-  type TypedEventBusOptions,
+  type EventBusOptions,
   type EventBusStats,
-} from './services/typed-event-bus';
+} from './services/event-bus';
 export {
   createMFERegistry,
   MFERegistryService,
