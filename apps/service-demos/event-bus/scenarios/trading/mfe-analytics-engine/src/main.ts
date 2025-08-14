@@ -1,5 +1,5 @@
 import { AnalyticsEngine } from './AnalyticsEngine';
-import type { MFEModuleV2, MFEServiceContainer } from '@mfe-toolkit/core';
+import type { MFEModuleV2, MFEServiceContainer, MFEServices } from '@mfe-toolkit/core';
 
 let instance: AnalyticsEngine | null = null;
 
@@ -11,8 +11,12 @@ const module: MFEModuleV2 = {
     capabilities: ['real-time-analytics', 'portfolio-analysis', 'trend-detection', 'performance-metrics']
   },
 
-  mount: async (element: HTMLElement, container: MFEServiceContainer) => {
-    const services = container.getAllServices();
+  mount: async (element: HTMLElement, containerOrServices: MFEServiceContainer | MFEServices) => {
+    // Handle both V1 (services) and V2 (container) interfaces
+    const services = 'getAllServices' in containerOrServices 
+      ? containerOrServices.getAllServices() 
+      : containerOrServices as MFEServices;
+    
     instance = new AnalyticsEngine(element, services);
   },
   
