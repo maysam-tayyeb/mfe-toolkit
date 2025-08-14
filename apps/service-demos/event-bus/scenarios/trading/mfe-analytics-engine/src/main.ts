@@ -1,9 +1,9 @@
 import { AnalyticsEngine } from './AnalyticsEngine';
-import type { MFEModuleV2, MFEServiceContainer, MFEServices } from '@mfe-toolkit/core';
+import type { MFEModule, MFEServiceContainer, MFEServices } from '@mfe-toolkit/core';
 
 let instance: AnalyticsEngine | null = null;
 
-const module: MFEModuleV2 = {
+const module: MFEModule = {
   metadata: {
     name: 'mfe-analytics-engine',
     version: '1.0.0',

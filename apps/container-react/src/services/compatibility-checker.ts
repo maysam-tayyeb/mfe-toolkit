@@ -1,4 +1,4 @@
-import { MFEManifest, isMFEManifestV2 } from '@mfe-toolkit/core';
+import { MFEManifest } from '@mfe-toolkit/core';
 import semver from 'semver';
 
 export interface CompatibilityCheckResult {
@@ -30,9 +30,9 @@ export class CompatibilityChecker {
     const errors: string[] = [];
     const warnings: string[] = [];
 
-    // All manifests must be V2 now
-    if (!isMFEManifestV2(manifest)) {
-      errors.push('Invalid manifest format. V2 manifest required.');
+    // Check that manifest has required structure
+    if (!manifest.dependencies || !manifest.dependencies.runtime) {
+      errors.push('Invalid manifest format. Missing dependencies.runtime field.');
       return { compatible: false, errors, warnings };
     }
 

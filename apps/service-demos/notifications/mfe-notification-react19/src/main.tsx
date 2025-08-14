@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { NotificationDemo } from './NotificationDemo';
-import type { MFEModuleV2, MFEServiceContainer, MFEServices } from '@mfe-toolkit/core';
+import type { MFEModule, MFEServiceContainer, MFEServices } from '@mfe-toolkit/core';
 
 let root: ReactDOM.Root | null = null;
 
-const module: MFEModuleV2 = {
+const module: MFEModule = {
   metadata: {
     name: 'mfe-notification-react19',
     version: '1.0.0',

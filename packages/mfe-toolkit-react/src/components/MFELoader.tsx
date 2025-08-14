@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
-import { MFEServices, MFEModuleV2, MFEServiceContainer } from '../types';
+import { MFEServices, MFEModule, MFEServiceContainer } from '../types';
 import { createServiceContainer } from '@mfe-toolkit/core';
 import { MFEErrorBoundary } from './MFEErrorBoundary';
 import { getErrorReporter } from '../services/error-reporter';
@@ -192,7 +192,7 @@ const StandardLoaderStrategy: React.FC<MFELoaderProps> = ({
     error: null,
     retryCount: 0,
   });
-  const mfeRef = useRef<MFEModuleV2 | null>(null);
+  const mfeRef = useRef<MFEModule | null>(null);
   const serviceContainerRef = useRef<MFEServiceContainer | null>(null);
   const mountedRef = useRef<boolean>(false);
   const loadingRef = useRef<boolean>(false);
@@ -220,7 +220,7 @@ const StandardLoaderStrategy: React.FC<MFELoaderProps> = ({
       services.logger.info(`Loading MFE ${name} from URL: ${url}`);
       const mfeModule = await import(/* @vite-ignore */ url);
 
-      const mfe = mfeModule.default as MFEModuleV2;
+      const mfe = mfeModule.default as MFEModule;
 
       if (!mfe || typeof mfe.mount !== 'function') {
         throw new Error(`MFE ${name} does not export a valid module with mount function`);

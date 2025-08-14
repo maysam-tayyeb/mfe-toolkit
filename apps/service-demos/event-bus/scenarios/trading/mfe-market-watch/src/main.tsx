@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { MarketWatch } from './MarketWatch';
-import type { MFEModuleV2, MFEServiceContainer, MFEServices } from '@mfe-toolkit/core';
+import type { MFEModule, MFEServiceContainer, MFEServices } from '@mfe-toolkit/core';
 
 let root: ReactDOM.Root | null = null;
 
-const module: MFEModuleV2 = {
+const module: MFEModule = {
   metadata: {
     name: 'mfe-market-watch',
     version: '1.0.0',

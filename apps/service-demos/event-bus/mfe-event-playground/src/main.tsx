@@ -1,6 +1,6 @@
 import { createSignal, createEffect, onCleanup, For } from 'solid-js';
 import { render } from 'solid-js/web';
-import type { EventBus, MFEModuleV2, MFEServiceContainer, MFEServices } from '@mfe-toolkit/core';
+import type { EventBus, MFEModule, MFEServiceContainer, MFEServices } from '@mfe-toolkit/core';
 
 interface EventEntry {
   id: string;
@@ -353,7 +353,7 @@ function EventPlayground(props: { services: MFEServices }) {
 // MFE Module Export
 let cleanup: (() => void) | null = null;
 
-const module: MFEModuleV2 = {
+const module: MFEModule = {
   metadata: {
     name: 'mfe-event-playground',
     version: '1.0.0',

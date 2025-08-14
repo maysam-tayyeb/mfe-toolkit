@@ -1,10 +1,10 @@
 import { createApp } from 'vue';
 import TradingTerminal from './TradingTerminal.vue';
-import type { MFEModuleV2, MFEServiceContainer, MFEServices } from '@mfe-toolkit/core';
+import type { MFEModule, MFEServiceContainer, MFEServices } from '@mfe-toolkit/core';
 
 let app: any = null;
 
-const module: MFEModuleV2 = {
+const module: MFEModule = {
   metadata: {
     name: 'mfe-trading-terminal',
     version: '1.0.0',

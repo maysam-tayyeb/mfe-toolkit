@@ -3,7 +3,7 @@ import type { ReactNode } from 'react';
 // Re-export core types for convenience
 export type {
   MFEServices,
-  MFEModuleV2,
+  MFEModule,
   MFEServiceContainer,
   MFEManifest,
   Logger,

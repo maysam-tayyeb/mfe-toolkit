@@ -1,7 +1,6 @@
 // Re-export manifest types
 export type {
   MFEManifest,
-  MFEManifestV2,
   MFERegistry,
   MFEDependencies,
   MFECompatibility,
@@ -12,8 +11,6 @@ export type {
   MFESecurity,
   MFELifecycle,
 } from './manifest';
-
-export { isMFEManifestV2 } from './manifest';
 
 // Re-export error reporter types
 export type { ErrorReport } from '../services/error-reporter';

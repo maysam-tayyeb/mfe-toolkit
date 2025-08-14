@@ -4,7 +4,6 @@ import { Badge } from '@/components/ui/badge';
 import { useUI } from '@/contexts/UIContext';
 import { useRegistry } from '@/hooks/useRegistry';
 import { compatibilityChecker } from '@/services/compatibility-checker';
-import { isMFEManifestV2 } from '@mfe-toolkit/core';
 import { Hero, MetricCard, LoadingState, EmptyState, TabGroup } from '@mfe/design-system-react';
 import {
   CheckCircle2,
@@ -66,7 +65,7 @@ export const DashboardPage: React.FC = () => {
           <div className="space-y-2">
             <h3 className="font-medium">Platform Info</h3>
             <p className="text-sm text-muted-foreground">
-              All platform services are running normally. Registry is using V2 Manifest Schema.
+              All platform services are running normally. Registry is using standard Manifest Schema.
             </p>
           </div>
         </div>
@@ -201,7 +200,7 @@ export const DashboardPage: React.FC = () => {
           </div>
           <div>
             <p className="text-xs ds-text-muted">Registry Type</p>
-            <p className="text-sm font-medium">V2 Manifest</p>
+            <p className="text-sm font-medium">Standard Manifest</p>
           </div>
         </div>
       ),
@@ -229,7 +228,7 @@ export const DashboardPage: React.FC = () => {
           </div>
           <div className="flex items-center gap-3">
             <CheckCircle2 className="h-4 w-4 ds-icon-success" />
-            <span className="text-sm">V2 Manifest Schema</span>
+            <span className="text-sm">Standard Manifest Schema</span>
           </div>
           <div className="flex items-center gap-3">
             <CheckCircle2 className="h-4 w-4 ds-icon-success" />
@@ -308,7 +307,7 @@ export const DashboardPage: React.FC = () => {
         />
         <MetricCard
           label="Registry Version"
-          value="V2"
+          value="Current"
           trend={{ value: 'Latest schema', direction: 'up' }}
           icon={<Zap className="h-4 w-4" />}
         />
@@ -439,7 +438,6 @@ export const DashboardPage: React.FC = () => {
             const manifest = registry.get(name);
             if (!manifest) return null;
 
-            const isV2 = isMFEManifestV2(manifest);
             const hasErrors = result.errors.length > 0;
             const hasWarnings = result.warnings.length > 0;
 
@@ -468,12 +466,10 @@ export const DashboardPage: React.FC = () => {
                     <div>
                       <div className="flex items-center gap-2">
                         <h3 className="ds-card-title">
-                          {isV2 && manifest.metadata?.displayName
-                            ? manifest.metadata.displayName
-                            : name}
+                          {manifest.metadata?.displayName || name}
                         </h3>
-                        <Badge variant={isV2 ? 'default' : 'secondary'} className="text-xs">
-                          {isV2 ? 'V2' : 'V1'}
+                        <Badge variant="default" className="text-xs">
+                          MFE
                         </Badge>
                         {result.compatible ? (
                           <CheckCircle2 className="h-4 w-4 ds-icon-success" />
@@ -482,9 +478,7 @@ export const DashboardPage: React.FC = () => {
                         )}
                       </div>
                       <p className="text-xs ds-text-muted mt-1">
-                        {isV2 && manifest.metadata?.description
-                          ? manifest.metadata.description
-                          : `Version ${manifest.version}`}
+                        {manifest.metadata?.description || `Version ${manifest.version}`}
                       </p>
                     </div>
                   </div>
@@ -501,7 +495,7 @@ export const DashboardPage: React.FC = () => {
                     </code>
                   </div>
 
-                  {isV2 && manifest.compatibility?.container && (
+                  {manifest.compatibility?.container && (
                     <div>
                       <p className="text-xs ds-text-muted mb-1">Container Required</p>
                       <code className="text-xs p-2 ds-bg-muted rounded block">
@@ -511,8 +505,7 @@ export const DashboardPage: React.FC = () => {
                   )}
                 </div>
 
-                {isV2 &&
-                  manifest.requirements?.services &&
+                {manifest.requirements?.services &&
                   manifest.requirements.services.length > 0 && (
                     <div className="mt-3">
                       <p className="text-xs ds-text-muted mb-2">Required Services</p>

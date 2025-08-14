@@ -276,7 +276,7 @@ export interface MFELifecycle {
 /**
  * Complete MFE Manifest
  */
-export interface MFEManifestV2 {
+export interface MFEManifest {
   /** Manifest schema version */
   $schema?: string;
 
@@ -328,21 +328,7 @@ export interface MFEManifestV2 {
   };
 }
 
-/**
- * MFE Manifest is now V2 only
- */
-export type MFEManifest = MFEManifestV2;
 
-/**
- * Type guard to check if manifest is V2 (always true now)
- */
-export function isMFEManifestV2(manifest: MFEManifest): manifest is MFEManifestV2 {
-  return (
-    'dependencies' in manifest &&
-    typeof manifest.dependencies === 'object' &&
-    'runtime' in manifest.dependencies
-  );
-}
 
 /**
  * MFE Registry containing multiple manifests
