@@ -13,12 +13,8 @@ const module: MFEModule = {
     capabilities: ['notification-testing', 'custom-notifications']
   },
 
-  mount: async (element: HTMLElement, containerOrServices: MFEServiceContainer | MFEServices) => {
-    // Handle both V1 (services) and V2 (container) interfaces
-    const services = 'getAllServices' in containerOrServices 
-      ? containerOrServices.getAllServices() 
-      : containerOrServices as MFEServices;
-    
+  mount: async (element: HTMLElement, container: MFEServiceContainer) => {
+    const services = container.getAllServices();
     root = ReactDOM.createRoot(element);
     root.render(<NotificationDemo services={services} />);
   },

@@ -12,12 +12,8 @@ const module: MFEModule = {
     capabilities: ['order-placement', 'portfolio-management', 'real-time-trading', 'order-tracking']
   },
 
-  mount: async (element: HTMLElement, containerOrServices: MFEServiceContainer | MFEServices) => {
-    // Handle both V1 (services) and V2 (container) interfaces
-    const services = 'getAllServices' in containerOrServices 
-      ? containerOrServices.getAllServices() 
-      : containerOrServices as MFEServices;
-    
+  mount: async (element: HTMLElement, container: MFEServiceContainer) => {
+    const services = container.getAllServices();
     app = createApp(TradingTerminal, { services });
     app.mount(element);
   },

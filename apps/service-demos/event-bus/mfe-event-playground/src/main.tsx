@@ -361,11 +361,8 @@ const module: MFEModule = {
     capabilities: ['event-testing', 'event-monitoring', 'json-validation', 'wildcard-subscriptions']
   },
 
-  mount: async (element: HTMLElement, containerOrServices: MFEServiceContainer | MFEServices) => {
-    // Handle both V1 (services) and V2 (container) interfaces
-    const services = 'getAllServices' in containerOrServices 
-      ? containerOrServices.getAllServices() 
-      : containerOrServices as MFEServices;
+  mount: async (element: HTMLElement, container: MFEServiceContainer) => {
+    const services = container.getAllServices();
     
     if (!services?.eventBus) {
       console.error('Event Bus service is required');
