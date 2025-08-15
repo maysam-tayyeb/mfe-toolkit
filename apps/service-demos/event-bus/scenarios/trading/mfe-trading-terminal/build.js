@@ -1,32 +1,13 @@
-const esbuild = require('esbuild');
-const vuePlugin = require('esbuild-plugin-vue3');
+import { buildMFE } from '@mfe-toolkit/core';
+import vuePlugin from 'esbuild-plugin-vue3';
 
-async function build() {
-  try {
-    await esbuild.build({
-      entryPoints: ['src/main.ts'],
-      bundle: true,
-      format: 'esm',
-      platform: 'browser',
-      outfile: 'dist/mfe-trading-terminal.js',
-      external: ['vue'],
-      loader: {
-        '.ts': 'ts'
-      },
-      plugins: [vuePlugin()],
-      define: {
-        'process.env.NODE_ENV': '"production"'
-      },
-      minify: true,
-      sourcemap: false,
-      target: 'es2020'
-    });
-    
-    console.log('✅ mfe-trading-terminal built successfully');
-  } catch (error) {
-    console.error('❌ Build failed:', error);
-    process.exit(1);
+// Build configuration for Vue 3 MFE (Trading Terminal)
+// Automatically detects Vue version from manifest.json
+await buildMFE({
+  entry: 'src/main.ts',
+  outfile: 'dist/mfe-trading-terminal.js',
+  manifestPath: './manifest.json',
+  esbuildOptions: {
+    plugins: [vuePlugin()]
   }
-}
-
-build();
+});

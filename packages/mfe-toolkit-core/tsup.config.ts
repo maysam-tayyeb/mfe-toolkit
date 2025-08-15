@@ -10,6 +10,7 @@ export default defineConfig({
   treeshake: true,
   outDir: 'dist',
   target: 'es2020',
-  external: [],
+  platform: 'node',
+  external: ['esbuild'], // Don't bundle esbuild
   noExternal: ['ajv', 'ajv-formats'], // Bundle these dependencies
 });

@@ -183,6 +183,7 @@ The toolkit is split into several npm packages under the `@mfe-toolkit` organiza
    - MFE types and interfaces
    - Manifest validation and migration
    - Common utility functions (generateId, delay, debounce, throttle)
+   - **buildMFE utility**: Generic build system with automatic dependency externalization
 
 2. **@mfe-toolkit/react** (`packages/mfe-toolkit-react/`)
    - React-specific components: MFELoader, MFEErrorBoundary, MFEPage
@@ -282,10 +283,18 @@ The toolkit is split into several npm packages under the `@mfe-toolkit` organiza
    }
    ```
 3. **Build Configuration**: 
-   - **tsup is the primary bundler** for all MFEs
-   - Use tsup for React, Solid.js, and Vanilla TypeScript MFEs
-   - Use tsup or esbuild for Vue MFEs (for Vue plugin compatibility if needed)
-   - Mark React, Vue, Solid.js as external dependencies
+   - Create a `build.js` file using the `buildMFE` utility:
+   ```javascript
+   import { buildMFE } from '@mfe-toolkit/core';
+   
+   await buildMFE({
+     entry: 'src/main.tsx',
+     outfile: 'dist/mfe-name.js',
+     manifestPath: './manifest.json'
+   });
+   ```
+   - Dependencies are automatically detected and externalized
+   - Versioned imports applied automatically (react → react@18)
 4. Add to container's MFE registry (`apps/container-react/public/mfe-registry.json`)
 5. Ensure proper TypeScript types from `@mfe-toolkit/core`
 6. **Framework Options**: React, Vue 3, Solid.js, or Vanilla TypeScript
@@ -608,12 +617,13 @@ If you don't know the correct commands for a project, ask the user and suggest u
 
 ## Build Process Notes
 
-- **MFEs use tsup as the primary bundler** (powered by esbuild under the hood)
-- **Container uses Vite** for development and production builds
-- **Packages use tsup** for library builds
+- **MFEs use esbuild** via the `buildMFE` utility from `@mfe-toolkit/core`
+- **Container uses Vite** for development and production builds  
+- **Packages use tsup** for library builds (cleaner output, no .js files in src/)
 - All MFEs are built to ES modules format
-- Shared dependencies are marked as external and loaded via import maps
-- tsup provides better TypeScript support, cleaner output, and simpler configuration than raw esbuild
+- Dependencies are automatically detected from manifest.json and externalized
+- Versioned imports are automatically applied (e.g., react → react@18)
+- Shared dependencies loaded via import map at runtime
 
 ## 🚨 DESIGN SYSTEM IS LAW
 
