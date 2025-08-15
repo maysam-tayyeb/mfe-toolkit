@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { NotificationDemo } from './NotificationDemo';
-import type { MFEModule, MFEServiceContainer, MFEServices } from '@mfe-toolkit/core';
+import type { MFEModule, MFEServiceContainer } from '@mfe-toolkit/core';
 
 let root: ReactDOM.Root | null = null;
 
@@ -10,7 +10,7 @@ const module: MFEModule = {
     name: 'mfe-notification-react19',
     version: '1.0.0',
     requiredServices: ['notification'],
-    capabilities: ['notification-testing', 'custom-notifications']
+    capabilities: ['notification-testing', 'custom-notifications'],
   },
 
   mount: async (element: HTMLElement, container: MFEServiceContainer) => {
@@ -24,7 +24,7 @@ const module: MFEModule = {
       root.unmount();
       root = null;
     }
-  }
+  },
 };
 
 export default module;

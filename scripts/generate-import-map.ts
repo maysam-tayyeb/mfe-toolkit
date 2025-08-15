@@ -105,19 +105,48 @@ async function generateImportMap(): Promise<ImportMapData> {
 async function main() {
   const importMapData = await generateImportMap();
   
-  // Save as JSON for runtime use
-  const outputPath = path.join(rootDir, 'apps/container-react/public/import-map.json');
-  fs.writeFileSync(outputPath, JSON.stringify(importMapData, null, 2));
-  console.log(`\n📄 Saved to ${outputPath}`);
+  // Update the index.html file with the generated import map
+  const indexPath = path.join(rootDir, 'apps/container-react/index.html');
+  let indexContent = fs.readFileSync(indexPath, 'utf-8');
   
-  // Also generate an HTML snippet for reference
-  const htmlSnippet = `<script type="importmap">
-${JSON.stringify({ imports: importMapData.imports }, null, 2)}
-</script>`;
+  // Preserve the existing container dependencies and design system imports
+  const containerImports = {
+    "// Container dependencies (non-versioned)": "",
+    "react": "https://esm.sh/react@19.1.0",
+    "react/jsx-runtime": "https://esm.sh/react@19.1.0/jsx-runtime",
+    "react/jsx-dev-runtime": "https://esm.sh/react@19.1.0/jsx-dev-runtime",
+    "react-dom": "https://esm.sh/react-dom@19.1.0",
+    "react-dom/client": "https://esm.sh/react-dom@19.1.0/client",
+    "react-router-dom": "https://esm.sh/react-router-dom@6.21.1?deps=react@19.1.0",
+    "lucide-react": "https://esm.sh/lucide-react@0.526.0?deps=react@19.1.0",
+    "zustand": "https://esm.sh/zustand@5.0.6",
+    "zustand/middleware": "https://esm.sh/zustand@5.0.6/middleware",
+    
+    "// MFE dependencies (versioned)": "",
+    ...importMapData.imports,
+    
+    "// Shared internal packages": "",
+    "@mfe/design-system": "http://localhost:8080/design-system/index.js",
+    "@mfe/design-system/tokens": "http://localhost:8080/design-system/index.js",
+    "@mfe/design-system/patterns": "http://localhost:8080/design-system/index.js"
+  };
   
-  const htmlPath = path.join(rootDir, 'apps/container-react/public/import-map.html');
-  fs.writeFileSync(htmlPath, htmlSnippet);
-  console.log(`📄 HTML snippet saved to ${htmlPath}`);
+  // Create the import map script tag with proper formatting
+  const importMapScript = `    <script type="importmap">
+      {
+        "imports": ${JSON.stringify(containerImports, null, 10).split('\n').map((line, i) => i === 0 ? line : '        ' + line).join('\n')}
+      }
+    </script>`;
+  
+  // Replace the existing import map in index.html
+  const importMapRegex = /<script type="importmap">[\s\S]*?<\/script>/;
+  if (importMapRegex.test(indexContent)) {
+    indexContent = indexContent.replace(importMapRegex, importMapScript);
+    fs.writeFileSync(indexPath, indexContent);
+    console.log(`\n✅ Updated import map in ${indexPath} with ${Object.keys(importMapData.imports).length} MFE dependencies`);
+  } else {
+    console.warn('⚠️  Could not find import map in index.html to update');
+  }
 }
 
 main().catch(console.error);
