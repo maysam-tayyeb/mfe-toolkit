@@ -140,6 +140,7 @@ async function createBasicStructure(projectPath: string, config: any) {
     },
     dependencies: {
       '@mfe-toolkit/core': 'workspace:*',
+      '@mfe-toolkit/build': 'workspace:*',
     },
     devDependencies: {
       typescript: '^5.3.3',
@@ -262,7 +263,7 @@ export default mfeModule;`;
   await fs.writeJson(path.join(projectPath, 'manifest.json'), manifest, { spaces: 2 });
 
   // Create build.js using the new buildMFE utility
-  const buildContent = `import { buildMFE } from '@mfe-toolkit/core';
+  const buildContent = `import { buildMFE } from '@mfe-toolkit/build';
 
 // Build configuration using the new versioning system
 // Automatically detects library versions from manifest.json
@@ -347,7 +348,7 @@ This MFE uses the automatic library versioning system. The build process will:
 
 ## Configuration
 - **manifest.json**: Defines MFE metadata and dependencies
-- **build.js**: Build configuration using \`@mfe-toolkit/core\`
+- **build.js**: Build configuration using \`@mfe-toolkit/build\`
 - **tsconfig.json**: TypeScript configuration
 
 ## Integration

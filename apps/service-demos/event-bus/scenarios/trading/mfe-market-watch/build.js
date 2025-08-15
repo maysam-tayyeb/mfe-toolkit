@@ -1,4 +1,4 @@
-import { buildMFE } from '@mfe-toolkit/core';
+import { buildMFE } from '@mfe-toolkit/build';
 
 // Build configuration for React MFE (Market Watch)
 // Automatically detects React version from manifest.json

@@ -1,4 +1,4 @@
-import { buildMFE } from '@mfe-toolkit/core';
+import { buildMFE } from '@mfe-toolkit/build';
 import vuePlugin from 'esbuild-plugin-vue3';
 
 // Build configuration for Vue 3 MFE (Trading Terminal)

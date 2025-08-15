@@ -37,9 +37,3 @@ export {
 
 // Utilities
 export * from './utils';
-
-// Build utilities - Generic automatic dependency externalization
-export {
-  buildMFE,
-  type MFEBuildOptions,
-} from './build/mfe-build';

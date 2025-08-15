@@ -1,4 +1,4 @@
-import { buildMFE } from '@mfe-toolkit/core';
+import { buildMFE } from '@mfe-toolkit/build';
 import { solidPlugin } from 'esbuild-plugin-solid';
 
 // Build configuration for Solid.js MFE
