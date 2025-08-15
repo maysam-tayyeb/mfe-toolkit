@@ -24,10 +24,11 @@
   ],
   "scripts": {
     "dev:container-react": "pnpm --filter @mfe/container-react dev",
-    "build": "pnpm build:packages && pnpm build:mfes",
+    "build": "pnpm build:packages && pnpm build:mfes && pnpm generate:import-map",
     "build:packages": "pnpm --parallel --filter './packages/**' build",
     "build:mfes": "pnpm --parallel --filter './apps/mfe-*' --filter './apps/service-demos/**' build && pnpm copy-to-dist",
     "copy-to-dist": "node scripts/copy-to-dist.js",
+    "generate:import-map": "tsx scripts/generate-import-map.ts",
     "serve": "pnpm dlx serve dist -p 8080 --cors",
     "test:packages": "pnpm --filter './packages/**' test",
     "test:container": "pnpm --filter @mfe/container-react test",

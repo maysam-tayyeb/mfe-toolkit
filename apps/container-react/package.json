@@ -4,6 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --port 3000",
+    "dev:hybrid": "vite --port 3000 --config vite.config.hybrid.ts",
     "build": "tsc && vite build",
     "preview": "vite preview",
     "type-check": "tsc --noEmit",

@@ -124,7 +124,7 @@ async function copyToDist() {
                           const distStat = await fs.stat(mfeDistPath);
                           if (distStat.isDirectory()) {
                             // Create nested structure in dist to match the URL path
-                            const targetPath = path.join(rootDist, 'event-bus', 'scenarios', scenario);
+                            const targetPath = path.join(rootDist, 'service-demos', 'event-bus', 'scenarios', scenario);
                             
                             // Ensure parent directories exist
                             await fs.mkdir(targetPath, { recursive: true });
@@ -138,7 +138,7 @@ async function copyToDist() {
                             }
                             
                             console.log(
-                              `✅ Copied event-bus/scenarios/${scenario}/${scenarioMfe}/dist → dist/event-bus/scenarios/${scenario}/`
+                              `✅ Copied event-bus/scenarios/${scenario}/${scenarioMfe}/dist → dist/service-demos/event-bus/scenarios/${scenario}/`
                             );
                           }
                         } catch (err) {

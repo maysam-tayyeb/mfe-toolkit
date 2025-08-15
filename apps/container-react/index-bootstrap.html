@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MFE Toolkit - Container</title>
+    <style>
+      .bootstrap-loading {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        font-family: system-ui, -apple-system, sans-serif;
+        color: #666;
+      }
+      .bootstrap-error {
+        padding: 2rem;
+        font-family: system-ui, -apple-system, sans-serif;
+        color: #d32f2f;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root">
+      <div class="bootstrap-loading">Initializing platform...</div>
+    </div>
+    
+    <!-- Bootstrap Script - NOT a module, runs before any imports -->
+    <script>
+      (async function bootstrap() {
+        const REGISTRY_URL = import.meta.env?.VITE_MFE_REGISTRY_URL || '/mfe-registry.json';
+        const USE_DYNAMIC_IMPORT_MAP = import.meta.env?.VITE_DYNAMIC_IMPORT_MAP === 'true';
+        
+        try {
+          let importMapData;
+          
+          // Try to use pre-generated import map first (hybrid approach)
+          try {
+            console.log('📦 Loading pre-generated import map...');
+            const response = await fetch('/import-map.json');
+            if (response.ok) {
+              importMapData = await response.json();
+              console.log(`✅ Using pre-generated import map (${importMapData.mfeCount} MFEs, generated ${importMapData.generated})`);
+            } else {
+              throw new Error('Pre-generated import map not found');
+            }
+          } catch (err) {
+            console.warn('⚠️  Pre-generated import map not available, generating dynamically...');
+            
+            // Fallback: Generate import map dynamically from registry
+            console.log('📦 Fetching MFE registry...');
+            const registry = await fetch(REGISTRY_URL).then(r => r.json());
+            
+            const imports = {};
+            const versions = new Map();
+            
+            // Process each MFE manifest (registry already contains full manifests)
+            for (const manifest of registry.mfes) {
+              const deps = {
+                ...manifest.dependencies?.runtime,
+                ...manifest.dependencies?.peer,
+              };
+              
+              for (const [lib, versionSpec] of Object.entries(deps || {})) {
+                const majorVersion = versionSpec.match(/\d+/)?.[0];
+                if (!majorVersion) continue;
+                
+                // Add versioned import
+                const versionedKey = `${lib}@${majorVersion}`;
+                if (!imports[versionedKey]) {
+                  imports[versionedKey] = `https://esm.sh/${lib}@${majorVersion}`;
+                }
+                
+                // Track highest version for non-versioned
+                const currentVersion = versions.get(lib);
+                if (!currentVersion || parseInt(majorVersion) > parseInt(currentVersion)) {
+                  versions.set(lib, majorVersion);
+                }
+              }
+            }
+            
+            // Add non-versioned imports for container
+            for (const [lib, version] of versions) {
+              imports[lib] = `https://esm.sh/${lib}@${version}`;
+            }
+            
+            // Add React subpaths if needed
+            if (imports['react@18'] || imports['react@19']) {
+              const reactVersion = imports['react@19'] ? '19' : '18';
+              imports[`react-dom@${reactVersion}/client`] = `https://esm.sh/react-dom@${reactVersion}/client`;
+              imports[`react@${reactVersion}/jsx-runtime`] = `https://esm.sh/react@${reactVersion}/jsx-runtime`;
+              imports[`react@${reactVersion}/jsx-dev-runtime`] = `https://esm.sh/react@${reactVersion}/jsx-dev-runtime`;
+            }
+            
+            importMapData = {
+              imports,
+              generated: 'runtime',
+              mfeCount: registry.mfes.length
+            };
+            
+            console.log(`✅ Dynamically generated import map with ${Object.keys(imports).length} entries`);
+          }
+          
+          // Create and inject the import map
+          const importMap = {
+            imports: importMapData.imports
+          };
+          
+          const importMapScript = document.createElement('script');
+          importMapScript.type = 'importmap';
+          importMapScript.textContent = JSON.stringify(importMap, null, 2);
+          document.head.appendChild(importMapScript);
+          
+          console.log('🗺️ Import map injected successfully');
+          
+          // Store registry for the app (if loaded)
+          if (window.localStorage) {
+            localStorage.setItem('import-map-generated', importMapData.generated);
+            localStorage.setItem('import-map-count', String(importMapData.mfeCount));
+          }
+          
+          // NOW load the actual React app
+          console.log('🚀 Loading container application...');
+          const appScript = document.createElement('script');
+          appScript.type = 'module';
+          appScript.src = '/src/main.tsx';
+          document.body.appendChild(appScript);
+          
+        } catch (error) {
+          console.error('❌ Bootstrap failed:', error);
+          document.getElementById('root').innerHTML = `
+            <div class="bootstrap-error">
+              <h1>Failed to initialize platform</h1>
+              <p>${error.message}</p>
+              <pre>${error.stack}</pre>
+            </div>
+          `;
+        }
+      })();
+    </script>
+  </body>
+</html>
