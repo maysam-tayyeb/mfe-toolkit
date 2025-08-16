@@ -126,6 +126,7 @@ function getCommonSubpaths(library: string): string[] {
   const subpathMap: Record<string, string[]> = {
     'react': ['jsx-runtime', 'jsx-dev-runtime'],
     'react-dom': ['client', 'server'],
+    'solid-js': ['web', 'store', 'html', 'h'],
     '@vue': ['runtime-dom', 'runtime-core'],
     'rxjs': ['operators'],
     'lodash': ['fp'],

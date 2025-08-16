@@ -92,6 +92,12 @@ async function generateImportMap(): Promise<ImportMapData> {
     imports[`react@19/jsx-dev-runtime`] = `https://esm.sh/react@19/jsx-dev-runtime`;
   }
   
+  // Add Solid.js subpaths
+  if (imports['solid-js@1']) {
+    imports[`solid-js@1/web`] = `https://esm.sh/solid-js@1/web`;
+    imports[`solid-js@1/store`] = `https://esm.sh/solid-js@1/store`;
+  }
+  
   console.log(`\n✅ Generated import map with ${Object.keys(imports).length} entries from ${mfeCount} MFEs`);
   
   return {
