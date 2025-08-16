@@ -1,7 +1,7 @@
 # mfe-modal-react19
 
 ## Description
-React 19 modal microfrontend with latest features and optimistic UI support.
+React 19 general microfrontend with latest features and optimistic UI support.
 
 ## Features
 - React 19 with latest APIs
@@ -9,7 +9,7 @@ React 19 modal microfrontend with latest features and optimistic UI support.
 - useOptimistic for optimistic UI updates
 - use() hook for promise handling
 - Enhanced Suspense and Actions
-- Modal service integration
+- General MFE functionality
 - Design system integration
 - TypeScript support
 

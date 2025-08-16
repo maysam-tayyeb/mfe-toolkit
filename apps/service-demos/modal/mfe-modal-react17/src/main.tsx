@@ -9,8 +9,8 @@ const module: MFEModule = {
   metadata: {
     name: 'mfe-modal-react17',
     version: '1.0.0',
-    requiredServices: ["modal","logger"],
-    capabilities: ["modal-demo","modal-testing"]
+    requiredServices: ["logger"],
+    capabilities: ["demo"]
   },
 
   mount: async (element: HTMLElement, container: MFEServiceContainer) => {

@@ -1,14 +1,14 @@
 # mfe-modal-react18
 
 ## Description
-React 18 modal microfrontend with concurrent features and modern APIs.
+React 18 general microfrontend with concurrent features and modern APIs.
 
 ## Features
 - React 18 with createRoot API
 - Concurrent rendering capabilities
 - Automatic batching
 - useTransition and Suspense support
-- Modal service integration
+- General MFE functionality
 - Design system integration
 - TypeScript support
 

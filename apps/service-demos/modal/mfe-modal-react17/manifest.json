@@ -2,7 +2,7 @@
   "$schema": "https://mfe-made-easy.com/schemas/mfe-manifest-v2.schema.json",
   "name": "mfe-modal-react17",
   "version": "1.0.0",
-  "url": "http://localhost:8080/service-demos/modal/mfe-modal-react17/mfe-modal-react17.js",
+  "url": "http://localhost:8080/service-demos/general/mfe-modal-react17/mfe-modal-react17.js",
   "alternativeUrls": [],
   "dependencies": {
     "runtime": {
@@ -10,7 +10,7 @@
       "react-dom": "^17.0.2 || ^18.0.0 || ^19.0.0"
     },
     "peer": {
-      "@mfe-toolkit/build": "^0.1.0"
+      "@mfe-toolkit/core": "^0.1.0"
     }
   },
   "compatibility": {
@@ -26,15 +26,9 @@
     }
   },
   "capabilities": {
-    "emits": [
-      "modal:test-opened",
-      "modal:test-closed"
-    ],
+    "emits": [],
     "listens": [],
     "features": [
-      "modal-testing",
-      "custom-modals",
-      "modal-stacking",
       "react17-hooks",
       "legacy-support"
     ]
@@ -42,28 +36,22 @@
   "requirements": {
     "services": [
       {
-        "name": "modal",
-        "optional": false
-      },
-      {
         "name": "logger",
         "optional": true
       }
     ]
   },
   "metadata": {
-    "displayName": "React 17 Modal Demo",
-    "description": "modal service demonstration MFE built with React 17",
+    "displayName": "mfe-modal-react17 MFE",
+    "description": "Microfrontend built with React 17",
     "icon": "🔗",
     "author": {
       "name": "MFE Toolkit Team"
     },
     "category": "service-demos",
     "tags": [
-      "modal",
       "react17",
-      "service",
-      "legacy"
+      "mfe"
     ]
   },
   "config": {
@@ -81,7 +69,7 @@
       "singleton": true
     },
     "communication": {
-      "eventNamespace": "modal-demo"
+      "eventNamespace": "mfe-modal-react17"
     }
   }
 }
