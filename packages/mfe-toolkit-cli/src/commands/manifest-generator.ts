@@ -6,7 +6,7 @@ import { MFEManifest, manifestValidator } from '@mfe-toolkit/core';
 interface GeneratorOptions {
   name: string;
   version?: string;
-  framework?: 'react' | 'vue' | 'angular' | 'vanilla';
+  framework?: 'react' | 'vue' | 'solid' | 'vanilla';
   output?: string;
   template?: 'basic' | 'full';
 }
@@ -62,15 +62,14 @@ export class ManifestGenerator {
         baseManifest.metadata.icon = '💚';
         break;
 
-      case 'angular':
+      case 'solid':
         baseManifest.dependencies.peer = {
-          '@angular/core': '^17.0.0',
-          '@angular/common': '^17.0.0',
+          'solid-js': '^1.8.0',
         };
         baseManifest.compatibility.frameworks = {
-          angular: '>=17.0.0',
+          'solid-js': '>=1.8.0',
         };
-        baseManifest.metadata.icon = '🅰️';
+        baseManifest.metadata.icon = '🔷';
         break;
 
       case 'vanilla':
@@ -260,7 +259,7 @@ Usage: mfe-manifest [options]
 Options:
   -n, --name <name>           MFE name (required)
   -v, --version <version>     MFE version (default: 1.0.0)
-  -f, --framework <framework> Framework: react, vue, angular, vanilla (default: react)
+  -f, --framework <framework> Framework: react, vue, solid, vanilla (default: react)
   -t, --template <template>   Template: basic, full (default: basic)
   -o, --output <path>         Output file path (default: <name>.manifest.json)
   --validate <path>           Validate an existing manifest
@@ -307,13 +306,4 @@ Examples:
     }
   }
 
-}
-
-// Run if called directly
-if (require.main === module) {
-  const generator = new ManifestGenerator();
-  generator.run().catch((error) => {
-    console.error('Unexpected error:', error);
-    process.exit(1);
-  });
 }
