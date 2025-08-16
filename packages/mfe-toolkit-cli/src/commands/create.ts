@@ -50,13 +50,13 @@ export const createCommand = new Command('create')
             initial: 1,
           },
           {
-            type: 'confirm',
+            type: options.yes ? null : 'confirm',
             name: 'includeRouter',
             message: 'Include routing?',
             initial: true,
           },
           {
-            type: 'confirm',
+            type: options.yes ? null : 'confirm',
             name: 'includeState',
             message: 'Include state management?',
             initial: true,
