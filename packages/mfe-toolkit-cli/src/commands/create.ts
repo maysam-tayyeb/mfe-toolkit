@@ -139,7 +139,7 @@ async function createBasicStructure(projectPath: string, config: any) {
     devDependencies: {
       '@mfe-toolkit/build': 'workspace:*',
       '@mfe-toolkit/core': 'workspace:*',
-      'esbuild': '^0.19.11',
+      'esbuild': '^0.24.2',
     },
   };
 
