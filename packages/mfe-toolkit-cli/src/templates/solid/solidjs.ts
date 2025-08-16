@@ -101,14 +101,7 @@ export default module;`;
   }
 
   generateApp(): string {
-    const { name, serviceType } = this.config;
-    
-    if (serviceType === 'modal') {
-      return this.generateModalApp();
-    } else if (serviceType === 'notification') {
-      return this.generateNotificationApp();
-    }
-    
+    // Always generate simple hello world app
     return this.generateGeneralApp();
   }
 
@@ -571,32 +564,16 @@ export default function App(props: AppProps) {
 
   generateBuildScript(): string {
     const { name } = this.config;
-    const serviceType = this.config.serviceType || 'general';
     
-    if (serviceType === 'modal') {
-      // For modal service, use simpler build without plugin
-      return `import { buildMFE } from '@mfe-toolkit/build';
+    // Always use .tsx for Solid.js since we have JSX in our components
+    return `import { buildMFE } from '@mfe-toolkit/build';
+import { solidPlugin } from 'esbuild-plugin-solid';
 
 await buildMFE({
   entry: 'src/main.tsx',
   outfile: 'dist/${name}.js',
   manifestPath: './manifest.json',
-  loader: {
-    '.tsx': 'tsx',
-    '.ts': 'ts'
-  }
-});`;
-    }
-    
-    // For other services, use the Solid plugin
-    return `import { buildMFE } from '@mfe-toolkit/build';
-import solid from 'esbuild-plugin-solid';
-
-await buildMFE({
-  entry: 'src/main.ts',
-  outfile: 'dist/${name}.js',
-  manifestPath: './manifest.json',
-  plugins: [solid()]
+  plugins: [solidPlugin()]
 });`;
   }
 

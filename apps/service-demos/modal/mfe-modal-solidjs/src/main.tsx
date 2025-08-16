@@ -1,21 +1,23 @@
-import { render } from 'solid-js/web';
 import type { MFEModule, MFEServiceContainer } from '@mfe-toolkit/core';
-import { App } from './App';
-
-let dispose: (() => void) | null = null;
 
 const module: MFEModule = {
   metadata: {
     name: 'mfe-modal-solidjs',
     version: '1.0.0',
-    requiredServices: ["modal","logger"],
-    capabilities: ["modal-demo","modal-testing"]
+    requiredServices: ["logger"],
+    capabilities: ["demo"]
   },
 
   mount: async (element: HTMLElement, container: MFEServiceContainer) => {
     const services = container.getAllServices();
     
-    dispose = render(() => App({ services }), element);
+    const { render } = await import('solid-js/web');
+    const { default: App } = await import('./App');
+    
+    const dispose = render(() => App({ services }), element);
+    
+    // Store dispose function for cleanup
+    (element as any).__dispose = dispose;
     
     if (services.logger) {
       services.logger.info('[mfe-modal-solidjs] Mounted successfully with Solid.js');
@@ -23,9 +25,10 @@ const module: MFEModule = {
   },
   
   unmount: async (container: MFEServiceContainer) => {
-    if (dispose) {
-      dispose();
-      dispose = null;
+    const element = document.querySelector('[data-mfe="mfe-modal-solidjs"]') as any;
+    if (element && element.__dispose) {
+      element.__dispose();
+      delete element.__dispose;
     }
     
     const services = container.getAllServices();

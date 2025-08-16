@@ -128,7 +128,7 @@ export const App: React.FC<AppProps> = ({ services }) => {
         'react-dom': '^17.0.2'
       },
       devDependencies: {
-        '@mfe-toolkit/core': 'workspace:*',
+        '@mfe-toolkit/build': 'workspace:*',
         '@types/react': '^17.0.2',
         '@types/react-dom': '^17.0.2',
         'esbuild': '^0.24.2',

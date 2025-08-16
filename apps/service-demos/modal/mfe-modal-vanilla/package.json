@@ -1,5 +1,5 @@
 {
-  "name": "@mfe/mfe-modal-vue3",
+  "name": "@mfe/mfe-modal-vanilla",
   "version": "1.0.0",
   "private": true,
   "type": "module",
@@ -8,13 +8,9 @@
     "build:watch": "node build.js --watch",
     "clean": "rm -rf dist"
   },
-  "dependencies": {
-    "vue": "^3.4.0"
-  },
   "devDependencies": {
     "@mfe-toolkit/build": "workspace:*",
     "esbuild": "^0.24.2",
-    "esbuild-plugin-vue3": "^0.4.2",
     "typescript": "^5.3.0"
   }
 }

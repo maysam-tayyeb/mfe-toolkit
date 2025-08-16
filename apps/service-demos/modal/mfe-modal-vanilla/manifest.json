@@ -1,15 +1,13 @@
 {
   "$schema": "https://mfe-made-easy.com/schemas/mfe-manifest-v2.schema.json",
-  "name": "mfe-modal-vue3",
+  "name": "mfe-modal-vanilla",
   "version": "1.0.0",
-  "url": "http://localhost:8080/service-demos/general/mfe-modal-vue3/mfe-modal-vue3.js",
+  "url": "http://localhost:8080/service-demos/general/mfe-modal-vanilla/mfe-modal-vanilla.js",
   "alternativeUrls": [],
   "dependencies": {
-    "runtime": {
-      "vue": "^3.4.0"
-    },
+    "runtime": {},
     "peer": {
-      "@mfe-toolkit/core": "^0.1.0"
+      "@mfe-toolkit/build": "^0.1.0"
     }
   },
   "compatibility": {
@@ -19,17 +17,13 @@
       "firefox": ">=88",
       "safari": ">=14",
       "edge": ">=90"
-    },
-    "frameworks": {
-      "vue": "^3.4.0"
     }
   },
   "capabilities": {
     "emits": [],
     "listens": [],
     "features": [
-      "vue3-composition-api",
-      "reactive-state"
+      "vanilla-ts"
     ]
   },
   "requirements": {
@@ -41,16 +35,17 @@
     ]
   },
   "metadata": {
-    "displayName": "mfe-modal-vue3 MFE",
-    "description": "Microfrontend built with Vue 3",
-    "icon": "💚",
+    "displayName": "Vanilla TS general Demo",
+    "description": "general service demo with Vanilla TypeScript",
+    "icon": "📦",
     "author": {
       "name": "MFE Toolkit Team"
     },
     "category": "service-demos",
     "tags": [
-      "vue3",
-      "mfe"
+      "general",
+      "vanilla-ts",
+      "service"
     ]
   },
   "config": {
@@ -68,7 +63,7 @@
       "singleton": true
     },
     "communication": {
-      "eventNamespace": "mfe-modal-vue3"
+      "eventNamespace": "mfe-modal-vanilla"
     }
   }
 }
