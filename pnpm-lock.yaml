@@ -299,6 +299,9 @@ importers:
 
   apps/service-demos/modal/mfe-modal-react17:
     dependencies:
+      '@mfe-toolkit/core':
+        specifier: workspace:*
+        version: link:../../../../packages/mfe-toolkit-core
       react:
         specifier: ^17.0.2
         version: 17.0.2
@@ -324,6 +327,9 @@ importers:
 
   apps/service-demos/modal/mfe-modal-react18:
     dependencies:
+      '@mfe-toolkit/core':
+        specifier: workspace:*
+        version: link:../../../../packages/mfe-toolkit-core
       react:
         specifier: ^18.2.0
         version: 18.3.1
@@ -349,6 +355,9 @@ importers:
 
   apps/service-demos/modal/mfe-modal-react19:
     dependencies:
+      '@mfe-toolkit/core':
+        specifier: workspace:*
+        version: link:../../../../packages/mfe-toolkit-core
       react:
         specifier: ^19.0.0
         version: 19.1.0
@@ -374,6 +383,9 @@ importers:
 
   apps/service-demos/modal/mfe-modal-solidjs:
     dependencies:
+      '@mfe-toolkit/core':
+        specifier: workspace:*
+        version: link:../../../../packages/mfe-toolkit-core
       solid-js:
         specifier: ^1.8.0
         version: 1.9.9
@@ -392,18 +404,10 @@ importers:
         version: 5.8.3
 
   apps/service-demos/modal/mfe-modal-vanilla:
-    devDependencies:
-      '@mfe-toolkit/build':
+    dependencies:
+      '@mfe-toolkit/core':
         specifier: workspace:*
-        version: link:../../../../packages/mfe-toolkit-build
-      esbuild:
-        specifier: ^0.24.2
-        version: 0.24.2
-      typescript:
-        specifier: ^5.3.0
-        version: 5.8.3
-
-  apps/service-demos/modal/mfe-modal-vanilla-ts:
+        version: link:../../../../packages/mfe-toolkit-core
     devDependencies:
       '@mfe-toolkit/build':
         specifier: workspace:*
@@ -417,6 +421,9 @@ importers:
 
   apps/service-demos/modal/mfe-modal-vue3:
     dependencies:
+      '@mfe-toolkit/core':
+        specifier: workspace:*
+        version: link:../../../../packages/mfe-toolkit-core
       vue:
         specifier: ^3.4.0
         version: 3.5.18(typescript@5.8.3)

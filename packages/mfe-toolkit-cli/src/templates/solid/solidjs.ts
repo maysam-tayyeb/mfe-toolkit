@@ -480,6 +480,7 @@ export default function App(props: AppProps) {
         clean: 'rm -rf dist'
       },
       dependencies: {
+        '@mfe-toolkit/core': 'workspace:*',
         'solid-js': '^1.8.0'
       },
       devDependencies: {
@@ -510,7 +511,7 @@ export default function App(props: AppProps) {
           'solid-js': '^1.8.0'
         },
         peer: {
-          '@mfe-toolkit/build': '^0.1.0'
+          '@mfe-toolkit/core': '^0.1.0'
         }
       },
       compatibility: {

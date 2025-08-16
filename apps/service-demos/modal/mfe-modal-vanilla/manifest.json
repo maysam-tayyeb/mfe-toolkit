@@ -7,7 +7,7 @@
   "dependencies": {
     "runtime": {},
     "peer": {
-      "@mfe-toolkit/build": "^0.1.0"
+      "@mfe-toolkit/core": "^0.1.0"
     }
   },
   "compatibility": {

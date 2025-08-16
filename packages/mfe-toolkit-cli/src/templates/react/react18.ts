@@ -445,6 +445,7 @@ export const App: React.FC<AppProps> = ({ services }) => {
         clean: 'rm -rf dist'
       },
       dependencies: {
+        '@mfe-toolkit/core': 'workspace:*',
         'react': '^18.2.0',
         'react-dom': '^18.2.0'
       },

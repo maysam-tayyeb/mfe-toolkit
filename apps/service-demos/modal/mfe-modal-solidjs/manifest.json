@@ -2,14 +2,14 @@
   "$schema": "https://mfe-made-easy.com/schemas/mfe-manifest-v2.schema.json",
   "name": "mfe-modal-solidjs",
   "version": "1.0.0",
-  "url": "http://localhost:8080/mfe-modal-solidjs/mfe-modal-solidjs.js",
+  "url": "http://localhost:8080/service-demos/general/mfe-modal-solidjs/mfe-modal-solidjs.js",
   "alternativeUrls": [],
   "dependencies": {
     "runtime": {
       "solid-js": "^1.8.0"
     },
     "peer": {
-      "@mfe-toolkit/build": "^0.1.0"
+      "@mfe-toolkit/core": "^0.1.0"
     }
   },
   "compatibility": {
@@ -48,7 +48,7 @@
     "author": {
       "name": "MFE Toolkit Team"
     },
-    "category": "custom",
+    "category": "service-demos",
     "tags": [
       "general",
       "solidjs",

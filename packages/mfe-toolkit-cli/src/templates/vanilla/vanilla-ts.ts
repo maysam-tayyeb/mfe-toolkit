@@ -142,6 +142,9 @@ export default module;`;
         'build:watch': 'node build.js --watch',
         clean: 'rm -rf dist'
       },
+      dependencies: {
+        '@mfe-toolkit/core': 'workspace:*'
+      },
       devDependencies: {
         '@mfe-toolkit/build': 'workspace:*',
         'esbuild': '^0.24.2',
@@ -164,7 +167,7 @@ export default module;`;
       version: '1.0.0',
       url: `http://localhost:8080/${urlPath}/${name}.js`,
       alternativeUrls: [],
-      dependencies: { runtime: {}, peer: { '@mfe-toolkit/build': '^0.1.0' } },
+      dependencies: { runtime: {}, peer: { '@mfe-toolkit/core': '^0.1.0' } },
       compatibility: {
         container: '^1.0.0',
         browsers: { chrome: '>=90', firefox: '>=88', safari: '>=14', edge: '>=90' }

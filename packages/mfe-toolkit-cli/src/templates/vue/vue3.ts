@@ -120,6 +120,7 @@ export const App = defineComponent({
         clean: 'rm -rf dist'
       },
       dependencies: {
+        '@mfe-toolkit/core': 'workspace:*',
         'vue': '^3.4.0'
       },
       devDependencies: {

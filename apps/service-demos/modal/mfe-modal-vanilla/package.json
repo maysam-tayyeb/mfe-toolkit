@@ -8,6 +8,9 @@
     "build:watch": "node build.js --watch",
     "clean": "rm -rf dist"
   },
+  "dependencies": {
+    "@mfe-toolkit/core": "workspace:*"
+  },
   "devDependencies": {
     "@mfe-toolkit/build": "workspace:*",
     "esbuild": "^0.24.2",
