@@ -1,0 +1,47 @@
+{
+  "$schema": "https://mfe-toolkit.com/schemas/mfe-manifest-v2.schema.json",
+  "name": "mfe-notification-vanilla",
+  "version": "0.1.0",
+  "url": "http://localhost:8080/mfe-notification-vanilla/mfe-notification-vanilla.js",
+  "dependencies": {
+    "runtime": {},
+    "peer": {
+      "@mfe-toolkit/core": "^0.1.0"
+    }
+  },
+  "compatibility": {
+    "container": ">=0.1.0",
+    "browsers": {
+      "chrome": ">=90",
+      "firefox": ">=88",
+      "safari": ">=14",
+      "edge": ">=90"
+    }
+  },
+  "requirements": {
+    "services": [
+      {
+        "name": "logger",
+        "optional": true
+      },
+      {
+        "name": "eventBus",
+        "optional": false
+      },
+      {
+        "name": "notification",
+        "optional": true
+      }
+    ]
+  },
+  "metadata": {
+    "displayName": "mfe-notification-vanilla",
+    "description": "mfe-notification-vanilla microfrontend",
+    "icon": "📦",
+    "category": "custom",
+    "tags": [
+      "vanilla-ts",
+      "mfe"
+    ]
+  }
+}

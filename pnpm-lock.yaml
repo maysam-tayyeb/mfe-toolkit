@@ -394,6 +394,21 @@ importers:
         specifier: ^5.3.0
         version: 5.8.3
 
+  apps/service-demos/notifications/mfe-notification-vanilla:
+    devDependencies:
+      '@mfe-toolkit/build':
+        specifier: workspace:*
+        version: link:../../../../packages/mfe-toolkit-build
+      '@mfe-toolkit/core':
+        specifier: workspace:*
+        version: link:../../../../packages/mfe-toolkit-core
+      esbuild:
+        specifier: ^0.19.11
+        version: 0.19.12
+      typescript:
+        specifier: ^5.3.0
+        version: 5.8.3
+
   apps/service-demos/notifications/mfe-notification-vue3:
     dependencies:
       vue:
