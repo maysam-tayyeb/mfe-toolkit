@@ -1,5 +1,5 @@
 <template>
-  <div class="ds-card-padded ds-card-elevated">
+  <div class="ds-p-4">
     <div class="ds-mb-6">
       <h2 class="ds-text-2xl ds-font-bold ds-mb-2">Vue 3 Notification Demo</h2>
       <p class="ds-text-gray-600">
