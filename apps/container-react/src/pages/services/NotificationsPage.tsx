@@ -42,12 +42,16 @@ const MFECard: React.FC<{
 };
 
 export const NotificationsPage: React.FC = () => {
-  const { addNotification } = useUI();
+  const { addNotification, clearNotifications } = useUI();
   const [searchParams, setSearchParams] = useSearchParams();
   
   // Tab state - get initial tab from URL or default to 'container'
   const initialTab = searchParams.get('tab') || 'container';
   const [activeTab, setActiveTab] = useState<string>(initialTab);
+  const [notificationCount, setNotificationCount] = useState(0);
+  const [customTitle, setCustomTitle] = useState('Custom Notification');
+  const [customMessage, setCustomMessage] = useState('This is a custom notification message');
+  const [customType, setCustomType] = useState<'success' | 'error' | 'warning' | 'info'>('info');
   
   // Sync tab state with URL
   const handleTabChange = (tabId: string) => {
@@ -55,122 +59,227 @@ export const NotificationsPage: React.FC = () => {
     setSearchParams({ tab: tabId });
   };
 
-  const notificationTypes = [
-    {
-      type: 'success' as const,
-      title: 'Success Notification',
-      message: 'This is a success notification example',
-      icon: '✓',
-      color: 'ds-text-green-600'
-    },
-    {
-      type: 'error' as const,
-      title: 'Error Notification',
-      message: 'This is an error notification example',
-      icon: '⚠',
-      color: 'ds-text-red-600'
-    },
-    {
-      type: 'warning' as const,
-      title: 'Warning Notification',
-      message: 'This is a warning notification example',
-      icon: '⚠',
-      color: 'ds-text-amber-600'
-    },
-    {
-      type: 'info' as const,
-      title: 'Info Notification',
-      message: 'This is an info notification example',
-      icon: 'ℹ',
-      color: 'ds-text-blue-600'
-    }
-  ];
-
-  const handleTestNotification = (type: 'success' | 'error' | 'warning' | 'info', title: string, message: string) => {
-    addNotification({ type, title, message });
+  const showNotification = (
+    title: string,
+    message: string,
+    type: 'success' | 'error' | 'warning' | 'info' = 'info',
+    duration?: number
+  ) => {
+    addNotification({ type, title, message, duration });
+    setNotificationCount(prev => prev + 1);
   };
 
   // Container notification content component
-  const ContainerNotificationDemo = () => (
-    <div className="ds-p-4">
-      <div className="ds-mb-6">
-        <h2 className="ds-section-title ds-mb-6">Notification Types</h2>
-        <div className="ds-grid ds-grid-cols-2 ds-gap-4">
-          {notificationTypes.map((notification) => (
-            <div key={notification.type} className="ds-card-compact">
-              <div className="ds-flex ds-items-start ds-gap-3">
-                <div className={`ds-mt-1 ${notification.color}`}>
-                  <span className="ds-text-lg">{notification.icon}</span>
-                </div>
-                <div className="ds-flex-1">
-                  <h3 className="ds-font-medium ds-mb-1">{notification.title}</h3>
-                  <p className="ds-text-sm ds-text-slate-600 ds-dark:text-slate-400 ds-mb-3">
-                    {notification.message}
-                  </p>
-                  <button
-                    className="ds-btn-outline ds-btn-sm"
-                    onClick={() => handleTestNotification(notification.type, notification.title, notification.message)}
-                  >
-                    <span className="ds-mr-2">🔔</span>
-                    Test {notification.type}
-                  </button>
-                </div>
-              </div>
+  const ContainerNotificationDemo = () => {
+    const showSuccess = () => {
+      showNotification(
+        'Success!',
+        'Operation completed successfully from Container',
+        'success'
+      );
+    };
+
+    const showError = () => {
+      showNotification(
+        'Error Occurred',
+        'Something went wrong in the Container',
+        'error'
+      );
+    };
+
+    const showWarning = () => {
+      showNotification(
+        'Warning',
+        'Please review this warning from Container',
+        'warning'
+      );
+    };
+
+    const showInfo = () => {
+      showNotification(
+        'Information',
+        'This is an informational message from Container',
+        'info'
+      );
+    };
+
+    const showCustom = () => {
+      showNotification(customTitle, customMessage, customType);
+    };
+
+    const showShortDuration = () => {
+      showNotification(
+        'Quick Message',
+        'This will disappear in 1 second',
+        'info',
+        1000
+      );
+    };
+
+    const showNormalDuration = () => {
+      showNotification(
+        'Normal Duration',
+        'This will disappear in 3 seconds',
+        'info',
+        3000
+      );
+    };
+
+    const showLongDuration = () => {
+      showNotification(
+        'Long Duration',
+        'This will stay for 10 seconds',
+        'info',
+        10000
+      );
+    };
+
+    const showPersistent = () => {
+      showNotification(
+        'Persistent Notification',
+        'This won\'t auto-dismiss (close manually)',
+        'warning',
+        0
+      );
+    };
+
+    const showMultiple = () => {
+      const messages = [
+        { title: 'First', message: 'Container notification 1', type: 'info' as const },
+        { title: 'Second', message: 'Container notification 2', type: 'success' as const },
+        { title: 'Third', message: 'Container notification 3', type: 'warning' as const },
+        { title: 'Fourth', message: 'Container notification 4', type: 'error' as const },
+        { title: 'Fifth', message: 'Container notification 5', type: 'info' as const }
+      ];
+
+      messages.forEach((msg, index) => {
+        setTimeout(() => {
+          showNotification(msg.title, msg.message, msg.type);
+        }, index * 200);
+      });
+    };
+
+    const clearAll = () => {
+      if (clearNotifications) {
+        clearNotifications();
+      }
+    };
+
+    return (
+      <div className="ds-p-4">
+        <div className="ds-mb-6">
+          <h2 className="ds-text-2xl ds-font-bold ds-mb-2">Container Notification Demo</h2>
+          <p className="ds-text-gray-600">
+            Framework: <span className="ds-font-medium">React 19.0.0</span> | 
+            Pattern: <span className="ds-font-medium">Container Native</span>
+          </p>
+        </div>
+
+        <div className="ds-space-y-4">
+          {/* Notification Types */}
+          <div>
+            <h3 className="ds-text-lg ds-font-semibold ds-mb-3">Notification Types</h3>
+            <div className="ds-flex ds-flex-wrap ds-gap-2">
+              <button onClick={showSuccess} className="ds-btn-success">
+                Success
+              </button>
+              <button onClick={showError} className="ds-btn-danger">
+                Error
+              </button>
+              <button onClick={showWarning} className="ds-btn-warning">
+                Warning
+              </button>
+              <button onClick={showInfo} className="ds-btn-primary">
+                Info
+              </button>
             </div>
-          ))}
+          </div>
+
+          {/* Custom Message */}
+          <div>
+            <h3 className="ds-text-lg ds-font-semibold ds-mb-3">Custom Notification</h3>
+            <div className="ds-space-y-3">
+              <div>
+                <label className="ds-block ds-text-sm ds-font-medium ds-mb-1">Title</label>
+                <input
+                  type="text"
+                  value={customTitle}
+                  onChange={(e) => setCustomTitle(e.target.value)}
+                  className="ds-input"
+                  placeholder="Enter notification title"
+                />
+              </div>
+              <div>
+                <label className="ds-block ds-text-sm ds-font-medium ds-mb-1">Message</label>
+                <textarea
+                  value={customMessage}
+                  onChange={(e) => setCustomMessage(e.target.value)}
+                  className="ds-textarea"
+                  rows={3}
+                  placeholder="Enter notification message"
+                />
+              </div>
+              <div>
+                <label className="ds-block ds-text-sm ds-font-medium ds-mb-1">Type</label>
+                <select 
+                  value={customType}
+                  onChange={(e) => setCustomType(e.target.value as any)}
+                  className="ds-select"
+                >
+                  <option value="info">Info</option>
+                  <option value="success">Success</option>
+                  <option value="warning">Warning</option>
+                  <option value="error">Error</option>
+                </select>
+              </div>
+              <button onClick={showCustom} className="ds-btn-primary">
+                Show Custom Notification
+              </button>
+            </div>
+          </div>
+
+          {/* Duration Control */}
+          <div>
+            <h3 className="ds-text-lg ds-font-semibold ds-mb-3">Duration Control</h3>
+            <div className="ds-flex ds-gap-2">
+              <button onClick={showShortDuration} className="ds-btn-outline">
+                Short (1s)
+              </button>
+              <button onClick={showNormalDuration} className="ds-btn-outline">
+                Normal (3s)
+              </button>
+              <button onClick={showLongDuration} className="ds-btn-outline">
+                Long (10s)
+              </button>
+              <button onClick={showPersistent} className="ds-btn-outline">
+                Persistent
+              </button>
+            </div>
+          </div>
+
+          {/* Batch Notifications */}
+          <div>
+            <h3 className="ds-text-lg ds-font-semibold ds-mb-3">Batch Operations</h3>
+            <div className="ds-flex ds-gap-2">
+              <button onClick={showMultiple} className="ds-btn-secondary">
+                Show 5 Notifications
+              </button>
+              <button onClick={clearAll} className="ds-btn-outline">
+                Clear All
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Notification Counter */}
+        <div className="ds-mt-6 ds-p-3 ds-bg-gray-50 ds-rounded">
+          <p className="ds-text-sm ds-text-gray-600">
+            Notifications shown: <span className="ds-font-semibold">{notificationCount}</span>
+          </p>
         </div>
       </div>
-
-      <div>
-        <h2 className="ds-section-title ds-mb-4">Custom Notification</h2>
-        <form onSubmit={(e) => {
-          e.preventDefault();
-          const formData = new FormData(e.currentTarget);
-          handleTestNotification(
-            formData.get('type') as any,
-            formData.get('title') as string,
-            formData.get('message') as string
-          );
-        }} className="ds-space-y-4">
-          <div className="ds-grid ds-grid-cols-2 ds-gap-4">
-            <div>
-              <label className="ds-label">Type</label>
-              <select name="type" className="ds-select">
-                <option value="info">Info</option>
-                <option value="success">Success</option>
-                <option value="warning">Warning</option>
-                <option value="error">Error</option>
-              </select>
-            </div>
-            <div>
-              <label className="ds-label">Title</label>
-              <input
-                name="title"
-                type="text"
-                className="ds-input"
-                placeholder="Notification title"
-                required
-              />
-            </div>
-          </div>
-          <div>
-            <label className="ds-label">Message</label>
-            <textarea
-              name="message"
-              className="ds-textarea"
-              rows={3}
-              placeholder="Notification message"
-              required
-            />
-          </div>
-          <button type="submit" className="ds-btn-primary">
-            <span className="ds-mr-2">🔔</span>
-            Send Custom Notification
-          </button>
-        </form>
-      </div>
-    </div>
-  );
+    );
+  };
 
   return (
     <div className="ds-page">
