@@ -513,6 +513,70 @@
           "eventNamespace": "notification-demo"
         }
       }
+    },
+    {
+      "$schema": "https://mfe-made-easy.com/schemas/mfe-manifest-v2.schema.json",
+      "name": "mfe-notification-solidjs",
+      "version": "1.0.0",
+      "url": "http://localhost:8080/service-demos/notifications/mfe-notification-solidjs/mfe-notification-solidjs.js",
+      "alternativeUrls": [],
+      "dependencies": {
+        "runtime": {
+          "solid-js": "^1.8.0"
+        },
+        "peer": {
+          "@mfe-toolkit/core": "^0.1.0"
+        }
+      },
+      "compatibility": {
+        "container": "^1.0.0",
+        "browsers": {
+          "chrome": ">=90",
+          "firefox": ">=88",
+          "safari": ">=14",
+          "edge": ">=90"
+        },
+        "frameworks": {
+          "solid-js": "^1.8.0"
+        }
+      },
+      "capabilities": {
+        "emits": ["notification:test"],
+        "listens": [],
+        "features": ["notification-testing", "solidjs-signals", "custom-notifications"]
+      },
+      "requirements": {
+        "services": [
+          { "name": "notification", "optional": false },
+          { "name": "logger", "optional": true }
+        ]
+      },
+      "metadata": {
+        "displayName": "Solid.js Notification Demo",
+        "description": "Notification service demonstration MFE built with Solid.js",
+        "icon": "🔷",
+        "author": { "name": "MFE Toolkit Team" },
+        "category": "service-demos",
+        "tags": ["notification", "demo", "solidjs", "service"]
+      },
+      "config": {
+        "loading": {
+          "timeout": 30000,
+          "retries": 3,
+          "retryDelay": 1000,
+          "priority": 5,
+          "preload": false,
+          "lazy": true
+        },
+        "runtime": {
+          "isolation": "none",
+          "keepAlive": false,
+          "singleton": true
+        },
+        "communication": {
+          "eventNamespace": "notification-demo"
+        }
+      }
     }
   ],
   "config": {
