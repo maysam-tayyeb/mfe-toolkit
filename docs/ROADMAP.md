@@ -1,8 +1,8 @@
 # MFE Platform - Unified Roadmap & Planning
 
-> **Last Updated**: January 2025  
+> **Last Updated**: January 16, 2025  
 > **Status**: Active Development  
-> **Version**: 2.0
+> **Version**: 2.1
 
 This document consolidates all roadmap, planning, and future development documentation for the MFE Platform. It serves as the single source of truth for the platform's current state, active development, and future vision.
 
@@ -27,15 +27,27 @@ The MFE Platform is a comprehensive, framework-agnostic toolkit that enables tea
 
 ### Key Achievements
 
-- ✅ **5 Published NPM Packages** under @mfe-toolkit organization
+- ✅ **6 Published NPM Packages** under @mfe-toolkit organization (including @mfe-toolkit/build)
 - ✅ **Zero-Pollution Design System** with 500+ CSS utility classes
 - ✅ **Event Bus System** with multi-framework demos (React, Vue, Vanilla JS, Solid.js)
 - ✅ **Service Injection Pattern** preventing global scope pollution
 - ✅ **Production-Ready React Container** with all core services
+- ✅ **Notification Service Demos** across all frameworks (React 19/18/17, Vue 3, Solid.js, Vanilla)
+- ✅ **MFEModule Pattern** standardized across all MFEs (removed V1/V2 distinctions)
+- ✅ **Dynamic Import Maps** for shared dependency management
+- ✅ **Advanced Build System** with library versioning strategy
+
+### Recent Accomplishments (January 2025)
+
+- ✅ **Notification Service Demos** - Complete implementation across all 6 frameworks
+- ✅ **Build System Package** - Published @mfe-toolkit/build with advanced versioning
+- ✅ **Import Map Generation** - Automatic dependency detection and versioning
+- ✅ **CLI Improvements** - Multi-version React support, proper manifest generation
+- ✅ **Codebase Cleanup** - Removed all V1/V2 references, unified to single MFEModule pattern
 
 ### Current Focus
 
-- 🎯 Service Demo MFEs - All frameworks including React 18/17 for cross-version compatibility
+- 🎯 Modal Service Demos - Next priority for all frameworks
 - 🔧 State Management Middleware (devtools, validation, persistence)
 - 🎯 Multi-Framework Containers (Vue, Solid.js, Vanilla JS)
 - 📦 Framework Adapters (Vue, Solid.js, Svelte, Angular)
@@ -76,14 +88,15 @@ The MFE Platform is a comprehensive, framework-agnostic toolkit that enables tea
 | @mfe-toolkit/state | 0.1.0 | Cross-framework state management | ✅ Published |
 | @mfe-toolkit/state-middleware-performance | 0.1.0 | Performance monitoring | ✅ Published |
 | @mfe-toolkit/cli | 0.1.0 | CLI tools for scaffolding | ✅ Published |
+| @mfe-toolkit/build | 0.1.0 | Advanced build system with versioning | ✅ Published |
 
 ### Service Demos
 
 | Service | React 19 | React 18 | React 17 | Vue 3 | Vanilla JS | Solid.js |
 |---------|----------|----------|----------|-------|------------|----------|
 | Modal | 📋 | 📋 | 📋 | 📋 | 📋 | 📋 |
-| Event Bus | ✅ | 📋 | 📋 | ✅ | ✅ | ✅ |
-| Notification | 📋 | 📋 | 📋 | 📋 | 📋 | 📋 |
+| Event Bus | ✅ | ✅ | 📋 | ✅ | ✅ | ✅ |
+| Notification | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | Logger | 📋 | 📋 | 📋 | 📋 | 📋 | 📋 |
 | Auth | 📋 | 📋 | 📋 | 📋 | 📋 | 📋 |
 | Theme | 📋 | 📋 | 📋 | 📋 | 📋 | 📋 |
@@ -94,12 +107,21 @@ The MFE Platform is a comprehensive, framework-agnostic toolkit that enables tea
 
 ### 1. Service Demo MFEs 🎯
 
+#### Notification Service Demos ✅
+- **Status**: Complete
+- **Completed**: React 19, React 18, React 17, Vue 3, Vanilla JS, Solid.js
+- **Features**:
+  - Comprehensive notification testing UI
+  - Duration control (short, normal, long, persistent)
+  - Custom notification forms
+  - Batch operations
+  - Cross-framework consistency
+
 #### Event Bus Service Demos
 - **Status**: Partially Complete, Expanding
-- **Completed**: React 19, Vue 3, Vanilla JS, Solid.js
+- **Completed**: React 19, React 18, Vue 3, Vanilla JS, Solid.js
 - **Planned**:
   - **React 17**: Legacy version compatibility testing
-  - **React 18**: LTS version support
 - **Target**: Q1 2025
 
 #### Modal Service Demos
@@ -299,20 +321,6 @@ The MFE Platform is a comprehensive, framework-agnostic toolkit that enables tea
 - Live preview
 - Code generation
 
-### React Container Features
-
-#### Advanced Features
-- React Query integration
-- Form management (React Hook Form)
-- Data fetching abstraction
-- Optimistic updates
-
-#### Accessibility
-- WCAG 2.1 AAA compliance
-- Comprehensive keyboard navigation
-- Screen reader optimization
-- Internationalization (i18n)
-
 ---
 
 ## Q4 2025 Roadmap
@@ -344,20 +352,6 @@ The MFE Platform is a comprehensive, framework-agnostic toolkit that enables tea
 - CDN integration
 - Geographic routing
 - Performance monitoring
-
-### React Container Enterprise
-
-#### Advanced Routing
-- Route guards
-- Lazy route loading
-- Route transitions
-- Breadcrumb generation
-
-#### Monitoring
-- Real User Monitoring (RUM)
-- Performance metrics collection
-- User session replay
-- Analytics integration (GA4)
 
 ---
 
