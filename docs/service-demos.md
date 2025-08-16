@@ -6,6 +6,52 @@ This document provides **technical implementation details** for existing service
 
 Service demos are working examples that showcase the platform's shared services across different frameworks. They demonstrate real-world integration patterns and best practices.
 
+## Notification Service Demos (Completed)
+
+**Status**: ✅ Complete - All frameworks implemented
+
+Located in `apps/service-demos/notifications/`
+
+### Implementations
+
+| MFE Name                    | Framework      | Features                                        |
+|-----------------------------|----------------|------------------------------------------------|
+| `mfe-notification-react19`  | React 19.0.0   | Full notification testing suite               |
+| `mfe-notification-react18`  | React 18.2.0   | Cross-version compatibility demo              |
+| `mfe-notification-react17`  | React 17.0.2   | Legacy React support demonstration            |
+| `mfe-notification-vue3`     | Vue 3.4.0      | Vue Composition API integration               |
+| `mfe-notification-solidjs`  | Solid.js 1.8.0 | Fine-grained reactivity example               |
+| `mfe-notification-vanilla`  | Vanilla TS     | Framework-agnostic implementation             |
+
+### Key Features Demonstrated
+
+1. **Notification Types** - Success, Error, Warning, Info messages
+2. **Duration Control** - Short (1s), Normal (3s), Long (10s), Persistent options
+3. **Custom Notifications** - Form-based custom message creation
+4. **Batch Operations** - Show multiple notifications, clear all functionality
+5. **Cross-Framework Consistency** - Identical UX across all frameworks
+6. **MFEModule Pattern** - Standardized module export structure
+
+### Usage Pattern
+
+```typescript
+// Service injection pattern for notifications
+const { notification } = services;
+
+// Show notification
+notification.show({
+  title: 'Success!',
+  message: 'Operation completed',
+  type: 'success',
+  duration: 3000 // optional, in milliseconds
+});
+
+// Clear all notifications
+notification.clear();
+```
+
+**Notification Demo**: http://localhost:3000/services/notifications
+
 ## Modal Service Demos (Planned)
 
 **Status**: Planned for Q1 2025 - See [ROADMAP.md](./ROADMAP.md#modal-service-demos) for details.
@@ -40,7 +86,7 @@ Located in `apps/service-demos/event-bus/`
 
 | MFE Name               | Framework   | Purpose                                          |
 | ---------------------- | ----------- | ------------------------------------------------ |
-| `mfe-market-watch`     | React       | Real-time stock ticker with price updates       |
+| `mfe-market-watch`     | React 18    | Real-time stock ticker with price updates       |
 | `mfe-trading-terminal` | Vue 3       | Order placement and portfolio management        |
 | `mfe-analytics-engine` | Vanilla TS  | Performance metrics and portfolio analysis      |
 
