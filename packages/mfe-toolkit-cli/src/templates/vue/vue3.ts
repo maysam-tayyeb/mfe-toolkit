@@ -207,13 +207,15 @@ export const App = defineComponent({
     const { name } = this.config;
     
     return `import { buildMFE } from '@mfe-toolkit/build';
-import vue from 'esbuild-plugin-vue3';
+import vuePlugin from 'esbuild-plugin-vue3';
 
 await buildMFE({
   entry: 'src/main.ts',
   outfile: 'dist/${name}.js',
   manifestPath: './manifest.json',
-  plugins: [vue()]
+  esbuildOptions: {
+    plugins: [vuePlugin()]
+  }
 });`;
   }
 
