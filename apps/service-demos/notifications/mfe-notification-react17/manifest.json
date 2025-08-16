@@ -1,14 +1,12 @@
 {
-  "$schema": "https://mfe-made-easy.com/schemas/mfe-manifest-v2.schema.json",
+  "$schema": "https://mfe-toolkit.com/schemas/mfe-manifest-v2.schema.json",
   "name": "mfe-notification-react17",
   "version": "1.0.0",
-  "displayName": "React 17 Notification Demo",
-  "description": "Notification service demonstration MFE built with React 17",
   "url": "http://localhost:8080/service-demos/notifications/mfe-notification-react17/mfe-notification-react17.js",
   "dependencies": {
     "runtime": {
-      "react": "^17.0.2 || ^18.0.0 || ^19.0.0",
-      "react-dom": "^17.0.2 || ^18.0.0 || ^19.0.0"
+      "react": "^17.0.2",
+      "react-dom": "^17.0.2"
     },
     "peer": {
       "@mfe-toolkit/core": "^0.1.0"
@@ -21,29 +19,43 @@
       "firefox": ">=88",
       "safari": ">=14",
       "edge": ">=90"
-    },
-    "frameworks": {
-      "react": "^17.0.2 || ^18.0.0 || ^19.0.0"
     }
   },
   "capabilities": {
-    "emits": ["notification:test"],
+    "emits": [
+      "notification:test"
+    ],
     "listens": [],
-    "features": ["notification-testing", "react17-hooks", "custom-notifications"]
+    "features": [
+      "notification-testing",
+      "custom-notifications"
+    ]
   },
   "requirements": {
     "services": [
-      { "name": "notification", "optional": false },
-      { "name": "logger", "optional": true }
+      {
+        "name": "notification",
+        "optional": false
+      },
+      {
+        "name": "logger",
+        "optional": true
+      }
     ]
   },
   "metadata": {
-    "displayName": "React 17 Notification Demo",
-    "description": "Notification service demonstration MFE built with React 17",
+    "displayName": "Mfe Notification React17",
+    "description": "Mfe Notification React17 MFE",
     "icon": "⚛️",
-    "author": { "name": "MFE Toolkit Team" },
+    "author": {
+      "name": "MFE Toolkit Team"
+    },
     "category": "service-demos",
-    "tags": ["notification", "demo", "react17", "service", "legacy"]
+    "tags": [
+      "react",
+      "mfe",
+      "demo"
+    ]
   },
   "config": {
     "loading": {

@@ -1,26 +1,25 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import type { MFEModule, MFEServiceContainer } from '@mfe-toolkit/core';
-import { NotificationDemo } from './NotificationDemo';
+import { App } from './App';
 
-let root: HTMLElement | null = null;
+let rootElement: HTMLElement | null = null;
 
 const module: MFEModule = {
   metadata: {
     name: 'mfe-notification-react17',
     version: '1.0.0',
-    requiredServices: ['notification', 'logger'],
-    capabilities: ['notification-display', 'react17-demo']
+    requiredServices: ['notification'],
+    capabilities: ['notification-demo']
   },
 
   mount: async (element: HTMLElement, container: MFEServiceContainer) => {
     const services = container.getAllServices();
+    rootElement = element;
     
-    // Using React 17 API
-    root = element;
     ReactDOM.render(
       <React.StrictMode>
-        <NotificationDemo services={services} />
+        <App services={services} />
       </React.StrictMode>,
       element
     );
@@ -31,10 +30,9 @@ const module: MFEModule = {
   },
   
   unmount: async (container: MFEServiceContainer) => {
-    if (root) {
-      // React 17 unmount
-      ReactDOM.unmountComponentAtNode(root);
-      root = null;
+    if (rootElement) {
+      ReactDOM.unmountComponentAtNode(rootElement);
+      rootElement = null;
     }
     
     const services = container.getAllServices();

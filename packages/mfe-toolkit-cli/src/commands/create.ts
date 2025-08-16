@@ -145,10 +145,22 @@ async function createBasicStructure(projectPath: string, config: any) {
 
   if (config.template === 'react') {
     const reactVersion = config.reactVersion || '18';
-    packageJson.dependencies['react'] = `^${reactVersion}.0.0`;
-    packageJson.dependencies['react-dom'] = `^${reactVersion}.0.0`;
-    packageJson.devDependencies['@types/react'] = '^18.2.0';
-    packageJson.devDependencies['@types/react-dom'] = '^18.2.0';
+    if (reactVersion === '17') {
+      packageJson.dependencies['react'] = '^17.0.2';
+      packageJson.dependencies['react-dom'] = '^17.0.2';
+      packageJson.devDependencies['@types/react'] = '^17.0.2';
+      packageJson.devDependencies['@types/react-dom'] = '^17.0.2';
+    } else if (reactVersion === '19') {
+      packageJson.dependencies['react'] = '^19.0.0';
+      packageJson.dependencies['react-dom'] = '^19.0.0';
+      packageJson.devDependencies['@types/react'] = '^18.2.0';
+      packageJson.devDependencies['@types/react-dom'] = '^18.2.0';
+    } else {
+      packageJson.dependencies['react'] = '^18.0.0';
+      packageJson.dependencies['react-dom'] = '^18.0.0';
+      packageJson.devDependencies['@types/react'] = '^18.2.0';
+      packageJson.devDependencies['@types/react-dom'] = '^18.2.0';
+    }
     packageJson.devDependencies['typescript'] = '^5.3.0';
   } else if (config.template === 'vue') {
     packageJson.dependencies['vue'] = '^3.4.0';
@@ -187,8 +199,8 @@ const module: MFEModule = {
   metadata: {
     name: '${config.name}',
     version: '1.0.0',
-    requiredServices: ['logger'],
-    capabilities: ['demo']
+    requiredServices: ${projectPath.includes('notifications') ? "['notification']" : "['logger']"},
+    capabilities: ${projectPath.includes('notifications') ? "['notification-demo']" : "['demo']"}
   },
 
   mount: async (element: HTMLElement, container: MFEServiceContainer) => {
@@ -240,8 +252,8 @@ const module: MFEModule = {
   metadata: {
     name: '${config.name}',
     version: '1.0.0',
-    requiredServices: ['logger'],
-    capabilities: ['demo']
+    requiredServices: ${projectPath.includes('notifications') ? "['notification']" : "['logger']"},
+    capabilities: ${projectPath.includes('notifications') ? "['notification-demo']" : "['demo']"}
   },
 
   mount: async (element: HTMLElement, container: MFEServiceContainer) => {
@@ -280,8 +292,8 @@ const module: MFEModule = {
   metadata: {
     name: '${config.name}',
     version: '1.0.0',
-    requiredServices: ['logger'],
-    capabilities: ['demo']
+    requiredServices: ${projectPath.includes('notifications') ? "['notification']" : "['logger']"},
+    capabilities: ${projectPath.includes('notifications') ? "['notification-demo']" : "['demo']"}
   },
 
   mount: async (element: HTMLElement, container: MFEServiceContainer) => {
@@ -314,8 +326,8 @@ const module: MFEModule = {
   metadata: {
     name: '${config.name}',
     version: '1.0.0',
-    requiredServices: ['logger'],
-    capabilities: ['demo']
+    requiredServices: ${projectPath.includes('notifications') ? "['notification']" : "['logger']"},
+    capabilities: ${projectPath.includes('notifications') ? "['notification-demo']" : "['demo']"}
   },
 
   mount: async (element: HTMLElement, container: MFEServiceContainer) => {
@@ -456,10 +468,22 @@ export const App: Component<AppProps> = (props) => {
   const getRuntimeDeps = () => {
     if (config.template === 'react') {
       const version = config.reactVersion || '18';
-      return {
-        react: `^${version}.0.0`,
-        'react-dom': `^${version}.0.0`,
-      };
+      if (version === '17') {
+        return {
+          react: '^17.0.2',
+          'react-dom': '^17.0.2',
+        };
+      } else if (version === '19') {
+        return {
+          react: '^19.0.0',
+          'react-dom': '^19.0.0',
+        };
+      } else {
+        return {
+          react: '^18.0.0',
+          'react-dom': '^18.0.0',
+        };
+      }
     } else if (config.template === 'vue') {
       return { vue: '^3.4.0' };
     } else if (config.template === 'solid') {
@@ -468,11 +492,36 @@ export const App: Component<AppProps> = (props) => {
     return {};
   };
 
+  const getIcon = () => {
+    if (config.template === 'react') return '⚛️';
+    if (config.template === 'vue') return '💚';
+    if (config.template === 'solid') return '🔷';
+    return '📦';
+  };
+
+  const getDisplayName = () => {
+    // Generate a nice display name from the MFE name
+    const parts = config.name.split('-');
+    return parts.map(part => 
+      part.charAt(0).toUpperCase() + part.slice(1)
+    ).join(' ');
+  };
+
+  // Determine if this is a service demo based on the path
+  const isServiceDemo = projectPath.includes('service-demos');
+  const serviceDemoType = projectPath.includes('notifications') ? 'notification' : 
+                          projectPath.includes('event-bus') ? 'event-bus' : 'general';
+
+  // Build the proper URL path
+  const urlPath = isServiceDemo 
+    ? `service-demos/${serviceDemoType}/${config.name}` 
+    : config.name;
+
   const manifest = {
     $schema: 'https://mfe-toolkit.com/schemas/mfe-manifest-v2.schema.json',
     name: config.name,
-    version: '0.1.0',
-    url: `http://localhost:8080/${config.name}/${config.name}.js`,
+    version: '1.0.0',
+    url: `http://localhost:8080/${urlPath}/${config.name}.js`,
     dependencies: {
       runtime: getRuntimeDeps(),
       peer: {
@@ -480,7 +529,7 @@ export const App: Component<AppProps> = (props) => {
       },
     },
     compatibility: {
-      container: '>=0.1.0',
+      container: '^1.0.0',
       browsers: {
         chrome: '>=90',
         firefox: '>=88',
@@ -488,19 +537,49 @@ export const App: Component<AppProps> = (props) => {
         edge: '>=90',
       },
     },
+    capabilities: {
+      emits: serviceDemoType === 'notification' ? ['notification:test'] : [],
+      listens: [],
+      features: serviceDemoType === 'notification' 
+        ? ['notification-testing', 'custom-notifications']
+        : [],
+    },
     requirements: {
-      services: [
-        { name: 'logger', optional: true },
-        { name: 'eventBus', optional: false },
-        { name: 'notification', optional: true },
-      ],
+      services: serviceDemoType === 'notification'
+        ? [
+            { name: 'notification', optional: false },
+            { name: 'logger', optional: true },
+          ]
+        : [
+            { name: 'logger', optional: true },
+            { name: 'eventBus', optional: false },
+          ],
     },
     metadata: {
-      displayName: config.name,
-      description: `${config.name} microfrontend`,
-      icon: '📦',
-      category: 'custom',
-      tags: [config.template, 'mfe'],
+      displayName: getDisplayName(),
+      description: `${getDisplayName()} MFE`,
+      icon: getIcon(),
+      author: { name: 'MFE Toolkit Team' },
+      category: isServiceDemo ? 'service-demos' : 'custom',
+      tags: [config.template, 'mfe', ...(isServiceDemo ? ['demo'] : [])],
+    },
+    config: {
+      loading: {
+        timeout: 30000,
+        retries: 3,
+        retryDelay: 1000,
+        priority: 5,
+        preload: false,
+        lazy: true,
+      },
+      runtime: {
+        isolation: 'none',
+        keepAlive: false,
+        singleton: true,
+      },
+      communication: {
+        eventNamespace: serviceDemoType === 'notification' ? 'notification-demo' : config.name,
+      },
     },
   };
 
@@ -537,12 +616,21 @@ await buildMFE({
 
   // Create tsconfig.json for TypeScript projects
   if (config.template !== 'vanilla-js') {
+    const getJsxSetting = () => {
+      if (config.template === 'react') {
+        const reactVersion = config.reactVersion || '18';
+        // React 17 needs 'react' instead of 'react-jsx'
+        return reactVersion === '17' ? 'react' : 'react-jsx';
+      }
+      return 'preserve';
+    };
+
     const tsConfig = {
       compilerOptions: {
         target: 'ES2020',
         module: 'ESNext',
         lib: ['ES2020', 'DOM', 'DOM.Iterable'],
-        jsx: config.template === 'react' ? 'react-jsx' : 'preserve',
+        jsx: getJsxSetting(),
         moduleResolution: 'node',
         strict: true,
         esModuleInterop: true,

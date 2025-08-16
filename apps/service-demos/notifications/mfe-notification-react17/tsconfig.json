@@ -2,7 +2,11 @@
   "compilerOptions": {
     "target": "ES2020",
     "module": "ESNext",
-    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "lib": [
+      "ES2020",
+      "DOM",
+      "DOM.Iterable"
+    ],
     "jsx": "react",
     "moduleResolution": "node",
     "strict": true,
@@ -11,9 +15,17 @@
     "forceConsistentCasingInFileNames": true,
     "declaration": false,
     "noEmit": true,
-    "types": ["react", "react-dom"],
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "types": [
+      "react",
+      "react-dom"
+    ]
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist"]
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
 }
