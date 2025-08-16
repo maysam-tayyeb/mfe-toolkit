@@ -76,10 +76,10 @@ Use standard JSON schema validators:
 npm install -g ajv-cli
 
 # Download schema
-curl -O https://mfe-made-easy.com/schemas/mfe-manifest-v2.schema.json
+curl -O https://mfe-made-easy.com/schemas/mfe-manifest.schema.json
 
 # Validate
-ajv validate -s mfe-manifest-v2.schema.json -d manifest.json
+ajv validate -s mfe-manifest.schema.json -d manifest.json
 ```
 
 ## CI/CD Integration

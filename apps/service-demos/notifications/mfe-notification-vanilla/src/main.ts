@@ -166,7 +166,7 @@ const createUI = (): string => {
         <h2 class="ds-text-2xl ds-font-bold ds-mb-2">Vanilla TypeScript Notification Demo</h2>
         <p class="ds-text-gray-600">
           Framework: <span class="ds-font-medium">Vanilla TypeScript</span> | 
-          Pattern: <span class="ds-font-medium">V2 MFEModule</span>
+          Pattern: <span class="ds-font-medium">MFEModule</span>
         </p>
       </div>
 

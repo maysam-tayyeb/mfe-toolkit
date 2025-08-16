@@ -39,13 +39,13 @@ export const createCommand = new Command('create')
             initial: 0,
           },
           {
-            type: (prev) => prev === 'react' ? 'select' : null,
+            type: (prev) => (prev === 'react' ? 'select' : null),
             name: 'reactVersion',
             message: 'Which React version would you like to use?',
             choices: [
               { title: 'React 19 (Latest)', value: '19' },
               { title: 'React 18 (Stable)', value: '18' },
-              { title: 'React 17 (Legacy)', value: '17' },
+              { title: 'React 17', value: '17' },
             ],
             initial: 1,
           },
@@ -139,7 +139,7 @@ async function createBasicStructure(projectPath: string, config: any) {
     devDependencies: {
       '@mfe-toolkit/build': 'workspace:*',
       '@mfe-toolkit/core': 'workspace:*',
-      'esbuild': '^0.24.2',
+      esbuild: '^0.24.2',
     },
   };
 
@@ -180,13 +180,14 @@ async function createBasicStructure(projectPath: string, config: any) {
   // Create basic entry file based on template
   let entryContent = '';
   let entryFileName = 'main.ts';
-  
+
   if (config.template === 'react') {
     const reactVersion = config.reactVersion || '18';
-    const importStatement = reactVersion === '17' 
-      ? `import ReactDOM from 'react-dom';`
-      : `import ReactDOM from 'react-dom/client';`;
-    
+    const importStatement =
+      reactVersion === '17'
+        ? `import ReactDOM from 'react-dom';`
+        : `import ReactDOM from 'react-dom/client';`;
+
     entryFileName = 'main.tsx';
     entryContent = `import React from 'react';
 ${importStatement}
@@ -205,20 +206,22 @@ const module: MFEModule = {
 
   mount: async (element: HTMLElement, container: MFEServiceContainer) => {
     const services = container.getAllServices();
-    ${reactVersion === '17' 
-      ? `root = element;
+    ${
+      reactVersion === '17'
+        ? `root = element;
     ReactDOM.render(
       <React.StrictMode>
         <App services={services} />
       </React.StrictMode>,
       element
     );`
-      : `root = ReactDOM.createRoot(element);
+        : `root = ReactDOM.createRoot(element);
     root.render(
       <React.StrictMode>
         <App services={services} />
       </React.StrictMode>
-    );`}
+    );`
+    }
     
     if (services.logger) {
       services.logger.info('[${config.name}] Mounted successfully');
@@ -227,9 +230,7 @@ const module: MFEModule = {
   
   unmount: async (container: MFEServiceContainer) => {
     if (root) {
-      ${reactVersion === '17' 
-        ? `ReactDOM.unmountComponentAtNode(root);`
-        : `root.unmount();`}
+      ${reactVersion === '17' ? `ReactDOM.unmountComponentAtNode(root);` : `root.unmount();`}
       root = null;
     }
     
@@ -350,10 +351,7 @@ const module: MFEModule = {
 export default module;`;
   }
 
-  await fs.writeFile(
-    path.join(projectPath, 'src', entryFileName),
-    entryContent
-  );
+  await fs.writeFile(path.join(projectPath, 'src', entryFileName), entryContent);
 
   // Create App component based on template
   if (config.template === 'react') {
@@ -502,23 +500,22 @@ export const App: Component<AppProps> = (props) => {
   const getDisplayName = () => {
     // Generate a nice display name from the MFE name
     const parts = config.name.split('-');
-    return parts.map(part => 
-      part.charAt(0).toUpperCase() + part.slice(1)
-    ).join(' ');
+    return parts.map((part) => part.charAt(0).toUpperCase() + part.slice(1)).join(' ');
   };
 
   // Determine if this is a service demo based on the path
   const isServiceDemo = projectPath.includes('service-demos');
-  const serviceDemoType = projectPath.includes('notifications') ? 'notification' : 
-                          projectPath.includes('event-bus') ? 'event-bus' : 'general';
+  const serviceDemoType = projectPath.includes('notifications')
+    ? 'notification'
+    : projectPath.includes('event-bus')
+      ? 'event-bus'
+      : 'general';
 
   // Build the proper URL path
-  const urlPath = isServiceDemo 
-    ? `service-demos/${serviceDemoType}/${config.name}` 
-    : config.name;
+  const urlPath = isServiceDemo ? `service-demos/${serviceDemoType}/${config.name}` : config.name;
 
   const manifest = {
-    $schema: 'https://mfe-toolkit.com/schemas/mfe-manifest-v2.schema.json',
+    $schema: 'https://mfe-toolkit.com/schemas/mfe-manifest.schema.json',
     name: config.name,
     version: '1.0.0',
     url: `http://localhost:8080/${urlPath}/${config.name}.js`,
@@ -540,20 +537,20 @@ export const App: Component<AppProps> = (props) => {
     capabilities: {
       emits: serviceDemoType === 'notification' ? ['notification:test'] : [],
       listens: [],
-      features: serviceDemoType === 'notification' 
-        ? ['notification-testing', 'custom-notifications']
-        : [],
+      features:
+        serviceDemoType === 'notification' ? ['notification-testing', 'custom-notifications'] : [],
     },
     requirements: {
-      services: serviceDemoType === 'notification'
-        ? [
-            { name: 'notification', optional: false },
-            { name: 'logger', optional: true },
-          ]
-        : [
-            { name: 'logger', optional: true },
-            { name: 'eventBus', optional: false },
-          ],
+      services:
+        serviceDemoType === 'notification'
+          ? [
+              { name: 'notification', optional: false },
+              { name: 'logger', optional: true },
+            ]
+          : [
+              { name: 'logger', optional: true },
+              { name: 'eventBus', optional: false },
+            ],
     },
     metadata: {
       displayName: getDisplayName(),
@@ -595,13 +592,21 @@ ${config.template === 'solid' ? `import { solidPlugin } from 'esbuild-plugin-sol
 await buildMFE({
   entry: 'src/${entryFileName}',
   outfile: 'dist/${config.name}.js',
-  manifestPath: './manifest.json'${config.template === 'vue' ? `,
+  manifestPath: './manifest.json'${
+    config.template === 'vue'
+      ? `,
   esbuildOptions: {
     plugins: [vuePlugin()]
-  }` : ''}${config.template === 'solid' ? `,
+  }`
+      : ''
+  }${
+    config.template === 'solid'
+      ? `,
   esbuildOptions: {
     plugins: [solidPlugin()]
-  }` : ''}
+  }`
+      : ''
+  }
 });
 `;
 

@@ -176,7 +176,7 @@ Schema URL: `https://mfe-made-easy.com/schemas/mfe-manifest.schema.json`
 
 - **Type**: `string` (URI)
 - **Description**: Points to the JSON schema for validation
-- **Example**: `"https://mfe-made-easy.com/schemas/mfe-manifest-v2.schema.json"`
+- **Example**: `"https://mfe-made-easy.com/schemas/mfe-manifest.schema.json"`
 
 #### `name` (required)
 

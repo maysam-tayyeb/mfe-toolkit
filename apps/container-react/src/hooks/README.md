@@ -195,7 +195,7 @@ The hooks automatically use these environment variables:
 The registry will try to load from:
 
 1. `VITE_MFE_REGISTRY_URL` if set
-2. `/mfe-registry-v2.json` as default (V2 format with enhanced metadata)
+2. `/mfe-registry.json` as default (MFE Manifest format with enhanced metadata)
 3. `/mfe-registry.{environment}.json` as fallback
 
 ## Best Practices

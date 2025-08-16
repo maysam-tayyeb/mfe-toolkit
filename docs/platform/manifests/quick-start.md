@@ -253,15 +253,6 @@ mfe-toolkit manifest validate manifest.json
 mfe-toolkit manifest validate --all
 ```
 
-### Migrate from V1
-
-```bash
-# Migrate a single manifest
-mfe-toolkit manifest migrate old-manifest.json -o manifest.json
-
-# Migrate with interactive mode
-mfe-toolkit manifest migrate old-manifest.json --interactive
-```
 
 ## Integration with Build Tools
 
@@ -362,7 +353,6 @@ module.exports = {
 
 - Read the full [Specification](./specification.md) for all available options
 - Check out [Examples](./examples.md) for real-world use cases
-- Learn about [Migration](./migration-guide.md) from V1 manifests
 - Set up [Validation](./validation-guide.md) in your CI/CD pipeline
 
 ## Getting Help

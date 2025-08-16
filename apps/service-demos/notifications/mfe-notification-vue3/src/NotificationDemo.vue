@@ -4,7 +4,7 @@
       <h2 class="ds-text-2xl ds-font-bold ds-mb-2">Vue 3 Notification Demo</h2>
       <p class="ds-text-gray-600">
         Framework: <span class="ds-font-medium">Vue 3.4.0</span> | 
-        Pattern: <span class="ds-font-medium">V2 MFEModule</span>
+        Pattern: <span class="ds-font-medium">MFEModule</span>
       </p>
     </div>
 

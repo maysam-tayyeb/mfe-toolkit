@@ -16,7 +16,7 @@ export class ManifestGenerator {
     const { name, version = '1.0.0', framework = 'react', template = 'basic' } = options;
 
     const baseManifest: MFEManifest = {
-      $schema: 'https://mfe-made-easy.com/schemas/mfe-manifest-v2.schema.json',
+      $schema: 'https://mfe-made-easy.com/schemas/mfe-manifest.schema.json',
       name,
       version,
       url: `http://localhost:8080/${name}/${name}.js`,

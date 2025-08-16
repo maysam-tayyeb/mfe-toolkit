@@ -10,7 +10,7 @@ The absolute minimum required for a React MFE:
 
 ```json
 {
-  "$schema": "https://mfe-made-easy.com/schemas/mfe-manifest-v2.schema.json",
+  "$schema": "https://mfe-made-easy.com/schemas/mfe-manifest.schema.json",
   "name": "minimal-react",
   "version": "1.0.0",
   "url": "http://localhost:3001/minimal.js",
@@ -39,7 +39,7 @@ For framework-agnostic MFEs:
 
 ```json
 {
-  "$schema": "https://mfe-made-easy.com/schemas/mfe-manifest-v2.schema.json",
+  "$schema": "https://mfe-made-easy.com/schemas/mfe-manifest.schema.json",
   "name": "vanilla-widget",
   "version": "1.0.0",
   "url": "http://localhost:3003/widget.js",
@@ -62,7 +62,7 @@ For framework-agnostic MFEs:
 
 ```json
 {
-  "$schema": "https://mfe-made-easy.com/schemas/mfe-manifest-v2.schema.json",
+  "$schema": "https://mfe-made-easy.com/schemas/mfe-manifest.schema.json",
   "name": "react19-dashboard",
   "version": "2.3.0",
   "url": "https://cdn.example.com/mfes/dashboard/2.3.0/bundle.js",
@@ -149,7 +149,7 @@ For framework-agnostic MFEs:
 
 ```json
 {
-  "$schema": "https://mfe-made-easy.com/schemas/mfe-manifest-v2.schema.json",
+  "$schema": "https://mfe-made-easy.com/schemas/mfe-manifest.schema.json",
   "name": "vue-shopping-cart",
   "version": "1.5.0",
   "url": "https://cdn.example.com/mfes/shopping-cart/1.5.0/bundle.js",
@@ -206,7 +206,7 @@ For framework-agnostic MFEs:
 
 ```json
 {
-  "$schema": "https://mfe-made-easy.com/schemas/mfe-manifest-v2.schema.json",
+  "$schema": "https://mfe-made-easy.com/schemas/mfe-manifest.schema.json",
   "name": "angular-admin",
   "version": "3.0.0",
   "url": "https://cdn.example.com/mfes/admin/3.0.0/bundle.js",
@@ -252,7 +252,7 @@ For framework-agnostic MFEs:
 
 ```json
 {
-  "$schema": "https://mfe-made-easy.com/schemas/mfe-manifest-v2.schema.json",
+  "$schema": "https://mfe-made-easy.com/schemas/mfe-manifest.schema.json",
   "name": "product-catalog",
   "version": "2.1.0",
   "url": "https://cdn.shop.com/mfes/catalog/2.1.0/bundle.js",
@@ -331,7 +331,7 @@ For framework-agnostic MFEs:
 
 ```json
 {
-  "$schema": "https://mfe-made-easy.com/schemas/mfe-manifest-v2.schema.json",
+  "$schema": "https://mfe-made-easy.com/schemas/mfe-manifest.schema.json",
   "name": "chat-widget",
   "version": "1.2.0",
   "url": "https://cdn.example.com/mfes/chat/1.2.0/bundle.js",
@@ -396,7 +396,7 @@ For framework-agnostic MFEs:
 
 ```json
 {
-  "$schema": "https://mfe-made-easy.com/schemas/mfe-manifest-v2.schema.json",
+  "$schema": "https://mfe-made-easy.com/schemas/mfe-manifest.schema.json",
   "name": "tenant-dashboard",
   "version": "4.0.0",
   "url": "https://saas.example.com/mfes/dashboard/{tenantId}/bundle.js",
@@ -457,7 +457,7 @@ For framework-agnostic MFEs:
 
 ```json
 {
-  "$schema": "https://mfe-made-easy.com/schemas/mfe-manifest-v2.schema.json",
+  "$schema": "https://mfe-made-easy.com/schemas/mfe-manifest.schema.json",
   "name": "banking-transactions",
   "version": "1.0.0",
   "url": "https://secure.bank.com/mfes/transactions/1.0.0/bundle.js",
@@ -508,7 +508,7 @@ For framework-agnostic MFEs:
 
 ```json
 {
-  "$schema": "https://mfe-made-easy.com/schemas/mfe-manifest-v2.schema.json",
+  "$schema": "https://mfe-made-easy.com/schemas/mfe-manifest.schema.json",
   "name": "pwa-news-reader",
   "version": "2.0.0",
   "url": "https://cdn.news.com/mfes/reader/2.0.0/bundle.js",
@@ -551,7 +551,7 @@ For framework-agnostic MFEs:
 
 ```json
 {
-  "$schema": "https://mfe-made-easy.com/schemas/mfe-manifest-v2.schema.json",
+  "$schema": "https://mfe-made-easy.com/schemas/mfe-manifest.schema.json",
   "name": "dev-tools",
   "version": "0.1.0-dev",
   "url": "http://localhost:3001/dev-tools.js",

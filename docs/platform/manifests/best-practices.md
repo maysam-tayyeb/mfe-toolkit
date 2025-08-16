@@ -553,4 +553,3 @@ Before deploying, ensure your manifest:
 - Review the [Specification](./specification.md) for all available options
 - Set up [Validation](./validation-guide.md) in your pipeline
 - Check out [Examples](./examples.md) for inspiration
-- Implement [Migration](./migration-guide.md) if using V1

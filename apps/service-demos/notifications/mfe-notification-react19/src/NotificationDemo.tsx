@@ -130,7 +130,7 @@ export const NotificationDemo: React.FC<{ services: MFEServices }> = ({ services
         <h2 className="ds-text-2xl ds-font-bold ds-mb-2">React 19 Notification Demo</h2>
         <p className="ds-text-gray-600">
           Framework: <span className="ds-font-medium">React 19.0.0</span> | 
-          Pattern: <span className="ds-font-medium">V2 MFEModule</span>
+          Pattern: <span className="ds-font-medium">MFEModule</span>
         </p>
       </div>
 
