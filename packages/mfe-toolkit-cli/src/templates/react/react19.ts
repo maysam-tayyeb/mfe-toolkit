@@ -512,7 +512,7 @@ export const App: React.FC<AppProps> = ({ services }) => {
           'react-dom': '^19.0.0'
         },
         peer: {
-          '@mfe-toolkit/build': '^0.1.0'
+          '@mfe-toolkit/core': '^0.1.0'
         }
       },
       compatibility: {
