@@ -8,7 +8,7 @@
       "$schema": "https://mfe-made-easy.com/schemas/mfe-manifest-v2.schema.json",
       "name": "mfe-market-watch",
       "version": "1.0.0",
-      "url": "http://localhost:8080/event-bus/scenarios/trading/mfe-market-watch.js",
+      "url": "http://localhost:8080/service-demos/event-bus/scenarios/trading/mfe-market-watch.js",
       "alternativeUrls": [],
       "dependencies": {
         "runtime": {
@@ -73,7 +73,7 @@
       "$schema": "https://mfe-made-easy.com/schemas/mfe-manifest-v2.schema.json",
       "name": "mfe-trading-terminal",
       "version": "1.0.0",
-      "url": "http://localhost:8080/event-bus/scenarios/trading/mfe-trading-terminal.js",
+      "url": "http://localhost:8080/service-demos/event-bus/scenarios/trading/mfe-trading-terminal.js",
       "alternativeUrls": [],
       "dependencies": {
         "runtime": {
@@ -137,7 +137,7 @@
       "$schema": "https://mfe-made-easy.com/schemas/mfe-manifest-v2.schema.json",
       "name": "mfe-analytics-engine",
       "version": "1.0.0",
-      "url": "http://localhost:8080/event-bus/scenarios/trading/mfe-analytics-engine.js",
+      "url": "http://localhost:8080/service-demos/event-bus/scenarios/trading/mfe-analytics-engine.js",
       "alternativeUrls": [],
       "dependencies": {
         "runtime": {},
@@ -196,7 +196,7 @@
       "$schema": "https://mfe-made-easy.com/schemas/mfe-manifest-v2.schema.json",
       "name": "mfe-event-playground",
       "version": "1.0.0",
-      "url": "http://localhost:8080/event-bus/mfe-event-playground.js",
+      "url": "http://localhost:8080/service-demos/event-bus/mfe-event-playground/mfe-event-playground.js",
       "alternativeUrls": [],
       "dependencies": {
         "runtime": {
