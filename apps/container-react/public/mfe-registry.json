@@ -636,6 +636,388 @@
           "eventNamespace": "notification-demo"
         }
       }
+    },
+    {
+      "$schema": "https://mfe-made-easy.com/schemas/mfe-manifest-v2.schema.json",
+      "name": "mfe-modal-react19",
+      "version": "1.0.0",
+      "url": "http://localhost:8080/service-demos/modal/mfe-modal-react19/mfe-modal-react19.js",
+      "alternativeUrls": [],
+      "dependencies": {
+        "runtime": {
+          "react": "^19.0.0",
+          "react-dom": "^19.0.0"
+        },
+        "peer": {
+          "@mfe-toolkit/core": "^0.1.0"
+        }
+      },
+      "compatibility": {
+        "container": "^1.0.0",
+        "browsers": {
+          "chrome": ">=90",
+          "firefox": ">=88",
+          "safari": ">=14",
+          "edge": ">=90"
+        },
+        "frameworks": {
+          "react": "^19.0.0"
+        }
+      },
+      "capabilities": {
+        "emits": ["modal:test-opened", "modal:test-closed"],
+        "listens": [],
+        "features": ["modal-testing", "custom-modals", "modal-stacking"]
+      },
+      "requirements": {
+        "services": [
+          { "name": "modal", "optional": false },
+          { "name": "logger", "optional": true }
+        ]
+      },
+      "metadata": {
+        "displayName": "React 19 Modal Demo",
+        "description": "Modal service demonstration MFE built with React 19",
+        "icon": "🪟",
+        "author": { "name": "MFE Toolkit Team" },
+        "category": "service-demos",
+        "tags": ["modal", "demo", "react19", "service"]
+      },
+      "config": {
+        "loading": {
+          "timeout": 30000,
+          "retries": 3,
+          "retryDelay": 1000,
+          "priority": 5,
+          "preload": false,
+          "lazy": true
+        },
+        "runtime": {
+          "isolation": "none",
+          "keepAlive": false,
+          "singleton": true
+        },
+        "communication": {
+          "eventNamespace": "modal-demo"
+        }
+      }
+    },
+    {
+      "$schema": "https://mfe-made-easy.com/schemas/mfe-manifest-v2.schema.json",
+      "name": "mfe-modal-react18",
+      "version": "1.0.0",
+      "url": "http://localhost:8080/service-demos/modal/mfe-modal-react18/mfe-modal-react18.js",
+      "alternativeUrls": [],
+      "dependencies": {
+        "runtime": {
+          "react": "^18.2.0 || ^19.0.0",
+          "react-dom": "^18.2.0 || ^19.0.0"
+        },
+        "peer": {
+          "@mfe-toolkit/core": "^0.1.0"
+        }
+      },
+      "compatibility": {
+        "container": "^1.0.0",
+        "browsers": {
+          "chrome": ">=90",
+          "firefox": ">=88",
+          "safari": ">=14",
+          "edge": ">=90"
+        },
+        "frameworks": {
+          "react": "^18.2.0 || ^19.0.0"
+        }
+      },
+      "capabilities": {
+        "emits": ["modal:test-opened", "modal:test-closed"],
+        "listens": [],
+        "features": ["modal-testing", "custom-modals", "modal-stacking", "react18-hooks"]
+      },
+      "requirements": {
+        "services": [
+          { "name": "modal", "optional": false },
+          { "name": "logger", "optional": true }
+        ]
+      },
+      "metadata": {
+        "displayName": "React 18 Modal Demo",
+        "description": "Modal service demonstration MFE built with React 18",
+        "icon": "⚛️",
+        "author": { "name": "MFE Toolkit Team" },
+        "category": "service-demos",
+        "tags": ["modal", "demo", "react18", "service"]
+      },
+      "config": {
+        "loading": {
+          "timeout": 30000,
+          "retries": 3,
+          "retryDelay": 1000,
+          "priority": 5,
+          "preload": false,
+          "lazy": true
+        },
+        "runtime": {
+          "isolation": "none",
+          "keepAlive": false,
+          "singleton": true
+        },
+        "communication": {
+          "eventNamespace": "modal-demo"
+        }
+      }
+    },
+    {
+      "$schema": "https://mfe-made-easy.com/schemas/mfe-manifest-v2.schema.json",
+      "name": "mfe-modal-react17",
+      "version": "1.0.0",
+      "url": "http://localhost:8080/service-demos/modal/mfe-modal-react17/mfe-modal-react17.js",
+      "alternativeUrls": [],
+      "dependencies": {
+        "runtime": {
+          "react": "^17.0.2 || ^18.0.0 || ^19.0.0",
+          "react-dom": "^17.0.2 || ^18.0.0 || ^19.0.0"
+        },
+        "peer": {
+          "@mfe-toolkit/core": "^0.1.0"
+        }
+      },
+      "compatibility": {
+        "container": "^1.0.0",
+        "browsers": {
+          "chrome": ">=90",
+          "firefox": ">=88",
+          "safari": ">=14",
+          "edge": ">=90"
+        },
+        "frameworks": {
+          "react": "^17.0.2 || ^18.0.0 || ^19.0.0"
+        }
+      },
+      "capabilities": {
+        "emits": ["modal:test-opened", "modal:test-closed"],
+        "listens": [],
+        "features": ["modal-testing", "custom-modals", "modal-stacking", "legacy-support"]
+      },
+      "requirements": {
+        "services": [
+          { "name": "modal", "optional": false },
+          { "name": "logger", "optional": true }
+        ]
+      },
+      "metadata": {
+        "displayName": "React 17 Modal Demo",
+        "description": "Modal service demonstration MFE built with React 17",
+        "icon": "🔗",
+        "author": { "name": "MFE Toolkit Team" },
+        "category": "service-demos",
+        "tags": ["modal", "demo", "react17", "service", "legacy"]
+      },
+      "config": {
+        "loading": {
+          "timeout": 30000,
+          "retries": 3,
+          "retryDelay": 1000,
+          "priority": 5,
+          "preload": false,
+          "lazy": true
+        },
+        "runtime": {
+          "isolation": "none",
+          "keepAlive": false,
+          "singleton": true
+        },
+        "communication": {
+          "eventNamespace": "modal-demo"
+        }
+      }
+    },
+    {
+      "$schema": "https://mfe-made-easy.com/schemas/mfe-manifest-v2.schema.json",
+      "name": "mfe-modal-vue3",
+      "version": "1.0.0",
+      "url": "http://localhost:8080/service-demos/modal/mfe-modal-vue3/mfe-modal-vue3.js",
+      "alternativeUrls": [],
+      "dependencies": {
+        "runtime": {
+          "vue": "^3.4.0"
+        },
+        "peer": {
+          "@mfe-toolkit/core": "^0.1.0"
+        }
+      },
+      "compatibility": {
+        "container": "^1.0.0",
+        "browsers": {
+          "chrome": ">=90",
+          "firefox": ">=88",
+          "safari": ">=14",
+          "edge": ">=90"
+        },
+        "frameworks": {
+          "vue": "^3.4.0"
+        }
+      },
+      "capabilities": {
+        "emits": ["modal:test-opened", "modal:test-closed"],
+        "listens": [],
+        "features": ["modal-testing", "custom-modals", "modal-stacking", "vue3-composition"]
+      },
+      "requirements": {
+        "services": [
+          { "name": "modal", "optional": false },
+          { "name": "logger", "optional": true }
+        ]
+      },
+      "metadata": {
+        "displayName": "Vue 3 Modal Demo",
+        "description": "Modal service demonstration MFE built with Vue 3",
+        "icon": "💚",
+        "author": { "name": "MFE Toolkit Team" },
+        "category": "service-demos",
+        "tags": ["modal", "demo", "vue3", "service"]
+      },
+      "config": {
+        "loading": {
+          "timeout": 30000,
+          "retries": 3,
+          "retryDelay": 1000,
+          "priority": 5,
+          "preload": false,
+          "lazy": true
+        },
+        "runtime": {
+          "isolation": "none",
+          "keepAlive": false,
+          "singleton": true
+        },
+        "communication": {
+          "eventNamespace": "modal-demo"
+        }
+      }
+    },
+    {
+      "$schema": "https://mfe-made-easy.com/schemas/mfe-manifest-v2.schema.json",
+      "name": "mfe-modal-solidjs",
+      "version": "1.0.0",
+      "url": "http://localhost:8080/service-demos/modal/mfe-modal-solidjs/mfe-modal-solidjs.js",
+      "alternativeUrls": [],
+      "dependencies": {
+        "runtime": {
+          "solid-js": "^1.8.0"
+        },
+        "peer": {
+          "@mfe-toolkit/core": "^0.1.0"
+        }
+      },
+      "compatibility": {
+        "container": "^1.0.0",
+        "browsers": {
+          "chrome": ">=90",
+          "firefox": ">=88",
+          "safari": ">=14",
+          "edge": ">=90"
+        },
+        "frameworks": {
+          "solid-js": "^1.8.0"
+        }
+      },
+      "capabilities": {
+        "emits": ["modal:test-opened", "modal:test-closed"],
+        "listens": [],
+        "features": ["modal-testing", "custom-modals", "modal-stacking", "solidjs-signals"]
+      },
+      "requirements": {
+        "services": [
+          { "name": "modal", "optional": false },
+          { "name": "logger", "optional": true }
+        ]
+      },
+      "metadata": {
+        "displayName": "Solid.js Modal Demo",
+        "description": "Modal service demonstration MFE built with Solid.js",
+        "icon": "🔷",
+        "author": { "name": "MFE Toolkit Team" },
+        "category": "service-demos",
+        "tags": ["modal", "demo", "solidjs", "service"]
+      },
+      "config": {
+        "loading": {
+          "timeout": 30000,
+          "retries": 3,
+          "retryDelay": 1000,
+          "priority": 5,
+          "preload": false,
+          "lazy": true
+        },
+        "runtime": {
+          "isolation": "none",
+          "keepAlive": false,
+          "singleton": true
+        },
+        "communication": {
+          "eventNamespace": "modal-demo"
+        }
+      }
+    },
+    {
+      "$schema": "https://mfe-made-easy.com/schemas/mfe-manifest-v2.schema.json",
+      "name": "mfe-modal-vanilla",
+      "version": "1.0.0",
+      "url": "http://localhost:8080/service-demos/modal/mfe-modal-vanilla/mfe-modal-vanilla.js",
+      "alternativeUrls": [],
+      "dependencies": {
+        "runtime": {},
+        "peer": {
+          "@mfe-toolkit/core": "^0.1.0"
+        }
+      },
+      "compatibility": {
+        "container": "^1.0.0",
+        "browsers": {
+          "chrome": ">=90",
+          "firefox": ">=88",
+          "safari": ">=14",
+          "edge": ">=90"
+        }
+      },
+      "capabilities": {
+        "emits": ["modal:test-opened", "modal:test-closed"],
+        "listens": [],
+        "features": ["modal-testing", "custom-modals", "modal-stacking", "vanilla-typescript"]
+      },
+      "requirements": {
+        "services": [
+          { "name": "modal", "optional": false },
+          { "name": "logger", "optional": true }
+        ]
+      },
+      "metadata": {
+        "displayName": "Vanilla TypeScript Modal Demo",
+        "description": "Modal service demonstration MFE built with Vanilla TypeScript",
+        "icon": "📦",
+        "author": { "name": "MFE Toolkit Team" },
+        "category": "service-demos",
+        "tags": ["modal", "demo", "vanilla", "typescript", "service"]
+      },
+      "config": {
+        "loading": {
+          "timeout": 30000,
+          "retries": 3,
+          "retryDelay": 1000,
+          "priority": 5,
+          "preload": false,
+          "lazy": true
+        },
+        "runtime": {
+          "isolation": "none",
+          "keepAlive": false,
+          "singleton": true
+        },
+        "communication": {
+          "eventNamespace": "modal-demo"
+        }
+      }
     }
   ],
   "config": {

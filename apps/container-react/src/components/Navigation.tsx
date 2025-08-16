@@ -71,6 +71,11 @@ export const Navigation: React.FC = () => {
           icon: <MessageSquare className="h-4 w-4" />,
         },
         {
+          path: '/services/modal',
+          label: 'Modal',
+          icon: <Package className="h-4 w-4" />,
+        },
+        {
           path: '/services/notifications',
           label: 'Notifications',
           icon: <Bell className="h-4 w-4" />,

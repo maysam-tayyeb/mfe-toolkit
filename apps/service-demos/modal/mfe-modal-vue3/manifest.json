@@ -1,0 +1,72 @@
+{
+  "$schema": "https://mfe-toolkit.com/schemas/mfe-manifest.schema.json",
+  "name": "mfe-modal-vue3",
+  "version": "1.0.0",
+  "url": "http://localhost:8080/service-demos/general/mfe-modal-vue3/mfe-modal-vue3.js",
+  "dependencies": {
+    "runtime": {
+      "vue": "^3.4.0"
+    },
+    "peer": {
+      "@mfe-toolkit/core": "^0.1.0"
+    }
+  },
+  "compatibility": {
+    "container": "^1.0.0",
+    "browsers": {
+      "chrome": ">=90",
+      "firefox": ">=88",
+      "safari": ">=14",
+      "edge": ">=90"
+    }
+  },
+  "capabilities": {
+    "emits": [],
+    "listens": [],
+    "features": []
+  },
+  "requirements": {
+    "services": [
+      {
+        "name": "logger",
+        "optional": true
+      },
+      {
+        "name": "eventBus",
+        "optional": false
+      }
+    ]
+  },
+  "metadata": {
+    "displayName": "Mfe Modal Vue3",
+    "description": "Mfe Modal Vue3 MFE",
+    "icon": "💚",
+    "author": {
+      "name": "MFE Toolkit Team"
+    },
+    "category": "service-demos",
+    "tags": [
+      "vue",
+      "mfe",
+      "demo"
+    ]
+  },
+  "config": {
+    "loading": {
+      "timeout": 30000,
+      "retries": 3,
+      "retryDelay": 1000,
+      "priority": 5,
+      "preload": false,
+      "lazy": true
+    },
+    "runtime": {
+      "isolation": "none",
+      "keepAlive": false,
+      "singleton": true
+    },
+    "communication": {
+      "eventNamespace": "mfe-modal-vue3"
+    }
+  }
+}

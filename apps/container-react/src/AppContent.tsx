@@ -6,6 +6,7 @@ import { DashboardPage } from '@/pages/DashboardPage';
 import { ErrorBoundaryDemoPage } from '@/pages/ErrorBoundaryDemoPage';
 import { MFERegistryPage } from '@/pages/MFERegistryPage';
 import { EventBusPageV3 as EventBusPage } from '@/pages/services/EventBusPageV3';
+import { ModalPage } from '@/pages/services/ModalPage';
 import { NotificationsPage } from '@/pages/services/NotificationsPage';
 import { MetricsPage } from '@/pages/dev/MetricsPage';
 import { SettingsPage } from '@/pages/dev/SettingsPage';
@@ -90,6 +91,7 @@ export function AppContent() {
           <Route path="mfe-registry" element={<MFERegistryPage />} />
           <Route path="error-boundary-demo" element={<ErrorBoundaryDemoPage />} />
           <Route path="services/event-bus" element={<EventBusPage />} />
+          <Route path="services/modal" element={<ModalPage />} />
           <Route path="services/notifications" element={<NotificationsPage />} />
           <Route path="dev/metrics" element={<MetricsPage />} />
           <Route path="dev/settings" element={<SettingsPage />} />

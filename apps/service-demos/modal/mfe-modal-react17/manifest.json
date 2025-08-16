@@ -1,0 +1,73 @@
+{
+  "$schema": "https://mfe-toolkit.com/schemas/mfe-manifest.schema.json",
+  "name": "mfe-modal-react17",
+  "version": "1.0.0",
+  "url": "http://localhost:8080/service-demos/general/mfe-modal-react17/mfe-modal-react17.js",
+  "dependencies": {
+    "runtime": {
+      "react": "^18.0.0",
+      "react-dom": "^18.0.0"
+    },
+    "peer": {
+      "@mfe-toolkit/core": "^0.1.0"
+    }
+  },
+  "compatibility": {
+    "container": "^1.0.0",
+    "browsers": {
+      "chrome": ">=90",
+      "firefox": ">=88",
+      "safari": ">=14",
+      "edge": ">=90"
+    }
+  },
+  "capabilities": {
+    "emits": [],
+    "listens": [],
+    "features": []
+  },
+  "requirements": {
+    "services": [
+      {
+        "name": "logger",
+        "optional": true
+      },
+      {
+        "name": "eventBus",
+        "optional": false
+      }
+    ]
+  },
+  "metadata": {
+    "displayName": "Mfe Modal React17",
+    "description": "Mfe Modal React17 MFE",
+    "icon": "⚛️",
+    "author": {
+      "name": "MFE Toolkit Team"
+    },
+    "category": "service-demos",
+    "tags": [
+      "react",
+      "mfe",
+      "demo"
+    ]
+  },
+  "config": {
+    "loading": {
+      "timeout": 30000,
+      "retries": 3,
+      "retryDelay": 1000,
+      "priority": 5,
+      "preload": false,
+      "lazy": true
+    },
+    "runtime": {
+      "isolation": "none",
+      "keepAlive": false,
+      "singleton": true
+    },
+    "communication": {
+      "eventNamespace": "mfe-modal-react17"
+    }
+  }
+}
