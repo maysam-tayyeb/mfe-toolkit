@@ -6,19 +6,20 @@ let app: any = null;
 
 const module: MFEModule = {
   metadata: {
-    name: 'mfe-modal-vue3',
+    name: 'mfe-modal-vue',
     version: '1.0.0',
-    requiredServices: ['logger'],
-    capabilities: ['demo']
+    requiredServices: ["modal","logger"],
+    capabilities: ["modal-demo","modal-testing"]
   },
 
   mount: async (element: HTMLElement, container: MFEServiceContainer) => {
     const services = container.getAllServices();
+    
     app = createApp(App, { services });
     app.mount(element);
     
     if (services.logger) {
-      services.logger.info('[mfe-modal-vue3] Mounted successfully');
+      services.logger.info('[mfe-modal-vue] Mounted successfully with Vue 3');
     }
   },
   
@@ -30,7 +31,7 @@ const module: MFEModule = {
     
     const services = container.getAllServices();
     if (services.logger) {
-      services.logger.info('[mfe-modal-vue3] Unmounted successfully');
+      services.logger.info('[mfe-modal-vue] Unmounted successfully');
     }
   }
 };

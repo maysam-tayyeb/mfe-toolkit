@@ -1,15 +1,16 @@
 {
-  "$schema": "https://mfe-toolkit.com/schemas/mfe-manifest.schema.json",
+  "$schema": "https://mfe-made-easy.com/schemas/mfe-manifest-v2.schema.json",
   "name": "mfe-modal-react19",
   "version": "1.0.0",
-  "url": "http://localhost:8080/service-demos/general/mfe-modal-react19/mfe-modal-react19.js",
+  "url": "http://localhost:8080/service-demos/modal/mfe-modal-react19/mfe-modal-react19.js",
+  "alternativeUrls": [],
   "dependencies": {
     "runtime": {
-      "react": "^18.0.0",
-      "react-dom": "^18.0.0"
+      "react": "^19.0.0",
+      "react-dom": "^19.0.0"
     },
     "peer": {
-      "@mfe-toolkit/core": "^0.1.0"
+      "@mfe-toolkit/build": "^0.1.0"
     }
   },
   "compatibility": {
@@ -19,37 +20,51 @@
       "firefox": ">=88",
       "safari": ">=14",
       "edge": ">=90"
+    },
+    "frameworks": {
+      "react": "^19.0.0"
     }
   },
   "capabilities": {
-    "emits": [],
+    "emits": [
+      "modal:test-opened",
+      "modal:test-closed"
+    ],
     "listens": [],
-    "features": []
+    "features": [
+      "modal-testing",
+      "custom-modals",
+      "modal-stacking",
+      "react19-hooks",
+      "server-components-ready",
+      "optimistic-ui"
+    ]
   },
   "requirements": {
     "services": [
       {
-        "name": "logger",
-        "optional": true
+        "name": "modal",
+        "optional": false
       },
       {
-        "name": "eventBus",
-        "optional": false
+        "name": "logger",
+        "optional": true
       }
     ]
   },
   "metadata": {
-    "displayName": "Mfe Modal React19",
-    "description": "Mfe Modal React19 MFE",
-    "icon": "⚛️",
+    "displayName": "React 19 Modal Demo",
+    "description": "modal service demonstration MFE built with React 19",
+    "icon": "🔥",
     "author": {
       "name": "MFE Toolkit Team"
     },
     "category": "service-demos",
     "tags": [
-      "react",
-      "mfe",
-      "demo"
+      "modal",
+      "react19",
+      "service",
+      "latest"
     ]
   },
   "config": {
@@ -67,7 +82,7 @@
       "singleton": true
     },
     "communication": {
-      "eventNamespace": "mfe-modal-react19"
+      "eventNamespace": "modal-demo"
     }
   }
 }

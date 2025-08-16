@@ -7,7 +7,6 @@
       "DOM",
       "DOM.Iterable"
     ],
-    "jsx": "preserve",
     "moduleResolution": "node",
     "strict": true,
     "esModuleInterop": true,
@@ -16,7 +15,7 @@
     "declaration": false,
     "noEmit": true,
     "resolveJsonModule": true,
-    "types": []
+    "jsx": "preserve"
   },
   "include": [
     "src/**/*"

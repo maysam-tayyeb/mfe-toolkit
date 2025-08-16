@@ -1,36 +1,38 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
+import ReactDOM from 'react-dom';
 import type { MFEModule, MFEServiceContainer } from '@mfe-toolkit/core';
 import { App } from './App';
 
-let root: ReactDOM.Root | null = null;
+let rootElement: HTMLElement | null = null;
 
 const module: MFEModule = {
   metadata: {
     name: 'mfe-modal-react17',
     version: '1.0.0',
-    requiredServices: ['logger'],
-    capabilities: ['demo']
+    requiredServices: ["modal","logger"],
+    capabilities: ["modal-demo","modal-testing"]
   },
 
   mount: async (element: HTMLElement, container: MFEServiceContainer) => {
     const services = container.getAllServices();
-    root = ReactDOM.createRoot(element);
-    root.render(
+    rootElement = element;
+    
+    ReactDOM.render(
       <React.StrictMode>
         <App services={services} />
-      </React.StrictMode>
+      </React.StrictMode>,
+      element
     );
     
     if (services.logger) {
-      services.logger.info('[mfe-modal-react17] Mounted successfully');
+      services.logger.info('[mfe-modal-react17] Mounted successfully with React 17');
     }
   },
   
   unmount: async (container: MFEServiceContainer) => {
-    if (root) {
-      root.unmount();
-      root = null;
+    if (rootElement) {
+      ReactDOM.unmountComponentAtNode(rootElement);
+      rootElement = null;
     }
     
     const services = container.getAllServices();

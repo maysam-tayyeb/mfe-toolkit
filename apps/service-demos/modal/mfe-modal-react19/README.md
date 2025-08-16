@@ -1,7 +1,17 @@
 # mfe-modal-react19
 
 ## Description
-mfe-modal-react19 microfrontend built with react (React 18).
+React 19 modal microfrontend with latest features and optimistic UI support.
+
+## Features
+- React 19 with latest APIs
+- Server Components ready
+- useOptimistic for optimistic UI updates
+- use() hook for promise handling
+- Enhanced Suspense and Actions
+- Modal service integration
+- Design system integration
+- TypeScript support
 
 ## Development
 
@@ -9,27 +19,23 @@ mfe-modal-react19 microfrontend built with react (React 18).
 # Install dependencies
 pnpm install
 
-# Start development build (watch mode)
-pnpm dev
-
 # Build for production
 pnpm build
+
+# Build in watch mode
+pnpm build:watch
 
 # Clean build artifacts
 pnpm clean
 ```
 
-## Library Versioning
-This MFE uses the automatic library versioning system. The build process will:
-1. Read the `manifest.json` to detect library versions
-2. Apply the appropriate import aliasing at build time
-3. Output code that uses versioned imports (e.g., `react@18`)
-
-## Configuration
-- **manifest.json**: Defines MFE metadata and dependencies
-- **build.js**: Build configuration using `@mfe-toolkit/build`
-- **tsconfig.json**: TypeScript configuration
+## React 19 Specifics
+This MFE leverages React 19's cutting-edge features:
+- `useOptimistic()` for instant UI feedback
+- `use()` hook for promise and context handling
+- Server Components compatibility
+- Enhanced form actions
+- Improved hydration performance
 
 ## Integration
-This MFE is designed to be loaded by the MFE container application.
-The container provides shared dependencies via import maps.
+Designed to be loaded by the MFE container application with shared dependencies via import maps.

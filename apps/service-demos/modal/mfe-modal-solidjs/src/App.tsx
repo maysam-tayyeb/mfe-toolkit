@@ -1,276 +1,250 @@
-import { Component, createSignal } from 'solid-js';
+import { createSignal, createMemo, For } from 'solid-js';
 import type { MFEServices } from '@mfe-toolkit/core';
 
 interface AppProps {
   services: MFEServices;
 }
 
-export const App: Component<AppProps> = (props) => {
-  const [notificationCount, setNotificationCount] = createSignal(0);
-  const [customTitle, setCustomTitle] = createSignal('Custom Notification');
-  const [customMessage, setCustomMessage] = createSignal('This is a custom notification message');
-  const [customType, setCustomType] = createSignal<'info' | 'success' | 'warning' | 'error'>('info');
+export function App(props: AppProps) {
+  const [modalCount, setModalCount] = createSignal(0);
+  const [customTitle, setCustomTitle] = createSignal('Custom Modal');
+  const [customContent, setCustomContent] = createSignal('This is custom modal content from Solid.js.');
+  const [selectedSize, setSelectedSize] = createSignal<'sm' | 'md' | 'lg' | 'xl'>('md');
+  const [isPending, setIsPending] = createSignal(false);
+  
+  const sizes = ['sm', 'md', 'lg', 'xl'] as const;
 
-  const showNotification = (
-    title: string,
-    message: string,
-    type: 'info' | 'success' | 'warning' | 'error' = 'info',
-    duration?: number
-  ) => {
-    if (props.services.notification) {
-      props.services.notification.show({
-        title,
-        message,
-        type,
-        duration
-      });
-      setNotificationCount(c => c + 1);
+  const showModal = (config: any) => {
+    if (!props.services.modal) {
+      console.error('Modal service not available');
+      return;
     }
+    
+    props.services.modal.show(config);
+    setModalCount(c => c + 1);
   };
 
-  const showSuccess = () => {
-    showNotification(
-      'Success!',
-      'Operation completed successfully from Solid.js MFE',
-      'success'
-    );
-  };
-
-  const showError = () => {
-    showNotification(
-      'Error Occurred',
-      'Something went wrong in the Solid.js MFE',
-      'error'
-    );
-  };
-
-  const showWarning = () => {
-    showNotification(
-      'Warning',
-      'Please review this warning from Solid.js',
-      'warning'
-    );
-  };
-
-  const showInfo = () => {
-    showNotification(
-      'Information',
-      'This is an informational message from Solid.js',
-      'info'
-    );
-  };
-
-  const showCustom = () => {
-    showNotification(
-      customTitle(),
-      customMessage(),
-      customType()
-    );
-  };
-
-  const showShortDuration = () => {
-    showNotification(
-      'Quick Message',
-      'This will disappear in 1 second',
-      'info',
-      1000
-    );
-  };
-
-  const showNormalDuration = () => {
-    showNotification(
-      'Normal Duration',
-      'This will disappear in 3 seconds',
-      'info',
-      3000
-    );
-  };
-
-  const showLongDuration = () => {
-    showNotification(
-      'Long Duration',
-      'This will stay for 10 seconds',
-      'info',
-      10000
-    );
-  };
-
-  const showPersistent = () => {
-    showNotification(
-      'Persistent Notification',
-      'This won\'t auto-dismiss (close manually)',
-      'warning',
-      0
-    );
-  };
-
-  const showMultiple = () => {
-    const messages = [
-      { title: 'First', message: 'Solid.js notification 1', type: 'info' as const },
-      { title: 'Second', message: 'Solid.js notification 2', type: 'success' as const },
-      { title: 'Third', message: 'Solid.js notification 3', type: 'warning' as const },
-      { title: 'Fourth', message: 'Solid.js notification 4', type: 'error' as const },
-      { title: 'Fifth', message: 'Solid.js notification 5', type: 'info' as const }
-    ];
-
-    messages.forEach((msg, index) => {
-      setTimeout(() => {
-        showNotification(msg.title, msg.message, msg.type);
-      }, index * 200);
+  const showSimpleModal = () => {
+    showModal({
+      title: 'Solid.js Modal',
+      content: 'This modal is powered by Solid.js - fine-grained reactivity at its best!',
+      showCloseButton: true
     });
   };
 
-  const clearAll = () => {
-    if (props.services.notification?.clear) {
-      props.services.notification.clear();
-    }
+  const showConfirmModal = () => {
+    showModal({
+      title: 'Confirm Action',
+      content: (
+        <div>
+          <p>Are you sure you want to proceed?</p>
+          <p class="ds-text-sm ds-text-muted ds-mt-2">
+            Triggered from Solid.js MFE with fine-grained reactivity
+          </p>
+        </div>
+      ),
+      onConfirm: () => {
+        console.log('Confirmed from Solid.js!');
+        props.services.modal?.close();
+        props.services.notification?.show({
+          title: 'Success',
+          message: 'Action confirmed with Solid.js reactivity!',
+          type: 'success'
+        });
+      },
+      showCloseButton: true
+    });
+  };
+
+  const showSizeModal = (size: 'sm' | 'md' | 'lg' | 'xl') => {
+    showModal({
+      title: `${size.toUpperCase()} Modal`,
+      content: (
+        <div>
+          <p>This is a <strong>{size}</strong> modal.</p>
+          <p class="ds-text-sm ds-text-muted ds-mt-2">
+            Solid.js with compiled reactive primitives
+          </p>
+        </div>
+      ),
+      size,
+      showCloseButton: true
+    });
+  };
+
+  const showCustomModal = () => {
+    showModal({
+      title: customTitle(),
+      content: <p>{customContent()}</p>,
+      size: selectedSize(),
+      showCloseButton: true
+    });
+  };
+
+  const showFeatureModal = () => {
+    showModal({
+      title: 'Solid.js Features',
+      content: (
+        <div class="ds-space-y-4">
+          <div class="ds-bg-accent-primary-soft ds-p-3 ds-rounded">
+            <h3 class="ds-font-semibold ds-mb-2">Fine-Grained Reactivity</h3>
+            <ul class="ds-list-disc ds-list-inside ds-text-sm">
+              <li>No Virtual DOM - direct updates</li>
+              <li>Compiled reactive primitives</li>
+              <li>createSignal, createMemo, createEffect</li>
+              <li>Exceptional performance</li>
+              <li>Small bundle size (~7kb)</li>
+              <li>JSX without React</li>
+            </ul>
+          </div>
+          <div class="ds-grid ds-grid-cols-3 ds-gap-2">
+            <div class="ds-card-compact ds-text-center">
+              <div class="ds-text-2xl">🔷</div>
+              <div class="ds-text-xs">Solid.js</div>
+            </div>
+            <div class="ds-card-compact ds-text-center">
+              <div class="ds-text-2xl">⚡</div>
+              <div class="ds-text-xs">Fast</div>
+            </div>
+            <div class="ds-card-compact ds-text-center">
+              <div class="ds-text-2xl">🎯</div>
+              <div class="ds-text-xs">Precise</div>
+            </div>
+          </div>
+        </div>
+      ),
+      size: 'lg',
+      showCloseButton: true
+    });
+  };
+
+  const showReactiveModal = () => {
+    setIsPending(true);
+    setTimeout(() => {
+      showModal({
+        title: 'Reactive Signals',
+        content: (
+          <div>
+            <p>Solid.js uses signals for reactivity!</p>
+            <div class="ds-mt-3 ds-p-2 ds-bg-accent-success-soft ds-rounded">
+              <p class="ds-text-sm">Modal count (signal): {modalCount()}</p>
+              <p class="ds-text-sm">Custom title: {customTitle()}</p>
+              <p class="ds-text-sm">Selected size: {selectedSize()}</p>
+            </div>
+            <p class="ds-text-sm ds-text-muted ds-mt-2">
+              Updates are fine-grained and efficient
+            </p>
+          </div>
+        ),
+        showCloseButton: true
+      });
+      setIsPending(false);
+    }, 300);
   };
 
   return (
-    <div class="ds-p-4">
-      <div class="ds-mb-6">
-        <h2 class="ds-text-2xl ds-font-bold ds-mb-2">Solid.js Notification Demo</h2>
+    <div class="ds-card ds-p-6 ds-m-4">
+      <div class="ds-mb-6 ds-text-center">
+        <h1 class="ds-text-3xl ds-font-bold ds-mb-2 ds-text-accent-primary">
+          🔷 Solid.js Modal Demo
+        </h1>
         <p class="ds-text-gray-600">
-          Framework: <span class="ds-font-medium">Solid.js 1.8.0</span> | 
-          Pattern: <span class="ds-font-medium">MFEModule</span>
+          Fine-Grained Reactive Modal Service
         </p>
+        {isPending() && (
+          <p class="ds-text-sm ds-text-warning ds-mt-2">
+            Processing...
+          </p>
+        )}
+      </div>
+
+      <div class="ds-grid ds-grid-cols-3 ds-gap-4 ds-mb-6">
+        <div class="ds-card-compact ds-text-center">
+          <div class="ds-text-2xl ds-font-bold ds-text-accent-primary">{modalCount()}</div>
+          <div class="ds-text-sm ds-text-gray-600">Modals Opened</div>
+        </div>
+        <div class="ds-card-compact ds-text-center">
+          <div class="ds-text-2xl">🔷</div>
+          <div class="ds-text-sm ds-text-gray-600">Solid.js</div>
+        </div>
+        <div class="ds-card-compact ds-text-center">
+          <div class="ds-text-2xl">⚡</div>
+          <div class="ds-text-sm ds-text-gray-600">Reactive</div>
+        </div>
       </div>
 
       <div class="ds-space-y-4">
-        {/* Notification Types */}
         <div>
-          <h3 class="ds-text-lg ds-font-semibold ds-mb-3">Notification Types</h3>
+          <h3 class="ds-text-lg ds-font-semibold ds-mb-3">Modal Types</h3>
           <div class="ds-flex ds-flex-wrap ds-gap-2">
-            <button 
-              onClick={showSuccess}
-              class="ds-btn-success"
-            >
-              Success
+            <button onClick={showSimpleModal} class="ds-btn-primary">
+              Simple Modal
             </button>
-            <button 
-              onClick={showError}
-              class="ds-btn-danger"
-            >
-              Error
+            <button onClick={showConfirmModal} class="ds-btn-success">
+              Confirm Dialog
             </button>
-            <button 
-              onClick={showWarning}
-              class="ds-btn-warning"
-            >
-              Warning
+            <button onClick={showFeatureModal} class="ds-btn-secondary">
+              Features
             </button>
-            <button 
-              onClick={showInfo}
-              class="ds-btn-primary"
-            >
-              Info
+            <button onClick={showReactiveModal} class="ds-btn-warning">
+              Reactive Signals
             </button>
           </div>
         </div>
 
-        {/* Custom Message */}
         <div>
-          <h3 class="ds-text-lg ds-font-semibold ds-mb-3">Custom Notification</h3>
+          <h3 class="ds-text-lg ds-font-semibold ds-mb-3">Modal Sizes</h3>
+          <div class="ds-flex ds-gap-2">
+            <For each={sizes}>
+              {(size) => (
+                <button 
+                  onClick={() => showSizeModal(size)} 
+                  class="ds-btn-outline ds-btn-sm"
+                >
+                  {size.toUpperCase()}
+                </button>
+              )}
+            </For>
+          </div>
+        </div>
+
+        <div>
+          <h3 class="ds-text-lg ds-font-semibold ds-mb-3">Custom Modal</h3>
           <div class="ds-space-y-3">
-            <div>
-              <label class="ds-block ds-text-sm ds-font-medium ds-mb-1">Title</label>
-              <input 
-                value={customTitle()}
-                onInput={(e) => setCustomTitle(e.currentTarget.value)}
-                type="text"
-                class="ds-input"
-                placeholder="Enter notification title"
-              />
-            </div>
-            <div>
-              <label class="ds-block ds-text-sm ds-font-medium ds-mb-1">Message</label>
-              <textarea 
-                value={customMessage()}
-                onInput={(e) => setCustomMessage(e.currentTarget.value)}
-                class="ds-textarea"
-                rows="3"
-                placeholder="Enter notification message"
-              ></textarea>
-            </div>
-            <div>
-              <label class="ds-block ds-text-sm ds-font-medium ds-mb-1">Type</label>
-              <select 
-                value={customType()} 
-                onChange={(e) => setCustomType(e.currentTarget.value as any)}
-                class="ds-select"
-              >
-                <option value="info">Info</option>
-                <option value="success">Success</option>
-                <option value="warning">Warning</option>
-                <option value="error">Error</option>
-              </select>
-            </div>
-            <button 
-              onClick={showCustom}
-              class="ds-btn-primary"
+            <input
+              type="text"
+              value={customTitle()}
+              onInput={(e) => setCustomTitle(e.currentTarget.value)}
+              class="ds-input"
+              placeholder="Modal title"
+            />
+            <textarea
+              value={customContent()}
+              onInput={(e) => setCustomContent(e.currentTarget.value)}
+              class="ds-textarea"
+              rows={2}
+              placeholder="Modal content"
+            />
+            <select 
+              value={selectedSize()}
+              onChange={(e) => setSelectedSize(e.currentTarget.value as any)}
+              class="ds-select"
             >
-              Show Custom Notification
-            </button>
-          </div>
-        </div>
-
-        {/* Duration Control */}
-        <div>
-          <h3 class="ds-text-lg ds-font-semibold ds-mb-3">Duration Control</h3>
-          <div class="ds-flex ds-gap-2">
-            <button 
-              onClick={showShortDuration}
-              class="ds-btn-outline"
-            >
-              Short (1s)
-            </button>
-            <button 
-              onClick={showNormalDuration}
-              class="ds-btn-outline"
-            >
-              Normal (3s)
-            </button>
-            <button 
-              onClick={showLongDuration}
-              class="ds-btn-outline"
-            >
-              Long (10s)
-            </button>
-            <button 
-              onClick={showPersistent}
-              class="ds-btn-outline"
-            >
-              Persistent
-            </button>
-          </div>
-        </div>
-
-        {/* Batch Notifications */}
-        <div>
-          <h3 class="ds-text-lg ds-font-semibold ds-mb-3">Batch Operations</h3>
-          <div class="ds-flex ds-gap-2">
-            <button 
-              onClick={showMultiple}
-              class="ds-btn-secondary"
-            >
-              Show 5 Notifications
-            </button>
-            <button 
-              onClick={clearAll}
-              class="ds-btn-outline"
-            >
-              Clear All
+              <option value="sm">Small</option>
+              <option value="md">Medium</option>
+              <option value="lg">Large</option>
+              <option value="xl">Extra Large</option>
+            </select>
+            <button onClick={showCustomModal} class="ds-btn-primary">
+              Show Custom Modal
             </button>
           </div>
         </div>
       </div>
 
-      {/* Notification Counter */}
-      <div class="ds-mt-6 ds-p-3 ds-bg-gray-50 ds-rounded">
-        <p class="ds-text-sm ds-text-gray-600">
-          Notifications shown: <span class="ds-font-semibold">{notificationCount()}</span>
-        </p>
+      <div class="ds-mt-6 ds-pt-4 ds-border-t ds-text-center ds-text-sm ds-text-gray-500">
+        Solid.js Modal Service Demo • Fine-Grained Reactivity
       </div>
     </div>
   );
-};
+}

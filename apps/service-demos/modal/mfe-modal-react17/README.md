@@ -1,7 +1,14 @@
 # mfe-modal-react17
 
 ## Description
-mfe-modal-react17 microfrontend built with react (React 18).
+React 17 modal microfrontend with legacy ReactDOM.render API support.
+
+## Features
+- React 17 with legacy render API
+- Full backwards compatibility
+- Modal service integration
+- Design system integration
+- TypeScript support
 
 ## Development
 
@@ -9,27 +16,21 @@ mfe-modal-react17 microfrontend built with react (React 18).
 # Install dependencies
 pnpm install
 
-# Start development build (watch mode)
-pnpm dev
-
 # Build for production
 pnpm build
+
+# Build in watch mode
+pnpm build:watch
 
 # Clean build artifacts
 pnpm clean
 ```
 
-## Library Versioning
-This MFE uses the automatic library versioning system. The build process will:
-1. Read the `manifest.json` to detect library versions
-2. Apply the appropriate import aliasing at build time
-3. Output code that uses versioned imports (e.g., `react@18`)
-
-## Configuration
-- **manifest.json**: Defines MFE metadata and dependencies
-- **build.js**: Build configuration using `@mfe-toolkit/build`
-- **tsconfig.json**: TypeScript configuration
+## React 17 Specifics
+This MFE uses React 17's legacy API:
+- `ReactDOM.render()` instead of `createRoot()`
+- `ReactDOM.unmountComponentAtNode()` for cleanup
+- Compatible with older React codebases
 
 ## Integration
-This MFE is designed to be loaded by the MFE container application.
-The container provides shared dependencies via import maps.
+Designed to be loaded by the MFE container application with shared dependencies via import maps.

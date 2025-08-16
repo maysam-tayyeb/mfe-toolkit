@@ -1,7 +1,16 @@
 # mfe-modal-react18
 
 ## Description
-mfe-modal-react18 microfrontend built with react (React 18).
+React 18 modal microfrontend with concurrent features and modern APIs.
+
+## Features
+- React 18 with createRoot API
+- Concurrent rendering capabilities
+- Automatic batching
+- useTransition and Suspense support
+- Modal service integration
+- Design system integration
+- TypeScript support
 
 ## Development
 
@@ -9,27 +18,22 @@ mfe-modal-react18 microfrontend built with react (React 18).
 # Install dependencies
 pnpm install
 
-# Start development build (watch mode)
-pnpm dev
-
 # Build for production
 pnpm build
+
+# Build in watch mode
+pnpm build:watch
 
 # Clean build artifacts
 pnpm clean
 ```
 
-## Library Versioning
-This MFE uses the automatic library versioning system. The build process will:
-1. Read the `manifest.json` to detect library versions
-2. Apply the appropriate import aliasing at build time
-3. Output code that uses versioned imports (e.g., `react@18`)
-
-## Configuration
-- **manifest.json**: Defines MFE metadata and dependencies
-- **build.js**: Build configuration using `@mfe-toolkit/build`
-- **tsconfig.json**: TypeScript configuration
+## React 18 Specifics
+This MFE leverages React 18's modern features:
+- `createRoot()` for concurrent rendering
+- `useTransition()` for non-urgent updates
+- Automatic batching of state updates
+- Improved Suspense boundaries
 
 ## Integration
-This MFE is designed to be loaded by the MFE container application.
-The container provides shared dependencies via import maps.
+Designed to be loaded by the MFE container application with shared dependencies via import maps.

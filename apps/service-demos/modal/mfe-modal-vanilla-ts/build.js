@@ -1,7 +1,7 @@
 import { buildMFE } from '@mfe-toolkit/build';
 
 await buildMFE({
-  entry: 'src/main.tsx',
-  outfile: 'dist/mfe-modal-react18.js',
+  entry: 'src/main.ts',
+  outfile: 'dist/mfe-modal-vanilla-ts.js',
   manifestPath: './manifest.json'
 });

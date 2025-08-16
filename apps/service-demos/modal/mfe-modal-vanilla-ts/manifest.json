@@ -1,12 +1,13 @@
 {
-  "$schema": "https://mfe-toolkit.com/schemas/mfe-manifest.schema.json",
-  "name": "mfe-modal-vanilla",
+  "$schema": "https://mfe-made-easy.com/schemas/mfe-manifest-v2.schema.json",
+  "name": "mfe-modal-vanilla-ts",
   "version": "1.0.0",
-  "url": "http://localhost:8080/service-demos/general/mfe-modal-vanilla/mfe-modal-vanilla.js",
+  "url": "http://localhost:8080/service-demos/modal/mfe-modal-vanilla-ts/mfe-modal-vanilla-ts.js",
+  "alternativeUrls": [],
   "dependencies": {
     "runtime": {},
     "peer": {
-      "@mfe-toolkit/core": "^0.1.0"
+      "@mfe-toolkit/build": "^0.1.0"
     }
   },
   "compatibility": {
@@ -19,34 +20,42 @@
     }
   },
   "capabilities": {
-    "emits": [],
+    "emits": [
+      "modal:test-opened",
+      "modal:test-closed"
+    ],
     "listens": [],
-    "features": []
+    "features": [
+      "modal-testing",
+      "custom-modals",
+      "modal-stacking",
+      "vanilla-ts"
+    ]
   },
   "requirements": {
     "services": [
       {
-        "name": "logger",
-        "optional": true
+        "name": "modal",
+        "optional": false
       },
       {
-        "name": "eventBus",
-        "optional": false
+        "name": "logger",
+        "optional": true
       }
     ]
   },
   "metadata": {
-    "displayName": "Mfe Modal Vanilla",
-    "description": "Mfe Modal Vanilla MFE",
+    "displayName": "Vanilla TS modal Demo",
+    "description": "modal service demo with Vanilla TypeScript",
     "icon": "📦",
     "author": {
       "name": "MFE Toolkit Team"
     },
     "category": "service-demos",
     "tags": [
+      "modal",
       "vanilla-ts",
-      "mfe",
-      "demo"
+      "service"
     ]
   },
   "config": {
@@ -64,7 +73,7 @@
       "singleton": true
     },
     "communication": {
-      "eventNamespace": "mfe-modal-vanilla"
+      "eventNamespace": "modal-demo"
     }
   }
 }

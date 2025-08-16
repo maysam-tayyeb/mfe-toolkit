@@ -9,12 +9,13 @@ const module: MFEModule = {
   metadata: {
     name: 'mfe-modal-react18',
     version: '1.0.0',
-    requiredServices: ['logger'],
-    capabilities: ['demo']
+    requiredServices: ["modal","logger"],
+    capabilities: ["modal-demo","modal-testing"]
   },
 
   mount: async (element: HTMLElement, container: MFEServiceContainer) => {
     const services = container.getAllServices();
+    
     root = ReactDOM.createRoot(element);
     root.render(
       <React.StrictMode>
@@ -23,7 +24,7 @@ const module: MFEModule = {
     );
     
     if (services.logger) {
-      services.logger.info('[mfe-modal-react18] Mounted successfully');
+      services.logger.info('[mfe-modal-react18] Mounted successfully with React 18');
     }
   },
   

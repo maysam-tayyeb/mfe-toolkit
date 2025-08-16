@@ -1,14 +1,15 @@
 {
-  "$schema": "https://mfe-toolkit.com/schemas/mfe-manifest.schema.json",
-  "name": "mfe-modal-vue3",
+  "$schema": "https://mfe-made-easy.com/schemas/mfe-manifest-v2.schema.json",
+  "name": "mfe-modal-vue",
   "version": "1.0.0",
-  "url": "http://localhost:8080/service-demos/general/mfe-modal-vue3/mfe-modal-vue3.js",
+  "url": "http://localhost:8080/service-demos/modal/mfe-modal-vue/mfe-modal-vue.js",
+  "alternativeUrls": [],
   "dependencies": {
     "runtime": {
       "vue": "^3.4.0"
     },
     "peer": {
-      "@mfe-toolkit/core": "^0.1.0"
+      "@mfe-toolkit/build": "^0.1.0"
     }
   },
   "compatibility": {
@@ -18,37 +19,50 @@
       "firefox": ">=88",
       "safari": ">=14",
       "edge": ">=90"
+    },
+    "frameworks": {
+      "vue": "^3.4.0"
     }
   },
   "capabilities": {
-    "emits": [],
+    "emits": [
+      "modal:test-opened",
+      "modal:test-closed"
+    ],
     "listens": [],
-    "features": []
+    "features": [
+      "modal-testing",
+      "custom-modals",
+      "modal-stacking",
+      "vue3-composition-api",
+      "reactive-state"
+    ]
   },
   "requirements": {
     "services": [
       {
-        "name": "logger",
-        "optional": true
+        "name": "modal",
+        "optional": false
       },
       {
-        "name": "eventBus",
-        "optional": false
+        "name": "logger",
+        "optional": true
       }
     ]
   },
   "metadata": {
-    "displayName": "Mfe Modal Vue3",
-    "description": "Mfe Modal Vue3 MFE",
+    "displayName": "Vue 3 Modal Demo",
+    "description": "modal service demonstration MFE built with Vue 3",
     "icon": "💚",
     "author": {
       "name": "MFE Toolkit Team"
     },
     "category": "service-demos",
     "tags": [
-      "vue",
-      "mfe",
-      "demo"
+      "modal",
+      "vue3",
+      "service",
+      "composition-api"
     ]
   },
   "config": {
@@ -66,7 +80,7 @@
       "singleton": true
     },
     "communication": {
-      "eventNamespace": "mfe-modal-vue3"
+      "eventNamespace": "modal-demo"
     }
   }
 }

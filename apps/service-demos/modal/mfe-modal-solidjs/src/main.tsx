@@ -2,34 +2,35 @@ import { render } from 'solid-js/web';
 import type { MFEModule, MFEServiceContainer } from '@mfe-toolkit/core';
 import { App } from './App';
 
-let cleanup: (() => void) | null = null;
+let dispose: (() => void) | null = null;
 
 const module: MFEModule = {
   metadata: {
-    name: 'mfe-notification-solidjs',
+    name: 'mfe-modal-solidjs',
     version: '1.0.0',
-    requiredServices: ['notification'],
-    capabilities: ['notification-demo']
+    requiredServices: ["modal","logger"],
+    capabilities: ["modal-demo","modal-testing"]
   },
 
   mount: async (element: HTMLElement, container: MFEServiceContainer) => {
     const services = container.getAllServices();
-    cleanup = render(() => <App services={services} />, element);
+    
+    dispose = render(() => App({ services }), element);
     
     if (services.logger) {
-      services.logger.info('[mfe-notification-solidjs] Mounted successfully');
+      services.logger.info('[mfe-modal-solidjs] Mounted successfully with Solid.js');
     }
   },
   
   unmount: async (container: MFEServiceContainer) => {
-    if (cleanup) {
-      cleanup();
-      cleanup = null;
+    if (dispose) {
+      dispose();
+      dispose = null;
     }
     
     const services = container.getAllServices();
     if (services.logger) {
-      services.logger.info('[mfe-notification-solidjs] Unmounted successfully');
+      services.logger.info('[mfe-modal-solidjs] Unmounted successfully');
     }
   }
 };
