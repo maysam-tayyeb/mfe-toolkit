@@ -1,0 +1,36 @@
+{
+  "$schema": "https://mfe-toolkit.com/schemas/mfe-manifest-v2.schema.json",
+  "name": "mfe-notification-vue3",
+  "version": "1.0.0",
+  "url": "http://localhost:8080/service-demos/notifications/mfe-notification-vue3/mfe-notification-vue3.js",
+  "dependencies": {
+    "runtime": {
+      "vue": "^3.4.0"
+    },
+    "peer": {
+      "@mfe-toolkit/core": "^0.1.0"
+    }
+  },
+  "compatibility": {
+    "container": ">=0.1.0",
+    "browsers": {
+      "chrome": ">=90",
+      "firefox": ">=88",
+      "safari": ">=14",
+      "edge": ">=90"
+    }
+  },
+  "requirements": {
+    "services": [
+      { "name": "notification", "optional": false },
+      { "name": "logger", "optional": true }
+    ]
+  },
+  "metadata": {
+    "displayName": "Vue 3 Notification Demo",
+    "description": "Notification demo MFE built with Vue 3",
+    "icon": "🔔",
+    "category": "demos/notifications",
+    "tags": ["vue", "notification", "demo"]
+  }
+}

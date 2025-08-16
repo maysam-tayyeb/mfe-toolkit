@@ -12,4 +12,5 @@ export default defineConfig({
   target: 'node18', // CLI tools run in Node
   external: ['@mfe-toolkit/core'], // Don't bundle peer dependencies
   shims: true, // Node.js shims for CLI
+  // No banner needed - shebang in source file
 });

@@ -126,87 +126,331 @@ async function createBasicStructure(projectPath: string, config: any) {
     scripts: Record<string, string>;
     dependencies: Record<string, string>;
     devDependencies: Record<string, string>;
-    peerDependencies?: Record<string, string>;
   } = {
-    name: `@mfe/${config.name}`,
-    version: '0.1.0',
+    name: config.name,
+    version: '1.0.0',
     private: true,
     type: 'module',
     scripts: {
       build: 'node build.js',
       'build:watch': 'node build.js --watch',
-      dev: 'node build.js --watch',
-      clean: 'rm -rf dist',
     },
-    dependencies: {
-      '@mfe-toolkit/core': 'workspace:*',
-      '@mfe-toolkit/build': 'workspace:*',
-    },
+    dependencies: {},
     devDependencies: {
-      typescript: '^5.3.3',
-      '@types/node': '^20.0.0',
+      '@mfe-toolkit/build': 'workspace:*',
+      '@mfe-toolkit/core': 'workspace:*',
+      'esbuild': '^0.19.11',
     },
   };
 
   if (config.template === 'react') {
-    // Use peerDependencies for React to leverage import maps
-    packageJson.peerDependencies = {
-      'react': '^17.0.0 || ^18.0.0 || ^19.0.0',
-      'react-dom': '^17.0.0 || ^18.0.0 || ^19.0.0',
-    };
-    packageJson.dependencies['@mfe-toolkit/react'] = 'workspace:*';
+    const reactVersion = config.reactVersion || '18';
+    packageJson.dependencies['react'] = `^${reactVersion}.0.0`;
+    packageJson.dependencies['react-dom'] = `^${reactVersion}.0.0`;
     packageJson.devDependencies['@types/react'] = '^18.2.0';
     packageJson.devDependencies['@types/react-dom'] = '^18.2.0';
+    packageJson.devDependencies['typescript'] = '^5.3.0';
   } else if (config.template === 'vue') {
-    packageJson.peerDependencies = {
-      'vue': '^3.0.0',
-    };
+    packageJson.dependencies['vue'] = '^3.4.0';
     packageJson.devDependencies['@vitejs/plugin-vue'] = '^5.0.0';
+    packageJson.devDependencies['esbuild-plugin-vue3'] = '^0.4.2';
+    packageJson.devDependencies['typescript'] = '^5.3.0';
+  } else if (config.template === 'solid') {
+    packageJson.dependencies['solid-js'] = '^1.8.0';
+    packageJson.devDependencies['esbuild-plugin-solid'] = '^0.5.0';
+    packageJson.devDependencies['typescript'] = '^5.3.0';
+  } else if (config.template === 'vanilla-ts') {
+    packageJson.devDependencies['typescript'] = '^5.3.0';
   }
 
   await fs.writeJson(path.join(projectPath, 'package.json'), packageJson, { spaces: 2 });
 
-  // Create basic entry file
-  const entryContent =
-    config.template === 'react'
-      ? `import React from 'react';
-import ReactDOM from 'react-dom/client';
-import type { MFEModule, MFEServices } from '@mfe-toolkit/core';
-
-const App: React.FC<{ services: MFEServices }> = ({ services }) => {
-  return <div>Hello from ${config.name}!</div>;
-};
-
-const mfeModule: MFEModule = {
-  mount: (element, services) => {
-    const root = ReactDOM.createRoot(element);
-    root.render(<App services={services} />);
+  // Create basic entry file based on template
+  let entryContent = '';
+  let entryFileName = 'main.ts';
+  
+  if (config.template === 'react') {
+    const reactVersion = config.reactVersion || '18';
+    const importStatement = reactVersion === '17' 
+      ? `import ReactDOM from 'react-dom';`
+      : `import ReactDOM from 'react-dom/client';`;
     
-    return () => {
-      root.unmount();
-    };
+    entryFileName = 'main.tsx';
+    entryContent = `import React from 'react';
+${importStatement}
+import type { MFEModule, MFEServiceContainer } from '@mfe-toolkit/core';
+import { App } from './App';
+
+let root: ${reactVersion === '17' ? 'HTMLElement | null' : 'ReactDOM.Root | null'} = null;
+
+const module: MFEModule = {
+  metadata: {
+    name: '${config.name}',
+    version: '1.0.0',
+    requiredServices: ['logger'],
+    capabilities: ['demo']
+  },
+
+  mount: async (element: HTMLElement, container: MFEServiceContainer) => {
+    const services = container.getAllServices();
+    ${reactVersion === '17' 
+      ? `root = element;
+    ReactDOM.render(
+      <React.StrictMode>
+        <App services={services} />
+      </React.StrictMode>,
+      element
+    );`
+      : `root = ReactDOM.createRoot(element);
+    root.render(
+      <React.StrictMode>
+        <App services={services} />
+      </React.StrictMode>
+    );`}
+    
+    if (services.logger) {
+      services.logger.info('[${config.name}] Mounted successfully');
+    }
+  },
+  
+  unmount: async (container: MFEServiceContainer) => {
+    if (root) {
+      ${reactVersion === '17' 
+        ? `ReactDOM.unmountComponentAtNode(root);`
+        : `root.unmount();`}
+      root = null;
+    }
+    
+    const services = container.getAllServices();
+    if (services.logger) {
+      services.logger.info('[${config.name}] Unmounted successfully');
+    }
   }
 };
 
-export default mfeModule;`
-      : `import type { MFEModule, MFEServices } from '@mfe-toolkit/core';
+export default module;`;
+  } else if (config.template === 'vue') {
+    entryContent = `import { createApp } from 'vue';
+import type { MFEModule, MFEServiceContainer } from '@mfe-toolkit/core';
+import App from './App.vue';
 
-const mfeModule: MFEModule = {
-  mount: (element, services) => {
+let app: any = null;
+
+const module: MFEModule = {
+  metadata: {
+    name: '${config.name}',
+    version: '1.0.0',
+    requiredServices: ['logger'],
+    capabilities: ['demo']
+  },
+
+  mount: async (element: HTMLElement, container: MFEServiceContainer) => {
+    const services = container.getAllServices();
+    app = createApp(App, { services });
+    app.mount(element);
+    
+    if (services.logger) {
+      services.logger.info('[${config.name}] Mounted successfully');
+    }
+  },
+  
+  unmount: async (container: MFEServiceContainer) => {
+    if (app) {
+      app.unmount();
+      app = null;
+    }
+    
+    const services = container.getAllServices();
+    if (services.logger) {
+      services.logger.info('[${config.name}] Unmounted successfully');
+    }
+  }
+};
+
+export default module;`;
+  } else if (config.template === 'solid') {
+    entryFileName = 'main.tsx';
+    entryContent = `import { render } from 'solid-js/web';
+import type { MFEModule, MFEServiceContainer } from '@mfe-toolkit/core';
+import { App } from './App';
+
+let cleanup: (() => void) | null = null;
+
+const module: MFEModule = {
+  metadata: {
+    name: '${config.name}',
+    version: '1.0.0',
+    requiredServices: ['logger'],
+    capabilities: ['demo']
+  },
+
+  mount: async (element: HTMLElement, container: MFEServiceContainer) => {
+    const services = container.getAllServices();
+    cleanup = render(() => <App services={services} />, element);
+    
+    if (services.logger) {
+      services.logger.info('[${config.name}] Mounted successfully');
+    }
+  },
+  
+  unmount: async (container: MFEServiceContainer) => {
+    if (cleanup) {
+      cleanup();
+      cleanup = null;
+    }
+    
+    const services = container.getAllServices();
+    if (services.logger) {
+      services.logger.info('[${config.name}] Unmounted successfully');
+    }
+  }
+};
+
+export default module;`;
+  } else {
+    entryContent = `import type { MFEModule, MFEServiceContainer } from '@mfe-toolkit/core';
+
+const module: MFEModule = {
+  metadata: {
+    name: '${config.name}',
+    version: '1.0.0',
+    requiredServices: ['logger'],
+    capabilities: ['demo']
+  },
+
+  mount: async (element: HTMLElement, container: MFEServiceContainer) => {
+    const services = container.getAllServices();
     element.innerHTML = '<div>Hello from ${config.name}!</div>';
     
-    return () => {
-      element.innerHTML = '';
-    };
+    if (services.logger) {
+      services.logger.info('[${config.name}] Mounted successfully');
+    }
+  },
+  
+  unmount: async (container: MFEServiceContainer) => {
+    const services = container.getAllServices();
+    if (services.logger) {
+      services.logger.info('[${config.name}] Unmounted successfully');
+    }
   }
 };
 
-export default mfeModule;`;
+export default module;`;
+  }
 
   await fs.writeFile(
-    path.join(projectPath, 'src', config.template === 'react' ? 'index.tsx' : 'index.ts'),
+    path.join(projectPath, 'src', entryFileName),
     entryContent
   );
+
+  // Create App component based on template
+  if (config.template === 'react') {
+    const appContent = `import React from 'react';
+import type { MFEServices } from '@mfe-toolkit/core';
+
+interface AppProps {
+  services: MFEServices;
+}
+
+export const App: React.FC<AppProps> = ({ services }) => {
+  const handleNotification = () => {
+    services.notification?.show({
+      title: 'Hello from ${config.name}',
+      message: 'This is a notification from the MFE',
+      type: 'success'
+    });
+  };
+
+  return (
+    <div className="ds-p-4">
+      <h2 className="ds-text-2xl ds-font-bold ds-mb-4">
+        ${config.name} MFE
+      </h2>
+      <p className="ds-text-gray-600 ds-mb-4">
+        This MFE was created with mfe-toolkit-cli
+      </p>
+      <button 
+        onClick={handleNotification}
+        className="ds-btn-primary"
+      >
+        Show Notification
+      </button>
+    </div>
+  );
+};`;
+    await fs.writeFile(path.join(projectPath, 'src', 'App.tsx'), appContent);
+  } else if (config.template === 'vue') {
+    const appContent = `<template>
+  <div class="ds-p-4">
+    <h2 class="ds-text-2xl ds-font-bold ds-mb-4">
+      ${config.name} MFE
+    </h2>
+    <p class="ds-text-gray-600 ds-mb-4">
+      This MFE was created with mfe-toolkit-cli
+    </p>
+    <button 
+      @click="handleNotification"
+      class="ds-btn-primary"
+    >
+      Show Notification
+    </button>
+  </div>
+</template>
+
+<script setup lang="ts">
+import type { MFEServices } from '@mfe-toolkit/core';
+
+interface Props {
+  services: MFEServices;
+}
+
+const props = defineProps<Props>();
+
+const handleNotification = () => {
+  props.services.notification?.show({
+    title: 'Hello from ${config.name}',
+    message: 'This is a notification from the Vue MFE',
+    type: 'success'
+  });
+};
+</script>`;
+    await fs.writeFile(path.join(projectPath, 'src', 'App.vue'), appContent);
+  } else if (config.template === 'solid') {
+    const appContent = `import { Component } from 'solid-js';
+import type { MFEServices } from '@mfe-toolkit/core';
+
+interface AppProps {
+  services: MFEServices;
+}
+
+export const App: Component<AppProps> = (props) => {
+  const handleNotification = () => {
+    props.services.notification?.show({
+      title: 'Hello from ${config.name}',
+      message: 'This is a notification from the Solid.js MFE',
+      type: 'success'
+    });
+  };
+
+  return (
+    <div class="ds-p-4">
+      <h2 class="ds-text-2xl ds-font-bold ds-mb-4">
+        ${config.name} MFE
+      </h2>
+      <p class="ds-text-gray-600 ds-mb-4">
+        This MFE was created with mfe-toolkit-cli
+      </p>
+      <button 
+        onClick={handleNotification}
+        class="ds-btn-primary"
+      >
+        Show Notification
+      </button>
+    </div>
+  );
+};`;
+    await fs.writeFile(path.join(projectPath, 'src', 'App.tsx'), appContent);
+  }
 
   // Create manifest.json with proper version specification
   const getRuntimeDeps = () => {
@@ -264,13 +508,21 @@ export default mfeModule;`;
 
   // Create build.js using the new buildMFE utility
   const buildContent = `import { buildMFE } from '@mfe-toolkit/build';
+${config.template === 'vue' ? `import vuePlugin from 'esbuild-plugin-vue3';` : ''}
+${config.template === 'solid' ? `import { solidPlugin } from 'esbuild-plugin-solid';` : ''}
 
 // Build configuration using the new versioning system
 // Automatically detects library versions from manifest.json
 await buildMFE({
-  entry: 'src/${config.template === 'react' ? 'index.tsx' : 'index.ts'}',
+  entry: 'src/${entryFileName}',
   outfile: 'dist/${config.name}.js',
-  manifestPath: './manifest.json'
+  manifestPath: './manifest.json'${config.template === 'vue' ? `,
+  esbuildOptions: {
+    plugins: [vuePlugin()]
+  }` : ''}${config.template === 'solid' ? `,
+  esbuildOptions: {
+    plugins: [solidPlugin()]
+  }` : ''}
 });
 `;
 

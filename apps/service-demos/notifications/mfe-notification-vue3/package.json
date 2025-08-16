@@ -1,0 +1,20 @@
+{
+  "name": "mfe-notification-vue3",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node build.js",
+    "build:watch": "node build.js --watch"
+  },
+  "dependencies": {
+    "vue": "^3.4.0"
+  },
+  "devDependencies": {
+    "@mfe-toolkit/build": "workspace:*",
+    "@mfe-toolkit/core": "workspace:*",
+    "@vitejs/plugin-vue": "^5.0.0",
+    "esbuild": "^0.19.11",
+    "esbuild-plugin-vue3": "^0.4.2"
+  }
+}

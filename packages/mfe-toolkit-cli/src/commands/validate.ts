@@ -2,7 +2,7 @@ import { Command } from 'commander';
 import { manifestValidator } from '@mfe-toolkit/core';
 import chalk from 'chalk';
 import fs from 'fs-extra';
-import glob from 'glob';
+import { glob } from 'glob';
 
 export const validateCommand = new Command('validate')
   .description('Validate MFE manifests')
@@ -14,7 +14,7 @@ export const validateCommand = new Command('validate')
       let manifestFiles: string[] = files;
 
       if (!manifestFiles.length) {
-        manifestFiles = glob.sync(options.pattern, {
+        manifestFiles = await glob(options.pattern, {
           ignore: ['**/node_modules/**', '**/dist/**'],
         });
       }
