@@ -144,7 +144,7 @@ export const createCommand = new Command('create')
       // Write main file
       const mainExt = framework === 'vue' ? 'ts' : 
                      (framework === 'vanilla-ts' || framework === 'vanilla-js') ? 'ts' : 
-                     framework === 'solid' ? 'tsx' :  // Solid.js always needs .tsx for JSX imports
+                     framework === 'solid' ? 'tsx' :  // Solid.js uses .tsx with JSX
                      'tsx';  // React always uses .tsx
       
       fs.writeFileSync(
@@ -155,7 +155,7 @@ export const createCommand = new Command('create')
       // Write app file if needed
       if (framework !== 'vanilla-ts' && framework !== 'vanilla-js') {
         const appExt = framework === 'vue' ? 'ts' :  // Vue3 now uses pure TypeScript files
-                      framework === 'solid' ? 'tsx' :  // Solid.js always needs .tsx for JSX
+                      framework === 'solid' ? 'tsx' :  // Solid.js uses .tsx for JSX
                       'tsx';  // React always uses .tsx
         const appContent = generator.generateApp();
         if (appContent) {

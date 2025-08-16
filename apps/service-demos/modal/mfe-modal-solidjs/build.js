@@ -5,5 +5,7 @@ await buildMFE({
   entry: 'src/main.tsx',
   outfile: 'dist/mfe-modal-solidjs.js',
   manifestPath: './manifest.json',
-  plugins: [solidPlugin()]
+  esbuildOptions: {
+    plugins: [solidPlugin()]
+  }
 });

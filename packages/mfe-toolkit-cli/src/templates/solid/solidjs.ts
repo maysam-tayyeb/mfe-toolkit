@@ -425,41 +425,29 @@ interface AppProps {
 
 export default function App(props: AppProps) {
   const [count, setCount] = createSignal(0);
-  const [message, setMessage] = createSignal('Welcome to Solid.js MFE!');
 
-  const handleLog = () => {
-    props.services.logger?.info(\`[${name}] Count is \${count()}\`);
-    setMessage(\`Logged count: \${count()}\`);
+  const handleClick = () => {
+    setCount(prev => prev + 1);
+    props.services.logger?.info(\`Button clicked! Count: \${count() + 1}\`);
   };
 
   return (
     <div class="ds-card ds-p-6 ds-m-4">
-      <div class="ds-mb-6 ds-text-center">
+      <div class="ds-text-center">
         <h1 class="ds-text-3xl ds-font-bold ds-mb-2 ds-text-accent-primary">
-          🔷 ${name}
+          🔷 Hello from ${name}!
         </h1>
-        <p class="ds-text-gray-600">Solid.js with Fine-Grained Reactivity</p>
-      </div>
-
-      <div class="ds-text-center ds-mb-6">
-        <div class="ds-text-3xl ds-font-bold">{count()}</div>
-        <div class="ds-text-sm ds-text-gray-600">Counter Value</div>
-      </div>
-
-      <div class="ds-bg-accent-primary-soft ds-p-3 ds-rounded ds-mb-4">
-        <p class="ds-text-sm">{message()}</p>
-      </div>
-
-      <div class="ds-flex ds-gap-2 ds-justify-center">
-        <button onClick={() => setCount(c => c + 1)} class="ds-btn-primary">
-          Increment
-        </button>
-        <button onClick={() => setCount(0)} class="ds-btn-outline">
-          Reset
-        </button>
-        <button onClick={handleLog} class="ds-btn-secondary">
-          Log Count
-        </button>
+        <p class="ds-text-gray-600 ds-mb-6">
+          Solid.js • Fine-Grained Reactivity
+        </p>
+        <div class="ds-card-compact ds-inline-block ds-p-4">
+          <div class="ds-text-4xl ds-font-bold ds-text-accent-primary ds-mb-2">
+            {count()}
+          </div>
+          <button class="ds-btn-primary" onClick={handleClick}>
+            Click me!
+          </button>
+        </div>
       </div>
     </div>
   );
@@ -566,7 +554,6 @@ export default function App(props: AppProps) {
   generateBuildScript(): string {
     const { name } = this.config;
     
-    // Always use .tsx for Solid.js since we have JSX in our components
     return `import { buildMFE } from '@mfe-toolkit/build';
 import { solidPlugin } from 'esbuild-plugin-solid';
 
@@ -574,7 +561,9 @@ await buildMFE({
   entry: 'src/main.tsx',
   outfile: 'dist/${name}.js',
   manifestPath: './manifest.json',
-  plugins: [solidPlugin()]
+  esbuildOptions: {
+    plugins: [solidPlugin()]
+  }
 });`;
   }
 
