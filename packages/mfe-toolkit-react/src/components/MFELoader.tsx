@@ -133,13 +133,12 @@ const IsolatedLoaderStrategy: React.FC<MFELoaderProps> = ({
       containerRef.current.innerHTML = '';
     }
 
-    // Delay loading slightly to ensure DOM is ready
-    const timer = setTimeout(loadAndMountMFE, 100);
+    // Load immediately - DOM is already ready
+    loadAndMountMFE();
 
     // Cleanup
     return () => {
       isMounted = false;
-      clearTimeout(timer);
 
       // Only cleanup if component is truly unmounting
       if (cleanupRef.current) {
@@ -242,8 +241,8 @@ const StandardLoaderStrategy: React.FC<MFELoaderProps> = ({
           reject(new Error('Mount timeout - container ref not available'));
         }, 5000);
 
-        // Use requestAnimationFrame to ensure DOM is ready
-        requestAnimationFrame(async () => {
+        // Mount immediately if container is ready
+        const performMount = async () => {
           if (containerRef.current && mfeRef.current && !mountedRef.current) {
             try {
               console.log(`[MFELoader] Mounting MFE ${name} to container`);
@@ -258,15 +257,38 @@ const StandardLoaderStrategy: React.FC<MFELoaderProps> = ({
               clearTimeout(mountTimeout);
               reject(new Error(`Failed to mount MFE: ${mountError}`));
             }
-          } else if (!containerRef.current) {
-            clearTimeout(mountTimeout);
-            console.error(`[MFELoader] Container ref not available for ${name}`);
-            reject(new Error('Container element not found'));
-          } else {
-            clearTimeout(mountTimeout);
-            resolve(); // Already mounted
           }
-        });
+        };
+
+        if (containerRef.current && mfeRef.current && !mountedRef.current) {
+          performMount();
+        } else if (!containerRef.current) {
+          // If container not ready, wait a frame
+          requestAnimationFrame(async () => {
+            if (containerRef.current && mfeRef.current && !mountedRef.current) {
+              try {
+                console.log(`[MFELoader] Mounting MFE ${name} to container (after frame)`);
+                services.logger.info(`Mounting MFE ${name}`);
+                const container = createServiceContainer(services);
+                serviceContainerRef.current = container;
+                await mfeRef.current.mount(containerRef.current, container);
+                mountedRef.current = true;
+                clearTimeout(mountTimeout);
+                resolve();
+              } catch (mountError) {
+                clearTimeout(mountTimeout);
+                reject(new Error(`Failed to mount MFE: ${mountError}`));
+              }
+            } else {
+              clearTimeout(mountTimeout);
+              console.error(`[MFELoader] Container ref not available for ${name}`);
+              reject(new Error('Container element not found'));
+            }
+          });
+        } else {
+          clearTimeout(mountTimeout);
+          resolve(); // Already mounted
+        }
       });
 
       setState((prev) => ({ ...prev, loading: false }));
