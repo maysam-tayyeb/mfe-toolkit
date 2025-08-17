@@ -1,4 +1,4 @@
-import React, { useState, useTransition, useOptimistic } from 'react';
+import React, { useState } from 'react';
 import type { MFEServices } from '@mfe-toolkit/core';
 
 interface AppProps {
@@ -7,56 +7,37 @@ interface AppProps {
 
 export const App: React.FC<AppProps> = ({ services }) => {
   const [count, setCount] = useState(0);
-  const [optimisticCount, setOptimisticCount] = useOptimistic(count);
-  const [message, setMessage] = useState('Welcome to React 19 MFE!');
-  const [isPending, startTransition] = useTransition();
 
-  const handleIncrement = () => {
-    setOptimisticCount(count + 1);
-    startTransition(() => {
-      setCount(c => c + 1);
-    });
-  };
-
-  const handleLog = () => {
-    startTransition(() => {
-      services.logger?.info(`[mfe-modal-react19] Count is ${count}`);
-      setMessage(`Logged count: ${count}`);
-    });
+  const handleClick = () => {
+    setCount(prev => prev + 1);
+    services.logger?.info(`Button clicked! Count: ${count + 1}`);
   };
 
   return (
     <div className="ds-card ds-p-6 ds-m-4">
-      <div className="ds-mb-6 ds-text-center">
+      <div className="ds-text-center">
         <h1 className="ds-text-3xl ds-font-bold ds-mb-2 ds-text-accent-primary">
-          🔥 mfe-modal-react19
+          🔥 Hello from mfe-modal-react19!
         </h1>
-        <p className="ds-text-gray-600">React 19 with Latest Features</p>
-        {isPending && <p className="ds-text-sm ds-text-warning">Updating...</p>}
-      </div>
-
-      <div className="ds-text-center ds-mb-6">
-        <div className="ds-text-3xl ds-font-bold">{optimisticCount}</div>
-        <div className="ds-text-sm ds-text-gray-600">Counter Value</div>
-        {optimisticCount !== count && (
-          <div className="ds-text-xs ds-text-warning">(updating...)</div>
-        )}
-      </div>
-
-      <div className="ds-bg-accent-primary-soft ds-p-3 ds-rounded ds-mb-4">
-        <p className="ds-text-sm">{message}</p>
-      </div>
-
-      <div className="ds-flex ds-gap-2 ds-justify-center">
-        <button onClick={handleIncrement} className="ds-btn-primary">
-          Increment
-        </button>
-        <button onClick={() => setCount(0)} className="ds-btn-outline">
-          Reset
-        </button>
-        <button onClick={handleLog} className="ds-btn-secondary">
-          Log Count
-        </button>
+        <p className="ds-text-gray-600 ds-mb-6">
+          React 19 MFE • Latest Features
+        </p>
+        
+        <div className="ds-card-compact ds-inline-block ds-p-4">
+          <div className="ds-text-4xl ds-font-bold ds-text-accent-primary ds-mb-2">
+            {count}
+          </div>
+          <button 
+            onClick={handleClick}
+            className="ds-btn-primary"
+          >
+            Click me!
+          </button>
+        </div>
+        
+        <p className="ds-text-sm ds-text-gray-500 ds-mt-6">
+          Built with ❤️ using MFE Toolkit
+        </p>
       </div>
     </div>
   );
