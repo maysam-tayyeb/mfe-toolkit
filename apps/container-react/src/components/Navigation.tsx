@@ -16,8 +16,6 @@ import {
   Package,
   Bell,
   MessageSquare,
-  Settings,
-  Activity,
 } from 'lucide-react';
 
 interface NavItem {
@@ -77,21 +75,6 @@ export const Navigation: React.FC = () => {
           path: '/error-boundary-demo',
           label: 'Error Handling',
           icon: <AlertCircle className="h-4 w-4" />,
-        },
-      ],
-    },
-    {
-      title: 'Developer',
-      items: [
-        {
-          path: '/dev/metrics',
-          label: 'Metrics',
-          icon: <Activity className="h-4 w-4" />,
-        },
-        {
-          path: '/dev/settings',
-          label: 'Settings',
-          icon: <Settings className="h-4 w-4" />,
         },
       ],
     },

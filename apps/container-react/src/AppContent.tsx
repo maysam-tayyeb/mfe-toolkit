@@ -7,8 +7,6 @@ import { ErrorBoundaryDemoPage } from '@/pages/ErrorBoundaryDemoPage';
 import { EventBusPageV3 as EventBusPage } from '@/pages/services/EventBusPageV3';
 import { ModalPage } from '@/pages/services/ModalPage';
 import { NotificationsPage } from '@/pages/services/NotificationsPage';
-import { MetricsPage } from '@/pages/dev/MetricsPage';
-import { SettingsPage } from '@/pages/dev/SettingsPage';
 import { CompatibleMFELoader } from '@/components/CompatibleMFELoader';
 import { getMFEServicesSingleton } from '@/services/mfe-services-singleton';
 import { useRegistryContext } from '@/contexts/RegistryContext';
@@ -91,8 +89,6 @@ export function AppContent() {
           <Route path="services/event-bus" element={<EventBusPage />} />
           <Route path="services/modal" element={<ModalPage />} />
           <Route path="services/notifications" element={<NotificationsPage />} />
-          <Route path="dev/metrics" element={<MetricsPage />} />
-          <Route path="dev/settings" element={<SettingsPage />} />
           <Route path="mfe/:mfeName" element={<MFEPage />} />
         </Route>
       </Routes>
