@@ -8,8 +8,8 @@ const module: MFEModule = {
   metadata: {
     name: 'mfe-modal-vue3',
     version: '1.0.0',
-    requiredServices: ["logger"],
-    capabilities: ["demo"]
+    requiredServices: ["modal","logger"],
+    capabilities: ["modal-demo","modal-testing"]
   },
 
   mount: async (element: HTMLElement, container: MFEServiceContainer) => {

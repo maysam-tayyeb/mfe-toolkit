@@ -1,7 +1,7 @@
 # mfe-modal-solidjs
 
 ## Description
-Solid.js general microfrontend with fine-grained reactivity and exceptional performance.
+Solid.js modal microfrontend with fine-grained reactivity and exceptional performance.
 
 ## Features
 - Solid.js with signals and reactive primitives
@@ -9,7 +9,7 @@ Solid.js general microfrontend with fine-grained reactivity and exceptional perf
 - Fine-grained reactivity system
 - Compiled reactive primitives
 - Small bundle size (~7kb)
-- General MFE functionality
+- Modal service integration
 - Design system integration
 - TypeScript support
 

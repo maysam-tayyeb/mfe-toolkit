@@ -115,26 +115,24 @@ export const App = (props: AppProps) => {
 
   const handleClick = () => {
     setCount(count() + 1);
-    props.services.logger?.info(\`Button clicked! Count: \${count()}\`);
+    props.services.logger?.info(\`Button clicked! Count: \${count() + 1}\`);
   };
 
   return (
     <div class="ds-card ds-p-6 ds-m-4">
       <div class="ds-text-center">
         <h1 class="ds-text-3xl ds-font-bold ds-mb-2 ds-text-accent-primary">
-          🔷 ${name}
+          🔷 Hello from ${name}!
         </h1>
         <p class="ds-text-gray-600 ds-mb-6">
-          A Solid.js Micro Frontend
+          Solid.js MFE • Fine-Grained Reactivity
         </p>
         
-        <div class="ds-space-y-4">
-          <div class="ds-p-4 ds-bg-gray-50 ds-rounded-lg">
-            <p class="ds-text-2xl ds-font-semibold">{count()}</p>
-            <p class="ds-text-sm ds-text-gray-500">Click count</p>
+        <div class="ds-card-compact ds-inline-block ds-p-4">
+          <div class="ds-text-4xl ds-font-bold ds-text-accent-primary ds-mb-2">
+            {count()}
           </div>
-          
-          <button
+          <button 
             onClick={handleClick}
             class="ds-btn-primary"
           >

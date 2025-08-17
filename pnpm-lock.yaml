@@ -365,34 +365,6 @@ importers:
         specifier: ^5.3.0
         version: 5.8.3
 
-  apps/service-demos/modal/mfe-modal-react18/mfe-modal-react17:
-    dependencies:
-      '@mfe-toolkit/core':
-        specifier: workspace:*
-        version: link:../../../../../packages/mfe-toolkit-core
-      react:
-        specifier: ^17.0.2
-        version: 17.0.2
-      react-dom:
-        specifier: ^17.0.2
-        version: 17.0.2(react@17.0.2)
-    devDependencies:
-      '@mfe-toolkit/build':
-        specifier: workspace:*
-        version: link:../../../../../packages/mfe-toolkit-build
-      '@types/react':
-        specifier: ^17.0.2
-        version: 17.0.87
-      '@types/react-dom':
-        specifier: ^17.0.2
-        version: 17.0.26(@types/react@17.0.87)
-      esbuild:
-        specifier: ^0.24.2
-        version: 0.24.2
-      typescript:
-        specifier: ^5.3.0
-        version: 5.8.3
-
   apps/service-demos/modal/mfe-modal-react19:
     dependencies:
       '@mfe-toolkit/core':

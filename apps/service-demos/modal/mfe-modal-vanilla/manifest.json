@@ -2,7 +2,7 @@
   "$schema": "https://mfe-made-easy.com/schemas/mfe-manifest-v2.schema.json",
   "name": "mfe-modal-vanilla",
   "version": "1.0.0",
-  "url": "http://localhost:8080/service-demos/general/mfe-modal-vanilla/mfe-modal-vanilla.js",
+  "url": "http://localhost:8080/service-demos/modal/mfe-modal-vanilla/mfe-modal-vanilla.js",
   "alternativeUrls": [],
   "dependencies": {
     "runtime": {},
@@ -20,14 +20,24 @@
     }
   },
   "capabilities": {
-    "emits": [],
+    "emits": [
+      "modal:test-opened",
+      "modal:test-closed"
+    ],
     "listens": [],
     "features": [
+      "modal-testing",
+      "custom-modals",
+      "modal-stacking",
       "vanilla-ts"
     ]
   },
   "requirements": {
     "services": [
+      {
+        "name": "modal",
+        "optional": false
+      },
       {
         "name": "logger",
         "optional": true
@@ -35,15 +45,15 @@
     ]
   },
   "metadata": {
-    "displayName": "Vanilla TS general Demo",
-    "description": "general service demo with Vanilla TypeScript",
+    "displayName": "Vanilla TS modal Demo",
+    "description": "modal service demo with Vanilla TypeScript",
     "icon": "📦",
     "author": {
       "name": "MFE Toolkit Team"
     },
     "category": "service-demos",
     "tags": [
-      "general",
+      "modal",
       "vanilla-ts",
       "service"
     ]
@@ -63,7 +73,7 @@
       "singleton": true
     },
     "communication": {
-      "eventNamespace": "mfe-modal-vanilla"
+      "eventNamespace": "modal-demo"
     }
   }
 }

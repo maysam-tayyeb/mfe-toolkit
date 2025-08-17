@@ -2,7 +2,7 @@
   "$schema": "https://mfe-made-easy.com/schemas/mfe-manifest-v2.schema.json",
   "name": "mfe-modal-solidjs",
   "version": "1.0.0",
-  "url": "http://localhost:8080/service-demos/general/mfe-modal-solidjs/mfe-modal-solidjs.js",
+  "url": "http://localhost:8080/service-demos/modal/mfe-modal-solidjs/mfe-modal-solidjs.js",
   "alternativeUrls": [],
   "dependencies": {
     "runtime": {
@@ -25,9 +25,15 @@
     }
   },
   "capabilities": {
-    "emits": [],
+    "emits": [
+      "modal:test-opened",
+      "modal:test-closed"
+    ],
     "listens": [],
     "features": [
+      "modal-testing",
+      "custom-modals",
+      "modal-stacking",
       "solid-signals",
       "fine-grained-reactivity",
       "no-virtual-dom"
@@ -36,21 +42,25 @@
   "requirements": {
     "services": [
       {
+        "name": "modal",
+        "optional": false
+      },
+      {
         "name": "logger",
         "optional": true
       }
     ]
   },
   "metadata": {
-    "displayName": "Solid.js  Demo",
-    "description": "general service demonstration MFE built with Solid.js",
+    "displayName": "Solid.js Modal Demo",
+    "description": "modal service demonstration MFE built with Solid.js",
     "icon": "🔷",
     "author": {
       "name": "MFE Toolkit Team"
     },
     "category": "service-demos",
     "tags": [
-      "general",
+      "modal",
       "solidjs",
       "service",
       "reactive"
@@ -71,7 +81,7 @@
       "singleton": true
     },
     "communication": {
-      "eventNamespace": "mfe-modal-solidjs"
+      "eventNamespace": "modal-demo"
     }
   }
 }

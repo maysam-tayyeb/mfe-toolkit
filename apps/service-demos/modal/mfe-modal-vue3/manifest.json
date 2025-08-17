@@ -2,7 +2,7 @@
   "$schema": "https://mfe-made-easy.com/schemas/mfe-manifest-v2.schema.json",
   "name": "mfe-modal-vue3",
   "version": "1.0.0",
-  "url": "http://localhost:8080/service-demos/general/mfe-modal-vue3/mfe-modal-vue3.js",
+  "url": "http://localhost:8080/service-demos/modal/mfe-modal-vue3/mfe-modal-vue3.js",
   "alternativeUrls": [],
   "dependencies": {
     "runtime": {
@@ -25,15 +25,25 @@
     }
   },
   "capabilities": {
-    "emits": [],
+    "emits": [
+      "modal:test-opened",
+      "modal:test-closed"
+    ],
     "listens": [],
     "features": [
+      "modal-testing",
+      "custom-modals",
+      "modal-stacking",
       "vue3-composition-api",
       "reactive-state"
     ]
   },
   "requirements": {
     "services": [
+      {
+        "name": "modal",
+        "optional": false
+      },
       {
         "name": "logger",
         "optional": true
@@ -68,7 +78,7 @@
       "singleton": true
     },
     "communication": {
-      "eventNamespace": "mfe-modal-vue3"
+      "eventNamespace": "modal-demo"
     }
   }
 }

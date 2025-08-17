@@ -2,7 +2,7 @@
   "$schema": "https://mfe-made-easy.com/schemas/mfe-manifest-v2.schema.json",
   "name": "mfe-modal-react19",
   "version": "1.0.0",
-  "url": "http://localhost:8080/mfe-modal-react19/mfe-modal-react19.js",
+  "url": "http://localhost:8080/service-demos/modal/mfe-modal-react19/mfe-modal-react19.js",
   "alternativeUrls": [],
   "dependencies": {
     "runtime": {
@@ -26,16 +26,27 @@
     }
   },
   "capabilities": {
-    "emits": [],
+    "emits": [
+      "modal:test-opened",
+      "modal:test-closed"
+    ],
     "listens": [],
     "features": [
+      "modal-testing",
+      "custom-modals",
+      "modal-stacking",
       "react19-hooks",
       "server-components-ready",
-      "optimistic-ui"
+      "optimistic-ui",
+      "use-hook"
     ]
   },
   "requirements": {
     "services": [
+      {
+        "name": "modal",
+        "optional": false
+      },
       {
         "name": "logger",
         "optional": true
@@ -43,15 +54,15 @@
     ]
   },
   "metadata": {
-    "displayName": "React 19  Demo",
-    "description": "general service demonstration MFE built with React 19",
+    "displayName": "React 19 Modal Demo",
+    "description": "modal service demonstration MFE built with React 19",
     "icon": "🔥",
     "author": {
       "name": "MFE Toolkit Team"
     },
-    "category": "custom",
+    "category": "service-demos",
     "tags": [
-      "general",
+      "modal",
       "react19",
       "service",
       "latest"
@@ -72,7 +83,7 @@
       "singleton": true
     },
     "communication": {
-      "eventNamespace": "mfe-modal-react19"
+      "eventNamespace": "modal-demo"
     }
   }
 }

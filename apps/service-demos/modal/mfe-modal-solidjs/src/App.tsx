@@ -5,11 +5,11 @@ interface AppProps {
   services: MFEServices;
 }
 
-export default function App(props: AppProps) {
+export const App = (props: AppProps) => {
   const [count, setCount] = createSignal(0);
 
   const handleClick = () => {
-    setCount(prev => prev + 1);
+    setCount(count() + 1);
     props.services.logger?.info(`Button clicked! Count: ${count() + 1}`);
   };
 
@@ -20,17 +20,25 @@ export default function App(props: AppProps) {
           🔷 Hello from mfe-modal-solidjs!
         </h1>
         <p class="ds-text-gray-600 ds-mb-6">
-          Solid.js • Fine-Grained Reactivity
+          Solid.js MFE • Fine-Grained Reactivity
         </p>
+        
         <div class="ds-card-compact ds-inline-block ds-p-4">
           <div class="ds-text-4xl ds-font-bold ds-text-accent-primary ds-mb-2">
             {count()}
           </div>
-          <button class="ds-btn-primary" onClick={handleClick}>
+          <button 
+            onClick={handleClick}
+            class="ds-btn-primary"
+          >
             Click me!
           </button>
         </div>
+        
+        <p class="ds-text-sm ds-text-gray-500 ds-mt-6">
+          Built with ❤️ using MFE Toolkit
+        </p>
       </div>
     </div>
   );
-}
+};

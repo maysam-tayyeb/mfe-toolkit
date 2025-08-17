@@ -37,7 +37,10 @@ export interface ServiceConfig {
 }
 
 export function detectServiceType(projectPath: string, name: string): ServiceType {
-  // Don't auto-detect modal - let users add modal functionality themselves
+  // Auto-detect service type from path or name
+  if (projectPath.includes('modal') || name.includes('modal')) {
+    return 'modal';
+  }
   if (projectPath.includes('notification') || name.includes('notification')) {
     return 'notification';
   }

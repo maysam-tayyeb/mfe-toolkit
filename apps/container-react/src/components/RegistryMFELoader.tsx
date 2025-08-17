@@ -29,7 +29,52 @@ export function RegistryMFELoader({ id, fallback, ...props }: RegistryMFELoaderP
           setManifest(mfe);
           setError(null);
         } else {
-          setError(new Error(`MFE with id "${id}" not found in registry`));
+          // Fallback for service-demos that aren't in the registry yet
+          // This is a temporary solution for development
+          if (id.startsWith('mfe-modal-') || id.startsWith('mfe-notification-')) {
+            const serviceType = id.includes('modal') ? 'modal' : 'notification';
+            const fallbackManifest: MFEManifest = {
+              name: id,
+              version: '1.0.0',
+              url: `http://localhost:8080/service-demos/${serviceType}/${id}/${id}.js`,
+              dependencies: {
+                runtime: {},
+                peer: { '@mfe-toolkit/core': '^0.1.0' }
+              },
+              compatibility: {
+                container: '^1.0.0',
+                browsers: {
+                  chrome: '>=90',
+                  firefox: '>=88',
+                  safari: '>=14',
+                  edge: '>=90'
+                }
+              },
+              capabilities: {
+                emits: [],
+                listens: [],
+                features: []
+              },
+              requirements: {
+                services: [
+                  { name: serviceType, optional: false },
+                  { name: 'logger', optional: true }
+                ]
+              },
+              metadata: {
+                displayName: `${id} (Fallback)`,
+                description: `${serviceType} service demo`,
+                icon: '📦',
+                author: { name: 'MFE Toolkit Team' },
+                category: 'service-demos',
+                tags: [serviceType, 'demo']
+              }
+            };
+            setManifest(fallbackManifest);
+            setError(null);
+          } else {
+            setError(new Error(`MFE with id "${id}" not found in registry`));
+          }
         }
       } catch (err) {
         setError(err instanceof Error ? err : new Error(`Failed to get MFE "${id}" from registry`));
