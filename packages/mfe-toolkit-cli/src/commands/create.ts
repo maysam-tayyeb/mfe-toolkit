@@ -3,13 +3,10 @@ import prompts from 'prompts';
 import chalk from 'chalk';
 import fs from 'fs-extra';
 import path from 'path';
-import { fileURLToPath } from 'url';
 import { spawn } from 'child_process';
 import { createTemplateGenerator, normalizeFramework } from '../templates/factory';
 import { detectServiceType } from '../templates/types';
 import type { TemplateConfig, ReactVersion, Framework } from '../templates/types';
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 function runCommand(command: string, args: string[], cwd: string): Promise<void> {
   return new Promise((resolve, reject) => {
