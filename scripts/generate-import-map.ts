@@ -140,12 +140,12 @@ async function main() {
   // Create the import map script tag with proper formatting
   const importMapScript = `    <script type="importmap">
       {
-        "imports": ${JSON.stringify(containerImports, null, 10).split('\n').map((line, i) => i === 0 ? line : '        ' + line).join('\n')}
+        "imports": ${JSON.stringify(containerImports, null, 2).split('\n').map((line, i) => i === 0 ? line : '        ' + line).join('\n')}
       }
     </script>`;
   
   // Replace the existing import map in index.html
-  const importMapRegex = /<script type="importmap">[\s\S]*?<\/script>/;
+  const importMapRegex = /\s*<script type="importmap">[\s\S]*?<\/script>/;
   if (importMapRegex.test(indexContent)) {
     indexContent = indexContent.replace(importMapRegex, importMapScript);
     fs.writeFileSync(indexPath, indexContent);
