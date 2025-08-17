@@ -59,7 +59,7 @@ export const HomePage: React.FC = () => {
     {
       icon: <Blocks className="h-5 w-5" />,
       title: 'Any Framework',
-      description: 'React, Vue, Angular, Vanilla JS',
+      description: 'React, Vue, Solid.js, Vanilla JS',
       color: 'ds-icon-warning',
       link: '/dashboard',
     },
@@ -83,8 +83,8 @@ export const HomePage: React.FC = () => {
     <div className="ds-page">
       {/* Hero Section */}
       <Hero
-        title="MFE Made Easy"
-        description="A framework-agnostic microfrontend platform with dynamic loading, universal state management, and zero global pollution"
+        title="MFE Toolkit"
+        description="A production-ready microfrontend toolkit with dynamic ES module loading, cross-framework state management, and enterprise-grade isolation"
         gradient
         actions={
           <>
@@ -265,8 +265,8 @@ export const HomePage: React.FC = () => {
           </div>
           <p className="ds-text-sm ds-text-muted ds-mb-md">Learn about the platform architecture</p>
           <div className="ds-stack-sm">
-            <a
-              href="/docs/getting-started"
+            <Link
+              to="/dashboard"
               className="ds-card-compact ds-hover-scale flex items-center justify-between group"
             >
               <div className="flex items-center gap-3">
@@ -274,29 +274,29 @@ export const HomePage: React.FC = () => {
                 <span className="text-sm font-medium">Getting Started</span>
               </div>
               <ArrowRight className="h-4 w-4 ds-text-muted" />
-            </a>
+            </Link>
 
-            <a
-              href="/docs/architecture"
+            <Link
+              to="/mfe-registry"
               className="ds-card-compact ds-hover-scale flex items-center justify-between group"
             >
               <div className="flex items-center gap-3">
                 <Blocks className="h-4 w-4 ds-icon-warning" />
-                <span className="text-sm font-medium">Architecture</span>
+                <span className="text-sm font-medium">MFE Registry</span>
               </div>
               <ArrowRight className="h-4 w-4 ds-text-muted" />
-            </a>
+            </Link>
 
-            <a
-              href="/docs/api"
+            <Link
+              to="/services/event-bus"
               className="ds-card-compact ds-hover-scale flex items-center justify-between group"
             >
               <div className="flex items-center gap-3">
                 <Code className="h-4 w-4 ds-icon-success" />
-                <span className="text-sm font-medium">API Reference</span>
+                <span className="text-sm font-medium">Services API</span>
               </div>
               <ArrowRight className="h-4 w-4 ds-text-muted" />
-            </a>
+            </Link>
           </div>
         </div>
       </div>
@@ -305,7 +305,7 @@ export const HomePage: React.FC = () => {
       <div className="ds-card-padded bg-gradient-to-r from-slate-50 to-slate-100 dark:from-slate-800 dark:to-slate-900 text-center">
         <h2 className="ds-section-title ds-mb-sm">Ready to Build?</h2>
         <p className="text-sm ds-text-muted ds-mb-md">
-          Start building scalable microfrontend applications with zero global pollution
+          Start building enterprise-ready microfrontend applications with the MFE Toolkit
         </p>
         <div className="flex gap-3 justify-center">
           <Button asChild>
@@ -315,7 +315,7 @@ export const HomePage: React.FC = () => {
             </Link>
           </Button>
           <Button asChild variant="outline">
-            <a href="https://github.com" target="_blank" rel="noopener noreferrer">
+            <a href="https://github.com/mfe-toolkit" target="_blank" rel="noopener noreferrer">
               <GitBranch className="h-4 w-4 mr-2" />
               View on GitHub
             </a>

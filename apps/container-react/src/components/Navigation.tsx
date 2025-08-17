@@ -114,7 +114,7 @@ export const Navigation: React.FC = () => {
               <div className="p-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 transition-all transform group-hover:scale-105">
                 <Sparkles className="h-4 w-4 text-white" />
               </div>
-              <span className="font-bold text-sm hidden sm:block" style={{ color: theme === 'dark' ? '#ffffff' : '#0f172a' }}>MFE Platform</span>
+              <span className="font-bold text-sm hidden sm:block" style={{ color: theme === 'dark' ? '#ffffff' : '#0f172a' }}>MFE Toolkit</span>
             </Link>
 
             {/* Desktop Navigation */}
