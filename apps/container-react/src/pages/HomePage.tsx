@@ -277,12 +277,12 @@ export const HomePage: React.FC = () => {
             </Link>
 
             <Link
-              to="/mfe-registry"
+              to="/dashboard#mfe-registry"
               className="ds-card-compact ds-hover-scale flex items-center justify-between group"
             >
               <div className="flex items-center gap-3">
                 <Blocks className="h-4 w-4 ds-icon-warning" />
-                <span className="text-sm font-medium">MFE Registry</span>
+                <span className="text-sm font-medium">View All MFEs</span>
               </div>
               <ArrowRight className="h-4 w-4 ds-text-muted" />
             </Link>

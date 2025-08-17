@@ -4,7 +4,6 @@ import { Layout } from '@/components/Layout';
 import { HomePage } from '@/pages/HomePage';
 import { DashboardPage } from '@/pages/DashboardPage';
 import { ErrorBoundaryDemoPage } from '@/pages/ErrorBoundaryDemoPage';
-import { MFERegistryPage } from '@/pages/MFERegistryPage';
 import { EventBusPageV3 as EventBusPage } from '@/pages/services/EventBusPageV3';
 import { ModalPage } from '@/pages/services/ModalPage';
 import { NotificationsPage } from '@/pages/services/NotificationsPage';
@@ -88,7 +87,6 @@ export function AppContent() {
         <Route path="/" element={<Layout />}>
           <Route index element={<HomePage />} />
           <Route path="dashboard" element={<DashboardPage />} />
-          <Route path="mfe-registry" element={<MFERegistryPage />} />
           <Route path="error-boundary-demo" element={<ErrorBoundaryDemoPage />} />
           <Route path="services/event-bus" element={<EventBusPage />} />
           <Route path="services/modal" element={<ModalPage />} />

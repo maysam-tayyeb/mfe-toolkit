@@ -276,13 +276,13 @@ export const DashboardPage: React.FC = () => {
             </button>
 
             <button
-              onClick={() => (window.location.href = '/mfe-registry')}
+              onClick={() => (window.location.href = '/services/notifications')}
               className="ds-card-compact ds-hover-scale flex items-center gap-3 w-full text-left"
             >
-              <Package className="h-4 w-4 ds-icon-primary" />
+              <Shield className="h-4 w-4 ds-icon-primary" />
               <div className="flex-1">
-                <p className="text-sm font-medium">MFE Registry</p>
-                <p className="text-xs ds-text-muted">View all MFE details</p>
+                <p className="text-sm font-medium">Notifications Demo</p>
+                <p className="text-xs ds-text-muted">Cross-framework demos</p>
               </div>
               <ChevronRight className="h-4 w-4 ds-text-muted" />
             </button>
