@@ -61,6 +61,7 @@ export function RegistryMFELoader({ id, fallback, ...props }: RegistryMFELoaderP
       url={manifest.url}
       services={services}
       fallback={fallback}
+      isolate={true}
       {...props}
     />
   );

@@ -395,10 +395,16 @@ const StandardLoaderStrategy: React.FC<MFELoaderProps> = ({
           services.logger.info(`Component unmounting, cleaning up MFE ${name}`);
           const container = serviceContainerRef.current || createServiceContainer(services);
           mfeRef.current.unmount(container);
+          mountedRef.current = false;
           serviceContainerRef.current = null;
+          mfeRef.current = null;
         } catch (err) {
           services.logger.error(`Error unmounting MFE ${name}:`, err);
         }
+      }
+      // Clear the container content
+      if (containerRef.current) {
+        containerRef.current.innerHTML = '';
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
