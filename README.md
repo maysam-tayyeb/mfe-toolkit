@@ -125,6 +125,21 @@ npm install @mfe-toolkit/state-middleware-performance
 
 ## 🚀 Quick Start
 
+### 📖 Complete Getting Started Guide
+
+New to MFE Toolkit? Start with our comprehensive guide:
+
+**[📚 Getting Started Guide](./docs/GETTING_STARTED.md)** - Complete 0-100 guide covering:
+- Installation and setup
+- Creating your first MFE
+- Setting up a container
+- Inter-MFE communication
+- State management
+- Production deployment
+- Troubleshooting
+
+## 🚀 Quick Start
+
 ### State Management with Middleware
 
 The toolkit includes a powerful state management solution with optional middleware:

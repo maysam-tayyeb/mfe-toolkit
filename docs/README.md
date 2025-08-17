@@ -28,7 +28,7 @@ Defines what a container application must provide to host MFEs:
 
 ### For MFE Developers
 
-- [Getting Started with MFEs](./platform/guides/getting-started-mfe.md)
+- **[🚀 Complete Getting Started Guide](./GETTING_STARTED.md)** - Start here! 0-100 comprehensive guide
 - [MFE Manifest Quick Start](./platform/manifests/quick-start.md)
 - [Available Services](./container-spec/service-contracts.md)
 - [State Management Patterns](./platform/architecture/state-patterns.md)
