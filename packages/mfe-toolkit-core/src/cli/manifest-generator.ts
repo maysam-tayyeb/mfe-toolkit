@@ -7,7 +7,7 @@ import { manifestValidator } from '../services/manifest-validator';
 interface GeneratorOptions {
   name: string;
   version?: string;
-  framework?: 'react' | 'vue' | 'angular' | 'vanilla';
+  framework?: 'react' | 'vue' | 'angular' | 'solid' | 'vanilla';
   output?: string;
   template?: 'basic' | 'full';
 }
@@ -72,6 +72,16 @@ class ManifestGenerator {
           angular: '>=17.0.0',
         };
         baseManifest.metadata.icon = '🅰️';
+        break;
+
+      case 'solid':
+        baseManifest.dependencies.peer = {
+          'solid-js': '^1.8.0',
+        };
+        baseManifest.compatibility.frameworks = {
+          solid: '>=1.8.0',
+        };
+        baseManifest.metadata.icon = '🔷';
         break;
 
       case 'vanilla':
