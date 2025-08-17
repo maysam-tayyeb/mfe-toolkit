@@ -55,6 +55,7 @@ export interface MFECompatibility {
     react?: VersionRange;
     vue?: VersionRange;
     angular?: VersionRange;
+    solid?: VersionRange;
   };
 }
 
