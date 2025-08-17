@@ -25,7 +25,7 @@
   "scripts": {
     "dev:container-react": "pnpm --filter @mfe/container-react dev",
     "build": "pnpm build:packages && pnpm build:mfes && pnpm generate:import-map",
-    "build:packages": "pnpm --filter '@mfe-toolkit/core' build && pnpm --filter '@mfe-toolkit/state' build && pnpm --filter '@mfe-toolkit/build' build && pnpm --parallel --filter '@mfe-toolkit/react' --filter '@mfe-toolkit/cli' --filter '@mfe-toolkit/state-middleware-performance' build && pnpm --filter '@mfe/shared' --filter '@mfe/design-system' --filter '@mfe/design-system-react' build",
+    "build:packages": "pnpm --filter './packages/**' build",
     "build:mfes": "pnpm --parallel --filter './apps/mfe-*' --filter './apps/service-demos/**' build && pnpm copy-to-dist",
     "copy-to-dist": "node scripts/copy-to-dist.js",
     "generate:import-map": "tsx scripts/generate-import-map.ts",
