@@ -155,7 +155,7 @@ export default module;`;
 
   generateManifest(): object {
     const { name, projectPath } = this.config;
-    const { requiredServices, capabilities, emits, listens, features, eventNamespace } = this.serviceConfig;
+    const { requiredServices, emits, listens, features, eventNamespace } = this.serviceConfig;
     
     const urlPath = projectPath.includes('service-demos') 
       ? `service-demos/${this.config.serviceType}/${name}` 

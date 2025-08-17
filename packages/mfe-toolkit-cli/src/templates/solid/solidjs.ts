@@ -1,5 +1,5 @@
 import type { TemplateConfig, TemplateGenerator, ServiceConfig } from '../types';
-import { getServiceConfig, getFrameworkIcon } from '../types';
+import { getServiceConfig } from '../types';
 
 export class SolidJSTemplate implements TemplateGenerator {
   private config: TemplateConfig;
@@ -482,7 +482,7 @@ export default function App(props: AppProps) {
 
   generateManifest(): object {
     const { name, projectPath } = this.config;
-    const { requiredServices, capabilities, emits, listens, features, eventNamespace } = this.serviceConfig;
+    const { requiredServices, emits, listens, features, eventNamespace } = this.serviceConfig;
     
     const urlPath = projectPath.includes('service-demos') 
       ? `service-demos/${this.config.serviceType}/${name}` 

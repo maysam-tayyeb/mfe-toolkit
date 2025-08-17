@@ -10,7 +10,7 @@ export function createTemplateGenerator(config: TemplateConfig): TemplateGenerat
   const { framework } = config;
   
   switch (framework) {
-    case 'react':
+    case 'react': {
       const reactVersion = config.reactVersion || '18';
       switch (reactVersion) {
         case '17':
@@ -22,6 +22,7 @@ export function createTemplateGenerator(config: TemplateConfig): TemplateGenerat
         default:
           return new React18Template(config);
       }
+    }
     
     case 'vue':
       return new Vue3Template(config);
