@@ -1,6 +1,6 @@
 # React Container Documentation
 
-The React container is a production-ready implementation of the MFE container specification using React 19.
+The React container is a React 19 implementation of the MFE container specification. [Work in Progress]
 
 ## Overview
 

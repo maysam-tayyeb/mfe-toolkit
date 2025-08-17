@@ -84,7 +84,7 @@ export const HomePage: React.FC = () => {
       {/* Hero Section */}
       <Hero
         title="MFE Toolkit"
-        description="A production-ready microfrontend toolkit with dynamic ES module loading, cross-framework state management, and enterprise-grade isolation"
+        description="A comprehensive microfrontend toolkit with dynamic ES module loading, cross-framework state management, and strong isolation boundaries"
         gradient
         actions={
           <>
@@ -305,7 +305,7 @@ export const HomePage: React.FC = () => {
       <div className="ds-card-padded bg-gradient-to-r from-slate-50 to-slate-100 dark:from-slate-800 dark:to-slate-900 text-center">
         <h2 className="ds-section-title ds-mb-sm">Ready to Build?</h2>
         <p className="text-sm ds-text-muted ds-mb-md">
-          Start building enterprise-ready microfrontend applications with the MFE Toolkit
+          Start building scalable microfrontend applications with the MFE Toolkit
         </p>
         <div className="flex gap-3 justify-center">
           <Button asChild>

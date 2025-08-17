@@ -1,4 +1,6 @@
-# @mfe-toolkit/core
+# @mfe-toolkit/core [WIP]
+
+> **⚠️ Work in Progress**: This package is under active development and not yet ready for production use. APIs may change without notice.
 
 Framework-agnostic core toolkit for building and managing microfrontends.
 

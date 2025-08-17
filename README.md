@@ -1,6 +1,8 @@
-# MFE Toolkit - Enterprise Microfrontend Development Platform
+# 🚧 MFE Toolkit - Enterprise Microfrontend Development Platform [WIP]
 
-A comprehensive toolkit and reference architecture for building production-ready microfrontends. Features framework-agnostic core, framework-specific adapters, CLI tools, and cross-framework state management.
+> **⚠️ Work in Progress**: This project is under active development and not yet ready for production use. APIs may change without notice.
+
+A comprehensive toolkit and reference architecture for building microfrontends. Features framework-agnostic core, framework-specific adapters, CLI tools, and cross-framework state management.
 
 ## ✨ Key Features
 

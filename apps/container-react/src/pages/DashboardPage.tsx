@@ -23,7 +23,6 @@ import {
   HardDrive,
   Gauge,
   GitBranch,
-  Clock,
   ChevronRight,
 } from 'lucide-react';
 
@@ -65,7 +64,8 @@ export const DashboardPage: React.FC = () => {
           <div className="space-y-2">
             <h3 className="font-medium">Platform Info</h3>
             <p className="text-sm text-muted-foreground">
-              All platform services are running normally. Registry is using standard Manifest Schema.
+              All platform services are running normally. Registry is using standard Manifest
+              Schema.
             </p>
           </div>
         </div>
@@ -353,15 +353,6 @@ export const DashboardPage: React.FC = () => {
               </div>
             </div>
           </div>
-          <div className="ds-card-compact">
-            <div className="flex items-center gap-3">
-              <Clock className="h-4 w-4 ds-icon-neutral" />
-              <div>
-                <p className="text-xs ds-text-muted">Uptime</p>
-                <p className="text-sm font-semibold">99.9%</p>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
 
@@ -465,9 +456,7 @@ export const DashboardPage: React.FC = () => {
                     />
                     <div>
                       <div className="flex items-center gap-2">
-                        <h3 className="ds-card-title">
-                          {manifest.metadata?.displayName || name}
-                        </h3>
+                        <h3 className="ds-card-title">{manifest.metadata?.displayName || name}</h3>
                         <Badge variant="default" className="text-xs">
                           MFE
                         </Badge>
@@ -505,22 +494,21 @@ export const DashboardPage: React.FC = () => {
                   )}
                 </div>
 
-                {manifest.requirements?.services &&
-                  manifest.requirements.services.length > 0 && (
-                    <div className="mt-3">
-                      <p className="text-xs ds-text-muted mb-2">Required Services</p>
-                      <div className="flex flex-wrap gap-2">
-                        {manifest.requirements.services
-                          .filter((s) => !s.optional)
-                          .map((service) => (
-                            <Badge key={service.name} variant="outline" className="text-xs">
-                              {service.name}
-                              {service.version && ` (${service.version})`}
-                            </Badge>
-                          ))}
-                      </div>
+                {manifest.requirements?.services && manifest.requirements.services.length > 0 && (
+                  <div className="mt-3">
+                    <p className="text-xs ds-text-muted mb-2">Required Services</p>
+                    <div className="flex flex-wrap gap-2">
+                      {manifest.requirements.services
+                        .filter((s) => !s.optional)
+                        .map((service) => (
+                          <Badge key={service.name} variant="outline" className="text-xs">
+                            {service.name}
+                            {service.version && ` (${service.version})`}
+                          </Badge>
+                        ))}
                     </div>
-                  )}
+                  </div>
+                )}
 
                 {(hasErrors || hasWarnings) && (
                   <div className="mt-3 pt-3 border-t ds-border-accent-neutral">

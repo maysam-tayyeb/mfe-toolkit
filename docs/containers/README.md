@@ -6,7 +6,7 @@ This directory contains framework-specific implementations of the MFE container 
 
 ### [React Container](./react/)
 
-**Status**: ✅ Production Ready
+**Status**: 🚧 Work in Progress
 
 - Built with React 19 and Vite
 - Uses React Context for state management
@@ -44,7 +44,7 @@ This directory contains framework-specific implementations of the MFE container 
 
 | Feature           | React        | Vue        | Vanilla |
 | ----------------- | ------------ | ---------- | ------- |
-| Production Ready  | ✅           | 🚧         | 🚧      |
+| Status            | 🚧 WIP       | 📋 Planned | 📋 Planned |
 | Bundle Size       | ~45KB        | TBD        | TBD     |
 | TypeScript        | ✅           | ✅         | ✅      |
 | HMR Support       | ✅           | ✅         | ⚠️      |
@@ -57,7 +57,7 @@ This directory contains framework-specific implementations of the MFE container 
 ### Use React Container if:
 
 - Your team is familiar with React
-- You need production-ready solution today
+- You want to use React 19 features
 - You want extensive component library support
 - You prefer JSX syntax
 

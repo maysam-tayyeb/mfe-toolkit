@@ -1,4 +1,6 @@
-# @mfe-toolkit/cli
+# @mfe-toolkit/cli [WIP]
+
+> **⚠️ Work in Progress**: This package is under active development and not yet ready for production use. APIs may change without notice.
 
 Command-line interface for creating and managing microfrontends.
 

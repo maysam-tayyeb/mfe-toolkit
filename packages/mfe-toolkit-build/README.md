@@ -1,4 +1,6 @@
-# @mfe-toolkit/build
+# @mfe-toolkit/build [WIP]
+
+> **⚠️ Work in Progress**: This package is under active development and not yet ready for production use. APIs may change without notice.
 
 Build utilities for MFE development. This package provides a streamlined build system with automatic dependency externalization and versioned imports support.
 

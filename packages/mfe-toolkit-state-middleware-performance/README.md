@@ -1,4 +1,6 @@
-# @mfe-toolkit/state-middleware-performance
+# @mfe-toolkit/state-middleware-performance [WIP]
+
+> **⚠️ Work in Progress**: This package is under active development and not yet ready for production use. APIs may change without notice.
 
 Performance monitoring middleware for `@mfe-toolkit/state` that tracks state update metrics, memory usage, and helps identify performance bottlenecks.
 

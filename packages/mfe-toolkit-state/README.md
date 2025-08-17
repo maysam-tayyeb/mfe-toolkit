@@ -1,4 +1,6 @@
-# @mfe-toolkit/state
+# @mfe-toolkit/state [WIP]
+
+> **⚠️ Work in Progress**: This package is under active development and not yet ready for production use. APIs may change without notice.
 
 Framework-agnostic state management for microfrontends with cross-tab synchronization.
 
