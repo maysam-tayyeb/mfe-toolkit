@@ -67,7 +67,7 @@ export class ManifestGenerator {
           'solid-js': '^1.8.0',
         };
         baseManifest.compatibility.frameworks = {
-          'solid-js': '>=1.8.0',
+          solid: '>=1.8.0',
         };
         baseManifest.metadata.icon = '🔷';
         break;
