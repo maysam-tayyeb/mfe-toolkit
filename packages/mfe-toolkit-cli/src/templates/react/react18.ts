@@ -1,5 +1,5 @@
 import type { TemplateConfig, TemplateGenerator, ServiceConfig } from '../types';
-import { getServiceConfig, getFrameworkIcon } from '../types';
+import { getServiceConfig } from '../types';
 
 export class React18Template implements TemplateGenerator {
   private config: TemplateConfig;
@@ -106,7 +106,7 @@ export const App: React.FC<AppProps> = ({ services }) => {
       </div>
     </div>
   );
-};
+};`;
   }
 
   generatePackageJson(): object {
@@ -153,8 +153,8 @@ export const App: React.FC<AppProps> = ({ services }) => {
       alternativeUrls: [],
       dependencies: {
         runtime: {
-          'react': '^18.2.0 || ^19.0.0',
-          'react-dom': '^18.2.0 || ^19.0.0'
+          'react': '^18.0.0',
+          'react-dom': '^18.0.0'
         },
         peer: {
           '@mfe-toolkit/core': '^0.1.0'
@@ -169,13 +169,13 @@ export const App: React.FC<AppProps> = ({ services }) => {
           edge: '>=90'
         },
         frameworks: {
-          react: '^18.2.0 || ^19.0.0'
+          react: '^18.0.0'
         }
       },
       capabilities: {
         emits,
         listens,
-        features: [...features, 'react18-hooks', 'concurrent-features']
+        features: [...features, 'react18-hooks', 'concurrent-rendering', 'suspense', 'automatic-batching']
       },
       requirements: {
         services: requiredServices.map(name => ({ name, optional: name === 'logger' }))
@@ -186,7 +186,7 @@ export const App: React.FC<AppProps> = ({ services }) => {
         icon: '⚛️',
         author: { name: 'MFE Toolkit Team' },
         category: projectPath.includes('service-demos') ? 'service-demos' : 'custom',
-        tags: [this.config.serviceType || 'demo', 'react18', 'service']
+        tags: [this.config.serviceType || 'demo', 'react18', 'service', 'concurrent']
       },
       config: {
         loading: {
@@ -224,10 +224,10 @@ await buildMFE({
   generateTsConfig(): object {
     return {
       compilerOptions: {
-        target: 'ES2020',
+        target: 'ES2022',
         module: 'ESNext',
-        lib: ['ES2020', 'DOM', 'DOM.Iterable'],
-        jsx: 'react-jsx', // React 18 uses the new JSX transform
+        lib: ['ES2022', 'DOM', 'DOM.Iterable'],
+        jsx: 'react-jsx',
         moduleResolution: 'node',
         strict: true,
         esModuleInterop: true,
@@ -249,13 +249,13 @@ await buildMFE({
     return `# ${name}
 
 ## Description
-React 18 ${serviceType || 'general'} microfrontend with concurrent features and modern APIs.
+React 18 ${serviceType || 'general'} microfrontend with concurrent features and automatic batching.
 
 ## Features
-- React 18 with createRoot API
-- Concurrent rendering capabilities
-- Automatic batching
-- useTransition and Suspense support
+- React 18 with Concurrent Rendering
+- Automatic batching for better performance
+- Suspense for data fetching
+- Transitions API ready
 - ${serviceType === 'modal' ? 'Modal service integration' : serviceType === 'notification' ? 'Notification service integration' : 'General MFE functionality'}
 - Design system integration
 - TypeScript support
@@ -277,11 +277,11 @@ pnpm clean
 \`\`\`
 
 ## React 18 Specifics
-This MFE leverages React 18's modern features:
-- \`createRoot()\` for concurrent rendering
-- \`useTransition()\` for non-urgent updates
-- Automatic batching of state updates
+This MFE leverages React 18's concurrent features:
+- Automatic batching for state updates
+- Concurrent rendering capabilities
 - Improved Suspense boundaries
+- Transition API support
 
 ## Integration
 Designed to be loaded by the MFE container application with shared dependencies via import maps.

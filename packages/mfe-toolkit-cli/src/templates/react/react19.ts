@@ -1,5 +1,5 @@
 import type { TemplateConfig, TemplateGenerator, ServiceConfig } from '../types';
-import { getServiceConfig, getFrameworkIcon } from '../types';
+import { getServiceConfig } from '../types';
 
 export class React19Template implements TemplateGenerator {
   private config: TemplateConfig;
@@ -106,7 +106,7 @@ export const App: React.FC<AppProps> = ({ services }) => {
       </div>
     </div>
   );
-};
+};`;
   }
 
   generatePackageJson(): object {
@@ -175,7 +175,7 @@ export const App: React.FC<AppProps> = ({ services }) => {
       capabilities: {
         emits,
         listens,
-        features: [...features, 'react19-hooks', 'server-components-ready', 'optimistic-ui']
+        features: [...features, 'react19-hooks', 'server-components-ready', 'optimistic-ui', 'use-hook']
       },
       requirements: {
         services: requiredServices.map(name => ({ name, optional: name === 'logger' }))
