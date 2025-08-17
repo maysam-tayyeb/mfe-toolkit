@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed - January 2025
+
+- **Project Status**: Marked entire project as Work in Progress (WIP)
+  - Added WIP warnings to all package README files
+  - Removed "production ready" mentions from documentation
+  - Updated main README with prominent WIP status indicator
+- **Branch Consolidation**: Merged feature/modal-service-demos into feature/design-system-and-reorg
+- **Main Branch Update**: Merged feature/design-system-and-reorg into main branch
+  - Integrated new design system implementation with CSS-first approach
+  - Added reorganized MFE structure with new service demos
+  - Included modal service demos for multiple frameworks (React 17/18/19, Vue 3, Solid.js, Vanilla)
+  - Integrated event bus trading scenario demos
+  - Added notification service demos
+  - Updated dashboard and homepage with design system
+  - Included build system improvements with new @mfe-toolkit/build package
+  - Enhanced CLI with better template support
+
 ### Added - November 2024
 
 - **Event Bus V3 Demo Page** with interactive Trading Terminal scenario
