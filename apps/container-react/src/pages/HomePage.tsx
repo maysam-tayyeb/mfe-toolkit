@@ -166,12 +166,12 @@ export const HomePage: React.FC = () => {
           </p>
           <div className="ds-stack-sm">
             <Link
-              to="/universal-state-demo"
+              to="/services/event-bus"
               className="ds-card-compact ds-hover-scale flex items-center justify-between group"
             >
               <div className="flex items-center gap-3">
-                <Database className="h-4 w-4 ds-icon-success" />
-                <span className="ds-text-sm font-medium">State Management</span>
+                <Radio className="h-4 w-4 ds-icon-success" />
+                <span className="ds-text-sm font-medium">Trading Platform</span>
               </div>
               <Badge variant="secondary" className="ds-text-xs">
                 Live
@@ -179,12 +179,12 @@ export const HomePage: React.FC = () => {
             </Link>
 
             <Link
-              to="/mfe-communication"
+              to="/services/notifications"
               className="ds-card-compact ds-hover-scale flex items-center justify-between group"
             >
               <div className="flex items-center gap-3">
-                <Radio className="h-4 w-4 ds-icon-info" />
-                <span className="ds-text-sm font-medium">Event Communication</span>
+                <AlertCircle className="h-4 w-4 ds-icon-info" />
+                <span className="ds-text-sm font-medium">Notifications</span>
               </div>
               <Badge variant="secondary" className="ds-text-xs">
                 Live
@@ -192,12 +192,12 @@ export const HomePage: React.FC = () => {
             </Link>
 
             <Link
-              to="/error-boundary-demo"
+              to="/services/modal"
               className="ds-card-compact ds-hover-scale flex items-center justify-between group"
             >
               <div className="flex items-center gap-3">
-                <AlertCircle className="h-4 w-4 ds-icon-danger" />
-                <span className="ds-text-sm font-medium">Error Handling</span>
+                <Blocks className="h-4 w-4 ds-icon-warning" />
+                <span className="ds-text-sm font-medium">Modal Service</span>
               </div>
               <Badge variant="secondary" className="ds-text-xs">
                 Live
@@ -213,45 +213,45 @@ export const HomePage: React.FC = () => {
             <h3 className="ds-section-title">Microfrontends</h3>
           </div>
           <p className="ds-text-sm ds-text-muted ds-mb-md">
-            Framework-specific MFE implementations
+            Real-world trading platform MFEs
           </p>
           <div className="ds-stack-sm">
             <Link
-              to={`/mfe/${MFE_CONFIG.serviceExplorer.id}`}
+              to="/services/event-bus"
               className="ds-card-compact ds-hover-scale flex items-center justify-between group"
             >
               <div className="flex items-center gap-3">
-                <Package className="h-4 w-4 ds-icon-primary" />
-                <span className="text-sm font-medium">Service Explorer</span>
+                <Activity className="h-4 w-4 ds-icon-primary" />
+                <span className="text-sm font-medium">Market Watch</span>
               </div>
               <Badge variant="outline" className="text-xs">
-                React 19
+                React
               </Badge>
             </Link>
 
             <Link
-              to={`/mfe/${MFE_CONFIG.legacyServiceExplorer.id}`}
+              to="/services/event-bus"
               className="ds-card-compact ds-hover-scale flex items-center justify-between group"
             >
               <div className="flex items-center gap-3">
-                <Zap className="h-4 w-4 ds-icon-warning" />
-                <span className="text-sm font-medium">Legacy Explorer</span>
+                <Zap className="h-4 w-4 ds-icon-success" />
+                <span className="text-sm font-medium">Trading Terminal</span>
               </div>
               <Badge variant="outline" className="text-xs">
-                React 17
+                Vue 3
               </Badge>
             </Link>
 
             <Link
-              to="/mfe/eventDemo"
+              to="/services/event-bus"
               className="ds-card-compact ds-hover-scale flex items-center justify-between group"
             >
               <div className="flex items-center gap-3">
-                <Activity className="h-4 w-4 ds-icon-info" />
-                <span className="text-sm font-medium">Event Demo</span>
+                <Package className="h-4 w-4 ds-icon-info" />
+                <span className="text-sm font-medium">Event Playground</span>
               </div>
               <Badge variant="outline" className="text-xs">
-                Events
+                Solid.js
               </Badge>
             </Link>
           </div>
