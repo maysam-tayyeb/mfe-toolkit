@@ -115,6 +115,12 @@ export async function startDevServer(options: ServerOptions = {}) {
       position: relative;
     }
     
+    #root.viewport-container.viewport-auto-height {
+      height: auto;
+      min-height: var(--viewport-min-height, 200px);
+      max-height: var(--viewport-max-height, 100vh);
+    }
+    
     #root.viewport-fullscreen {
       width: 100%;
       height: 100vh;
@@ -670,7 +676,17 @@ export async function startDevServer(options: ServerOptions = {}) {
                 <option value="px">px</option>
                 <option value="%">%</option>
                 <option value="vh">vh</option>
+                <option value="auto">auto</option>
               </select>
+            </div>
+            <div class="viewport-input-group">
+              <label style="flex: none; width: auto;">
+                <input type="checkbox" id="viewport-auto-height" onchange="toggleAutoHeight()" style="width: auto; margin-right: 6px;">
+                Auto Height
+              </label>
+              <span style="font-size: 10px; color: #9ca3af; margin-left: 8px;">
+                (adapts to content)
+              </span>
             </div>
             <div class="viewport-input-group">
               <button onclick="applyCustomViewport()" style="flex: 1; padding: 6px; background: #3b82f6; color: white; border: none; border-radius: 4px; cursor: pointer;">
@@ -968,6 +984,7 @@ export async function startDevServer(options: ServerOptions = {}) {
       { name: 'Fullscreen', width: '100%', height: '100vh', icon: '⛶' },
       { name: 'Sidebar', width: 350, height: '100vh', icon: '📑' },
       { name: 'Widget', width: 400, height: 300, icon: '◻' },
+      { name: 'Widget Auto', width: 400, height: 'auto', icon: '◫' },
       { name: 'Modal', width: 600, height: 400, icon: '🗗' }
     ];
     
@@ -999,6 +1016,7 @@ export async function startDevServer(options: ServerOptions = {}) {
     function applyViewportPreset(preset) {
       const root = document.getElementById('root');
       const indicator = document.getElementById('viewport-indicator');
+      const autoHeightCheckbox = document.getElementById('viewport-auto-height');
       
       // Update active button
       document.querySelectorAll('.viewport-preset-btn').forEach(btn => {
@@ -1013,12 +1031,23 @@ export async function startDevServer(options: ServerOptions = {}) {
         root.className = 'viewport-fullscreen';
         document.documentElement.style.removeProperty('--viewport-width');
         document.documentElement.style.removeProperty('--viewport-height');
+        autoHeightCheckbox.checked = false;
       } else {
-        root.className = 'viewport-container';
+        const isAutoHeight = preset.height === 'auto';
+        root.className = isAutoHeight ? 'viewport-container viewport-auto-height' : 'viewport-container';
+        
         const width = typeof preset.width === 'number' ? \`\${preset.width}px\` : preset.width;
-        const height = typeof preset.height === 'number' ? \`\${preset.height}px\` : preset.height;
         document.documentElement.style.setProperty('--viewport-width', width);
-        document.documentElement.style.setProperty('--viewport-height', height);
+        
+        if (!isAutoHeight) {
+          const height = typeof preset.height === 'number' ? \`\${preset.height}px\` : preset.height;
+          document.documentElement.style.setProperty('--viewport-height', height);
+        } else {
+          document.documentElement.style.removeProperty('--viewport-height');
+        }
+        
+        // Update auto height checkbox
+        autoHeightCheckbox.checked = isAutoHeight;
       }
       
       // Update current display
@@ -1034,7 +1063,8 @@ export async function startDevServer(options: ServerOptions = {}) {
       localStorage.setItem('devtools-viewport', JSON.stringify({
         name: preset.name,
         width: preset.width,
-        height: preset.height
+        height: preset.height,
+        autoHeight: preset.height === 'auto'
       }));
     }
     
@@ -1043,20 +1073,56 @@ export async function startDevServer(options: ServerOptions = {}) {
       const heightInput = document.getElementById('viewport-height');
       const widthUnit = document.getElementById('viewport-width-unit').value;
       const heightUnit = document.getElementById('viewport-height-unit').value;
+      const autoHeight = document.getElementById('viewport-auto-height').checked;
       
-      if (!widthInput.value || !heightInput.value) {
-        alert('Please enter both width and height values');
+      if (!widthInput.value) {
+        alert('Please enter a width value');
+        return;
+      }
+      
+      if (!autoHeight && !heightInput.value) {
+        alert('Please enter a height value or enable auto height');
         return;
       }
       
       const width = widthInput.value + widthUnit;
-      const height = heightInput.value + heightUnit;
+      const height = autoHeight ? 'auto' : (heightInput.value + heightUnit);
       
       applyViewportPreset({
         name: 'Custom',
         width: width,
         height: height
       });
+    };
+    
+    window.toggleAutoHeight = function() {
+      const checkbox = document.getElementById('viewport-auto-height');
+      const heightInput = document.getElementById('viewport-height');
+      const heightUnit = document.getElementById('viewport-height-unit');
+      
+      if (checkbox.checked) {
+        heightInput.disabled = true;
+        heightUnit.disabled = true;
+        heightInput.style.opacity = '0.5';
+        heightUnit.style.opacity = '0.5';
+        
+        // Get current width and apply with auto height
+        const widthInput = document.getElementById('viewport-width');
+        const widthUnitValue = document.getElementById('viewport-width-unit').value;
+        if (widthInput.value) {
+          const width = widthInput.value + widthUnitValue;
+          applyViewportPreset({
+            name: 'Custom',
+            width: width,
+            height: 'auto'
+          });
+        }
+      } else {
+        heightInput.disabled = false;
+        heightUnit.disabled = false;
+        heightInput.style.opacity = '1';
+        heightUnit.style.opacity = '1';
+      }
     };
     
     // Load saved viewport or apply default

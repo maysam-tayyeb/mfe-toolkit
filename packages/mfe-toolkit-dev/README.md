@@ -65,7 +65,7 @@ export default {
       // Custom viewport dimensions (when default is 'custom')
       custom: {
         width: 800,      // Number (pixels) or string ('100%', '50vw')
-        height: 600,     // Number (pixels) or string ('100vh', '400px')
+        height: 'auto',  // Number (pixels) or string ('100vh', '400px', 'auto')
         name: 'Custom Dashboard'
       },
       
@@ -93,6 +93,7 @@ The dev server includes these default viewport presets:
 | Fullscreen | 100%×100vh | Full browser viewport |
 | Sidebar | 350×100vh | Sidebar panel/drawer |
 | Widget | 400×300 | Dashboard widget |
+| Widget Auto | 400×auto | Widget with content-based height |
 | Modal | 600×400 | Modal dialog |
 
 #### Using Viewport Controls
@@ -100,7 +101,11 @@ The dev server includes these default viewport presets:
 1. **In Dev Tools**: Click the "Viewport" tab to access controls
 2. **Quick Presets**: Click any preset button to instantly resize
 3. **Custom Size**: Enter specific dimensions and units (px, %, vw, vh)
-4. **Keyboard Shortcuts**: Coming soon
+4. **Auto Height**: Enable checkbox to let container adapt to content height
+5. **Height Options**:
+   - Fixed height: Specify in px, %, or vh
+   - Auto height: Container grows/shrinks with content
+   - Useful for widgets, cards, and embedded components
 
 The viewport size persists across page reloads, making it easy to test at specific sizes during development.
 
