@@ -678,6 +678,53 @@ pnpm validate           # Run all checks
 
 ---
 
+## GitHub Pages Deployment Plan
+
+### Overview
+Deploy the MFE container application to GitHub Pages while maintaining the ability to run locally. This plan uses the existing import map generator with environment-based configuration.
+
+### Implementation Plan
+
+#### Phase 1: Environment Configuration
+- **Import Map Generator Enhancement**: Add `NODE_ENV=production` support to replace localhost URLs with GitHub Pages URLs
+- **Production Registry**: Create `mfe-registry.production.json` with GitHub Pages URLs
+- **Vite Configuration**: Add base path configuration for GitHub Pages deployment
+
+#### Phase 2: Build Pipeline
+- **Build Scripts**: Add `build:gh-pages` script for production builds
+- **Asset Preparation**: Script to copy MFEs and design system to container dist
+- **GitHub Actions**: Automated deployment workflow on push to main
+
+#### Phase 3: Runtime Configuration
+- **Registry Context**: Auto-detect GitHub Pages deployment and load production registry
+- **Base URL Resolution**: Dynamic URL resolution based on deployment environment
+
+### Technical Implementation
+
+#### Key Files to Modify
+1. `scripts/generate-import-map.ts` - Environment-based URL generation
+2. `apps/container-react/vite.config.ts` - Base path configuration
+3. `apps/container-react/src/contexts/RegistryContext.tsx` - Production registry loading
+4. `.github/workflows/deploy.yml` - GitHub Actions deployment workflow
+
+#### Testing Strategy
+- **Local Development**: Ensure no impact on local development workflow
+- **Production Build**: Test with `npx serve` before deployment
+- **GitHub Pages**: Verify all MFEs load correctly from GitHub Pages URLs
+- **CORS Validation**: Check for any cross-origin issues
+
+### Deployment URL
+Once deployed, the application will be accessible at:
+```
+https://[username].github.io/mfe-toolkit
+```
+
+### Rollback Plan
+- Original build commands remain unchanged
+- Local development workflow unaffected
+- Can disable GitHub Actions if needed
+- All changes are additive, not destructive
+
 ## Appendix
 
 ### File Structure
