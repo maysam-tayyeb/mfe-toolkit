@@ -43,3 +43,6 @@ apps/*/src/**/*.d.ts.map
 test-results/
 playwright-report/
 coverage/
+
+# Playwright MCP screenshots (local only)
+.playwright-mcp/
