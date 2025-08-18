@@ -3,6 +3,7 @@ import cors from 'cors';
 import { resolve, join } from 'path';
 import { readFileSync, existsSync } from 'fs';
 import pc from 'picocolors';
+import { loadConfig, resolvePath } from './config.js';
 
 export interface ServerOptions {
   cwd?: string;
@@ -10,7 +11,11 @@ export interface ServerOptions {
 }
 
 export async function startDevServer(options: ServerOptions = {}) {
-  const { cwd = process.cwd(), port = 3100 } = options;
+  const { cwd = process.cwd() } = options;
+  
+  // Load configuration
+  const config = await loadConfig(cwd);
+  const port = options.port || config?.dev?.port || 3100;
   
   const app = express();
   app.use(cors());
@@ -19,12 +24,62 @@ export async function startDevServer(options: ServerOptions = {}) {
   const distPath = resolve(cwd, 'dist');
   app.use('/dist', express.static(distPath));
   
+  // Serve node_modules for design system files
+  const nodeModulesPath = resolve(cwd, 'node_modules');
+  if (existsSync(nodeModulesPath)) {
+    app.use('/node_modules', express.static(nodeModulesPath));
+  }
+  
+  // Serve workspace root for monorepo packages
+  const workspaceRoot = resolve(cwd, '../../../..');
+  if (existsSync(workspaceRoot)) {
+    app.use('/workspace', express.static(workspaceRoot));
+  }
+  
   // Get MFE name from package.json
   const packageJson = JSON.parse(readFileSync(resolve(cwd, 'package.json'), 'utf-8'));
   const mfeName = packageJson.name?.split('/').pop() || 'mfe';
   
   // Serve the development container HTML
-  app.get('/', (req, res) => {
+  app.get('/', async (req, res) => {
+    // Prepare style links
+    const styleLinks = config?.dev?.styles?.map(stylePath => {
+      // If it's a relative path to workspace, convert to workspace URL
+      if (stylePath.startsWith('../')) {
+        // Remove leading ../ segments and use workspace route
+        const cleanPath = stylePath.replace(/^(\.\.\/)+/, '');
+        return `<link rel="stylesheet" href="/workspace/${cleanPath}">`;
+      } else if (stylePath.includes('node_modules')) {
+        // For node_modules paths
+        return `<link rel="stylesheet" href="/node_modules/${stylePath.split('node_modules/')[1]}">`;
+      }
+      // For absolute URLs or other paths
+      return `<link rel="stylesheet" href="${stylePath}">`;
+    }).join('\n    ') || '';
+    
+    // Prepare script tags
+    const scriptTags = config?.dev?.scripts?.map(scriptPath => {
+      // If it's a relative path to workspace, convert to workspace URL
+      if (scriptPath.startsWith('../')) {
+        // Remove leading ../ segments and use workspace route
+        const cleanPath = scriptPath.replace(/^(\.\.\/)+/, '');
+        return `<script src="/workspace/${cleanPath}"></script>`;
+      } else if (scriptPath.includes('node_modules')) {
+        // For node_modules paths
+        return `<script src="/node_modules/${scriptPath.split('node_modules/')[1]}"></script>`;
+      }
+      // For absolute URLs or other paths
+      return `<script src="${scriptPath}"></script>`;
+    }).join('\n    ') || '';
+    
+    // Prepare import map
+    const importMapScript = config?.dev?.importMap ? `
+  <script type="importmap">
+  {
+    "imports": ${JSON.stringify(config.dev.importMap, null, 2)}
+  }
+  </script>` : '';
+    
     const html = `
 <!DOCTYPE html>
 <html lang="en">
@@ -32,6 +87,9 @@ export async function startDevServer(options: ServerOptions = {}) {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${mfeName} - Development</title>
+  ${styleLinks}
+  ${importMapScript}
+  ${config?.dev?.headHtml || ''}
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { 
@@ -430,6 +488,8 @@ export async function startDevServer(options: ServerOptions = {}) {
     
     console.log('✅ MFE loaded with mock services');
   </script>
+  ${scriptTags}
+  ${config?.dev?.bodyHtml || ''}
 </body>
 </html>
     `;
