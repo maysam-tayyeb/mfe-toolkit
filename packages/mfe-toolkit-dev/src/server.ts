@@ -208,17 +208,136 @@ export async function startDevServer(options: ServerOptions = {}) {
       background: #f9fafb;
       border-radius: 4px;
       font-size: 12px;
+      border-left: 3px solid #3b82f6;
+    }
+    
+    .event-timestamp {
+      font-size: 11px;
+      color: #9ca3af;
+      font-family: monospace;
     }
     
     .event-name {
       font-weight: 600;
       color: #1e293b;
+      margin-top: 2px;
     }
     
     .event-data {
       color: #6b7280;
       margin-top: 4px;
       font-family: monospace;
+      background: #ffffff;
+      padding: 4px;
+      border-radius: 2px;
+      white-space: pre-wrap;
+      word-break: break-all;
+      max-height: 100px;
+      overflow-y: auto;
+    }
+    
+    .event-emitter {
+      padding: 12px;
+      background: #f3f4f6;
+      border-radius: 6px;
+      margin-bottom: 12px;
+      border: 1px solid #e5e7eb;
+    }
+    
+    .event-emitter-title {
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #1e293b;
+      font-size: 13px;
+    }
+    
+    .event-emitter-form {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    
+    .event-emitter-row {
+      display: flex;
+      gap: 8px;
+    }
+    
+    .event-emitter input[type="text"], 
+    .event-emitter textarea {
+      flex: 1;
+      padding: 6px 8px;
+      border: 1px solid #d1d5db;
+      border-radius: 4px;
+      font-size: 12px;
+      font-family: inherit;
+    }
+    
+    .event-emitter textarea {
+      min-height: 60px;
+      font-family: monospace;
+      resize: vertical;
+    }
+    
+    .event-emitter button {
+      padding: 6px 12px;
+      background: #3b82f6;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 12px;
+      cursor: pointer;
+      font-weight: 500;
+    }
+    
+    .event-emitter button:hover {
+      background: #2563eb;
+    }
+    
+    .event-presets {
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+    
+    .event-preset {
+      padding: 4px 8px;
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 4px;
+      font-size: 11px;
+      cursor: pointer;
+      color: #6b7280;
+    }
+    
+    .event-preset:hover {
+      background: #f9fafb;
+      border-color: #3b82f6;
+      color: #3b82f6;
+    }
+    
+    .event-logs-container {
+      flex: 1;
+      overflow-y: auto;
+      max-height: 250px;
+      padding: 8px;
+    }
+    
+    .event-clear-btn {
+      position: absolute;
+      top: 12px;
+      right: 50px;
+      padding: 4px 8px;
+      background: #ef4444;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 11px;
+      cursor: pointer;
+    }
+    
+    .event-clear-btn:hover {
+      background: #dc2626;
     }
     
     .metrics-grid {
@@ -270,7 +389,28 @@ export async function startDevServer(options: ServerOptions = {}) {
         <div id="console-logs"></div>
       </div>
       <div id="events-tab" style="display: none;">
-        <div id="event-logs"></div>
+        <button class="event-clear-btn" onclick="clearEvents()">Clear</button>
+        <div class="event-emitter">
+          <div class="event-emitter-title">Emit Event</div>
+          <div class="event-emitter-form">
+            <div class="event-emitter-row">
+              <input type="text" id="event-name" placeholder="Event name (e.g., user:login)" />
+            </div>
+            <textarea id="event-data" placeholder='Event data (JSON format, e.g., {"userId": "123"})'>{}</textarea>
+            <div class="event-emitter-row">
+              <button onclick="emitCustomEvent()">Emit Event</button>
+            </div>
+            <div class="event-presets">
+              <div class="event-preset" onclick="loadPreset('user:login', {userId: '123', timestamp: Date.now()})">user:login</div>
+              <div class="event-preset" onclick="loadPreset('cart:add', {productId: 'ABC', quantity: 1})">cart:add</div>
+              <div class="event-preset" onclick="loadPreset('navigation', {path: '/dashboard'})">navigation</div>
+              <div class="event-preset" onclick="loadPreset('api:request', {method: 'GET', url: '/api/data'})">api:request</div>
+            </div>
+          </div>
+        </div>
+        <div class="event-logs-container">
+          <div id="event-logs"></div>
+        </div>
       </div>
       <div id="metrics-tab" style="display: none;">
         <div class="metrics-grid">
@@ -347,8 +487,8 @@ export async function startDevServer(options: ServerOptions = {}) {
       document.getElementById('metric-errors').textContent = metrics.errors;
     }
     
-    function addEvent(eventName, data) {
-      const entry = { eventName, data, timestamp: new Date() };
+    function addEvent(eventName, data, source = 'MFE') {
+      const entry = { eventName, data, timestamp: new Date(), source };
       events.push(entry);
       metrics.events++;
       
@@ -356,18 +496,69 @@ export async function startDevServer(options: ServerOptions = {}) {
       const eventDiv = document.getElementById('event-logs');
       const eventEntry = document.createElement('div');
       eventEntry.className = 'event-entry';
+      
+      const time = entry.timestamp.toLocaleTimeString('en-US', { 
+        hour12: false, 
+        hour: '2-digit', 
+        minute: '2-digit', 
+        second: '2-digit',
+        fractionalSecondDigits: 3
+      });
+      
+      const dataStr = data ? JSON.stringify(data, null, 2) : 'undefined';
+      
       eventEntry.innerHTML = \`
+        <div class="event-timestamp">[\${time}] [\${source}]</div>
         <div class="event-name">\${eventName}</div>
-        <div class="event-data">\${JSON.stringify(data, null, 2)}</div>
+        \${dataStr !== 'undefined' ? \`<div class="event-data">\${dataStr}</div>\` : ''}
       \`;
       eventDiv.appendChild(eventEntry);
       
       // Auto-scroll
-      eventDiv.scrollTop = eventDiv.scrollHeight;
+      const container = document.querySelector('.event-logs-container');
+      if (container) {
+        container.scrollTop = container.scrollHeight;
+      }
       
       // Update metrics
       document.getElementById('metric-events').textContent = metrics.events;
     }
+    
+    // Event emitter functions
+    window.emitCustomEvent = function() {
+      const eventName = document.getElementById('event-name').value;
+      const eventDataStr = document.getElementById('event-data').value;
+      
+      if (!eventName) {
+        alert('Please enter an event name');
+        return;
+      }
+      
+      let eventData;
+      try {
+        eventData = eventDataStr ? JSON.parse(eventDataStr) : undefined;
+      } catch (e) {
+        alert('Invalid JSON format in event data');
+        return;
+      }
+      
+      // Emit the event directly
+      console.log('[EventBus] Emit:', eventName, eventData);
+      addEvent(eventName, eventData, 'DevTools');
+      window.dispatchEvent(new CustomEvent('mfe-event', { detail: { event: eventName, data: eventData } }));
+    };
+    
+    window.loadPreset = function(eventName, eventData) {
+      document.getElementById('event-name').value = eventName;
+      document.getElementById('event-data').value = JSON.stringify(eventData, null, 2);
+    };
+    
+    window.clearEvents = function() {
+      events = [];
+      metrics.events = 0;
+      document.getElementById('event-logs').innerHTML = '';
+      document.getElementById('metric-events').textContent = '0';
+    };
     
     // Keyboard shortcut
     document.addEventListener('keydown', (e) => {
