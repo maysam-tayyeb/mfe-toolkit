@@ -50,6 +50,60 @@ Your MFE will be available at `http://localhost:3100` with:
 
 ## Configuration
 
+### Viewport Configuration
+
+Configure viewport presets to simulate different container sizes and test responsive behavior:
+
+```javascript
+// mfe.config.mjs
+export default {
+  dev: {
+    viewport: {
+      // Default viewport on load
+      default: 'desktop', // 'mobile' | 'tablet' | 'desktop' | 'wide' | 'fullscreen' | 'sidebar' | 'widget' | 'modal' | 'custom'
+      
+      // Custom viewport dimensions (when default is 'custom')
+      custom: {
+        width: 800,      // Number (pixels) or string ('100%', '50vw')
+        height: 600,     // Number (pixels) or string ('100vh', '400px')
+        name: 'Custom Dashboard'
+      },
+      
+      // Add project-specific viewport presets
+      presets: [
+        { name: 'Dashboard Widget', width: 450, height: 350, icon: '📊' },
+        { name: 'Notification Panel', width: 380, height: 500, icon: '🔔' },
+        { name: 'Settings Modal', width: 600, height: 450, icon: '⚙️' }
+      ]
+    }
+  }
+};
+```
+
+#### Built-in Viewport Presets
+
+The dev server includes these default viewport presets:
+
+| Preset | Dimensions | Use Case |
+|--------|------------|----------|
+| Mobile | 375×667 | iPhone-sized mobile view |
+| Tablet | 768×1024 | iPad portrait view |
+| Desktop | 1280×720 | Standard desktop monitor |
+| Wide | 1920×1080 | Wide/full HD display |
+| Fullscreen | 100%×100vh | Full browser viewport |
+| Sidebar | 350×100vh | Sidebar panel/drawer |
+| Widget | 400×300 | Dashboard widget |
+| Modal | 600×400 | Modal dialog |
+
+#### Using Viewport Controls
+
+1. **In Dev Tools**: Click the "Viewport" tab to access controls
+2. **Quick Presets**: Click any preset button to instantly resize
+3. **Custom Size**: Enter specific dimensions and units (px, %, vw, vh)
+4. **Keyboard Shortcuts**: Coming soon
+
+The viewport size persists across page reloads, making it easy to test at specific sizes during development.
+
 ### Design System Integration
 
 Create an `mfe.config.mjs` file in your MFE root to load custom styles, scripts, or modules:
@@ -245,9 +299,10 @@ The built-in dev tools panel provides:
 - Automatic scrolling to latest entries
 
 ### Events Tab
-- Tracks all emitted events
-- Shows event names and payloads
-- Useful for debugging inter-MFE communication
+- View event log with timestamps and source labels
+- Emit custom events with JSON payloads
+- Quick preset buttons for common events
+- Clear event history
 
 ### Metrics Tab
 - Live counters for:
@@ -256,9 +311,21 @@ The built-in dev tools panel provides:
   - Log entries
   - Errors caught
 
+### Viewport Tab
+- Quick viewport preset buttons (Mobile, Tablet, Desktop, etc.)
+- Custom width/height input with unit selection (px, %, vw, vh)
+- Visual indicator shows current viewport size
+- Settings persist across page reloads
+- Configure default viewport in `mfe.config.mjs`
+
+### Features
+- **Draggable**: Move the panel anywhere on screen
+- **Resizable**: Drag corner to resize
+- **Minimizable**: Hide panel with floating restore button
+- **Persistent**: Position and size saved across sessions
+
 ### Keyboard Shortcuts
 - `Ctrl+Shift+D`: Toggle dev tools panel
-- Panel can also be minimized/maximized via UI button
 
 ## Static File Serving
 

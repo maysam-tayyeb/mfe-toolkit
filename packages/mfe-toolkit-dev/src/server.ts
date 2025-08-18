@@ -98,10 +98,50 @@ export async function startDevServer(options: ServerOptions = {}) {
       min-height: 100vh;
     }
     #root { 
-      min-height: 100vh;
       background: white;
       margin: 0 auto;
-      max-width: 1400px;
+      transition: all 0.3s ease;
+    }
+    
+    /* Viewport container styles */
+    #root.viewport-container {
+      width: var(--viewport-width, 100%);
+      height: var(--viewport-height, 100vh);
+      max-width: 100vw;
+      max-height: 100vh;
+      margin: 20px auto;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+      overflow: auto;
+      position: relative;
+    }
+    
+    #root.viewport-fullscreen {
+      width: 100%;
+      height: 100vh;
+      margin: 0;
+      box-shadow: none;
+    }
+    
+    /* Viewport size indicator */
+    .viewport-indicator {
+      position: fixed;
+      top: 50px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(30, 41, 59, 0.9);
+      color: white;
+      padding: 4px 12px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-family: monospace;
+      z-index: 1000;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    
+    .viewport-indicator.visible {
+      opacity: 1;
     }
     .dev-banner {
       background: #1e293b;
@@ -444,13 +484,101 @@ export async function startDevServer(options: ServerOptions = {}) {
       font-weight: 600;
       color: #1e293b;
     }
+    
+    /* Viewport Controls */
+    .viewport-controls {
+      padding: 12px;
+    }
+    
+    .viewport-presets {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    
+    .viewport-preset-btn {
+      padding: 8px;
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 6px;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+      font-size: 12px;
+    }
+    
+    .viewport-preset-btn:hover {
+      background: #f3f4f6;
+      border-color: #3b82f6;
+    }
+    
+    .viewport-preset-btn.active {
+      background: #3b82f6;
+      color: white;
+      border-color: #3b82f6;
+    }
+    
+    .viewport-preset-icon {
+      font-size: 20px;
+      display: block;
+      margin-bottom: 4px;
+    }
+    
+    .viewport-custom-controls {
+      background: #f9fafb;
+      padding: 12px;
+      border-radius: 6px;
+      margin-top: 12px;
+    }
+    
+    .viewport-input-group {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    
+    .viewport-input-group label {
+      font-size: 12px;
+      color: #6b7280;
+      width: 50px;
+    }
+    
+    .viewport-input-group input {
+      flex: 1;
+      padding: 4px 8px;
+      border: 1px solid #d1d5db;
+      border-radius: 4px;
+      font-size: 12px;
+    }
+    
+    .viewport-input-group select {
+      padding: 4px 8px;
+      border: 1px solid #d1d5db;
+      border-radius: 4px;
+      font-size: 12px;
+      background: white;
+    }
+    
+    .viewport-current {
+      margin-top: 12px;
+      padding: 8px;
+      background: #1e293b;
+      color: white;
+      border-radius: 4px;
+      font-size: 11px;
+      font-family: monospace;
+      text-align: center;
+    }
   </style>
 </head>
 <body>
   <div class="dev-banner">
     🚀 MFE Development Mode - ${mfeName} | Press Ctrl+Shift+D to toggle dev tools
   </div>
-  <div id="root"></div>
+  <div class="viewport-indicator" id="viewport-indicator"></div>
+  <div id="root" class="viewport-fullscreen"></div>
   
   <!-- Floating Restore Button -->
   <button id="devtools-restore-btn" onclick="toggleDevTools()" title="Open Dev Tools">🛠️</button>
@@ -469,6 +597,7 @@ export async function startDevServer(options: ServerOptions = {}) {
       <button class="devtools-tab active" onclick="switchTab('console')">Console</button>
       <button class="devtools-tab" onclick="switchTab('events')">Events</button>
       <button class="devtools-tab" onclick="switchTab('metrics')">Metrics</button>
+      <button class="devtools-tab" onclick="switchTab('viewport')">Viewport</button>
     </div>
     <div class="devtools-content" id="devtools-content">
       <div id="console-tab">
@@ -518,6 +647,43 @@ export async function startDevServer(options: ServerOptions = {}) {
           </div>
         </div>
       </div>
+      <div id="viewport-tab" style="display: none;">
+        <div class="viewport-controls">
+          <div class="viewport-presets" id="viewport-presets">
+            <!-- Preset buttons will be added dynamically -->
+          </div>
+          
+          <div class="viewport-custom-controls">
+            <div class="viewport-input-group">
+              <label>Width:</label>
+              <input type="text" id="viewport-width" placeholder="e.g., 1280 or 100%">
+              <select id="viewport-width-unit">
+                <option value="px">px</option>
+                <option value="%">%</option>
+                <option value="vw">vw</option>
+              </select>
+            </div>
+            <div class="viewport-input-group">
+              <label>Height:</label>
+              <input type="text" id="viewport-height" placeholder="e.g., 720 or 100vh">
+              <select id="viewport-height-unit">
+                <option value="px">px</option>
+                <option value="%">%</option>
+                <option value="vh">vh</option>
+              </select>
+            </div>
+            <div class="viewport-input-group">
+              <button onclick="applyCustomViewport()" style="flex: 1; padding: 6px; background: #3b82f6; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                Apply Custom Size
+              </button>
+            </div>
+          </div>
+          
+          <div class="viewport-current" id="viewport-current">
+            Current: Fullscreen
+          </div>
+        </div>
+      </div>
     </div>
     <div class="devtools-resize-handle"></div>
   </div>
@@ -558,6 +724,7 @@ export async function startDevServer(options: ServerOptions = {}) {
       document.getElementById('console-tab').style.display = 'none';
       document.getElementById('events-tab').style.display = 'none';
       document.getElementById('metrics-tab').style.display = 'none';
+      document.getElementById('viewport-tab').style.display = 'none';
       
       // Show selected tab
       document.getElementById(tab + '-tab').style.display = 'block';
@@ -771,6 +938,147 @@ export async function startDevServer(options: ServerOptions = {}) {
     
     // Also save on resize
     devtools.addEventListener('mouseup', saveDevToolsState);
+    
+    // Viewport functionality
+    const defaultPresets = [
+      { name: 'Mobile', width: 375, height: 667, icon: '📱' },
+      { name: 'Tablet', width: 768, height: 1024, icon: '📱' },
+      { name: 'Desktop', width: 1280, height: 720, icon: '🖥️' },
+      { name: 'Wide', width: 1920, height: 1080, icon: '🖥️' },
+      { name: 'Fullscreen', width: '100%', height: '100vh', icon: '⛶' },
+      { name: 'Sidebar', width: 350, height: '100vh', icon: '📑' },
+      { name: 'Widget', width: 400, height: 300, icon: '◻' },
+      { name: 'Modal', width: 600, height: 400, icon: '🗗' }
+    ];
+    
+    // Merge with config presets
+    const configViewport = ${JSON.stringify(config?.dev?.viewport || {})};
+    const allPresets = [...defaultPresets, ...(configViewport.presets || [])];
+    let currentViewport = configViewport.default || 'fullscreen';
+    
+    // Initialize viewport presets
+    const viewportPresetsContainer = document.getElementById('viewport-presets');
+    allPresets.forEach(preset => {
+      const btn = document.createElement('button');
+      btn.className = 'viewport-preset-btn';
+      btn.onclick = () => applyViewportPreset(preset);
+      btn.innerHTML = \`
+        <span class="viewport-preset-icon">\${preset.icon || '📐'}</span>
+        <div>\${preset.name}</div>
+        <div style="font-size: 10px; opacity: 0.7;">\${formatViewportSize(preset.width, preset.height)}</div>
+      \`;
+      viewportPresetsContainer.appendChild(btn);
+    });
+    
+    function formatViewportSize(width, height) {
+      const w = typeof width === 'number' ? \`\${width}px\` : width;
+      const h = typeof height === 'number' ? \`\${height}px\` : height;
+      return \`\${w} × \${h}\`;
+    }
+    
+    function applyViewportPreset(preset) {
+      const root = document.getElementById('root');
+      const indicator = document.getElementById('viewport-indicator');
+      
+      // Update active button
+      document.querySelectorAll('.viewport-preset-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.textContent.includes(preset.name)) {
+          btn.classList.add('active');
+        }
+      });
+      
+      // Apply viewport size
+      if (preset.name === 'Fullscreen') {
+        root.className = 'viewport-fullscreen';
+        document.documentElement.style.removeProperty('--viewport-width');
+        document.documentElement.style.removeProperty('--viewport-height');
+      } else {
+        root.className = 'viewport-container';
+        const width = typeof preset.width === 'number' ? \`\${preset.width}px\` : preset.width;
+        const height = typeof preset.height === 'number' ? \`\${preset.height}px\` : preset.height;
+        document.documentElement.style.setProperty('--viewport-width', width);
+        document.documentElement.style.setProperty('--viewport-height', height);
+      }
+      
+      // Update current display
+      document.getElementById('viewport-current').textContent = 
+        \`Current: \${preset.name} (\${formatViewportSize(preset.width, preset.height)})\`;
+      
+      // Show indicator briefly
+      indicator.textContent = \`\${preset.name}: \${formatViewportSize(preset.width, preset.height)}\`;
+      indicator.classList.add('visible');
+      setTimeout(() => indicator.classList.remove('visible'), 2000);
+      
+      // Save to localStorage
+      localStorage.setItem('devtools-viewport', JSON.stringify({
+        name: preset.name,
+        width: preset.width,
+        height: preset.height
+      }));
+    }
+    
+    window.applyCustomViewport = function() {
+      const widthInput = document.getElementById('viewport-width');
+      const heightInput = document.getElementById('viewport-height');
+      const widthUnit = document.getElementById('viewport-width-unit').value;
+      const heightUnit = document.getElementById('viewport-height-unit').value;
+      
+      if (!widthInput.value || !heightInput.value) {
+        alert('Please enter both width and height values');
+        return;
+      }
+      
+      const width = widthInput.value + widthUnit;
+      const height = heightInput.value + heightUnit;
+      
+      applyViewportPreset({
+        name: 'Custom',
+        width: width,
+        height: height
+      });
+    };
+    
+    // Load saved viewport or apply default
+    const savedViewport = localStorage.getItem('devtools-viewport');
+    if (savedViewport) {
+      try {
+        const viewport = JSON.parse(savedViewport);
+        applyViewportPreset(viewport);
+      } catch (e) {
+        // Apply default from config
+        if (currentViewport === 'custom' && configViewport.custom) {
+          applyViewportPreset({
+            name: configViewport.custom.name || 'Custom',
+            width: configViewport.custom.width,
+            height: configViewport.custom.height
+          });
+        } else {
+          const defaultPreset = allPresets.find(p => 
+            p.name.toLowerCase() === currentViewport.toLowerCase()
+          ) || allPresets.find(p => p.name === 'Fullscreen');
+          if (defaultPreset) {
+            applyViewportPreset(defaultPreset);
+          }
+        }
+      }
+    } else {
+      // Apply default from config
+      if (currentViewport === 'custom' && configViewport.custom) {
+        applyViewportPreset({
+          name: configViewport.custom.name || 'Custom',
+          width: configViewport.custom.width,
+          height: configViewport.custom.height
+        });
+      } else {
+        const defaultPreset = allPresets.find(p => 
+          p.name.toLowerCase() === currentViewport.toLowerCase()
+        ) || allPresets.find(p => p.name === 'Fullscreen');
+        if (defaultPreset) {
+          applyViewportPreset(defaultPreset);
+        }
+      }
+    }
     
     // Import and initialize the MFE with mock services
     import mfeModule from '/dist/${mfeName}.js';

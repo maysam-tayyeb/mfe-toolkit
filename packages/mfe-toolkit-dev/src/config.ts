@@ -2,6 +2,35 @@ import { existsSync } from 'fs';
 import { join, resolve } from 'path';
 import { pathToFileURL } from 'url';
 
+export interface ViewportPreset {
+  name: string;
+  width: number | string;
+  height: number | string;
+  icon?: string;
+}
+
+export interface ViewportConfig {
+  /**
+   * Default viewport to use on load
+   * @default 'fullscreen'
+   */
+  default?: 'mobile' | 'tablet' | 'desktop' | 'wide' | 'fullscreen' | 'sidebar' | 'widget' | 'modal' | 'custom';
+  
+  /**
+   * Custom viewport dimensions when default is 'custom'
+   */
+  custom?: {
+    width: number | string;
+    height: number | string;
+    name?: string;
+  };
+  
+  /**
+   * Additional project-specific viewport presets
+   */
+  presets?: ViewportPreset[];
+}
+
 export interface MFEDevConfig {
   dev?: {
     /**
@@ -37,6 +66,11 @@ export interface MFEDevConfig {
      * Additional HTML to inject before the closing </body>
      */
     bodyHtml?: string;
+    
+    /**
+     * Viewport configuration for container sizing
+     */
+    viewport?: ViewportConfig;
   };
 }
 
