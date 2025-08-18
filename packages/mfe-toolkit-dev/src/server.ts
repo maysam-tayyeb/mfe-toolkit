@@ -676,7 +676,6 @@ export async function startDevServer(options: ServerOptions = {}) {
                 <option value="px">px</option>
                 <option value="%">%</option>
                 <option value="vh">vh</option>
-                <option value="auto">auto</option>
               </select>
             </div>
             <div class="viewport-input-group">
@@ -1105,23 +1104,13 @@ export async function startDevServer(options: ServerOptions = {}) {
         heightUnit.disabled = true;
         heightInput.style.opacity = '0.5';
         heightUnit.style.opacity = '0.5';
-        
-        // Get current width and apply with auto height
-        const widthInput = document.getElementById('viewport-width');
-        const widthUnitValue = document.getElementById('viewport-width-unit').value;
-        if (widthInput.value) {
-          const width = widthInput.value + widthUnitValue;
-          applyViewportPreset({
-            name: 'Custom',
-            width: width,
-            height: 'auto'
-          });
-        }
+        heightInput.placeholder = 'Auto height enabled';
       } else {
         heightInput.disabled = false;
         heightUnit.disabled = false;
         heightInput.style.opacity = '1';
         heightUnit.style.opacity = '1';
+        heightInput.placeholder = 'e.g., 720 or 100vh';
       }
     };
     
