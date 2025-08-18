@@ -196,13 +196,73 @@ export async function startDevServer(options: ServerOptions = {}) {
       gap: 8px;
     }
     
-    .devtools-minimize {
+    .devtools-controls {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+    }
+    
+    .devtools-control-btn {
       background: transparent;
       border: none;
       color: white;
       cursor: pointer;
-      font-size: 18px;
-      padding: 0 4px;
+      font-size: 16px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      transition: background 0.2s;
+    }
+    
+    .devtools-control-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+    
+    .devtools-control-btn.active {
+      background: rgba(59, 130, 246, 0.5);
+    }
+    
+    /* Docking positions */
+    #devtools.docked-right {
+      top: 0 !important;
+      right: 0 !important;
+      left: auto !important;
+      bottom: 0 !important;
+      width: 450px !important;
+      height: 100vh !important;
+      max-height: 100vh !important;
+      border-radius: 0;
+      resize: none;
+    }
+    
+    #devtools.docked-left {
+      top: 0 !important;
+      left: 0 !important;
+      right: auto !important;
+      bottom: 0 !important;
+      width: 450px !important;
+      height: 100vh !important;
+      max-height: 100vh !important;
+      border-radius: 0;
+      resize: none;
+    }
+    
+    #devtools.docked-bottom {
+      bottom: 0 !important;
+      left: 0 !important;
+      right: 0 !important;
+      top: auto !important;
+      width: 100vw !important;
+      height: 400px !important;
+      max-width: 100vw !important;
+      border-radius: 0;
+      resize: none;
+    }
+    
+    #devtools.docked-right .devtools-header,
+    #devtools.docked-left .devtools-header,
+    #devtools.docked-bottom .devtools-header {
+      border-radius: 0;
+      cursor: default;
     }
     
     .devtools-tabs {
@@ -420,7 +480,14 @@ export async function startDevServer(options: ServerOptions = {}) {
       <div class="devtools-title">
         🛠️ MFE Dev Tools
       </div>
-      <button class="devtools-minimize" onclick="toggleDevTools()">－</button>
+      <div class="devtools-controls">
+        <button class="devtools-control-btn" onclick="dockLeft()" title="Dock Left">⬅</button>
+        <button class="devtools-control-btn" onclick="dockBottom()" title="Dock Bottom">⬇</button>
+        <button class="devtools-control-btn" onclick="dockRight()" title="Dock Right">➡</button>
+        <button class="devtools-control-btn" onclick="floatPanel()" title="Float">⬜</button>
+        <button class="devtools-control-btn" onclick="restoreDefault()" title="Restore Default">↺</button>
+        <button class="devtools-control-btn" onclick="toggleDevTools()" title="Minimize">－</button>
+      </div>
     </div>
     <div class="devtools-tabs">
       <button class="devtools-tab active" onclick="switchTab('console')">Console</button>
@@ -620,7 +687,9 @@ export async function startDevServer(options: ServerOptions = {}) {
     const header = devtools.querySelector('.devtools-header');
     
     header.addEventListener('mousedown', (e) => {
-      if (e.target.classList.contains('devtools-minimize')) return;
+      // Don't drag if clicking on controls or if docked
+      if (e.target.classList.contains('devtools-control-btn')) return;
+      if (currentDockPosition !== 'float') return;
       
       isDragging = true;
       devtools.classList.add('dragging');
@@ -658,20 +727,67 @@ export async function startDevServer(options: ServerOptions = {}) {
       }
     });
     
-    // Save and restore position/size
-    const saveDevToolsState = () => {
-      const rect = devtools.getBoundingClientRect();
-      const state = {
-        left: rect.left,
-        top: rect.top,
-        width: devtools.style.width || devtools.offsetWidth,
-        height: devtools.style.height || devtools.offsetHeight
-      };
-      localStorage.setItem('devtools-state', JSON.stringify(state));
+    // Docking functionality
+    let currentDockPosition = 'float';
+    
+    window.dockLeft = () => {
+      devtools.className = 'docked-left';
+      currentDockPosition = 'left';
+      saveDevToolsState();
+      updateDockButtons();
     };
     
-    const restoreDevToolsState = () => {
-      const saved = localStorage.getItem('devtools-state');
+    window.dockRight = () => {
+      devtools.className = 'docked-right';
+      currentDockPosition = 'right';
+      saveDevToolsState();
+      updateDockButtons();
+    };
+    
+    window.dockBottom = () => {
+      devtools.className = 'docked-bottom';
+      currentDockPosition = 'bottom';
+      saveDevToolsState();
+      updateDockButtons();
+    };
+    
+    window.floatPanel = () => {
+      devtools.className = '';
+      currentDockPosition = 'float';
+      restoreFloatingPosition();
+      updateDockButtons();
+    };
+    
+    window.restoreDefault = () => {
+      devtools.className = '';
+      devtools.style.left = 'auto';
+      devtools.style.top = 'auto';
+      devtools.style.right = '20px';
+      devtools.style.bottom = '20px';
+      devtools.style.width = '450px';
+      devtools.style.height = '400px';
+      currentDockPosition = 'float';
+      localStorage.removeItem('devtools-state');
+      updateDockButtons();
+    };
+    
+    const updateDockButtons = () => {
+      const buttons = devtools.querySelectorAll('.devtools-control-btn');
+      buttons.forEach(btn => btn.classList.remove('active'));
+      
+      if (currentDockPosition === 'left') {
+        buttons[0].classList.add('active');
+      } else if (currentDockPosition === 'bottom') {
+        buttons[1].classList.add('active');
+      } else if (currentDockPosition === 'right') {
+        buttons[2].classList.add('active');
+      } else if (currentDockPosition === 'float') {
+        buttons[3].classList.add('active');
+      }
+    };
+    
+    const restoreFloatingPosition = () => {
+      const saved = localStorage.getItem('devtools-floating-state');
       if (saved) {
         try {
           const state = JSON.parse(saved);
@@ -682,8 +798,56 @@ export async function startDevServer(options: ServerOptions = {}) {
           devtools.style.right = 'auto';
           devtools.style.bottom = 'auto';
         } catch (e) {
+          // Invalid state, use defaults
+          window.restoreDefault();
+        }
+      }
+    };
+    
+    // Save and restore position/size
+    const saveDevToolsState = () => {
+      const rect = devtools.getBoundingClientRect();
+      const state = {
+        left: rect.left,
+        top: rect.top,
+        width: devtools.style.width || devtools.offsetWidth,
+        height: devtools.style.height || devtools.offsetHeight,
+        dockPosition: currentDockPosition
+      };
+      
+      if (currentDockPosition === 'float') {
+        localStorage.setItem('devtools-floating-state', JSON.stringify(state));
+      }
+      localStorage.setItem('devtools-state', JSON.stringify(state));
+    };
+    
+    const restoreDevToolsState = () => {
+      const saved = localStorage.getItem('devtools-state');
+      if (saved) {
+        try {
+          const state = JSON.parse(saved);
+          currentDockPosition = state.dockPosition || 'float';
+          
+          if (currentDockPosition === 'left') {
+            window.dockLeft();
+          } else if (currentDockPosition === 'right') {
+            window.dockRight();
+          } else if (currentDockPosition === 'bottom') {
+            window.dockBottom();
+          } else {
+            devtools.style.left = state.left + 'px';
+            devtools.style.top = state.top + 'px';
+            devtools.style.width = state.width + (typeof state.width === 'number' ? 'px' : '');
+            devtools.style.height = state.height + (typeof state.height === 'number' ? 'px' : '');
+            devtools.style.right = 'auto';
+            devtools.style.bottom = 'auto';
+            updateDockButtons();
+          }
+        } catch (e) {
           // Invalid state, ignore
         }
+      } else {
+        updateDockButtons();
       }
     };
     
