@@ -100,7 +100,6 @@ export async function startDevServer(options: ServerOptions = {}) {
     #root { 
       background: white;
       margin: 0 auto;
-      transition: all 0.3s ease;
     }
     
     /* Viewport container styles */
