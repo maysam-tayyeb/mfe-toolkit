@@ -6,6 +6,8 @@ A comprehensive toolkit and reference architecture for building microfrontends. 
 
 ## ✨ Key Features
 
+- 🧪 **Standalone Development** - Develop MFEs independently with `@mfe-toolkit/dev` - no container needed!
+- 🛠️ **Interactive Dev Tools** - Built-in console, event simulator, metrics, viewport controls, and theme switcher
 - 🚀 **Dynamic MFE Loading** - Load microfrontends on-demand with ES modules
 - 📡 **Inter-MFE Communication** - Real-time event bus for MFE-to-MFE messaging ([see guide](./docs/guides/mfe-communication-guide.md))
 - 🎯 **Shared Services** - Modal, notification, auth, and logging services ([see demos](./docs/service-demos.md))
@@ -88,6 +90,7 @@ The toolkit is available as modular npm packages under the `@mfe-toolkit` organi
 | [`@mfe-toolkit/core`](./packages/mfe-toolkit-core)   | Framework-agnostic core functionality | 0.1.0   |
 | [`@mfe-toolkit/react`](./packages/mfe-toolkit-react) | React components and hooks            | 0.1.0   |
 | [`@mfe-toolkit/cli`](./packages/mfe-toolkit-cli)     | CLI tools for MFE development         | 0.1.0   |
+| [`@mfe-toolkit/dev`](./packages/mfe-toolkit-dev)     | Standalone dev server with dev tools  | 0.1.0   |
 | [`@mfe-toolkit/state`](./packages/mfe-toolkit-state) | Cross-framework state management      | 0.1.0   |
 
 ### Middleware Packages
@@ -110,6 +113,9 @@ The toolkit is available as modular npm packages under the `@mfe-toolkit` organi
 # Core functionality (required)
 npm install @mfe-toolkit/core
 
+# Standalone development (recommended)
+npm install -D @mfe-toolkit/dev
+
 # React components (for React apps)
 npm install @mfe-toolkit/react
 
@@ -125,20 +131,44 @@ npm install @mfe-toolkit/state-middleware-performance
 
 ## 🚀 Quick Start
 
+### 🧪 Standalone Development (Fastest Way to Start)
+
+```bash
+# Create a new MFE
+npx @mfe-toolkit/cli create my-awesome-mfe
+cd my-awesome-mfe
+
+# Add dev toolkit
+pnpm add -D @mfe-toolkit/dev
+
+# Start standalone dev server with dev tools
+pnpm dev
+
+# Open http://localhost:3100
+# Press Ctrl+Shift+D to toggle dev tools
+```
+
+**Features:**
+- ✅ Mock services automatically injected
+- ✅ Interactive dev tools panel
+- ✅ Hot reload
+- ✅ Event simulator
+- ✅ Viewport testing
+- ✅ Theme switcher
+
 ### 📖 Complete Getting Started Guide
 
 New to MFE Toolkit? Start with our comprehensive guide:
 
 **[📚 Getting Started Guide](./docs/GETTING_STARTED.md)** - Complete 0-100 guide covering:
-- Installation and setup
+- Standalone development workflow
 - Creating your first MFE
+- Using dev tools effectively
 - Setting up a container
 - Inter-MFE communication
 - State management
 - Production deployment
 - Troubleshooting
-
-## 🚀 Quick Start
 
 ### State Management with Middleware
 
