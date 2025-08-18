@@ -997,7 +997,15 @@ export async function startDevServer(options: ServerOptions = {}) {
     allPresets.forEach(preset => {
       const btn = document.createElement('button');
       btn.className = 'viewport-preset-btn';
-      btn.onclick = () => applyViewportPreset(preset);
+      btn.dataset.presetName = preset.name;
+      btn.onclick = () => {
+        // Clear custom inputs when selecting a preset
+        if (preset.name !== 'Custom') {
+          document.getElementById('viewport-width').value = '';
+          document.getElementById('viewport-height').value = '';
+        }
+        applyViewportPreset(preset);
+      };
       btn.innerHTML = \`
         <span class="viewport-preset-icon">\${preset.icon || '📐'}</span>
         <div>\${preset.name}</div>
@@ -1016,11 +1024,19 @@ export async function startDevServer(options: ServerOptions = {}) {
       const root = document.getElementById('root');
       const indicator = document.getElementById('viewport-indicator');
       const autoHeightCheckbox = document.getElementById('viewport-auto-height');
+      const widthInput = document.getElementById('viewport-width');
+      const heightInput = document.getElementById('viewport-height');
+      const widthUnit = document.getElementById('viewport-width-unit');
+      const heightUnit = document.getElementById('viewport-height-unit');
       
-      // Update active button
+      // Update active button - only one can be active
       document.querySelectorAll('.viewport-preset-btn').forEach(btn => {
         btn.classList.remove('active');
-        if (btn.textContent.includes(preset.name)) {
+      });
+      
+      // Find and activate the correct button
+      document.querySelectorAll('.viewport-preset-btn').forEach(btn => {
+        if (btn.dataset.presetName === preset.name) {
           btn.classList.add('active');
         }
       });
@@ -1047,6 +1063,28 @@ export async function startDevServer(options: ServerOptions = {}) {
         
         // Update auto height checkbox
         autoHeightCheckbox.checked = isAutoHeight;
+        toggleAutoHeight(); // Update input states
+      }
+      
+      // Update custom inputs only if 'Custom' is selected
+      if (preset.name === 'Custom') {
+        // Parse and set width value
+        const widthStr = typeof preset.width === 'number' ? \`\${preset.width}px\` : preset.width;
+        const widthMatch = widthStr.match(/^(\\d+(?:\\.\\d+)?)(px|%|vw)?$/);
+        if (widthMatch) {
+          widthInput.value = widthMatch[1];
+          widthUnit.value = widthMatch[2] || 'px';
+        }
+        
+        // Parse and set height value
+        if (preset.height !== 'auto') {
+          const heightStr = typeof preset.height === 'number' ? \`\${preset.height}px\` : preset.height;
+          const heightMatch = heightStr.match(/^(\\d+(?:\\.\\d+)?)(px|%|vh)?$/);
+          if (heightMatch) {
+            heightInput.value = heightMatch[1];
+            heightUnit.value = heightMatch[2] || 'px';
+          }
+        }
       }
       
       // Update current display
