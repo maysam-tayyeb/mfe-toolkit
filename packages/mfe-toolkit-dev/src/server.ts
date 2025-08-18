@@ -116,14 +116,52 @@ export async function startDevServer(options: ServerOptions = {}) {
       position: fixed;
       bottom: 20px;
       right: 20px;
-      width: 400px;
-      max-height: 500px;
+      width: 450px;
+      height: 400px;
+      min-width: 350px;
+      min-height: 200px;
+      max-width: 90vw;
+      max-height: 80vh;
       background: white;
       border-radius: 8px;
       box-shadow: 0 10px 40px rgba(0,0,0,0.2);
       z-index: 10000;
       display: flex;
       flex-direction: column;
+      resize: both;
+      overflow: auto;
+    }
+    
+    #devtools.dragging {
+      opacity: 0.9;
+      cursor: move;
+      user-select: none;
+    }
+    
+    /* Resize handle styling */
+    #devtools::-webkit-resizer {
+      background: transparent;
+    }
+    
+    .devtools-resize-handle {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 20px;
+      height: 20px;
+      cursor: nwse-resize;
+      z-index: 1;
+    }
+    
+    .devtools-resize-handle::after {
+      content: '';
+      position: absolute;
+      bottom: 3px;
+      right: 3px;
+      width: 5px;
+      height: 5px;
+      border-right: 2px solid #9ca3af;
+      border-bottom: 2px solid #9ca3af;
     }
     
     #devtools.minimized {
@@ -144,6 +182,11 @@ export async function startDevServer(options: ServerOptions = {}) {
       justify-content: space-between;
       align-items: center;
       cursor: move;
+      user-select: none;
+    }
+    
+    .devtools-header:active {
+      cursor: grabbing;
     }
     
     .devtools-title {
@@ -433,6 +476,7 @@ export async function startDevServer(options: ServerOptions = {}) {
         </div>
       </div>
     </div>
+    <div class="devtools-resize-handle"></div>
   </div>
   
   <script type="module">
@@ -567,6 +611,94 @@ export async function startDevServer(options: ServerOptions = {}) {
         toggleDevTools();
       }
     });
+    
+    // Drag functionality
+    let isDragging = false;
+    let dragOffsetX = 0;
+    let dragOffsetY = 0;
+    const devtools = document.getElementById('devtools');
+    const header = devtools.querySelector('.devtools-header');
+    
+    header.addEventListener('mousedown', (e) => {
+      if (e.target.classList.contains('devtools-minimize')) return;
+      
+      isDragging = true;
+      devtools.classList.add('dragging');
+      
+      const rect = devtools.getBoundingClientRect();
+      dragOffsetX = e.clientX - rect.left;
+      dragOffsetY = e.clientY - rect.top;
+      
+      e.preventDefault();
+    });
+    
+    document.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+      
+      const x = e.clientX - dragOffsetX;
+      const y = e.clientY - dragOffsetY;
+      
+      // Keep within viewport bounds
+      const maxX = window.innerWidth - devtools.offsetWidth;
+      const maxY = window.innerHeight - devtools.offsetHeight;
+      
+      const finalX = Math.max(0, Math.min(x, maxX));
+      const finalY = Math.max(0, Math.min(y, maxY));
+      
+      devtools.style.left = finalX + 'px';
+      devtools.style.top = finalY + 'px';
+      devtools.style.right = 'auto';
+      devtools.style.bottom = 'auto';
+    });
+    
+    document.addEventListener('mouseup', () => {
+      if (isDragging) {
+        isDragging = false;
+        devtools.classList.remove('dragging');
+      }
+    });
+    
+    // Save and restore position/size
+    const saveDevToolsState = () => {
+      const rect = devtools.getBoundingClientRect();
+      const state = {
+        left: rect.left,
+        top: rect.top,
+        width: devtools.style.width || devtools.offsetWidth,
+        height: devtools.style.height || devtools.offsetHeight
+      };
+      localStorage.setItem('devtools-state', JSON.stringify(state));
+    };
+    
+    const restoreDevToolsState = () => {
+      const saved = localStorage.getItem('devtools-state');
+      if (saved) {
+        try {
+          const state = JSON.parse(saved);
+          devtools.style.left = state.left + 'px';
+          devtools.style.top = state.top + 'px';
+          devtools.style.width = state.width + (typeof state.width === 'number' ? 'px' : '');
+          devtools.style.height = state.height + (typeof state.height === 'number' ? 'px' : '');
+          devtools.style.right = 'auto';
+          devtools.style.bottom = 'auto';
+        } catch (e) {
+          // Invalid state, ignore
+        }
+      }
+    };
+    
+    // Restore on load
+    restoreDevToolsState();
+    
+    // Save on changes
+    const observer = new MutationObserver(saveDevToolsState);
+    observer.observe(devtools, { 
+      attributes: true, 
+      attributeFilter: ['style'] 
+    });
+    
+    // Also save on resize
+    devtools.addEventListener('mouseup', saveDevToolsState);
     
     // Import and initialize the MFE with mock services
     import mfeModule from '/dist/${mfeName}.js';
