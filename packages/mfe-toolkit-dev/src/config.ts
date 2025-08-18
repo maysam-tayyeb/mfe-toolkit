@@ -31,6 +31,25 @@ export interface ViewportConfig {
   presets?: ViewportPreset[];
 }
 
+export interface ThemeConfig {
+  /**
+   * Default theme to use on load
+   * @default 'light'
+   */
+  default?: string;
+  
+  /**
+   * Available themes
+   */
+  themes?: Array<{
+    name: string;
+    displayName?: string;
+    styles?: string | string[];
+    class?: string;
+    variables?: Record<string, string>;
+  }>;
+}
+
 export interface MFEDevConfig {
   dev?: {
     /**
@@ -71,6 +90,11 @@ export interface MFEDevConfig {
      * Viewport configuration for container sizing
      */
     viewport?: ViewportConfig;
+    
+    /**
+     * Theme configuration for testing different visual styles
+     */
+    themes?: ThemeConfig;
   };
 }
 

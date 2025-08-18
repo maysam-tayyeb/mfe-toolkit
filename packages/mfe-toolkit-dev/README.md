@@ -109,6 +109,63 @@ The dev server includes these default viewport presets:
 
 The viewport size persists across page reloads, making it easy to test at specific sizes during development.
 
+### Theme Configuration
+
+Test your MFE with different visual themes to ensure compatibility across design systems:
+
+```javascript
+// mfe.config.mjs
+export default {
+  dev: {
+    themes: {
+      // Default theme on load
+      default: 'light', // 'light' | 'dark' | custom theme name
+      
+      // Custom themes (optional - defaults provided)
+      themes: [
+        {
+          name: 'corporate',
+          displayName: 'Corporate Theme',
+          variables: {
+            '--primary-color': '#003366',
+            '--bg-primary': '#ffffff',
+            '--text-primary': '#333333',
+            '--border-color': '#cccccc'
+          }
+        },
+        {
+          name: 'brand',
+          displayName: 'Brand Theme',
+          class: 'theme-brand', // Optional CSS class to add to body
+          variables: {
+            '--primary-color': '#ff6b35',
+            '--secondary-color': '#004643',
+            '--bg-primary': '#f8f9fa',
+            '--text-primary': '#212529'
+          }
+        }
+      ]
+    }
+  }
+};
+```
+
+#### Built-in Themes
+
+The dev server includes two default themes:
+
+1. **Light**: Clean, bright theme with excellent readability
+2. **Dark**: Dark mode for reduced eye strain
+
+#### Using Theme Controls
+
+1. **In Dev Tools**: Click the "Themes" tab to access controls
+2. **Select Theme**: Choose from available themes with live preview
+3. **Custom CSS Variables**: Enter custom CSS variables to override theme
+4. **Persistence**: Theme selection saves across page reloads
+
+This helps test MFE compatibility with different design systems and ensure proper theming support.
+
 ### Design System Integration
 
 Create an `mfe.config.mjs` file in your MFE root to load custom styles, scripts, or modules:
@@ -322,6 +379,12 @@ The built-in dev tools panel provides:
 - Visual indicator shows current viewport size
 - Settings persist across page reloads
 - Configure default viewport in `mfe.config.mjs`
+
+### Themes Tab
+- Switch between Light and Dark themes
+- Apply custom CSS variables for testing different design systems
+- Theme selection persists across sessions
+- Configure custom themes in `mfe.config.mjs`
 
 ### Features
 - **Draggable**: Move the panel anywhere on screen

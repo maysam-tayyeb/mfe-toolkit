@@ -102,6 +102,11 @@ export async function startDevServer(options: ServerOptions = {}) {
       margin: 0 auto;
     }
     
+    .dark #root {
+      background: rgb(15, 23, 42); /* slate-900 */
+      color: rgb(241, 245, 249); /* slate-100 */
+    }
+    
     /* Viewport container styles */
     #root.viewport-container {
       width: var(--viewport-width, 100%);
@@ -576,6 +581,116 @@ export async function startDevServer(options: ServerOptions = {}) {
       font-family: monospace;
       text-align: center;
     }
+    
+    /* Themes tab styles */
+    .themes-controls {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    
+    .themes-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    
+    .theme-option {
+      display: flex;
+      align-items: center;
+      padding: 12px;
+      border: 1px solid #e5e7eb;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    
+    .theme-option:hover {
+      background: #f9fafb;
+    }
+    
+    .theme-option.active {
+      background: #eff6ff;
+      border-color: #3b82f6;
+    }
+    
+    .theme-option input[type="radio"] {
+      margin-right: 12px;
+    }
+    
+    .theme-info {
+      flex: 1;
+    }
+    
+    .theme-name {
+      font-weight: 600;
+      color: #1e293b;
+      font-size: 14px;
+    }
+    
+    .theme-description {
+      color: #6b7280;
+      font-size: 12px;
+      margin-top: 2px;
+    }
+    
+    .theme-preview {
+      display: flex;
+      gap: 4px;
+      margin-left: 12px;
+    }
+    
+    .theme-color {
+      width: 20px;
+      height: 20px;
+      border-radius: 4px;
+      border: 1px solid #e5e7eb;
+    }
+    
+    .custom-css-section {
+      padding: 16px;
+      background: #f9fafb;
+      border-radius: 6px;
+      border: 1px solid #e5e7eb;
+    }
+    
+    .custom-css-title {
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #1e293b;
+      font-size: 13px;
+    }
+    
+    .custom-css-input {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #d1d5db;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 12px;
+      resize: vertical;
+      min-height: 120px;
+    }
+    
+    .apply-custom-css-btn {
+      margin-top: 8px;
+      padding: 6px 12px;
+      background: #3b82f6;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    
+    .apply-custom-css-btn:hover {
+      background: #2563eb;
+    }
+    
+    .apply-custom-css-btn:active {
+      background: #1d4ed8;
+    }
   </style>
 </head>
 <body>
@@ -603,6 +718,7 @@ export async function startDevServer(options: ServerOptions = {}) {
       <button class="devtools-tab" onclick="switchTab('events')">Events</button>
       <button class="devtools-tab" onclick="switchTab('metrics')">Metrics</button>
       <button class="devtools-tab" onclick="switchTab('viewport')">Viewport</button>
+      <button class="devtools-tab" onclick="switchTab('themes')">Themes</button>
     </div>
     <div class="devtools-content" id="devtools-content">
       <div id="console-tab">
@@ -698,6 +814,24 @@ export async function startDevServer(options: ServerOptions = {}) {
           </div>
         </div>
       </div>
+      <div id="themes-tab" style="display: none;">
+        <div class="themes-controls">
+          <div class="themes-list" id="themes-list">
+            <!-- Theme options will be populated here -->
+          </div>
+          
+          <div class="custom-css-section">
+            <div class="custom-css-title">Custom CSS Variables</div>
+            <textarea 
+              id="custom-css-input" 
+              class="custom-css-input" 
+              placeholder="/* Add custom CSS variables */&#10;:root {&#10;  --primary-color: #3b82f6;&#10;  --background: #ffffff;&#10;}"
+              rows="8"
+            ></textarea>
+            <button class="apply-custom-css-btn" onclick="applyCustomCSS()">Apply Custom CSS</button>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="devtools-resize-handle"></div>
   </div>
@@ -739,6 +873,7 @@ export async function startDevServer(options: ServerOptions = {}) {
       document.getElementById('events-tab').style.display = 'none';
       document.getElementById('metrics-tab').style.display = 'none';
       document.getElementById('viewport-tab').style.display = 'none';
+      document.getElementById('themes-tab').style.display = 'none';
       
       // Show selected tab
       document.getElementById(tab + '-tab').style.display = 'block';
@@ -957,7 +1092,7 @@ export async function startDevServer(options: ServerOptions = {}) {
     
     // Restore active tab
     const savedTab = localStorage.getItem('devtools-active-tab');
-    if (savedTab && ['console', 'events', 'metrics', 'viewport'].includes(savedTab)) {
+    if (savedTab && ['console', 'events', 'metrics', 'viewport', 'themes'].includes(savedTab)) {
       // Set initial tab state without animation
       document.getElementById('console-tab').style.display = 'none';
       switchTab(savedTab);
@@ -1190,6 +1325,150 @@ export async function startDevServer(options: ServerOptions = {}) {
           applyViewportPreset(defaultPreset);
         }
       }
+    }
+    
+    // Theme functionality
+    const defaultThemes = [
+      {
+        name: 'light',
+        displayName: 'Light',
+        description: 'Default light theme',
+        class: 'light',
+        variables: {}
+      },
+      {
+        name: 'dark', 
+        displayName: 'Dark',
+        description: 'Dark mode theme',
+        class: 'dark',
+        variables: {}
+      }
+    ];
+    
+    // Get themes from config or use defaults
+    const configThemes = ${JSON.stringify(config?.dev?.themes?.themes || null)};
+    const themes = configThemes || defaultThemes;
+    const defaultTheme = '${config?.dev?.themes?.default || 'light'}';
+    
+    // Initialize themes list
+    const themesList = document.getElementById('themes-list');
+    themes.forEach((theme, index) => {
+      const themeOption = document.createElement('div');
+      themeOption.className = 'theme-option';
+      themeOption.dataset.themeName = theme.name;
+      
+      const previewColors = theme.variables ? 
+        Object.entries(theme.variables).slice(0, 3).map(([key, value]) => 
+          \`<div class="theme-color" style="background: \${value}" title="\${key}"></div>\`
+        ).join('') : '';
+      
+      themeOption.innerHTML = \`
+        <input type="radio" name="theme" value="\${theme.name}" id="theme-\${theme.name}">
+        <div class="theme-info">
+          <div class="theme-name">\${theme.displayName || theme.name}</div>
+          \${theme.description ? \`<div class="theme-description">\${theme.description}</div>\` : ''}
+        </div>
+        \${previewColors ? \`<div class="theme-preview">\${previewColors}</div>\` : ''}
+      \`;
+      
+      themeOption.addEventListener('click', function() {
+        const radio = this.querySelector('input[type="radio"]');
+        radio.checked = true;
+        applyTheme(theme);
+      });
+      
+      themesList.appendChild(themeOption);
+    });
+    
+    // Apply theme function
+    window.applyTheme = function(theme) {
+      const root = document.documentElement;
+      
+      // Remove all theme classes from root (for Tailwind dark mode)
+      themes.forEach(t => {
+        if (t.class) {
+          root.classList.remove(t.class);
+        }
+      });
+      
+      // Add new theme class to root for Tailwind dark mode
+      if (theme.class) {
+        root.classList.add(theme.class);
+      }
+      
+      // Also set data-theme attribute for additional CSS targeting
+      root.setAttribute('data-theme', theme.name);
+      
+      // Apply any custom CSS variables
+      if (theme.variables && Object.keys(theme.variables).length > 0) {
+        Object.entries(theme.variables).forEach(([key, value]) => {
+          root.style.setProperty(key, value);
+        });
+      }
+      
+      // Update active state in UI
+      document.querySelectorAll('.theme-option').forEach(opt => {
+        opt.classList.toggle('active', opt.dataset.themeName === theme.name);
+      });
+      
+      // Save to localStorage
+      localStorage.setItem('devtools-theme', JSON.stringify(theme));
+    };
+    
+    // Apply custom CSS function
+    window.applyCustomCSS = function() {
+      const customCSS = document.getElementById('custom-css-input').value;
+      let customStyleElement = document.getElementById('custom-theme-styles');
+      
+      if (!customStyleElement) {
+        customStyleElement = document.createElement('style');
+        customStyleElement.id = 'custom-theme-styles';
+        document.head.appendChild(customStyleElement);
+      }
+      
+      // Apply custom CSS globally and scope some to the MFE container
+      const scopedCSS = customCSS + '\\n' + 
+        customCSS.replace(/:root/g, '#root').replace(/;/g, ' !important;');
+      
+      customStyleElement.textContent = scopedCSS;
+      
+      // Save to localStorage
+      localStorage.setItem('devtools-custom-css', customCSS);
+    };
+    
+    // Load saved theme or apply default
+    const savedTheme = localStorage.getItem('devtools-theme');
+    const savedCustomCSS = localStorage.getItem('devtools-custom-css');
+    
+    if (savedTheme) {
+      try {
+        const theme = JSON.parse(savedTheme);
+        applyTheme(theme);
+        const radio = document.querySelector(\`input[name="theme"][value="\${theme.name}"]\`);
+        if (radio) radio.checked = true;
+      } catch (e) {
+        // Apply default theme
+        const defaultThemeObj = themes.find(t => t.name === defaultTheme) || themes[0];
+        if (defaultThemeObj) {
+          applyTheme(defaultThemeObj);
+          const radio = document.querySelector(\`input[name="theme"][value="\${defaultThemeObj.name}"]\`);
+          if (radio) radio.checked = true;
+        }
+      }
+    } else {
+      // Apply default theme
+      const defaultThemeObj = themes.find(t => t.name === defaultTheme) || themes[0];
+      if (defaultThemeObj) {
+        applyTheme(defaultThemeObj);
+        const radio = document.querySelector(\`input[name="theme"][value="\${defaultThemeObj.name}"]\`);
+        if (radio) radio.checked = true;
+      }
+    }
+    
+    // Load saved custom CSS
+    if (savedCustomCSS) {
+      document.getElementById('custom-css-input').value = savedCustomCSS;
+      applyCustomCSS();
     }
     
     // Import and initialize the MFE with mock services
