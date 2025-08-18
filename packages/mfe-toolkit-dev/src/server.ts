@@ -165,11 +165,18 @@ export async function startDevServer(options: ServerOptions = {}) {
     }
     
     #devtools.minimized {
-      height: auto;
-      max-height: none;
+      height: auto !important;
+      max-height: none !important;
+      width: auto !important;
+      position: fixed !important;
+      bottom: 20px !important;
+      right: 20px !important;
+      top: auto !important;
+      left: auto !important;
     }
     
-    #devtools.minimized .devtools-content {
+    #devtools.minimized .devtools-content,
+    #devtools.minimized .devtools-tabs {
       display: none;
     }
     
@@ -556,11 +563,30 @@ export async function startDevServer(options: ServerOptions = {}) {
       logs: 0,
       errors: 0
     };
+    let currentDockPosition = 'float'; // Define this early so toggleDevTools can access it
     
     // Dev Tools Functions
     window.toggleDevTools = function() {
       const devtools = document.getElementById('devtools');
-      devtools.classList.toggle('minimized');
+      const isMinimized = devtools.classList.contains('minimized');
+      
+      if (isMinimized) {
+        // Restore previous state
+        devtools.classList.remove('minimized');
+        // Restore docking state
+        if (currentDockPosition === 'left') {
+          devtools.className = 'docked-left';
+        } else if (currentDockPosition === 'right') {
+          devtools.className = 'docked-right';
+        } else if (currentDockPosition === 'bottom') {
+          devtools.className = 'docked-bottom';
+        } else {
+          devtools.className = '';
+        }
+      } else {
+        // Minimize
+        devtools.className = 'minimized';
+      }
     };
     
     window.switchTab = function(tab) {
@@ -728,7 +754,6 @@ export async function startDevServer(options: ServerOptions = {}) {
     });
     
     // Docking functionality
-    let currentDockPosition = 'float';
     
     window.dockLeft = () => {
       devtools.className = 'docked-left';
