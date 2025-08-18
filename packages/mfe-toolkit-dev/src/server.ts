@@ -731,7 +731,19 @@ export async function startDevServer(options: ServerOptions = {}) {
       
       // Update active tab
       document.querySelectorAll('.devtools-tab').forEach(t => t.classList.remove('active'));
-      event.target.classList.add('active');
+      if (event && event.target) {
+        event.target.classList.add('active');
+      } else {
+        // Called programmatically, find the tab button by text
+        document.querySelectorAll('.devtools-tab').forEach(t => {
+          if (t.textContent.toLowerCase() === tab.toLowerCase()) {
+            t.classList.add('active');
+          }
+        });
+      }
+      
+      // Save active tab to localStorage
+      localStorage.setItem('devtools-active-tab', tab);
     };
     
     function addLog(level, message, ...args) {
@@ -928,6 +940,14 @@ export async function startDevServer(options: ServerOptions = {}) {
     
     // Restore on load
     restoreDevToolsState();
+    
+    // Restore active tab
+    const savedTab = localStorage.getItem('devtools-active-tab');
+    if (savedTab && ['console', 'events', 'metrics', 'viewport'].includes(savedTab)) {
+      // Set initial tab state without animation
+      document.getElementById('console-tab').style.display = 'none';
+      switchTab(savedTab);
+    }
     
     // Save on changes
     const observer = new MutationObserver(saveDevToolsState);
