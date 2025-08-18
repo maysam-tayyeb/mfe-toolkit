@@ -165,19 +165,37 @@ export async function startDevServer(options: ServerOptions = {}) {
     }
     
     #devtools.minimized {
-      height: auto !important;
-      max-height: none !important;
-      width: auto !important;
-      position: fixed !important;
-      bottom: 20px !important;
-      right: 20px !important;
-      top: auto !important;
-      left: auto !important;
+      display: none !important;
     }
     
-    #devtools.minimized .devtools-content,
-    #devtools.minimized .devtools-tabs {
+    /* Floating restore button */
+    #devtools-restore-btn {
       display: none;
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 50px;
+      height: 50px;
+      background: #1e293b;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      cursor: pointer;
+      z-index: 10001;
+      font-size: 20px;
+      transition: transform 0.2s, background 0.2s;
+    }
+    
+    #devtools-restore-btn:hover {
+      transform: scale(1.1);
+      background: #334155;
+    }
+    
+    #devtools-restore-btn.visible {
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     
     .devtools-header {
@@ -481,6 +499,9 @@ export async function startDevServer(options: ServerOptions = {}) {
   </div>
   <div id="root"></div>
   
+  <!-- Floating Restore Button -->
+  <button id="devtools-restore-btn" onclick="toggleDevTools()" title="Open Dev Tools">🛠️</button>
+  
   <!-- Dev Tools Panel -->
   <div id="devtools">
     <div class="devtools-header">
@@ -568,11 +589,13 @@ export async function startDevServer(options: ServerOptions = {}) {
     // Dev Tools Functions
     window.toggleDevTools = function() {
       const devtools = document.getElementById('devtools');
+      const restoreBtn = document.getElementById('devtools-restore-btn');
       const isMinimized = devtools.classList.contains('minimized');
       
       if (isMinimized) {
         // Restore previous state
         devtools.classList.remove('minimized');
+        restoreBtn.classList.remove('visible');
         // Restore docking state
         if (currentDockPosition === 'left') {
           devtools.className = 'docked-left';
@@ -584,9 +607,13 @@ export async function startDevServer(options: ServerOptions = {}) {
           devtools.className = '';
         }
       } else {
-        // Minimize
+        // Minimize - hide panel and show floating button
         devtools.className = 'minimized';
+        restoreBtn.classList.add('visible');
       }
+      
+      // Save state
+      saveDevToolsState();
     };
     
     window.switchTab = function(tab) {
@@ -832,12 +859,14 @@ export async function startDevServer(options: ServerOptions = {}) {
     // Save and restore position/size
     const saveDevToolsState = () => {
       const rect = devtools.getBoundingClientRect();
+      const isMinimized = devtools.classList.contains('minimized');
       const state = {
         left: rect.left,
         top: rect.top,
         width: devtools.style.width || devtools.offsetWidth,
         height: devtools.style.height || devtools.offsetHeight,
-        dockPosition: currentDockPosition
+        dockPosition: currentDockPosition,
+        minimized: isMinimized
       };
       
       if (currentDockPosition === 'float') {
@@ -848,25 +877,34 @@ export async function startDevServer(options: ServerOptions = {}) {
     
     const restoreDevToolsState = () => {
       const saved = localStorage.getItem('devtools-state');
+      const restoreBtn = document.getElementById('devtools-restore-btn');
+      
       if (saved) {
         try {
           const state = JSON.parse(saved);
           currentDockPosition = state.dockPosition || 'float';
           
-          if (currentDockPosition === 'left') {
-            window.dockLeft();
-          } else if (currentDockPosition === 'right') {
-            window.dockRight();
-          } else if (currentDockPosition === 'bottom') {
-            window.dockBottom();
+          // Restore minimized state first
+          if (state.minimized) {
+            devtools.className = 'minimized';
+            restoreBtn.classList.add('visible');
           } else {
-            devtools.style.left = state.left + 'px';
-            devtools.style.top = state.top + 'px';
-            devtools.style.width = state.width + (typeof state.width === 'number' ? 'px' : '');
-            devtools.style.height = state.height + (typeof state.height === 'number' ? 'px' : '');
-            devtools.style.right = 'auto';
-            devtools.style.bottom = 'auto';
-            updateDockButtons();
+            // Only restore position if not minimized
+            if (currentDockPosition === 'left') {
+              window.dockLeft();
+            } else if (currentDockPosition === 'right') {
+              window.dockRight();
+            } else if (currentDockPosition === 'bottom') {
+              window.dockBottom();
+            } else {
+              devtools.style.left = state.left + 'px';
+              devtools.style.top = state.top + 'px';
+              devtools.style.width = state.width + (typeof state.width === 'number' ? 'px' : '');
+              devtools.style.height = state.height + (typeof state.height === 'number' ? 'px' : '');
+              devtools.style.right = 'auto';
+              devtools.style.bottom = 'auto';
+              updateDockButtons();
+            }
           }
         } catch (e) {
           // Invalid state, ignore
