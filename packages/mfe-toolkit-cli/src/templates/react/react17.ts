@@ -119,6 +119,7 @@ export const App: React.FC<AppProps> = ({ services }) => {
       private: true,
       type: 'module',
       scripts: {
+        dev: 'mfe-dev',
         build: 'node build.js',
         'build:watch': 'node build.js --watch',
         clean: 'rm -rf dist'
@@ -130,6 +131,7 @@ export const App: React.FC<AppProps> = ({ services }) => {
       },
       devDependencies: {
         '@mfe-toolkit/build': 'workspace:*',
+        '@mfe-toolkit/dev': 'workspace:*',
         '@types/react': '^17.0.2',
         '@types/react-dom': '^17.0.2',
         'esbuild': '^0.24.2',
@@ -253,16 +255,67 @@ A simple React 17 microfrontend with a beautiful hello world interface.
 
 ## Development
 
+### Standalone Development (Recommended)
+
 \`\`\`bash
 # Install dependencies
 pnpm install
 
+# Start standalone dev server with dev tools
+pnpm dev
+
+# Open http://localhost:3100
+# Press Ctrl+Shift+D to toggle dev tools
+\`\`\`
+
+### Production Build
+
+\`\`\`bash
 # Build for production
 pnpm build
 
 # Build in watch mode
 pnpm build:watch
 \`\`\`
+`;
+  }
+
+  generateMfeConfig(): string {
+    return `// mfe.config.mjs
+export default {
+  dev: {
+    // Load design system styles (adjust path as needed)
+    styles: [
+      '../../packages/design-system/dist/styles.css'
+    ],
+    
+    // Configure viewport presets for testing
+    viewport: {
+      default: 'fullscreen',
+      presets: []
+    },
+    
+    // Configure themes
+    themes: {
+      default: 'light',
+      themes: [
+        {
+          name: 'light',
+          displayName: 'Light Theme',
+          class: 'light'
+        },
+        {
+          name: 'dark',
+          displayName: 'Dark Theme',
+          class: 'dark'
+        }
+      ]
+    },
+    
+    // Show dev tools panel on startup
+    showDevTools: true
+  }
+};
 `;
   }
 }

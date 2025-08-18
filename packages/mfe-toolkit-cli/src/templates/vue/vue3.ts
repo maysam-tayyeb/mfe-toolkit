@@ -115,6 +115,7 @@ export const App = defineComponent({
       private: true,
       type: 'module',
       scripts: {
+        dev: 'mfe-dev',
         build: 'node build.js',
         'build:watch': 'node build.js --watch',
         clean: 'rm -rf dist'
@@ -125,6 +126,7 @@ export const App = defineComponent({
       },
       devDependencies: {
         '@mfe-toolkit/build': 'workspace:*',
+        '@mfe-toolkit/dev': 'workspace:*',
         'esbuild': '^0.24.2',
         'esbuild-plugin-vue3': '^0.4.2',
         'typescript': '^5.3.0'

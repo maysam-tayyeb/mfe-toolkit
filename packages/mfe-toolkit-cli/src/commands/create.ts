@@ -189,6 +189,14 @@ export const createCommand = new Command('create')
         generator.generateReadme()
       );
       
+      // Write mfe.config.mjs if the generator has the method
+      if ('generateMfeConfig' in generator && typeof generator.generateMfeConfig === 'function') {
+        fs.writeFileSync(
+          path.join(mfePath, 'mfe.config.mjs'),
+          generator.generateMfeConfig()
+        );
+      }
+      
       fs.writeFileSync(
         path.join(mfePath, '.gitignore'),
         'node_modules\ndist\n*.log\n.DS_Store'
@@ -222,7 +230,9 @@ export const createCommand = new Command('create')
 
 🚀 Next steps:
    ${chalk.cyan(`cd ${config.name}`)}
-   ${chalk.cyan('npm run dev')}
+   ${chalk.cyan('pnpm dev')}  ${chalk.gray('# Start standalone dev server with dev tools')}
+   
+   ${chalk.gray('Press Ctrl+Shift+D to toggle dev tools')}
 `)
       );
       

@@ -118,6 +118,7 @@ export const App: React.FC<AppProps> = ({ services }) => {
       private: true,
       type: 'module',
       scripts: {
+        dev: 'mfe-dev',
         build: 'node build.js',
         'build:watch': 'node build.js --watch',
         clean: 'rm -rf dist'
@@ -129,6 +130,7 @@ export const App: React.FC<AppProps> = ({ services }) => {
       },
       devDependencies: {
         '@mfe-toolkit/build': 'workspace:*',
+        '@mfe-toolkit/dev': 'workspace:*',
         '@types/react': '^18.2.0',
         '@types/react-dom': '^18.2.0',
         'esbuild': '^0.24.2',

@@ -158,6 +158,7 @@ export const App = (props: AppProps) => {
       private: true,
       type: 'module',
       scripts: {
+        dev: 'mfe-dev',
         build: 'node build.js',
         'build:watch': 'node build.js --watch',
         clean: 'rm -rf dist'
@@ -168,6 +169,7 @@ export const App = (props: AppProps) => {
       },
       devDependencies: {
         '@mfe-toolkit/build': 'workspace:*',
+        '@mfe-toolkit/dev': 'workspace:*',
         'esbuild': '^0.24.2',
         'esbuild-plugin-solid': '^0.6.0',
         'typescript': '^5.3.0'
