@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added - January 2025
+
+- **Standalone Development Mode** - New @mfe-toolkit/dev package for independent MFE development
+  - Dev server with hot reload and ES module support
+  - Interactive dev tools panel with draggable/resizable interface
+  - Mock services for all MFE dependencies (logger, eventBus, notification, modal)
+  - Console tab with real-time log streaming
+  - Events tab with event log and emit functionality
+  - Metrics tab tracking events, notifications, logs, and errors
+  - Viewport controls with presets and custom dimensions
+  - Theme switcher supporting Light/Dark modes with Tailwind CSS integration
+  - Configuration system via mfe.config.mjs for styles, scripts, and import maps
+  - TypeScript support with comprehensive type definitions
+- **Getting Started Guide Update** - Restructured documentation to emphasize standalone development workflow
+- **Type System Improvements** - Created semantic type aliases and well-structured interfaces for @mfe-toolkit/dev configuration
+
 ### Changed - January 2025
 
 - **Project Status**: Marked entire project as Work in Progress (WIP)
