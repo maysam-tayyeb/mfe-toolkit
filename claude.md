@@ -77,14 +77,14 @@ cd apps/container-react && pnpm preview
 
 ## Architecture Overview
 
-This is a **microfrontend (MFE) monorepo** using pnpm workspaces. The architecture demonstrates real-world scenarios with a trading platform example, showcasing event-driven communication between MFEs.
+This is a **production-ready microfrontend (MFE) monorepo** using pnpm workspaces. The architecture demonstrates enterprise-grade patterns with real-world trading platform scenarios, showcasing cross-framework communication and service-oriented design.
 
 ### Supported Frameworks
 
-- **React 19**: Primary framework for container and many MFEs
-- **Vue 3**: Full support with shared dependencies via import map
-- **Vanilla JavaScript/TypeScript**: Zero-dependency MFEs
-- **Solid.js**: Reactive framework with fine-grained reactivity for high-performance MFEs
+- **React 17/18/19**: Comprehensive version support with shared runtime dependencies
+- **Vue 3**: Full Composition API support with shared dependencies via import map
+- **Solid.js**: Fine-grained reactive framework for high-performance MFEs
+- **Vanilla JavaScript/TypeScript**: Zero-dependency, framework-agnostic MFEs
 
 ### UI/UX Design Principles
 
@@ -114,28 +114,32 @@ This is a **microfrontend (MFE) monorepo** using pnpm workspaces. The architectu
 1. **Container Application** (`apps/container-react/`)
    - Main shell application that hosts and orchestrates MFEs
    - React 19 + React Context + Tailwind CSS + ShadCN UI
-   - Provides shared services: auth, modal, notifications, event bus, logger
-   - Dynamic MFE loading via ES modules (no Module Federation)
-   - MFE registry system for configuration management
-   - Uses React Context for state management (AuthContext, UIContext, RegistryContext)
+   - Provides shared services: auth, modal, notifications, event bus, logger, error reporter
+   - Dynamic MFE loading via ES modules with runtime URLs (no Module Federation)
+   - JSON-based MFE registry system with environment-specific configurations
+   - React Context for state management (AuthContext, UIContext, RegistryContext)
+   - Comprehensive error boundaries and retry mechanisms
 
 2. **Microfrontends** (`apps/service-demos/`)
-   - Event Bus Demos:
+   - **Trading Platform Scenario**:
+     - `mfe-market-watch`: React-based real-time market data viewer
+     - `mfe-trading-terminal`: Vue 3 trading interface with order placement
+     - `mfe-analytics-engine`: Vanilla TypeScript analytics processor
      - `mfe-event-playground`: Solid.js interactive event testing tool
-     - Trading Scenario MFEs:
-       - `mfe-market-watch`: React market data viewer
-       - `mfe-trading-terminal`: Vue 3 trading interface
-       - `mfe-analytics-engine`: Vanilla TypeScript analytics processor
+   - **Service Demonstrations**:
+     - Modal demos: React 17/18/19, Vue 3, Solid.js, Vanilla TS versions
+     - Notification demos: React 17/18/19, Vue 3, Solid.js, Vanilla TS versions
+   - All MFEs demonstrate framework-agnostic service injection patterns
 
 3. **Shared Packages** (`packages/`)
-   - `@mfe-toolkit/core`: Framework-agnostic toolkit with types, services, and utilities
-   - `@mfe-toolkit/react`: React-specific components and hooks (MFELoader, MFEErrorBoundary)
-   - `@mfe-toolkit/cli`: Command-line tools for creating and managing MFEs
-   - `@mfe-toolkit/state`: Cross-framework state management solution
-   - `@mfe-toolkit/state-middleware-performance`: Performance monitoring middleware for state management
-   - `@mfe/shared`: Internal shared utilities for demo apps (private, not published)
-   - `@mfe/design-system`: Framework-agnostic CSS-first design system (private, not published)
-   - `@mfe/design-system-react`: React 19 component wrappers for design system (private, not published)
+   - `@mfe-toolkit/core`: Framework-agnostic toolkit with types, services, utilities, and buildMFE system
+   - `@mfe-toolkit/react`: React-specific components (MFELoader with dual loading strategies, MFEErrorBoundary)
+   - `@mfe-toolkit/cli`: Command-line tools for scaffolding and managing MFEs
+   - `@mfe-toolkit/state`: Cross-framework state management with persistence and cross-tab sync
+   - `@mfe-toolkit/state-middleware-performance`: Performance monitoring middleware
+   - `@mfe/shared`: Internal shared utilities (private)
+   - `@mfe/design-system`: CSS-first design system with 500+ utility classes (private)
+   - `@mfe/design-system-react`: React 19 component wrappers for design system (private)
 
 ### Key Services
 
@@ -148,28 +152,40 @@ Services are injected into MFEs at mount time (no global window pollution):
 - **Auth Service**: Authentication state management
 - **Error Reporter**: Comprehensive error tracking and reporting
 
-### MFE Loading Process
+### MFE Loading Architecture
 
-1. Container loads MFE registry from JSON configuration
-2. MFEs are built and served from static file server (port 8080)
-3. Container dynamically imports MFEs at runtime
-4. Each MFE exports a default object with mount/unmount functions
-5. Services are injected into MFEs during mount (no global dependencies)
+#### Loading Process
+1. Container fetches MFE registry from JSON configuration (supports environment-specific configs)
+2. MFEs are pre-built as ES modules and served from static file server (port 8080)
+3. Container dynamically imports MFEs at runtime using `import(/* @vite-ignore */ url)`
+4. Each MFE exports a default object with `mount(element, container)` and `unmount(container)` functions
+5. Services are injected via service container during mount (zero global pollution)
 
-### MFE Loading Components
+#### Loading Strategies
+The `MFELoader` component in `@mfe-toolkit/react` provides two strategies:
 
-- **RegistryMFELoader**: Loads MFEs from registry configuration
+- **StandardLoaderStrategy**: Default strategy with retry logic, exponential backoff, and error reporting
+- **IsolatedLoaderStrategy**: Creates isolated DOM containers to prevent React interference with non-React MFEs
+
+Both strategies handle:
+- Dynamic imports with runtime URLs
+- Service injection without global dependencies
+- Comprehensive error handling and recovery
+- Automatic cleanup on unmount
+
+#### MFE Loading Components
+- **MFELoader**: Main loader with dual strategy support, error boundaries, and retry mechanisms
+- **RegistryMFELoader**: Loads MFEs from registry configuration with manifest validation
 - **CompatibleMFELoader**: Legacy support for older MFE formats
-- **MFEErrorBoundary**: Comprehensive error handling and recovery
-- All loaders include retry mechanisms and fallback UI
+- **MFEErrorBoundary**: React error boundary with recovery and error reporting
 
-### Registry System
+#### Registry System
+MFEs are configured via JSON registry files with full manifest v2 support:
 
-MFEs are configured via JSON registry files:
-
-- `public/mfe-registry.json` - Default registry
-- `public/mfe-registry.{environment}.json` - Environment-specific
+- `public/mfe-registry.json` - Default registry with all MFE configurations
+- `public/mfe-registry.{environment}.json` - Environment-specific overrides
 - Configurable via `VITE_MFE_REGISTRY_URL` environment variable
+- Supports capabilities, requirements, dependencies, and loading configurations
 
 ## Package Structure
 
@@ -410,11 +426,14 @@ See [State Management Architecture](./docs/architecture/state-management-archite
 
 ### Architecture Decisions
 
-- **Dynamic Imports over Module Federation**: Better independence, no build-time coupling
-- **React Context over Redux**: Better isolation, simpler state management
-- **Service Injection**: No global window pollution, better testability
-- **CSS-first Design System**: Framework-agnostic, zero JavaScript pollution
+- **Dynamic Imports over Module Federation**: Runtime flexibility, no build-time coupling, better version independence
+- **Service Injection Pattern**: Zero global/window pollution, framework-agnostic, better testability
+- **Dual Loading Strategies**: Support for both React and non-React MFEs with proper isolation
+- **CSS-first Design System**: Framework-agnostic, zero JavaScript pollution, 500+ utility classes
 - **TypeScript-first**: Full type safety across all packages and MFEs
+- **Registry-based Configuration**: Dynamic MFE discovery, environment-specific configs, manifest v2 support
+- **React Context over Redux**: Component-level isolation, simpler state management for container
+- **Universal State Manager**: Cross-framework state sharing with middleware support
 
 ## Design System
 

@@ -1,8 +1,6 @@
-# 🚧 MFE Toolkit - Enterprise Microfrontend Development Platform [WIP]
+# 🚀 MFE Toolkit - Enterprise Microfrontend Development Platform
 
-> **⚠️ Work in Progress**: This project is under active development and not yet ready for production use. APIs may change without notice.
-
-A comprehensive toolkit and reference architecture for building microfrontends. Features framework-agnostic core, framework-specific adapters, CLI tools, and cross-framework state management.
+A production-ready toolkit and reference architecture for building enterprise-grade microfrontends. Features framework-agnostic core, cross-framework communication, comprehensive dev tools, and battle-tested patterns from real-world implementations.
 
 ## ✨ Key Features
 
@@ -15,10 +13,12 @@ A comprehensive toolkit and reference architecture for building microfrontends. 
 - 🔄 **Cross-Framework Support** - React, Vue, Solid.js, and Vanilla JS MFEs work together ([see demos](./docs/service-demos.md))
 - 🛠️ **Modern Tooling** - Vite, TypeScript, pnpm workspaces, and ESBuild
 - 🔧 **Universal State Manager** - Cross-framework state management (React, Vue, Solid.js, Vanilla JS) with proxy-based reactivity and middleware support
-- 🎨 **Zero-Pollution Design System** - Framework-agnostic CSS-first design system with Modern Blue & Slate palette
-- 📐 **Professional UI/UX** - Hero sections, metric cards, tabs, semantic colors, and responsive layouts
+- 🎨 **Zero-Pollution Design System** - Framework-agnostic CSS-first design system with 500+ utility classes
+- 📐 **Professional UI/UX** - Modern Blue & Slate palette, heroes, metrics, cards, complete component system
 - 🚫 **No Global Pollution** - Clean architecture with service injection, no window/global variables
-- 📱 **Mobile-Responsive** - Adaptive layouts that work across all device sizes
+- 📱 **Mobile-Responsive** - Adaptive layouts with `ds-sm:*`, `ds-md:*`, `ds-lg:*` breakpoints
+- 🔄 **Dual Loading Strategies** - Standard and Isolated loaders for React and non-React MFEs
+- 📊 **Performance Monitoring** - Built-in middleware for state management performance tracking
 
 ## 🏗️ Architecture Overview
 
@@ -26,26 +26,29 @@ A comprehensive toolkit and reference architecture for building microfrontends. 
 ┌─────────────────────────────────────────────────────────────┐
 │                      Container Application                  │
 │  ┌───────────────────────────────────────────────────────┐  │
-│  │  Navigation | Dashboard | Modal Service | Event Bus   │  │
-│  │  Error Handling Demo                                  │  │
+│  │  Navigation | Dashboard | Registry | Services Demo    │  │
+│  │  Error Boundaries | Performance Monitoring            │  │
 │  └───────────────────────────────────────────────────────┘  │
 │                                                             │
-│  ┌─────────────────────────────────────────────────────┐    │
-│  │              Injected Services Layer                │    │
-│  │  ┌──────────┐ ┌───────────┐ ┌─────────┐ ┌─────────┐ │    │
-│  │  │  Logger  │ │ Event Bus │ │  Modal  │ │ Notify  │ │    │
-│  │  └──────────┘ └───────────┘ └─────────┘ └─────────┘ │    │
-│  └─────────────────────────────────────────────────────┘    │
+│  ┌───────────────────────────────────────────────────────┐  │
+│  │                Injected Services Layer                │  │
+│  │  ┌──────────┐ ┌───────────┐ ┌─────────┐ ┌─────────┐   │  │
+│  │  │  Logger  │ │ Event Bus │ │  Modal  │ │ Notify  │   │  │
+│  │  └──────────┘ └───────────┘ └─────────┘ └─────────┘   │  │
+│  │  ┌──────────────┐ ┌────────────────────────────────┐  │  │
+│  │  │Error Reporter│ │ Service Container (Injection)  │  │  │
+│  │  └──────────────┘ └────────────────────────────────┘  │  │
+│  └───────────────────────────────────────────────────────┘  │
 │                                                             │
-│  ┌─────────────────────────────────────────────────────┐    │
-│  │           Container State Management                │    │
-│  │    AuthContext  |  UIContext  |  RegistryContext    │    │
-│  └─────────────────────────────────────────────────────┘    │
+│  ┌───────────────────────────────────────────────────────┐  │
+│  │             Container State Management                │  │
+│  │    AuthContext  |  UIContext  |  RegistryContext      │  │
+│  └───────────────────────────────────────────────────────┘  │
 │                                                             │
-│  ┌─────────────────────────────────────────────────────┐    │
-│  │          MFE Loading Infrastructure                 │    │
-│  │     MFELoader Components | Error Boundaries         │    │
-│  └─────────────────────────────────────────────────────┘    │
+│  ┌───────────────────────────────────────────────────────┐  │
+│  │          MFE Loading Infrastructure                   │  │
+│  │     MFELoader Components | Error Boundaries           │  │
+│  └───────────────────────────────────────────────────────┘  │
 └─────────────────────────────────────────────────────────────┘
                               ↓
                   Dynamic Import (Runtime)
@@ -53,21 +56,23 @@ A comprehensive toolkit and reference architecture for building microfrontends. 
 ┌─────────────────────────────────────────────────────────────┐
 │         Static File Server (Port 8080)                      │
 │         Serves Built MFEs from dist/ directory              │
-│  ┌──────────────┐ ┌──────────────┐ ┌─────────────────┐      │
-│  │/modal-demos/ │ │/eventbus-demo│ │/state-demos/*  │      │
-│  │react|vue|js  │ │.js .js.map   │ │react|vue|vanilla│      │
-│  └──────────────┘ └──────────────┘ └─────────────────┘      │
+│  ┌────────────────┐ ┌────────────────┐ ┌─────────────────┐  │
+│  │/service-demos  │ │/event-bus/*    │ │/trading/*       │  │
+│  │/modal/*        │ │/playground.js  │ │market|terminal  │  │
+│  │/notifications  │ │                │ │analytics        │  │
+│  └────────────────┘ └────────────────┘ └─────────────────┘  │
 └─────────────────────────────────────────────────────────────┘
                               ↓
 ┌─────────────────────────────────────────────────────────────┐
 │                    Microfrontends (MFEs)                    │
-│  ┌──────────────┐ ┌──────────────┐ ┌─────────────────┐      │
-│  │Modal Demos   │ │EventBus Demo │ │State Demo MFEs  │      │
-│  │- React 19    │ │- React 19    │ │- React          │      │
-│  │- React 17    │ │- Vue 3       │ │- Vue            │      │
-│  │- Vue 3       │ │- Solid.js    │ │- Solid.js       │      │
-│  │- Vanilla JS  │ │- Vanilla JS  │ │- Vanilla JS     │      │
-│  └──────────────┘ └──────────────┘ └─────────────────┘      │
+│  ┌────────────────┐ ┌───────────────┐ ┌──────────────────┐  │
+│  │Service Demos   │ │Trading Demos  │ │Interactive Tools │  │
+│  │- Modal         │ │- Market Watch │ │- Event Playground│  │
+│  │  All frameworks│ │- Trading      │ │  (Solid.js)      │  │
+│  │- Notifications │ │  Terminal     │ │- Dev Tools       │  │
+│  │  All frameworks│ │- Analytics    │ │  Panel           │  │
+│  │                │ │  Engine       │ │                  │  │
+│  └────────────────┘ └───────────────┘ └──────────────────┘  │
 └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -103,7 +108,7 @@ The toolkit is available as modular npm packages under the `@mfe-toolkit` organi
 
 | Package                                                      | Description                                       | Status   |
 | ------------------------------------------------------------ | ------------------------------------------------- | -------- |
-| [`@mfe/design-system`](./packages/design-system)             | CSS-first design system with 200+ utility classes | Internal |
+| [`@mfe/design-system`](./packages/design-system)             | CSS-first design system with 500+ utility classes | Internal |
 | [`@mfe/design-system-react`](./packages/design-system-react) | React components for design system                | Internal |
 | [`@mfe/shared`](./packages/shared)                           | Shared utilities and constants                    | Internal |
 
@@ -254,22 +259,21 @@ pnpm dev:container-react  # React container app on http://localhost:3000
 
 The platform includes comprehensive service demonstrations across multiple frameworks:
 
-#### Modal Service Demos
+#### Trading Platform Scenario
+- **Market Watch** (React): Real-time market data viewer
+- **Trading Terminal** (Vue 3): Order placement interface
+- **Analytics Engine** (Vanilla TS): Real-time analytics processor
+- **Event Playground** (Solid.js): Interactive event testing tool
 
-- **React 19**: Full modal capabilities with JSX support
-- **React 17**: Legacy React with text-only content
-- **Vue 3**: Cross-framework integration demo
-- **Solid.js**: High-performance reactive framework demo
-- **Vanilla TS**: Lightweight implementation (5KB)
-
-#### Event Bus Demo
-
-- **React 19**: Interactive pub/sub demonstration with real-time event log
+#### Service Demonstrations
+- **Modal Service**: React 17/18/19, Vue 3, Solid.js, Vanilla TS implementations
+- **Notification Service**: React 17/18/19, Vue 3, Solid.js, Vanilla TS implementations
+- All demos showcase framework-agnostic service injection patterns
 
 Access demos at:
-
+- Trading Platform: http://localhost:3000/services/event-bus-v3
 - Modal Service: http://localhost:3000/services/modal
-- Event Bus: http://localhost:3000/services/event-bus
+- Notifications: http://localhost:3000/services/notifications
 
 See [Service Demonstrations](./docs/service-demos.md) for detailed documentation.
 
@@ -481,17 +485,19 @@ mfe-made-easy/
 ## 🎯 Features Implemented
 
 ✅ **Monorepo Setup**: pnpm workspaces with shared configurations  
-✅ **Container Applications**: Framework-agnostic architecture with React implementation  
-✅ **MFE Dev Kit**: Complete service layer for MFE integration  
-✅ **Dynamic Loading**: ES modules loaded at runtime (no Module Federation)  
-✅ **Shared Services**: Auth, Modal, Notification, Event Bus, Logger  
-✅ **Universal State Manager**: Cross-framework state synchronization with proxy-based reactivity  
-✅ **Dual MFE Loaders**: Standard and Isolated loaders for different scenarios  
-✅ **Zero-Pollution Design System**: CSS-first with 200+ utility classes  
-✅ **Professional UI/UX**: Hero sections, metric cards, tabs, semantic colors  
-✅ **Development Mode**: Hot reload for both container and MFEs  
-✅ **TypeScript**: Full type safety across the monorepo  
-✅ **Modern Tooling**: Vite, Tailwind CSS, ESLint, Vitest, Playwright
+✅ **Container Applications**: React 19 with comprehensive service injection  
+✅ **MFE Dev Kit**: Standalone development with interactive dev tools  
+✅ **Dynamic Loading**: Runtime ES module imports with dual loading strategies  
+✅ **Shared Services**: Auth, Modal, Notification, Event Bus, Logger, Error Reporter  
+✅ **Universal State Manager**: Cross-framework state with middleware and performance monitoring  
+✅ **Registry System**: JSON-based MFE configuration with manifest v2 support  
+✅ **Cross-Framework Support**: React 17/18/19, Vue 3, Solid.js, Vanilla TS  
+✅ **Zero-Pollution Design System**: CSS-first with 500+ utility classes  
+✅ **Professional UI/UX**: Hero sections, metrics, cards, complete component system  
+✅ **Error Handling**: Comprehensive error boundaries with retry mechanisms  
+✅ **Performance Monitoring**: Built-in middleware for state management metrics  
+✅ **TypeScript**: Full type safety with framework-agnostic types  
+✅ **Modern Tooling**: Vite, ESBuild, Tailwind CSS, ESLint, Vitest, Playwright
 
 ## 🚀 Quick Command Reference
 
@@ -571,12 +577,13 @@ pnpm type-check
 
 ### Services Not Available?
 
-Services are injected into MFEs at mount time (no global window pollution). Check:
+Services are injected into MFEs at mount time via service container (zero global pollution). Check:
 
-1. MFE is properly importing from `@mfe-toolkit/core` or `@mfe-toolkit/react`
-2. Services are passed to MFE during mount
-3. Error boundaries are catching and reporting errors
-4. Check the Error Reporter service for detailed error tracking
+1. MFE exports proper mount/unmount functions with service container parameter
+2. Services are injected via `createServiceContainer` during mount
+3. MFE is using correct TypeScript types from `@mfe-toolkit/core`
+4. Error boundaries are catching and reporting errors
+5. Check browser console for detailed error logs from Error Reporter service
 
 ### Port Already in Use?
 
@@ -607,29 +614,52 @@ The MFE platform now uses a **dynamic registry system** that loads MFE configura
 
 The container application looks for registry files in the `public` directory:
 
-- `mfe-registry.json` - Single source of truth for all MFE configurations (MFE Manifest format)
+- `mfe-registry.json` - Single source of truth for all MFE configurations (Manifest v2 format)
+- Supports environment-specific configs: `mfe-registry.{environment}.json`
 
 #### Registry JSON Structure
 
 ```json
 {
+  "$schema": "https://mfe-made-easy.com/schemas/mfe-registry.schema.json",
+  "version": "2.0.0",
+  "environment": "development",
   "mfes": [
     {
-      "name": "example",
+      "name": "mfe-market-watch",
       "version": "1.0.0",
-      "url": "http://localhost:3001/mfe-example.js",
-      "dependencies": ["react", "react-dom"],
-      "sharedLibs": ["@reduxjs/toolkit", "react-redux"],
+      "url": "http://localhost:8080/service-demos/event-bus/scenarios/trading/mfe-market-watch.js",
+      "dependencies": {
+        "runtime": { "react": "^18.0.0 || ^19.0.0" }
+      },
+      "capabilities": {
+        "emits": ["market:price-update"],
+        "listens": ["trading:order-placed"]
+      },
+      "requirements": {
+        "services": [
+          { "name": "eventBus", "optional": false },
+          { "name": "logger", "optional": true }
+        ]
+      },
       "metadata": {
-        "displayName": "Example MFE",
-        "description": "Demonstrates all MFE services",
-        "icon": "🎯"
+        "displayName": "Market Watch",
+        "description": "Real-time market data viewer",
+        "icon": "📈"
+      },
+      "config": {
+        "loading": {
+          "timeout": 30000,
+          "retries": 3,
+          "retryDelay": 1000
+        },
+        "runtime": {
+          "isolation": "none",
+          "singleton": true
+        }
       }
     }
-  ],
-  "environment": "development",
-  "version": "1.0.0",
-  "lastUpdated": "2024-01-20T10:00:00Z"
+  ]
 }
 ```
 
