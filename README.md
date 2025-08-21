@@ -13,7 +13,6 @@ A production-ready toolkit and reference architecture for building enterprise-gr
 - 🔄 **Cross-Framework Support** - React, Vue, Solid.js, and Vanilla JS MFEs work together ([see demos](./docs/service-demos.md))
 - 🛠️ **Modern Tooling** - Vite, TypeScript, pnpm workspaces, and ESBuild
 - 🔧 **Universal State Manager** - Cross-framework state management (React, Vue, Solid.js, Vanilla JS) with proxy-based reactivity and middleware support
-- 🎨 **Zero-Pollution Design System** - Framework-agnostic CSS-first design system with 500+ utility classes
 - 📐 **Professional UI/UX** - Modern Blue & Slate palette, heroes, metrics, cards, complete component system
 - 🚫 **No Global Pollution** - Clean architecture with service injection, no window/global variables
 - 📱 **Mobile-Responsive** - Adaptive layouts with `ds-sm:*`, `ds-md:*`, `ds-lg:*` breakpoints
@@ -32,9 +31,9 @@ A production-ready toolkit and reference architecture for building enterprise-gr
 │                                                             │
 │  ┌───────────────────────────────────────────────────────┐  │
 │  │                Injected Services Layer                │  │
-│  │  ┌──────────┐ ┌───────────┐ ┌─────────┐ ┌─────────┐   │  │
-│  │  │  Logger  │ │ Event Bus │ │  Modal  │ │ Notify  │   │  │
-│  │  └──────────┘ └───────────┘ └─────────┘ └─────────┘   │  │
+│  │  ┌──────────┐ ┌───────────┐ ┌─────────┐ ┌──────────┐  │  │
+│  │  │  Logger  │ │ Event Bus │ │  Modal  │ │  Notify  │  │  │
+│  │  └──────────┘ └───────────┘ └─────────┘ └──────────┘  │  │
 │  │  ┌──────────────┐ ┌────────────────────────────────┐  │  │
 │  │  │Error Reporter│ │ Service Container (Injection)  │  │  │
 │  │  └──────────────┘ └────────────────────────────────┘  │  │
@@ -54,7 +53,7 @@ A production-ready toolkit and reference architecture for building enterprise-gr
                   Dynamic Import (Runtime)
                               ↓
 ┌─────────────────────────────────────────────────────────────┐
-│         Static File Server (Port 8080)                      │
+│         Static File Server (S3)                             │
 │         Serves Built MFEs from dist/ directory              │
 │  ┌────────────────┐ ┌────────────────┐ ┌─────────────────┐  │
 │  │/service-demos  │ │/event-bus/*    │ │/trading/*       │  │
@@ -492,7 +491,6 @@ mfe-made-easy/
 ✅ **Universal State Manager**: Cross-framework state with middleware and performance monitoring  
 ✅ **Registry System**: JSON-based MFE configuration with manifest v2 support  
 ✅ **Cross-Framework Support**: React 17/18/19, Vue 3, Solid.js, Vanilla TS  
-✅ **Zero-Pollution Design System**: CSS-first with 500+ utility classes  
 ✅ **Professional UI/UX**: Hero sections, metrics, cards, complete component system  
 ✅ **Error Handling**: Comprehensive error boundaries with retry mechanisms  
 ✅ **Performance Monitoring**: Built-in middleware for state management metrics  
