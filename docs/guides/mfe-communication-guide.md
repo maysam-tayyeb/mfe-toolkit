@@ -1,48 +1,68 @@
 # MFE Communication Guide
 
-This guide demonstrates how to implement inter-MFE communication using the event bus system in the MFE platform.
+This guide demonstrates how to implement inter-MFE communication using the event bus system in the MFE Toolkit platform.
 
-> **🚀 New: Typed Event Bus**  
-> The platform now supports a fully typed event system with compile-time type safety. See the [Typed Event Bus Migration Guide](./typed-event-bus-migration.md) for details on migrating to the typed API.
+> **🚀 Typed Event Bus Support**  
+> The platform includes a fully typed event system with compile-time type safety. See the [Typed Event Bus Migration Guide](./typed-event-bus-migration.md) for details on using the typed API.
 
 ## 🎯 Overview
 
-The MFE Communication Center provides a real-time testing environment for inter-MFE communication. It displays two MFEs side-by-side with a centralized event log, allowing you to observe and test event-based communication patterns.
+The MFE Toolkit provides comprehensive inter-MFE communication capabilities through an event bus system. The platform includes demonstration pages that showcase real-time communication between MFEs, including a trading platform scenario with market data, trading terminals, and analytics engines.
 
 ## 🚀 Quick Start
 
-1. **Start all applications:**
+1. **Install dependencies and build:**
 
    ```bash
-   pnpm dev
+   pnpm install
+   pnpm build
    ```
 
-2. **Navigate to the MFE Communication Center:**
-   - Open http://localhost:3000/mfe-communication
-   - You'll see both MFEs loaded side-by-side with event controls
+2. **Start the development environment:**
+
+   ```bash
+   # In terminal 1: Start the container app
+   pnpm dev:container-react
+   
+   # In terminal 2: Serve the MFEs
+   pnpm serve
+   ```
+
+3. **Explore communication demos:**
+   - **Event Bus Demo**: http://localhost:3000/services/event-bus
+   - **Trading Platform**: View the integrated trading scenario with real-time market data
+   - **Service Demos**: Test modal and notification services across frameworks
 
 ## 📡 Inter-MFE Communication Examples
 
-### Example 1: Simple Message Exchange
+### Example 1: Trading Platform Communication
 
-**From Example MFE to React 17 MFE:**
+**Real-time market data synchronization:**
 
-1. In the Example MFE (left panel), enter:
-   - **Event name:** `inter-mfe.message`
-   - **Event data:**
+The trading platform demo showcases cross-framework communication:
+
+1. **Market Watch MFE (React)** broadcasts price updates:
    ```json
    {
-     "from": "example",
-     "to": "react17",
-     "message": "Hello React 17!",
-     "timestamp": "2024-01-20T10:30:00Z"
+     "event": "market.price-update",
+     "data": {
+       "symbol": "AAPL",
+       "price": 150.25,
+       "change": 2.5,
+       "timestamp": "2024-01-20T10:30:00Z"
+     }
    }
    ```
-2. Click "Send Event"
-3. Observe the event appear in:
-   - Example MFE Event Log (marked as "Sent")
-   - React 17 MFE Event Log (marked as "Received")
-   - Central Event Log (with direction indicators)
+
+2. **Trading Terminal (Vue 3)** receives updates and displays:
+   - Real-time price changes
+   - Order book updates
+   - Trading opportunities
+
+3. **Analytics Engine (Vanilla TS)** processes data:
+   - Calculates metrics
+   - Detects patterns
+   - Broadcasts analytics events
 
 ### Example 2: Data Synchronization
 
@@ -123,74 +143,104 @@ eventBus.on('user.action', (payload) => {
 
 ## 🔧 Implementation in Your MFE
 
+### Basic Setup
+
+```typescript
+import type { MFEServices } from '@mfe-toolkit/core';
+
+export default function createMFE(services: MFEServices) {
+  const { eventBus, logger, modal, notification } = services;
+  
+  return {
+    mount(element: HTMLElement) {
+      // Your MFE implementation
+      logger.info('MFE mounted');
+      
+      // Subscribe to events
+      const unsubscribe = eventBus.on('custom.event', (event) => {
+        logger.debug('Received event:', event);
+      });
+      
+      // Return cleanup function
+      return () => {
+        unsubscribe();
+      };
+    },
+    unmount() {
+      logger.info('MFE unmounting');
+    }
+  };
+}
+```
+
 ### Sending Events
 
 ```typescript
-// Access the event bus from injected services
-export default {
-  mount(element: HTMLElement, services: MFEServices) {
-    const { eventBus } = services;
-
-    // Send a targeted message
-    eventBus.emit('custom.event', {
-      from: 'your-mfe',
-      to: 'target-mfe',
-      action: 'update',
-      data: {
-        /* your data */
-      },
-    });
-
-    // Broadcast to all MFEs
-    eventBus.emit('broadcast.event', {
-      from: 'your-mfe',
-      to: 'all',
-      message: 'Global update',
-    });
+// Send a targeted message
+eventBus.emit('custom.event', {
+  from: 'your-mfe',
+  to: 'target-mfe',
+  action: 'update',
+  data: {
+    /* your data */
   },
-};
+});
+
+// Broadcast to all MFEs
+eventBus.emit('broadcast.event', {
+  from: 'your-mfe',
+  to: 'all',
+  message: 'Global update',
+});
 ```
 
 ### Receiving Events
 
 ```typescript
-// In React MFE
-export default {
-  mount(element: HTMLElement, services: MFEServices) {
-    const { eventBus } = services;
+// React Component Example
+import { useEffect } from 'react';
+import type { MFEServices } from '@mfe-toolkit/core';
 
-    // Listen for specific events
-    const unsubscribe = eventBus.on('custom.event', (payload) => {
-      console.log('Received event:', payload);
-
+function MyComponent({ services }: { services: MFEServices }) {
+  const { eventBus, logger } = services;
+  
+  useEffect(() => {
+    const unsubscribe = eventBus.on('custom.event', (event) => {
+      logger.debug('Received event:', event);
+      
       // Check if this MFE is the target
-      if (payload.data.to === 'your-mfe' || payload.data.to === 'all') {
+      if (event.data?.to === 'your-mfe' || event.data?.to === 'all') {
         // Handle the event
-        handleIncomingEvent(payload.data);
+        handleIncomingEvent(event.data);
       }
     });
 
-    // Store unsubscribe for cleanup
-    return {
-      unmount: () => {
-        unsubscribe();
-      },
-    };
-  },
-};
-
-// Or in React component within MFE:
-function MyComponent({ services }: { services: MFEServices }) {
-  useEffect(() => {
-    const { eventBus } = services;
-
-    const unsubscribe = eventBus.on('custom.event', (payload) => {
-      // Handle event
-    });
-
     return () => unsubscribe();
-  }, [services]);
+  }, [eventBus, logger]);
+  
+  return <div>Your component UI</div>;
 }
+
+// Vue 3 Composition API Example
+import { onMounted, onUnmounted } from 'vue';
+
+export default {
+  setup(props: { services: MFEServices }) {
+    const { eventBus, logger } = props.services;
+    let unsubscribe: (() => void) | null = null;
+    
+    onMounted(() => {
+      unsubscribe = eventBus.on('custom.event', (event) => {
+        logger.debug('Vue received:', event);
+        // Handle event
+      });
+    });
+    
+    onUnmounted(() => {
+      unsubscribe?.();
+    });
+  }
+};
 ```
 
 ### Event Types Reference
@@ -207,51 +257,54 @@ The platform supports these standard event types:
 | `auth.changed`      | Authentication updates    | Update permissions                |
 | `custom.*`          | Custom application events | App-specific needs                |
 
-## 📊 MFE Communication Center Features
+## 📊 Platform Features
 
-### Event Bus Controls
+### Event Bus Demo Page
 
-- **Custom Event Publisher**: Send events with custom types and JSON payloads
-- **Quick Actions**: Pre-configured buttons for common event types
-- **Event Type Input**: Define custom event types
-- **JSON Data Editor**: Format complex event payloads
+The Event Bus demo (`/services/event-bus`) provides:
 
-### Real-time Event Log
+- **Live Trading Scenario**: Market Watch, Trading Terminal, and Analytics Engine
+- **Interactive Event Playground**: Solid.js-based tool for testing events
+- **Real-time Event Log**: Monitor all events with timestamps and data
+- **Event Controls**: Send custom events with JSON payloads
+- **Framework Showcase**: See React, Vue 3, Solid.js, and Vanilla TS working together
 
-- **Direction Indicators**: Visual distinction between sent (→ OUT) and received (← IN) events
-- **Timestamp Tracking**: Precise timing for each event
-- **Source Identification**: Track which MFE sent each event
-- **Data Visualization**: Formatted JSON display of event payloads
-- **Log Management**: Clear log functionality
+### Service Integration
 
-### Communication Statistics
+All MFEs receive these services at mount time:
 
-- **Total Events**: Count of all logged events
-- **Events Sent**: Number of outgoing events
-- **Events Received**: Number of incoming events
-- **Active MFEs**: Current number of loaded MFEs
+- **Logger Service**: Centralized logging with levels
+- **Event Bus**: Pub/sub communication system
+- **Modal Service**: Cross-framework modal management
+- **Notification Service**: Toast notifications
+- **Auth Service**: Authentication state management
+- **Error Reporter**: Error tracking and reporting
 
-## 🎨 UI Components
+## 🎨 Design System Integration
 
-### Event Log Entry Structure
+The platform uses a CSS-first design system with 500+ utility classes:
+
+### Event UI Components
 
 ```typescript
-interface EventLogEntry {
-  id: string;
-  timestamp: Date;
-  type: string;
-  source: string;
-  data: any;
-  direction: 'sent' | 'received';
-}
+// Event display with design system classes
+<div className="ds-card ds-p-4">
+  <div className="ds-flex ds-justify-between ds-items-center">
+    <span className="ds-badge ds-badge-info">Event Type</span>
+    <span className="ds-text-sm ds-text-muted">10:30:25</span>
+  </div>
+  <pre className="ds-code-block ds-mt-2">
+    {JSON.stringify(eventData, null, 2)}
+  </pre>
+</div>
 ```
 
 ### Visual Indicators
 
-- **Blue**: Outgoing events (sent from container)
-- **Green**: Incoming events (received from MFEs)
-- **Timestamps**: Locale-specific time formatting
-- **JSON Formatting**: Pretty-printed data with syntax highlighting
+- **Event Types**: Color-coded badges for different event categories
+- **Timestamps**: Formatted with `ds-text-muted` for subtle display
+- **Data Display**: `ds-code-block` for JSON formatting
+- **Status**: `ds-badge-success`, `ds-badge-warning`, `ds-badge-danger`
 
 ## 🚦 Best Practices
 
@@ -284,18 +337,19 @@ interface EventLogEntry {
 ## 🔍 Debugging Tips
 
 1. **Use Browser DevTools**
-   - Monitor the `__EVENT_BUS__` on window object
-   - Check console logs for event activity
+   - Check the container's service container for event bus instance
+   - Monitor console logs with logger service output
+   - Use React/Vue DevTools to inspect MFE state
 
 2. **Event Log Inspection**
-   - Watch the central event log for all communications
-   - Use the direction indicators to trace event flow
-   - Check timestamps to debug timing issues
+   - Visit `/services/event-bus` for the interactive demo
+   - Use the Event Playground MFE to test custom events
+   - Monitor real-time event flow between MFEs
 
 3. **Testing Patterns**
-   - Start with simple ping-pong messages
-   - Test broadcast events with multiple listeners
-   - Verify cleanup by checking for memory leaks
+   - Start with the trading platform demo
+   - Test cross-framework communication
+   - Verify service injection and cleanup
 
 ## 📚 Advanced Patterns
 
@@ -321,9 +375,9 @@ eventBus.on('survey.response', (payload) => {
 ### Event Throttling
 
 ```typescript
-import { throttle } from 'lodash';
+import { throttle } from '@mfe-toolkit/core';
 
-const throttledEmit = throttle((eventType, data) => {
+const throttledEmit = throttle((eventType: string, data: unknown) => {
   eventBus.emit(eventType, data);
 }, 100);
 
@@ -429,15 +483,18 @@ For a complete migration guide, see [Typed Event Bus Migration Guide](./typed-ev
 
 ## 🔗 Related Documentation
 
-- [MFE Development Kit API](../packages/mfe-dev-kit/README.md)
-- [Container Services](../apps/container-react/README.md)
-- [Event Bus Implementation](../packages/mfe-dev-kit/src/services/event-bus.ts)
+- [MFE Toolkit Core API](../packages/mfe-toolkit-core/README.md)
+- [MFE Toolkit React Components](../packages/mfe-toolkit-react/README.md)
+- [MFE Toolkit CLI](../packages/mfe-toolkit-cli/README.md)
+- [State Management Architecture](../architecture/state-management-architecture.md)
 - [Typed Event Bus Migration Guide](./typed-event-bus-migration.md)
+- [Design System Documentation](../packages/design-system/README.md)
 
 ## 💡 Try It Yourself
 
-1. Open the MFE Communication Center
-2. Send a message from one MFE to another
-3. Watch the event flow in real-time
-4. Experiment with different event types and payloads
-5. Build your own inter-MFE communication patterns!
+1. Start the development environment with `pnpm dev:container-react` and `pnpm serve`
+2. Visit http://localhost:3000/services/event-bus
+3. Watch the trading platform demo with live market data
+4. Use the Event Playground to send custom events
+5. Experiment with cross-framework communication
+6. Build your own inter-MFE communication patterns!
