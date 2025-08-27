@@ -77,7 +77,7 @@ export class ErrorReporter {
 
     // Create error report
     const report: ErrorReport = {
-      id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      id: `${Date.now()}-${Math.random().toString(36).substring(2, 11)}`,
       timestamp: new Date(),
       mfeName,
       error: {
@@ -154,7 +154,7 @@ export class ErrorReporter {
   private getSessionId(): string {
     let sessionId = sessionStorage.getItem('mfe-session-id');
     if (!sessionId) {
-      sessionId = `session-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+      sessionId = `session-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`;
       sessionStorage.setItem('mfe-session-id', sessionId);
     }
     return sessionId;
