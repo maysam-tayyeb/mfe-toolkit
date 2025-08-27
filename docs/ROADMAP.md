@@ -61,6 +61,129 @@ The MFE Platform is a comprehensive, framework-agnostic toolkit that enables tea
 
 ---
 
+## 🔴 CRITICAL: Package Testing & Publication Readiness (Highest Priority)
+
+> **Status**: Testing Required Before Alpha Release  
+> **Timeline**: 2 weeks (Option A: Full Testing)  
+> **Decision**: No packages will be published until proper test coverage is achieved
+
+### Testing Requirements
+
+| Package | Current Tests | Required Coverage | Priority | Timeline | Blockers |
+|---------|--------------|-------------------|----------|----------|----------|
+| @mfe-toolkit/core | 1 test file (event-bus only) | 70%+ | **Critical** | Days 1-2 | Missing tests for Logger, ErrorReporter, ServiceContainer, Registry, utils; Fix `substr()` |
+| @mfe-toolkit/build | **Zero tests** | 70%+ | **Critical** | Days 3-4 | Test buildMFE, dependency detection, version aliasing, manifest parsing |
+| @mfe-toolkit/react | **Zero tests** | 70%+ | **Critical** | Day 5 | Test MFELoader, loading strategies, error boundaries, hooks |
+| @mfe-toolkit/cli | **Zero tests** | 60%+ | High | Days 6-7 | Test template generation, manifest creation, command parsing |
+| @mfe-toolkit/dev | **Zero tests** | 60%+ | High | Days 8-9 | Test dev server, mock services, HTML generation; Add LICENSE |
+| @mfe-toolkit/state | ✅ Well tested | Ready | Low | - | Just remove WIP status |
+
+### Week 1: Core Package Testing Sprint (Days 1-5)
+
+#### Days 1-2: @mfe-toolkit/core
+- [ ] Fix deprecated `substr()` → `substring()` in utils
+- [ ] Add Logger service tests
+- [ ] Add ErrorReporter tests
+- [ ] Add ServiceContainer tests
+- [ ] Add MFERegistry tests
+- [ ] Add utility function tests (generateId, delay, debounce, throttle)
+- [ ] Add manifest validator tests
+- [ ] Achieve 70%+ coverage
+
+#### Days 3-4: @mfe-toolkit/build
+- [ ] Test buildMFE main function
+- [ ] Test automatic dependency detection from manifest
+- [ ] Test version aliasing (react → react@18)
+- [ ] Test different framework configurations
+- [ ] Test error handling
+- [ ] Test JSX transform detection
+- [ ] Achieve 70%+ coverage
+
+#### Day 5: @mfe-toolkit/react
+- [ ] Test MFELoader component
+- [ ] Test StandardLoaderStrategy
+- [ ] Test IsolatedLoaderStrategy
+- [ ] Test MFEErrorBoundary
+- [ ] Test useMFEServices hook
+- [ ] Test withMFEServices HOC
+- [ ] Test retry logic and exponential backoff
+- [ ] Achieve 70%+ coverage
+
+### Week 2: Supporting Package Testing Sprint (Days 6-10)
+
+#### Days 6-7: @mfe-toolkit/cli
+- [ ] Test create command
+- [ ] Test template generation for all frameworks
+- [ ] Test manifest generation
+- [ ] Test manifest validation command
+- [ ] Verify generated projects actually build
+- [ ] Test error handling
+- [ ] Achieve 60%+ coverage
+
+#### Days 8-9: @mfe-toolkit/dev
+- [ ] Add LICENSE file
+- [ ] Test dev server startup
+- [ ] Test mock service implementations
+- [ ] Test HTML template generation
+- [ ] Test viewport controls
+- [ ] Test theme switching
+- [ ] Test auto-build detection
+- [ ] Achieve 60%+ coverage
+
+#### Day 10: Integration & Final Validation
+- [ ] Run full integration tests
+- [ ] Verify all cross-package dependencies
+- [ ] Run prepublish checks
+- [ ] Perform dry-run publish
+
+### Pre-Publication Checklist
+
+- [ ] **Testing Complete**
+  - [ ] @mfe-toolkit/core: 70%+ coverage
+  - [ ] @mfe-toolkit/build: 70%+ coverage  
+  - [ ] @mfe-toolkit/react: 70%+ coverage
+  - [ ] @mfe-toolkit/cli: 60%+ coverage
+  - [ ] @mfe-toolkit/dev: 60%+ coverage
+  - [ ] @mfe-toolkit/state: Already tested ✅
+
+- [ ] **Code Fixes**
+  - [ ] Fix deprecated `substr()` in @mfe-toolkit/core
+  - [ ] Add LICENSE to @mfe-toolkit/dev
+
+- [ ] **Documentation Updates**
+  - [ ] Update all README files from WIP → Alpha status
+  - [ ] Add Alpha warning: `⚠️ Alpha Release: APIs may change`
+  
+- [ ] **Validation**
+  - [ ] Run `pnpm build` successfully
+  - [ ] Run `pnpm prepublish:check` - all pass
+  - [ ] Run `pnpm publish:dry` - verify output
+  - [ ] Test cross-package dependencies work
+
+### Publishing Strategy After Testing
+
+Once all tests are complete and passing:
+
+1. **Alpha Release** (Recommended first step)
+   ```bash
+   pnpm publish:alpha  # Publishes as 0.1.0-alpha.1
+   ```
+
+2. **Test in Fresh Project**
+   ```bash
+   npm install @mfe-toolkit/cli@alpha
+   npx mfe create test-app
+   cd test-app && npm run build && npm run dev
+   ```
+
+3. **Iterate based on feedback** before stable release
+
+### Packages NOT Being Published
+
+- ❌ **@mfe-toolkit/state-middleware-performance** - No usage, no tests, minimal value
+
+---
+
 ## Current Platform State
 
 ### Architecture Overview
@@ -85,17 +208,17 @@ The MFE Platform is a comprehensive, framework-agnostic toolkit that enables tea
 └───────────────────────────────────────────────────────────┘
 ```
 
-### Published Packages
+### Package Status (Pre-Publication)
 
-| Package | Version | Description | Status |
-|---------|---------|-------------|--------|
-| @mfe-toolkit/core | 0.1.0 | Framework-agnostic core | 📦 Ready to publish |
-| @mfe-toolkit/react | 0.1.0 | React adapters and components | 📦 Ready to publish |
-| @mfe-toolkit/state | 0.1.0 | Cross-framework state management | 📦 Ready to publish |
-| @mfe-toolkit/state-middleware-performance | 0.1.0 | Performance monitoring | 📦 Ready to publish |
-| @mfe-toolkit/cli | 0.1.0 | CLI tools for scaffolding | 📦 Ready to publish |
-| @mfe-toolkit/build | 0.1.0 | Advanced build system with versioning | 📦 Ready to publish |
-| @mfe-toolkit/dev | 0.1.0 | Standalone development server with dev tools | 📦 Ready to publish |
+| Package | Version | Description | Test Coverage | Status |
+|---------|---------|-------------|---------------|--------|
+| @mfe-toolkit/core | 0.1.0 | Framework-agnostic core | ❌ Minimal (1 file) | 🧪 Testing Required |
+| @mfe-toolkit/react | 0.1.0 | React adapters and components | ❌ Zero tests | 🧪 Testing Required |
+| @mfe-toolkit/state | 0.1.0 | Cross-framework state management | ✅ Well tested | 📝 Remove WIP only |
+| @mfe-toolkit/state-middleware-performance | 0.1.0 | Performance monitoring | ❌ Zero tests | ⛔ Not publishing |
+| @mfe-toolkit/cli | 0.1.0 | CLI tools for scaffolding | ❌ Zero tests | 🧪 Testing Required |
+| @mfe-toolkit/build | 0.1.0 | Advanced build system with versioning | ❌ Zero tests | 🧪 Testing Required |
+| @mfe-toolkit/dev | 0.1.0 | Standalone development server with dev tools | ❌ Zero tests | 🧪 Testing Required |
 
 ### Service Demos
 
