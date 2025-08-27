@@ -1,6 +1,6 @@
-# @mfe-toolkit/react [WIP]
+# @mfe-toolkit/react
 
-> **⚠️ Work in Progress**: This package is under active development and not yet ready for production use. APIs may change without notice.
+> ⚠️ **Alpha Release**: This package is in alpha. APIs may change in future versions. Use in production at your own risk.
 
 React components and hooks for building microfrontends.
 
