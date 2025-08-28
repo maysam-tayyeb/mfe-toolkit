@@ -426,9 +426,11 @@ let unsubscribes: Array<() => void> = [];
 onMounted(() => {
   // Listen for stock selection from market watch
   const unsub1 = props.services.eventBus.on('market:stock-selected', (payload: any) => {
-    orderForm.value.symbol = payload.data?.symbol || 'AAPL';
-    if (payload.data?.price && orderForm.value.type === 'limit') {
-      orderForm.value.price = payload.data.price;
+    // Handle both direct payload and wrapped payload formats
+    const data = payload.data || payload;
+    orderForm.value.symbol = data?.symbol || 'AAPL';
+    if (data?.price && orderForm.value.type === 'limit') {
+      orderForm.value.price = data.price;
     }
   });
 
