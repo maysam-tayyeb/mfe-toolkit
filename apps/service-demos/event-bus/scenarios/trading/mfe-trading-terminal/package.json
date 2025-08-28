@@ -5,7 +5,9 @@
   "type": "module",
   "scripts": {
     "build": "node build.js",
-    "dev": "node build.js --watch"
+    "dev": "mfe-dev",
+    "dev:build": "node build.js --watch",
+    "dev:standalone": "pnpm build && mfe-dev"
   },
   "dependencies": {
     "@mfe-toolkit/core": "workspace:*",
@@ -13,6 +15,7 @@
   },
   "devDependencies": {
     "@mfe-toolkit/build": "workspace:*",
+    "@mfe-toolkit/dev": "workspace:*",
     "@vitejs/plugin-vue": "^5.0.0",
     "esbuild": "^0.24.2",
     "esbuild-plugin-vue3": "^0.4.2",
