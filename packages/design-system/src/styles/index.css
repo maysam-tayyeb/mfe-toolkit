@@ -12,11 +12,102 @@
 @tailwind components;
 @tailwind utilities;
 
+/* CSS Variables for Theming - Default Values */
+@layer base {
+  :root {
+    /* Primary Colors */
+    --ds-color-primary: 59 130 246; /* blue-500 */
+    --ds-color-primary-hover: 37 99 235; /* blue-600 */
+    --ds-color-primary-soft: 219 234 254; /* blue-100 */
+    
+    /* Secondary Colors */
+    --ds-color-secondary: 241 245 249; /* slate-100 */
+    --ds-color-secondary-hover: 226 232 240; /* slate-200 */
+    --ds-color-secondary-soft: 248 250 252; /* slate-50 */
+    
+    /* Surface Colors */
+    --ds-color-surface: 255 255 255; /* white */
+    --ds-color-surface-secondary: 248 250 252; /* slate-50 */
+    --ds-color-surface-muted: 241 245 249; /* slate-100 */
+    
+    /* Text Colors */
+    --ds-color-text: 15 23 42; /* slate-900 */
+    --ds-color-text-secondary: 51 65 85; /* slate-700 */
+    --ds-color-text-muted: 100 116 139; /* slate-500 */
+    --ds-color-text-inverse: 255 255 255; /* white */
+    
+    /* Border Colors */
+    --ds-color-border: 226 232 240; /* slate-200 */
+    --ds-color-border-secondary: 203 213 225; /* slate-300 */
+    
+    /* Semantic Colors */
+    --ds-color-success: 34 197 94; /* green-500 */
+    --ds-color-success-soft: 220 252 231; /* green-100 */
+    --ds-color-success-text: 22 101 52; /* green-800 */
+    
+    --ds-color-warning: 245 158 11; /* amber-500 */
+    --ds-color-warning-soft: 254 243 199; /* amber-100 */
+    --ds-color-warning-text: 146 64 14; /* amber-800 */
+    
+    --ds-color-danger: 239 68 68; /* red-500 */
+    --ds-color-danger-soft: 254 226 226; /* red-100 */
+    --ds-color-danger-text: 153 27 27; /* red-800 */
+    
+    --ds-color-info: 59 130 246; /* blue-500 */
+    --ds-color-info-soft: 219 234 254; /* blue-100 */
+    --ds-color-info-text: 30 58 138; /* blue-800 */
+  }
+  
+  /* Dark Mode Theme */
+  .dark {
+    --ds-color-primary: 59 130 246; /* blue-500 */
+    --ds-color-primary-hover: 96 165 250; /* blue-400 */
+    --ds-color-primary-soft: 30 58 138; /* blue-900 */
+    
+    --ds-color-secondary: 51 65 85; /* slate-700 */
+    --ds-color-secondary-hover: 71 85 105; /* slate-600 */
+    --ds-color-secondary-soft: 30 41 59; /* slate-800 */
+    
+    --ds-color-surface: 30 41 59; /* slate-800 */
+    --ds-color-surface-secondary: 15 23 42; /* slate-900 */
+    --ds-color-surface-muted: 51 65 85; /* slate-700 */
+    
+    --ds-color-text: 241 245 249; /* slate-100 */
+    --ds-color-text-secondary: 203 213 225; /* slate-300 */
+    --ds-color-text-muted: 148 163 184; /* slate-400 */
+    --ds-color-text-inverse: 15 23 42; /* slate-900 */
+    
+    --ds-color-border: 51 65 85; /* slate-700 */
+    --ds-color-border-secondary: 71 85 105; /* slate-600 */
+    
+    --ds-color-success: 34 197 94; /* green-500 */
+    --ds-color-success-soft: 5 46 22; /* green-950 */
+    --ds-color-success-text: 187 247 208; /* green-200 */
+    
+    --ds-color-warning: 245 158 11; /* amber-500 */
+    --ds-color-warning-soft: 69 26 3; /* amber-950 */
+    --ds-color-warning-text: 254 215 170; /* amber-200 */
+    
+    --ds-color-danger: 239 68 68; /* red-500 */
+    --ds-color-danger-soft: 69 10 10; /* red-950 */
+    --ds-color-danger-text: 254 202 202; /* red-200 */
+    
+    --ds-color-info: 59 130 246; /* blue-500 */
+    --ds-color-info-soft: 23 37 84; /* blue-950 */
+    --ds-color-info-text: 191 219 254; /* blue-200 */
+  }
+  
+  /* Allow themes to override via data-theme attribute */
+  [data-theme] {
+    /* Theme variables will override the defaults */
+  }
+}
+
 /* Component Classes - Framework Agnostic */
 @layer components {
   /* Card Components - Compact for better screen usage */
   .ds-card {
-    @apply rounded-lg border border-slate-200 bg-white dark:bg-slate-800 dark:border-slate-700;
+    @apply rounded-lg border border-border bg-surface dark:bg-surface dark:border-border;
   }
 
   .ds-card-padded {
@@ -28,7 +119,7 @@
   }
 
   .ds-card-header {
-    @apply px-4 py-3 border-b border-slate-200 dark:border-slate-700;
+    @apply px-4 py-3 border-b border-border dark:border-border;
   }
 
   .ds-card-content {
@@ -50,23 +141,68 @@
   }
 
   .ds-button-primary {
-    @apply ds-button bg-blue-500 text-white hover:bg-blue-600;
+    @apply ds-button bg-primary text-text-inverse hover:bg-primary-hover;
   }
 
   .ds-button-secondary {
-    @apply ds-button bg-slate-100 text-slate-700 hover:bg-slate-200 dark:bg-slate-700 dark:text-slate-100 dark:hover:bg-slate-600;
+    @apply ds-button bg-secondary text-text-secondary hover:bg-secondary-hover dark:bg-secondary dark:text-text dark:hover:bg-secondary-hover;
   }
 
   .ds-button-outline {
-    @apply ds-button border border-slate-300 bg-transparent hover:bg-slate-50 dark:border-slate-600 dark:hover:bg-slate-800;
+    @apply ds-button border border-border-secondary bg-transparent hover:bg-surface-secondary dark:border-border-secondary dark:hover:bg-surface-muted;
   }
 
   .ds-button-ghost {
-    @apply ds-button hover:bg-slate-100 dark:hover:bg-slate-800;
+    @apply ds-button hover:bg-surface-muted dark:hover:bg-surface-muted;
   }
 
   .ds-button-destructive {
-    @apply ds-button bg-red-500 text-white hover:bg-red-600;
+    @apply ds-button bg-danger text-text-inverse hover:bg-danger/90;
+  }
+
+  .ds-button-success {
+    @apply ds-button bg-success text-text-inverse hover:bg-success/90;
+  }
+
+  .ds-button-warning {
+    @apply ds-button bg-warning text-text-inverse hover:bg-warning/90;
+  }
+
+  /* Backward compatibility aliases */
+  .ds-button-danger {
+    @apply ds-button-destructive;
+  }
+
+  .ds-btn-primary {
+    @apply ds-button-primary;
+  }
+
+  .ds-btn-secondary {
+    @apply ds-button-secondary;
+  }
+
+  .ds-btn-outline {
+    @apply ds-button-outline;
+  }
+
+  .ds-btn-danger {
+    @apply ds-button-destructive;
+  }
+
+  .ds-btn-success {
+    @apply ds-button-success;
+  }
+
+  .ds-btn-warning {
+    @apply ds-button-warning;
+  }
+
+  .ds-btn-sm {
+    @apply ds-button-sm;
+  }
+
+  .ds-btn-lg {
+    @apply ds-button-lg;
   }
 
   .ds-button-sm {
@@ -95,7 +231,7 @@
   }
 
   .ds-caption {
-    @apply text-xs text-slate-500 dark:text-slate-400; /* Small text/captions */
+    @apply text-xs text-text-muted dark:text-text-muted; /* Small text/captions */
   }
 
   /* Legacy heading support */
@@ -247,19 +383,19 @@
   }
 
   .ds-badge-primary {
-    @apply ds-badge bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200;
+    @apply ds-badge bg-primary-soft text-primary dark:bg-primary-soft dark:text-primary;
   }
 
   .ds-badge-success {
-    @apply ds-badge bg-emerald-100 text-emerald-700 dark:bg-emerald-900 dark:text-emerald-200;
+    @apply ds-badge bg-success-soft text-success-text dark:bg-success-soft dark:text-success-text;
   }
 
   .ds-badge-warning {
-    @apply ds-badge bg-amber-100 text-amber-700 dark:bg-amber-900 dark:text-amber-200;
+    @apply ds-badge bg-warning-soft text-warning-text dark:bg-warning-soft dark:text-warning-text;
   }
 
   .ds-badge-error {
-    @apply ds-badge bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-200;
+    @apply ds-badge bg-danger-soft text-danger-text dark:bg-danger-soft dark:text-danger-text;
   }
 
   /* Alert/Notification Components */

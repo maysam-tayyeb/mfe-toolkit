@@ -38,39 +38,23 @@ export default {
       ],
     },
 
-    // Theme configuration for testing
+    // Theme configuration using class-based switching
     themes: {
       default: 'light',
       themes: [
         {
-          name: 'trading-dark',
-          displayName: 'Trading Dark',
-          variables: {
-            '--primary-color': '#00d4aa',
-            '--bg-primary': '#0a0e27',
-            '--bg-secondary': '#151932',
-            '--text-primary': '#e4e4e7',
-            '--text-secondary': '#a1a1aa',
-            '--border-color': '#27293d',
-            '--success-color': '#00d4aa',
-            '--danger-color': '#ff3860',
-            '--warning-color': '#ffdd57',
-          },
+          name: 'light',
+          displayName: 'Light',
+          description: 'Light trading theme',
+          class: 'light',
+          variables: {} // No inline variables needed - design system handles it
         },
         {
-          name: 'trading-light',
-          displayName: 'Trading Light',
-          variables: {
-            '--primary-color': '#0066ff',
-            '--bg-primary': '#ffffff',
-            '--bg-secondary': '#f8fafc',
-            '--text-primary': '#0f172a',
-            '--text-secondary': '#64748b',
-            '--border-color': '#e2e8f0',
-            '--success-color': '#10b981',
-            '--danger-color': '#ef4444',
-            '--warning-color': '#f59e0b',
-          },
+          name: 'dark', 
+          displayName: 'Dark',
+          description: 'Dark trading theme',
+          class: 'dark',
+          variables: {} // No inline variables needed - design system handles it
         },
       ],
     },
@@ -88,10 +72,10 @@ export default {
           font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', monospace;
         }
         
-        /* Price indicators */
-        .price-up { color: var(--success-color, #00d4aa); }
-        .price-down { color: var(--danger-color, #ff3860); }
-        .price-unchanged { color: var(--text-secondary, #a1a1aa); }
+        /* Price indicators using design system variables */
+        .price-up { color: rgb(var(--ds-color-success, 0 212 170)); }
+        .price-down { color: rgb(var(--ds-color-danger, 239 68 68)); }
+        .price-unchanged { color: rgb(var(--ds-color-text-muted, 148 163 184)); }
         
         /* Trading grid layout */
         .trading-grid {
