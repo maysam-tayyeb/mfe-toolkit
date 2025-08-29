@@ -1,8 +1,9 @@
-// Types
-export * from './types';
+// Service Registry (New Architecture)
+export * from './services/registry';
+
+// Types (Legacy - to be removed)
 export * from './types/events';
 export type { MFEModule } from './types/mfe-module';
-export * from './services/service-container';
 
 // Services
 export { createLogger } from './services/logger';
