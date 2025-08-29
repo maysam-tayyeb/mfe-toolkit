@@ -1,13 +1,10 @@
 import React, { useRef, useImperativeHandle, forwardRef, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useUI } from '@/contexts/UIContext';
-import {
-  AuthService,
-  ModalService,
-  NotificationService,
-  NotificationConfig,
-  ThemeService,
-} from '@mfe-toolkit/core';
+import type { AuthService } from '@mfe-toolkit/service-auth';
+import type { ModalService } from '@mfe-toolkit/service-modal';
+import type { NotificationService, NotificationConfig } from '@mfe-toolkit/service-notification';
+import type { ThemeService } from '@mfe-toolkit/service-theme';
 import { getThemeService } from './theme-service';
 
 export interface ContextBridgeRef {
@@ -32,16 +29,18 @@ export const ContextBridge = forwardRef<ContextBridgeRef, { children: React.Reac
     });
 
     const modalServiceRef = useRef<ModalService>({
-      open: () => {},
+      open: () => '', // Must return modal ID
       close: () => {},
     });
 
     const notificationServiceRef = useRef<NotificationService>({
-      show: () => {},
-      success: () => {},
-      error: () => {},
-      warning: () => {},
-      info: () => {},
+      show: () => '', // Must return notification ID
+      success: () => '',
+      error: () => '',
+      warning: () => '',
+      info: () => '',
+      dismiss: () => {},
+      dismissAll: () => {},
     });
 
     // Update service methods without recreating the objects
@@ -55,12 +54,18 @@ export const ContextBridge = forwardRef<ContextBridgeRef, { children: React.Reac
     }, [auth.session]);
 
     useEffect(() => {
-      modalServiceRef.current.open = (config) => ui.openModal(config);
+      modalServiceRef.current.open = (config) => {
+        ui.openModal(config);
+        return 'modal-1'; // Return a modal ID
+      };
       modalServiceRef.current.close = () => ui.closeModal();
     }, [ui.openModal, ui.closeModal]);
 
     useEffect(() => {
-      const show = (config: NotificationConfig) => ui.addNotification(config);
+      const show = (config: NotificationConfig) => {
+        ui.addNotification(config);
+        return `notification-${Date.now()}`; // Return a notification ID
+      };
 
       notificationServiceRef.current.show = show;
       notificationServiceRef.current.success = (title, message) =>
@@ -71,6 +76,8 @@ export const ContextBridge = forwardRef<ContextBridgeRef, { children: React.Reac
         show({ type: 'warning', title, message });
       notificationServiceRef.current.info = (title, message) =>
         show({ type: 'info', title, message });
+      notificationServiceRef.current.dismiss = () => {}; // TODO: Implement
+      notificationServiceRef.current.dismissAll = () => {}; // TODO: Implement
     }, [ui.addNotification]);
 
     // Get theme service singleton

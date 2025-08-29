@@ -1,12 +1,12 @@
 import {
-  MFEServices,
-  AuthService,
-  ModalService,
-  NotificationService,
-  ThemeService,
+  ServiceContainer,
   createLogger,
   getErrorReporter,
 } from '@mfe-toolkit/core';
+import type { AuthService } from '@mfe-toolkit/service-auth';
+import type { ModalService } from '@mfe-toolkit/service-modal';
+import type { NotificationService } from '@mfe-toolkit/service-notification';
+import type { ThemeService } from '@mfe-toolkit/service-theme';
 import { ContextBridgeRef } from './context-bridge';
 import { createPlatformEventBus } from './platform-event-bus';
 
@@ -106,27 +106,75 @@ const createThemeServiceImpl = (): ThemeService => {
   );
 };
 
-export const createMFEServices = (): MFEServices => {
+export const createMFEServices = (): ServiceContainer => {
   const eventBus = createPlatformEventBus();
-  const services: MFEServices = {
-    logger: createLogger('MFE'),
-    auth: createAuthService(),
-    eventBus,
-    modal: createModalServiceImpl(),
-    notification: createNotificationServiceImpl(),
-    theme: createThemeServiceImpl(),
+  
+  // Create a service container with the services
+  const serviceContainer: ServiceContainer = {
+    get: (name: string) => {
+      switch (name) {
+        case 'logger':
+          return createLogger('MFE');
+        case 'auth':
+          return createAuthService();
+        case 'eventBus':
+          return eventBus;
+        case 'modal':
+          return createModalServiceImpl();
+        case 'notification':
+          return createNotificationServiceImpl();
+        case 'theme':
+          return createThemeServiceImpl();
+        case 'errorReporter':
+          return getErrorReporter(
+            {
+              enableConsoleLog: true,
+              maxErrorsPerSession: 100,
+            },
+            serviceContainer
+          );
+        default:
+          return undefined;
+      }
+    },
+    require: (name: string) => {
+      const service = serviceContainer.get(name);
+      if (!service) {
+        throw new Error(`Required service '${name}' not found`);
+      }
+      return service;
+    },
+    has: (name: string) => {
+      return serviceContainer.get(name) !== undefined;
+    },
+    listAvailable: () => {
+      return [
+        { name: 'logger', version: '1.0.0', status: 'ready' as const },
+        { name: 'auth', version: '1.0.0', status: 'ready' as const },
+        { name: 'eventBus', version: '1.0.0', status: 'ready' as const },
+        { name: 'modal', version: '1.0.0', status: 'ready' as const },
+        { name: 'notification', version: '1.0.0', status: 'ready' as const },
+        { name: 'theme', version: '1.0.0', status: 'ready' as const },
+        { name: 'errorReporter', version: '1.0.0', status: 'ready' as const }
+      ];
+    },
+    getAllServices: () => {
+      const services = new Map<string, any>();
+      ['logger', 'auth', 'eventBus', 'modal', 'notification', 'theme', 'errorReporter'].forEach(name => {
+        services.set(name, serviceContainer.get(name));
+      });
+      return services;
+    },
+    createScoped: (_overrides: Record<string, any>) => {
+      // Return the same container for now (no scoping)
+      return serviceContainer;
+    },
+    dispose: async () => {
+      // Cleanup if needed
+    }
   };
 
-  // Create error reporter with services
-  services.errorReporter = getErrorReporter(
-    {
-      enableConsoleLog: true,
-      maxErrorsPerSession: 100,
-    },
-    services
-  );
-
-  return services;
+  return serviceContainer;
 };
 
 // Container-specific utilities (not part of MFE contract)

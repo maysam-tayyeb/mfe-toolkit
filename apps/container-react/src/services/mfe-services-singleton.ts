@@ -1,9 +1,9 @@
-import { MFEServices } from '@mfe-toolkit/core';
+import { ServiceContainer } from '@mfe-toolkit/core';
 import { createMFEServices } from './mfe-services';
 
-let mfeServicesInstance: MFEServices | null = null;
+let mfeServicesInstance: ServiceContainer | null = null;
 
-export const getMFEServicesSingleton = (): MFEServices => {
+export const getMFEServicesSingleton = (): ServiceContainer => {
   if (!mfeServicesInstance) {
     mfeServicesInstance = createMFEServices();
   }

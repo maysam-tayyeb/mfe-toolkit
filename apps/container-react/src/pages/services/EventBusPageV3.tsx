@@ -11,7 +11,7 @@ type LayoutMode = 'grid' | 'stacked' | 'focus';
 type EventMessage = {
   id: string;
   event: string;
-  data?: any;
+  data: any; // Make data required to match EventLog component
   timestamp: string;
   source: string;
 };
@@ -75,7 +75,7 @@ export const EventBusPageV3: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   
   // Core state
-  const [activeScenario, setActiveScenario] = useState<string>('trading');
+  const [activeScenario] = useState<string>('trading');
   const [events, setEvents] = useState<EventMessage[]>(() => {
     const loaded = StorageManager.load(STORAGE_KEY);
     return loaded.slice(0, MAX_EVENTS); // Limit initial load
@@ -88,8 +88,8 @@ export const EventBusPageV3: React.FC = () => {
   const [apiReferenceHeight, setApiReferenceHeight] = useState(75); // 75% of viewport
   const [isDraggingEventLog, setIsDraggingEventLog] = useState(false);
   const [isDraggingApi, setIsDraggingApi] = useState(false);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filterType, setFilterType] = useState<string>('all');
+  const [searchTerm] = useState('');
+  const [filterType] = useState<string>('all');
   
   // Container playground state
   const [containerEventName, setContainerEventName] = useState('container:test');
@@ -116,7 +116,8 @@ export const EventBusPageV3: React.FC = () => {
   const sendContainerEvent = () => {
     try {
       const payload = JSON.parse(containerPayload);
-      services.eventBus.emit(containerEventName, payload);
+      const eventBus = services.get('eventBus');
+      eventBus?.emit(containerEventName, payload);
       
       // Add to container event history
       const newEvent: EventMessage = {
@@ -170,7 +171,8 @@ export const EventBusPageV3: React.FC = () => {
     listeningEvents.forEach(eventPattern => {
       // If it's a pattern, subscribe to all events and filter
       if (eventPattern.endsWith(':*')) {
-        const unsubscribe = services.eventBus.on('*', (payload) => {
+        const eventBus = services.get('eventBus');
+        const unsubscribe = eventBus?.on('*', (payload: any) => {
           const actualEventName = payload.type || payload.eventName || 'unknown';
           if (matchesPattern(actualEventName, eventPattern)) {
             // Add to container event history
@@ -190,10 +192,11 @@ export const EventBusPageV3: React.FC = () => {
             });
           }
         });
-        unsubscribes.push(unsubscribe);
+        if (unsubscribe) unsubscribes.push(unsubscribe);
       } else {
         // For exact event names, subscribe directly
-        const unsubscribe = services.eventBus.on(eventPattern, (payload) => {
+        const eventBus = services.get('eventBus');
+        const unsubscribe = eventBus?.on(eventPattern, (payload: any) => {
           // Add to container event history
           const newEvent: EventMessage = {
             id: `${Date.now()}-${Math.random()}`,
@@ -210,7 +213,7 @@ export const EventBusPageV3: React.FC = () => {
             message: JSON.stringify(payload, null, 2).substring(0, 100)
           });
         });
-        unsubscribes.push(unsubscribe);
+        if (unsubscribe) unsubscribes.push(unsubscribe);
       }
     });
     
@@ -297,8 +300,9 @@ export const EventBusPageV3: React.FC = () => {
       });
     };
 
-    const unsubscribe = services.eventBus.on('*', handleEvent);
-    return () => unsubscribe();
+    const eventBus = services.get('eventBus');
+    const unsubscribe = eventBus?.on('*', handleEvent);
+    return () => unsubscribe?.();
   }, [services, activeScenario]);
 
   // Filtered and limited events for rendering
@@ -968,7 +972,7 @@ const MyTradingComponent: React.FC<{ services: MFEServices }> = ({ services }) =
                       </div>
                     )}
                     
-                    {currentScenario.mfes.map((mfe, index) => {
+                    {currentScenario.mfes.map((mfe) => {
                       const isFullWidth = mfe.position === 'full-width';
                       
                       return (

@@ -1,4 +1,4 @@
-import { useMemo, useEffect } from 'react';
+import { useEffect } from 'react';
 import { BrowserRouter, Routes, Route, useParams } from 'react-router-dom';
 import { Layout } from '@/components/Layout';
 import { HomePage } from '@/pages/HomePage';
@@ -38,7 +38,7 @@ function MFEPage() {
   return (
     <CompatibleMFELoader
       manifest={manifest}
-      services={mfeServices}
+      services={services}
       fallback={
         <div className="flex items-center justify-center h-64">
           <div className="text-center">
