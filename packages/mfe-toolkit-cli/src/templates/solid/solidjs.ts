@@ -17,7 +17,7 @@ export class SolidJSTemplate implements TemplateGenerator {
 
     if (serviceType === 'modal') {
       return `import { render } from 'solid-js/web';
-import type { MFEModule, MFEServiceContainer } from '@mfe-toolkit/core';
+import type { MFEModule, ServiceContainer } from '@mfe-toolkit/core';
 import { App } from './App';
 
 let dispose: (() => void) | null = null;
@@ -30,25 +30,25 @@ const module: MFEModule = {
     capabilities: ${JSON.stringify(capabilities)}
   },
 
-  mount: async (element: HTMLElement, container: MFEServiceContainer) => {
-    const services = container.getAllServices();
+  mount: async (element: HTMLElement, container: ServiceContainer) => {
+    
     
     dispose = render(() => App({ services }), element);
     
-    if (services.logger) {
-      services.logger.info('[${name}] Mounted successfully with Solid.js');
+    if (container.get('logger')) {
+      container.get('logger').info('[${name}] Mounted successfully with Solid.js');
     }
   },
   
-  unmount: async (container: MFEServiceContainer) => {
+  unmount: async (container: ServiceContainer) => {
     if (dispose) {
       dispose();
       dispose = null;
     }
     
-    const services = container.getAllServices();
-    if (services.logger) {
-      services.logger.info('[${name}] Unmounted successfully');
+    
+    if (container.get('logger')) {
+      container.get('logger').info('[${name}] Unmounted successfully');
     }
   }
 };
@@ -57,7 +57,7 @@ export default module;`;
     }
 
     // For non-modal services, use the standard template
-    return `import type { MFEModule, MFEServiceContainer } from '@mfe-toolkit/core';
+    return `import type { MFEModule, ServiceContainer } from '@mfe-toolkit/core';
 
 const module: MFEModule = {
   metadata: {
@@ -67,8 +67,8 @@ const module: MFEModule = {
     capabilities: ${JSON.stringify(capabilities)}
   },
 
-  mount: async (element: HTMLElement, container: MFEServiceContainer) => {
-    const services = container.getAllServices();
+  mount: async (element: HTMLElement, container: ServiceContainer) => {
+    
     
     const { render } = await import('solid-js/web');
     const { default: App } = await import('./App');
@@ -78,21 +78,21 @@ const module: MFEModule = {
     // Store dispose function for cleanup
     (element as any).__dispose = dispose;
     
-    if (services.logger) {
-      services.logger.info('[${name}] Mounted successfully with Solid.js');
+    if (container.get('logger')) {
+      container.get('logger').info('[${name}] Mounted successfully with Solid.js');
     }
   },
   
-  unmount: async (container: MFEServiceContainer) => {
+  unmount: async (container: ServiceContainer) => {
     const element = document.querySelector('[data-mfe="${name}"]') as any;
     if (element && element.__dispose) {
       element.__dispose();
       delete element.__dispose;
     }
     
-    const services = container.getAllServices();
-    if (services.logger) {
-      services.logger.info('[${name}] Unmounted successfully');
+    
+    if (container.get('logger')) {
+      container.get('logger').info('[${name}] Unmounted successfully');
     }
   }
 };
@@ -104,10 +104,10 @@ export default module;`;
     const { name } = this.config;
     
     return `import { createSignal } from 'solid-js';
-import type { MFEServices } from '@mfe-toolkit/core';
+import type { ServiceContainer } from '@mfe-toolkit/core';
 
 interface AppProps {
-  services: MFEServices;
+  services: ServiceContainer;
 }
 
 export const App = (props: AppProps) => {
@@ -115,7 +115,7 @@ export const App = (props: AppProps) => {
 
   const handleClick = () => {
     setCount(count() + 1);
-    props.services.logger?.info(\`Button clicked! Count: \${count() + 1}\`);
+    props.container.get('logger')?.info(\`Button clicked! Count: \${count() + 1}\`);
   };
 
   return (

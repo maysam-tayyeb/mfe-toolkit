@@ -8,7 +8,7 @@ import { EventBusPageV3 as EventBusPage } from '@/pages/services/EventBusPageV3'
 import { ModalPage } from '@/pages/services/ModalPage';
 import { NotificationsPage } from '@/pages/services/NotificationsPage';
 import { CompatibleMFELoader } from '@/components/CompatibleMFELoader';
-import { getMFEServicesSingleton } from '@/services/mfe-services-singleton';
+import { useServices } from '@/contexts/ServiceContext';
 import { useRegistryContext } from '@/contexts/RegistryContext';
 import { initializePlatformMetrics, updatePlatformMetric } from '@/store/platform-metrics';
 
@@ -16,7 +16,7 @@ import { initializePlatformMetrics, updatePlatformMetric } from '@/store/platfor
 function MFEPage() {
   const { mfeName } = useParams<{ mfeName: string }>();
   const { registry } = useRegistryContext();
-  const mfeServices = useMemo(() => getMFEServicesSingleton(), []);
+  const services = useServices();
 
   if (!mfeName || !registry) {
     return (

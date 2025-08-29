@@ -33,9 +33,10 @@ export class AnalyticsEngine {
   private eventListeners: Array<() => void> = [];
   private updateInterval: NodeJS.Timeout | null = null;
 
-  constructor(container: HTMLElement, services: MFEServices) {
+  constructor(container: HTMLElement, eventBus: EventBus, logger: Logger) {
     this.container = container;
-    this.services = services;
+    this.eventBus = eventBus;
+    this.logger = logger;
     this.init();
   }
 
@@ -204,7 +205,7 @@ export class AnalyticsEngine {
 
   private subscribeToEvents(): void {
     // Listen for executed trades
-    const unsub1 = this.services.eventBus.on('trade:executed', (payload: any) => {
+    const unsub1 = this.eventBus.on('trade:executed', (payload: any) => {
       const { symbol, action, quantity, price } = payload.data || {};
       
       if (symbol && action && quantity && price) {
@@ -222,7 +223,7 @@ export class AnalyticsEngine {
     });
 
     // Listen for price alerts
-    const unsub2 = this.services.eventBus.on('market:price-alert', (payload: any) => {
+    const unsub2 = this.eventBus.on('market:price-alert', (payload: any) => {
       const { symbol, price, change } = payload.data || {};
       
       if (symbol && price !== undefined && change !== undefined) {
@@ -239,7 +240,7 @@ export class AnalyticsEngine {
     });
 
     // Listen for volume spikes
-    const unsub3 = this.services.eventBus.on('market:volume-spike', (payload: any) => {
+    const unsub3 = this.eventBus.on('market:volume-spike', (payload: any) => {
       this.services.notifications?.addNotification({
         type: 'warning',
         title: 'Volume Spike Detected',
@@ -256,7 +257,7 @@ export class AnalyticsEngine {
       this.render();
       
       // Emit market status
-      this.services.eventBus.emit('analytics:market-status', {
+      this.eventBus.emit('analytics:market-status', {
         sentiment: this.metrics.marketSentiment,
         volatility: this.calculateVolatility(),
         momentum: this.calculateMomentum(),

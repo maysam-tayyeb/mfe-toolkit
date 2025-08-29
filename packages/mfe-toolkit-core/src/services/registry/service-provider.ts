@@ -106,10 +106,8 @@ export function createFactoryProvider<T>(
     
     async dispose(): Promise<void> {
       // Dispose all instances
-      for (const instance of instances) {
-        if (options.dispose) {
-          await options.dispose();
-        }
+      if (options.dispose) {
+        await options.dispose();
       }
       instances.clear();
     },

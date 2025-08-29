@@ -1,31 +1,55 @@
-import { useRef, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { UIProvider } from '@/contexts/UIContext';
 import { RegistryProvider } from '@/contexts/RegistryContext';
-import { ContextBridge, ContextBridgeRef } from '@/services/context-bridge';
-import { setContextBridge } from '@/services/mfe-services';
+import { ServiceProvider } from '@/contexts/ServiceContext';
 import { AppContent } from './AppContent';
+import { initializeServices } from '@/services/container-services';
+import type { ServiceContainer } from '@mfe-toolkit/core';
 
 function App() {
-  const contextBridgeRef = useRef<ContextBridgeRef>(null);
+  const [services, setServices] = useState<ServiceContainer | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Initialize the context bridge once it's available
-    if (contextBridgeRef.current) {
-      setContextBridge(contextBridgeRef.current);
-    }
+    // Initialize services
+    initializeServices()
+      .then((container) => {
+        setServices(container);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error('Failed to initialize services:', error);
+        setLoading(false);
+      });
   }, []);
 
+  if (loading) {
+    return (
+      <div className="ds-flex ds-items-center ds-justify-center ds-min-h-screen">
+        <div className="ds-text-lg">Initializing services...</div>
+      </div>
+    );
+  }
+
+  if (!services) {
+    return (
+      <div className="ds-flex ds-items-center ds-justify-center ds-min-h-screen">
+        <div className="ds-text-lg ds-text-danger">Failed to initialize services</div>
+      </div>
+    );
+  }
+
   return (
-    <AuthProvider>
-      <UIProvider>
-        <ContextBridge ref={contextBridgeRef}>
+    <ServiceProvider services={services}>
+      <AuthProvider>
+        <UIProvider>
           <RegistryProvider>
             <AppContent />
           </RegistryProvider>
-        </ContextBridge>
-      </UIProvider>
-    </AuthProvider>
+        </UIProvider>
+      </AuthProvider>
+    </ServiceProvider>
   );
 }
 

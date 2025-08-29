@@ -42,7 +42,8 @@ export function createModalProvider<TModalConfig extends BaseModalConfig = BaseM
           logger.debug('Opening modal', { title: config.title });
           
           // Check max modals
-          if (options.maxModals && modalService.getOpenModals?.().length >= options.maxModals) {
+          const openModals = modalService.getOpenModals?.() || [];
+          if (options.maxModals && openModals.length >= options.maxModals) {
             logger.warn(`Maximum number of modals (${options.maxModals}) reached`);
             throw new Error(`Cannot open more than ${options.maxModals} modals`);
           }

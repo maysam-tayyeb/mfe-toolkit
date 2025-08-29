@@ -16,7 +16,7 @@ export class React19Template implements TemplateGenerator {
 
     return `import React from 'react';
 import ReactDOM from 'react-dom/client';
-import type { MFEModule, MFEServiceContainer } from '@mfe-toolkit/core';
+import type { MFEModule, ServiceContainer } from '@mfe-toolkit/core';
 import { App } from './App';
 
 let root: ReactDOM.Root | null = null;
@@ -29,8 +29,8 @@ const module: MFEModule = {
     capabilities: ${JSON.stringify(capabilities)}
   },
 
-  mount: async (element: HTMLElement, container: MFEServiceContainer) => {
-    const services = container.getAllServices();
+  mount: async (element: HTMLElement, container: ServiceContainer) => {
+    
     
     root = ReactDOM.createRoot(element);
     root.render(
@@ -39,20 +39,20 @@ const module: MFEModule = {
       </React.StrictMode>
     );
     
-    if (services.logger) {
-      services.logger.info('[${name}] Mounted successfully with React 19');
+    if (container.get('logger')) {
+      container.get('logger').info('[${name}] Mounted successfully with React 19');
     }
   },
   
-  unmount: async (container: MFEServiceContainer) => {
+  unmount: async (container: ServiceContainer) => {
     if (root) {
       root.unmount();
       root = null;
     }
     
-    const services = container.getAllServices();
-    if (services.logger) {
-      services.logger.info('[${name}] Unmounted successfully');
+    
+    if (container.get('logger')) {
+      container.get('logger').info('[${name}] Unmounted successfully');
     }
   }
 };
@@ -64,10 +64,10 @@ export default module;`;
     const { name } = this.config;
     
     return `import React, { useState } from 'react';
-import type { MFEServices } from '@mfe-toolkit/core';
+import type { ServiceContainer } from '@mfe-toolkit/core';
 
 interface AppProps {
-  services: MFEServices;
+  services: ServiceContainer;
 }
 
 export const App: React.FC<AppProps> = ({ services }) => {
@@ -75,7 +75,7 @@ export const App: React.FC<AppProps> = ({ services }) => {
 
   const handleClick = () => {
     setCount(prev => prev + 1);
-    services.logger?.info(\`Button clicked! Count: \${count + 1}\`);
+    container.get('logger')?.info(\`Button clicked! Count: \${count + 1}\`);
   };
 
   return (

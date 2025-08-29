@@ -1,5 +1,5 @@
 import { AnalyticsEngine } from './AnalyticsEngine';
-import type { MFEModule, MFEServiceContainer } from '@mfe-toolkit/core';
+import type { MFEModule, ServiceContainer } from '@mfe-toolkit/core';
 
 let instance: AnalyticsEngine | null = null;
 
@@ -11,25 +11,23 @@ const module: MFEModule = {
     capabilities: ['analytics', 'data-processing', 'volume-tracking']
   },
 
-  mount: async (element: HTMLElement, container: MFEServiceContainer) => {
-    const services = container.getAllServices();
-    instance = new AnalyticsEngine(element, services);
+  mount: async (element: HTMLElement, container: ServiceContainer) => {
+    const eventBus = container.require('eventBus');
+    const logger = container.require('logger');
     
-    if (services.logger) {
-      services.logger.info('[mfe-analytics-engine] Mounted successfully');
-    }
+    instance = new AnalyticsEngine(element, eventBus, logger);
+    
+    logger.info('[mfe-analytics-engine] Mounted successfully');
   },
   
-  unmount: async (container: MFEServiceContainer) => {
+  unmount: async (container: ServiceContainer) => {
     if (instance) {
       instance.destroy();
       instance = null;
     }
     
-    const services = container.getAllServices();
-    if (services.logger) {
-      services.logger.info('[mfe-analytics-engine] Unmounted successfully');
-    }
+    const logger = container.get('logger');
+    logger?.info('[mfe-analytics-engine] Unmounted successfully');
   }
 };
 

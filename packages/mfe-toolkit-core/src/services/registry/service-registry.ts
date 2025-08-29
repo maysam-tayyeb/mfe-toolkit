@@ -78,7 +78,7 @@ export class ServiceRegistryImpl implements ServiceRegistry {
     const services: ServiceInfo[] = [];
     
     // Add registered services
-    for (const [name, service] of this.services.entries()) {
+    for (const [name] of this.services.entries()) {
       services.push({
         name,
         status: this.status.get(name) || 'ready',

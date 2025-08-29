@@ -16,7 +16,7 @@ export class React18Template implements TemplateGenerator {
 
     return `import React from 'react';
 import ReactDOM from 'react-dom/client';
-import type { MFEModule, MFEServiceContainer } from '@mfe-toolkit/core';
+import type { MFEModule, ServiceContainer } from '@mfe-toolkit/core';
 import { App } from './App';
 
 let root: ReactDOM.Root | null = null;
@@ -29,30 +29,30 @@ const module: MFEModule = {
     capabilities: ${JSON.stringify(capabilities)}
   },
 
-  mount: async (element: HTMLElement, container: MFEServiceContainer) => {
-    const services = container.getAllServices();
+  mount: async (element: HTMLElement, container: ServiceContainer) => {
     
     root = ReactDOM.createRoot(element);
     root.render(
       <React.StrictMode>
-        <App services={services} />
+        <App serviceContainer={container} />
       </React.StrictMode>
     );
     
-    if (services.logger) {
-      services.logger.info('[${name}] Mounted successfully with React 18');
+    const logger = container.get('logger');
+    if (logger) {
+      logger.info('[${name}] Mounted successfully with React 18');
     }
   },
   
-  unmount: async (container: MFEServiceContainer) => {
+  unmount: async (container: ServiceContainer) => {
     if (root) {
       root.unmount();
       root = null;
     }
     
-    const services = container.getAllServices();
-    if (services.logger) {
-      services.logger.info('[${name}] Unmounted successfully');
+    const logger = container.get('logger');
+    if (logger) {
+      logger.info('[${name}] Unmounted successfully');
     }
   }
 };
@@ -64,18 +64,21 @@ export default module;`;
     const { name } = this.config;
     
     return `import React, { useState } from 'react';
-import type { MFEServices } from '@mfe-toolkit/core';
+import type { ServiceContainer } from '@mfe-toolkit/core';
 
 interface AppProps {
-  services: MFEServices;
+  serviceContainer: ServiceContainer;
 }
 
-export const App: React.FC<AppProps> = ({ services }) => {
+export const App: React.FC<AppProps> = ({ serviceContainer }) => {
   const [count, setCount] = useState(0);
 
   const handleClick = () => {
     setCount(prev => prev + 1);
-    services.logger?.info(\`Button clicked! Count: \${count + 1}\`);
+    const logger = serviceContainer.get('logger');
+    if (logger) {
+      logger.info(\`Button clicked! Count: \${count + 1}\`);
+    }
   };
 
   return (

@@ -14,7 +14,7 @@ export class VanillaTypeScriptTemplate implements TemplateGenerator {
     const { name } = this.config;
     const { requiredServices, capabilities } = this.serviceConfig;
 
-    return `import type { MFEModule, MFEServiceContainer } from '@mfe-toolkit/core';
+    return `import type { MFEModule, ServiceContainer } from '@mfe-toolkit/core';
 
 const module: MFEModule = {
   metadata: {
@@ -24,8 +24,8 @@ const module: MFEModule = {
     capabilities: ${JSON.stringify(capabilities)}
   },
 
-  mount: async (element: HTMLElement, container: MFEServiceContainer) => {
-    const services = container.getAllServices();
+  mount: async (element: HTMLElement, container: ServiceContainer) => {
+    
     
     let clickCount = 0;
 
@@ -59,18 +59,18 @@ const module: MFEModule = {
       clickCount++;
       const counterEl = element.querySelector('#counter');
       if (counterEl) counterEl.textContent = String(clickCount);
-      services.logger?.info(\`Button clicked! Count: \${clickCount}\`);
+      container.get('logger')?.info(\`Button clicked! Count: \${clickCount}\`);
     });
     
-    if (services.logger) {
-      services.logger.info('[${name}] Mounted successfully');
+    if (container.get('logger')) {
+      container.get('logger').info('[${name}] Mounted successfully');
     }
   },
   
-  unmount: async (container: MFEServiceContainer) => {
-    const services = container.getAllServices();
-    if (services.logger) {
-      services.logger.info('[${name}] Unmounted successfully');
+  unmount: async (container: ServiceContainer) => {
+    
+    if (container.get('logger')) {
+      container.get('logger').info('[${name}] Unmounted successfully');
     }
   }
 };

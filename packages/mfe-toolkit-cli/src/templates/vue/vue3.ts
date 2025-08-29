@@ -15,7 +15,7 @@ export class Vue3Template implements TemplateGenerator {
     const { requiredServices, capabilities } = this.serviceConfig;
 
     return `import { createApp, h } from 'vue';
-import type { MFEModule, MFEServiceContainer } from '@mfe-toolkit/core';
+import type { MFEModule, ServiceContainer } from '@mfe-toolkit/core';
 import { App } from './App';
 
 let app: any = null;
@@ -28,8 +28,8 @@ const module: MFEModule = {
     capabilities: ${JSON.stringify(capabilities)}
   },
 
-  mount: async (element: HTMLElement, container: MFEServiceContainer) => {
-    const services = container.getAllServices();
+  mount: async (element: HTMLElement, container: ServiceContainer) => {
+    
     
     app = createApp({
       render() {
@@ -38,20 +38,20 @@ const module: MFEModule = {
     });
     app.mount(element);
     
-    if (services.logger) {
-      services.logger.info('[${name}] Mounted successfully with Vue 3');
+    if (container.get('logger')) {
+      container.get('logger').info('[${name}] Mounted successfully with Vue 3');
     }
   },
   
-  unmount: async (container: MFEServiceContainer) => {
+  unmount: async (container: ServiceContainer) => {
     if (app) {
       app.unmount();
       app = null;
     }
     
-    const services = container.getAllServices();
-    if (services.logger) {
-      services.logger.info('[${name}] Unmounted successfully');
+    
+    if (container.get('logger')) {
+      container.get('logger').info('[${name}] Unmounted successfully');
     }
   }
 };
@@ -63,12 +63,12 @@ export default module;`;
     const { name } = this.config;
     
     return `import { defineComponent, ref, h } from 'vue';
-import type { MFEServices } from '@mfe-toolkit/core';
+import type { ServiceContainer } from '@mfe-toolkit/core';
 
 export const App = defineComponent({
   props: {
     services: {
-      type: Object as () => MFEServices,
+      type: Object as () => ServiceContainer,
       required: true
     }
   },
@@ -77,7 +77,7 @@ export const App = defineComponent({
 
     const handleClick = () => {
       count.value++;
-      props.services.logger?.info(\`Button clicked! Count: \${count.value}\`);
+      props.container.get('logger')?.info(\`Button clicked! Count: \${count.value}\`);
     };
 
     return () => h('div', { class: 'ds-card ds-p-6 ds-m-4' }, [

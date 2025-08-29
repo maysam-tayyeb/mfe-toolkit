@@ -4,10 +4,11 @@ import React, {
   useState,
   useCallback,
   ReactNode,
-  useRef,
   useEffect,
 } from 'react';
-import { BaseModalConfig, NotificationConfig } from '@mfe-toolkit/core';
+import { useModalService, useNotificationService } from './ServiceContext';
+import type { BaseModalConfig } from '@mfe-toolkit/service-modal';
+import type { NotificationConfig } from '@mfe-toolkit/service-notification';
 
 type ModalConfig = BaseModalConfig<React.ReactNode>;
 
@@ -29,57 +30,76 @@ interface UIContextType {
 const UIContext = createContext<UIContextType | null>(null);
 
 export const UIProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const modalService = useModalService();
+  const notificationService = useNotificationService();
+  
   const [modal, setModal] = useState<{ isOpen: boolean; config: ModalConfig | null }>({
     isOpen: false,
     config: null,
   });
   const [notifications, setNotifications] = useState<NotificationConfig[]>([]);
-  const timeoutsRef = useRef<Map<string, NodeJS.Timeout>>(new Map());
+
+  // Subscribe to modal service changes
+  useEffect(() => {
+    if (!modalService) return;
+    
+    const unsubscribe = (modalService as any).subscribe?.((modals: any[]) => {
+      if (modals.length > 0) {
+        const topModal = modals[modals.length - 1];
+        setModal({ isOpen: true, config: topModal.config });
+      } else {
+        setModal({ isOpen: false, config: null });
+      }
+    });
+    
+    return unsubscribe;
+  }, [modalService]);
+
+  // Subscribe to notification service changes
+  useEffect(() => {
+    if (!notificationService) return;
+    
+    const unsubscribe = (notificationService as any).subscribe?.((notifs: NotificationConfig[]) => {
+      setNotifications(notifs);
+    });
+    
+    return unsubscribe;
+  }, [notificationService]);
 
   // Modal functions
   const openModal = useCallback((config: ModalConfig) => {
-    setModal({ isOpen: true, config });
-  }, []);
+    if (modalService) {
+      modalService.open(config);
+    } else {
+      setModal({ isOpen: true, config });
+    }
+  }, [modalService]);
 
   const closeModal = useCallback(() => {
-    setModal({ isOpen: false, config: null });
-  }, []);
+    if (modalService) {
+      modalService.close();
+    } else {
+      setModal({ isOpen: false, config: null });
+    }
+  }, [modalService]);
 
   // Notification functions
-  const removeNotification = useCallback((id: string) => {
-    setNotifications((prev) => prev.filter((n) => n.id !== id));
-    // Clear any pending timeout
-    const timeout = timeoutsRef.current.get(id);
-    if (timeout) {
-      clearTimeout(timeout);
-      timeoutsRef.current.delete(id);
-    }
-  }, []);
-
   const addNotification = useCallback((notification: NotificationConfig) => {
-    const id = notification.id || `notification-${Date.now()}-${Math.random()}`;
-    const newNotification = { ...notification, id };
-
-    setNotifications((prev) => [...prev, newNotification]);
-
-    // Auto-remove after duration
-    if (notification.duration !== 0) {
-      const duration = notification.duration || 5000;
-      const timeout = setTimeout(() => {
-        setNotifications((prev) => prev.filter((n) => n.id !== id));
-        timeoutsRef.current.delete(id);
-      }, duration);
-      timeoutsRef.current.set(id, timeout);
+    if (notificationService) {
+      notificationService.show(notification);
+    } else {
+      const id = notification.id || `notification-${Date.now()}`;
+      setNotifications(prev => [...prev, { ...notification, id }]);
     }
-  }, []);
+  }, [notificationService]);
 
-  // Clean up timeouts on unmount
-  useEffect(() => {
-    return () => {
-      timeoutsRef.current.forEach((timeout) => clearTimeout(timeout));
-      timeoutsRef.current.clear();
-    };
-  }, []);
+  const removeNotification = useCallback((id: string) => {
+    if (notificationService) {
+      notificationService.dismiss(id);
+    } else {
+      setNotifications(prev => prev.filter(n => n.id !== id));
+    }
+  }, [notificationService]);
 
   const value: UIContextType = {
     modal,
