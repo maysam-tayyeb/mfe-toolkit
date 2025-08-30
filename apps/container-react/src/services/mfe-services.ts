@@ -264,7 +264,7 @@ class MFEServiceContainerImpl implements ServiceContainer {
   }
 }
 
-export const createMFEServices = (): ServiceContainer => {
+export const createSharedServices = (): ServiceContainer => {
   // TypeScript validates that MFEServiceContainerImpl properly implements ServiceContainer
   return new MFEServiceContainerImpl();
 };

@@ -1,12 +1,12 @@
 import { ServiceContainer } from '@mfe-toolkit/core';
-import { createMFEServices } from './mfe-services';
+import { createSharedServices } from './mfe-services';
 
-let mfeServicesInstance: ServiceContainer | null = null;
+let sharedServicesInstance: ServiceContainer | null = null;
 
 export const getSharedServices = (): ServiceContainer => {
-  if (!mfeServicesInstance) {
-    mfeServicesInstance = createMFEServices();
+  if (!sharedServicesInstance) {
+    sharedServicesInstance = createSharedServices();
   }
 
-  return mfeServicesInstance;
+  return sharedServicesInstance;
 };

@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import {
-  createMFEServices,
+  createSharedServices,
   setContextBridge,
   resetContextBridge,
   isContextBridgeReady,
@@ -60,7 +60,7 @@ describe('MFE Services with Proxy Pattern', () => {
       })),
     };
 
-    services = createMFEServices();
+    services = createSharedServices();
   });
 
   afterEach(() => {
