@@ -29,12 +29,28 @@ function findRegistryPath(startPath: string = process.cwd()): string | null {
   let currentPath = path.resolve(startPath);
   
   while (currentPath !== path.dirname(currentPath)) {
-    // Check common locations
+    // Check common generic locations for registry files
     const possiblePaths = [
-      path.join(currentPath, 'apps', 'container-react', 'public', 'mfe-registry.json'),
-      path.join(currentPath, 'public', 'mfe-registry.json'),
       path.join(currentPath, 'mfe-registry.json'),
+      path.join(currentPath, 'public', 'mfe-registry.json'),
+      path.join(currentPath, 'src', 'mfe-registry.json'),
+      path.join(currentPath, 'config', 'mfe-registry.json'),
     ];
+    
+    // Also check in any 'apps' subdirectories
+    const appsDir = path.join(currentPath, 'apps');
+    if (fs.existsSync(appsDir) && fs.statSync(appsDir).isDirectory()) {
+      const appDirs = fs.readdirSync(appsDir).filter(dir => 
+        fs.statSync(path.join(appsDir, dir)).isDirectory()
+      );
+      
+      for (const appDir of appDirs) {
+        possiblePaths.push(
+          path.join(appsDir, appDir, 'public', 'mfe-registry.json'),
+          path.join(appsDir, appDir, 'mfe-registry.json')
+        );
+      }
+    }
     
     for (const registryPath of possiblePaths) {
       if (fs.existsSync(registryPath)) {
@@ -291,7 +307,10 @@ const listCommand = new Command('list')
     }
   });
 
-// Validate subcommand
+// Removed validate and sync commands - consolidated into main validate command
+
+/*
+// Validate subcommand (removed - use 'mfe-toolkit validate --registry' instead)
 const validateCommand = new Command('validate')
   .description('Validate registry integrity')
   .option('-r, --registry <path>', 'Path to registry file')
@@ -380,7 +399,7 @@ const validateCommand = new Command('validate')
     }
   });
 
-// Sync subcommand
+// Sync subcommand (removed - too complex and unpredictable)
 const syncCommand = new Command('sync')
   .description('Sync registry with filesystem')
   .option('-r, --registry <path>', 'Path to registry file')
@@ -521,12 +540,12 @@ const syncCommand = new Command('sync')
     console.log(chalk.green('\n✅ Registry synced successfully!'));
   });
 
+*/
+
 // Main registry command
 export const registryCommand = new Command('registry')
   .description('Manage MFE registry')
   .addCommand(addCommand)
   .addCommand(removeCommand)
   .addCommand(updateCommand)
-  .addCommand(listCommand)
-  .addCommand(validateCommand)
-  .addCommand(syncCommand);
+  .addCommand(listCommand);
