@@ -5,10 +5,12 @@
 
 import type { ServiceProvider, ServiceContainer } from '@mfe-toolkit/core';
 
+export type NotificationType = 'success' | 'error' | 'warning' | 'info';
+
 // Types
 export interface NotificationConfig {
   id?: string;
-  type: 'success' | 'error' | 'warning' | 'info';
+  type: NotificationType;
   title: string;
   message?: string;
   duration?: number;
@@ -40,15 +42,15 @@ class NotificationServiceImpl implements NotificationService {
   show(config: NotificationConfig): string {
     const id = config.id || `notification-${++this.idCounter}`;
     const notification = { ...config, id };
-    
+
     this.notifications.set(id, notification);
     this.notifyListeners();
-    
+
     // Auto-dismiss after duration
     if (config.duration !== 0) {
       setTimeout(() => this.dismiss(id), config.duration || 5000);
     }
-    
+
     return id;
   }
 
@@ -91,7 +93,7 @@ class NotificationServiceImpl implements NotificationService {
 
   private notifyListeners(): void {
     const notifications = Array.from(this.notifications.values());
-    this.listeners.forEach(callback => callback(notifications));
+    this.listeners.forEach((callback) => callback(notifications));
   }
 }
 
@@ -101,11 +103,11 @@ export function createNotificationProvider(): ServiceProvider<NotificationServic
     name: NOTIFICATION_SERVICE_KEY,
     version: '1.0.0',
     dependencies: ['logger'],
-    
+
     create(container: ServiceContainer): NotificationService {
       const logger = container.get('logger');
       const service = new NotificationServiceImpl();
-      
+
       if (logger) {
         const originalShow = service.show.bind(service);
         service.show = (config) => {
@@ -113,7 +115,7 @@ export function createNotificationProvider(): ServiceProvider<NotificationServic
           return originalShow(config);
         };
       }
-      
+
       return service;
     },
   };

@@ -9,13 +9,12 @@ const module: MFEModule = {
   metadata: {
     name: 'mfe-notification-react18',
     version: '1.0.0',
-    requiredServices: ['logger', 'notification'],
-    capabilities: ['notification-testing', 'react18-hooks', 'custom-notifications']
+    requiredServices: ['logger', 'notification']
   },
 
-  mount: async (element: HTMLElement, container: ServiceContainer) => {
-    const logger = container.require('logger');
-    const notification = container.require('notification');
+  mount: async (element: HTMLElement, serviceContainer: ServiceContainer) => {
+    const logger = serviceContainer.require('logger');
+    const notification = serviceContainer.require('notification');
     
     // React 18 uses createRoot API
     root = ReactDOM.createRoot(element);
@@ -28,10 +27,15 @@ const module: MFEModule = {
     logger.info('React 18 Notification MFE mounted');
   },
 
-  unmount: async (_container: ServiceContainer) => {
+  unmount: async (serviceContainer: ServiceContainer) => {
     if (root) {
       root.unmount();
       root = null;
+    }
+    
+    const logger = serviceContainer.get('logger');
+    if (logger) {
+      logger.info('React 18 Notification MFE unmounted');
     }
   }
 };

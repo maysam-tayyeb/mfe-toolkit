@@ -1,9 +1,24 @@
 import React, { useState } from 'react';
-import type { MFEServices } from '@mfe-toolkit/core';
+import type { Logger } from '@mfe-toolkit/core';
 
 type NotificationType = 'success' | 'error' | 'warning' | 'info';
 
-export const NotificationDemo: React.FC<{ services: MFEServices }> = ({ services }) => {
+interface NotificationService {
+  show(options: {
+    title: string;
+    message: string;
+    type: NotificationType;
+    duration?: number;
+  }): void;
+  clear?(): void;
+}
+
+interface NotificationDemoProps {
+  notification: NotificationService;
+  logger: Logger;
+}
+
+export const NotificationDemo: React.FC<NotificationDemoProps> = ({ notification, logger }) => {
   const [notificationCount, setNotificationCount] = useState(0);
   const [customTitle, setCustomTitle] = useState('Custom Notification');
   const [customMessage, setCustomMessage] = useState('This is a custom notification message');
@@ -15,15 +30,14 @@ export const NotificationDemo: React.FC<{ services: MFEServices }> = ({ services
     type: NotificationType = 'info',
     duration?: number
   ) => {
-    if (services.notification) {
-      services.notification.show({
-        title,
-        message,
-        type,
-        duration
-      });
-      setNotificationCount(prev => prev + 1);
-    }
+    notification.show({
+      title,
+      message,
+      type,
+      duration
+    });
+    setNotificationCount(prev => prev + 1);
+    logger.info(`Notification shown: ${title} - ${message}`);
   };
 
   const showSuccess = () => {
@@ -119,8 +133,9 @@ export const NotificationDemo: React.FC<{ services: MFEServices }> = ({ services
   };
 
   const clearAll = () => {
-    if (services.notification?.clear) {
-      services.notification.clear();
+    if (notification.clear) {
+      notification.clear();
+      logger.info('All notifications cleared');
     }
   };
 
