@@ -16,7 +16,7 @@ export interface ThemeService {
   cycleTheme?(): void;
 }
 
-export const THEME_SERVICE_KEY = '@mfe-toolkit/theme';
+export const THEME_SERVICE_KEY = 'theme';
 
 // Implementation
 class ThemeServiceImpl implements ThemeService {
@@ -117,6 +117,6 @@ export const themeServiceProvider = createThemeProvider();
 // Module augmentation
 declare module '@mfe-toolkit/core' {
   interface ServiceMap {
-    '@mfe-toolkit/theme': ThemeService;
+    theme: ThemeService;
   }
 }

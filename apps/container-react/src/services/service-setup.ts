@@ -10,7 +10,8 @@ import {
   type ServiceContainer,
 } from '@mfe-toolkit/core';
 
-import { authServiceProvider } from '@mfe-toolkit/service-auth';
+import { authServiceProvider } from '@mfe-toolkit/service-authentication';
+import { authorizationServiceProvider } from '@mfe-toolkit/service-authorization';
 import { modalServiceProvider } from '@mfe-toolkit/service-modal';
 import { notificationServiceProvider } from '@mfe-toolkit/service-notification';
 import { themeServiceProvider } from '@mfe-toolkit/service-theme';
@@ -32,6 +33,7 @@ export async function setupServices(): Promise<ServiceRegistry> {
   
   // Register service packages
   registry.registerProvider(authServiceProvider);
+  registry.registerProvider(authorizationServiceProvider); // Depends on auth
   registry.registerProvider(modalServiceProvider);
   registry.registerProvider(notificationServiceProvider);
   registry.registerProvider(themeServiceProvider);

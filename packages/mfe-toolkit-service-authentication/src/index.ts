@@ -22,6 +22,6 @@ export { createAuthProvider, authServiceProvider, type AuthProviderOptions } fro
 // Module augmentation for type safety
 declare module '@mfe-toolkit/core' {
   interface ServiceMap {
-    '@mfe-toolkit/auth': import('./types').AuthService;
+    auth: import('./types').AuthService;
   }
 }

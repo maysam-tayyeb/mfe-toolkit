@@ -4,7 +4,8 @@
  */
 
 import type { ServiceContainer } from '@mfe-toolkit/core';
-import type { AuthService } from '@mfe-toolkit/service-auth';
+import type { AuthService } from '@mfe-toolkit/service-authentication';
+import type { AuthorizationService } from '@mfe-toolkit/service-authorization';
 import type { ModalService } from '@mfe-toolkit/service-modal';
 import type { NotificationService } from '@mfe-toolkit/service-notification';
 import type { ThemeService } from '@mfe-toolkit/service-theme';
@@ -34,19 +35,23 @@ export function getServices(): ServiceContainer | null {
  * Service accessor functions for React contexts
  */
 export function getAuthService(): AuthService | undefined {
-  return containerInstance?.get('@mfe-toolkit/auth');
+  return containerInstance?.get('auth');
+}
+
+export function getAuthorizationService(): AuthorizationService | undefined {
+  return containerInstance?.get('authz');
 }
 
 export function getModalService(): ModalService | undefined {
-  return containerInstance?.get('@mfe-toolkit/modal');
+  return containerInstance?.get('modal');
 }
 
 export function getNotificationService(): NotificationService | undefined {
-  return containerInstance?.get('@mfe-toolkit/notification');
+  return containerInstance?.get('notification');
 }
 
 export function getThemeService(): ThemeService | undefined {
-  return containerInstance?.get('@mfe-toolkit/theme');
+  return containerInstance?.get('theme');
 }
 
 export function getLogger() {

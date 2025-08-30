@@ -120,9 +120,12 @@ importers:
       '@mfe-toolkit/service-analytics':
         specifier: workspace:*
         version: link:../../packages/mfe-toolkit-service-analytics
-      '@mfe-toolkit/service-auth':
+      '@mfe-toolkit/service-authentication':
         specifier: workspace:*
-        version: link:../../packages/mfe-toolkit-service-auth
+        version: link:../../packages/mfe-toolkit-service-authentication
+      '@mfe-toolkit/service-authorization':
+        specifier: workspace:*
+        version: link:../../packages/mfe-toolkit-service-authorization
       '@mfe-toolkit/service-modal':
         specifier: workspace:*
         version: link:../../packages/mfe-toolkit-service-modal
@@ -689,7 +692,25 @@ importers:
         specifier: ^5.0.0
         version: 5.8.3
 
-  packages/mfe-toolkit-service-auth:
+  packages/mfe-toolkit-service-authentication:
+    devDependencies:
+      '@mfe-toolkit/core':
+        specifier: workspace:*
+        version: link:../mfe-toolkit-core
+      '@types/node':
+        specifier: ^20.0.0
+        version: 20.19.9
+      tsup:
+        specifier: ^8.0.0
+        version: 8.5.0(@microsoft/api-extractor@7.43.0(@types/node@20.19.9))(jiti@2.5.1)(postcss@8.5.6)(tsx@4.20.3)(typescript@5.8.3)(yaml@2.8.0)
+      typescript:
+        specifier: ^5.0.0
+        version: 5.8.3
+      vitest:
+        specifier: ^1.6.0
+        version: 1.6.1(@types/node@20.19.9)(@vitest/ui@3.2.4)(happy-dom@18.0.1)(jsdom@23.2.0)(less@4.4.0)(lightningcss@1.30.1)(sass@1.89.2)(stylus@0.64.0)
+
+  packages/mfe-toolkit-service-authorization:
     devDependencies:
       '@mfe-toolkit/core':
         specifier: workspace:*

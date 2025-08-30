@@ -18,7 +18,8 @@
   "dependencies": {
     "@mfe-toolkit/core": "workspace:*",
     "@mfe-toolkit/react": "workspace:*",
-    "@mfe-toolkit/service-auth": "workspace:*",
+    "@mfe-toolkit/service-authentication": "workspace:*",
+    "@mfe-toolkit/service-authorization": "workspace:*",
     "@mfe-toolkit/service-modal": "workspace:*",
     "@mfe-toolkit/service-notification": "workspace:*",
     "@mfe-toolkit/service-theme": "workspace:*",

@@ -45,25 +45,30 @@ export function useEventBus() {
 
 export function useAuthService() {
   const serviceContainer = useServices();
-  return serviceContainer.get('@mfe-toolkit/auth');
+  return serviceContainer.get('auth');
+}
+
+export function useAuthzService() {
+  const serviceContainer = useServices();
+  return serviceContainer.get('authz');
 }
 
 export function useModalService() {
   const serviceContainer = useServices();
-  return serviceContainer.get('@mfe-toolkit/modal');
+  return serviceContainer.get('modal');
 }
 
 export function useNotificationService() {
   const serviceContainer = useServices();
-  return serviceContainer.get('@mfe-toolkit/notification');
+  return serviceContainer.get('notification');
 }
 
 export function useThemeService() {
   const serviceContainer = useServices();
-  return serviceContainer.get('@mfe-toolkit/theme');
+  return serviceContainer.get('theme');
 }
 
 export function useAnalyticsService() {
   const serviceContainer = useServices();
-  return serviceContainer.get('@mfe-toolkit/analytics');
+  return serviceContainer.get('analytics');
 }

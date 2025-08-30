@@ -25,14 +25,14 @@ export interface AuthService {
   isAuthenticated(): boolean;
   
   /**
-   * Check if user has a specific permission
+   * Get access token
    */
-  hasPermission(permission: string): boolean;
+  getAccessToken?(): string | null;
   
   /**
-   * Check if user has a specific role
+   * Get refresh token
    */
-  hasRole(role: string): boolean;
+  getRefreshToken?(): string | null;
   
   /**
    * Login user
@@ -92,4 +92,4 @@ export interface AuthConfig {
 /**
  * Service key for registration
  */
-export const AUTH_SERVICE_KEY = '@mfe-toolkit/auth';
+export const AUTH_SERVICE_KEY = 'auth';

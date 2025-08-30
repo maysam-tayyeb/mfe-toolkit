@@ -121,4 +121,4 @@ export interface ModalStackEntry<TModalConfig = BaseModalConfig> {
 /**
  * Service key for registration
  */
-export const MODAL_SERVICE_KEY = '@mfe-toolkit/modal';
+export const MODAL_SERVICE_KEY = 'modal';

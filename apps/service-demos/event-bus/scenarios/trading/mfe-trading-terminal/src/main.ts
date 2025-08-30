@@ -9,14 +9,14 @@ const module: MFEModule = {
     name: 'mfe-trading-terminal',
     version: '1.0.0',
     requiredServices: ['eventBus', 'logger'],
-    optionalServices: ['@mfe-toolkit/notification'],
+    optionalServices: ['notification'],
     capabilities: ['order-placement', 'portfolio-management']
   },
 
   mount: async (element: HTMLElement, container: ServiceContainer) => {
     const eventBus = container.require('eventBus');
     const logger = container.require('logger');
-    const notification = container.get('@mfe-toolkit/notification');
+    const notification = container.get('notification');
     
     app = createApp(TradingTerminal, { 
       eventBus,

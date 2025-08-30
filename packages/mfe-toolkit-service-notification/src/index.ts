@@ -29,7 +29,7 @@ export interface NotificationService {
   dismissAll(): void;
 }
 
-export const NOTIFICATION_SERVICE_KEY = '@mfe-toolkit/notification';
+export const NOTIFICATION_SERVICE_KEY = 'notification';
 
 // Implementation
 class NotificationServiceImpl implements NotificationService {
@@ -124,6 +124,6 @@ export const notificationServiceProvider = createNotificationProvider();
 // Module augmentation
 declare module '@mfe-toolkit/core' {
   interface ServiceMap {
-    '@mfe-toolkit/notification': NotificationService;
+    notification: NotificationService;
   }
 }

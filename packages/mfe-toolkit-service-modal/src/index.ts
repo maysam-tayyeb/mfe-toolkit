@@ -21,6 +21,6 @@ export { createModalProvider, modalServiceProvider, type ModalProviderOptions } 
 // Module augmentation for type safety
 declare module '@mfe-toolkit/core' {
   interface ServiceMap {
-    '@mfe-toolkit/modal': import('./types').ModalService;
+    modal: import('./types').ModalService;
   }
 }

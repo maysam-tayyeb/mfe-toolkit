@@ -42,14 +42,19 @@ export class AuthServiceImpl implements AuthService {
     return this.session.isAuthenticated;
   }
 
-  hasPermission(permission: string): boolean {
-    if (!this.session) return false;
-    return this.session.permissions.includes(permission);
+  getAccessToken(): string | null {
+    // In a real implementation, this would return the JWT access token
+    // For now, return a mock token if authenticated
+    if (this.session && this.session.isAuthenticated) {
+      return `mock-access-token-${this.session.userId}`;
+    }
+    return null;
   }
 
-  hasRole(role: string): boolean {
-    if (!this.session) return false;
-    return this.session.roles.includes(role);
+  getRefreshToken(): string | null {
+    // In a real implementation, this would return the refresh token
+    // For now, return the refresh token from session if available
+    return this.session?.refreshToken || null;
   }
 
   async login(credentials: LoginCredentials): Promise<AuthSession> {

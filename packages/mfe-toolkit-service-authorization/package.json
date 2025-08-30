@@ -1,7 +1,7 @@
 {
-  "name": "@mfe-toolkit/service-auth",
+  "name": "@mfe-toolkit/service-authorization",
   "version": "1.0.0",
-  "description": "Authentication service for MFE Toolkit",
+  "description": "Authorization service for MFE Toolkit",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
@@ -19,8 +19,10 @@
   "keywords": [
     "mfe",
     "microfrontend",
-    "auth",
-    "authentication",
+    "authz",
+    "authorization",
+    "permissions",
+    "roles",
     "service"
   ],
   "author": "",

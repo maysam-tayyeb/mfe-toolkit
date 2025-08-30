@@ -33,7 +33,7 @@ export interface AnalyticsConfig {
   flushInterval?: number;
 }
 
-export const ANALYTICS_SERVICE_KEY = '@mfe-toolkit/analytics';
+export const ANALYTICS_SERVICE_KEY = 'analytics';
 
 // Implementation
 class AnalyticsServiceImpl implements AnalyticsService {
@@ -222,6 +222,6 @@ export const analyticsServiceProvider = createAnalyticsProvider();
 // Module augmentation
 declare module '@mfe-toolkit/core' {
   interface ServiceMap {
-    '@mfe-toolkit/analytics': AnalyticsService;
+    analytics: AnalyticsService;
   }
 }
