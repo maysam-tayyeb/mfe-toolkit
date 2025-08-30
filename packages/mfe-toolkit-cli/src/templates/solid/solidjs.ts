@@ -1,5 +1,6 @@
 import type { TemplateConfig, TemplateGenerator, ServiceConfig } from '../types';
 import { getServiceConfig } from '../types';
+import { template, formatJson } from '../utils/template-engine';
 
 export class SolidJSTemplate implements TemplateGenerator {
   private config: TemplateConfig;
@@ -16,7 +17,11 @@ export class SolidJSTemplate implements TemplateGenerator {
     const serviceType = this.config.serviceType || 'general';
 
     if (serviceType === 'modal') {
-      return `import { render } from 'solid-js/web';
+      return template({
+        name,
+        requiredServices: formatJson(requiredServices),
+        capabilities: formatJson(capabilities)
+      })`import { render } from 'solid-js/web';
 import type { MFEModule, ServiceContainer } from '@mfe-toolkit/core';
 import { App } from './App';
 
@@ -24,19 +29,18 @@ let dispose: (() => void) | null = null;
 
 const module: MFEModule = {
   metadata: {
-    name: '${name}',
+    name: '{{name}}',
     version: '1.0.0',
-    requiredServices: ${JSON.stringify(requiredServices)},
-    capabilities: ${JSON.stringify(capabilities)}
+    requiredServices: {{requiredServices}},
+    capabilities: {{capabilities}}
   },
 
   mount: async (element: HTMLElement, container: ServiceContainer) => {
+    dispose = render(() => App({ services: container }), element);
     
-    
-    dispose = render(() => App({ services }), element);
-    
-    if (container.get('logger')) {
-      container.get('logger').info('[${name}] Mounted successfully with Solid.js');
+    const logger = container.get('logger');
+    if (logger) {
+      logger.info('[{{name}}] Mounted successfully with Solid.js');
     }
   },
   
@@ -46,8 +50,8 @@ const module: MFEModule = {
       dispose = null;
     }
     
-    
-    if (container.get('logger')) {
+    const logger = container.get('logger');
+    if (logger) {
       container.get('logger').info('[${name}] Unmounted successfully');
     }
   }

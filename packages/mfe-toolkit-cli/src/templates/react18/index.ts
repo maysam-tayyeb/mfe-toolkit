@@ -1,6 +1,8 @@
 import type { TemplateConfig, TemplateGenerator, ServiceConfig } from '../types';
 import { getServiceConfig } from '../types';
-import { template, formatJson } from '../utils/template-engine';
+import { processTemplate } from '../utils/template-processor';
+import { formatJson } from '../utils/template-engine';
+import { mainTsxTemplate, appTsxTemplate, buildJsTemplate, readmeTemplate } from './templates';
 
 export class React18Template implements TemplateGenerator {
   private config: TemplateConfig;
@@ -12,108 +14,17 @@ export class React18Template implements TemplateGenerator {
   }
 
   generateMain(): string {
-    const { name } = this.config;
-    const { requiredServices, capabilities } = this.serviceConfig;
-
-    return template({
-      name,
-      requiredServices: formatJson(requiredServices),
-      capabilities: formatJson(capabilities)
-    })`import React from 'react';
-import ReactDOM from 'react-dom/client';
-import type { MFEModule, ServiceContainer } from '@mfe-toolkit/core';
-import { App } from './App';
-
-let root: ReactDOM.Root | null = null;
-
-const module: MFEModule = {
-  metadata: {
-    name: '{{name}}',
-    version: '1.0.0',
-    requiredServices: {{requiredServices}},
-    capabilities: {{capabilities}}
-  },
-
-  mount: async (element: HTMLElement, container: ServiceContainer) => {
-    root = ReactDOM.createRoot(element);
-    root.render(
-      <React.StrictMode>
-        <App serviceContainer={container} />
-      </React.StrictMode>
-    );
-    
-    const logger = container.get('logger');
-    if (logger) {
-      logger.info('[{{name}}] Mounted successfully with React 18');
-    }
-  },
-  
-  unmount: async (container: ServiceContainer) => {
-    if (root) {
-      root.unmount();
-      root = null;
-    }
-    
-    const logger = container.get('logger');
-    if (logger) {
-      logger.info('[{{name}}] Unmounted successfully');
-    }
-  }
-};
-
-export default module;`;
+    return processTemplate(mainTsxTemplate, {
+      name: this.config.name,
+      requiredServices: formatJson(this.serviceConfig.requiredServices),
+      capabilities: formatJson(this.serviceConfig.capabilities)
+    });
   }
 
   generateApp(): string {
-    const { name } = this.config;
-    
-    return `import React, { useState } from 'react';
-import type { ServiceContainer } from '@mfe-toolkit/core';
-
-interface AppProps {
-  serviceContainer: ServiceContainer;
-}
-
-export const App: React.FC<AppProps> = ({ serviceContainer }) => {
-  const [count, setCount] = useState(0);
-
-  const handleClick = () => {
-    setCount(prev => prev + 1);
-    const logger = serviceContainer.get('logger');
-    if (logger) {
-      logger.info(\`Button clicked! Count: \${count + 1}\`);
-    }
-  };
-
-  return (
-    <div className="ds-card ds-p-6 ds-m-4">
-      <div className="ds-text-center">
-        <h1 className="ds-text-3xl ds-font-bold ds-mb-2 ds-text-accent-primary">
-          ⚛️ Hello from ${name}!
-        </h1>
-        <p className="ds-text-gray-600 ds-mb-6">
-          React 18 MFE • Concurrent Features
-        </p>
-        
-        <div className="ds-card-compact ds-inline-block ds-p-4">
-          <div className="ds-text-4xl ds-font-bold ds-text-accent-primary ds-mb-2">
-            {count}
-          </div>
-          <button 
-            onClick={handleClick}
-            className="ds-btn-primary"
-          >
-            Click me!
-          </button>
-        </div>
-        
-        <p className="ds-text-sm ds-text-gray-500 ds-mt-6">
-          Built with ❤️ using MFE Toolkit
-        </p>
-      </div>
-    </div>
-  );
-};`;
+    return processTemplate(appTsxTemplate, {
+      name: this.config.name
+    });
   }
 
   generatePackageJson(): object {
@@ -219,15 +130,9 @@ export const App: React.FC<AppProps> = ({ serviceContainer }) => {
   }
 
   generateBuildScript(): string {
-    const { name } = this.config;
-    
-    return `import { buildMFE } from '@mfe-toolkit/build';
-
-await buildMFE({
-  entry: 'src/main.tsx',
-  outfile: 'dist/${name}.js',
-  manifestPath: './manifest.json'
-});`;
+    return processTemplate(buildJsTemplate, {
+      name: this.config.name
+    });
   }
 
   generateTsConfig(): object {
@@ -255,45 +160,12 @@ await buildMFE({
   generateReadme(): string {
     const { name, serviceType } = this.config;
     
-    return `# ${name}
-
-## Description
-React 18 ${serviceType || 'general'} microfrontend with concurrent features and automatic batching.
-
-## Features
-- React 18 with Concurrent Rendering
-- Automatic batching for better performance
-- Suspense for data fetching
-- Transitions API ready
-- ${serviceType === 'modal' ? 'Modal service integration' : serviceType === 'notification' ? 'Notification service integration' : 'General MFE functionality'}
-- Design system integration
-- TypeScript support
-
-## Development
-
-\`\`\`bash
-# Install dependencies
-pnpm install
-
-# Build for production
-pnpm build
-
-# Build in watch mode
-pnpm build:watch
-
-# Clean build artifacts
-pnpm clean
-\`\`\`
-
-## React 18 Specifics
-This MFE leverages React 18's concurrent features:
-- Automatic batching for state updates
-- Concurrent rendering capabilities
-- Improved Suspense boundaries
-- Transition API support
-
-## Integration
-Designed to be loaded by the MFE container application with shared dependencies via import maps.
-`;
+    return processTemplate(readmeTemplate, {
+      name,
+      serviceType: serviceType || 'general',
+      serviceFeature: serviceType === 'modal' ? 'Modal service integration' : 
+                      serviceType === 'notification' ? 'Notification service integration' : 
+                      'General MFE functionality'
+    });
   }
 }
