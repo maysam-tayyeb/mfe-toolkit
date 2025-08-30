@@ -284,7 +284,7 @@ const placeOrder = () => {
   orders.value = [order, ...orders.value].slice(0, 10);
 
   // Emit trade event
-  props.services.eventBus.emit('trade:placed', {
+  props.eventBus.emit('trade:placed', {
     orderId: order.id,
     symbol: order.symbol,
     action: order.action,
@@ -302,7 +302,7 @@ const placeOrder = () => {
       if (executedOrder.status === 'executed') {
         updatePositions(executedOrder);
         
-        props.services.eventBus.emit('trade:executed', {
+        props.eventBus.emit('trade:executed', {
           orderId: order.id,
           symbol: order.symbol,
           action: order.action,
@@ -376,7 +376,7 @@ const closeAllPositions = () => {
   
   positions.value = [];
   
-  props.services.eventBus.emit('trade:positions-closed', {
+  props.eventBus.emit('trade:positions-closed', {
     count: positions.value.length,
     timestamp: Date.now()
   });
@@ -415,7 +415,7 @@ const refreshPortfolio = () => {
     position.pnl = ((currentPrice - position.avgPrice) / position.avgPrice) * 100;
   });
   
-  props.services.eventBus.emit('trade:portfolio-refreshed', {
+  props.eventBus.emit('trade:portfolio-refreshed', {
     positions: positions.value.length,
     totalValue: positions.value.reduce((sum, p) => sum + p.value, 0)
   });
@@ -425,7 +425,7 @@ let unsubscribes: Array<() => void> = [];
 
 onMounted(() => {
   // Listen for stock selection from market watch
-  const unsub1 = props.services.eventBus.on('market:stock-selected', (payload: any) => {
+  const unsub1 = props.eventBus.on('market:stock-selected', (payload: any) => {
     // Handle both direct payload and wrapped payload formats
     const data = payload.data || payload;
     orderForm.value.symbol = data?.symbol || 'AAPL';
@@ -435,7 +435,7 @@ onMounted(() => {
   });
 
   // Listen for price updates
-  const unsub2 = props.services.eventBus.on('market:price-alert', (payload: any) => {
+  const unsub2 = props.eventBus.on('market:price-alert', (payload: any) => {
     if (payload.data?.symbol && payload.data?.price) {
       currentPrices.value[payload.data.symbol] = payload.data.price;
       refreshPortfolio();
@@ -443,7 +443,7 @@ onMounted(() => {
   });
 
   // Listen for market status changes
-  const unsub3 = props.services.eventBus.on('analytics:market-status', (payload: any) => {
+  const unsub3 = props.eventBus.on('analytics:market-status', (payload: any) => {
     marketStatus.value = payload.data?.status || 'open';
   });
 

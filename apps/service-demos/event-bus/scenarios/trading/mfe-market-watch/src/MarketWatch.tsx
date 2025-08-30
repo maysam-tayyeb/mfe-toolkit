@@ -69,7 +69,7 @@ export const MarketWatch: React.FC<MarketWatchProps> = ({ eventBus, logger }) =>
     }, 2000);
 
     return () => clearInterval(interval);
-  }, [services, stocks]);
+  }, [eventBus, stocks]);
 
   useEffect(() => {
     // Listen for trade execution events
