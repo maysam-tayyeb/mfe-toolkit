@@ -1,4 +1,4 @@
-import type { MFEServices } from '@mfe-toolkit/core';
+import type { ServiceContainer, EventBus, Logger } from '@mfe-toolkit/core';
 
 type TradeData = {
   symbol: string;
@@ -19,7 +19,9 @@ type MarketMetrics = {
 
 export class AnalyticsEngine {
   private container: HTMLElement;
-  private services: MFEServices;
+  private serviceContainer: ServiceContainer;
+  private eventBus: EventBus;
+  private logger: Logger;
   private trades: TradeData[] = [];
   private metrics: MarketMetrics = {
     totalVolume: 0,
@@ -33,10 +35,11 @@ export class AnalyticsEngine {
   private eventListeners: Array<() => void> = [];
   private updateInterval: NodeJS.Timeout | null = null;
 
-  constructor(container: HTMLElement, eventBus: EventBus, logger: Logger) {
+  constructor(container: HTMLElement, serviceContainer: ServiceContainer) {
     this.container = container;
-    this.eventBus = eventBus;
-    this.logger = logger;
+    this.serviceContainer = serviceContainer;
+    this.eventBus = serviceContainer.require('eventBus');
+    this.logger = serviceContainer.require('logger');
     this.init();
   }
 
@@ -241,9 +244,8 @@ export class AnalyticsEngine {
 
     // Listen for volume spikes
     const unsub3 = this.eventBus.on('market:volume-spike', (payload: any) => {
-      this.services.notifications?.addNotification({
-        type: 'warning',
-        title: 'Volume Spike Detected',
+      this.logger.warn('Volume spike detected', {
+        symbol: payload.data?.symbol || 'Unknown',
         message: `Unusual trading volume on ${payload.data?.symbol || 'Unknown'}`
       });
     });
@@ -393,10 +395,9 @@ export class AnalyticsEngine {
     a.click();
     URL.revokeObjectURL(url);
 
-    this.services.notifications?.addNotification({
-      type: 'success',
-      title: 'Data Exported',
-      message: 'Analytics data has been exported'
+    this.logger.info('Data exported successfully', {
+      trades: this.trades.length,
+      metrics: this.metrics
     });
   }
 
@@ -414,11 +415,7 @@ export class AnalyticsEngine {
     
     this.render();
     
-    this.services.notifications?.addNotification({
-      type: 'info',
-      title: 'Data Cleared',
-      message: 'Analytics data has been reset'
-    });
+    this.logger.info('Analytics data cleared and reset');
   }
 
   destroy(): void {

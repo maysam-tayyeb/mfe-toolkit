@@ -7,17 +7,16 @@ const module: MFEModule = {
   metadata: {
     name: 'mfe-analytics-engine',
     version: '1.0.0',
-    requiredServices: ['eventBus', 'logger'],
-    capabilities: ['analytics', 'data-processing', 'volume-tracking']
+    requiredServices: ['eventBus', 'logger']
   },
 
   mount: async (element: HTMLElement, container: ServiceContainer) => {
-    const eventBus = container.require('eventBus');
-    const logger = container.require('logger');
+    instance = new AnalyticsEngine(element, container);
     
-    instance = new AnalyticsEngine(element, eventBus, logger);
-    
-    logger.info('[mfe-analytics-engine] Mounted successfully');
+    const logger = container.get('logger');
+    if (logger) {
+      logger.info('[mfe-analytics-engine] Mounted successfully with Vanilla TypeScript');
+    }
   },
   
   unmount: async (container: ServiceContainer) => {
@@ -27,7 +26,9 @@ const module: MFEModule = {
     }
     
     const logger = container.get('logger');
-    logger?.info('[mfe-analytics-engine] Unmounted successfully');
+    if (logger) {
+      logger.info('[mfe-analytics-engine] Unmounted successfully');
+    }
   }
 };
 

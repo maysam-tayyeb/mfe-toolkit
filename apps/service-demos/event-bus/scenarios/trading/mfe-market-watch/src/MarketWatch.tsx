@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import type { EventBus, Logger } from '@mfe-toolkit/core';
+import type { ServiceContainer } from '@mfe-toolkit/core';
 
 type Stock = {
   symbol: string;
@@ -14,11 +14,12 @@ type Stock = {
 };
 
 type MarketWatchProps = {
-  eventBus: EventBus;
-  logger: Logger;
+  serviceContainer: ServiceContainer;
 };
 
-export const MarketWatch: React.FC<MarketWatchProps> = ({ eventBus, logger }) => {
+export const MarketWatch: React.FC<MarketWatchProps> = ({ serviceContainer }) => {
+  const eventBus = serviceContainer.require('eventBus');
+  const logger = serviceContainer.require('logger');
   const [stocks, setStocks] = useState<Stock[]>([
     { symbol: 'AAPL', name: 'Apple Inc.', price: 178.35, change: 2.45, changePercent: 1.39, volume: '52.3M', high: 179.20, low: 176.80, marketCap: '2.8T' },
     { symbol: 'GOOGL', name: 'Alphabet Inc.', price: 138.92, change: -0.84, changePercent: -0.60, volume: '28.1M', high: 140.10, low: 138.50, marketCap: '1.7T' },
@@ -98,7 +99,7 @@ export const MarketWatch: React.FC<MarketWatchProps> = ({ eventBus, logger }) =>
     });
 
     return () => unsubscribe();
-  }, [services]);
+  }, [eventBus, logger]);
 
   const handleStockClick = (symbol: string) => {
     setSelectedStock(symbol);

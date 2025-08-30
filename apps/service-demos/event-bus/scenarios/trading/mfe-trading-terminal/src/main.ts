@@ -9,23 +9,19 @@ const module: MFEModule = {
     name: 'mfe-trading-terminal',
     version: '1.0.0',
     requiredServices: ['eventBus', 'logger'],
-    optionalServices: ['notification'],
-    capabilities: ['order-placement', 'portfolio-management']
+    optionalServices: ['notification']
   },
 
   mount: async (element: HTMLElement, container: ServiceContainer) => {
-    const eventBus = container.require('eventBus');
-    const logger = container.require('logger');
-    const notification = container.get('notification');
-    
     app = createApp(TradingTerminal, { 
-      eventBus,
-      logger,
-      notification
+      serviceContainer: container
     });
     app.mount(element);
     
-    logger.info('[mfe-trading-terminal] Mounted successfully');
+    const logger = container.get('logger');
+    if (logger) {
+      logger.info('[mfe-trading-terminal] Mounted successfully with Vue 3');
+    }
   },
   
   unmount: async (container: ServiceContainer) => {
@@ -35,7 +31,9 @@ const module: MFEModule = {
     }
     
     const logger = container.get('logger');
-    logger?.info('[mfe-trading-terminal] Unmounted successfully');
+    if (logger) {
+      logger.info('[mfe-trading-terminal] Unmounted successfully');
+    }
   }
 };
 

@@ -9,7 +9,7 @@ import type { AuthorizationService } from '@mfe-toolkit/service-authorization';
 import type { ModalService } from '@mfe-toolkit/service-modal';
 import type { NotificationService } from '@mfe-toolkit/service-notification';
 import type { ThemeService } from '@mfe-toolkit/service-theme';
-import { getServiceContainer } from './service-setup';
+import { getMFEServicesSingleton } from './mfe-services-singleton';
 
 // Service container instance
 let containerInstance: ServiceContainer | null = null;
@@ -19,7 +19,7 @@ let containerInstance: ServiceContainer | null = null;
  */
 export async function initializeServices(): Promise<ServiceContainer> {
   if (!containerInstance) {
-    containerInstance = await getServiceContainer();
+    containerInstance = getMFEServicesSingleton();
   }
   return containerInstance;
 }

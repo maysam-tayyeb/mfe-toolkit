@@ -172,14 +172,14 @@ export const EventBusPageV3: React.FC = () => {
       // If it's a pattern, subscribe to all events and filter
       if (eventPattern.endsWith(':*')) {
         const eventBus = serviceContainer.get('eventBus');
-        const unsubscribe = eventBus?.on('*', (payload: any) => {
-          const actualEventName = payload.type || payload.eventName || 'unknown';
+        const unsubscribe = eventBus?.on('*', (event: any) => {
+          const actualEventName = event.type;
           if (matchesPattern(actualEventName, eventPattern)) {
             // Add to container event history
             const newEvent: EventMessage = {
               id: `${Date.now()}-${Math.random()}`,
               event: actualEventName,
-              data: payload.data || payload,
+              data: event.data,
               timestamp: new Date().toLocaleTimeString(),
               source: 'received'
             };
@@ -196,12 +196,12 @@ export const EventBusPageV3: React.FC = () => {
       } else {
         // For exact event names, subscribe directly
         const eventBus = serviceContainer.get('eventBus');
-        const unsubscribe = eventBus?.on(eventPattern, (payload: any) => {
+        const unsubscribe = eventBus?.on(eventPattern, (event: any) => {
           // Add to container event history
           const newEvent: EventMessage = {
             id: `${Date.now()}-${Math.random()}`,
-            event: payload.type || eventPattern,
-            data: payload.data || payload,
+            event: event.type || eventPattern,
+            data: event.data,
             timestamp: new Date().toLocaleTimeString(),
             source: 'received'
           };
@@ -210,7 +210,7 @@ export const EventBusPageV3: React.FC = () => {
           addNotification({
             type: 'info',
             title: `Event Received: ${eventPattern}`,
-            message: JSON.stringify(payload, null, 2).substring(0, 100)
+            message: JSON.stringify(event, null, 2).substring(0, 100)
           });
         });
         if (unsubscribe) unsubscribes.push(unsubscribe);
