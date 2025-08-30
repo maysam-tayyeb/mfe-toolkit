@@ -106,34 +106,32 @@ export interface ServiceContainer {
    * Get a service by name (returns undefined if not found)
    */
   get<K extends keyof ServiceMap>(name: K): ServiceMap[K] | undefined;
-  get<T = any>(name: string): T | undefined;
-  
+
   /**
    * Require a service by name (throws if not found)
    */
   require<K extends keyof ServiceMap>(name: K): ServiceMap[K];
-  require<T = any>(name: string): T;
-  
+
   /**
    * Check if a service exists
    */
   has(name: string): boolean;
-  
+
   /**
    * List all available services
    */
   listAvailable(): ServiceInfo[];
-  
+
   /**
    * Get all services as a map
    */
-  getAllServices(): Map<string, any>;
-  
+  getAllServices(): ServiceMap;
+
   /**
    * Create a scoped container with overrides
    */
   createScoped(overrides: Record<string, any>): ServiceContainer;
-  
+
   /**
    * Dispose of the container and its services
    */
@@ -148,42 +146,42 @@ export interface ServiceRegistry {
    * Register a service instance
    */
   register<T>(name: string, service: T, options?: RegisterOptions): void;
-  
+
   /**
    * Register a service provider for lazy initialization
    */
   registerProvider(provider: ServiceProvider, options?: RegisterOptions): void;
-  
+
   /**
    * Get a service by name
    */
   get<T = any>(name: string): T | undefined;
-  
+
   /**
    * Check if a service is registered
    */
   has(name: string): boolean;
-  
+
   /**
    * List all registered services
    */
   listServices(): ServiceInfo[];
-  
+
   /**
    * Get service metadata
    */
   getMetadata(name: string): ServiceMetadata | undefined;
-  
+
   /**
    * Initialize all providers
    */
   initialize(): Promise<void>;
-  
+
   /**
    * Create a service container from this registry
    */
   createContainer(): ServiceContainer;
-  
+
   /**
    * Dispose of all services
    */
@@ -203,12 +201,12 @@ export interface MFEModule {
     requiredServices?: string[];
     optionalServices?: string[];
   };
-  
+
   /**
    * Mount the MFE
    */
   mount(element: HTMLElement, container: ServiceContainer): void | Promise<void>;
-  
+
   /**
    * Unmount the MFE
    */

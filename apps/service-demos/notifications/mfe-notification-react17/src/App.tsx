@@ -1,17 +1,6 @@
 import React, { useState } from 'react';
 import type { Logger } from '@mfe-toolkit/core';
-
-type NotificationType = 'success' | 'error' | 'warning' | 'info';
-
-interface NotificationService {
-  show(options: {
-    title: string;
-    message: string;
-    type: NotificationType;
-    duration?: number;
-  }): void;
-  clear?(): void;
-}
+import type { NotificationService, NotificationType } from '@mfe-toolkit/service-notification';
 
 interface AppProps {
   notification: NotificationService;
@@ -133,10 +122,8 @@ export const App: React.FC<AppProps> = ({ notification, logger }) => {
   };
 
   const clearAll = () => {
-    if (notification.clear) {
-      notification.clear();
-      logger.info('All notifications cleared');
-    }
+    notification.dismissAll();
+    logger.info('All notifications cleared');
   };
 
   return (

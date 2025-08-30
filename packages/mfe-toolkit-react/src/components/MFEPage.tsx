@@ -27,9 +27,10 @@ export const MFEPage: React.FC<MFEPageProps> = ({
         if (logger) {
           logger.error(`Failed to load MFE ${manifest.name}:`, error);
         }
-        const notification = serviceContainer.get('notification');
-        if (notification) {
-          notification.error('MFE Load Error', error.message);
+        // Try to use notification service if available
+        const notification = serviceContainer.get('notification' as any);
+        if (notification && typeof (notification as any).error === 'function') {
+          (notification as any).error('MFE Load Error', error.message);
         }
       }}
     />

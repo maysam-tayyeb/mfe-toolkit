@@ -100,9 +100,13 @@ export class ServiceContainerImpl implements ServiceContainer {
   /**
    * Get all services as a map
    */
-  getAllServices(): Map<string, any> {
+  getAllServices(): ServiceMap {
     this.checkDisposed();
-    return new Map(this.services);
+    const result: any = {};
+    this.services.forEach((value, key) => {
+      result[key] = value;
+    });
+    return result as ServiceMap;
   }
 
   /**

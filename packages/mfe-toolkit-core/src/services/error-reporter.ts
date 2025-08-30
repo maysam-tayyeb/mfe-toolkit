@@ -89,7 +89,7 @@ export class ErrorReporter {
         url: window.location.href,
         userAgent: navigator.userAgent,
         sessionId: this.getSessionId(),
-        userId: this.services?.get('auth')?.getSession?.()?.userId,
+        userId: this.getUserId(),
         ...context,
       },
       errorInfo,
@@ -125,13 +125,7 @@ export class ErrorReporter {
 
     // Show notification for critical errors
     if (report.severity === 'critical') {
-      const notification = this.services?.get('notification');
-      if (notification) {
-        notification.error(
-          'Critical Error',
-          `${mfeName} encountered a critical error. Please refresh the page.`
-        );
-      }
+      this.showCriticalErrorNotification(mfeName);
     }
 
     return report;
@@ -162,6 +156,31 @@ export class ErrorReporter {
       sessionStorage.setItem('mfe-session-id', sessionId);
     }
     return sessionId;
+  }
+
+  private getUserId(): string | undefined {
+    // Try to get auth service if available (may not exist in core)
+    const auth = this.services?.get('auth' as any);
+    if (auth && typeof (auth as any).getSession === 'function') {
+      return (auth as any).getSession()?.userId;
+    }
+    return undefined;
+  }
+
+  private showCriticalErrorNotification(mfeName: string): void {
+    // Try to get notification service if available (may not exist in core)
+    const notification = this.services?.get('notification' as any);
+    if (notification && typeof (notification as any).error === 'function') {
+      (notification as any).error(
+        'Critical Error',
+        `${mfeName} encountered a critical error. Please refresh the page.`
+      );
+    } else {
+      // Fallback to console error if notification service not available
+      console.error(
+        `Critical Error: ${mfeName} encountered a critical error. Please refresh the page.`
+      );
+    }
   }
 
   private async sendToRemote(report: ErrorReport): Promise<void> {

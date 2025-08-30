@@ -22,5 +22,5 @@ export const useMFEServices = (): ServiceContainer => {
 
 export const useMFEService = <T = any>(serviceName: string): T | undefined => {
   const services = useMFEServices();
-  return services.get<T>(serviceName);
+  return services.get(serviceName as any) as T | undefined;
 };

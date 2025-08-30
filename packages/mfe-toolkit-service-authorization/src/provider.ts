@@ -26,7 +26,7 @@ export function createAuthorizationProvider(
     
     create(container: ServiceContainer): AuthorizationService {
       const logger = container.get('logger');
-      const authService = container.get('auth');
+      const authService = container.get('auth' as any);
       
       // Create authorization service
       const authzService = createAuthorizationService(options);
@@ -34,7 +34,7 @@ export function createAuthorizationProvider(
       // Sync with auth service if available
       if (authService && options.syncWithAuth !== false) {
         // Get initial session
-        const session = authService.getSession();
+        const session = (authService as any).getSession?.();
         if (session) {
           authzService.updateAuthorization?.(
             session.roles || [],
@@ -43,8 +43,8 @@ export function createAuthorizationProvider(
         }
         
         // Subscribe to auth changes
-        if (authService.subscribe) {
-          authService.subscribe((session: any) => {
+        if ((authService as any).subscribe) {
+          (authService as any).subscribe((session: any) => {
             if (session) {
               authzService.updateAuthorization?.(
                 session.roles || [],

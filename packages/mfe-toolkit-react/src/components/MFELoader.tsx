@@ -100,8 +100,7 @@ const IsolatedLoaderStrategy: React.FC<MFELoaderProps> = ({
         serviceContainer.get('logger')?.error(`[IsolatedLoader] Error loading ${name}:`, error);
 
         // Report error to error reporter
-        const errorReporter =
-          serviceContainer.get('errorReporter') || getErrorReporter({}, serviceContainer);
+        const errorReporter = getErrorReporter({}, serviceContainer);
         const errorType = error.message.includes('timeout')
           ? 'timeout-error'
           : error.message.includes('network')
@@ -302,8 +301,7 @@ const StandardLoaderStrategy: React.FC<MFELoaderProps> = ({
       serviceContainer.get('logger')?.error(`Failed to load MFE ${name}: ${error.message}`);
 
       // Report error
-      const errorReporter =
-        serviceContainer.get('errorReporter') || getErrorReporter({}, serviceContainer);
+      const errorReporter = getErrorReporter({}, serviceContainer);
       const errorType = error.message.includes('timeout')
         ? 'timeout-error'
         : error.message.includes('network')
