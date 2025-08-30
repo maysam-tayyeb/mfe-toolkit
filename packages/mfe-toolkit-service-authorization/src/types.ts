@@ -30,39 +30,39 @@ export interface AuthorizationService {
   hasPermission(permission: string): boolean;
   hasAnyPermission(permissions: string[]): boolean;
   hasAllPermissions(permissions: string[]): boolean;
-  
+
   /**
    * Role checks
    */
   hasRole(role: string): boolean;
   hasAnyRole(roles: string[]): boolean;
   hasAllRoles(roles: string[]): boolean;
-  
+
   /**
    * Resource access control
    */
   canAccess(resource: string, action: string): boolean;
   canAccessAny(resources: ResourceAccess[]): boolean;
   canAccessAll(resources: ResourceAccess[]): boolean;
-  
+
   /**
    * Policy evaluation
    */
   evaluatePolicy?(policy: Policy): boolean;
   evaluatePolicies?(policies: Policy[]): boolean;
-  
+
   /**
    * Get current authorization data
    */
   getPermissions(): string[];
   getRoles(): string[];
   getScopes?(): string[];
-  
+
   /**
    * Update authorization data (usually from auth service)
    */
   updateAuthorization?(roles: string[], permissions: string[]): void;
-  
+
   /**
    * Subscribe to authorization changes
    */
@@ -77,27 +77,27 @@ export interface AuthorizationConfig {
    * Default roles if none provided
    */
   defaultRoles?: string[];
-  
+
   /**
    * Default permissions if none provided
    */
   defaultPermissions?: string[];
-  
+
   /**
    * Enable caching of permission checks
    */
   enableCache?: boolean;
-  
+
   /**
    * Cache TTL in milliseconds
    */
   cacheTTL?: number;
-  
+
   /**
    * Enable debug logging
    */
   debug?: boolean;
-  
+
   /**
    * Custom policy evaluator
    */
@@ -119,3 +119,9 @@ export interface AuthorizationContext {
  * Service key for registration
  */
 export const AUTHZ_SERVICE_KEY = 'authz';
+// Module augmentation for TypeScript support
+declare module '@mfe-toolkit/core' {
+  interface ServiceMap {
+    authz: AuthorizationService;
+  }
+}

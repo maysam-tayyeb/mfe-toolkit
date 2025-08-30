@@ -25,8 +25,4 @@ export {
 } from './provider';
 
 // Module augmentation for type safety
-declare module '@mfe-toolkit/core' {
-  interface ServiceMap {
-    authz: import('./types').AuthorizationService;
-  }
-}
+// Module augmentation is now in ./types.ts for lighter imports

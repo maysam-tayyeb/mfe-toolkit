@@ -142,7 +142,7 @@ export class React17Template implements TemplateGenerator {
         module: 'ESNext',
         lib: ['ES2020', 'DOM', 'DOM.Iterable'],
         jsx: 'react-jsx',
-        moduleResolution: 'node',
+        moduleResolution: 'bundler',
         strict: true,
         esModuleInterop: true,
         skipLibCheck: true,

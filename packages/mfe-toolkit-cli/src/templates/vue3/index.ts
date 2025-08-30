@@ -138,7 +138,7 @@ export class Vue3Template implements TemplateGenerator {
         target: 'ES2020',
         module: 'ESNext',
         lib: ['ES2020', 'DOM', 'DOM.Iterable'],
-        moduleResolution: 'node',
+        moduleResolution: 'bundler',
         strict: true,
         esModuleInterop: true,
         skipLibCheck: true,

@@ -144,14 +144,15 @@ export class SolidJSTemplate implements TemplateGenerator {
         lib: ['ES2020', 'DOM', 'DOM.Iterable'],
         jsx: 'preserve',
         jsxImportSource: 'solid-js',
-        moduleResolution: 'node',
+        moduleResolution: 'bundler',
         strict: true,
         esModuleInterop: true,
         skipLibCheck: true,
         forceConsistentCasingInFileNames: true,
         declaration: false,
         noEmit: true,
-        resolveJsonModule: true
+        resolveJsonModule: true,
+        types: ['solid-js']
       },
       include: ['src/**/*'],
       exclude: ['node_modules', 'dist']

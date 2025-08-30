@@ -4,32 +4,10 @@
  */
 
 import type { ServiceProvider, ServiceContainer } from '@mfe-toolkit/core';
+import type { NotificationService, NotificationConfig } from './types';
 
-export type NotificationType = 'success' | 'error' | 'warning' | 'info';
-
-// Types
-export interface NotificationConfig {
-  id?: string;
-  type: NotificationType;
-  title: string;
-  message?: string;
-  duration?: number;
-  onClose?: () => void;
-  actions?: Array<{
-    label: string;
-    action: () => void;
-  }>;
-}
-
-export interface NotificationService {
-  show(config: NotificationConfig): string;
-  success(title: string, message?: string): string;
-  error(title: string, message?: string): string;
-  warning(title: string, message?: string): string;
-  info(title: string, message?: string): string;
-  dismiss(id: string): void;
-  dismissAll(): void;
-}
+// Re-export types for backward compatibility
+export type { NotificationService, NotificationConfig, NotificationType } from './types';
 
 export const NOTIFICATION_SERVICE_KEY = 'notification';
 
@@ -123,9 +101,4 @@ export function createNotificationProvider(): ServiceProvider<NotificationServic
 
 export const notificationServiceProvider = createNotificationProvider();
 
-// Module augmentation
-declare module '@mfe-toolkit/core' {
-  interface ServiceMap {
-    notification: NotificationService;
-  }
-}
+// Module augmentation is now in ./types.ts for lighter imports

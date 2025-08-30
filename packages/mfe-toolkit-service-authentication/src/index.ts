@@ -19,9 +19,4 @@ export { AuthServiceImpl, createAuthService } from './service';
 // Export provider
 export { createAuthProvider, authServiceProvider, type AuthProviderOptions } from './provider';
 
-// Module augmentation for type safety
-declare module '@mfe-toolkit/core' {
-  interface ServiceMap {
-    auth: import('./types').AuthService;
-  }
-}
+// Module augmentation is now in ./types.ts for lighter imports

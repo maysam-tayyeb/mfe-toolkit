@@ -142,7 +142,7 @@ export class React18Template implements TemplateGenerator {
         module: 'ESNext',
         lib: ['ES2022', 'DOM', 'DOM.Iterable'],
         jsx: 'react-jsx',
-        moduleResolution: 'node',
+        moduleResolution: 'bundler',
         strict: true,
         esModuleInterop: true,
         skipLibCheck: true,

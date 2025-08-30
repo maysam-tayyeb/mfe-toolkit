@@ -1,14 +1,22 @@
 import React, { useRef, useImperativeHandle, forwardRef, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useUI } from '@/contexts/UIContext';
-import type { AuthService } from '@mfe-toolkit/service-auth';
+import type { AuthService } from '@mfe-toolkit/service-authentication/types';
+import type {
+  AuthorizationService,
+  ResourceAccess,
+} from '@mfe-toolkit/service-authorization/types';
 import type { ModalService } from '@mfe-toolkit/service-modal';
-import type { NotificationService, NotificationConfig } from '@mfe-toolkit/service-notification';
+import type {
+  NotificationService,
+  NotificationConfig,
+} from '@mfe-toolkit/service-notification/types';
 import type { ThemeService } from '@mfe-toolkit/service-theme';
 import { getThemeService } from './theme-service';
 
 export interface ContextBridgeRef {
-  getAuthService: () => AuthService;
+  getAuthenticationService: () => AuthService;
+  getAuthorizationService: () => AuthorizationService;
   getModalService: () => ModalService;
   getNotificationService: () => NotificationService;
   getThemeService: () => ThemeService;
@@ -24,8 +32,20 @@ export const ContextBridge = forwardRef<ContextBridgeRef, { children: React.Reac
     const authServiceRef = useRef<AuthService>({
       getSession: () => null,
       isAuthenticated: () => false,
+    });
+
+    const authorizationServiceRef = useRef<AuthorizationService>({
       hasPermission: () => false,
+      hasAnyPermission: () => false,
+      hasAllPermissions: () => false,
       hasRole: () => false,
+      hasAnyRole: () => false,
+      hasAllRoles: () => false,
+      canAccess: () => false,
+      canAccessAny: () => false,
+      canAccessAll: () => false,
+      getPermissions: () => [],
+      getRoles: () => [],
     });
 
     const modalServiceRef = useRef<ModalService>({
@@ -47,10 +67,48 @@ export const ContextBridge = forwardRef<ContextBridgeRef, { children: React.Reac
     useEffect(() => {
       authServiceRef.current.getSession = () => auth.session;
       authServiceRef.current.isAuthenticated = () => auth.session?.isAuthenticated || false;
-      authServiceRef.current.hasPermission = (permission: string) =>
-        auth.session?.permissions.includes(permission) || false;
-      authServiceRef.current.hasRole = (role: string) =>
-        auth.session?.roles.includes(role) || false;
+    }, [auth.session]);
+
+    useEffect(() => {
+      authorizationServiceRef.current.hasPermission = (permission: string) =>
+        auth.session?.permissions?.includes(permission) || false;
+      authorizationServiceRef.current.hasAnyPermission = (permissions: string[]) =>
+        permissions.some((p) => auth.session?.permissions?.includes(p)) || false;
+      authorizationServiceRef.current.hasAllPermissions = (permissions: string[]) =>
+        permissions.every((p) => auth.session?.permissions?.includes(p)) || false;
+      authorizationServiceRef.current.hasRole = (role: string) =>
+        auth.session?.roles?.includes(role) || false;
+      authorizationServiceRef.current.hasAnyRole = (roles: string[]) =>
+        roles.some((r) => auth.session?.roles?.includes(r)) || false;
+      authorizationServiceRef.current.hasAllRoles = (roles: string[]) =>
+        roles.every((r) => auth.session?.roles?.includes(r)) || false;
+      authorizationServiceRef.current.canAccess = (resource: string, action: string) => {
+        // Simple permission check - could be more sophisticated
+        const permission = `${resource}:${action}`;
+        return auth.session?.permissions?.includes(permission) || false;
+      };
+      authorizationServiceRef.current.canAccessAny = (resources: ResourceAccess[]) => {
+        return (
+          resources.some((r) =>
+            r.actions.some((action) => {
+              const permission = `${r.resource}:${action}`;
+              return auth.session?.permissions?.includes(permission);
+            })
+          ) || false
+        );
+      };
+      authorizationServiceRef.current.canAccessAll = (resources: ResourceAccess[]) => {
+        return (
+          resources.every((r) =>
+            r.actions.every((action) => {
+              const permission = `${r.resource}:${action}`;
+              return auth.session?.permissions?.includes(permission);
+            })
+          ) || false
+        );
+      };
+      authorizationServiceRef.current.getPermissions = () => auth.session?.permissions || [];
+      authorizationServiceRef.current.getRoles = () => auth.session?.roles || [];
     }, [auth.session]);
 
     useEffect(() => {
@@ -87,7 +145,8 @@ export const ContextBridge = forwardRef<ContextBridgeRef, { children: React.Reac
     useImperativeHandle(
       ref,
       () => ({
-        getAuthService: () => authServiceRef.current,
+        getAuthenticationService: () => authServiceRef.current,
+        getAuthorizationService: () => authorizationServiceRef.current,
         getModalService: () => modalServiceRef.current,
         getNotificationService: () => notificationServiceRef.current,
         getThemeService: () => themeService,

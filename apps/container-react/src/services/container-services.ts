@@ -34,7 +34,7 @@ export function getServices(): ServiceContainer | null {
 /**
  * Service accessor functions for React contexts
  */
-export function getAuthService(): AuthService | undefined {
+export function getAuthenticationService(): AuthService | undefined {
   return containerInstance?.get('auth');
 }
 

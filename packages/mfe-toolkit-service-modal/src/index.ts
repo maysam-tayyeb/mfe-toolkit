@@ -18,9 +18,4 @@ export { ModalServiceImpl, createModalService } from './service';
 // Export provider
 export { createModalProvider, modalServiceProvider, type ModalProviderOptions } from './provider';
 
-// Module augmentation for type safety
-declare module '@mfe-toolkit/core' {
-  interface ServiceMap {
-    modal: import('./types').ModalService;
-  }
-}
+// Module augmentation is now in ./types.ts for lighter imports

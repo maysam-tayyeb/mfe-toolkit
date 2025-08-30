@@ -115,7 +115,7 @@ describe('MFE Services with Proxy Pattern', () => {
       const session = auth?.getSession();
 
       expect(session).toMatchObject({ username: 'test-user' });
-      expect(mockContextBridge.getAuthService).toHaveBeenCalled();
+      expect(mockContextBridge.getAuthenticationService).toHaveBeenCalled();
     });
   });
 

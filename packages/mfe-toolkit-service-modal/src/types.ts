@@ -122,3 +122,10 @@ export interface ModalStackEntry<TModalConfig = BaseModalConfig> {
  * Service key for registration
  */
 export const MODAL_SERVICE_KEY = 'modal';
+
+// Module augmentation for TypeScript support
+declare module '@mfe-toolkit/core' {
+  interface ServiceMap {
+    modal: ModalService;
+  }
+}

@@ -4,36 +4,12 @@
  */
 
 import type { ServiceProvider, ServiceContainer } from '@mfe-toolkit/core';
+import type { AnalyticsService, AnalyticsEvent, AnalyticsConfig } from './types';
+import { ANALYTICS_SERVICE_KEY } from './types';
 
-// Types
-export interface AnalyticsEvent {
-  name: string;
-  properties?: Record<string, any>;
-  timestamp?: number;
-  userId?: string;
-  sessionId?: string;
-}
-
-export interface AnalyticsService {
-  track(event: string, properties?: Record<string, any>): void;
-  identify(userId: string, traits?: Record<string, any>): void;
-  page(name?: string, properties?: Record<string, any>): void;
-  group(groupId: string, traits?: Record<string, any>): void;
-  alias(userId: string, previousId: string): void;
-  reset(): void;
-  setContext(context: Record<string, any>): void;
-  getAnonymousId(): string;
-}
-
-export interface AnalyticsConfig {
-  apiKey?: string;
-  endpoint?: string;
-  debug?: boolean;
-  bufferSize?: number;
-  flushInterval?: number;
-}
-
-export const ANALYTICS_SERVICE_KEY = 'analytics';
+// Re-export types for backward compatibility
+export type { AnalyticsService, AnalyticsEvent, AnalyticsConfig } from './types';
+export { ANALYTICS_SERVICE_KEY } from './types';
 
 // Implementation
 class AnalyticsServiceImpl implements AnalyticsService {
@@ -219,9 +195,4 @@ export function createAnalyticsProvider(config?: AnalyticsConfig): ServiceProvid
 
 export const analyticsServiceProvider = createAnalyticsProvider();
 
-// Module augmentation
-declare module '@mfe-toolkit/core' {
-  interface ServiceMap {
-    analytics: AnalyticsService;
-  }
-}
+// Module augmentation is now in ./types.ts for lighter imports

@@ -4,19 +4,12 @@
  */
 
 import type { ServiceProvider, ServiceContainer } from '@mfe-toolkit/core';
+import type { Theme, ThemeService } from './types';
+import { THEME_SERVICE_KEY } from './types';
 
-// Types
-export type Theme = string;
-
-export interface ThemeService {
-  getTheme(): Theme;
-  setTheme(theme: Theme): void;
-  subscribe(callback: (theme: Theme) => void): () => void;
-  getAvailableThemes?(): Theme[];
-  cycleTheme?(): void;
-}
-
-export const THEME_SERVICE_KEY = 'theme';
+// Re-export types for backward compatibility
+export type { Theme, ThemeService } from './types';
+export { THEME_SERVICE_KEY } from './types';
 
 // Implementation
 class ThemeServiceImpl implements ThemeService {
@@ -115,8 +108,4 @@ export function createThemeProvider(
 export const themeServiceProvider = createThemeProvider();
 
 // Module augmentation
-declare module '@mfe-toolkit/core' {
-  interface ServiceMap {
-    theme: ThemeService;
-  }
-}
+// Module augmentation is now in ./types.ts for lighter imports

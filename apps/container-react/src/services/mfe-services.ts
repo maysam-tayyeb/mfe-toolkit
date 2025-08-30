@@ -1,12 +1,18 @@
 import {
   ServiceContainer,
+  ServiceMap,
   createLogger,
   getErrorReporter,
+  ServiceInfo,
 } from '@mfe-toolkit/core';
-import type { AuthService } from '@mfe-toolkit/service-auth';
-import type { ModalService } from '@mfe-toolkit/service-modal';
-import type { NotificationService } from '@mfe-toolkit/service-notification';
-import type { ThemeService } from '@mfe-toolkit/service-theme';
+
+// Import type augmentations to extend ServiceMap
+import '@mfe-toolkit/service-authentication/types';
+import '@mfe-toolkit/service-authorization/types';
+import '@mfe-toolkit/service-modal/types';
+import '@mfe-toolkit/service-notification/types';
+import '@mfe-toolkit/service-theme/types';
+import '@mfe-toolkit/service-analytics/types';
 import { ContextBridgeRef } from './context-bridge';
 import { createPlatformEventBus } from './platform-event-bus';
 
@@ -73,27 +79,51 @@ const createProxiedService = <T extends object>(
   });
 };
 
-const createAuthService = (): AuthService => {
-  return createProxiedService<AuthService>('AuthService', () => contextBridge!.getAuthService(), {
-    getSession: null,
-    isAuthenticated: false,
-    hasPermission: false,
-    hasRole: false,
-  });
+const createAuthService = (): ServiceMap['auth'] => {
+  return createProxiedService<ServiceMap['auth']>(
+    'AuthService',
+    () => contextBridge!.getAuthenticationService(),
+    {
+      getSession: null,
+      isAuthenticated: false,
+    }
+  );
 };
 
-const createModalServiceImpl = (): ModalService => {
-  return createProxiedService<ModalService>('ModalService', () => contextBridge!.getModalService());
+const createAuthorizationService = (): ServiceMap['authz'] => {
+  return createProxiedService<ServiceMap['authz']>(
+    'AuthorizationService',
+    () => contextBridge!.getAuthorizationService(),
+    {
+      hasPermission: false,
+      hasRole: false,
+      hasAnyPermission: false,
+      hasAnyRole: false,
+      hasAllPermissions: false,
+      hasAllRoles: false,
+      canAccess: false,
+      canAccessAny: false,
+      canAccessAll: false,
+      getPermissions: [],
+      getRoles: [],
+    }
+  );
 };
 
-const createNotificationServiceImpl = (): NotificationService => {
-  return createProxiedService<NotificationService>('NotificationService', () =>
+const createModalServiceImpl = (): ServiceMap['modal'] => {
+  return createProxiedService<ServiceMap['modal']>('ModalService', () =>
+    contextBridge!.getModalService()
+  );
+};
+
+const createNotificationServiceImpl = (): ServiceMap['notification'] => {
+  return createProxiedService<ServiceMap['notification']>('NotificationService', () =>
     contextBridge!.getNotificationService()
   );
 };
 
-const createThemeServiceImpl = (): ThemeService => {
-  return createProxiedService<ThemeService>(
+const createThemeServiceImpl = (): ServiceMap['theme'] => {
+  return createProxiedService<ServiceMap['theme']>(
     'ThemeService',
     () => contextBridge!.getThemeService(),
     {
@@ -106,75 +136,137 @@ const createThemeServiceImpl = (): ThemeService => {
   );
 };
 
-export const createMFEServices = (): ServiceContainer => {
-  const eventBus = createPlatformEventBus();
-  
-  // Create a service container with the services
-  const serviceContainer: ServiceContainer = {
-    get: (name: string) => {
-      switch (name) {
-        case 'logger':
-          return createLogger('MFE');
-        case 'auth':
-          return createAuthService();
-        case 'eventBus':
-          return eventBus;
-        case 'modal':
-          return createModalServiceImpl();
-        case 'notification':
-          return createNotificationServiceImpl();
-        case 'theme':
-          return createThemeServiceImpl();
-        case 'errorReporter':
-          return getErrorReporter(
-            {
-              enableConsoleLog: true,
-              maxErrorsPerSession: 100,
-            },
-            serviceContainer
-          );
-        default:
-          return undefined;
-      }
-    },
-    require: (name: string) => {
-      const service = serviceContainer.get(name);
-      if (!service) {
-        throw new Error(`Required service '${name}' not found`);
-      }
-      return service;
-    },
-    has: (name: string) => {
-      return serviceContainer.get(name) !== undefined;
-    },
-    listAvailable: () => {
-      return [
-        { name: 'logger', version: '1.0.0', status: 'ready' as const },
-        { name: 'auth', version: '1.0.0', status: 'ready' as const },
-        { name: 'eventBus', version: '1.0.0', status: 'ready' as const },
-        { name: 'modal', version: '1.0.0', status: 'ready' as const },
-        { name: 'notification', version: '1.0.0', status: 'ready' as const },
-        { name: 'theme', version: '1.0.0', status: 'ready' as const },
-        { name: 'errorReporter', version: '1.0.0', status: 'ready' as const }
-      ];
-    },
-    getAllServices: () => {
-      const services = new Map<string, any>();
-      ['logger', 'auth', 'eventBus', 'modal', 'notification', 'theme', 'errorReporter'].forEach(name => {
-        services.set(name, serviceContainer.get(name));
-      });
-      return services;
-    },
-    createScoped: (_overrides: Record<string, any>) => {
-      // Return the same container for now (no scoping)
-      return serviceContainer;
-    },
-    dispose: async () => {
-      // Cleanup if needed
-    }
-  };
+/**
+ * Service container implementation that properly satisfies the interface
+ */
+class MFEServiceContainerImpl implements ServiceContainer {
+  private eventBus = createPlatformEventBus();
+  private serviceCache = new Map<string, any>();
 
-  return serviceContainer;
+  private getOrCreateService(name: string): any {
+    // Check cache first
+    if (this.serviceCache.has(name)) {
+      return this.serviceCache.get(name);
+    }
+
+    let service: any;
+
+    switch (name) {
+      case 'logger':
+        service = createLogger('MFE');
+        break;
+      case 'auth':
+        service = createAuthService();
+        break;
+      case 'authz':
+        service = createAuthorizationService();
+        break;
+      case 'eventBus':
+        service = this.eventBus;
+        break;
+      case 'modal':
+        service = createModalServiceImpl();
+        break;
+      case 'notification':
+        service = createNotificationServiceImpl();
+        break;
+      case 'theme':
+        service = createThemeServiceImpl();
+        break;
+      case 'errorReporter':
+        service = getErrorReporter(
+          {
+            enableConsoleLog: true,
+            maxErrorsPerSession: 100,
+          },
+          this
+        );
+        break;
+      default:
+        return undefined;
+    }
+
+    // Cache the service
+    if (service !== undefined) {
+      this.serviceCache.set(name, service);
+    }
+
+    return service;
+  }
+
+  // Implement ServiceContainer interface methods
+  get<K extends keyof ServiceMap>(name: K): ServiceMap[K] | undefined;
+  get(name: string): any | undefined;
+  get(name: string): any | undefined {
+    return this.getOrCreateService(name);
+  }
+  require<K extends keyof ServiceMap>(name: K): ServiceMap[K];
+  require(name: string): any;
+  require(name: string): any {
+    const service = this.get(name);
+    if (!service) {
+      throw new Error(`Required service '${name}' not found`);
+    }
+    return service;
+  }
+  has(name: string): boolean {
+    const knownServices = [
+      'logger',
+      'auth',
+      'authz',
+      'eventBus',
+      'modal',
+      'notification',
+      'theme',
+      'errorReporter',
+    ];
+    return knownServices.includes(name);
+  }
+  listAvailable(): ServiceInfo[] {
+    return [
+      { name: 'logger', version: '1.0.0', status: 'ready' as const },
+      { name: 'auth', version: '1.0.0', status: 'ready' as const },
+      { name: 'authz', version: '1.0.0', status: 'ready' as const },
+      { name: 'eventBus', version: '1.0.0', status: 'ready' as const },
+      { name: 'modal', version: '1.0.0', status: 'ready' as const },
+      { name: 'notification', version: '1.0.0', status: 'ready' as const },
+      { name: 'theme', version: '1.0.0', status: 'ready' as const },
+      { name: 'errorReporter', version: '1.0.0', status: 'ready' as const },
+    ];
+  }
+  getAllServices(): ServiceMap {
+    const services: any = {};
+    const serviceNames = ['logger', 'auth', 'authz', 'eventBus', 'modal', 'notification', 'theme'];
+
+    for (const name of serviceNames) {
+      const service = this.get(name);
+      if (service) {
+        services[name] = service;
+      }
+    }
+
+    return services as ServiceMap;
+  }
+  createScoped(overrides: Record<string, any>): ServiceContainer {
+    // Create a new container instance with overrides
+    const scopedContainer = new MFEServiceContainerImpl();
+
+    // Apply overrides to the scoped container's cache
+    for (const [name, service] of Object.entries(overrides)) {
+      scopedContainer.serviceCache.set(name, service);
+    }
+
+    return scopedContainer;
+  }
+  async dispose(): Promise<void> {
+    // Clear cache and cleanup
+    this.serviceCache.clear();
+  }
+}
+
+export const createMFEServices = (): ServiceContainer => {
+  // TypeScript validates that MFEServiceContainerImpl properly implements ServiceContainer
+  return new MFEServiceContainerImpl();
 };
 
 // Container-specific utilities (not part of MFE contract)
