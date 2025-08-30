@@ -1,15 +1,18 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { UIProvider } from '@/contexts/UIContext';
 import { RegistryProvider } from '@/contexts/RegistryContext';
 import { ServiceProvider } from '@/contexts/ServiceContext';
 import { AppContent } from './AppContent';
 import { initializeServices } from '@/services/container-services';
+import { ContextBridge, type ContextBridgeRef } from '@/services/context-bridge';
+import { setContextBridge } from '@/services/mfe-services';
 import type { ServiceContainer } from '@mfe-toolkit/core';
 
 function App() {
   const [services, setServices] = useState<ServiceContainer | null>(null);
   const [loading, setLoading] = useState(true);
+  const contextBridgeRef = useRef<ContextBridgeRef>(null);
 
   useEffect(() => {
     // Initialize services
@@ -23,6 +26,13 @@ function App() {
         setLoading(false);
       });
   }, []);
+
+  // Initialize context bridge as soon as it's available
+  useEffect(() => {
+    if (contextBridgeRef.current) {
+      setContextBridge(contextBridgeRef.current);
+    }
+  });
 
   if (loading) {
     return (
@@ -44,9 +54,11 @@ function App() {
     <ServiceProvider serviceContainer={services}>
       <AuthProvider>
         <UIProvider>
-          <RegistryProvider>
-            <AppContent />
-          </RegistryProvider>
+          <ContextBridge ref={contextBridgeRef}>
+            <RegistryProvider>
+              <AppContent />
+            </RegistryProvider>
+          </ContextBridge>
         </UIProvider>
       </AuthProvider>
     </ServiceProvider>

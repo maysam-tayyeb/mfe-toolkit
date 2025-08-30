@@ -52,6 +52,7 @@ const createProxiedService = <T extends object>(
 ): T => {
   return new Proxy({} as T, {
     get(_, prop: string | symbol) {
+      // Always return a function for method access
       return (...args: any[]) => {
         if (!contextBridge) {
           const message = `${serviceName}.${String(prop)} called before context bridge initialization`;
@@ -69,11 +70,12 @@ const createProxiedService = <T extends object>(
         const service = getService();
         const method = (service as any)[prop];
 
-        if (typeof method !== 'function') {
-          throw new Error(`${serviceName}.${String(prop)} is not a function`);
+        // If the property doesn't exist or isn't a function, return undefined
+        if (!method || typeof method !== 'function') {
+          return undefined;
         }
 
-        return method(...args);
+        return method.apply(service, args);
       };
     },
   });
