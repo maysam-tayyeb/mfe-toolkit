@@ -3,7 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import { useUI } from '@/contexts/UIContext';
 import { RegistryMFELoader } from '@/components/RegistryMFELoader';
 import { EventLog, TabGroup } from '@mfe/design-system-react';
-import { getMFEServicesSingleton } from '@/services/mfe-services-singleton';
+import { getSharedServices } from '@/services/shared-services';
 
 // Types
 type LayoutMode = 'grid' | 'stacked' | 'focus';
@@ -71,7 +71,7 @@ const MAX_RENDERED_EVENTS = 50; // Maximum number of events to render at once
 
 export const EventBusPageV3: React.FC = () => {
   const { addNotification } = useUI();
-  const serviceContainer = useMemo(() => getMFEServicesSingleton(), []);
+  const serviceContainer = useMemo(() => getSharedServices(), []);
   const [searchParams, setSearchParams] = useSearchParams();
   
   // Core state
