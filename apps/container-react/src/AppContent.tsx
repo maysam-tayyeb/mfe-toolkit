@@ -16,7 +16,7 @@ import { initializePlatformMetrics, updatePlatformMetric } from '@/store/platfor
 function MFEPage() {
   const { mfeName } = useParams<{ mfeName: string }>();
   const { registry } = useRegistryContext();
-  const services = useServices();
+  const serviceContainer = useServices();
 
   if (!mfeName || !registry) {
     return (
@@ -38,7 +38,7 @@ function MFEPage() {
   return (
     <CompatibleMFELoader
       manifest={manifest}
-      services={services}
+      services={serviceContainer}
       fallback={
         <div className="flex items-center justify-center h-64">
           <div className="text-center">

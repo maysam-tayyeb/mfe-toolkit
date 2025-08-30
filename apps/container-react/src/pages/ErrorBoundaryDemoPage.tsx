@@ -33,8 +33,8 @@ export const ErrorBoundaryDemoPage: React.FC = () => {
   const [selectedScenario, setSelectedScenario] = useState<string>('');
   const [errorReportVisible, setErrorReportVisible] = useState(false);
   const [, setRefreshKey] = useState(0);
-  const services = useServices();
-  const errorReporter = services.get('errorReporter');
+  const serviceContainer = useServices();
+  const errorReporter = serviceContainer.get('errorReporter');
 
   const scenarios = [
     {
@@ -326,7 +326,7 @@ export const ErrorBoundaryDemoPage: React.FC = () => {
               key={selectedScenario}
               name={`test-${selectedScenario}`}
               url={scenarios.find((s) => s.id === selectedScenario)?.url || ''}
-              serviceContainer={services}
+              serviceContainer={serviceContainer}
               fallback={
                 <div className="ds-loading-state min-h-[300px]">
                   <div className="ds-spinner-lg"></div>
@@ -335,7 +335,7 @@ export const ErrorBoundaryDemoPage: React.FC = () => {
                 </div>
               }
               onError={(error: Error) => {
-                const notification = services.get('notification');
+                const notification = serviceContainer.get('notification');
                 notification?.error('MFE Load Failed', error.message);
               }}
               isolate={true}

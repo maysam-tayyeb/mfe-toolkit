@@ -41,7 +41,7 @@ function App() {
   }
 
   return (
-    <ServiceProvider services={services}>
+    <ServiceProvider serviceContainer={services}>
       <AuthProvider>
         <UIProvider>
           <RegistryProvider>

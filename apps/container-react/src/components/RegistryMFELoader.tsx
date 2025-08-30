@@ -17,7 +17,7 @@ interface RegistryMFELoaderProps {
 
 export function RegistryMFELoader({ id, fallback, ...props }: RegistryMFELoaderProps) {
   const { registry, isLoading: registryLoading, error: registryError } = useRegistry();
-  const services = useServices();
+  const serviceContainer = useServices();
   const [manifest, setManifest] = useState<MFEManifest | null>(null);
   const [error, setError] = useState<Error | null>(null);
 
@@ -104,7 +104,7 @@ export function RegistryMFELoader({ id, fallback, ...props }: RegistryMFELoaderP
     <MFELoader
       name={manifest.name}
       url={manifest.url}
-      serviceContainer={services}
+      serviceContainer={serviceContainer}
       fallback={fallback}
       isolate={true}
       {...props}
