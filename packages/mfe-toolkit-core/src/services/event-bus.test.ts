@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { createEventBus } from './event-bus';
-import type { EventBus } from '../types';
+import { createSimpleEventBus as createEventBus } from '../implementations/event-bus/simple-event-bus';
+import type { EventBus } from '../services/registry/types';
 
 describe('EventBus', () => {
   let eventBus: EventBus;
@@ -28,7 +28,7 @@ describe('EventBus', () => {
         type: 'test-event',
         data: testData,
         timestamp: expect.any(Number),
-        source: 'mfe-platform',
+        source: 'container',
       });
       expect(handler).toHaveBeenCalledTimes(1);
     });
@@ -47,13 +47,13 @@ describe('EventBus', () => {
         type: 'test-event',
         data: testData,
         timestamp: expect.any(Number),
-        source: 'mfe-platform',
+        source: 'container',
       });
       expect(handler2).toHaveBeenCalledWith({
         type: 'test-event',
         data: testData,
         timestamp: expect.any(Number),
-        source: 'mfe-platform',
+        source: 'container',
       });
     });
 
@@ -109,7 +109,7 @@ describe('EventBus', () => {
         type: 'test-event',
         data: payload,
         timestamp: expect.any(Number),
-        source: 'mfe-platform',
+        source: 'container',
       });
     });
 
@@ -129,7 +129,7 @@ describe('EventBus', () => {
         type: 'test-event',
         data: undefined,
         timestamp: expect.any(Number),
-        source: 'mfe-platform',
+        source: 'container',
       });
     });
   });

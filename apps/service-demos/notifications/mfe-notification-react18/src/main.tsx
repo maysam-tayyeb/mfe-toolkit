@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { NotificationDemo } from './NotificationDemo';
 import type { MFEModule, ServiceContainer } from '@mfe-toolkit/core';
-import '@mfe-toolkit/service-notification/types';
+import '@mfe-toolkit/core/types';
 
 let root: ReactDOM.Root | null = null;
 

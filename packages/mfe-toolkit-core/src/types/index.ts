@@ -12,6 +12,40 @@ export type {
   MFELifecycle,
 } from './manifest';
 
+// Re-export authentication types
+export type {
+  AuthService,
+  AuthSession,
+  AuthConfig,
+  LoginCredentials,
+} from './authentication';
+export { AUTH_SERVICE_KEY } from './authentication';
+
+// Re-export authorization types
+export type {
+  AuthorizationService,
+  AuthorizationConfig,
+  AuthorizationContext,
+  Policy,
+  ResourceAccess,
+} from './authorization';
+export { AUTHZ_SERVICE_KEY } from './authorization';
+
+// Re-export theme types
+export type {
+  Theme,
+  ThemeService,
+} from './theme';
+export { THEME_SERVICE_KEY } from './theme';
+
+// Re-export analytics types
+export type {
+  AnalyticsService,
+  AnalyticsEvent,
+  AnalyticsConfig,
+} from './analytics';
+export { ANALYTICS_SERVICE_KEY } from './analytics';
+
 // Error reporter types are now exported from ./types/error-reporter
 // No need to re-export here to avoid conflicts
 

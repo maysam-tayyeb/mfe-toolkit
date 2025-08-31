@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { ErrorReporter } from './error-reporter';
+import { DefaultErrorReporter as ErrorReporter } from '../implementations/error-reporter/default-error-reporter';
 
 describe('ErrorReporter', () => {
   let consoleErrorSpy: any;

@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useCallback, ReactNode, useEffect } from 'react';
 import { useAuthService } from './ServiceContext';
-import type { AuthSession } from '@mfe-toolkit/service-authentication/types';
+import type { AuthSession } from '@mfe-toolkit/core';
 
 interface AuthContextType {
   session: AuthSession | null;

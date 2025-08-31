@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { createLogger } from './logger';
+import { createConsoleLogger as createLogger } from '../implementations/logger/console-logger';
 
 describe('Logger', () => {
   let originalConsole: typeof console;

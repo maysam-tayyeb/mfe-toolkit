@@ -1,6 +1,6 @@
 import { createApp } from 'vue';
 import type { MFEModule, ServiceContainer } from '@mfe-toolkit/core';
-import '@mfe-toolkit/service-notification/types';
+import '@mfe-toolkit/core/types';
 import NotificationDemo from './NotificationDemo.vue';
 
 let app: any = null;

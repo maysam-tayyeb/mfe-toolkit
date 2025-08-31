@@ -10,12 +10,7 @@ import { createLogger } from '@mfe-toolkit/core';
 
 const exampleLogger = createLogger('TypedServiceUsage');
 
-// Import type augmentations to extend ServiceMap
-import '@mfe-toolkit/service-authentication/types';
-import '@mfe-toolkit/service-authorization/types';
-import '@mfe-toolkit/service-modal/types';
-import '@mfe-toolkit/service-notification/types';
-import '@mfe-toolkit/service-theme/types';
+// All service types are now in core - no need for separate type augmentation imports
 
 export function demonstrateTypedServiceAccess(container: ServiceContainer) {
   // ✅ Type-safe access with autocomplete for service names
@@ -29,11 +24,11 @@ export function demonstrateTypedServiceAccess(container: ServiceContainer) {
   
   // ✅ Full IntelliSense for service methods
   logger.info('Service access is now type-safe!');
-  auth.isAuthenticated(); // Returns boolean
-  authz.hasPermission('users:read'); // Returns boolean
-  modal.open({ title: 'Test', content: 'Hello' }); // Type-checked config
-  notification.success('Success', 'Operation completed');
-  theme.setTheme('dark');
+  auth?.isAuthenticated(); // Returns boolean
+  authz?.hasPermission('users:read'); // Returns boolean
+  modal?.open({ title: 'Test', content: 'Hello' }); // Type-checked config
+  notification?.success('Success', 'Operation completed');
+  theme?.setTheme('dark');
   eventBus.emit('test', { data: 'payload' });
   
   // ✅ Optional access with proper undefined handling

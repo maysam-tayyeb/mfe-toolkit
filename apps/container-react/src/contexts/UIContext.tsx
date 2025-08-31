@@ -5,8 +5,7 @@ import React, {
   useCallback,
   ReactNode,
 } from 'react';
-import type { BaseModalConfig } from '@mfe-toolkit/service-modal';
-import type { NotificationConfig } from '@mfe-toolkit/service-notification';
+import type { BaseModalConfig, NotificationConfig } from '@mfe-toolkit/core';
 
 type ModalConfig = BaseModalConfig<React.ReactNode>;
 

@@ -9,24 +9,18 @@ import {
   ServiceInfo,
   createLogger,
   createErrorReporter,
+  type ModalService,
+  type BaseModalConfig,
+  type NotificationService,
+  type NotificationConfig,
+  type AuthService,
+  type AuthorizationService,
+  type ResourceAccess,
 } from '@mfe-toolkit/core';
-import type { AuthService } from '@mfe-toolkit/service-authentication/types';
-import type { AuthorizationService, ResourceAccess } from '@mfe-toolkit/service-authorization/types';
-import type { ModalService, BaseModalConfig } from '@mfe-toolkit/service-modal';
-import type {
-  NotificationService,
-  NotificationConfig,
-} from '@mfe-toolkit/service-notification/types';
 import { createPlatformEventBus } from './platform-event-bus';
 import { getThemeService } from './theme-service';
 
-// Import type augmentations
-import '@mfe-toolkit/service-authentication/types';
-import '@mfe-toolkit/service-authorization/types';
-import '@mfe-toolkit/service-modal/types';
-import '@mfe-toolkit/service-notification/types';
-import '@mfe-toolkit/service-theme/types';
-import '@mfe-toolkit/service-analytics/types';
+// All service types are now in core - no need for separate type augmentation imports
 
 // Context values that will be injected by React
 export interface ReactContextValues {

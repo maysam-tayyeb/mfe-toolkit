@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import type { Logger } from '@mfe-toolkit/core';
-import type { NotificationService, NotificationType } from '@mfe-toolkit/service-notification/types';
+import type { NotificationService, NotificationType } from '@mfe-toolkit/core/types';
 
 interface AppProps {
   notification: NotificationService;

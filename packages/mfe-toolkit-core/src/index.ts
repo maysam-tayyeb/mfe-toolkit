@@ -5,6 +5,12 @@ export * from './services/registry';
 export * from './types/events';
 export * from './types';
 export * from './types/error-reporter';
+export * from './types/modal';
+export * from './types/notification';
+export * from './types/authentication';
+export * from './types/authorization';
+export * from './types/theme';
+export * from './types/analytics';
 
 // Service Implementations (tree-shakable - only used ones get bundled)
 // These are reference implementations that containers can use or replace

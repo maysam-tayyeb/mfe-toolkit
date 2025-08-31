@@ -6,17 +6,17 @@ import {
   createServiceRegistry,
   type ServiceRegistry,
   type ServiceContainer,
+  // Import reference implementations from core (tree-shakable)
+  createLogger,
+  createEventBus,
+  createErrorReporter,
+  modalServiceProvider,
+  notificationServiceProvider,
+  authServiceProvider,
+  authorizationServiceProvider,
+  themeServiceProvider,
+  analyticsServiceProvider,
 } from '@mfe-toolkit/core';
-
-import { authServiceProvider } from '@mfe-toolkit/service-authentication';
-import { authorizationServiceProvider } from '@mfe-toolkit/service-authorization';
-import { modalServiceProvider } from '@mfe-toolkit/service-modal';
-import { notificationServiceProvider } from '@mfe-toolkit/service-notification';
-import { themeServiceProvider } from '@mfe-toolkit/service-theme';
-import { analyticsServiceProvider } from '@mfe-toolkit/service-analytics';
-
-// Import reference implementations from core (tree-shakable)
-import { createLogger, createEventBus, createErrorReporter } from '@mfe-toolkit/core';
 
 let registryInstance: ServiceRegistry | null = null;
 let containerInstance: ServiceContainer | null = null;

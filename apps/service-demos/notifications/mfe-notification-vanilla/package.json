@@ -9,8 +9,7 @@
     "build:watch": "node build.js --watch"
   },
   "dependencies": {
-    "@mfe-toolkit/core": "workspace:*",
-    "@mfe-toolkit/service-notification": "workspace:*"
+    "@mfe-toolkit/core": "workspace:*"
   },
   "devDependencies": {
     "@mfe-toolkit/build": "workspace:*",

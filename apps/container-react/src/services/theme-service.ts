@@ -1,5 +1,4 @@
-import type { Theme, ThemeService } from '@mfe-toolkit/service-theme';
-import { createLogger } from '@mfe-toolkit/core';
+import { createLogger, type Theme, type ThemeService } from '@mfe-toolkit/core';
 
 const logger = createLogger('ThemeService');
 

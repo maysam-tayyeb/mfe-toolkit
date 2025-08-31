@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@mfe-toolkit/core": "workspace:*",
-    "@mfe-toolkit/service-notification": "workspace:*",
+    
     "vue": "^3.4.0"
   },
   "devDependencies": {

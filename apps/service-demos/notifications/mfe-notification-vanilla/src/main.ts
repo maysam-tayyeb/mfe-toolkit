@@ -1,6 +1,6 @@
 import type { MFEModule, ServiceContainer, Logger } from '@mfe-toolkit/core';
-import type { NotificationService } from '@mfe-toolkit/service-notification/types';
-import '@mfe-toolkit/service-notification/types';
+import type { NotificationService } from '@mfe-toolkit/core/types';
+import '@mfe-toolkit/core/types';
 
 // State management for the Vanilla TS MFE
 interface NotificationState {

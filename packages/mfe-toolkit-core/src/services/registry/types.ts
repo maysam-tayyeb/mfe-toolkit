@@ -66,6 +66,19 @@ export interface ServiceMap {
   logger: Logger;
   eventBus: EventBus;
   errorReporter?: import('../../types/error-reporter').ErrorReporter;
+  
+  // UI Services
+  modal?: import('../../types/modal').ModalService;
+  notification?: import('../../types/notification').NotificationService;
+  
+  // User Services
+  auth?: import('../../types/authentication').AuthService;
+  authz?: import('../../types/authorization').AuthorizationService;
+  
+  // Application Services
+  theme?: import('../../types/theme').ThemeService;
+  analytics?: import('../../types/analytics').AnalyticsService;
+  
   // Extended by service packages via module augmentation
 }
 
