@@ -65,6 +65,7 @@ export interface ServiceMap {
   // Core services always available
   logger: Logger;
   eventBus: EventBus;
+  errorReporter?: import('../../types/error-reporter').ErrorReporter;
   // Extended by service packages via module augmentation
 }
 

@@ -4,8 +4,6 @@
 
 import {
   createServiceRegistry,
-  createLogger,
-  createEventBus,
   type ServiceRegistry,
   type ServiceContainer,
 } from '@mfe-toolkit/core';
@@ -17,6 +15,11 @@ import { notificationServiceProvider } from '@mfe-toolkit/service-notification';
 import { themeServiceProvider } from '@mfe-toolkit/service-theme';
 import { analyticsServiceProvider } from '@mfe-toolkit/service-analytics';
 
+// Import container implementations
+import { createConsoleLogger } from './implementations/logger/console-logger';
+import { createSimpleEventBus } from './implementations/event-bus/simple-event-bus';
+import { createErrorReporter } from './implementations/error-reporter/default-error-reporter';
+
 let registryInstance: ServiceRegistry | null = null;
 let containerInstance: ServiceContainer | null = null;
 
@@ -27,9 +30,20 @@ export async function setupServices(): Promise<ServiceRegistry> {
   // Create registry
   const registry = createServiceRegistry();
   
-  // Register core services (always available)
-  registry.register('logger', createLogger('Container'));
-  registry.register('eventBus', createEventBus());
+  // Register core services using container implementations
+  registry.register('logger', createConsoleLogger('Container'));
+  registry.register('eventBus', createSimpleEventBus('Container'));
+  
+  // Register error reporter (new)
+  const errorReporter = createErrorReporter(
+    {
+      maxErrorsPerSession: 100,
+      enableConsoleLog: true,
+      enableRemoteLogging: false,
+    },
+    registry.createContainer()
+  );
+  registry.register('errorReporter', errorReporter);
   
   // Register service packages
   registry.registerProvider(authServiceProvider);

@@ -14,7 +14,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - ✅ **Standalone Development** - @mfe-toolkit/dev package for independent MFE development
 - ✅ **Build System** - @mfe-toolkit/build with automatic dependency detection
 - ✅ **Service Package Extraction** - Modal, Notification, Auth, Theme services extracted to separate packages
-- 🚧 **Service Architecture Refactoring** - Plan documented to separate interfaces from implementations
+- ✅ **Service Architecture Refactoring (Phase 1)** - Core services (Logger, EventBus, ErrorReporter) now use container implementations
+- 🚧 **Service Architecture Refactoring (Phase 2)** - Service packages still need interface/implementation separation
 
 ## Essential Commands
 
@@ -92,10 +93,17 @@ cd apps/container-react && pnpm preview
 ## ⚠️ Service Architecture Status (IMPORTANT - READ THIS)
 
 ### Current State (January 2025)
-The service architecture is in transition. Currently:
-- **Logger, EventBus, ErrorReporter**: Still have implementations in `@mfe-toolkit/core` 
-- **Modal, Notification, Auth, Theme, Analytics**: Extracted to separate packages but still contain implementations
-- **Service Registry**: Properly implemented with dependency injection
+The service architecture is in transition:
+
+**✅ Phase 1 Complete (Core Services)**:
+- **Logger**: Interface in core, implementation in container (`ConsoleLogger`)
+- **EventBus**: Interface in core, implementation in container (`SimpleEventBus`)
+- **ErrorReporter**: Interface in core, implementation in container (`DefaultErrorReporter`)
+- Core package exports are deprecated but still available for backward compatibility
+
+**🚧 Phase 2 Pending (Service Packages)**:
+- **Modal, Notification, Auth, Theme, Analytics**: Still contain implementations in packages
+- Need to extract implementations to container
 
 ### Planned Refactoring
 We are moving to a pure interface-based architecture where:
@@ -107,7 +115,10 @@ We are moving to a pure interface-based architecture where:
    - Better testing with mock services
    - True dependency inversion
 
-**See `/docs/architecture/service-architecture-refactoring.md` for the complete plan.**
+**Documentation:**
+- `/docs/architecture/service-architecture.md` - Current service architecture
+- `/docs/in-progress-plans/service-architecture-refactoring.md` - Complete refactoring plan
+- `/docs/in-progress-plans/service-architecture-refactoring-status.md` - Implementation status
 
 ## Architecture Overview
 

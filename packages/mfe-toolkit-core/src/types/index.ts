@@ -12,9 +12,8 @@ export type {
   MFELifecycle,
 } from './manifest';
 
-// Re-export error reporter types
-export type { ErrorReport } from '../services/error-reporter';
-export { ErrorReporter } from '../services/error-reporter';
+// Error reporter types are now exported from ./types/error-reporter
+// No need to re-export here to avoid conflicts
 
 // Define StateManager interface (matches @mfe-toolkit/state)
 export interface StateManager {
