@@ -4,6 +4,9 @@ import { useUI } from '@/contexts/UIContext';
 import { RegistryMFELoader } from '@/components/RegistryMFELoader';
 import { EventLog, TabGroup } from '@mfe/design-system-react';
 import { useServices } from '@/contexts/ServiceContext';
+import { createLogger } from '@mfe-toolkit/core';
+
+const logger = createLogger('EventBusPage');
 
 // Types
 type LayoutMode = 'grid' | 'stacked' | 'focus';
@@ -55,7 +58,7 @@ const StorageManager = {
     try {
       localStorage.setItem(key, JSON.stringify(data));
     } catch (error) {
-      console.error('Failed to save events:', error);
+      logger.error('Failed to save events:', error);
     }
   },
   load: (key: string): EventMessage[] => {
@@ -63,7 +66,7 @@ const StorageManager = {
       const stored = localStorage.getItem(key);
       return stored ? JSON.parse(stored) : [];
     } catch (error) {
-      console.error('Failed to load events:', error);
+      logger.error('Failed to load events:', error);
       return [];
     }
   },
@@ -240,7 +243,7 @@ export const EventBusPageV3: React.FC = () => {
   useEffect(() => {
     const handleEvent = (payload: any) => {
       // Debug logging
-      console.log('Event received:', payload);
+      logger.debug('Event received:', payload);
 
       // Filter out lifecycle events and internal events
       if (payload.type?.startsWith('mfe:')) {

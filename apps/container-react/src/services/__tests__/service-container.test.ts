@@ -71,7 +71,7 @@ describe('Unified Service Container', () => {
       auth?.getSession();
       
       expect(consoleSpy).toHaveBeenCalledWith(
-        'Service accessed before React contexts are initialized'
+        expect.stringContaining('Service accessed before React contexts are initialized')
       );
       
       consoleSpy.mockRestore();
@@ -232,8 +232,12 @@ describe('Unified Service Container', () => {
       notification?.dismiss('notification-123');
       notification?.dismissAll();
       
-      expect(consoleSpy).toHaveBeenCalledWith('NotificationService.dismiss not yet implemented');
-      expect(consoleSpy).toHaveBeenCalledWith('NotificationService.dismissAll not yet implemented');
+      expect(consoleSpy).toHaveBeenCalledWith(
+        expect.stringContaining('NotificationService.dismiss not yet implemented')
+      );
+      expect(consoleSpy).toHaveBeenCalledWith(
+        expect.stringContaining('NotificationService.dismissAll not yet implemented')
+      );
       
       consoleSpy.mockRestore();
     });
@@ -305,7 +309,7 @@ describe('Unified Service Container', () => {
       auth?.getSession();
       
       expect(consoleSpy).toHaveBeenCalledWith(
-        'Service accessed before React contexts are initialized'
+        expect.stringContaining('Service accessed before React contexts are initialized')
       );
       
       consoleSpy.mockRestore();

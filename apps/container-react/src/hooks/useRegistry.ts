@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
-import { MFERegistryService, RegistryOptions } from '@mfe-toolkit/core';
+import { MFERegistryService, RegistryOptions, createLogger } from '@mfe-toolkit/core';
 import { getRegistrySingleton } from '@/services/registry-singleton';
+
+const logger = createLogger('useRegistry');
 
 export interface UseRegistryOptions extends RegistryOptions {
   loadOnMount?: boolean;
@@ -54,7 +56,7 @@ export function useRegistry(options: UseRegistryOptions = {}): UseRegistryResult
       onLoadSuccess?.();
     } catch (err) {
       const error = err instanceof Error ? err : new Error('Failed to load registry');
-      console.error('Failed to load MFE registry:', error);
+      logger.error('Failed to load MFE registry:', error);
       setError(error);
       onLoadError?.(error);
 

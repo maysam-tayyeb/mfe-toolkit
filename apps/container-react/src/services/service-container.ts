@@ -143,6 +143,9 @@ function createModalService(getContextValues: () => ReactContextValues): ModalSe
   };
 }
 
+// Singleton logger for notification service
+const notificationLogger = createLogger('NotificationService');
+
 /**
  * Creates notification service that calls React context methods
  */
@@ -165,11 +168,11 @@ function createNotificationService(getContextValues: () => ReactContextValues): 
       show({ type: 'info', title, message }),
     dismiss: (_id: string) => {
       // TODO: Implement dismiss functionality in UIContext
-      console.warn('NotificationService.dismiss not yet implemented');
+      notificationLogger.warn('NotificationService.dismiss not yet implemented');
     },
     dismissAll: () => {
       // TODO: Implement dismissAll functionality in UIContext
-      console.warn('NotificationService.dismissAll not yet implemented');
+      notificationLogger.warn('NotificationService.dismissAll not yet implemented');
     },
   };
 }
@@ -181,7 +184,7 @@ export class UnifiedServiceContainer implements ServiceContainer {
   private services = new Map<string, unknown>();
   private contextValues: ReactContextValues | null = null;
   private eventBus = createPlatformEventBus();
-  private logger = createLogger('MFE');
+  private logger = createLogger('ServiceContainer');
   private themeService = getThemeService();
 
   /**
@@ -196,13 +199,13 @@ export class UnifiedServiceContainer implements ServiceContainer {
    */
   private getContextValues(): ReactContextValues {
     if (!this.contextValues) {
-      console.warn('Service accessed before React contexts are initialized');
+      this.logger.warn('Service accessed before React contexts are initialized');
       return {
         auth: { session: null },
         ui: {
-          openModal: () => console.warn('Modal service not ready'),
-          closeModal: () => console.warn('Modal service not ready'),
-          addNotification: () => console.warn('Notification service not ready'),
+          openModal: () => this.logger.warn('Modal service not ready'),
+          closeModal: () => this.logger.warn('Modal service not ready'),
+          addNotification: () => this.logger.warn('Notification service not ready'),
         },
       };
     }

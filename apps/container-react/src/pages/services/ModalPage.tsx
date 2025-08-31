@@ -3,6 +3,9 @@ import { useSearchParams } from 'react-router-dom';
 import { useUI } from '@/contexts/UIContext';
 import { TabGroup } from '@mfe/design-system-react';
 import { RegistryMFELoader } from '@/components/RegistryMFELoader';
+import { createLogger } from '@mfe-toolkit/core';
+
+const logger = createLogger('ModalPage');
 
 // MFE Card Component with Framework Badge (matching EventBusPageV3 style)
 const MFECard: React.FC<{
@@ -85,11 +88,11 @@ export const ModalPage: React.FC = () => {
           </div>
         ),
         onConfirm: () => {
-          console.log('Confirmed!');
+          logger.info('Modal confirmed');
           closeModal();
         },
         onClose: () => {
-          console.log('Cancelled');
+          logger.info('Modal cancelled');
         },
         showCloseButton: true
       });
@@ -179,7 +182,7 @@ export const ModalPage: React.FC = () => {
         ),
         size: 'lg',
         onConfirm: () => {
-          console.log('Form submitted:', formData);
+          logger.info('Form submitted:', formData);
           closeModal();
         },
         showCloseButton: true

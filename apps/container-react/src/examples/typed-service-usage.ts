@@ -6,6 +6,9 @@
  */
 
 import type { ServiceContainer, ServiceMap } from '@mfe-toolkit/core';
+import { createLogger } from '@mfe-toolkit/core';
+
+const exampleLogger = createLogger('TypedServiceUsage');
 
 // Import type augmentations to extend ServiceMap
 import '@mfe-toolkit/service-authentication/types';
@@ -51,7 +54,7 @@ export function demonstrateTypedServiceAccess(container: ServiceContainer) {
   const dynamicService = container.get(serviceName); // Type: AuthService | undefined
   if (dynamicService) {
     // Use the service after checking it exists
-    console.log('Service found:', serviceName);
+    exampleLogger.info('Service found:', serviceName);
   }
   
   return {

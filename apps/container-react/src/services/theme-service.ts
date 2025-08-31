@@ -1,4 +1,7 @@
 import type { Theme, ThemeService } from '@mfe-toolkit/service-theme';
+import { createLogger } from '@mfe-toolkit/core';
+
+const logger = createLogger('ThemeService');
 
 type ThemeChangeListener = (theme: Theme) => void;
 
@@ -107,7 +110,7 @@ export class ThemeServiceImpl implements ThemeService {
       try {
         listener(theme);
       } catch (error) {
-        console.error('Error in theme change listener:', error);
+        logger.error('Error in theme change listener:', error);
       }
     });
   }
@@ -126,7 +129,7 @@ export const getThemeService = (themes?: Theme[]): ThemeServiceImpl => {
 // Export for configuration
 export const configureThemeService = (themes: Theme[]): void => {
   if (themeService) {
-    console.warn('Theme service already initialized. Ignoring new configuration.');
+    logger.warn('Theme service already initialized. Ignoring new configuration.');
     return;
   }
   themeService = new ThemeServiceImpl(themes);
