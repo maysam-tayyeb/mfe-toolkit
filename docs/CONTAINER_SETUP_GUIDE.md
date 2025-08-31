@@ -61,7 +61,7 @@ my-container-app/
 │   │   ├── AuthContext.tsx
 │   │   └── UIContext.tsx
 │   ├── services/
-│   │   ├── mfe-services.ts
+│   │   ├── service-container.ts
 │   │   └── registry.ts
 │   ├── pages/
 │   │   ├── HomePage.tsx
@@ -131,121 +131,139 @@ Create `tsconfig.json`:
 
 ### Step 1: Create the Services
 
-> **📁 See Working Example:** `apps/container-react/src/services/mfe-services.ts`
+> **📁 See Working Example:** `apps/container-react/src/services/service-container.ts`
 
-Create `src/services/mfe-services.ts`:
+Create `src/services/service-container.ts`:
 
 ```typescript
-import { 
-  createLogger, 
-  createEventBus, 
-  createErrorReporter,
-  type MFEServices,
-  type LogLevel 
+import {
+  ServiceContainer,
+  ServiceMap,
+  createLogger,
+  getErrorReporter,
 } from '@mfe-toolkit/core';
+import { createPlatformEventBus } from './platform-event-bus';
+import { getThemeService } from './theme-service';
 
-export interface ServiceConfig {
-  logLevel?: LogLevel;
-  enableDebug?: boolean;
-}
-
-export function createMFEServices(config: ServiceConfig = {}): MFEServices {
-  // Create logger
-  const logger = createLogger('container', {
-    level: config.logLevel || 'info',
-    enabled: true
-  });
-
-  // Create event bus
-  const eventBus = createEventBus({
-    debug: config.enableDebug || false,
-    maxListeners: 100
-  });
-
-  // Create error reporter
-  const errorReporter = createErrorReporter({
-    logger,
-    endpoint: process.env.VITE_ERROR_REPORTING_URL
-  });
-
-  // Modal service (will be connected to UI context)
-  const modal = {
-    open: (config: any) => {
-      eventBus.emit('ui:modal:open', config);
-    },
-    close: () => {
-      eventBus.emit('ui:modal:close');
-    }
+// React context values interface
+export interface ReactContextValues {
+  auth: {
+    session: {
+      userId: string;
+      username: string;
+      email: string;
+      roles: string[];
+      permissions: string[];
+      isAuthenticated: boolean;
+    } | null;
   };
-
-  // Notification service
-  const notification = {
-    show: (config: any) => {
-      eventBus.emit('ui:notification:show', config);
-    },
-    hide: (id: string) => {
-      eventBus.emit('ui:notification:hide', { id });
-    }
-  };
-
-  // Auth service (will be connected to auth context)
-  const auth = {
-    getSession: () => {
-      // This will be replaced with actual implementation
-      return null;
-    },
-    isAuthenticated: () => {
-      return false;
-    },
-    login: async (credentials: any) => {
-      // Implement login logic
-      eventBus.emit('auth:login', credentials);
-    },
-    logout: async () => {
-      eventBus.emit('auth:logout');
-    }
-  };
-
-  return {
-    logger,
-    eventBus,
-    errorReporter,
-    modal,
-    notification,
-    auth
+  ui: {
+    openModal: (config: BaseModalConfig) => void;
+    closeModal: () => void;
+    addNotification: (config: NotificationConfig) => void;
   };
 }
 
-// Singleton instance
-let servicesInstance: MFEServices | null = null;
+/**
+ * Unified Service Container - Provides all services to MFEs
+ */
+export class UnifiedServiceContainer implements ServiceContainer {
+  private services = new Map<string, unknown>();
+  private contextValues: ReactContextValues | null = null;
+  private eventBus = createPlatformEventBus();
+  private logger = createLogger('MFE');
+  private themeService = getThemeService();
 
-export function getMFEServicesSingleton(): MFEServices {
-  if (!servicesInstance) {
-    servicesInstance = createMFEServices({
-      logLevel: 'debug',
-      enableDebug: process.env.NODE_ENV === 'development'
-    });
+  /**
+   * Update React context values for services that need them
+   */
+  setContextValues(values: ReactContextValues) {
+    this.contextValues = values;
   }
-  return servicesInstance;
+
+  /**
+   * Get a service by name
+   */
+  get<K extends keyof ServiceMap>(name: K): ServiceMap[K] | undefined {
+    return this.getOrCreateService(name);
+  }
+
+  /**
+   * Create service instances that read from React contexts
+   */
+  private getOrCreateService(name: string): unknown {
+    if (this.services.has(name)) {
+      return this.services.get(name);
+    }
+
+    let service: unknown;
+
+    switch (name) {
+      case 'logger':
+        service = this.logger;
+        break;
+      case 'eventBus':
+        service = this.eventBus;
+        break;
+      case 'auth':
+        service = this.createAuthService();
+        break;
+      case 'modal':
+        service = this.createModalService();
+        break;
+      case 'notification':
+        service = this.createNotificationService();
+        break;
+      case 'theme':
+        service = this.themeService;
+        break;
+      // Add more services as needed
+    }
+
+    if (service !== undefined) {
+      this.services.set(name, service);
+    }
+
+    return service;
+  }
+
+  // Service creation methods...
+  private createAuthService() { /* ... */ }
+  private createModalService() { /* ... */ }
+  private createNotificationService() { /* ... */ }
+
+  // Other ServiceContainer interface methods...
+  require(name: string) { /* ... */ }
+  has(name: string) { /* ... */ }
+  listAvailable() { /* ... */ }
+  getAllServices() { /* ... */ }
+  createScoped(overrides: Record<string, unknown>) { /* ... */ }
+  async dispose() { /* ... */ }
+}
+
+/**
+ * Create the service container
+ */
+export function createServiceContainer(): UnifiedServiceContainer {
+  return new UnifiedServiceContainer();
 }
 ```
 
 ### Step 2: Create Services Context
 
-> **📁 Note:** ServicesContext example to be implemented (currently using singleton pattern)
-> **Reference:** `apps/container-react/src/services/mfe-services-singleton.ts`
+> **📁 See Working Example:** `apps/container-react/src/contexts/ServiceContext.tsx`
 
 Create `src/contexts/ServicesContext.tsx`:
 
 ```tsx
 import React, { createContext, useContext, ReactNode } from 'react';
 import { type MFEServices } from '@mfe-toolkit/core';
-import { getMFEServicesSingleton } from '../services/mfe-services';
+import { createServiceContainer } from '../services/service-container';
 
 const ServicesContext = createContext<MFEServices | null>(null);
 
 export const ServicesProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const services = getMFEServicesSingleton();
+  const services = useMemo(() => createServiceContainer(), []);
   
   return (
     <ServicesContext.Provider value={services}>
@@ -843,6 +861,44 @@ export const ModalManager: React.FC = () => {
 };
 ```
 
+### Step 3.5: Create ContextBridge (Simplified)
+
+> **📁 See Working Example:** `apps/container-react/src/services/context-bridge.tsx`
+
+The ContextBridge is a simple component that syncs React context values to the service container so that services can access them:
+
+```tsx
+import React, { useEffect } from 'react';
+import { useAuth } from '@/contexts/AuthContext';
+import { useUI } from '@/contexts/UIContext';
+import { useServices } from '@/contexts/ServiceContext';
+import type { UnifiedServiceContainer } from './service-container';
+
+export function ContextBridge({ children }: { children: React.ReactNode }) {
+  const auth = useAuth();
+  const ui = useUI();
+  const serviceContainer = useServices() as UnifiedServiceContainer;
+
+  // Sync React context values to service container
+  useEffect(() => {
+    serviceContainer.setContextValues({
+      auth: {
+        session: auth.session,
+      },
+      ui: {
+        openModal: ui.openModal,
+        closeModal: ui.closeModal,
+        addNotification: ui.addNotification,
+      },
+    });
+  }, [auth.session, ui, serviceContainer]);
+
+  return <>{children}</>;
+}
+```
+
+This eliminates the need for complex proxy patterns - services simply read the context values directly when needed.
+
 ### Step 4: Create Main App Component
 
 > **📁 See Working Example:** `apps/container-react/src/App.tsx`
@@ -850,10 +906,12 @@ export const ModalManager: React.FC = () => {
 Create `src/App.tsx`:
 
 ```tsx
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ServicesProvider } from './contexts/ServicesContext';
+import { AuthProvider } from './contexts/AuthContext';
 import { UIProvider } from './contexts/UIContext';
+import { ContextBridge } from './services/context-bridge';
 import { Layout } from './components/Layout';
 import { HomePage } from './pages/HomePage';
 import { MFEPage } from './pages/MFEPage';
@@ -870,18 +928,22 @@ export const App: React.FC = () => {
   return (
     <ErrorBoundary>
       <ServicesProvider>
-        <UIProvider>
-          <BrowserRouter>
-            <Layout>
-              <Routes>
-                <Route path="/" element={<HomePage />} />
-                <Route path="/dashboard/*" element={<MFEPage mfeId="dashboard" />} />
-                <Route path="/profile/*" element={<MFEPage mfeId="profile" />} />
-                <Route path="/mfes" element={<MFEManagerPage />} />
-              </Routes>
-            </Layout>
-          </BrowserRouter>
-        </UIProvider>
+        <AuthProvider>
+          <UIProvider>
+            <ContextBridge>
+              <BrowserRouter>
+                <Layout>
+                  <Routes>
+                    <Route path="/" element={<HomePage />} />
+                    <Route path="/dashboard/*" element={<MFEPage mfeId="dashboard" />} />
+                    <Route path="/profile/*" element={<MFEPage mfeId="profile" />} />
+                    <Route path="/mfes" element={<MFEManagerPage />} />
+                  </Routes>
+                </Layout>
+              </BrowserRouter>
+            </ContextBridge>
+          </UIProvider>
+        </AuthProvider>
       </ServicesProvider>
     </ErrorBoundary>
   );

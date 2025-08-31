@@ -51,11 +51,13 @@ Both systems co-exist and serve different purposes in the architecture.
 └─────────────────────────────────────────────────────────────┘
 ```
 
-## ContextBridge: Container Services
+## ContextBridge: Container Services (Simplified Architecture)
+
+> **Note**: The ContextBridge has been significantly simplified. See [Service Architecture Simplified](./service-architecture-simplified.md) for details.
 
 ### Purpose
 
-The ContextBridge provides MFEs with access to container-specific UI services that cannot be implemented within individual MFEs.
+The ContextBridge is now a simple component that syncs React context values to the service container, eliminating the need for complex proxy patterns.
 
 ### Services Provided
 
@@ -99,10 +101,63 @@ interface ContainerServices {
 - **UI-focused**: Primarily for UI elements that render in container
 - **Stateless for MFEs**: MFEs don't manage this state directly
 
-### Implementation
+### Simplified Implementation
+
+The new architecture eliminates the complex proxy pattern:
 
 ```typescript
-// How MFEs use container services
+// Old complex proxy pattern (removed)
+const createProxiedService = <T>(serviceName: string, getService: () => T): T => {
+  return new Proxy({} as T, {
+    get(_, prop) {
+      // Complex proxy logic with context bridge checking
+    }
+  });
+};
+
+// New direct implementation
+export class UnifiedServiceContainer {
+  setContextValues(values: ReactContextValues) {
+    this.contextValues = values;
+  }
+  
+  private createAuthService() {
+    return {
+      getSession: () => this.contextValues?.auth.session,
+      isAuthenticated: () => this.contextValues?.auth.session?.isAuthenticated ?? false
+    };
+  }
+}
+```
+
+#### ContextBridge Component (39 lines vs 160 lines)
+
+```tsx
+export function ContextBridge({ children }) {
+  const auth = useAuth();
+  const ui = useUI();
+  const serviceContainer = useServices();
+
+  useEffect(() => {
+    // Simply sync React context values to service container
+    serviceContainer.setContextValues({
+      auth: { session: auth.session },
+      ui: {
+        openModal: ui.openModal,
+        closeModal: ui.closeModal,
+        addNotification: ui.addNotification,
+      },
+    });
+  }, [auth.session, ui, serviceContainer]);
+
+  return <>{children}</>;
+}
+```
+
+### How MFEs Use Services (Unchanged)
+
+```typescript
+// MFEs still use the same API
 export default {
   mount: (element, services) => {
     // Show a modal (rendered by container)
