@@ -154,7 +154,7 @@ interface StateManager {
 ├─────────────────────────────────────┤
 │   UniversalStateManager Class       │
 ├─────────────────────────────────────┤
-│      Valtio Proxy Store            │
+│      Valtio Proxy Store             │
 └─────────────────────────────────────┘
 ```
 

@@ -17,37 +17,37 @@ Both systems co-exist and serve different purposes in the architecture.
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                     Container Application                    │
+│                     Container Application                   │
 │                                                             │
-│  ┌─────────────────────────────────────────────────────┐   │
+│  ┌──────────────────────────────────────────────────────┐   │
 │  │                   ContextBridge                      │   │
-│  │  ┌─────────────┐ ┌──────────────┐ ┌──────────────┐ │   │
-│  │  │AuthService  │ │ModalService │ │NotifyService │ │   │
-│  │  │(Container)  │ │(Container UI)│ │(Container UI)│ │   │
-│  │  └─────────────┘ └──────────────┘ └──────────────┘ │   │
+│  │  ┌─────────────┐ ┌──────────────┐ ┌──────────────┐   │   │
+│  │  │AuthService  │ │ModalService  │ │NotifyService │   │   │
+│  │  │(Container)  │ │(Container UI)│ │(Container UI)│   │   │
+│  │  └─────────────┘ └──────────────┘ └──────────────┘   │   │
 │  │                                                      │   │
 │  │  Purpose: Container-provided infrastructure services │   │
-│  │  Lifecycle: Lives as long as container              │   │
-│  │  Access: MFEs call → Container responds             │   │
-│  └─────────────────────────────────────────────────────┘   │
+│  │  Lifecycle: Lives as long as container               │   │
+│  │  Access: MFEs call → Container responds              │   │
+│  └──────────────────────────────────────────────────────┘   │
 └─────────────────────────────────────────────────────────────┘
                               │
                               ↓
 ┌─────────────────────────────────────────────────────────────┐
 │          Universal State Manager (Abstraction Layer)        │
 │                                                             │
-│  ┌─────────────┐ ┌──────────────┐ ┌───────────────────┐   │
-│  │ Cart State  │ │User Prefs    │ │ Product Selection │   │
-│  │(Business)   │ │(Application) │ │ (Shared Data)     │   │
-│  └─────────────┘ └──────────────┘ └───────────────────┘   │
+│  ┌─────────────┐ ┌──────────────┐ ┌───────────────────┐     │
+│  │ Cart State  │ │User Prefs    │ │ Product Selection │     │
+│  │(Business)   │ │(Application) │ │ (Shared Data)     │     │
+│  └─────────────┘ └──────────────┘ └───────────────────┘     │
 │                                                             │
-│  Purpose: Shared application/business state                │
-│  Lifecycle: Can persist across sessions                    │
-│  Access: Any MFE can read/write                           │
-│  Features: Cross-tab sync, persistence, framework-agnostic │
-│  Implementation: Currently Valtio (proxy-based reactivity) │
-│  Abstraction: Vendor-independent interface                 │
-│  Middleware: Extensible with performance monitoring, etc.  │
+│  Purpose: Shared application/business state                 │
+│  Lifecycle: Can persist across sessions                     │
+│  Access: Any MFE can read/write                             │
+│  Features: Cross-tab sync, persistence, framework-agnostic  │
+│  Implementation: Currently Valtio (proxy-based reactivity)  │
+│  Abstraction: Vendor-independent interface                  │
+│  Middleware: Extensible with performance monitoring, etc.   │
 └─────────────────────────────────────────────────────────────┘
 ```
 

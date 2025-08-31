@@ -67,6 +67,6 @@ See [Testing Guide](./testing.md) for how to verify your container meets the spe
 
 ## Reference Implementations
 
-- [React Container](../containers/react/) - React 19 implementation [WIP]
+- [React Container](../container-apps/react/) - React 19 implementation [WIP]
 - Vue Container (coming soon)
 - Vanilla JS Container (coming soon)

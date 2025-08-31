@@ -111,9 +111,9 @@ This document outlines a comprehensive redesign of the MFE platform's user inter
 │  ┌──────────────┬─────────────────────┐     │
 │  │ CONTROLS     │ LIVE EVENT LOG      │     │
 │  │              │                     │     │
-│  │ [Emit Event] │ ● user:login       │     │
-│  │ [Subscribe]  │ ● data:update      │     │
-│  │ [Clear]      │ ● theme:change     │     │
+│  │ [Emit Event] │ ● user:login        │     │
+│  │ [Subscribe]  │ ● data:update       │     │
+│  │ [Clear]      │ ● theme:change      │     │
 │  │              │                     │     │
 │  └──────────────┴─────────────────────┘     │
 └─────────────────────────────────────────────┘

@@ -47,19 +47,19 @@ MFE Toolkit now offers **two development approaches**:
 
 ```
 ┌─────────────────────────────────────┐
-│    Standalone Development (Dev)      │ ← Start here for quick development!
-│  - @mfe-toolkit/dev server           │
-│  - Mock services                     │
-│  - Dev tools & debugging             │
+│    Standalone Development (Dev)     │ ← Start here for quick development!
+│  - @mfe-toolkit/dev server          │
+│  - Mock services                    │
+│  - Dev tools & debugging            │
 └─────────────┬───────────────────────┘
               │
               │ Build & Export
               ↓
 ┌─────────────────────────────────────┐
-│         Container (Production)       │ ← Deploy here for production
-│  - Loads built MFEs                  │
-│  - Provides real services            │
-│  - Manages routing                   │
+│         Container (Production)      │ ← Deploy here for production
+│  - Loads built MFEs                 │
+│  - Provides real services           │
+│  - Manages routing                  │
 └─────────────────────────────────────┘
 ```
 
