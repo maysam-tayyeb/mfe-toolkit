@@ -13,9 +13,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - ✅ **@mfe-toolkit/core Tests** - 75 tests passing with good coverage
 - ✅ **Standalone Development** - @mfe-toolkit/dev package for independent MFE development
 - ✅ **Build System** - @mfe-toolkit/build with automatic dependency detection
-- ✅ **Service Package Extraction** - Modal, Notification, Auth, Theme services extracted to separate packages
-- ✅ **Service Architecture Refactoring (Phase 1)** - Core services (Logger, EventBus, ErrorReporter) now use container implementations
-- 🚧 **Service Architecture Refactoring (Phase 2)** - Service packages still need interface/implementation separation
+- ✅ **Service Architecture Refactoring (Phase 1)** - Core services now use interface/implementation separation
+- ✅ **Service Architecture Refactoring (Phase 2)** - All services consolidated into @mfe-toolkit/core
+- ✅ **Single Package Architecture** - Everything in core, service packages removed completely
 
 ## Essential Commands
 
@@ -90,35 +90,34 @@ pnpm build
 cd apps/container-react && pnpm preview
 ```
 
-## ⚠️ Service Architecture Status (IMPORTANT - READ THIS)
+## ✅ Service Architecture Complete (January 2025)
 
-### Current State (January 2025)
-The service architecture is in transition:
+### Current State
+The service architecture refactoring is **complete**. All services now follow a consistent pattern:
 
-**✅ Phase 1 Complete (Core Services)**:
-- **Logger**: Interface in core, implementation in container (`ConsoleLogger`)
-- **EventBus**: Interface in core, implementation in container (`SimpleEventBus`)
-- **ErrorReporter**: Interface in core, implementation in container (`DefaultErrorReporter`)
-- Core package exports are deprecated but still available for backward compatibility
+**Architecture:**
+- **Single Package**: Everything in `@mfe-toolkit/core`
+- **Interfaces**: Located in `src/types/`
+- **Implementations**: Located in `src/implementations/` (tree-shakable)
+- **Generic Exports**: Easy to swap (e.g., `createLogger`, `createModal`)
 
-**🚧 Phase 2 Pending (Service Packages)**:
-- **Modal, Notification, Auth, Theme, Analytics**: Still contain implementations in packages
-- Need to extract implementations to container
+**Services Available:**
+- **Core**: Logger, EventBus, ErrorReporter
+- **UI**: Modal, Notification
+- **Auth**: Authentication, Authorization
+- **Platform**: Theme, Analytics
 
-### Planned Refactoring
-We are moving to a pure interface-based architecture where:
-1. **Packages export ONLY interfaces** - No implementations in any package
-2. **Container owns ALL implementations** - Full control over service behavior
-3. **Benefits**: 
-   - Containers can use any logger (Pino, Winston, etc.)
-   - Easy to swap implementations per environment
-   - Better testing with mock services
-   - True dependency inversion
+### Benefits Achieved
+1. **Single Import Source** - Everything from `@mfe-toolkit/core`
+2. **Tree-Shakable** - Only used implementations get bundled
+3. **Flexibility** - Containers can provide custom implementations
+4. **Low Barrier** - One package to install and understand
+5. **Type Safety** - Full TypeScript support
 
 **Documentation:**
 - `/docs/architecture/service-architecture.md` - Current service architecture
-- `/docs/in-progress-plans/service-architecture-refactoring.md` - Complete refactoring plan
-- `/docs/in-progress-plans/service-architecture-refactoring-status.md` - Implementation status
+- `/docs/in-progress-plans/service-architecture-refactoring.md` - Refactoring approach
+- `/docs/in-progress-plans/service-architecture-refactoring-status.md` - Implementation details
 
 ## Architecture Overview
 
