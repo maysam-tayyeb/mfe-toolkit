@@ -1,91 +1,95 @@
 # Service Architecture Refactoring - Implementation Status
 
 > **Last Updated**: January 2025  
-> **Status**: Phase 1 Complete, Phase 2 Pending
+> **Status**: Phase 1.1 Complete, Phase 2 Revised
 
 ## Executive Summary
 
-We are refactoring the service architecture to follow the Dependency Inversion Principle, where packages provide only interfaces and containers own all implementations. This enables containers to swap implementations (e.g., using Pino instead of console logger) without affecting MFEs.
+We have simplified the service architecture to reduce complexity while maintaining flexibility. All service interfaces and reference implementations now live in `@mfe-toolkit/core` as tree-shakable exports. This provides a low barrier to entry while still allowing containers to swap implementations.
 
-## ✅ Completed Work (Phase 1 - Core Services)
+## ✅ Completed Work (Phase 1 & 1.1 - Simplified Architecture)
 
-### 1. Logger Service
-- **Interface**: Located in `packages/mfe-toolkit-core/src/services/registry/types.ts`
-- **Implementation**: `ConsoleLogger` created in `apps/container-react/src/services/implementations/logger/console-logger.ts`
-- **Status**: ✅ Core implementation deprecated, container uses its own implementation
-- **Benefits**: Can now swap to Pino, Winston, or any logger implementation
+### Phase 1: Initial Separation
+- ✅ Moved implementations to container
+- ✅ Established interface/implementation separation
+- ✅ Proved the architecture pattern works
 
-### 2. EventBus Service  
-- **Interface**: Located in `packages/mfe-toolkit-core/src/services/registry/types.ts`
-- **Implementation**: `SimpleEventBus` created in `apps/container-react/src/services/implementations/event-bus/simple-event-bus.ts`
-- **Status**: ✅ Core implementation deprecated, container uses its own implementation
-- **Note**: Complex typed EventBus (`EventBusExtended`) still in core for backward compatibility
+### Phase 1.1: Simplification (Current Architecture)
 
-### 3. ErrorReporter Service
-- **Interface**: Created in `packages/mfe-toolkit-core/src/types/error-reporter.ts`
-- **Implementation**: `DefaultErrorReporter` created in `apps/container-react/src/services/implementations/error-reporter/default-error-reporter.ts`
-- **Status**: ✅ Core implementation deprecated, container uses its own implementation
-- **Features**: Throttling, session management, remote logging support
+#### 1. Single Package Approach
+- **Location**: All in `@mfe-toolkit/core`
+- **Interfaces**: `src/services/registry/types.ts` and `src/types/`
+- **Implementations**: `src/implementations/` (tree-shakable)
+- **Benefits**: Single package to install, lower barrier to entry
 
-### 4. Container Service Setup
-- **File**: `apps/container-react/src/services/service-setup.ts`
-- **Changes**: Now imports and uses container implementations instead of core
-- **Status**: ✅ Updated and tested
+#### 2. Core Services
+- **Logger**: 
+  - Interface: `Logger` in types
+  - Implementation: `createConsoleLogger` exported as `createLogger`
+- **EventBus**: 
+  - Interface: `EventBus` in types
+  - Implementation: `createSimpleEventBus` exported as `createEventBus`
+- **ErrorReporter**: 
+  - Interface: `ErrorReporter` in types
+  - Implementation: `createErrorReporter` exported as `getErrorReporter`
 
-### 5. Core Package Exports
-- **File**: `packages/mfe-toolkit-core/src/index.ts`
-- **Changes**: Added deprecation warnings to implementation exports
-- **Status**: ✅ Backward compatible with clear migration path
+#### 3. Tree-Shaking Strategy
+- MFEs import only types (zero runtime cost)
+- Containers import implementations (only used ones get bundled)
+- Generic export names enable easy refactoring
 
-## 🚧 In Progress (Phase 2 - Service Packages)
+## 🚧 Phase 2 - Extended Services (Revised Approach)
 
-### Service Packages Still Containing Implementations
-1. **@mfe-toolkit/service-modal** - `ModalServiceImpl` class
-2. **@mfe-toolkit/service-notification** - `NotificationServiceImpl` class  
-3. **@mfe-toolkit/service-authentication** - Auth implementation
-4. **@mfe-toolkit/service-authorization** - Authorization implementation
-5. **@mfe-toolkit/service-theme** - Theme implementation
-6. **@mfe-toolkit/service-analytics** - Analytics implementation
+### Current Status
+Service packages still contain implementations but should follow the same pattern as core.
 
-### Work Required
-- Extract implementations to container
-- Convert packages to interface-only exports
-- Add module augmentation for ServiceMap
-- Update service providers to be optional utilities
+### Services to Refactor
+1. **@mfe-toolkit/service-modal** - Move implementation to core
+2. **@mfe-toolkit/service-notification** - Move implementation to core
+3. **@mfe-toolkit/service-authentication** - Move implementation to core
+4. **@mfe-toolkit/service-authorization** - Move implementation to core
+5. **@mfe-toolkit/service-theme** - Move implementation to core
+6. **@mfe-toolkit/service-analytics** - Move implementation to core
+
+### New Approach (Following Phase 1.1 Pattern)
+- Move all interfaces to `@mfe-toolkit/core/src/types/`
+- Move all implementations to `@mfe-toolkit/core/src/implementations/`
+- Keep service packages as optional type augmentation only
+- Maintain tree-shakable exports with generic names
 
 ## 📋 Next Steps
 
-### Immediate (Phase 2)
-1. **Extract Modal Service Implementation**
-   - Move `ModalServiceImpl` to container
-   - Keep only types in package
-   - Update exports
+### Phase 2: Consolidate Extended Services
+1. **Move Modal Service**
+   - Interface to `@mfe-toolkit/core/src/types/modal.ts`
+   - Implementation to `@mfe-toolkit/core/src/implementations/modal/`
+   - Export as `createModal` (generic name)
 
-2. **Extract Notification Service Implementation**
-   - Move `NotificationServiceImpl` to container
-   - Keep only types in package
-   - Update exports
+2. **Move Notification Service**
+   - Interface to `@mfe-toolkit/core/src/types/notification.ts`
+   - Implementation to `@mfe-toolkit/core/src/implementations/notification/`
+   - Export as `createNotification` (generic name)
 
-3. **Extract Other Service Implementations**
-   - Auth, Authorization, Theme, Analytics
-   - Follow same pattern as Modal/Notification
+3. **Move Other Services**
+   - Follow same pattern for Auth, Authorization, Theme, Analytics
+   - All in core package as tree-shakable exports
 
-### Future (Phase 3)
-1. **Add Alternative Implementations**
-   - Pino logger for production
-   - Sentry error reporter
-   - Redux-based event bus
-   - Environment-specific configurations
+### Phase 3: Enhanced Implementations
+1. **Production-Ready Alternatives**
+   - `createPinoLogger` exported as `createLogger` 
+   - `createSentryReporter` exported as `getErrorReporter`
+   - Environment-based selection in containers
 
-2. **Create Migration Tools**
-   - Codemod for updating imports
-   - Migration guide documentation
-   - Compatibility layer for gradual migration
+2. **Documentation**
+   - Migration guide from service packages to core
+   - Examples of custom implementations
+   - Tree-shaking verification guide
 
-3. **Remove Deprecated Code (v2.0.0)**
-   - Remove all implementations from core
-   - Major version bump
-   - Update all dependents
+### Phase 4: Cleanup (Optional)
+1. **Deprecate Service Packages**
+   - Mark as deprecated with migration instructions
+   - Keep for backward compatibility
+   - Remove in next major version
 
 ## 🎯 Success Metrics
 
@@ -105,25 +109,27 @@ We are refactoring the service architecture to follow the Dependency Inversion P
 
 ## 💡 Implementation Examples
 
-### Current Container Setup
+### Current Setup (Simplified)
 ```typescript
 // apps/container-react/src/services/service-setup.ts
-import { createConsoleLogger } from './implementations/logger/console-logger';
-import { createSimpleEventBus } from './implementations/event-bus/simple-event-bus';
-import { createErrorReporter } from './implementations/error-reporter/default-error-reporter';
+import { 
+  createLogger,        // Generic name, easy to swap
+  createEventBus,      // Tree-shakable from core
+  createErrorReporter  // Reference implementations
+} from '@mfe-toolkit/core';
 
 export async function setupServices() {
   const registry = createServiceRegistry();
   
-  // Using container implementations
-  registry.register('logger', createConsoleLogger('Container'));
-  registry.register('eventBus', createSimpleEventBus('Container'));
+  // Using reference implementations from core
+  registry.register('logger', createLogger('Container'));
+  registry.register('eventBus', createEventBus('Container'));
   registry.register('errorReporter', createErrorReporter({
     maxErrorsPerSession: 100,
     enableConsoleLog: true,
   }));
   
-  // Still using package implementations (to be moved)
+  // Service packages still to be refactored
   registry.registerProvider(modalServiceProvider);
   registry.registerProvider(notificationServiceProvider);
   
@@ -146,20 +152,31 @@ registry.register('logger', logger);
 registry.register('errorReporter', errorReporter);
 ```
 
-## 📊 Architecture Comparison
+## 📊 Architecture Evolution
 
-### Before (Tight Coupling)
+### Original (Many Packages)
 ```
-Package → Interface + Implementation
-Container → Uses package implementation
-MFE → Depends on package implementation
+@mfe-toolkit/core → Interfaces
+@mfe-toolkit/impl-logger → Implementation
+@mfe-toolkit/impl-event-bus → Implementation
+Container → Imports from multiple packages
+Problem: Too many packages, steep learning curve
 ```
 
-### After (Dependency Inversion)
+### Current (Simplified)
 ```
-Package → Interface only
-Container → Provides implementation
-MFE → Depends on interface only
+@mfe-toolkit/core → Interfaces + Tree-shakable Implementations
+Container → Imports implementations (bundled)
+MFE → Imports only types (zero runtime)
+Benefit: Single package, low barrier to entry
+```
+
+### Custom Implementation
+```
+Container → Can still provide custom implementations
+Example: import { PinoLogger } from './custom'
+Registry: register('logger', new PinoLogger())
+MFEs → Unchanged, use interface
 ```
 
 ## 🔗 Related Documentation

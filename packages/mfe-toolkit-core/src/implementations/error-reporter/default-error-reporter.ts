@@ -1,27 +1,10 @@
-import type { ServiceContainer } from './registry/types';
+/**
+ * Default Error Reporter Implementation
+ * Reference implementation for error tracking and reporting in MFEs
+ */
 
-export interface ErrorReport {
-  id: string;
-  timestamp: Date;
-  mfeName: string;
-  error: {
-    message: string;
-    stack?: string;
-    name: string;
-  };
-  context?: {
-    url?: string;
-    userAgent?: string;
-    sessionId?: string;
-    userId?: string;
-    retryCount?: number;
-  };
-  errorInfo?: {
-    componentStack?: string;
-  };
-  severity: 'low' | 'medium' | 'high' | 'critical';
-  type: 'load-error' | 'runtime-error' | 'network-error' | 'timeout-error';
-}
+import type { ErrorReporter, ErrorReport, ErrorSummary } from '../../types/error-reporter';
+import type { ServiceContainer } from '../../services/registry/types';
 
 export interface ErrorReporterConfig {
   maxErrorsPerSession?: number;
@@ -32,12 +15,13 @@ export interface ErrorReporterConfig {
   onError?: (report: ErrorReport) => void;
 }
 
-export class ErrorReporter {
+export class DefaultErrorReporter implements ErrorReporter {
   private errors: ErrorReport[] = [];
   private errorCounts = new Map<string, number>();
   private lastErrorTime = new Map<string, number>();
   private config: Required<ErrorReporterConfig>;
   private services?: ServiceContainer;
+
   constructor(config: ErrorReporterConfig = {}, services?: ServiceContainer) {
     this.config = {
       maxErrorsPerSession: 100,
@@ -86,8 +70,8 @@ export class ErrorReporter {
         name: error.name,
       },
       context: {
-        url: window.location.href,
-        userAgent: navigator.userAgent,
+        url: typeof window !== 'undefined' ? window.location.href : undefined,
+        userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : undefined,
         sessionId: this.getSessionId(),
         userId: this.getUserId(),
         ...context,
@@ -131,6 +115,51 @@ export class ErrorReporter {
     return report;
   }
 
+  getErrors(): ErrorReport[] {
+    return [...this.errors];
+  }
+
+  getErrorsByMFE(mfeName: string): ErrorReport[] {
+    return this.errors.filter((e) => e.mfeName === mfeName);
+  }
+
+  getErrorCounts(): Record<string, number> {
+    const counts: Record<string, number> = {};
+    this.errorCounts.forEach((count, key) => {
+      counts[key] = count;
+    });
+    return counts;
+  }
+
+  clearErrors(): void {
+    this.errors = [];
+    this.errorCounts.clear();
+    this.lastErrorTime.clear();
+  }
+
+  getSummary(): ErrorSummary {
+    const summary: ErrorSummary = {
+      totalErrors: this.errors.length,
+      errorsByType: {},
+      errorsBySeverity: {},
+      errorsByMFE: {},
+    };
+
+    this.errors.forEach((error) => {
+      // By type
+      summary.errorsByType[error.type] = (summary.errorsByType[error.type] || 0) + 1;
+
+      // By severity
+      summary.errorsBySeverity[error.severity] =
+        (summary.errorsBySeverity[error.severity] || 0) + 1;
+
+      // By MFE
+      summary.errorsByMFE[error.mfeName] = (summary.errorsByMFE[error.mfeName] || 0) + 1;
+    });
+
+    return summary;
+  }
+
   private calculateSeverity(error: Error, type: ErrorReport['type']): ErrorReport['severity'] {
     // Network errors are usually medium severity
     if (type === 'network-error') return 'medium';
@@ -150,6 +179,10 @@ export class ErrorReporter {
   }
 
   private getSessionId(): string {
+    if (typeof sessionStorage === 'undefined') {
+      return 'no-session';
+    }
+    
     let sessionId = sessionStorage.getItem('mfe-session-id');
     if (!sessionId) {
       sessionId = `session-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`;
@@ -159,7 +192,7 @@ export class ErrorReporter {
   }
 
   private getUserId(): string | undefined {
-    // Try to get auth service if available (may not exist in core)
+    // Try to get auth service if available
     const auth = this.services?.get('auth' as any);
     if (auth && typeof (auth as any).getSession === 'function') {
       return (auth as any).getSession()?.userId;
@@ -168,7 +201,7 @@ export class ErrorReporter {
   }
 
   private showCriticalErrorNotification(mfeName: string): void {
-    // Try to get notification service if available (may not exist in core)
+    // Try to get notification service if available
     const notification = this.services?.get('notification' as any);
     if (notification && typeof (notification as any).error === 'function') {
       (notification as any).error(
@@ -196,67 +229,22 @@ export class ErrorReporter {
       console.error('Failed to send error report to remote:', error);
     }
   }
-
-  getErrors(): ErrorReport[] {
-    return [...this.errors];
-  }
-
-  getErrorsByMFE(mfeName: string): ErrorReport[] {
-    return this.errors.filter((e) => e.mfeName === mfeName);
-  }
-
-  getErrorCounts(): Record<string, number> {
-    const counts: Record<string, number> = {};
-    this.errorCounts.forEach((count, key) => {
-      counts[key] = count;
-    });
-    return counts;
-  }
-
-  clearErrors(): void {
-    this.errors = [];
-    this.errorCounts.clear();
-    this.lastErrorTime.clear();
-  }
-
-  getSummary(): {
-    totalErrors: number;
-    errorsByType: Record<string, number>;
-    errorsBySeverity: Record<string, number>;
-    errorsByMFE: Record<string, number>;
-  } {
-    const summary = {
-      totalErrors: this.errors.length,
-      errorsByType: {} as Record<string, number>,
-      errorsBySeverity: {} as Record<string, number>,
-      errorsByMFE: {} as Record<string, number>,
-    };
-
-    this.errors.forEach((error) => {
-      // By type
-      summary.errorsByType[error.type] = (summary.errorsByType[error.type] || 0) + 1;
-
-      // By severity
-      summary.errorsBySeverity[error.severity] =
-        (summary.errorsBySeverity[error.severity] || 0) + 1;
-
-      // By MFE
-      summary.errorsByMFE[error.mfeName] = (summary.errorsByMFE[error.mfeName] || 0) + 1;
-    });
-
-    return summary;
-  }
 }
 
-// Singleton instance
-let errorReporter: ErrorReporter | null = null;
-
-export function getErrorReporter(
+/**
+ * Factory function for creating an error reporter
+ * @param config - Optional configuration
+ * @param services - Optional service container for integration
+ * @returns ErrorReporter instance
+ */
+export function createErrorReporter(
   config?: ErrorReporterConfig,
   services?: ServiceContainer
 ): ErrorReporter {
-  if (!errorReporter) {
-    errorReporter = new ErrorReporter(config, services);
-  }
-  return errorReporter;
+  return new DefaultErrorReporter(config, services);
 }
+
+/**
+ * Default error reporter instance
+ */
+export const defaultErrorReporter = createErrorReporter();

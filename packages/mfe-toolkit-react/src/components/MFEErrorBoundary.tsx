@@ -1,6 +1,5 @@
 import React, { Component, ErrorInfo, ReactNode } from 'react';
 import type { ServiceContainer } from '@mfe-toolkit/core';
-import { getErrorReporter } from '../services/error-reporter';
 
 interface Props {
   children: ReactNode;
@@ -39,13 +38,22 @@ export class MFEErrorBoundary extends Component<Props, State> {
     // Log error to console
     console.error(`MFE Error Boundary caught error in ${mfeName}:`, error, errorInfo);
 
-    // Report error using error reporter
+    // Report error using error reporter from service container
     if (services) {
-      const errorReporter = getErrorReporter({}, services);
-      errorReporter.reportError(mfeName, error, 'runtime-error', {
-        retryCount,
-        componentStack: errorInfo?.componentStack || undefined,
-      });
+      const errorReporter = services.get('errorReporter');
+      if (errorReporter) {
+        errorReporter.reportError(
+          mfeName,
+          error,
+          'runtime-error',
+          {
+            retryCount,
+          },
+          {
+            componentStack: errorInfo?.componentStack || undefined,
+          }
+        );
+      }
     }
 
     // Log to MFE logger service if available

@@ -8,7 +8,7 @@ import {
   ServiceMap,
   ServiceInfo,
   createLogger,
-  getErrorReporter,
+  createErrorReporter,
 } from '@mfe-toolkit/core';
 import type { AuthService } from '@mfe-toolkit/service-authentication/types';
 import type { AuthorizationService, ResourceAccess } from '@mfe-toolkit/service-authorization/types';
@@ -246,7 +246,7 @@ export class UnifiedServiceContainer implements ServiceContainer {
         service = this.themeService;
         break;
       case 'errorReporter':
-        service = getErrorReporter(
+        service = createErrorReporter(
           {
             enableConsoleLog: true,
             maxErrorsPerSession: 100,

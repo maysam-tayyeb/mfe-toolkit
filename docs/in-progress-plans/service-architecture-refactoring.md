@@ -1,13 +1,23 @@
-# Service Architecture Refactoring: Interface/Implementation Separation
+# Service Architecture Refactoring: Simplified Single-Package Approach
+
+> **Updated**: January 2025 - Revised to single-package architecture
 
 ## Problem Statement
 
-The current architecture violates the Dependency Inversion Principle by having service implementations in packages when they should only provide interfaces/types. This creates several issues:
+The original multi-package approach created unnecessary complexity:
 
-1. **Tight Coupling**: MFEs are coupled to specific implementations rather than abstractions
-2. **Limited Flexibility**: Container applications cannot easily swap implementations (e.g., using Pino instead of console logger)
-3. **Testing Difficulties**: Hard to mock services when implementations are bundled with interfaces
-4. **Package Bloat**: Service packages include implementation code that may not be needed
+1. **Too Many Packages**: Separate implementation packages increased learning curve
+2. **Complex Imports**: Developers needed to know which package contained what
+3. **Maintenance Overhead**: Multiple packages to version and maintain
+
+## Solution: Simplified Architecture
+
+All service interfaces AND tree-shakable reference implementations now live in `@mfe-toolkit/core`, providing:
+
+1. **Low Barrier to Entry**: Single package to install
+2. **Tree-Shaking**: Only used implementations get bundled
+3. **Flexibility**: Containers can still provide custom implementations
+4. **Type Safety**: MFEs import only types (zero runtime cost)
 
 ## Current Architecture Issues
 
@@ -24,62 +34,61 @@ The current architecture violates the Dependency Inversion Principle by having s
 - `@mfe-toolkit/service-theme`: Contains implementation
 - `@mfe-toolkit/service-analytics`: Contains implementation
 
-## Proposed Architecture
+## Current Architecture (Simplified)
 
 ### Design Principles
 
-1. **Dependency Inversion**: MFEs depend on interfaces, not implementations
-2. **Single Responsibility**: Packages define contracts, containers provide implementations
-3. **Open/Closed**: Easy to extend with new implementations without modifying packages
-4. **Interface Segregation**: Small, focused interfaces for each service
+1. **Single Package**: Everything in `@mfe-toolkit/core` for simplicity
+2. **Tree-Shakable**: Reference implementations only bundled when used
+3. **Generic Exports**: Use generic names (createLogger) for easy swapping
+4. **Type Safety**: MFEs import only interfaces (zero runtime cost)
+5. **Flexibility**: Containers can still provide custom implementations
 
 ### Package Structure
 
 ```
 packages/
-├── @mfe-toolkit/core/
-│   ├── types/
-│   │   ├── services.ts         # Core service interfaces only
-│   │   ├── logger.ts           # Logger interface
-│   │   ├── event-bus.ts        # EventBus interface
-│   │   └── error-reporter.ts   # ErrorReporter interface
-│   └── index.ts                # Re-export types only
-│
-├── @mfe-toolkit/service-modal/
-│   ├── types.ts                # ModalService interface
-│   ├── index.ts                # Export types
-│   └── default-impl.ts         # Optional: Default implementation (separate export)
-│
-└── @mfe-toolkit/service-notification/
-    ├── types.ts                # NotificationService interface
-    ├── index.ts                # Export types
-    └── default-impl.ts         # Optional: Default implementation (separate export)
+└── @mfe-toolkit/core/
+    ├── src/
+    │   ├── services/registry/types.ts  # Service interfaces
+    │   ├── types/                       # Additional types
+    │   │   └── error-reporter.ts        # ErrorReporter types
+    │   ├── implementations/             # Tree-shakable implementations
+    │   │   ├── logger/
+    │   │   │   └── console-logger.ts    # ConsoleLogger class
+    │   │   ├── event-bus/
+    │   │   │   └── simple-event-bus.ts  # SimpleEventBus class
+    │   │   ├── error-reporter/
+    │   │   │   └── default-error-reporter.ts # DefaultErrorReporter
+    │   │   └── index.ts                 # Re-exports with generic names
+    │   └── index.ts                     # Main exports
 
 apps/
 └── container-react/
-    └── services/
-        ├── implementations/
-        │   ├── logger/
-        │   │   ├── console-logger.ts    # Default console implementation
-        │   │   ├── pino-logger.ts       # Pino implementation
-        │   │   └── winston-logger.ts    # Winston implementation
-        │   ├── event-bus/
-        │   │   ├── simple-event-bus.ts  # Default implementation
-        │   │   └── redux-event-bus.ts   # Redux-based implementation
-        │   ├── modal/
-        │   │   └── modal-service.ts     # Container's modal implementation
-        │   └── notification/
-        │       └── notification-service.ts # Container's notification implementation
-        └── service-setup.ts             # Wire up chosen implementations
+    ├── src/services/
+    │   └── service-setup.ts            # Uses core implementations
+    └── custom/ (optional)
+        └── pino-logger.ts               # Custom implementation example
+```
+
+### Export Strategy
+
+```typescript
+// implementations/index.ts
+export { createConsoleLogger as createLogger } from './logger/console-logger';
+export { createSimpleEventBus as createEventBus } from './event-bus/simple-event-bus';
+export { createErrorReporter as getErrorReporter } from './error-reporter/default-error-reporter';
 ```
 
 ## Implementation Status
 
-### ✅ Phase 1: Core Services Refactoring (COMPLETED - January 2025)
+### ✅ Phase 1 & 1.1: Core Services (COMPLETED - January 2025)
 
-#### 1.1 Logger Service ✅
+All core services now follow the simplified architecture with interfaces and tree-shakable implementations in `@mfe-toolkit/core`.
+
+#### Example: Logger Service
 ```typescript
-// packages/mfe-toolkit-core/src/types/logger.ts
+// Interface in @mfe-toolkit/core/src/services/registry/types.ts
 export interface Logger {
   debug(message: string, ...args: any[]): void;
   info(message: string, ...args: any[]): void;
@@ -87,105 +96,27 @@ export interface Logger {
   error(message: string, ...args: any[]): void;
 }
 
-// apps/container-react/src/services/implementations/logger/console-logger.ts
-import type { Logger } from '@mfe-toolkit/core';
-
+// Implementation in @mfe-toolkit/core/src/implementations/logger/console-logger.ts
 export class ConsoleLogger implements Logger {
-  constructor(private prefix: string) {}
-  
-  debug(message: string, ...args: any[]): void {
-    console.debug(`[${this.prefix}] ${message}`, ...args);
-  }
-  // ... other methods
+  // Implementation details...
 }
 
-// apps/container-react/src/services/implementations/logger/pino-logger.ts
-import type { Logger } from '@mfe-toolkit/core';
-import pino from 'pino';
-
-export class PinoLogger implements Logger {
-  private pino: pino.Logger;
-  
-  constructor(options: pino.LoggerOptions) {
-    this.pino = pino(options);
-  }
-  
-  debug(message: string, ...args: any[]): void {
-    this.pino.debug({ args }, message);
-  }
-  // ... other methods
+export function createConsoleLogger(prefix?: string): Logger {
+  return new ConsoleLogger(prefix);
 }
+
+// Re-exported with generic name in implementations/index.ts
+export { createConsoleLogger as createLogger } from './logger/console-logger';
+
+// Container usage
+import { createLogger } from '@mfe-toolkit/core'; // Tree-shakable
+const logger = createLogger('MyApp');
+
+// MFE usage
+import type { Logger } from '@mfe-toolkit/core'; // Type only, zero runtime
 ```
 
-#### 1.2 EventBus Service
-```typescript
-// packages/mfe-toolkit-core/src/types/event-bus.ts
-export interface EventPayload<T = any> {
-  type: string;
-  data: T;
-  timestamp: number;
-  source: string;
-}
-
-export interface EventBus {
-  emit<T = any>(event: string, payload: T): void;
-  on<T = any>(event: string, handler: (payload: EventPayload<T>) => void): () => void;
-  off(event: string, handler: (payload: EventPayload<any>) => void): void;
-  once<T = any>(event: string, handler: (payload: EventPayload<T>) => void): void;
-}
-
-// apps/container-react/src/services/implementations/event-bus/simple-event-bus.ts
-import type { EventBus, EventPayload } from '@mfe-toolkit/core';
-
-export class SimpleEventBus implements EventBus {
-  private listeners = new Map<string, Set<Function>>();
-  
-  emit<T = any>(event: string, payload: T): void {
-    // Implementation
-  }
-  // ... other methods
-}
-```
-
-#### 1.3 ErrorReporter Service
-```typescript
-// packages/mfe-toolkit-core/src/types/error-reporter.ts
-export interface ErrorReport {
-  id: string;
-  timestamp: Date;
-  mfeName: string;
-  error: {
-    message: string;
-    stack?: string;
-    name: string;
-  };
-  severity: 'low' | 'medium' | 'high' | 'critical';
-  type: 'load-error' | 'runtime-error' | 'network-error' | 'timeout-error';
-}
-
-export interface ErrorReporter {
-  reportError(
-    mfeName: string,
-    error: Error,
-    type?: ErrorReport['type'],
-    context?: any
-  ): ErrorReport | null;
-  getErrors(): ErrorReport[];
-  clearErrors(): void;
-}
-
-// apps/container-react/src/services/implementations/error-reporter/default-error-reporter.ts
-import type { ErrorReporter, ErrorReport } from '@mfe-toolkit/core';
-
-export class DefaultErrorReporter implements ErrorReporter {
-  private errors: ErrorReport[] = [];
-  
-  reportError(/* params */): ErrorReport | null {
-    // Implementation
-  }
-  // ... other methods
-}
-```
+Similar patterns are applied for EventBus and ErrorReporter services, with all implementations living in `@mfe-toolkit/core/src/implementations/` as tree-shakable exports.
 
 ### Phase 2: Service Package Refactoring
 
@@ -241,85 +172,75 @@ export function createServiceProvider<T>(
 }
 ```
 
-### Phase 3: Container Service Setup
+### Phase 3: Container Service Setup (Simplified)
 
 ```typescript
 // apps/container-react/src/services/service-setup.ts
-import { createServiceRegistry } from '@mfe-toolkit/core';
-import type { Logger, EventBus, ErrorReporter } from '@mfe-toolkit/core';
-import type { ModalService } from '@mfe-toolkit/service-modal';
-import type { NotificationService } from '@mfe-toolkit/service-notification';
-
-// Import implementations
-import { ConsoleLogger } from './implementations/logger/console-logger';
-import { PinoLogger } from './implementations/logger/pino-logger';
-import { SimpleEventBus } from './implementations/event-bus/simple-event-bus';
-import { DefaultErrorReporter } from './implementations/error-reporter/default-error-reporter';
-import { ModalServiceImpl } from './implementations/modal/modal-service';
-import { NotificationServiceImpl } from './implementations/notification/notification-service';
+import { 
+  createServiceRegistry,
+  createLogger,      // Tree-shakable from core
+  createEventBus,    // Reference implementations
+  createErrorReporter 
+} from '@mfe-toolkit/core';
 
 export async function setupServices() {
   const registry = createServiceRegistry();
   
-  // Choose implementations based on environment or configuration
-  const useProductionLogger = process.env.NODE_ENV === 'production';
+  // Use reference implementations (tree-shakable)
+  registry.register('logger', createLogger('Container'));
+  registry.register('eventBus', createEventBus('Container'));
+  registry.register('errorReporter', createErrorReporter({
+    maxErrorsPerSession: 100,
+    enableConsoleLog: true
+  }));
   
-  // Register chosen implementations
-  registry.register<Logger>('logger', 
-    useProductionLogger 
-      ? new PinoLogger({ level: 'info' })
-      : new ConsoleLogger('Container')
-  );
-  
-  registry.register<EventBus>('eventBus', new SimpleEventBus());
-  registry.register<ErrorReporter>('errorReporter', new DefaultErrorReporter());
-  registry.register<ModalService>('modal', new ModalServiceImpl());
-  registry.register<NotificationService>('notification', new NotificationServiceImpl());
+  // Future: service packages will follow same pattern
+  // registry.register('modal', createModal());
+  // registry.register('notification', createNotification());
   
   return registry;
 }
+
+// Custom implementation example
+import { PinoLogger } from './custom/pino-logger';
+
+if (process.env.NODE_ENV === 'production') {
+  registry.register('logger', new PinoLogger({ level: 'info' }));
+}
 ```
 
-## Migration Strategy
+## Migration Strategy (Simplified - No Breaking Changes)
 
-### Step 1: Create New Interfaces (Non-Breaking)
-1. Add interface-only exports alongside existing implementations
-2. Mark implementation exports as deprecated
-3. Update documentation
+### ✅ Completed
+1. Move implementations to `@mfe-toolkit/core/src/implementations/`
+2. Export with generic names for easy refactoring
+3. Tree-shakable - only used implementations get bundled
+4. MFEs already use interfaces - no changes needed
 
-### Step 2: Container Implementation (Non-Breaking)
-1. Create implementation classes in container
-2. Update service setup to use container implementations
-3. Test thoroughly with existing MFEs
+### 🚧 Next Steps (Phase 2)
+1. Move Modal, Notification, Auth services to core implementations
+2. Follow same tree-shakable pattern
+3. Deprecate service packages (but keep for compatibility)
+4. No breaking changes required
 
-### Step 3: Update MFEs (Gradual)
-1. Update MFE imports to use interface types only
-2. Remove any direct implementation dependencies
-3. Test each MFE after update
+## Benefits of Simplified Architecture
 
-### Step 4: Remove Deprecated Code (Breaking)
-1. Remove implementation code from packages
-2. Bump major version numbers
-3. Update all dependent packages
+### Single Package Advantage
+- **Low Barrier to Entry**: One package to install (`@mfe-toolkit/core`)
+- **Simple Imports**: Everything from one place
+- **Easy Discovery**: All services in one package
+- **Reduced Complexity**: No need to understand multiple packages
 
-## Benefits
+### Tree-Shaking Benefits
+- **MFEs**: Import only types (zero runtime cost)
+- **Containers**: Only used implementations get bundled
+- **Optimized Bundles**: Automatic dead code elimination
 
-### For Container Applications
-- **Implementation Choice**: Use any logger (Console, Pino, Winston, etc.)
-- **Custom Behavior**: Override any service with custom implementation
+### Flexibility Maintained
+- **Custom Implementations**: Containers can still provide their own
 - **Environment-Specific**: Different implementations for dev/prod
-- **Testing**: Easy to mock services
-
-### For MFEs
-- **Type Safety**: Strong typing through interfaces
-- **No Implementation Lock-in**: Not tied to specific implementations
-- **Smaller Bundles**: No unnecessary implementation code
+- **Easy Testing**: Mock interfaces, not implementations
 - **Framework Agnostic**: Works with any framework
-
-### For Testing
-- **Easy Mocking**: Mock interfaces, not implementations
-- **Isolated Testing**: Test MFEs without real services
-- **Test Implementations**: Separate testing of service implementations
 
 ## Example: Using Different Logger Implementations
 
@@ -370,12 +291,16 @@ if (process.env.NODE_ENV === 'test') {
 
 ## Timeline
 
-1. **Week 1**: Refactor core services (Logger, EventBus, ErrorReporter)
-2. **Week 2**: Refactor service packages to interface-only
-3. **Week 3**: Implement container service implementations
-4. **Week 4**: Test with existing MFEs, update documentation
-5. **Week 5-6**: Gradual MFE migration
-6. **Week 7**: Remove deprecated code, major version bump
+### ✅ Completed (Phase 1 & 1.1)
+- Core services refactored to single package architecture
+- Tree-shakable implementations in place
+- Container using new architecture
+
+### 🚧 Remaining Work (Phase 2)
+- **Week 1**: Move Modal and Notification services to core
+- **Week 2**: Move Auth, Authorization, Theme, Analytics to core
+- **Week 3**: Update documentation and examples
+- **Week 4**: Deprecate service packages (keep for compatibility)
 
 ## CLI Template Updates
 
@@ -400,11 +325,16 @@ The templates are already following best practices for the new architecture.
 
 ## Success Criteria
 
-- [ ] All service packages export only interfaces
-- [ ] Container owns all service implementations
-- [ ] MFEs depend only on interfaces
-- [ ] Container can swap implementations without affecting MFEs
-- [ ] All tests pass with new architecture
-- [ ] Documentation updated
-- [ ] Migration guide published
-- [ ] CLI templates verified to use only interfaces
+### ✅ Achieved
+- [x] Single package architecture implemented
+- [x] Tree-shakable implementations in core
+- [x] Generic export names for easy refactoring
+- [x] MFEs use only interfaces (zero runtime)
+- [x] Container can swap implementations
+- [x] All tests pass with new architecture
+
+### 🚧 In Progress
+- [ ] Move extended services to core (Modal, Notification, etc.)
+- [ ] Update documentation completely
+- [ ] Create migration guide for service packages
+- [ ] Verify tree-shaking in production builds

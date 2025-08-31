@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import type { MFEModule, ServiceContainer } from '@mfe-toolkit/core';
 import { MFEErrorBoundary } from './MFEErrorBoundary';
-import { getErrorReporter } from '../services/error-reporter';
 
 interface MFELoaderProps {
   name: string;
@@ -99,17 +98,19 @@ const IsolatedLoaderStrategy: React.FC<MFELoaderProps> = ({
         const error = err instanceof Error ? err : new Error('Unknown error');
         serviceContainer.get('logger')?.error(`[IsolatedLoader] Error loading ${name}:`, error);
 
-        // Report error to error reporter
-        const errorReporter = getErrorReporter({}, serviceContainer);
-        const errorType = error.message.includes('timeout')
-          ? 'timeout-error'
-          : error.message.includes('network')
-            ? 'network-error'
-            : 'load-error';
+        // Report error to error reporter from service container
+        const errorReporter = serviceContainer.get('errorReporter');
+        if (errorReporter) {
+          const errorType = error.message.includes('timeout')
+            ? 'timeout-error'
+            : error.message.includes('network')
+              ? 'network-error'
+              : 'load-error';
 
-        errorReporter.reportError(name, error, errorType, {
-          url,
-        });
+          errorReporter.reportError(name, error, errorType, {
+            url,
+          });
+        }
 
         setError(error);
         setLoading(false);
@@ -300,18 +301,20 @@ const StandardLoaderStrategy: React.FC<MFELoaderProps> = ({
       console.error(`[MFELoader] Failed to load MFE ${name}:`, error);
       serviceContainer.get('logger')?.error(`Failed to load MFE ${name}: ${error.message}`);
 
-      // Report error
-      const errorReporter = getErrorReporter({}, serviceContainer);
-      const errorType = error.message.includes('timeout')
-        ? 'timeout-error'
-        : error.message.includes('network')
-          ? 'network-error'
-          : 'load-error';
+      // Report error using error reporter from service container
+      const errorReporter = serviceContainer.get('errorReporter');
+      if (errorReporter) {
+        const errorType = error.message.includes('timeout')
+          ? 'timeout-error'
+          : error.message.includes('network')
+            ? 'network-error'
+            : 'load-error';
 
-      errorReporter.reportError(name, error, errorType, {
-        retryCount: state.retryCount,
-        url,
-      });
+        errorReporter.reportError(name, error, errorType, {
+          retryCount: state.retryCount,
+          url,
+        });
+      }
 
       // Handle retry logic
       if (state.retryCount < maxRetries) {
