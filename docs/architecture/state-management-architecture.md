@@ -51,13 +51,11 @@ Both systems co-exist and serve different purposes in the architecture.
 └─────────────────────────────────────────────────────────────┘
 ```
 
-## ContextBridge: Container Services (Simplified Architecture)
-
-> **Note**: The ContextBridge has been significantly simplified. See [Service Architecture Simplified](./service-architecture-simplified.md) for details.
+## ContextBridge: Container Services
 
 ### Purpose
 
-The ContextBridge is now a simple component that syncs React context values to the service container, eliminating the need for complex proxy patterns.
+The ContextBridge is a simple component that syncs React context values to the service container, providing a clean separation between React contexts and MFE services.
 
 ### Services Provided
 
@@ -101,21 +99,12 @@ interface ContainerServices {
 - **UI-focused**: Primarily for UI elements that render in container
 - **Stateless for MFEs**: MFEs don't manage this state directly
 
-### Simplified Implementation
+### Implementation
 
-The new architecture eliminates the complex proxy pattern:
+The service architecture uses a direct, simple approach:
 
 ```typescript
-// Old complex proxy pattern (removed)
-const createProxiedService = <T>(serviceName: string, getService: () => T): T => {
-  return new Proxy({} as T, {
-    get(_, prop) {
-      // Complex proxy logic with context bridge checking
-    }
-  });
-};
-
-// New direct implementation
+// Service Container Implementation
 export class UnifiedServiceContainer {
   setContextValues(values: ReactContextValues) {
     this.contextValues = values;
@@ -130,7 +119,7 @@ export class UnifiedServiceContainer {
 }
 ```
 
-#### ContextBridge Component (39 lines vs 160 lines)
+#### ContextBridge Component
 
 ```tsx
 export function ContextBridge({ children }) {

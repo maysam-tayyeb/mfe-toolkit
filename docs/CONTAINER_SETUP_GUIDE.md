@@ -897,7 +897,7 @@ export function ContextBridge({ children }: { children: React.ReactNode }) {
 }
 ```
 
-This eliminates the need for complex proxy patterns - services simply read the context values directly when needed.
+Services read the context values directly when needed through this clean abstraction.
 
 ### Step 4: Create Main App Component
 

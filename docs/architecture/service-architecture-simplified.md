@@ -1,20 +1,10 @@
-# Service Architecture - Simplified Design
+# Service Architecture
 
 ## Overview
 
-The service architecture has been significantly simplified to reduce complexity, improve type safety, and enhance maintainability. This document describes the new streamlined architecture that replaced the previous multi-layered proxy pattern.
+The service architecture provides a clean, type-safe way for MFEs to access container services. This document describes the streamlined architecture that ensures simplicity and maintainability.
 
-## Previous Architecture Issues
-
-The original architecture had several problems:
-
-1. **Too many abstraction layers**: 5+ files and layers between React contexts and MFEs
-2. **Complex proxy pattern**: JavaScript Proxy with `any` types and manual method forwarding
-3. **Circular dependencies**: Context bridge needed contexts, MFE services needed bridge
-4. **Mixed paradigms**: React hooks + imperative services + proxy pattern
-5. **Type safety issues**: Extensive use of `any` types throughout
-
-## New Simplified Architecture
+## Architecture Design
 
 ### Core Components
 
@@ -23,7 +13,7 @@ The original architecture had several problems:
 A single, unified service container that:
 - Creates all services in one place
 - Directly integrates with React contexts
-- No proxy pattern - direct method implementations
+- Direct method implementations
 - Full TypeScript type safety
 
 ```typescript
@@ -36,7 +26,7 @@ export class UnifiedServiceContainer implements ServiceContainer {
     this.contextValues = values;
   }
   
-  // Direct service creation without proxies
+  // Direct service creation
   private getOrCreateService(name: string): unknown {
     switch (name) {
       case 'auth':
@@ -49,10 +39,10 @@ export class UnifiedServiceContainer implements ServiceContainer {
 
 #### 2. Context Bridge (`context-bridge.tsx`)
 
-Simplified from 160 lines to 39 lines:
-- No refs or imperative handles
-- Just syncs React context values to service container
+A lightweight component that:
+- Syncs React context values to service container
 - Clean, functional component
+- Simple useEffect-based synchronization
 
 ```typescript
 export function ContextBridge({ children }: ContextBridgeProps) {
@@ -77,10 +67,10 @@ export function ContextBridge({ children }: ContextBridgeProps) {
 
 #### 3. App Initialization (`App.tsx`)
 
-Much cleaner initialization:
-- No async service loading
-- No complex bridge setup
+Clean initialization pattern:
 - Simple `useMemo` for container creation
+- Straightforward provider hierarchy
+- Clear component structure
 
 ```typescript
 function App() {
@@ -123,24 +113,24 @@ function createAuthService(getContextValues: () => ReactContextValues): AuthServ
 
 ## Benefits
 
-### 1. Code Reduction
-- **50% less code** in the service layer
-- Removed 3 entire files
-- Simplified remaining files significantly
+### 1. Code Efficiency
+- Minimal code footprint
+- Single service container file
+- Concise implementation
 
 ### 2. Type Safety
-- No more `any` types in service proxying
-- Full TypeScript intellisense
+- Full TypeScript type safety
+- Complete intellisense support
 - Compile-time type checking for all services
 
 ### 3. Performance
-- No proxy overhead
 - Direct function calls
-- Faster service access
+- Minimal overhead
+- Fast service access
 
 ### 4. Debugging
 - Clear call stacks
-- No proxy magic to debug through
+- Straightforward execution flow
 - Easy to set breakpoints and trace execution
 
 ### 5. Maintainability
@@ -150,8 +140,8 @@ function createAuthService(getContextValues: () => ReactContextValues): AuthServ
 
 ### 6. Testing
 - Simple to mock services
-- No complex proxy behavior to account for
-- Straightforward test setup
+- Clean test setup
+- Predictable behavior
 
 ## Data Flow
 
@@ -229,4 +219,4 @@ While the current architecture is much simpler, there are still opportunities fo
 
 ## Conclusion
 
-The simplified service architecture achieves all the original goals while being much easier to understand, maintain, and extend. The removal of the proxy pattern and reduction in abstraction layers makes the codebase more approachable for new developers and more efficient at runtime.
+The service architecture provides a clean, efficient, and maintainable solution for managing container services. The direct implementation pattern ensures the codebase is approachable for developers and performs efficiently at runtime.
