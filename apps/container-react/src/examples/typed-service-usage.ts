@@ -5,7 +5,7 @@
  * when accessing services using ServiceMap keys.
  */
 
-import type { ServiceContainer } from '@mfe-toolkit/core';
+import type { ServiceContainer, ServiceMap } from '@mfe-toolkit/core';
 
 // Import type augmentations to extend ServiceMap
 import '@mfe-toolkit/service-authentication/types';
@@ -47,8 +47,8 @@ export function demonstrateTypedServiceAccess(container: ServiceContainer) {
   
   // The implementation still accepts strings for backward compatibility,
   // but the interface provides full type safety through overloads
-  const serviceName: string = 'auth'; // Dynamic string
-  const dynamicService = container.get(serviceName); // Type: any | undefined (fallback overload)
+  const serviceName = 'auth' as keyof ServiceMap; // Cast to known service name
+  const dynamicService = container.get(serviceName); // Type: AuthService | undefined
   if (dynamicService) {
     // Use the service after checking it exists
     console.log('Service found:', serviceName);

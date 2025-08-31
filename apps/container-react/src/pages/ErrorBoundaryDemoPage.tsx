@@ -34,7 +34,7 @@ export const ErrorBoundaryDemoPage: React.FC = () => {
   const [errorReportVisible, setErrorReportVisible] = useState(false);
   const [, setRefreshKey] = useState(0);
   const serviceContainer = useServices();
-  const errorReporter = serviceContainer.get('errorReporter');
+  const errorReporter = (serviceContainer as any).get('errorReporter');
 
   const scenarios = [
     {
@@ -72,7 +72,7 @@ export const ErrorBoundaryDemoPage: React.FC = () => {
   ];
 
   const getErrorSummary = () => {
-    const summary = errorReporter?.getSummary();
+    const summary = errorReporter?.getSummary ? errorReporter.getSummary() : null;
     return summary;
   };
 
@@ -369,7 +369,7 @@ export const ErrorBoundaryDemoPage: React.FC = () => {
             </Button>
             <Button
               onClick={() => {
-                errorReporter?.clearErrors();
+                errorReporter?.clearErrors && errorReporter.clearErrors();
                 setErrorReportVisible(false);
                 setRefreshKey((prev) => prev + 1);
               }}
@@ -449,7 +449,7 @@ export const ErrorBoundaryDemoPage: React.FC = () => {
         {errorReportVisible && (
           <div className="border-t pt-4">
             <h3 className="ds-card-title ds-mb-sm">Error Details</h3>
-            {(errorReporter?.getErrors()?.length ?? 0) === 0 ? (
+            {(errorReporter?.getErrors ? errorReporter.getErrors()?.length ?? 0 : 0) === 0 ? (
               <EmptyState
                 title="No errors recorded"
                 description="Errors will appear here when they occur"
@@ -457,7 +457,7 @@ export const ErrorBoundaryDemoPage: React.FC = () => {
               />
             ) : (
               <div className="space-y-3 max-h-96 overflow-y-auto">
-                {errorReporter?.getErrors()?.map((error: any) => (
+                {errorReporter?.getErrors && errorReporter.getErrors()?.map((error: any) => (
                   <div
                     key={error.id}
                     className={`ds-card-compact ${
