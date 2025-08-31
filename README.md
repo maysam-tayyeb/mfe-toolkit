@@ -6,6 +6,7 @@ A production-ready toolkit and reference architecture for building enterprise-gr
 
 - 🧪 **Standalone Development** - Develop MFEs independently with `@mfe-toolkit/dev` - no container needed!
 - 🛠️ **Interactive Dev Tools** - Built-in console, event simulator, metrics, viewport controls, and theme switcher
+- 🏗️ **Service Registry Architecture** - Advanced dependency injection with scoped containers for isolation ([see docs](./docs/architecture/service-registry-architecture.md))
 - 🚀 **Dynamic MFE Loading** - Load microfrontends on-demand with ES modules
 - 📡 **Inter-MFE Communication** - Real-time event bus for MFE-to-MFE messaging ([see guide](./docs/guides/mfe-communication-guide.md))
 - 🎯 **Shared Services** - Modal, notification, auth, and logging services ([see demos](./docs/service-demos.md))
@@ -80,10 +81,12 @@ A production-ready toolkit and reference architecture for building enterprise-gr
 
 ### 📚 Architecture Documentation
 
+- [Service Registry Architecture](./docs/architecture/service-registry-architecture.md) - Advanced dependency injection with scoped containers
 - [Architecture Decisions](./docs/architecture/architecture-decisions.md) - Key design choices and rationale
 - [State Management Architecture](./docs/architecture/state-management-architecture.md) - ContextBridge vs Universal State Manager
 - [MFE Loading Guide](./docs/architecture/mfe-loading-guide.md) - How MFEs are loaded and best practices
 - [Service Demonstrations](./docs/service-demos.md) - Interactive demos of all platform services
+- [Service Registry Examples](./docs/examples/service-registry-examples.md) - Practical examples of scoped containers and service isolation
 - [Comprehensive Roadmap](./docs/architecture/comprehensive-roadmap.md) - Complete development roadmap with completed work and future plans
 
 ## 📦 NPM Packages

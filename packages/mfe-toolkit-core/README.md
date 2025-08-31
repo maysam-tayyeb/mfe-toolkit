@@ -6,7 +6,8 @@ Framework-agnostic core toolkit for building and managing microfrontends.
 
 ## Features
 
-- 🔧 **Service Container Pattern** - Dependency injection for MFE services
+- 🏗️ **Service Registry Architecture** - Advanced dependency injection with scoped containers
+- 🔧 **Service Container Pattern** - Runtime service access with isolation support
 - 📨 **Event Bus System** - Both legacy and typed event bus for inter-MFE communication
 - 🚨 **Error Handling** - Comprehensive error boundaries and reporting
 - 📦 **MFE Module Interface** - Standard interface for MFE modules
@@ -84,6 +85,155 @@ eventBus.emit('user:login', {
   timestamp: new Date(),
 });
 ```
+
+## Service Registry & Container
+
+The Service Registry architecture separates service definition from runtime access, enabling powerful scenarios like MFE isolation, testing, and multi-tenancy.
+
+### Basic Usage
+
+```typescript
+import { 
+  createServiceRegistry, 
+  createLogger, 
+  createEventBus,
+  type ServiceContainer 
+} from '@mfe-toolkit/core';
+
+// Create and setup registry
+const registry = createServiceRegistry();
+registry.register('logger', createLogger('app'));
+registry.register('eventBus', createEventBus());
+
+// Create container for runtime access
+const container = registry.createContainer();
+
+// Access services with type safety
+const logger = container.get('logger');     // Logger | undefined
+const eventBus = container.require('eventBus'); // EventBus (throws if not found)
+```
+
+### Scoped Containers
+
+Create isolated containers with service overrides:
+
+```typescript
+// Create scoped container for an MFE
+const mfeContainer = container.createScoped({
+  logger: createLogger(`MFE:${mfeName}`), // MFE-specific logger
+  errorReporter: customErrorReporter      // Override error reporter
+});
+
+// MFE receives scoped container
+mfeModule.mount(element, mfeContainer);
+```
+
+### Service Providers
+
+Use providers for lazy initialization and dependency management:
+
+```typescript
+import { createSingletonProvider } from '@mfe-toolkit/core';
+
+// Define a service provider
+const authServiceProvider = createSingletonProvider({
+  name: 'auth',
+  version: '1.0.0',
+  dependencies: ['logger', 'api'],
+  
+  factory: (container) => {
+    const logger = container.require('logger');
+    const api = container.require('api');
+    return new AuthService({ logger, api });
+  },
+  
+  dispose: async () => {
+    // Cleanup when service is disposed
+  }
+});
+
+// Register the provider
+registry.registerProvider(authServiceProvider);
+
+// Initialize all providers
+await registry.initialize();
+```
+
+### Testing with Mocked Services
+
+```typescript
+describe('MyComponent', () => {
+  it('should handle notifications', () => {
+    const mockNotification = {
+      show: jest.fn(),
+      hide: jest.fn()
+    };
+    
+    // Create test container with mocked services
+    const testContainer = container.createScoped({
+      notification: mockNotification,
+      auth: mockAuthService
+    });
+    
+    const component = new MyComponent(testContainer);
+    component.showAlert();
+    
+    expect(mockNotification.show).toHaveBeenCalled();
+  });
+});
+```
+
+### Provider Types
+
+```typescript
+import { 
+  createSingletonProvider,  // Creates service once, reuses instance
+  createFactoryProvider,    // Creates new instance each time
+  composeProviders         // Combines multiple providers
+} from '@mfe-toolkit/core';
+
+// Singleton - one instance shared
+const dbProvider = createSingletonProvider({
+  name: 'database',
+  factory: async (container) => {
+    return await Database.connect(config);
+  }
+});
+
+// Factory - new instance each time
+const modalProvider = createFactoryProvider({
+  name: 'modal',
+  factory: (container) => new Modal()
+});
+
+// Composed - group related providers
+const uiProviders = composeProviders([
+  modalProvider,
+  notificationProvider,
+  tooltipProvider
+]);
+```
+
+### Type-Safe Service Access
+
+Extend the ServiceMap for compile-time type checking:
+
+```typescript
+// Declare your custom services
+declare module '@mfe-toolkit/core' {
+  interface ServiceMap {
+    myService: MyServiceType;
+    apiClient: ApiClient;
+  }
+}
+
+// Now get full type safety
+const myService = container.get('myService');    // MyServiceType | undefined
+const api = container.require('apiClient');       // ApiClient
+const unknown = container.get('unknown');         // TypeScript error!
+```
+
+For more details, see the [Service Registry Architecture documentation](../../docs/architecture/service-registry-architecture.md).
 
 ## Core APIs
 
