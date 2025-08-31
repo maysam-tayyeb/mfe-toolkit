@@ -13,6 +13,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - ✅ **@mfe-toolkit/core Tests** - 75 tests passing with good coverage
 - ✅ **Standalone Development** - @mfe-toolkit/dev package for independent MFE development
 - ✅ **Build System** - @mfe-toolkit/build with automatic dependency detection
+- ✅ **Service Package Extraction** - Modal, Notification, Auth, Theme services extracted to separate packages
+- 🚧 **Service Architecture Refactoring** - Plan documented to separate interfaces from implementations
 
 ## Essential Commands
 
@@ -87,6 +89,26 @@ pnpm build
 cd apps/container-react && pnpm preview
 ```
 
+## ⚠️ Service Architecture Status (IMPORTANT - READ THIS)
+
+### Current State (January 2025)
+The service architecture is in transition. Currently:
+- **Logger, EventBus, ErrorReporter**: Still have implementations in `@mfe-toolkit/core` 
+- **Modal, Notification, Auth, Theme, Analytics**: Extracted to separate packages but still contain implementations
+- **Service Registry**: Properly implemented with dependency injection
+
+### Planned Refactoring
+We are moving to a pure interface-based architecture where:
+1. **Packages export ONLY interfaces** - No implementations in any package
+2. **Container owns ALL implementations** - Full control over service behavior
+3. **Benefits**: 
+   - Containers can use any logger (Pino, Winston, etc.)
+   - Easy to swap implementations per environment
+   - Better testing with mock services
+   - True dependency inversion
+
+**See `/docs/architecture/service-architecture-refactoring.md` for the complete plan.**
+
 ## Architecture Overview
 
 This is a **production-ready microfrontend (MFE) monorepo** using pnpm workspaces. The architecture demonstrates enterprise-grade patterns with real-world trading platform scenarios, showcasing cross-framework communication and service-oriented design.
@@ -144,25 +166,43 @@ This is a **production-ready microfrontend (MFE) monorepo** using pnpm workspace
    - All MFEs demonstrate framework-agnostic service injection patterns
 
 3. **Shared Packages** (`packages/`)
-   - `@mfe-toolkit/core`: Framework-agnostic toolkit with types, services, utilities, and buildMFE system
+   - `@mfe-toolkit/core`: Framework-agnostic types, interfaces, and service registry system
    - `@mfe-toolkit/react`: React-specific components (MFELoader with dual loading strategies, MFEErrorBoundary)
    - `@mfe-toolkit/cli`: Command-line tools for scaffolding and managing MFEs
    - `@mfe-toolkit/state`: Cross-framework state management with persistence and cross-tab sync
    - `@mfe-toolkit/state-middleware-performance`: Performance monitoring middleware
+   - `@mfe-toolkit/service-modal`: Modal service interface and types
+   - `@mfe-toolkit/service-notification`: Notification service interface and types
+   - `@mfe-toolkit/service-authentication`: Auth service interface and types
+   - `@mfe-toolkit/service-authorization`: Authorization service interface and types
+   - `@mfe-toolkit/service-theme`: Theme service interface and types
+   - `@mfe-toolkit/service-analytics`: Analytics service interface and types
    - `@mfe/shared`: Internal shared utilities (private)
    - `@mfe/design-system`: CSS-first design system with 500+ utility classes (private)
    - `@mfe/design-system-react`: React 19 component wrappers for design system (private)
 
-### Key Services
+### Service Architecture
 
-Services are injected into MFEs at mount time (no global window pollution):
+**Interface-Based Design**: Services are defined as interfaces in packages, with implementations provided by containers.
 
-- **Logger Service**: Centralized logging with levels (debug, info, warn, error)
-- **Event Bus**: Inter-MFE communication via pub/sub pattern
-- **Modal Service**: Programmatic modal management
-- **Notification Service**: Toast notifications system
-- **Auth Service**: Authentication state management
-- **Error Reporter**: Comprehensive error tracking and reporting
+#### Core Services (in `@mfe-toolkit/core`):
+- **Logger**: Interface for logging with levels (debug, info, warn, error)
+- **EventBus**: Interface for inter-MFE communication via pub/sub pattern
+- **ErrorReporter**: Interface for error tracking and reporting
+
+#### Extended Services (in separate packages):
+- **Modal** (`@mfe-toolkit/service-modal`): Interface for modal management
+- **Notification** (`@mfe-toolkit/service-notification`): Interface for toast notifications
+- **Authentication** (`@mfe-toolkit/service-authentication`): Interface for auth state
+- **Authorization** (`@mfe-toolkit/service-authorization`): Interface for permissions
+- **Theme** (`@mfe-toolkit/service-theme`): Interface for theme management
+- **Analytics** (`@mfe-toolkit/service-analytics`): Interface for analytics tracking
+
+#### Service Implementation:
+- **Container Ownership**: All service implementations live in the container
+- **Flexibility**: Containers can swap implementations (e.g., Pino vs Console logger)
+- **No Global Pollution**: Services injected via ServiceContainer at mount time
+- **Type Safety**: Full TypeScript support through interface definitions
 
 ### MFE Loading Architecture
 
@@ -206,12 +246,13 @@ MFEs are configured via JSON registry files with full manifest v2 support:
 The toolkit is split into several npm packages under the `@mfe-toolkit` organization:
 
 1. **@mfe-toolkit/core** (`packages/mfe-toolkit-core/`)
-   - Framework-agnostic core functionality
-   - Event bus, logger, error reporter, service container
+   - Framework-agnostic types and interfaces
+   - Service registry and container system
+   - Core service interfaces (Logger, EventBus, ErrorReporter)
    - MFE types and interfaces
    - Manifest validation and migration
    - Common utility functions (generateId, delay, debounce, throttle)
-   - **buildMFE utility**: Generic build system with automatic dependency externalization
+   - **Note**: Contains only interfaces, no implementations
 
 2. **@mfe-toolkit/react** (`packages/mfe-toolkit-react/`)
    - React-specific components: MFELoader, MFEErrorBoundary, MFEPage
@@ -301,14 +342,39 @@ The toolkit is split into several npm packages under the `@mfe-toolkit` organiza
 ### When Creating New MFEs
 
 1. Create new app in `apps/service-demos/` directory following naming convention `mfe-{name}`
-2. Export default function that accepts MFE services:
+2. Use the new ServiceContainer pattern (NOT the old MFEServices):
    ```typescript
-   export default function ({ eventBus, logger, modal, notification }: MFEServices) {
-     return {
-       mount: (element: HTMLElement) => { /* mount logic */ },
-       unmount: () => { /* cleanup logic */ }
-     };
-   }
+   import type { MFEModule, ServiceContainer } from '@mfe-toolkit/core';
+   
+   const module: MFEModule = {
+     metadata: {
+       name: 'mfe-name',
+       version: '1.0.0',
+       requiredServices: ['logger', 'eventBus'],
+       optionalServices: ['modal', 'notification']
+     },
+     
+     mount: async (element: HTMLElement, container: ServiceContainer) => {
+       // Access services through container
+       const logger = container.get('logger');
+       const eventBus = container.get('eventBus');
+       
+       // Always check service availability
+       logger?.info('MFE mounted');
+       
+       // Handle optional services gracefully
+       if (container.has('modal')) {
+         const modal = container.get('modal');
+         // Use modal service
+       }
+     },
+     
+     unmount: async (container: ServiceContainer) => {
+       container.get('logger')?.info('MFE unmounted');
+     }
+   };
+   
+   export default module;
    ```
 3. **Build Configuration**: 
    - Create a `build.js` file using the `buildMFE` utility:
@@ -438,6 +504,9 @@ See [State Management Architecture](./docs/architecture/state-management-archite
 
 ### Architecture Decisions
 
+- **Interface/Implementation Separation**: Service packages define interfaces only, containers provide implementations
+- **Dependency Inversion Principle**: MFEs depend on abstractions (interfaces), not concrete implementations
+- **Container-Owned Implementations**: Enables easy swapping of service implementations per environment
 - **Dynamic Imports over Module Federation**: Runtime flexibility, no build-time coupling, better version independence
 - **Service Injection Pattern**: Zero global/window pollution, framework-agnostic, better testability
 - **Dual Loading Strategies**: Support for both React and non-React MFEs with proper isolation
