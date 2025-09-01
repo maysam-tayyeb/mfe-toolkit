@@ -23,7 +23,7 @@ export interface ResourceAccess {
 /**
  * Authorization service interface
  */
-export interface AuthorizationService {
+export interface AuthzService {
   /**
    * Permission checks
    */

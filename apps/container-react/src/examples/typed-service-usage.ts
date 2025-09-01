@@ -16,7 +16,7 @@ export function demonstrateTypedServiceAccess(container: ServiceContainer) {
   // ✅ Type-safe access with autocomplete for service names
   const logger = container.require('logger'); // Type: Logger
   const auth = container.require('auth'); // Type: AuthService
-  const authz = container.require('authz'); // Type: AuthorizationService
+  const authz = container.require('authz'); // Type: AuthzService
   const modal = container.require('modal'); // Type: ModalService
   const notification = container.require('notification'); // Type: NotificationService
   const theme = container.require('theme'); // Type: ThemeService

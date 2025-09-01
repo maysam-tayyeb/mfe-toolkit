@@ -14,7 +14,7 @@ import {
   type NotificationService,
   type NotificationConfig,
   type AuthService,
-  type AuthorizationService,
+  type AuthzService,
   type ResourceAccess,
 } from '@mfe-toolkit/core';
 import { createPlatformEventBus } from './platform-event-bus';
@@ -60,7 +60,7 @@ function createAuthService(getContextValues: () => ReactContextValues): AuthServ
 /**
  * Creates authorization service that reads from React context values
  */
-function createAuthorizationService(getContextValues: () => ReactContextValues): AuthorizationService {
+function createAuthzService(getContextValues: () => ReactContextValues): AuthzService {
   return {
     hasPermission: (permission: string) => {
       const { auth } = getContextValues();
@@ -225,7 +225,7 @@ export class UnifiedServiceContainer implements ServiceContainer {
         service = createAuthService(() => this.getContextValues());
         break;
       case 'authz':
-        service = createAuthorizationService(() => this.getContextValues());
+        service = createAuthzService(() => this.getContextValues());
         break;
       case 'eventBus':
         service = this.eventBus;

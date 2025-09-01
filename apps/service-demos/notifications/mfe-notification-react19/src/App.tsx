@@ -1,13 +1,19 @@
 import React, { useState } from 'react';
-import type { Logger } from '@mfe-toolkit/core';
-import type { NotificationService, NotificationType } from '@mfe-toolkit/core/types';
+import type {
+  Logger,
+  ServiceContainer,
+  NotificationType,
+  NotificationService,
+} from '@mfe-toolkit/core';
 
 interface NotificationDemoProps {
-  notification: NotificationService;
-  logger: Logger;
+  serviceContainer: ServiceContainer;
 }
 
-export const NotificationDemo: React.FC<NotificationDemoProps> = ({ notification, logger }) => {
+export const App: React.FC<NotificationDemoProps> = ({ serviceContainer }) => {
+  const logger = serviceContainer.require('logger');
+  const notification = serviceContainer.require('notification') as NotificationService;
+
   const [notificationCount, setNotificationCount] = useState(0);
   const [customTitle, setCustomTitle] = useState('Custom Notification');
   const [customMessage, setCustomMessage] = useState('This is a custom notification message');

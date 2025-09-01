@@ -3,12 +3,7 @@
  * Provides type-safe access to services with scoping support
  */
 
-import type {
-  ServiceContainer,
-  ServiceInfo,
-  ServiceMap,
-  ServiceRegistry,
-} from './types';
+import type { ServiceContainer, ServiceInfo, ServiceMap, ServiceRegistry } from './types';
 
 export class ServiceContainerImpl implements ServiceContainer {
   private services: Map<string, any>;
@@ -16,7 +11,11 @@ export class ServiceContainerImpl implements ServiceContainer {
   private disposed = false;
 
   constructor(registryOrServices: ServiceRegistry | Map<string, any>) {
-    if ('get' in registryOrServices && 'has' in registryOrServices && 'listServices' in registryOrServices) {
+    if (
+      'get' in registryOrServices &&
+      'has' in registryOrServices &&
+      'listServices' in registryOrServices
+    ) {
       // It's a registry
       this.registry = registryOrServices as ServiceRegistry;
       this.services = new Map();
@@ -37,30 +36,26 @@ export class ServiceContainerImpl implements ServiceContainer {
   /**
    * Get a service by name (returns undefined if not found)
    */
-  get<K extends keyof ServiceMap>(name: K): ServiceMap[K] | undefined;
-  get<T = any>(name: string): T | undefined;
-  get(name: string): any | undefined {
+  get<K extends keyof ServiceMap>(name: K): ServiceMap[K] | undefined {
     this.checkDisposed();
-    
+
     // Try local services first
     if (this.services.has(name)) {
       return this.services.get(name);
     }
-    
+
     // Try registry if available
     if (this.registry) {
       return this.registry.get(name);
     }
-    
+
     return undefined;
   }
 
   /**
    * Require a service by name (throws if not found)
    */
-  require<K extends keyof ServiceMap>(name: K): ServiceMap[K];
-  require<T = any>(name: string): T;
-  require(name: string): any {
+  require<K extends keyof ServiceMap>(name: K): ServiceMap[K] {
     const service = this.get(name);
     if (service === undefined) {
       throw new Error(`Required service "${name}" not found in container`);
@@ -81,11 +76,11 @@ export class ServiceContainerImpl implements ServiceContainer {
    */
   listAvailable(): ServiceInfo[] {
     this.checkDisposed();
-    
+
     if (this.registry) {
       return this.registry.listServices();
     }
-    
+
     // Create ServiceInfo from local services
     const services: ServiceInfo[] = [];
     for (const name of this.services.keys()) {
@@ -114,10 +109,10 @@ export class ServiceContainerImpl implements ServiceContainer {
    */
   createScoped(overrides: Record<string, any>): ServiceContainer {
     this.checkDisposed();
-    
+
     // Create new map with parent services
     const scopedServices = new Map(this.services);
-    
+
     // Apply overrides
     for (const [name, service] of Object.entries(overrides)) {
       if (service === undefined) {
@@ -126,7 +121,7 @@ export class ServiceContainerImpl implements ServiceContainer {
         scopedServices.set(name, service);
       }
     }
-    
+
     return new ServiceContainerImpl(scopedServices);
   }
 
@@ -135,7 +130,7 @@ export class ServiceContainerImpl implements ServiceContainer {
    */
   async dispose(): Promise<void> {
     if (this.disposed) return;
-    
+
     this.disposed = true;
     this.services.clear();
     this.registry = null;
@@ -151,7 +146,9 @@ export class ServiceContainerImpl implements ServiceContainer {
 /**
  * Factory function to create a service container
  */
-export function createServiceContainer(services: Map<string, any> | Record<string, any>): ServiceContainer {
+export function createServiceContainer(
+  services: Map<string, any> | Record<string, any>
+): ServiceContainer {
   const serviceMap = services instanceof Map ? services : new Map(Object.entries(services));
   return new ServiceContainerImpl(serviceMap);
 }

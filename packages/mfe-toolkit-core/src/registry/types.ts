@@ -72,22 +72,21 @@ export interface ServiceMap {
   logger: Logger;
   eventBus: EventBus;
   errorReporter?: import('../services/types/error-reporter').ErrorReporter;
-  
+
   // UI Services
   modal?: import('../services/types/modal').ModalService;
   notification?: import('../services/types/notification').NotificationService;
-  
+
   // User Services
   auth?: import('../services/types/authentication').AuthService;
-  authz?: import('../services/types/authorization').AuthorizationService;
-  
+  authz?: import('../services/types/authorization').AuthzService;
+
   // Application Services
   theme?: import('../services/types/theme').ThemeService;
   analytics?: import('../services/types/analytics').AnalyticsService;
-  
+
   // Extended by service packages via module augmentation
 }
-
 
 /**
  * Service container interface
@@ -190,7 +189,6 @@ export interface MFEModule {
     name: string;
     version: string;
     requiredServices?: string[];
-    optionalServices?: string[];
   };
 
   /**

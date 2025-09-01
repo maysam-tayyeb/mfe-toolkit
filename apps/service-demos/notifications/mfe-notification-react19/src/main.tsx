@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { NotificationDemo } from './NotificationDemo';
+import { App } from './App';
 import type { MFEModule, ServiceContainer } from '@mfe-toolkit/core';
 import '@mfe-toolkit/core/types';
 
@@ -14,17 +14,14 @@ const module: MFEModule = {
   },
 
   mount: async (element: HTMLElement, serviceContainer: ServiceContainer) => {
-    const logger = serviceContainer.require('logger');
-    const notification = serviceContainer.require('notification');
-
     root = ReactDOM.createRoot(element);
     root.render(
       <React.StrictMode>
-        <NotificationDemo notification={notification} logger={logger} />
+        <App serviceContainer={serviceContainer} />
       </React.StrictMode>
     );
 
-    logger.info('React 19 Notification MFE mounted');
+    serviceContainer.require('logger').info('React 19 Notification MFE mounted');
   },
 
   unmount: async (serviceContainer: ServiceContainer) => {
@@ -33,10 +30,7 @@ const module: MFEModule = {
       root = null;
     }
 
-    const logger = serviceContainer.get('logger');
-    if (logger) {
-      logger.info('React 19 Notification MFE unmounted');
-    }
+    serviceContainer.require('logger').info('React 19 Notification MFE unmounted');
   },
 };
 

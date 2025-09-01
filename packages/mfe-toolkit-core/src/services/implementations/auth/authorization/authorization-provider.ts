@@ -3,9 +3,9 @@
  */
 
 import type { ServiceProvider, ServiceContainer } from '../../../../registry/types';
-import type { AuthorizationService, AuthorizationConfig } from "../../../../services/types";
+import type { AuthzService, AuthorizationConfig } from "../../../../services/types";
 import { AUTHZ_SERVICE_KEY } from "../../../../services/types";
-import { AuthorizationServiceImpl } from './authorization-service';
+import { AuthzServiceImpl } from './authorization-service';
 
 export interface AuthorizationProviderOptions extends AuthorizationConfig {
   // Additional provider-specific options can be added here
@@ -14,15 +14,15 @@ export interface AuthorizationProviderOptions extends AuthorizationConfig {
 /**
  * Create an authorization service provider
  */
-export function createAuthorizationProvider(options?: AuthorizationProviderOptions): ServiceProvider<AuthorizationService> {
+export function createAuthzProvider(options?: AuthorizationProviderOptions): ServiceProvider<AuthzService> {
   return {
     name: AUTHZ_SERVICE_KEY,
     version: '1.0.0',
     dependencies: ['logger'],
     
-    create(container: ServiceContainer): AuthorizationService {
+    create(container: ServiceContainer): AuthzService {
       const logger = container.get('logger');
-      const service = new AuthorizationServiceImpl(options);
+      const service = new AuthzServiceImpl(options);
       
       if (logger) {
         logger.info('Authorization service initialized');
@@ -49,4 +49,4 @@ export function createAuthorizationProvider(options?: AuthorizationProviderOptio
 /**
  * Default authorization service provider
  */
-export const authorizationServiceProvider = createAuthorizationProvider();
+export const authzServiceProvider = createAuthzProvider();

@@ -29,8 +29,8 @@ export { NotificationServiceImpl } from './ui/notification/notification-service'
 export { authServiceProvider } from './auth/authentication/authentication-provider';
 export { AuthServiceImpl } from './auth/authentication/authentication-service';
 
-export { authorizationServiceProvider } from './auth/authorization/authorization-provider';
-export { AuthorizationServiceImpl } from './auth/authorization/authorization-service';
+export { authzServiceProvider } from './auth/authorization/authorization-provider';
+export { AuthzServiceImpl } from './auth/authorization/authorization-service';
 
 // Platform Service Implementations
 export { themeServiceProvider } from './platform/theme/theme-provider';

@@ -3,14 +3,14 @@
  */
 
 import type {
-  AuthorizationService,
+  AuthzService,
   AuthorizationConfig,
   AuthorizationContext,
   Policy,
   ResourceAccess,
 } from "../../../../services/types";
 
-export class AuthorizationServiceImpl implements AuthorizationService {
+export class AuthzServiceImpl implements AuthzService {
   private roles: Set<string>;
   private permissions: Set<string>;
   private scopes: Set<string>;
@@ -213,9 +213,9 @@ export class AuthorizationServiceImpl implements AuthorizationService {
 /**
  * Create an authorization service instance
  */
-export function createAuthorizationService(config?: AuthorizationConfig): AuthorizationService {
-  return new AuthorizationServiceImpl(config);
+export function createAuthzService(config?: AuthorizationConfig): AuthzService {
+  return new AuthzServiceImpl(config);
 }
 
 // Generic alias following the pattern
-export const createAuthz = createAuthorizationService;
+export const createAuthz = createAuthzService;

@@ -9,7 +9,7 @@ const module: MFEModule = {
   metadata: {
     name: 'mfe-market-watch',
     version: '1.0.0',
-    requiredServices: ['eventBus', 'logger']
+    requiredServices: ['eventBus', 'logger'],
   },
 
   mount: async (element: HTMLElement, container: ServiceContainer) => {
@@ -19,24 +19,18 @@ const module: MFEModule = {
         <MarketWatch serviceContainer={container} />
       </React.StrictMode>
     );
-    
-    const logger = container.get('logger');
-    if (logger) {
-      logger.info('[mfe-market-watch] Mounted successfully with React 18');
-    }
+
+    container.require('logger').info('[mfe-market-watch] Mounted successfully with React 18');
   },
-  
+
   unmount: async (container: ServiceContainer) => {
     if (root) {
       root.unmount();
       root = null;
     }
-    
-    const logger = container.get('logger');
-    if (logger) {
-      logger.info('[mfe-market-watch] Unmounted successfully');
-    }
-  }
+
+    container.require('logger').info('[mfe-market-watch] Unmounted successfully');
+  },
 };
 
 export default module;
