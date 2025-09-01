@@ -9,8 +9,23 @@
 export type { Logger } from './logger';
 export { LOGGER_SERVICE_KEY } from './logger';
 
-export type { EventBus, EventPayload } from './event-bus';
-export { EVENT_BUS_SERVICE_KEY } from './event-bus';
+export type { 
+  EventBus, 
+  EventPayload, 
+  AnyEvent, 
+  EventHandler, 
+  TypedEventHandler 
+} from './event-bus';
+export { 
+  EVENT_BUS_SERVICE_KEY,
+  toBaseEvent,
+  toEventPayload,
+  isBaseEvent,
+  isEventPayload,
+  EventBusAdapter,
+  TypedEventEmitter,
+  EventValidators
+} from './event-bus';
 
 export type { ErrorReporter, ErrorReport, ErrorSeverity } from './error-reporter';
 

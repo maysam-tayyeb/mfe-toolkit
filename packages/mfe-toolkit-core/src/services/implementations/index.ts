@@ -9,6 +9,8 @@ export { ConsoleLogger } from './base/logger/console-logger';
 
 export { createSimpleEventBus as createEventBus } from './base/event-bus/simple-event-bus';
 export { SimpleEventBus } from './base/event-bus/simple-event-bus';
+export { defaultEventBus } from './base/event-bus/simple-event-bus';
+export { EventFlowDebugger } from './base/event-bus/simple-event-bus';
 
 export { 
   DefaultErrorReporter,
