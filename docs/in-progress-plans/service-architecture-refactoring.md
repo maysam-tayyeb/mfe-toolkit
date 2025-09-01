@@ -293,41 +293,49 @@ if (process.env.NODE_ENV === 'test') {
 
 ## Timeline
 
-### ✅ Completed (All Phases)
-- Phase 1: Core services refactored to single package architecture
-- Phase 1.1: Simplified to tree-shakable implementations
-- Phase 2: All extended services migrated to core
+### ✅ Completed Phases
+- **Phase 1**: Core services refactored to single package architecture
+- **Phase 1.1**: Simplified to tree-shakable implementations
+- **Phase 2**: All extended services migrated to core
+- **Phase 3**: Core infrastructure reorganization and initial type consistency
+  - Created `services/types/` for Logger and EventBus
+  - Reorganized to `core/` directory structure
+  - Categorized implementations (core/ui/auth/platform)
 - All service packages removed
 - Container and MFEs using new architecture
 
-### 🚧 Phase 3: Service Type Consistency (In Progress)
+### 🚧 Phase 4: Complete Type Organization Consistency (Pending)
 
 ### Problem
-There's an inconsistency in how service interfaces are defined:
-- **Logger** and **EventBus**: Defined directly in `registry/types.ts` 
-- **All other services**: Defined in separate files under `types/` directory
-
-This breaks the consistent pattern established during Phase 2.
+While Phase 3 started the type consistency work, the migration is incomplete:
+- **Split Service Interfaces**: Logger and EventBus in `services/types/`, others still in `types/`
+- **Mixed Type Categories**: `types/` contains both service interfaces and domain types
+- **Inconsistent Organization**: No clear separation between service and domain types
 
 ### Solution
-Move Logger and EventBus interfaces to their own type files to match all other services:
+Complete the type organization by separating service interfaces from domain types:
 
-1. **Create new type files:**
-   - `src/types/logger.ts` - Logger interface
-   - `src/types/event-bus.ts` - EventBus and EventPayload interfaces
+1. **Move all service interfaces to `services/types/`:**
+   - Move error-reporter, modal, notification, authentication, authorization, theme, analytics
+   - Update all imports to use the new location
 
-2. **Update registry/types.ts:**
-   - Remove inline interface definitions
-   - Import from new type files like other services
+2. **Create `domain/` directory for domain types:**
+   - Rename `types/` to `domain/`
+   - Keep only: manifest.ts, events.ts, state.ts (extracted)
+   - These are data/configuration types, not service interfaces
 
-3. **Update imports:**
-   - Update 3 implementation files that import from registry/types
-   - Export from main index.ts
+3. **Final structure:**
+   ```
+   src/
+   ├── services/types/     # ALL service interfaces
+   └── domain/            # Domain/data types only
+   ```
 
 ### Benefits
-- **Consistency**: All services follow the same pattern
-- **Maintainability**: Each service interface in its own file
-- **Clarity**: Clear separation between registry types and service interfaces
+- **Clear Separation**: Service interfaces vs domain types
+- **Complete Consistency**: All services in one place
+- **Better Organization**: Easy to understand and maintain
+- **Follows Architecture**: Aligns with service-oriented design
 
 ## CLI Template Updates
 
@@ -361,7 +369,7 @@ The templates are already following best practices for the new architecture.
 - [x] All tests pass with new architecture
 
 ### 🚧 In Progress
-- [ ] Move extended services to core (Modal, Notification, etc.)
+- [ ] Complete type organization consistency (Phase 4)
 - [ ] Update documentation completely
-- [ ] Create migration guide for service packages
+- [ ] Create migration guide
 - [ ] Verify tree-shaking in production builds
