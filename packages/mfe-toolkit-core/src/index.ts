@@ -16,18 +16,10 @@ export {
 // Utilities
 export * from './core/utils';
 
-// Types and Interfaces (used by MFEs - zero runtime cost)
-export * from './types/events';
-export * from './types';
-export * from './types/error-reporter';
-export * from './types/modal';
-export * from './types/notification';
-export * from './types/authentication';
-export * from './types/authorization';
-export * from './types/theme';
-export * from './types/analytics';
+// Domain Types (data/configuration types - used by MFEs)
+export * from './domain';
 
-// Service Types (new location)
+// Service Types (interface definitions - zero runtime cost)
 export * from './services/types';
 
 // Service Implementations (tree-shakable - only used ones get bundled)

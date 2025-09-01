@@ -3,8 +3,8 @@
  */
 
 import type { ServiceProvider, ServiceContainer } from '../../services/registry/types';
-import type { ModalService, BaseModalConfig } from '../../types/modal';
-import { MODAL_SERVICE_KEY } from '../../types/modal';
+import type { ModalService, BaseModalConfig } from "../../../../services/types";
+import { MODAL_SERVICE_KEY } from "../../../../services/types";
 import { createModalService } from './modal-service';
 
 export interface ModalProviderOptions {

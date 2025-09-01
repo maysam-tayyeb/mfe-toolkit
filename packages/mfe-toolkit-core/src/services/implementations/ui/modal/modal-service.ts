@@ -2,7 +2,7 @@
  * Modal Service Implementation
  */
 
-import type { ModalService, BaseModalConfig, ModalStackEntry } from '../../types/modal';
+import type { ModalService, BaseModalConfig, ModalStackEntry } from "../../../../services/types";
 
 export class ModalServiceImpl<TModalConfig extends BaseModalConfig = BaseModalConfig> 
   implements ModalService<TModalConfig> {

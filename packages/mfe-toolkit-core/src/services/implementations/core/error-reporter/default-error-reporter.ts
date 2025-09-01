@@ -3,7 +3,7 @@
  * Reference implementation for error tracking and reporting in MFEs
  */
 
-import type { ErrorReporter, ErrorReport, ErrorSummary } from '../../../../types/error-reporter';
+import type { ErrorReporter, ErrorReport, ErrorSummary } from "../../../../services/types";
 import type { ServiceContainer } from '../../../../core/service-registry/types';
 
 export interface ErrorReporterConfig {

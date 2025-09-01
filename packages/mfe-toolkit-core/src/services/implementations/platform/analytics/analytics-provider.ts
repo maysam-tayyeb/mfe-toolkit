@@ -3,8 +3,8 @@
  */
 
 import type { ServiceProvider, ServiceContainer } from '../../services/registry/types';
-import type { AnalyticsService, AnalyticsConfig } from '../../types/analytics';
-import { ANALYTICS_SERVICE_KEY } from '../../types/analytics';
+import type { AnalyticsService, AnalyticsConfig } from "../../../../services/types";
+import { ANALYTICS_SERVICE_KEY } from "../../../../services/types";
 import { AnalyticsServiceImpl } from './analytics-service';
 
 export interface AnalyticsProviderOptions extends AnalyticsConfig {

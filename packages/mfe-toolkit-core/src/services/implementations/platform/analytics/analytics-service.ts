@@ -2,7 +2,7 @@
  * Analytics Service Implementation
  */
 
-import type { AnalyticsService, AnalyticsEvent, AnalyticsConfig } from '../../types/analytics';
+import type { AnalyticsService, AnalyticsEvent, AnalyticsConfig } from "../../../../services/types";
 
 export class AnalyticsServiceImpl implements AnalyticsService {
   private config: AnalyticsConfig;

@@ -3,8 +3,8 @@
  */
 
 import type { ServiceProvider, ServiceContainer } from '../../services/registry/types';
-import type { AuthorizationService, AuthorizationConfig } from '../../types/authorization';
-import { AUTHZ_SERVICE_KEY } from '../../types/authorization';
+import type { AuthorizationService, AuthorizationConfig } from "../../../../services/types";
+import { AUTHZ_SERVICE_KEY } from "../../../../services/types";
 import { AuthorizationServiceImpl } from './authorization-service';
 
 export interface AuthorizationProviderOptions extends AuthorizationConfig {

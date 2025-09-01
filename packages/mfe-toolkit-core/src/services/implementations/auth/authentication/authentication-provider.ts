@@ -3,8 +3,8 @@
  */
 
 import type { ServiceProvider, ServiceContainer } from '../../services/registry/types';
-import type { AuthService, AuthConfig } from '../../types/authentication';
-import { AUTH_SERVICE_KEY } from '../../types/authentication';
+import type { AuthService, AuthConfig } from "../../../../services/types";
+import { AUTH_SERVICE_KEY } from "../../../../services/types";
 import { AuthServiceImpl } from './auth-service';
 
 export interface AuthProviderOptions extends AuthConfig {

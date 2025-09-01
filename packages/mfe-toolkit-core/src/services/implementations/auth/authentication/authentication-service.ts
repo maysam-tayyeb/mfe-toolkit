@@ -2,7 +2,7 @@
  * Authentication Service Implementation
  */
 
-import type { AuthService, AuthSession, AuthConfig, LoginCredentials } from '../../types/authentication';
+import type { AuthService, AuthSession, AuthConfig, LoginCredentials } from "../../../../services/types";
 
 export class AuthServiceImpl implements AuthService {
   private session: AuthSession | null = null;

@@ -12,16 +12,20 @@ export { LOGGER_SERVICE_KEY } from './logger';
 export type { EventBus, EventPayload } from './event-bus';
 export { EVENT_BUS_SERVICE_KEY } from './event-bus';
 
-// Import and re-export other service types from the main types directory
-// These will be moved here in Phase 3
-export type { ErrorReporter, ErrorReport, ErrorSeverity } from '../../types/error-reporter';
-export type { ModalService, ModalConfig } from '../../types/modal';
-export type { NotificationService, NotificationConfig } from '../../types/notification';
-export type { AuthService, AuthSession, AuthConfig, LoginCredentials } from '../../types/authentication';
-export { AUTH_SERVICE_KEY } from '../../types/authentication';
-export type { AuthorizationService, AuthorizationConfig, AuthorizationContext, Policy, ResourceAccess } from '../../types/authorization';
-export { AUTHZ_SERVICE_KEY } from '../../types/authorization';
-export type { Theme, ThemeService } from '../../types/theme';
-export { THEME_SERVICE_KEY } from '../../types/theme';
-export type { AnalyticsService, AnalyticsEvent, AnalyticsConfig } from '../../types/analytics';
-export { ANALYTICS_SERVICE_KEY } from '../../types/analytics';
+export type { ErrorReporter, ErrorReport, ErrorSeverity } from './error-reporter';
+
+// UI services
+export type { ModalService, ModalConfig } from './modal';
+export type { NotificationService, NotificationConfig } from './notification';
+
+// Auth services
+export type { AuthService, AuthSession, AuthConfig, LoginCredentials } from './authentication';
+export { AUTH_SERVICE_KEY } from './authentication';
+export type { AuthorizationService, AuthorizationConfig, AuthorizationContext, Policy, ResourceAccess } from './authorization';
+export { AUTHZ_SERVICE_KEY } from './authorization';
+
+// Platform services
+export type { Theme, ThemeService } from './theme';
+export { THEME_SERVICE_KEY } from './theme';
+export type { AnalyticsService, AnalyticsEvent, AnalyticsConfig } from './analytics';
+export { ANALYTICS_SERVICE_KEY } from './analytics';

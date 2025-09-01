@@ -2,7 +2,7 @@
  * Theme Service Implementation
  */
 
-import type { Theme, ThemeService } from '../../types/theme';
+import type { Theme, ThemeService } from "../../../../services/types";
 
 export class ThemeServiceImpl implements ThemeService {
   private theme: Theme;

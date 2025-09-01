@@ -2,7 +2,7 @@
  * Notification Service Implementation
  */
 
-import type { NotificationService, NotificationConfig } from '../../types/notification';
+import type { NotificationService, NotificationConfig } from "../../../../services/types";
 
 export class NotificationServiceImpl implements NotificationService {
   private notifications = new Map<string, NotificationConfig>();

@@ -3,8 +3,8 @@
  */
 
 import type { ServiceProvider, ServiceContainer } from '../../services/registry/types';
-import type { NotificationService } from '../../types/notification';
-import { NOTIFICATION_SERVICE_KEY } from '../../types/notification';
+import type { NotificationService } from "../../../../services/types";
+import { NOTIFICATION_SERVICE_KEY } from "../../../../services/types";
 import { createNotificationService } from './notification-service';
 
 /**

@@ -8,7 +8,7 @@ import type {
   AuthorizationContext,
   Policy,
   ResourceAccess,
-} from '../../types/authorization';
+} from "../../../../services/types";
 
 export class AuthorizationServiceImpl implements AuthorizationService {
   private roles: Set<string>;

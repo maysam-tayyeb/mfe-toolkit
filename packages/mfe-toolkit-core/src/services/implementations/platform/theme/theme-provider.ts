@@ -3,8 +3,8 @@
  */
 
 import type { ServiceProvider, ServiceContainer } from '../../services/registry/types';
-import type { Theme, ThemeService } from '../../types/theme';
-import { THEME_SERVICE_KEY } from '../../types/theme';
+import type { Theme, ThemeService } from "../../../../services/types";
+import { THEME_SERVICE_KEY } from "../../../../services/types";
 import { ThemeServiceImpl } from './theme-service';
 
 export interface ThemeProviderOptions {
