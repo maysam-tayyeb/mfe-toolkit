@@ -3,7 +3,7 @@
  * Reference implementation of the Logger interface using browser console
  */
 
-import type { Logger } from '../../services/types/logger';
+import type { Logger } from '../../../types/logger';
 
 export class ConsoleLogger implements Logger {
   constructor(private prefix: string = 'MFE') {}

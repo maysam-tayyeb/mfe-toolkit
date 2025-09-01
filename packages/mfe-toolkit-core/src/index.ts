@@ -32,4 +32,4 @@ export * from './services/types';
 
 // Service Implementations (tree-shakable - only used ones get bundled)
 // These are reference implementations that containers can use or replace
-export * from './implementations';
+export * from './services/implementations';
