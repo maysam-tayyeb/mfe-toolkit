@@ -23,12 +23,12 @@ Phase 7 implementation is fully complete and migrated to production with the fol
 
 3. **Simplified EventBus Interface** (`services/types/event-bus.ts`):
    - ✅ Single set of methods with intelligent overloads
-   - ✅ Supports typed events, legacy strings, and BaseEvent objects
+   - ✅ Supports typed events, legacy strings, and EventPayload objects
    - ✅ Full backward compatibility maintained
    - ✅ Removed all v2/simplified naming - single clean interface
 
 4. **Enhanced Implementation** (`services/implementations/base/event-bus/simple-event-bus.ts`):
-   - ✅ Unified internal format using BaseEvent
+   - ✅ Unified internal format using EventPayload
    - ✅ Built-in debugging features (logging, history, stats)
    - ✅ Event validation in development mode
    - ✅ Performance tracking
@@ -60,7 +60,7 @@ Phase 7 implementation is fully complete and migrated to production with the fol
 2. **~~Deprecated but Widely Used~~** ✅ RESOLVED:
    - ~~`EventPayload` marked deprecated but still used throughout codebase~~
    - EventPayload has been completely removed
-   - All code now uses BaseEvent exclusively
+   - All code now uses EventPayload exclusively
 
 3. **Implementation Complexity**:
    - SimpleEventBus handles both formats with complex branching
@@ -98,7 +98,7 @@ interface EventBus {
   // Single emit method with overloads
   emit<K extends keyof MFEEventMap>(type: K, data: MFEEventMap[K]): void;
   emit<T = any>(type: string, data?: T): void;
-  emit<T extends BaseEvent>(event: T): void;
+  emit<T extends EventPayload>(event: T): void;
   
   // Single on method with overloads  
   on<K extends keyof MFEEventMap>(
@@ -120,7 +120,7 @@ interface EventBus {
   
   // New debugging methods
   enableLogging(enabled: boolean): void;
-  getEventHistory(limit?: number): BaseEvent[];
+  getEventHistory(limit?: number): EventPayload[];
 }
 ```
 
@@ -233,11 +233,11 @@ export function migrateEmit(eventBus: EventBus) {
 ```typescript
 class SimpleEventBus implements EventBus {
   private handlers = new Map<string, Set<Handler>>();
-  private eventHistory: BaseEvent[] = [];
+  private eventHistory: EventPayload[] = [];
   private loggingEnabled = false;
   
   emit(...args: any[]): void {
-    const event = this.normalizeToBaseEvent(args);
+    const event = this.normalizeToEventPayload(args);
     
     if (this.loggingEnabled) {
       console.log('[EventBus]', event.type, event);
@@ -247,10 +247,10 @@ class SimpleEventBus implements EventBus {
     this.dispatch(event);
   }
   
-  private normalizeToBaseEvent(args: any[]): BaseEvent {
+  private normalizeToEventPayload(args: any[]): EventPayload {
     // Handle different call signatures
     if (args.length === 1 && typeof args[0] === 'object' && 'type' in args[0]) {
-      // Already a BaseEvent
+      // Already a EventPayload
       return args[0];
     } else if (args.length >= 1) {
       // Legacy: emit(type, data?)
@@ -264,7 +264,7 @@ class SimpleEventBus implements EventBus {
     throw new Error('Invalid emit arguments');
   }
   
-  private dispatch(event: BaseEvent): void {
+  private dispatch(event: EventPayload): void {
     // Single dispatch logic for all events
     const handlers = this.handlers.get(event.type) || [];
     const wildcardHandlers = this.handlers.get('*') || [];
@@ -281,7 +281,7 @@ class SimpleEventBus implements EventBus {
 ```
 
 #### 3.2 Benefits
-- Single internal format (BaseEvent)
+- Single internal format (EventPayload)
 - Simpler dispatch logic
 - Built-in debugging features
 - Event history for debugging

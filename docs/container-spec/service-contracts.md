@@ -86,8 +86,8 @@ interface EventBus {
   emit<K extends keyof MFEEventMap>(type: K, data: MFEEventMap[K]): void;
   // Legacy string event with optional data
   emit<T = any>(type: string, data?: T): void;
-  // Complete BaseEvent object
-  emit<T extends BaseEvent>(event: T): void;
+  // Complete EventPayload object
+  emit<T extends EventPayload>(event: T): void;
 
   // Subscribe to events - returns unsubscribe function
   on<K extends keyof MFEEventMap>(
@@ -96,7 +96,7 @@ interface EventBus {
   ): () => void;
   on<T = any>(
     type: string,
-    handler: (event: BaseEvent<string, T>) => void
+    handler: (event: EventPayload<string, T>) => void
   ): () => void;
 
   // Subscribe once - auto-unsubscribe after first event
@@ -106,7 +106,7 @@ interface EventBus {
   ): () => void;
   once<T = any>(
     type: string,
-    handler: (event: BaseEvent<string, T>) => void
+    handler: (event: EventPayload<string, T>) => void
   ): () => void;
 
   // Unsubscribe from events
@@ -116,12 +116,12 @@ interface EventBus {
   ): void;
   off<T = any>(
     type: string,
-    handler: (event: BaseEvent<string, T>) => void
+    handler: (event: EventPayload<string, T>) => void
   ): void;
 }
 
-// BaseEvent is the standard event format
-interface BaseEvent<TType = string, TData = unknown> {
+// EventPayload is the standard event format
+interface EventPayload<TType = string, TData = unknown> {
   type: TType;
   data: TData;
   timestamp: number;

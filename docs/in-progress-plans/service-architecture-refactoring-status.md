@@ -205,13 +205,13 @@ packages/mfe-toolkit-core/src/
 ## ✅ Phase 6: Unify Event Systems (Complete)
 
 ### Problem Solved
-- **Disconnected Systems**: EventBus used simple EventPayload while domain had rich BaseEvent types
+- **Disconnected Systems**: EventBus used simple EventPayload while domain had rich EventPayload types
 - **Type Safety Gap**: Rich event system wasn't utilized by EventBus service
 - **Duplication**: Two separate event type systems with no relationship
 
 ### Implementation
 1. **Enhanced EventBus Interface**:
-   - Now uses BaseEvent as the single event format
+   - Now uses EventPayload as the single event format
    - Added typed methods for domain events
    - Removed deprecated EventPayload type completely
 
@@ -243,7 +243,7 @@ Successfully simplified the EventBus API with a single, intuitive interface.
 2. **Event Type Constants**: `MFEEvents.LOADED`, `MFEEvents.USER_LOGIN`, etc.
 3. **Simplified Interface**: Single set of methods with intelligent overloads
 4. **Debugging Tools**: Event history, statistics, logging, validation
-5. **Clean Implementation**: Single internal BaseEvent format
+5. **Clean Implementation**: Single internal EventPayload format
 
 ### Results
 - Single unified API (no more emit/emitEvent confusion)

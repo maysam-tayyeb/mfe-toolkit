@@ -372,7 +372,7 @@ packages/mfe-toolkit-core/src/
 ## ✅ Phase 6: Unify Event Systems (Complete - January 2025)
 
 ### Problem Solved
-- **Disconnected event systems**: EventBus service used simple EventPayload while domain had rich BaseEvent types
+- **Disconnected event systems**: EventBus service used simple EventPayload while domain had rich EventPayload types
 - **Missed opportunity**: Type-safe event system wasn't being utilized by EventBus
 - **Inconsistency**: Two separate event type definitions with no connection
 
@@ -380,19 +380,19 @@ packages/mfe-toolkit-core/src/
 Unified the event systems with a single, clean API:
 
 1. **Enhanced EventBus Interface**:
-   - Now exclusively uses domain BaseEvent types
+   - Now exclusively uses domain EventPayload types
    - EventPayload has been completely removed
    - Single unified API with intelligent overloads
    - Full type safety with MFEEventMap
 
 2. **Updated Implementation**:
-   - SimpleEventBus uses BaseEvent as internal format
+   - SimpleEventBus uses EventPayload as internal format
    - Clean implementation without conversion complexity
    - Built-in debugging features
    - Better performance without format conversions
 
 3. **Simplified Types**:
-   - Only `isBaseEvent()` type guard needed
+   - Only `isEventPayload()` type guard needed
    - No conversion utilities required
    - Cleaner, simpler API surface
 
@@ -420,7 +420,7 @@ Successfully cleaned up and simplified the EventBus API to provide a single, int
 - **Event Type Constants**: `MFEEvents.LOADED`, `MFEEvents.USER_LOGIN`, etc.
 - **Simplified Interface**: Single `emit()`, `on()`, `once()` with overloads
 - **Debugging Features**: Event history, statistics, logging, validation
-- **Clean Implementation**: Single internal format (BaseEvent)
+- **Clean Implementation**: Single internal format (EventPayload)
 
 ### Implementation Details
 See [event-bus-cleanup.md](./event-bus-cleanup.md) for full details

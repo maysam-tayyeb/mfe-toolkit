@@ -3,10 +3,10 @@
  *
  * Provides pub/sub messaging capabilities for inter-MFE communication.
  * Enables decoupled communication between MFEs and the container.
- * Uses BaseEvent as the standard event format for type safety and consistency.
+ * Uses EventPayload as the standard event format for type safety and consistency.
  */
 
-import type { BaseEvent, MFEEventMap, EventType, TypedEvent } from '../../domain/events';
+import type { EventPayload, MFEEventMap, EventType, TypedEvent } from '../../domain/events';
 
 /**
  * Event Bus interface with unified methods
@@ -20,8 +20,8 @@ export interface EventBus {
   emit<K extends keyof MFEEventMap>(type: K, data: MFEEventMap[K]): void;
   // Legacy string event with optional data
   emit<T = any>(type: string, data?: T): void;
-  // Complete BaseEvent object
-  emit<T extends BaseEvent>(event: T): void;
+  // Complete EventPayload object
+  emit<T extends EventPayload>(event: T): void;
 
   /**
    * Subscribe to events - returns unsubscribe function
@@ -32,7 +32,7 @@ export interface EventBus {
     handler: (event: TypedEvent<MFEEventMap, K>) => void
   ): () => void;
   // Legacy string subscription
-  on<T = any>(type: string, handler: (event: BaseEvent<string, T>) => void): () => void;
+  on<T = any>(type: string, handler: (event: EventPayload<string, T>) => void): () => void;
 
   /**
    * Subscribe once - auto-unsubscribe after first event
@@ -43,7 +43,7 @@ export interface EventBus {
     handler: (event: TypedEvent<MFEEventMap, K>) => void
   ): () => void;
   // Legacy string once
-  once<T = any>(type: string, handler: (event: BaseEvent<string, T>) => void): () => void;
+  once<T = any>(type: string, handler: (event: EventPayload<string, T>) => void): () => void;
 
   /**
    * Unsubscribe from events
@@ -54,7 +54,7 @@ export interface EventBus {
     handler: (event: TypedEvent<MFEEventMap, K>) => void
   ): void;
   // Legacy string unsubscribe
-  off<T = any>(type: string, handler: (event: BaseEvent<string, T>) => void): void;
+  off<T = any>(type: string, handler: (event: EventPayload<string, T>) => void): void;
 
   /**
    * Remove all listeners for an event type, or all if no type specified
@@ -84,7 +84,7 @@ export interface EventBus {
    * Get event history (last N events)
    * Useful for debugging and testing
    */
-  getEventHistory(limit?: number): BaseEvent[];
+  getEventHistory(limit?: number): EventPayload[];
 
   /**
    * Clear event history
@@ -113,9 +113,9 @@ export interface EventBus {
 export const EVENT_BUS_SERVICE_KEY = 'eventBus';
 
 /**
- * Event handler that accepts BaseEvent format
+ * Event handler that accepts EventPayload format
  */
-export type EventHandler<T = any> = (event: BaseEvent<string, T>) => void;
+export type EventHandler<T = any> = (event: EventPayload<string, T>) => void;
 
 /**
  * Type-safe event handler for domain events
@@ -126,9 +126,9 @@ export type TypedEventHandler<
 > = (event: TypedEvent<TEventMap, TType>) => void;
 
 /**
- * Type guard to check if an object is a BaseEvent
+ * Type guard to check if an object is an EventPayload
  */
-export function isBaseEvent(event: unknown): event is BaseEvent {
+export function isEventPayload(event: unknown): event is EventPayload {
   return (
     typeof event === 'object' &&
     event !== null &&
@@ -147,7 +147,7 @@ export class EventBusAdapter implements EventBus {
 
   emit(...args: any[]): void {
     if (args.length === 1 && typeof args[0] === 'object' && 'type' in args[0]) {
-      // BaseEvent object
+      // EventPayload object
       this.legacyBus.emitEvent(args[0]);
     } else {
       // Legacy emit(type, data?)
@@ -187,7 +187,7 @@ export class EventBusAdapter implements EventBus {
     console.log(`Event logging ${enabled ? 'enabled' : 'disabled'}`);
   }
 
-  getEventHistory(_limit?: number): BaseEvent[] {
+  getEventHistory(_limit?: number): EventPayload[] {
     // To be implemented
     return [];
   }

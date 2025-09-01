@@ -16,7 +16,7 @@ export type {
 } from './event-bus';
 export { 
   EVENT_BUS_SERVICE_KEY,
-  isBaseEvent,
+  isEventPayload,
   EventBusAdapter,
   TypedEventEmitter,
   EventValidators

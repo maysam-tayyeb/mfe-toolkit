@@ -117,7 +117,7 @@ export class SimpleEventBus implements EventBus {
   once(...args: any[]): () => void {
     const [type, handler] = args;
     
-    const unsubscribe = this.on(type, (event: BaseEvent) => {
+    const unsubscribe = this.on(type, (event: EventPayload) => {
       handler(event);
       unsubscribe();
     });
@@ -235,7 +235,7 @@ export class SimpleEventBus implements EventBus {
   /**
    * Dispatch event to handlers
    */
-  private dispatch(event: BaseEvent): void {
+  private dispatch(event: EventPayload): void {
     // Dispatch to specific handlers
     const handlers = this.handlers.get(event.type);
     if (handlers) {
@@ -264,7 +264,7 @@ export class SimpleEventBus implements EventBus {
   /**
    * Validate event structure in development
    */
-  private validateEvent(event: BaseEvent): void {
+  private validateEvent(event: EventPayload): void {
     // Basic structure validation
     if (!event.type || typeof event.type !== 'string') {
       console.warn('[EventBus] Invalid event: missing or invalid type', event);
@@ -290,7 +290,7 @@ export class SimpleEventBus implements EventBus {
   /**
    * Add event to history
    */
-  private addToHistory(event: BaseEvent): void {
+  private addToHistory(event: EventPayload): void {
     this.eventHistory.push(event);
     
     // Limit history size
@@ -302,7 +302,7 @@ export class SimpleEventBus implements EventBus {
   /**
    * Update event statistics
    */
-  private updateStats(event: BaseEvent): void {
+  private updateStats(event: EventPayload): void {
     this.stats.totalEmitted++;
     this.stats.eventCounts[event.type] = (this.stats.eventCounts[event.type] || 0) + 1;
   }
@@ -332,7 +332,7 @@ export class EventFlowDebugger {
   
   private startTracking(): void {
     // Track all events
-    this.eventBus.on('*', (event: BaseEvent) => {
+    this.eventBus.on('*', (event: EventPayload) => {
       if (!this.flows.has(event.type)) {
         this.flows.set(event.type, { source: new Set(), targets: new Set() });
       }

@@ -21,7 +21,7 @@ export type {
 
 // Event system types
 export type {
-  BaseEvent,
+  EventPayload,
   EventMap,
   EventType,
   EventData,

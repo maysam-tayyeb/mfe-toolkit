@@ -5,7 +5,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { SimpleEventBus, createSimpleEventBus, EventFlowDebugger } from './simple-event-bus';
 import { Events, MFEEvents } from '../../../../domain/events';
-import type { BaseEvent } from '../../../../domain/events';
+import type { EventPayload } from '../../../../domain/events';
 import type { EventBus } from '../../../../services/types/event-bus';
 
 describe('SimpleEventBus', () => {
@@ -321,7 +321,7 @@ describe('SimpleEventBus', () => {
 
   describe('type safety', () => {
     it('should provide type safety with MFEEventMap', () => {
-      const handler = vi.fn<[BaseEvent<'mfe:loaded', any>], void>();
+      const handler = vi.fn<[EventPayload<'mfe:loaded', any>], void>();
       
       eventBus.on('mfe:loaded', handler);
       

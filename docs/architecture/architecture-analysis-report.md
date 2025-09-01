@@ -130,7 +130,7 @@ interface MFEManifest {
 **Current State:**
 
 ```typescript
-eventBus.on('*', (event: BaseEvent<string, any>) => {
+eventBus.on('*', (event: EventPayload<string, any>) => {
   // Process all events
 });
 ```

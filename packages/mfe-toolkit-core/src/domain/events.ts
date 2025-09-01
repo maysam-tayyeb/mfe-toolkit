@@ -10,9 +10,9 @@
 // ============================================================================
 
 /**
- * Base event structure that all events must extend
+ * Event payload structure that all events must follow
  */
-export type BaseEvent<TType extends string = string, TData = unknown> = {
+export type EventPayload<TType extends string = string, TData = unknown> = {
   type: TType;
   data: TData;
   timestamp: number;
@@ -46,7 +46,7 @@ export type EventData<
 export type TypedEvent<
   TEventMap extends EventMap,
   TType extends EventType<TEventMap> = EventType<TEventMap>,
-> = TType extends EventType<TEventMap> ? BaseEvent<TType, EventData<TEventMap, TType>> : never;
+> = TType extends EventType<TEventMap> ? EventPayload<TType, EventData<TEventMap, TType>> : never;
 
 // ============================================================================
 // Standard MFE Events
@@ -157,7 +157,7 @@ export type MFEEventType = EventType<MFEEventMap>;
  * Type guard to check if an event matches a specific type
  */
 export function isEventType<TEventMap extends EventMap, TType extends EventType<TEventMap>>(
-  event: BaseEvent,
+  event: EventPayload,
   type: TType,
   _eventMap?: TEventMap
 ): event is TypedEvent<TEventMap, TType> {
@@ -227,8 +227,8 @@ export type EventSchema<TEventMap extends EventMap> = {
  */
 export function createEventValidator<TEventMap extends EventMap>(
   schema: EventSchema<TEventMap>
-): (event: BaseEvent) => event is TypedEvent<TEventMap> {
-  return (event: BaseEvent): event is TypedEvent<TEventMap> => {
+): (event: EventPayload) => event is TypedEvent<TEventMap> {
+  return (event: EventPayload): event is TypedEvent<TEventMap> => {
     const validator = schema[event.type as EventType<TEventMap>];
     if (!validator) {
       // No validator defined, allow any event
@@ -245,7 +245,7 @@ export function createEventValidator<TEventMap extends EventMap>(
 /**
  * Legacy event type for backward compatibility
  */
-export type LegacyEvent = BaseEvent<string, any>;
+export type LegacyEvent = EventPayload<string, any>;
 
 /**
  * Convert legacy event to typed event (if possible)
@@ -266,7 +266,7 @@ export function fromLegacyEvent<TEventMap extends EventMap>(
  * Type guard for checking if an event is typed
  */
 export function isTypedEvent<TEventMap extends EventMap>(
-  event: BaseEvent,
+  event: EventPayload,
   eventMap: TEventMap
 ): event is TypedEvent<TEventMap> {
   return event.type in eventMap;
