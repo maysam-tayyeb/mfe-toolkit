@@ -1,4 +1,4 @@
-import { MFEManifest } from '../../types';
+import { MFEManifest } from '../domain';
 
 export interface RegistryConfig {
   mfes: MFEManifest[];

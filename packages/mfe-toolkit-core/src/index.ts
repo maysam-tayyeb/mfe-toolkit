@@ -1,6 +1,6 @@
 // Core Infrastructure
-// Service Registry (New Architecture)
-export * from './core/service-registry';
+// Service Registry
+export * from './registry';
 
 // MFE Management
 export {
@@ -11,10 +11,10 @@ export {
   ManifestValidator,
   manifestValidator,
   type ValidationResult,
-} from './core/mfe-management';
+} from './mfe-management';
 
 // Utilities
-export * from './core/utils';
+export * from './utils';
 
 // Domain Types (data/configuration types - used by MFEs)
 export * from './domain';

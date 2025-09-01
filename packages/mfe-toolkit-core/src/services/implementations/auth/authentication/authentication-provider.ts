@@ -2,10 +2,10 @@
  * Authentication Service Provider
  */
 
-import type { ServiceProvider, ServiceContainer } from '../../services/registry/types';
+import type { ServiceProvider, ServiceContainer } from '../../../../registry/types';
 import type { AuthService, AuthConfig } from "../../../../services/types";
 import { AUTH_SERVICE_KEY } from "../../../../services/types";
-import { AuthServiceImpl } from './auth-service';
+import { AuthServiceImpl } from './authentication-service';
 
 export interface AuthProviderOptions extends AuthConfig {
   // Additional provider-specific options can be added here

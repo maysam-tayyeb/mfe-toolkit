@@ -3,8 +3,8 @@
  * Provides type definitions for the service registry system
  */
 
-import type { Logger } from '../../services/types/logger';
-import type { EventBus, EventPayload } from '../../services/types/event-bus';
+import type { Logger } from '../services/types/logger';
+import type { EventBus, EventPayload } from '../services/types/event-bus';
 
 // Re-export for backward compatibility
 export type { Logger, EventBus, EventPayload };
@@ -71,19 +71,19 @@ export interface ServiceMap {
   // Core services always available
   logger: Logger;
   eventBus: EventBus;
-  errorReporter?: import('../../types/error-reporter').ErrorReporter;
+  errorReporter?: import('../services/types/error-reporter').ErrorReporter;
   
   // UI Services
-  modal?: import('../../types/modal').ModalService;
-  notification?: import('../../types/notification').NotificationService;
+  modal?: import('../services/types/modal').ModalService;
+  notification?: import('../services/types/notification').NotificationService;
   
   // User Services
-  auth?: import('../../types/authentication').AuthService;
-  authz?: import('../../types/authorization').AuthorizationService;
+  auth?: import('../services/types/authentication').AuthService;
+  authz?: import('../services/types/authorization').AuthorizationService;
   
   // Application Services
-  theme?: import('../../types/theme').ThemeService;
-  analytics?: import('../../types/analytics').AnalyticsService;
+  theme?: import('../services/types/theme').ThemeService;
+  analytics?: import('../services/types/analytics').AnalyticsService;
   
   // Extended by service packages via module augmentation
 }

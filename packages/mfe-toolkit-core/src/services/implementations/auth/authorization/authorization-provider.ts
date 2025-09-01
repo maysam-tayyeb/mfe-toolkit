@@ -2,7 +2,7 @@
  * Authorization Service Provider
  */
 
-import type { ServiceProvider, ServiceContainer } from '../../services/registry/types';
+import type { ServiceProvider, ServiceContainer } from '../../../../registry/types';
 import type { AuthorizationService, AuthorizationConfig } from "../../../../services/types";
 import { AUTHZ_SERVICE_KEY } from "../../../../services/types";
 import { AuthorizationServiceImpl } from './authorization-service';

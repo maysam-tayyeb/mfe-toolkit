@@ -3,18 +3,18 @@
  * Tree-shakable reference implementations for all services
  */
 
-// Core Service Implementations
-export { createConsoleLogger as createLogger } from './core/logger/console-logger';
-export { ConsoleLogger } from './core/logger/console-logger';
+// Base Service Implementations (core infrastructure)
+export { createConsoleLogger as createLogger } from './base/logger/console-logger';
+export { ConsoleLogger } from './base/logger/console-logger';
 
-export { createSimpleEventBus as createEventBus } from './core/event-bus/simple-event-bus';
-export { SimpleEventBus } from './core/event-bus/simple-event-bus';
+export { createSimpleEventBus as createEventBus } from './base/event-bus/simple-event-bus';
+export { SimpleEventBus } from './base/event-bus/simple-event-bus';
 
 export { 
   DefaultErrorReporter,
   createErrorReporter,
   getErrorReporter 
-} from './core/error-reporter/default-error-reporter';
+} from './base/error-reporter/default-error-reporter';
 
 // UI Service Implementations
 export { modalServiceProvider } from './ui/modal/modal-provider';

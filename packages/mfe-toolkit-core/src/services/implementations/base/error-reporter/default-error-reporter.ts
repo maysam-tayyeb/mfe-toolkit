@@ -3,8 +3,8 @@
  * Reference implementation for error tracking and reporting in MFEs
  */
 
-import type { ErrorReporter, ErrorReport, ErrorSummary } from "../../../../services/types";
-import type { ServiceContainer } from '../../../../core/service-registry/types';
+import type { ErrorReporter, ErrorReport, ErrorSummary } from "../../../../services/types/error-reporter";
+import type { ServiceContainer } from '../../../../registry/types';
 
 export interface ErrorReporterConfig {
   maxErrorsPerSession?: number;

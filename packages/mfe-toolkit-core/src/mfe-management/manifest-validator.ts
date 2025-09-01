@@ -1,6 +1,6 @@
 import Ajv, { ValidateFunction } from 'ajv';
 import addFormats from 'ajv-formats';
-import { MFEManifest } from '../../types/manifest';
+import { MFEManifest } from '../domain';
 import manifestSchema from './manifest.schema.json';
 
 export interface ValidationResult {
