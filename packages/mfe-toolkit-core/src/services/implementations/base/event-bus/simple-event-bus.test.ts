@@ -321,7 +321,7 @@ describe('SimpleEventBus', () => {
 
   describe('type safety', () => {
     it('should provide type safety with MFEEventMap', () => {
-      const handler = vi.fn<[EventPayload<'mfe:loaded', any>], void>();
+      const handler = vi.fn<(event: EventPayload<'mfe:loaded', any>) => void>();
       
       eventBus.on('mfe:loaded', handler);
       
