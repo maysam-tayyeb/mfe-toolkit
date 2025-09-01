@@ -3,6 +3,12 @@
  * Provides type definitions for the service registry system
  */
 
+import type { Logger } from '../../services/types/logger';
+import type { EventBus, EventPayload } from '../../services/types/event-bus';
+
+// Re-export for backward compatibility
+export type { Logger, EventBus, EventPayload };
+
 /**
  * Service metadata for registry entries
  */
@@ -82,35 +88,6 @@ export interface ServiceMap {
   // Extended by service packages via module augmentation
 }
 
-/**
- * Logger service interface
- */
-export interface Logger {
-  debug(message: string, ...args: any[]): void;
-  info(message: string, ...args: any[]): void;
-  warn(message: string, ...args: any[]): void;
-  error(message: string, ...args: any[]): void;
-}
-
-/**
- * Event payload for event bus
- */
-export interface EventPayload<T = any> {
-  type: string;
-  data: T;
-  timestamp: number;
-  source: string;
-}
-
-/**
- * Event bus service interface
- */
-export interface EventBus {
-  emit<T = any>(event: string, payload: T): void;
-  on<T = any>(event: string, handler: (payload: EventPayload<T>) => void): () => void;
-  off(event: string, handler: (payload: EventPayload<any>) => void): void;
-  once<T = any>(event: string, handler: (payload: EventPayload<T>) => void): void;
-}
 
 /**
  * Service container interface

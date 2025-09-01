@@ -3,7 +3,7 @@
  * Reference implementation for MFE communication via pub/sub pattern
  */
 
-import type { EventBus, EventPayload } from '../../services/registry/types';
+import type { EventBus, EventPayload } from '../../services/types/event-bus';
 
 export class SimpleEventBus implements EventBus {
   private handlers: Map<string, Set<(payload: EventPayload<any>) => void>> = new Map();
