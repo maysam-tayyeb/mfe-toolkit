@@ -6,13 +6,13 @@
 
 import type { EventBus } from '../../../../services/types/event-bus';
 import { EventValidators } from '../../../../services/types/event-bus';
-import type { BaseEvent } from '../../../../domain/events';
+import type { EventPayload } from '../../../../domain/events';
 
-type EventHandler = (event: BaseEvent) => void;
+type EventHandler = (event: EventPayload) => void;
 
 export class SimpleEventBus implements EventBus {
   private handlers = new Map<string, Set<EventHandler>>();
-  private eventHistory: BaseEvent[] = [];
+  private eventHistory: EventPayload[] = [];
   private loggingEnabled = false;
   private validationEnabled = false;
   private source: string;
@@ -58,10 +58,10 @@ export class SimpleEventBus implements EventBus {
   }
 
   /**
-   * Convert various emit signatures to BaseEvent
+   * Convert various emit signatures to EventPayload
    */
-  private normalizeToBaseEvent(args: any[]): BaseEvent {
-    // Case 1: Single BaseEvent object
+  private normalizeToBaseEvent(args: any[]): EventPayload {
+    // Case 1: Single EventPayload object
     if (args.length === 1 && typeof args[0] === 'object' && 'type' in args[0] && 'timestamp' in args[0]) {
       return {
         ...args[0],
@@ -92,8 +92,8 @@ export class SimpleEventBus implements EventBus {
       this.handlers.set(type, new Set());
     }
     
-    // Wrap the handler to ensure it receives BaseEvent
-    const wrappedHandler: EventHandler = (event: BaseEvent) => {
+    // Wrap the handler to ensure it receives EventPayload
+    const wrappedHandler: EventHandler = (event: EventPayload) => {
       handler(event);
     };
     
@@ -187,7 +187,7 @@ export class SimpleEventBus implements EventBus {
   /**
    * Get event history
    */
-  getEventHistory(limit?: number): BaseEvent[] {
+  getEventHistory(limit?: number): EventPayload[] {
     if (!limit) {
       return [...this.eventHistory];
     }
