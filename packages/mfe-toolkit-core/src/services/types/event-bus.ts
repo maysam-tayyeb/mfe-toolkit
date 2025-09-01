@@ -6,7 +6,7 @@
  * Uses BaseEvent as the standard event format for type safety and consistency.
  */
 
-import type { BaseEvent, MFEEventMap, EventType, TypedEvent, MFEEvents } from '../../domain/events';
+import type { BaseEvent, MFEEventMap, EventType, TypedEvent } from '../../domain/events';
 
 /**
  * Event Bus interface with unified methods
@@ -187,7 +187,7 @@ export class EventBusAdapter implements EventBus {
     console.log(`Event logging ${enabled ? 'enabled' : 'disabled'}`);
   }
 
-  getEventHistory(limit?: number): BaseEvent[] {
+  getEventHistory(_limit?: number): BaseEvent[] {
     // To be implemented
     return [];
   }

@@ -22,11 +22,13 @@ export {
   EventValidators
 } from './event-bus';
 
-export type { ErrorReporter, ErrorReport, ErrorSeverity } from './error-reporter';
+export type { ErrorReporter, ErrorReport } from './error-reporter';
 
 // UI services
-export type { ModalService, ModalConfig } from './modal';
+export type { ModalService, BaseModalConfig, ModalStackEntry } from './modal';
+export { MODAL_SERVICE_KEY } from './modal';
 export type { NotificationService, NotificationConfig } from './notification';
+export { NOTIFICATION_SERVICE_KEY } from './notification';
 
 // Auth services
 export type { AuthService, AuthSession, AuthConfig, LoginCredentials } from './authentication';

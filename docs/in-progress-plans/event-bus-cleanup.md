@@ -57,10 +57,10 @@ Phase 7 implementation is fully complete and migrated to production with the fol
    - Typed methods: `emitEvent()`, `onEvent()`, `onceEvent()`, `offEvent()`
    - Developers uncertain which to use
 
-2. **Deprecated but Widely Used**:
-   - `EventPayload` marked deprecated but still used throughout codebase
-   - No clear migration examples or utilities
-   - Examples still use legacy methods
+2. **~~Deprecated but Widely Used~~** ✅ RESOLVED:
+   - ~~`EventPayload` marked deprecated but still used throughout codebase~~
+   - EventPayload has been completely removed
+   - All code now uses BaseEvent exclusively
 
 3. **Implementation Complexity**:
    - SimpleEventBus handles both formats with complex branching

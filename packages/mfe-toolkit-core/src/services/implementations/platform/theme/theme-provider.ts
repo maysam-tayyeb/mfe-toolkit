@@ -2,7 +2,7 @@
  * Theme Service Provider
  */
 
-import type { ServiceProvider, ServiceContainer } from '../../services/registry/types';
+import type { ServiceProvider, ServiceContainer } from '../../../../registry/types';
 import type { Theme, ThemeService } from "../../../../services/types";
 import { THEME_SERVICE_KEY } from "../../../../services/types";
 import { ThemeServiceImpl } from './theme-service';

@@ -15,7 +15,7 @@ export { EventFlowDebugger } from './base/event-bus/simple-event-bus';
 export { 
   DefaultErrorReporter,
   createErrorReporter,
-  getErrorReporter 
+  defaultErrorReporter 
 } from './base/error-reporter/default-error-reporter';
 
 // UI Service Implementations

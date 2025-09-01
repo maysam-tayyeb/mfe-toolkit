@@ -82,17 +82,51 @@ Enables publish-subscribe communication between MFEs.
 ```typescript
 // @mfe-toolkit/core
 interface EventBus {
-  emit<T = any>(event: string, payload: T): void;
-  on<T = any>(event: string, handler: (payload: EventPayload<T>) => void): () => void;
-  off(event: string, handler: (payload: EventPayload<any>) => void): void;
-  once<T = any>(event: string, handler: (payload: EventPayload<T>) => void): void;
+  // Typed event with MFEEventMap
+  emit<K extends keyof MFEEventMap>(type: K, data: MFEEventMap[K]): void;
+  // Legacy string event with optional data
+  emit<T = any>(type: string, data?: T): void;
+  // Complete BaseEvent object
+  emit<T extends BaseEvent>(event: T): void;
+
+  // Subscribe to events - returns unsubscribe function
+  on<K extends keyof MFEEventMap>(
+    type: K,
+    handler: (event: TypedEvent<MFEEventMap, K>) => void
+  ): () => void;
+  on<T = any>(
+    type: string,
+    handler: (event: BaseEvent<string, T>) => void
+  ): () => void;
+
+  // Subscribe once - auto-unsubscribe after first event
+  once<K extends keyof MFEEventMap>(
+    type: K,
+    handler: (event: TypedEvent<MFEEventMap, K>) => void
+  ): () => void;
+  once<T = any>(
+    type: string,
+    handler: (event: BaseEvent<string, T>) => void
+  ): () => void;
+
+  // Unsubscribe from events
+  off<K extends keyof MFEEventMap>(
+    type: K,
+    handler: (event: TypedEvent<MFEEventMap, K>) => void
+  ): void;
+  off<T = any>(
+    type: string,
+    handler: (event: BaseEvent<string, T>) => void
+  ): void;
 }
 
-interface EventPayload<T = any> {
-  type: string;
-  data: T;
+// BaseEvent is the standard event format
+interface BaseEvent<TType = string, TData = unknown> {
+  type: TType;
+  data: TData;
   timestamp: number;
   source: string;
+  metadata?: Record<string, unknown>;
 }
 ```
 

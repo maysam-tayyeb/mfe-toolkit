@@ -2,7 +2,7 @@
  * Analytics Service Provider
  */
 
-import type { ServiceProvider, ServiceContainer } from '../../services/registry/types';
+import type { ServiceProvider, ServiceContainer } from '../../../../registry/types';
 import type { AnalyticsService, AnalyticsConfig } from "../../../../services/types";
 import { ANALYTICS_SERVICE_KEY } from "../../../../services/types";
 import { AnalyticsServiceImpl } from './analytics-service';

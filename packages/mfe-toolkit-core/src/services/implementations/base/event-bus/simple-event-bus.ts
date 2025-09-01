@@ -4,8 +4,9 @@
  * Clean, unified implementation with single internal format and debugging features.
  */
 
-import type { EventBus, EventValidators } from '../../../../services/types/event-bus';
-import type { BaseEvent, MFEEventMap, TypedEvent } from '../../../../domain/events';
+import type { EventBus } from '../../../../services/types/event-bus';
+import { EventValidators } from '../../../../services/types/event-bus';
+import type { BaseEvent } from '../../../../domain/events';
 
 type EventHandler = (event: BaseEvent) => void;
 
@@ -128,7 +129,7 @@ export class SimpleEventBus implements EventBus {
    * Unsubscribe from events
    */
   off(...args: any[]): void {
-    const [type, handler] = args;
+    const [type] = args;
     const handlers = this.handlers.get(type);
     
     if (handlers) {

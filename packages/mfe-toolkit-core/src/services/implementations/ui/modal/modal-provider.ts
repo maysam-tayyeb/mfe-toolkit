@@ -2,7 +2,7 @@
  * Modal Service Provider
  */
 
-import type { ServiceProvider, ServiceContainer } from '../../services/registry/types';
+import type { ServiceProvider, ServiceContainer } from '../../../../registry/types';
 import type { ModalService, BaseModalConfig } from "../../../../services/types";
 import { MODAL_SERVICE_KEY } from "../../../../services/types";
 import { createModalService } from './modal-service';

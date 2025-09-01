@@ -377,24 +377,24 @@ packages/mfe-toolkit-core/src/
 - **Inconsistency**: Two separate event type definitions with no connection
 
 ### Solution Implemented
-Unified the event systems while maintaining backward compatibility:
+Unified the event systems with a single, clean API:
 
 1. **Enhanced EventBus Interface**:
-   - Added support for domain BaseEvent types
-   - Kept EventPayload for backward compatibility (marked deprecated)
-   - Added typed methods: `emitEvent()`, `onEvent()`, `onceEvent()`
+   - Now exclusively uses domain BaseEvent types
+   - EventPayload has been completely removed
+   - Single unified API with intelligent overloads
    - Full type safety with MFEEventMap
 
 2. **Updated Implementation**:
-   - SimpleEventBus now handles both event formats
-   - Automatic event conversion between formats
-   - Type guards to detect event types
-   - Preserved existing behavior
+   - SimpleEventBus uses BaseEvent as internal format
+   - Clean implementation without conversion complexity
+   - Built-in debugging features
+   - Better performance without format conversions
 
-3. **Added Utilities**:
-   - `toBaseEvent()`: Convert EventPayload to BaseEvent
-   - `toEventPayload()`: Convert BaseEvent to EventPayload  
-   - `isBaseEvent()`, `isEventPayload()`: Type guards
+3. **Simplified Types**:
+   - Only `isBaseEvent()` type guard needed
+   - No conversion utilities required
+   - Cleaner, simpler API surface
 
 ### Benefits
 - **Type-safe events**: Full IntelliSense and compile-time checking

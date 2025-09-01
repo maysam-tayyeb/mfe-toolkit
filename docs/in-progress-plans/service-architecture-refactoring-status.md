@@ -211,9 +211,9 @@ packages/mfe-toolkit-core/src/
 
 ### Implementation
 1. **Enhanced EventBus Interface**:
-   - Supports both EventPayload (legacy) and BaseEvent (new)
+   - Now uses BaseEvent as the single event format
    - Added typed methods for domain events
-   - Full backward compatibility maintained
+   - Removed deprecated EventPayload type completely
 
 2. **Unified Implementation**:
    - SimpleEventBus handles both event formats
