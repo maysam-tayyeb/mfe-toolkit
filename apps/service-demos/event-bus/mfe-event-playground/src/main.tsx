@@ -363,12 +363,6 @@ function EventPlayground(props: { serviceContainer: ServiceContainer }) {
 let cleanup: (() => void) | null = null;
 
 const module: MFEModule = {
-  metadata: {
-    name: 'mfe-event-playground',
-    version: '1.0.0',
-    requiredServices: ['eventBus', 'logger']
-  },
-
   mount: async (element: HTMLElement, container: ServiceContainer) => {
     cleanup = render(() => <EventPlayground serviceContainer={container} />, element);
     

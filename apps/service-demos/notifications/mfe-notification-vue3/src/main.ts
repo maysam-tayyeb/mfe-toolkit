@@ -6,12 +6,6 @@ import NotificationDemo from './NotificationDemo.vue';
 let app: any = null;
 
 const module: MFEModule = {
-  metadata: {
-    name: 'mfe-notification-vue3',
-    version: '1.0.0',
-    requiredServices: ['logger', 'notification']
-  },
-
   mount: async (element: HTMLElement, serviceContainer: ServiceContainer) => {
     const logger = serviceContainer.require('logger');
     const notification = serviceContainer.require('notification');

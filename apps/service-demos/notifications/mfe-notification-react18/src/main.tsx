@@ -7,12 +7,6 @@ import '@mfe-toolkit/core/types';
 let root: ReactDOM.Root | null = null;
 
 const module: MFEModule = {
-  metadata: {
-    name: 'mfe-notification-react18',
-    version: '1.0.0',
-    requiredServices: ['logger', 'notification'],
-  },
-
   mount: async (element: HTMLElement, serviceContainer: ServiceContainer) => {
     const logger = serviceContainer.require('logger');
     const notification = serviceContainer.require('notification');

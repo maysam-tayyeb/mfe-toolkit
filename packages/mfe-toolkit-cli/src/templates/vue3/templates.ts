@@ -8,13 +8,6 @@ import { App } from './App';
 let app: any = null;
 
 const module: MFEModule = {
-  metadata: {
-    name: '{{name}}',
-    version: '1.0.0',
-    requiredServices: {{requiredServices}},
-    capabilities: {{capabilities}}
-  },
-
   mount: async (element: HTMLElement, container: ServiceContainer) => {
     app = createApp({
       render() {

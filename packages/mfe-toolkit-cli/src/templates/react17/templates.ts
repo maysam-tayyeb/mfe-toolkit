@@ -7,13 +7,6 @@ import type { MFEModule, ServiceContainer } from '@mfe-toolkit/core';
 import { App } from './App';
 
 const module: MFEModule = {
-  metadata: {
-    name: '{{name}}',
-    version: '1.0.0',
-    requiredServices: {{requiredServices}},
-    capabilities: {{capabilities}}
-  },
-
   mount: async (element: HTMLElement, container: ServiceContainer) => {
     ReactDOM.render(
       <React.StrictMode>

@@ -4,13 +4,6 @@
 export const mainTsTemplate = `import type { MFEModule, ServiceContainer } from '@mfe-toolkit/core';
 
 const module: MFEModule = {
-  metadata: {
-    name: '{{name}}',
-    version: '1.0.0',
-    requiredServices: {{requiredServices}},
-    capabilities: {{capabilities}}
-  },
-
   mount: async (element: HTMLElement, container: ServiceContainer) => {
     let clickCount = 0;
 

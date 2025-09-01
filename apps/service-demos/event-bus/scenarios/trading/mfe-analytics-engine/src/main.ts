@@ -4,12 +4,6 @@ import type { MFEModule, ServiceContainer } from '@mfe-toolkit/core';
 let instance: AnalyticsEngine | null = null;
 
 const module: MFEModule = {
-  metadata: {
-    name: 'mfe-analytics-engine',
-    version: '1.0.0',
-    requiredServices: ['eventBus', 'logger']
-  },
-
   mount: async (element: HTMLElement, container: ServiceContainer) => {
     instance = new AnalyticsEngine(element, container);
     

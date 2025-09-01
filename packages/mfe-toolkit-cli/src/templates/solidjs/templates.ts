@@ -8,13 +8,6 @@ import { App } from './App';
 let dispose: (() => void) | null = null;
 
 const module: MFEModule = {
-  metadata: {
-    name: '{{name}}',
-    version: '1.0.0',
-    requiredServices: {{requiredServices}},
-    capabilities: {{capabilities}}
-  },
-
   mount: async (element: HTMLElement, container: ServiceContainer) => {
     dispose = render(() => App({ services: container }), element);
     

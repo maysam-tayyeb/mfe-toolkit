@@ -333,12 +333,6 @@ const cleanupEventListeners = () => {
 };
 
 const module: MFEModule = {
-  metadata: {
-    name: 'mfe-notification-vanilla',
-    version: '1.0.0',
-    requiredServices: ['logger', 'notification']
-  },
-
   mount: async (element: HTMLElement, serviceContainer: ServiceContainer) => {
     logger = serviceContainer.require('logger');
     notification = serviceContainer.require('notification');

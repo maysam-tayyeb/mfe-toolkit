@@ -183,15 +183,6 @@ export interface ServiceRegistry {
  */
 export interface MFEModule {
   /**
-   * Module metadata
-   */
-  metadata?: {
-    name: string;
-    version: string;
-    requiredServices?: string[];
-  };
-
-  /**
    * Mount the MFE
    */
   mount(element: HTMLElement, container: ServiceContainer): void | Promise<void>;

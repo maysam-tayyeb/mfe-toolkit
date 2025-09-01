@@ -6,12 +6,6 @@ import { App } from './App';
 let cleanup: (() => void) | null = null;
 
 const module: MFEModule = {
-  metadata: {
-    name: 'mfe-notification-solidjs',
-    version: '1.0.0',
-    requiredServices: ['logger', 'notification']
-  },
-
   mount: async (element: HTMLElement, serviceContainer: ServiceContainer) => {
     const logger = serviceContainer.require('logger');
     const notification = serviceContainer.require('notification');

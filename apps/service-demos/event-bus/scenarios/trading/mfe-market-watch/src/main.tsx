@@ -6,12 +6,6 @@ import type { MFEModule, ServiceContainer } from '@mfe-toolkit/core';
 let root: ReactDOM.Root | null = null;
 
 const module: MFEModule = {
-  metadata: {
-    name: 'mfe-market-watch',
-    version: '1.0.0',
-    requiredServices: ['eventBus', 'logger'],
-  },
-
   mount: async (element: HTMLElement, container: ServiceContainer) => {
     root = ReactDOM.createRoot(element);
     root.render(
