@@ -369,6 +369,40 @@ packages/mfe-toolkit-core/src/
 - **Better Organization**: Easy to understand and maintain
 - **Follows Architecture**: Aligns with service-oriented design
 
+## ✅ Phase 6: Unify Event Systems (Complete - January 2025)
+
+### Problem Solved
+- **Disconnected event systems**: EventBus service used simple EventPayload while domain had rich BaseEvent types
+- **Missed opportunity**: Type-safe event system wasn't being utilized by EventBus
+- **Inconsistency**: Two separate event type definitions with no connection
+
+### Solution Implemented
+Unified the event systems while maintaining backward compatibility:
+
+1. **Enhanced EventBus Interface**:
+   - Added support for domain BaseEvent types
+   - Kept EventPayload for backward compatibility (marked deprecated)
+   - Added typed methods: `emitEvent()`, `onEvent()`, `onceEvent()`
+   - Full type safety with MFEEventMap
+
+2. **Updated Implementation**:
+   - SimpleEventBus now handles both event formats
+   - Automatic event conversion between formats
+   - Type guards to detect event types
+   - Preserved existing behavior
+
+3. **Added Utilities**:
+   - `toBaseEvent()`: Convert EventPayload to BaseEvent
+   - `toEventPayload()`: Convert BaseEvent to EventPayload  
+   - `isBaseEvent()`, `isEventPayload()`: Type guards
+
+### Benefits
+- **Type-safe events**: Full IntelliSense and compile-time checking
+- **Rich event system**: Leverage predefined MFE events (lifecycle, navigation, user, state, communication)
+- **Backward compatible**: Existing code continues to work
+- **Migration path**: Gradual adoption of typed events
+- **Better DX**: Auto-completion and type checking for events
+
 ## CLI Template Updates
 
 The CLI templates need to be updated to reflect the new architecture where services are interfaces only:
