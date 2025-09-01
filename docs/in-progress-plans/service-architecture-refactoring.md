@@ -300,11 +300,34 @@ if (process.env.NODE_ENV === 'test') {
 - All service packages removed
 - Container and MFEs using new architecture
 
-### 🚧 Remaining Work (Phase 2)
-- **Week 1**: Move Modal and Notification services to core
-- **Week 2**: Move Auth, Authorization, Theme, Analytics to core
-- **Week 3**: Update documentation and examples
-- **Week 4**: Deprecate service packages (keep for compatibility)
+### 🚧 Phase 3: Service Type Consistency (In Progress)
+
+### Problem
+There's an inconsistency in how service interfaces are defined:
+- **Logger** and **EventBus**: Defined directly in `registry/types.ts` 
+- **All other services**: Defined in separate files under `types/` directory
+
+This breaks the consistent pattern established during Phase 2.
+
+### Solution
+Move Logger and EventBus interfaces to their own type files to match all other services:
+
+1. **Create new type files:**
+   - `src/types/logger.ts` - Logger interface
+   - `src/types/event-bus.ts` - EventBus and EventPayload interfaces
+
+2. **Update registry/types.ts:**
+   - Remove inline interface definitions
+   - Import from new type files like other services
+
+3. **Update imports:**
+   - Update 3 implementation files that import from registry/types
+   - Export from main index.ts
+
+### Benefits
+- **Consistency**: All services follow the same pattern
+- **Maintainability**: Each service interface in its own file
+- **Clarity**: Clear separation between registry types and service interfaces
 
 ## CLI Template Updates
 

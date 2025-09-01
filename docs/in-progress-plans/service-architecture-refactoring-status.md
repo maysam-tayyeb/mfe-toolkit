@@ -80,9 +80,38 @@ All service packages have been successfully migrated to core following the simpl
 - **Tree-shakable**: Only used implementations get bundled
 - **Generic names**: Easy to swap implementations
 
-## 📋 Next Steps
+## 🚧 Phase 3: Service Type Consistency (In Progress)
 
-### Phase 3: Enhanced Implementations
+### Problem Identified
+After Phase 2 completion, an inconsistency was discovered:
+- **Logger** and **EventBus**: Interfaces defined directly in `registry/types.ts`
+- **All other services**: Interfaces in separate files under `types/` directory
+
+### Implementation Plan
+1. **Create type files** (Pending)
+   - [ ] `packages/mfe-toolkit-core/src/types/logger.ts`
+   - [ ] `packages/mfe-toolkit-core/src/types/event-bus.ts`
+
+2. **Refactor registry/types.ts** (Pending)
+   - [ ] Remove Logger interface (lines 88-93)
+   - [ ] Remove EventBus and EventPayload interfaces (lines 95-113)
+   - [ ] Update ServiceMap to import from new locations
+
+3. **Update imports** (Pending)
+   - [ ] `implementations/logger/console-logger.ts`
+   - [ ] `implementations/event-bus/simple-event-bus.ts`
+   - [ ] `services/event-bus.test.ts`
+
+4. **Update exports** (Pending)
+   - [ ] Add exports to main index.ts
+   - [ ] Update registry/index.ts exports
+
+### Expected Outcome
+All service interfaces will follow the same consistent pattern with separate type files.
+
+## 📋 Future Steps
+
+### Phase 4: Enhanced Implementations
 1. **Production-Ready Alternatives**
    - `createPinoLogger` exported as `createLogger` 
    - `createSentryReporter` exported as `getErrorReporter`
