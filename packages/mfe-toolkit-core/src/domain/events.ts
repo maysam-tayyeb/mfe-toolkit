@@ -271,3 +271,178 @@ export function isTypedEvent<TEventMap extends EventMap>(
 ): event is TypedEvent<TEventMap> {
   return event.type in eventMap;
 }
+
+// ============================================================================
+// Event Type Constants
+// ============================================================================
+
+/**
+ * Event type constants for IntelliSense and type safety
+ * Use these constants instead of string literals for better DX
+ */
+export const MFEEvents = {
+  // Lifecycle Events
+  LOADED: 'mfe:loaded' as const,
+  UNLOADED: 'mfe:unloaded' as const,
+  ERROR: 'mfe:error' as const,
+  READY: 'mfe:ready' as const,
+  
+  // Navigation Events
+  NAV_CHANGE: 'navigation:change' as const,
+  NAV_REQUEST: 'navigation:request' as const,
+  
+  // User Events
+  USER_LOGIN: 'user:login' as const,
+  USER_LOGOUT: 'user:logout' as const,
+  USER_ACTION: 'user:action' as const,
+  
+  // State Sync Events
+  STATE_SYNC: 'state:sync' as const,
+  STATE_REQUEST: 'state:request' as const,
+  STATE_RESPONSE: 'state:response' as const,
+  
+  // Communication Events
+  BROADCAST: 'broadcast:message' as const,
+  REQUEST_DATA: 'request:data' as const,
+  RESPONSE_DATA: 'response:data' as const,
+} as const;
+
+// ============================================================================
+// Event Factory Functions
+// ============================================================================
+
+/**
+ * Factory functions for creating typed events with proper structure
+ * These ensure consistency and provide better DX
+ */
+export const Events = {
+  // MFE Lifecycle Events
+  mfeLoaded: (name: string, version: string, metadata?: Record<string, unknown>) =>
+    createEvent<MFEEventMap, 'mfe:loaded'>(
+      'mfe:loaded',
+      { name, version, metadata },
+      name
+    ),
+  
+  mfeUnloaded: (name: string, reason?: string) =>
+    createEvent<MFEEventMap, 'mfe:unloaded'>(
+      'mfe:unloaded',
+      { name, reason },
+      name
+    ),
+  
+  mfeError: (name: string, error: Error | string, context?: Record<string, unknown>) =>
+    createEvent<MFEEventMap, 'mfe:error'>(
+      'mfe:error',
+      {
+        name,
+        error: typeof error === 'string' ? error : error.message,
+        stack: typeof error === 'string' ? undefined : error.stack,
+        context,
+      },
+      name
+    ),
+  
+  mfeReady: (name: string, capabilities?: string[]) =>
+    createEvent<MFEEventMap, 'mfe:ready'>(
+      'mfe:ready',
+      { name, capabilities },
+      name
+    ),
+  
+  // Navigation Events
+  navigationChange: (
+    from: string,
+    to: string,
+    method: 'push' | 'replace' | 'back' | 'forward' = 'push'
+  ) =>
+    createEvent<MFEEventMap, 'navigation:change'>(
+      'navigation:change',
+      { from, to, method },
+      'router'
+    ),
+  
+  navigationRequest: (path: string, params?: Record<string, string>, query?: Record<string, string>) =>
+    createEvent<MFEEventMap, 'navigation:request'>(
+      'navigation:request',
+      { path, params, query },
+      'router'
+    ),
+  
+  // User Events
+  userLogin: (userId: string, username: string, roles: string[]) =>
+    createEvent<MFEEventMap, 'user:login'>(
+      'user:login',
+      { userId, username, roles },
+      'auth'
+    ),
+  
+  userLogout: (userId: string, reason?: string) =>
+    createEvent<MFEEventMap, 'user:logout'>(
+      'user:logout',
+      { userId, reason },
+      'auth'
+    ),
+  
+  userAction: (action: string, target?: string, data?: unknown) =>
+    createEvent<MFEEventMap, 'user:action'>(
+      'user:action',
+      { action, target, data },
+      'user'
+    ),
+  
+  // State Sync Events
+  stateSync: (from: string, state: unknown, partial: boolean = false) =>
+    createEvent<MFEEventMap, 'state:sync'>(
+      'state:sync',
+      { from, state, partial },
+      from
+    ),
+  
+  stateRequest: (from: string, keys?: string[]) =>
+    createEvent<MFEEventMap, 'state:request'>(
+      'state:request',
+      { from, keys },
+      from
+    ),
+  
+  stateResponse: (to: string, state: unknown, requestId?: string) =>
+    createEvent<MFEEventMap, 'state:response'>(
+      'state:response',
+      { to, state, requestId },
+      'state-manager'
+    ),
+  
+  // Communication Events
+  broadcast: (
+    from: string,
+    message: unknown,
+    to: 'all' | string[] = 'all',
+    priority: 'low' | 'normal' | 'high' = 'normal'
+  ) =>
+    createEvent<MFEEventMap, 'broadcast:message'>(
+      'broadcast:message',
+      { from, to, message, priority },
+      from
+    ),
+  
+  requestData: (from: string, to: string, requestId: string, query: unknown) =>
+    createEvent<MFEEventMap, 'request:data'>(
+      'request:data',
+      { from, to, requestId, query },
+      from
+    ),
+  
+  responseData: (
+    from: string,
+    to: string,
+    requestId: string,
+    data: unknown,
+    error?: string
+  ) =>
+    createEvent<MFEEventMap, 'response:data'>(
+      'response:data',
+      { from, to, requestId, data, error },
+      from
+    ),
+};
