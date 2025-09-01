@@ -11,17 +11,12 @@ export { LOGGER_SERVICE_KEY } from './logger';
 
 export type { 
   EventBus, 
-  EventPayload, 
-  AnyEvent, 
   EventHandler, 
   TypedEventHandler 
 } from './event-bus';
 export { 
   EVENT_BUS_SERVICE_KEY,
-  toBaseEvent,
-  toEventPayload,
   isBaseEvent,
-  isEventPayload,
   EventBusAdapter,
   TypedEventEmitter,
   EventValidators

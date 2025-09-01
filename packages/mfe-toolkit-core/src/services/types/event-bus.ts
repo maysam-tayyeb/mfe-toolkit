@@ -3,8 +3,7 @@
  *
  * Provides pub/sub messaging capabilities for inter-MFE communication.
  * Enables decoupled communication between MFEs and the container.
- *
- * Supports both legacy EventPayload and rich BaseEvent types seamlessly.
+ * Uses BaseEvent as the standard event format for type safety and consistency.
  */
 
 import type { BaseEvent, MFEEventMap, EventType, TypedEvent, MFEEvents } from '../../domain/events';
@@ -114,40 +113,9 @@ export interface EventBus {
 export const EVENT_BUS_SERVICE_KEY = 'eventBus';
 
 /**
- * Legacy event payload structure for backward compatibility
- * @deprecated Use BaseEvent from domain/events for new code
+ * Event handler that accepts BaseEvent format
  */
-export interface EventPayload<T = any> {
-  /**
-   * Event type/name identifier
-   */
-  type: string;
-
-  /**
-   * Event data payload
-   */
-  data?: T;
-
-  /**
-   * Timestamp when the event was emitted
-   */
-  timestamp: number;
-
-  /**
-   * Source identifier (MFE name or 'container')
-   */
-  source: string;
-}
-
-/**
- * Union type supporting both event formats
- */
-export type AnyEvent<T = any> = EventPayload<T> | BaseEvent<string, T>;
-
-/**
- * Event handler that accepts both event formats
- */
-export type EventHandler<T = any> = (event: AnyEvent<T>) => void;
+export type EventHandler<T = any> = (event: BaseEvent<string, T>) => void;
 
 /**
  * Type-safe event handler for domain events
@@ -158,52 +126,15 @@ export type TypedEventHandler<
 > = (event: TypedEvent<TEventMap, TType>) => void;
 
 /**
- * Helper to convert EventPayload to BaseEvent
+ * Type guard to check if an object is a BaseEvent
  */
-export function toBaseEvent<T = any>(payload: EventPayload<T>): BaseEvent<string, T> {
-  return {
-    type: payload.type,
-    data: payload.data as T,
-    timestamp: payload.timestamp,
-    source: payload.source,
-  };
-}
-
-/**
- * Helper to convert BaseEvent to EventPayload
- */
-export function toEventPayload<T = any>(event: BaseEvent<string, T>): EventPayload<T> {
-  return {
-    type: event.type,
-    data: event.data,
-    timestamp: event.timestamp,
-    source: event.source,
-  };
-}
-
-/**
- * Type guard to check if an event is a BaseEvent
- */
-export function isBaseEvent(event: AnyEvent): event is BaseEvent {
+export function isBaseEvent(event: unknown): event is BaseEvent {
   return (
     typeof event === 'object' &&
+    event !== null &&
     'type' in event &&
     'timestamp' in event &&
-    'source' in event &&
-    !('data' in event && event.data === undefined && Object.keys(event).length === 4)
-  );
-}
-
-/**
- * Type guard to check if an event is an EventPayload
- */
-export function isEventPayload(event: AnyEvent): event is EventPayload {
-  return (
-    typeof event === 'object' &&
-    'type' in event &&
-    'timestamp' in event &&
-    'source' in event &&
-    Object.keys(event).length <= 4
+    'source' in event
   );
 }
 

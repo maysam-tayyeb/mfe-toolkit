@@ -14,7 +14,6 @@ export type {
   RegisterOptions,
   Logger,
   EventBus,
-  EventPayload,
   MFEModule,
 } from './types';
 

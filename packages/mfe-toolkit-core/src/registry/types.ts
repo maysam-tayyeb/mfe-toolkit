@@ -4,10 +4,10 @@
  */
 
 import type { Logger } from '../services/types/logger';
-import type { EventBus, EventPayload } from '../services/types/event-bus';
+import type { EventBus } from '../services/types/event-bus';
 
 // Re-export for backward compatibility
-export type { Logger, EventBus, EventPayload };
+export type { Logger, EventBus };
 
 /**
  * Service metadata for registry entries
