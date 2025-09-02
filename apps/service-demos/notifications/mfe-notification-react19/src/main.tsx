@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { App } from './App';
 import type { MFEModule, ServiceContainer } from '@mfe-toolkit/core';
-import '@mfe-toolkit/core/types';
 
 let root: ReactDOM.Root | null = null;
 

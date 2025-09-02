@@ -1,6 +1,5 @@
 import { render } from 'solid-js/web';
 import type { MFEModule, ServiceContainer } from '@mfe-toolkit/core';
-import '@mfe-toolkit/core/types';
 import { App } from './App';
 
 let cleanup: (() => void) | null = null;

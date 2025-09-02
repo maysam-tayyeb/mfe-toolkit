@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import type { MFEModule, ServiceContainer } from '@mfe-toolkit/core';
-import '@mfe-toolkit/core/types';
 import { App } from './App';
 
 let rootElement: HTMLElement | null = null;
