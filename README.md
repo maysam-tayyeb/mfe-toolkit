@@ -1,6 +1,6 @@
-# 🚀 MFE Toolkit - Enterprise Microfrontend Development Platform
+# 🚀 MFE Toolkit - Enterprise Microfrontend Development Platform (WIP)
 
-A production-ready toolkit and reference architecture for building enterprise-grade microfrontends. Features framework-agnostic core, cross-framework communication, comprehensive dev tools, and battle-tested patterns from real-world implementations.
+A toolkit and reference architecture for building enterprise-grade microfrontends. Features framework-agnostic core, cross-framework communication, comprehensive dev tools, and battle-tested patterns from real-world implementations.
 
 ## ✨ Key Features
 
@@ -14,14 +14,10 @@ A production-ready toolkit and reference architecture for building enterprise-gr
 - 🔄 **Cross-Framework Support** - React, Vue, Solid.js, and Vanilla JS MFEs work together ([see demos](./docs/service-demos.md))
 - 🛠️ **Modern Tooling** - Vite, TypeScript, pnpm workspaces, and ESBuild
 - 🔧 **Universal State Manager** - Cross-framework state management (React, Vue, Solid.js, Vanilla JS) with proxy-based reactivity and middleware support
-- 📐 **Professional UI/UX** - Modern Blue & Slate palette, heroes, metrics, cards, complete component system
 - 🚫 **No Global Pollution** - Clean architecture with service injection, no window/global variables
-- 📱 **Mobile-Responsive** - Adaptive layouts with `ds-sm:*`, `ds-md:*`, `ds-lg:*` breakpoints
 - 🔄 **Dual Loading Strategies** - Standard and Isolated loaders for React and non-React MFEs
-- 📊 **Performance Monitoring** - Built-in middleware for state management performance tracking
 - 📝 **Registry Management** - CLI commands for managing MFE registry (add/remove/update/list)
 - 🎯 **Auto-Registry Updates** - MFE creation automatically updates registry
-- ✅ **Comprehensive Testing** - All packages now have test suites
 
 ## 🏗️ Architecture Overview
 
