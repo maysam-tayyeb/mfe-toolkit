@@ -2,10 +2,12 @@ import React from 'react';
 import { Outlet } from 'react-router-dom';
 import { Navigation } from './Navigation';
 import { ModalManager } from './ModalManager';
-import { NotificationManager } from './NotificationManager';
+import { useNotificationManager } from '@/hooks/useNotificationManager';
 import { Toaster } from '@/components/ui/toaster';
 
 export const Layout: React.FC = () => {
+  useNotificationManager();
+
   return (
     <div className="min-h-screen ds-bg-base">
       <Navigation />
@@ -19,7 +21,6 @@ export const Layout: React.FC = () => {
         </main>
       </div>
       <ModalManager />
-      <NotificationManager />
       <Toaster />
     </div>
   );

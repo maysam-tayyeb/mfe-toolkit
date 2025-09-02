@@ -8,7 +8,7 @@ describe('Unified Service Container', () => {
 
   beforeEach(() => {
     container = createServiceContainer();
-    
+
     mockContextValues = {
       auth: {
         session: {
@@ -53,7 +53,7 @@ describe('Unified Service Container', () => {
     it('should list available services', () => {
       const services = container.listAvailable();
       expect(services).toHaveLength(8);
-      expect(services.every(s => s.status === 'ready')).toBe(true);
+      expect(services.every((s) => s.status === 'ready')).toBe(true);
     });
 
     it('should throw error for required missing service', () => {
@@ -66,14 +66,14 @@ describe('Unified Service Container', () => {
   describe('Context Integration', () => {
     it('should warn when accessing services before context is set', () => {
       const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
-      
+
       const auth = container.get('auth');
       auth?.getSession();
-      
+
       expect(consoleSpy).toHaveBeenCalledWith(
         expect.stringContaining('Service accessed before React contexts are initialized')
       );
-      
+
       consoleSpy.mockRestore();
     });
 
@@ -91,10 +91,10 @@ describe('Unified Service Container', () => {
 
     it('should use context values when set', () => {
       container.setContextValues(mockContextValues);
-      
+
       const auth = container.get('auth');
       const session = auth?.getSession();
-      
+
       expect(session).toEqual(mockContextValues.auth.session);
       expect(auth?.isAuthenticated()).toBe(true);
     });
@@ -108,20 +108,20 @@ describe('Unified Service Container', () => {
     it('should provide authentication status', () => {
       const auth = container.get('auth');
       expect(auth?.isAuthenticated()).toBe(true);
-      
+
       // Update context values
       container.setContextValues({
         ...mockContextValues,
         auth: { session: null },
       });
-      
+
       expect(auth?.isAuthenticated()).toBe(false);
     });
 
     it('should provide session data', () => {
       const auth = container.get('auth');
       const session = auth?.getSession();
-      
+
       expect(session?.username).toBe('test-user');
       expect(session?.email).toBe('test@example.com');
     });
@@ -134,7 +134,7 @@ describe('Unified Service Container', () => {
 
     it('should check permissions', () => {
       const authz = container.get('authz');
-      
+
       expect(authz?.hasPermission('read')).toBe(true);
       expect(authz?.hasPermission('delete')).toBe(false);
       expect(authz?.hasAnyPermission(['read', 'delete'])).toBe(true);
@@ -144,7 +144,7 @@ describe('Unified Service Container', () => {
 
     it('should check roles', () => {
       const authz = container.get('authz');
-      
+
       expect(authz?.hasRole('user')).toBe(true);
       expect(authz?.hasRole('superadmin')).toBe(false);
       expect(authz?.hasAnyRole(['user', 'superadmin'])).toBe(true);
@@ -154,7 +154,7 @@ describe('Unified Service Container', () => {
 
     it('should check resource access', () => {
       const authz = container.get('authz');
-      
+
       container.setContextValues({
         ...mockContextValues,
         auth: {
@@ -164,15 +164,11 @@ describe('Unified Service Container', () => {
           },
         },
       });
-      
+
       expect(authz?.canAccess('posts', 'read')).toBe(true);
       expect(authz?.canAccess('posts', 'delete')).toBe(false);
-      expect(authz?.canAccessAny([
-        { resource: 'posts', actions: ['read', 'delete'] },
-      ])).toBe(true);
-      expect(authz?.canAccessAll([
-        { resource: 'posts', actions: ['read', 'write'] },
-      ])).toBe(true);
+      expect(authz?.canAccessAny([{ resource: 'posts', actions: ['read', 'delete'] }])).toBe(true);
+      expect(authz?.canAccessAll([{ resource: 'posts', actions: ['read', 'write'] }])).toBe(true);
     });
   });
 
@@ -184,7 +180,7 @@ describe('Unified Service Container', () => {
     it('should open modal and return ID', () => {
       const modal = container.get('modal');
       const id = modal?.open({ title: 'Test', content: 'Test content' });
-      
+
       expect(id).toMatch(/^modal-\d+$/);
       expect(mockContextValues.ui.openModal).toHaveBeenCalledWith({
         title: 'Test',
@@ -195,7 +191,7 @@ describe('Unified Service Container', () => {
     it('should close modal', () => {
       const modal = container.get('modal');
       modal?.close();
-      
+
       expect(mockContextValues.ui.closeModal).toHaveBeenCalled();
     });
   });
@@ -207,7 +203,7 @@ describe('Unified Service Container', () => {
 
     it('should show notifications with different types', () => {
       const notification = container.get('notification');
-      
+
       const successId = notification?.success('Success', 'Operation completed');
       expect(successId).toMatch(/^notification-\d+$/);
       expect(mockContextValues.ui.addNotification).toHaveBeenCalledWith({
@@ -227,18 +223,18 @@ describe('Unified Service Container', () => {
 
     it('should warn for unimplemented dismiss methods', () => {
       const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
-      
+
       const notification = container.get('notification');
       notification?.dismiss('notification-123');
       notification?.dismissAll();
-      
+
       expect(consoleSpy).toHaveBeenCalledWith(
         expect.stringContaining('NotificationService.dismiss not yet implemented')
       );
       expect(consoleSpy).toHaveBeenCalledWith(
         expect.stringContaining('NotificationService.dismissAll not yet implemented')
       );
-      
+
       consoleSpy.mockRestore();
     });
   });
@@ -278,21 +274,21 @@ describe('Unified Service Container', () => {
         warn: vi.fn(),
         error: vi.fn(),
       };
-      
+
       const scopedContainer = container.createScoped({
         logger: mockLogger,
       });
-      
+
       expect(scopedContainer.get('logger')).toBe(mockLogger);
       expect(scopedContainer.get('eventBus')).toBeDefined();
     });
 
     it('should inherit context values in scoped container', () => {
       container.setContextValues(mockContextValues);
-      
+
       const scopedContainer = container.createScoped({});
       const auth = scopedContainer.get('auth');
-      
+
       expect(auth?.getSession()).toEqual(mockContextValues.auth.session);
     });
   });
@@ -301,17 +297,17 @@ describe('Unified Service Container', () => {
     it('should clear services on dispose', async () => {
       container.setContextValues(mockContextValues);
       await container.dispose();
-      
+
       // After disposal, services should return default values
       const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
-      
+
       const auth = container.get('auth');
       auth?.getSession();
-      
+
       expect(consoleSpy).toHaveBeenCalledWith(
         expect.stringContaining('Service accessed before React contexts are initialized')
       );
-      
+
       consoleSpy.mockRestore();
     });
   });

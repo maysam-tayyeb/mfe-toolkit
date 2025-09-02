@@ -19,12 +19,7 @@ interface MFELoaderProps {
   forceLoad?: boolean;
 }
 
-export function MFELoader({ 
-  name, 
-  fallback, 
-  forceLoad = false,
-  ...props 
-}: MFELoaderProps) {
+export function MFELoader({ name, fallback, forceLoad = false, ...props }: MFELoaderProps) {
   const { registry, isLoading: registryLoading, error: registryError } = useRegistry();
   const serviceContainer = useServices();
   const [manifest, setManifest] = useState<MFEManifest | null>(null);

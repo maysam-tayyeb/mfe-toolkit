@@ -1,6 +1,6 @@
 /**
  * Example: Type-safe Service Access with ServiceMap
- * 
+ *
  * This demonstrates how the ServiceContainer now provides full type safety
  * when accessing services using ServiceMap keys.
  */
@@ -21,7 +21,7 @@ export function demonstrateTypedServiceAccess(container: ServiceContainer) {
   const notification = container.require('notification'); // Type: NotificationService
   const theme = container.require('theme'); // Type: ThemeService
   const eventBus = container.require('eventBus'); // Type: EventBus
-  
+
   // ✅ Full IntelliSense for service methods
   logger.info('Service access is now type-safe!');
   auth?.isAuthenticated(); // Returns boolean
@@ -30,19 +30,19 @@ export function demonstrateTypedServiceAccess(container: ServiceContainer) {
   notification?.success('Success', 'Operation completed');
   theme?.setTheme('dark');
   eventBus.emit('test', { data: 'payload' });
-  
+
   // ✅ Optional access with proper undefined handling
   const maybeAuth = container.get('auth'); // Type: AuthService | undefined
   if (maybeAuth) {
     maybeAuth.getSession(); // Safe to access after null check
   }
-  
+
   // ❌ TypeScript errors for invalid service names
   // container.require('invalid'); // Error: Argument of type '"invalid"' is not assignable to parameter of type 'keyof ServiceMap'
-  
+
   // ❌ TypeScript errors for incorrect method usage
   // notification.invalidMethod(); // Error: Property 'invalidMethod' does not exist on type 'NotificationService'
-  
+
   // The implementation still accepts strings for backward compatibility,
   // but the interface provides full type safety through overloads
   const serviceName = 'auth' as keyof ServiceMap; // Cast to known service name
@@ -51,7 +51,7 @@ export function demonstrateTypedServiceAccess(container: ServiceContainer) {
     // Use the service after checking it exists
     exampleLogger.info('Service found:', serviceName);
   }
-  
+
   return {
     logger,
     auth,
@@ -59,13 +59,13 @@ export function demonstrateTypedServiceAccess(container: ServiceContainer) {
     modal,
     notification,
     theme,
-    eventBus
+    eventBus,
   };
 }
 
 /**
  * Benefits of using ServiceMap keys:
- * 
+ *
  * 1. **Type Safety**: Catch typos and invalid service names at compile time
  * 2. **IntelliSense**: Auto-complete for service names and methods
  * 3. **Refactoring**: Renaming services updates all references automatically

@@ -1,10 +1,4 @@
-import React, {
-  createContext,
-  useContext,
-  useState,
-  useCallback,
-  ReactNode,
-} from 'react';
+import React, { createContext, useContext, useState, useCallback, ReactNode } from 'react';
 import type { BaseModalConfig, NotificationConfig } from '@mfe-toolkit/core';
 
 type ModalConfig = BaseModalConfig<React.ReactNode>;
@@ -45,11 +39,11 @@ export const UIProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   // Notification functions
   const addNotification = useCallback((notification: NotificationConfig) => {
     const id = notification.id || `notification-${Date.now()}`;
-    setNotifications(prev => [...prev, { ...notification, id }]);
+    setNotifications((prev) => [...prev, { ...notification, id }]);
   }, []);
 
   const removeNotification = useCallback((id: string) => {
-    setNotifications(prev => prev.filter(n => n.id !== id));
+    setNotifications((prev) => prev.filter((n) => n.id !== id));
   }, []);
 
   const value: UIContextType = {

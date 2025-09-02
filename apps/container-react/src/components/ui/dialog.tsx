@@ -57,10 +57,7 @@ const DialogHeader = ({ className, ...props }: React.HTMLAttributes<HTMLDivEleme
 DialogHeader.displayName = 'DialogHeader';
 
 const DialogFooter = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div
-    className={cn('ds-modal-footer-content', className)}
-    {...props}
-  />
+  <div className={cn('ds-modal-footer-content', className)} {...props} />
 );
 DialogFooter.displayName = 'DialogFooter';
 
@@ -68,11 +65,7 @@ const DialogTitle = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Title>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Title>
 >(({ className, ...props }, ref) => (
-  <DialogPrimitive.Title
-    ref={ref}
-    className={cn('ds-modal-title-text', className)}
-    {...props}
-  />
+  <DialogPrimitive.Title ref={ref} className={cn('ds-modal-title-text', className)} {...props} />
 ));
 DialogTitle.displayName = DialogPrimitive.Title.displayName;
 

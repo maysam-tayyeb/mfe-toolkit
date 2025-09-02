@@ -3,12 +3,7 @@
  * Provides error tracking and reporting for MFEs
  */
 
-import type { 
-  ErrorReporter, 
-  ErrorReport, 
-  ErrorSummary,
-  ServiceContainer 
-} from '@mfe-toolkit/core';
+import type { ErrorReporter, ErrorReport, ErrorSummary, ServiceContainer } from '@mfe-toolkit/core';
 
 export interface ErrorReporterConfig {
   maxErrorsPerSession?: number;
@@ -186,7 +181,7 @@ export class DefaultErrorReporter implements ErrorReporter {
     if (typeof sessionStorage === 'undefined') {
       return 'no-session';
     }
-    
+
     let sessionId = sessionStorage.getItem('mfe-session-id');
     if (!sessionId) {
       sessionId = `session-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`;

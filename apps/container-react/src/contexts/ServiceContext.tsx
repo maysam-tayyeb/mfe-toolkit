@@ -17,11 +17,7 @@ export interface ServiceProviderProps {
 }
 
 export function ServiceProvider({ serviceContainer, children }: ServiceProviderProps) {
-  return (
-    <ServiceContext.Provider value={{ serviceContainer }}>
-      {children}
-    </ServiceContext.Provider>
-  );
+  return <ServiceContext.Provider value={{ serviceContainer }}>{children}</ServiceContext.Provider>;
 }
 
 export function useServices(): ServiceContainer {

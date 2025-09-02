@@ -1,8 +1,8 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useUI } from '@/contexts/UIContext';
-import { useToast } from '@/components/ui/use-toast';
+import { useToast } from '@/hooks/useToast';
 
-export const NotificationManager: React.FC = () => {
+export const useNotificationManager = () => {
   const { notifications, removeNotification } = useUI();
   const { toast } = useToast();
   const activeToasts = useRef<Set<string>>(new Set());
@@ -34,6 +34,4 @@ export const NotificationManager: React.FC = () => {
       });
     });
   }, [notifications, toast, removeNotification]);
-
-  return null;
 };

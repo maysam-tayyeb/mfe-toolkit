@@ -18,11 +18,7 @@ export interface UseRegistryResult {
 }
 
 export function useRegistry(options: UseRegistryOptions = {}): UseRegistryResult {
-  const {
-    loadOnMount = true,
-    onLoadSuccess,
-    onLoadError,
-  } = options;
+  const { loadOnMount = true, onLoadSuccess, onLoadError } = options;
 
   // Always use singleton registry
   const registry = getRegistrySingleton();

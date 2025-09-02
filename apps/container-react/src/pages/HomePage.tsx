@@ -211,9 +211,7 @@ export const HomePage: React.FC = () => {
             <Layers className="h-5 w-5 ds-icon-warning" />
             <h3 className="ds-section-title">Microfrontends</h3>
           </div>
-          <p className="ds-text-sm ds-text-muted ds-mb-md">
-            Real-world trading platform MFEs
-          </p>
+          <p className="ds-text-sm ds-text-muted ds-mb-md">Real-world trading platform MFEs</p>
           <div className="ds-stack-sm">
             <Link
               to="/services/event-bus"

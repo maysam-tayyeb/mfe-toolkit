@@ -1,4 +1,11 @@
-import React, { createContext, useContext, useState, useCallback, ReactNode, useEffect } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useCallback,
+  ReactNode,
+  useEffect,
+} from 'react';
 import { useAuthService } from './ServiceContext';
 import type { AuthSession } from '@mfe-toolkit/core';
 
@@ -32,12 +39,12 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     if (authService) {
       const currentSession = authService.getSession();
       setSessionState(currentSession || defaultSession);
-      
+
       // Subscribe to auth changes if available
       const unsubscribe = authService.subscribe?.((newSession) => {
         setSessionState(newSession);
       });
-      
+
       setLoading(false);
       return unsubscribe;
     } else {
@@ -47,14 +54,17 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   }, [authService]);
 
-  const setSession = useCallback((newSession: AuthSession | null) => {
-    setSessionState(newSession);
-    // Update auth service if available
-    if (authService && newSession) {
-      // In a real app, this would update the auth service
-      // For now, we just update local state
-    }
-  }, [authService]);
+  const setSession = useCallback(
+    (newSession: AuthSession | null) => {
+      setSessionState(newSession);
+      // Update auth service if available
+      if (authService && newSession) {
+        // In a real app, this would update the auth service
+        // For now, we just update local state
+      }
+    },
+    [authService]
+  );
 
   const logout = useCallback(() => {
     if (authService?.logout) {

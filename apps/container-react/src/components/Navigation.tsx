@@ -78,7 +78,12 @@ export const Navigation: React.FC = () => {
               <div className="p-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 transition-all transform group-hover:scale-105">
                 <Sparkles className="h-4 w-4 text-white" />
               </div>
-              <span className="font-bold text-sm hidden sm:block" style={{ color: theme === 'dark' ? '#ffffff' : '#0f172a' }}>MFE Toolkit</span>
+              <span
+                className="font-bold text-sm hidden sm:block"
+                style={{ color: theme === 'dark' ? '#ffffff' : '#0f172a' }}
+              >
+                MFE Toolkit
+              </span>
             </Link>
 
             {/* Desktop Navigation */}
@@ -128,10 +133,11 @@ export const Navigation: React.FC = () => {
               aria-label="Toggle theme"
               className="h-8 w-8 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-all"
             >
-              {theme === 'dark' ? 
-                <Sun className="h-4 w-4 text-amber-400" /> : 
+              {theme === 'dark' ? (
+                <Sun className="h-4 w-4 text-amber-400" />
+              ) : (
                 <Moon className="h-4 w-4 text-slate-800" />
-              }
+              )}
             </Button>
 
             {/* Mobile Menu Button */}
@@ -141,7 +147,11 @@ export const Navigation: React.FC = () => {
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="block lg:!hidden h-8 w-8 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-all"
             >
-              {mobileMenuOpen ? <X className="h-4 w-4 text-slate-800 dark:text-slate-200" /> : <Menu className="h-4 w-4 text-slate-800 dark:text-slate-200" />}
+              {mobileMenuOpen ? (
+                <X className="h-4 w-4 text-slate-800 dark:text-slate-200" />
+              ) : (
+                <Menu className="h-4 w-4 text-slate-800 dark:text-slate-200" />
+              )}
             </Button>
           </div>
         </div>

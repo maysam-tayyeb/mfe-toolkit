@@ -68,11 +68,11 @@ function createAuthzService(getContextValues: () => ReactContextValues): AuthzSe
     },
     hasAnyPermission: (permissions: string[]) => {
       const { auth } = getContextValues();
-      return permissions.some(p => auth.session?.permissions?.includes(p)) ?? false;
+      return permissions.some((p) => auth.session?.permissions?.includes(p)) ?? false;
     },
     hasAllPermissions: (permissions: string[]) => {
       const { auth } = getContextValues();
-      return permissions.every(p => auth.session?.permissions?.includes(p)) ?? false;
+      return permissions.every((p) => auth.session?.permissions?.includes(p)) ?? false;
     },
     hasRole: (role: string) => {
       const { auth } = getContextValues();
@@ -80,11 +80,11 @@ function createAuthzService(getContextValues: () => ReactContextValues): AuthzSe
     },
     hasAnyRole: (roles: string[]) => {
       const { auth } = getContextValues();
-      return roles.some(r => auth.session?.roles?.includes(r)) ?? false;
+      return roles.some((r) => auth.session?.roles?.includes(r)) ?? false;
     },
     hasAllRoles: (roles: string[]) => {
       const { auth } = getContextValues();
-      return roles.every(r => auth.session?.roles?.includes(r)) ?? false;
+      return roles.every((r) => auth.session?.roles?.includes(r)) ?? false;
     },
     canAccess: (resource: string, action: string) => {
       const { auth } = getContextValues();
@@ -93,21 +93,25 @@ function createAuthzService(getContextValues: () => ReactContextValues): AuthzSe
     },
     canAccessAny: (resources: ResourceAccess[]) => {
       const { auth } = getContextValues();
-      return resources.some(r =>
-        r.actions.some(action => {
-          const permission = `${r.resource}:${action}`;
-          return auth.session?.permissions?.includes(permission);
-        })
-      ) ?? false;
+      return (
+        resources.some((r) =>
+          r.actions.some((action) => {
+            const permission = `${r.resource}:${action}`;
+            return auth.session?.permissions?.includes(permission);
+          })
+        ) ?? false
+      );
     },
     canAccessAll: (resources: ResourceAccess[]) => {
       const { auth } = getContextValues();
-      return resources.every(r =>
-        r.actions.every(action => {
-          const permission = `${r.resource}:${action}`;
-          return auth.session?.permissions?.includes(permission);
-        })
-      ) ?? false;
+      return (
+        resources.every((r) =>
+          r.actions.every((action) => {
+            const permission = `${r.resource}:${action}`;
+            return auth.session?.permissions?.includes(permission);
+          })
+        ) ?? false
+      );
     },
     getPermissions: () => {
       const { auth } = getContextValues();
@@ -143,7 +147,9 @@ const notificationLogger = createLogger('NotificationService');
 /**
  * Creates notification service that calls React context methods
  */
-function createNotificationService(getContextValues: () => ReactContextValues): NotificationService {
+function createNotificationService(
+  getContextValues: () => ReactContextValues
+): NotificationService {
   const show = (config: NotificationConfig) => {
     const { ui } = getContextValues();
     ui.addNotification(config);
@@ -152,14 +158,10 @@ function createNotificationService(getContextValues: () => ReactContextValues): 
 
   return {
     show,
-    success: (title: string, message?: string) => 
-      show({ type: 'success', title, message }),
-    error: (title: string, message?: string) => 
-      show({ type: 'error', title, message }),
-    warning: (title: string, message?: string) => 
-      show({ type: 'warning', title, message }),
-    info: (title: string, message?: string) => 
-      show({ type: 'info', title, message }),
+    success: (title: string, message?: string) => show({ type: 'success', title, message }),
+    error: (title: string, message?: string) => show({ type: 'error', title, message }),
+    warning: (title: string, message?: string) => show({ type: 'warning', title, message }),
+    info: (title: string, message?: string) => show({ type: 'info', title, message }),
     dismiss: (_id: string) => {
       // TODO: Implement dismiss functionality in UIContext
       notificationLogger.warn('NotificationService.dismiss not yet implemented');
@@ -328,7 +330,7 @@ export class UnifiedServiceContainer implements ServiceContainer {
 
   createScoped(overrides: Record<string, unknown>): ServiceContainer {
     const scopedContainer = new UnifiedServiceContainer();
-    
+
     // Copy context values
     if (this.contextValues) {
       scopedContainer.setContextValues(this.contextValues);
