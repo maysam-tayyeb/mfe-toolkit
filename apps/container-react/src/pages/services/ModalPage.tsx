@@ -17,10 +17,14 @@ const MFECard: React.FC<{
 }> = ({ id, title, framework, frameworkVersion, className = '' }) => {
   const getFrameworkBadge = (framework: 'react' | 'vue' | 'vanilla' | 'solid') => {
     const badges = {
-      react: { color: 'ds-bg-blue-500', icon: '⚛️', name: `React${frameworkVersion ? ` ${frameworkVersion}` : ''} MFE` },
+      react: {
+        color: 'ds-bg-blue-500',
+        icon: '⚛️',
+        name: `React${frameworkVersion ? ` ${frameworkVersion}` : ''} MFE`,
+      },
       vue: { color: 'ds-bg-green-500', icon: '💚', name: 'Vue 3 MFE' },
       vanilla: { color: 'ds-bg-yellow-600', icon: '📦', name: 'Vanilla TS MFE' },
-      solid: { color: 'ds-bg-purple-500', icon: '🔷', name: 'Solid.js MFE' }
+      solid: { color: 'ds-bg-purple-500', icon: '🔷', name: 'Solid.js MFE' },
     };
     return badges[framework];
   };
@@ -38,7 +42,7 @@ const MFECard: React.FC<{
         </div>
       </div>
       <div>
-        <RegistryMFELoader id={id} />
+        <RegistryMFELoader name={id} />
       </div>
     </div>
   );
@@ -47,16 +51,18 @@ const MFECard: React.FC<{
 export const ModalPage: React.FC = () => {
   const { openModal, closeModal } = useUI();
   const [searchParams, setSearchParams] = useSearchParams();
-  
+
   // Tab state - get initial tab from URL or default to 'container'
   const initialTab = searchParams.get('tab') || 'container';
   const [activeTab, setActiveTab] = useState<string>(initialTab);
   const [modalCount, setModalCount] = useState(0);
   const [customTitle, setCustomTitle] = useState('Custom Modal');
-  const [customContent, setCustomContent] = useState('This is custom modal content from the container.');
+  const [customContent, setCustomContent] = useState(
+    'This is custom modal content from the container.'
+  );
   const [selectedSize, setSelectedSize] = useState<'sm' | 'md' | 'lg' | 'xl'>('md');
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
-  
+
   // Sync tab state with URL
   const handleTabChange = (tabId: string) => {
     setActiveTab(tabId);
@@ -65,7 +71,7 @@ export const ModalPage: React.FC = () => {
 
   const showModal = (config: any) => {
     openModal(config);
-    setModalCount(prev => prev + 1);
+    setModalCount((prev) => prev + 1);
   };
 
   // Container modal content component
@@ -74,7 +80,7 @@ export const ModalPage: React.FC = () => {
       showModal({
         title: 'Simple Modal',
         content: <p>This is a simple modal with text content from the Container.</p>,
-        showCloseButton: true
+        showCloseButton: true,
       });
     };
 
@@ -94,7 +100,7 @@ export const ModalPage: React.FC = () => {
         onClose: () => {
           logger.info('Modal cancelled');
         },
-        showCloseButton: true
+        showCloseButton: true,
       });
     };
 
@@ -113,7 +119,7 @@ export const ModalPage: React.FC = () => {
           </div>
         ),
         showCloseButton: true,
-        closeOnOverlayClick: false
+        closeOnOverlayClick: false,
       });
     };
 
@@ -122,14 +128,16 @@ export const ModalPage: React.FC = () => {
         title: `${size.toUpperCase()} Size Modal`,
         content: (
           <div>
-            <p>This modal is displayed in <strong>{size}</strong> size.</p>
+            <p>
+              This modal is displayed in <strong>{size}</strong> size.
+            </p>
             <p className="ds-mt-2 ds-text-sm ds-text-muted">
               Modal sizes: sm (small), md (medium), lg (large), xl (extra large)
             </p>
           </div>
         ),
         size,
-        showCloseButton: true
+        showCloseButton: true,
       });
     };
 
@@ -139,7 +147,7 @@ export const ModalPage: React.FC = () => {
         content: <p>{customContent}</p>,
         size: selectedSize,
         showCloseButton: true,
-        closeOnOverlayClick: true
+        closeOnOverlayClick: true,
       });
     };
 
@@ -155,7 +163,7 @@ export const ModalPage: React.FC = () => {
                 className="ds-input"
                 placeholder="Enter your name"
                 value={formData.name}
-                onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+                onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
               />
             </div>
             <div>
@@ -165,7 +173,7 @@ export const ModalPage: React.FC = () => {
                 className="ds-input"
                 placeholder="Enter your email"
                 value={formData.email}
-                onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
+                onChange={(e) => setFormData((prev) => ({ ...prev, email: e.target.value }))}
               />
             </div>
             <div>
@@ -175,7 +183,7 @@ export const ModalPage: React.FC = () => {
                 rows={3}
                 placeholder="Enter your message"
                 value={formData.message}
-                onChange={(e) => setFormData(prev => ({ ...prev, message: e.target.value }))}
+                onChange={(e) => setFormData((prev) => ({ ...prev, message: e.target.value }))}
               />
             </div>
           </form>
@@ -185,7 +193,7 @@ export const ModalPage: React.FC = () => {
           logger.info('Form submitted:', formData);
           closeModal();
         },
-        showCloseButton: true
+        showCloseButton: true,
       });
     };
 
@@ -224,7 +232,7 @@ export const ModalPage: React.FC = () => {
           </div>
         ),
         size: 'lg',
-        showCloseButton: true
+        showCloseButton: true,
       });
     };
 
@@ -234,7 +242,7 @@ export const ModalPage: React.FC = () => {
         content: (
           <div>
             <p>This is the first modal. Click the button below to open another modal on top.</p>
-            <button 
+            <button
               className="ds-btn-primary ds-mt-3"
               onClick={() => {
                 showModal({
@@ -248,7 +256,7 @@ export const ModalPage: React.FC = () => {
                     </div>
                   ),
                   size: 'sm',
-                  showCloseButton: true
+                  showCloseButton: true,
                 });
               }}
             >
@@ -257,7 +265,7 @@ export const ModalPage: React.FC = () => {
           </div>
         ),
         size: 'md',
-        showCloseButton: true
+        showCloseButton: true,
       });
     };
 
@@ -273,7 +281,7 @@ export const ModalPage: React.FC = () => {
           </div>
         ),
         showCloseButton: true,
-        closeOnOverlayClick: false
+        closeOnOverlayClick: false,
       });
     };
 
@@ -282,8 +290,8 @@ export const ModalPage: React.FC = () => {
         <div className="ds-mb-6">
           <h2 className="ds-text-2xl ds-font-bold ds-mb-2">Container Modal Demo</h2>
           <p className="ds-text-gray-600">
-            Framework: <span className="ds-font-medium">React 19.0.0</span> | 
-            Pattern: <span className="ds-font-medium">Container Native</span>
+            Framework: <span className="ds-font-medium">React 19.0.0</span> | Pattern:{' '}
+            <span className="ds-font-medium">Container Native</span>
           </p>
         </div>
 
@@ -355,7 +363,7 @@ export const ModalPage: React.FC = () => {
               </div>
               <div>
                 <label className="ds-block ds-text-sm ds-font-medium ds-mb-1">Size</label>
-                <select 
+                <select
                   value={selectedSize}
                   onChange={(e) => setSelectedSize(e.target.value as any)}
                   className="ds-select"
@@ -424,77 +432,63 @@ export const ModalPage: React.FC = () => {
                   <ContainerModalDemo />
                 </div>
               </div>
-            )
+            ),
           },
           {
             id: 'react19',
             label: '⚛️ React 19',
             content: (
-              <MFECard 
-                id="mfe-modal-react19" 
-                title="Modal Service Demo" 
+              <MFECard
+                id="mfe-modal-react19"
+                title="Modal Service Demo"
                 framework="react"
                 frameworkVersion="19"
               />
-            )
+            ),
           },
           {
             id: 'react18',
             label: '⚛️ React 18',
             content: (
-              <MFECard 
-                id="mfe-modal-react18" 
-                title="Modal Service Demo" 
+              <MFECard
+                id="mfe-modal-react18"
+                title="Modal Service Demo"
                 framework="react"
                 frameworkVersion="18"
               />
-            )
+            ),
           },
           {
             id: 'react17',
             label: '⚛️ React 17',
             content: (
-              <MFECard 
-                id="mfe-modal-react17" 
-                title="Modal Service Demo" 
+              <MFECard
+                id="mfe-modal-react17"
+                title="Modal Service Demo"
                 framework="react"
                 frameworkVersion="17"
               />
-            )
+            ),
           },
           {
             id: 'vue3',
             label: '💚 Vue 3',
-            content: (
-              <MFECard 
-                id="mfe-modal-vue3" 
-                title="Modal Service Demo" 
-                framework="vue"
-              />
-            )
+            content: <MFECard id="mfe-modal-vue3" title="Modal Service Demo" framework="vue" />,
           },
           {
             id: 'solidjs',
             label: '🔷 Solid.js',
             content: (
-              <MFECard 
-                id="mfe-modal-solidjs" 
-                title="Modal Service Demo" 
-                framework="solid"
-              />
-            )
+              <MFECard id="mfe-modal-solidjs" title="Modal Service Demo" framework="solid" />
+            ),
           },
           {
             id: 'vanilla',
             label: '📦 Vanilla TS',
             content: (
-              <MFECard 
-                id="mfe-modal-vanilla" 
-                title="Modal Service Demo" 
-                framework="vanilla"
-              />
-            )
-          }
+              <MFECard id="mfe-modal-vanilla" title="Modal Service Demo" framework="vanilla" />
+            ),
+          },
         ]}
         defaultTab="container"
         className="ds-mt-4"

@@ -449,7 +449,7 @@ export const ErrorBoundaryDemoPage: React.FC = () => {
         {errorReportVisible && (
           <div className="border-t pt-4">
             <h3 className="ds-card-title ds-mb-sm">Error Details</h3>
-            {(errorReporter?.getErrors ? errorReporter.getErrors()?.length ?? 0 : 0) === 0 ? (
+            {(errorReporter?.getErrors ? (errorReporter.getErrors()?.length ?? 0) : 0) === 0 ? (
               <EmptyState
                 title="No errors recorded"
                 description="Errors will appear here when they occur"
@@ -457,38 +457,39 @@ export const ErrorBoundaryDemoPage: React.FC = () => {
               />
             ) : (
               <div className="space-y-3 max-h-96 overflow-y-auto">
-                {errorReporter?.getErrors && errorReporter.getErrors()?.map((error: any) => (
-                  <div
-                    key={error.id}
-                    className={`ds-card-compact ${
-                      error.severity === 'critical' ? 'border-red-500' : ''
-                    }`}
-                  >
-                    <div className="flex items-start justify-between mb-2">
-                      <div className="flex items-center gap-2">
-                        <span className="font-medium text-sm">{error.mfeName}</span>
-                        <Badge className={`text-xs ${getSeverityColor(error.severity)}`}>
-                          {error.severity}
-                        </Badge>
-                        <Badge variant="outline" className="text-xs">
-                          {error.type}
-                        </Badge>
-                      </div>
-                      <span className="text-xs ds-text-muted">
-                        {error.timestamp.toLocaleTimeString()}
-                      </span>
-                    </div>
-                    <p className="text-sm ds-accent-danger mb-2">{error.error.message}</p>
-                    {error.context?.retryCount !== undefined && (
-                      <div className="flex items-center gap-2">
-                        <RefreshCw className="h-3 w-3 ds-icon-muted" />
+                {errorReporter?.getErrors &&
+                  errorReporter.getErrors()?.map((error: any) => (
+                    <div
+                      key={error.name}
+                      className={`ds-card-compact ${
+                        error.severity === 'critical' ? 'border-red-500' : ''
+                      }`}
+                    >
+                      <div className="flex items-start justify-between mb-2">
+                        <div className="flex items-center gap-2">
+                          <span className="font-medium text-sm">{error.mfeName}</span>
+                          <Badge className={`text-xs ${getSeverityColor(error.severity)}`}>
+                            {error.severity}
+                          </Badge>
+                          <Badge variant="outline" className="text-xs">
+                            {error.type}
+                          </Badge>
+                        </div>
                         <span className="text-xs ds-text-muted">
-                          Retry attempts: {error.context.retryCount}
+                          {error.timestamp.toLocaleTimeString()}
                         </span>
                       </div>
-                    )}
-                  </div>
-                ))}
+                      <p className="text-sm ds-accent-danger mb-2">{error.error.message}</p>
+                      {error.context?.retryCount !== undefined && (
+                        <div className="flex items-center gap-2">
+                          <RefreshCw className="h-3 w-3 ds-icon-muted" />
+                          <span className="text-xs ds-text-muted">
+                            Retry attempts: {error.context.retryCount}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  ))}
               </div>
             )}
           </div>

@@ -14,10 +14,14 @@ const MFECard: React.FC<{
 }> = ({ id, title, framework, frameworkVersion, className = '' }) => {
   const getFrameworkBadge = (framework: 'react' | 'vue' | 'vanilla' | 'solid') => {
     const badges = {
-      react: { color: 'ds-bg-blue-500', icon: '⚛️', name: `React${frameworkVersion ? ` ${frameworkVersion}` : ''} MFE` },
+      react: {
+        color: 'ds-bg-blue-500',
+        icon: '⚛️',
+        name: `React${frameworkVersion ? ` ${frameworkVersion}` : ''} MFE`,
+      },
       vue: { color: 'ds-bg-green-500', icon: '💚', name: 'Vue 3 MFE' },
       vanilla: { color: 'ds-bg-yellow-600', icon: '📦', name: 'Vanilla TS MFE' },
-      solid: { color: 'ds-bg-purple-500', icon: '🔷', name: 'Solid.js MFE' }
+      solid: { color: 'ds-bg-purple-500', icon: '🔷', name: 'Solid.js MFE' },
     };
     return badges[framework];
   };
@@ -35,7 +39,7 @@ const MFECard: React.FC<{
         </div>
       </div>
       <div>
-        <RegistryMFELoader id={id} />
+        <RegistryMFELoader name={id} />
       </div>
     </div>
   );
@@ -44,16 +48,16 @@ const MFECard: React.FC<{
 export const NotificationsPage: React.FC = () => {
   const { addNotification, notifications, removeNotification } = useUI();
   const [searchParams, setSearchParams] = useSearchParams();
-  
+
   // Helper function to clear all notifications
   const clearNotifications = () => {
-    notifications.forEach(notification => {
+    notifications.forEach((notification) => {
       if (notification.id) {
         removeNotification(notification.id);
       }
     });
   };
-  
+
   // Tab state - get initial tab from URL or default to 'container'
   const initialTab = searchParams.get('tab') || 'container';
   const [activeTab, setActiveTab] = useState<string>(initialTab);
@@ -61,7 +65,7 @@ export const NotificationsPage: React.FC = () => {
   const [customTitle, setCustomTitle] = useState('Custom Notification');
   const [customMessage, setCustomMessage] = useState('This is a custom notification message');
   const [customType, setCustomType] = useState<'success' | 'error' | 'warning' | 'info'>('info');
-  
+
   // Sync tab state with URL
   const handleTabChange = (tabId: string) => {
     setActiveTab(tabId);
@@ -75,41 +79,25 @@ export const NotificationsPage: React.FC = () => {
     duration?: number
   ) => {
     addNotification({ type, title, message, duration });
-    setNotificationCount(prev => prev + 1);
+    setNotificationCount((prev) => prev + 1);
   };
 
   // Container notification content component
   const ContainerNotificationDemo = () => {
     const showSuccess = () => {
-      showNotification(
-        'Success!',
-        'Operation completed successfully from Container',
-        'success'
-      );
+      showNotification('Success!', 'Operation completed successfully from Container', 'success');
     };
 
     const showError = () => {
-      showNotification(
-        'Error Occurred',
-        'Something went wrong in the Container',
-        'error'
-      );
+      showNotification('Error Occurred', 'Something went wrong in the Container', 'error');
     };
 
     const showWarning = () => {
-      showNotification(
-        'Warning',
-        'Please review this warning from Container',
-        'warning'
-      );
+      showNotification('Warning', 'Please review this warning from Container', 'warning');
     };
 
     const showInfo = () => {
-      showNotification(
-        'Information',
-        'This is an informational message from Container',
-        'info'
-      );
+      showNotification('Information', 'This is an informational message from Container', 'info');
     };
 
     const showCustom = () => {
@@ -117,36 +105,21 @@ export const NotificationsPage: React.FC = () => {
     };
 
     const showShortDuration = () => {
-      showNotification(
-        'Quick Message',
-        'This will disappear in 1 second',
-        'info',
-        1000
-      );
+      showNotification('Quick Message', 'This will disappear in 1 second', 'info', 1000);
     };
 
     const showNormalDuration = () => {
-      showNotification(
-        'Normal Duration',
-        'This will disappear in 3 seconds',
-        'info',
-        3000
-      );
+      showNotification('Normal Duration', 'This will disappear in 3 seconds', 'info', 3000);
     };
 
     const showLongDuration = () => {
-      showNotification(
-        'Long Duration',
-        'This will stay for 10 seconds',
-        'info',
-        10000
-      );
+      showNotification('Long Duration', 'This will stay for 10 seconds', 'info', 10000);
     };
 
     const showPersistent = () => {
       showNotification(
         'Persistent Notification',
-        'This won\'t auto-dismiss (close manually)',
+        "This won't auto-dismiss (close manually)",
         'warning',
         0
       );
@@ -158,7 +131,7 @@ export const NotificationsPage: React.FC = () => {
         { title: 'Second', message: 'Container notification 2', type: 'success' as const },
         { title: 'Third', message: 'Container notification 3', type: 'warning' as const },
         { title: 'Fourth', message: 'Container notification 4', type: 'error' as const },
-        { title: 'Fifth', message: 'Container notification 5', type: 'info' as const }
+        { title: 'Fifth', message: 'Container notification 5', type: 'info' as const },
       ];
 
       messages.forEach((msg, index) => {
@@ -179,8 +152,8 @@ export const NotificationsPage: React.FC = () => {
         <div className="ds-mb-6">
           <h2 className="ds-text-2xl ds-font-bold ds-mb-2">Container Notification Demo</h2>
           <p className="ds-text-gray-600">
-            Framework: <span className="ds-font-medium">React 19.0.0</span> | 
-            Pattern: <span className="ds-font-medium">Container Native</span>
+            Framework: <span className="ds-font-medium">React 19.0.0</span> | Pattern:{' '}
+            <span className="ds-font-medium">Container Native</span>
           </p>
         </div>
 
@@ -230,7 +203,7 @@ export const NotificationsPage: React.FC = () => {
               </div>
               <div>
                 <label className="ds-block ds-text-sm ds-font-medium ds-mb-1">Type</label>
-                <select 
+                <select
                   value={customType}
                   onChange={(e) => setCustomType(e.target.value as any)}
                   className="ds-select"
@@ -294,7 +267,9 @@ export const NotificationsPage: React.FC = () => {
     <div className="ds-page">
       <div className="ds-section">
         <h1 className="ds-page-title">Notification Service</h1>
-        <p className="ds-text-muted">Test the platform notification system across different frameworks</p>
+        <p className="ds-text-muted">
+          Test the platform notification system across different frameworks
+        </p>
       </div>
 
       <TabGroup
@@ -318,77 +293,77 @@ export const NotificationsPage: React.FC = () => {
                   <ContainerNotificationDemo />
                 </div>
               </div>
-            )
+            ),
           },
           {
             id: 'react19',
             label: '⚛️ React 19',
             content: (
-              <MFECard 
-                id="mfe-notification-react19" 
-                title="Notification Service Demo" 
+              <MFECard
+                id="mfe-notification-react19"
+                title="Notification Service Demo"
                 framework="react"
                 frameworkVersion="19"
               />
-            )
+            ),
           },
           {
             id: 'react18',
             label: '⚛️ React 18',
             content: (
-              <MFECard 
-                id="mfe-notification-react18" 
-                title="Notification Service Demo" 
+              <MFECard
+                id="mfe-notification-react18"
+                title="Notification Service Demo"
                 framework="react"
                 frameworkVersion="18"
               />
-            )
+            ),
           },
           {
             id: 'react17',
             label: '⚛️ React 17',
             content: (
-              <MFECard 
-                id="mfe-notification-react17" 
-                title="Notification Service Demo" 
+              <MFECard
+                id="mfe-notification-react17"
+                title="Notification Service Demo"
                 framework="react"
                 frameworkVersion="17"
               />
-            )
+            ),
           },
           {
             id: 'vue3',
             label: '💚 Vue 3',
             content: (
-              <MFECard 
-                id="mfe-notification-vue3" 
-                title="Notification Service Demo" 
+              <MFECard
+                id="mfe-notification-vue3"
+                title="Notification Service Demo"
                 framework="vue"
               />
-            )
+            ),
           },
           {
             id: 'solidjs',
             label: '🔷 Solid.js',
             content: (
-              <MFECard 
-                id="mfe-notification-solidjs" 
-                title="Notification Service Demo" 
+              <MFECard
+                id="mfe-notification-solidjs"
+                title="Notification Service Demo"
                 framework="solid"
               />
-            )
+            ),
           },
           {
             id: 'vanilla',
             label: '📦 Vanilla TS',
             content: (
-              <MFECard 
-                id="mfe-notification-vanilla" 
-                title="Notification Service Demo" 
+              <MFECard
+                id="mfe-notification-vanilla"
+                title="Notification Service Demo"
                 framework="vanilla"
               />
-            )
-          }
+            ),
+          },
         ]}
         defaultTab="container"
         className="ds-mt-4"

@@ -7,18 +7,15 @@ import { ErrorBoundaryDemoPage } from '@/pages/ErrorBoundaryDemoPage';
 import { EventBusPageV3 as EventBusPage } from '@/pages/services/EventBusPageV3';
 import { ModalPage } from '@/pages/services/ModalPage';
 import { NotificationsPage } from '@/pages/services/NotificationsPage';
-import { CompatibleMFELoader } from '@/components/CompatibleMFELoader';
-import { useServices } from '@/contexts/ServiceContext';
 import { useRegistryContext } from '@/contexts/RegistryContext';
 import { initializePlatformMetrics, updatePlatformMetric } from '@/store/platform-metrics';
+import { RegistryMFELoader } from '@/components/RegistryMFELoader';
 
 // Simple MFE Page component to replace the missing MFEPage from @mfe-toolkit/react
 function MFEPage() {
   const { mfeName } = useParams<{ mfeName: string }>();
-  const { registry } = useRegistryContext();
-  const serviceContainer = useServices();
 
-  if (!mfeName || !registry) {
+  if (!mfeName) {
     return (
       <div className="flex items-center justify-center h-64">
         <p className="text-muted-foreground">Loading...</p>
@@ -26,19 +23,9 @@ function MFEPage() {
     );
   }
 
-  const manifest = registry.get(mfeName);
-  if (!manifest) {
-    return (
-      <div className="flex items-center justify-center h-64">
-        <p className="text-muted-foreground">MFE '{mfeName}' not found</p>
-      </div>
-    );
-  }
-
   return (
-    <CompatibleMFELoader
-      manifest={manifest}
-      services={serviceContainer}
+    <RegistryMFELoader
+      name={mfeName}
       fallback={
         <div className="flex items-center justify-center h-64">
           <div className="text-center">

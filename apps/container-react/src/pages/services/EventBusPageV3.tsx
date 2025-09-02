@@ -1258,7 +1258,7 @@ const MyTradingComponent: React.FC<{ serviceContainer: ServiceContainer }> = ({ 
 
                 {/* Solid.js MFE Playground */}
                 <div className="ds-card">
-                  <RegistryMFELoader id="mfe-event-playground" />
+                  <RegistryMFELoader name="mfe-event-playground" />
                 </div>
               </div>
             ),
@@ -1303,7 +1303,7 @@ const MFECard: React.FC<{
         </div>
       </div>
       <div className={`${fullHeight ? 'ds-flex-1 ds-overflow-hidden' : ''}`}>
-        <RegistryMFELoader id={id} />
+        <RegistryMFELoader name={id} />
       </div>
     </div>
   );

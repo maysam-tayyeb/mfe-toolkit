@@ -5,7 +5,7 @@ import { useServices } from '@/contexts/ServiceContext';
 import type { MFEManifest } from '@mfe-toolkit/core';
 
 interface RegistryMFELoaderProps {
-  id: string;
+  name: string;
   fallback?: React.ReactNode;
   onError?: (error: Error) => void;
   maxRetries?: number;
@@ -15,7 +15,7 @@ interface RegistryMFELoaderProps {
   errorFallback?: (error: Error, errorInfo: React.ErrorInfo, retry: () => void) => React.ReactNode;
 }
 
-export function RegistryMFELoader({ id, fallback, ...props }: RegistryMFELoaderProps) {
+export function RegistryMFELoader({ name, fallback, ...props }: RegistryMFELoaderProps) {
   const { registry, isLoading: registryLoading, error: registryError } = useRegistry();
   const serviceContainer = useServices();
   const [manifest, setManifest] = useState<MFEManifest | null>(null);
@@ -24,18 +24,20 @@ export function RegistryMFELoader({ id, fallback, ...props }: RegistryMFELoaderP
   useEffect(() => {
     if (!registryLoading && !registryError) {
       try {
-        const mfe = registry.get(id);
+        const mfe = registry.get(name);
         if (mfe) {
           setManifest(mfe);
           setError(null);
         } else {
-          setError(new Error(`MFE with id "${id}" not found in registry`));
+          setError(new Error(`MFE with name "${name}" not found in registry`));
         }
       } catch (err) {
-        setError(err instanceof Error ? err : new Error(`Failed to get MFE "${id}" from registry`));
+        setError(
+          err instanceof Error ? err : new Error(`Failed to get MFE "${name}" from registry`)
+        );
       }
     }
-  }, [id, registry, registryLoading, registryError]);
+  }, [name, registry, registryLoading, registryError]);
 
   if (registryLoading) {
     return <>{fallback || <div>Loading registry...</div>}</>;
@@ -56,11 +58,7 @@ export function RegistryMFELoader({ id, fallback, ...props }: RegistryMFELoaderP
   }
 
   return (
-    <MFEErrorBoundary
-      mfeName={manifest.name}
-      services={serviceContainer}
-      onError={props.onError}
-    >
+    <MFEErrorBoundary mfeName={manifest.name} services={serviceContainer} onError={props.onError}>
       <MFELoader
         name={manifest.name}
         url={manifest.url}
