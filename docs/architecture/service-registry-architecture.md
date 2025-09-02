@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Service Registry architecture in `@mfe-toolkit/core` provides a powerful dependency injection system that separates service definition from runtime access. This architecture enables advanced scenarios like MFE isolation, testing with mocked services, and multi-tenant configurations.
+The Service Registry architecture in `@mfe-toolkit/core` provides a powerful dependency injection system that separates service definition from runtime access. With the simplified single-package approach, all service interfaces and tree-shakable reference implementations are now available from `@mfe-toolkit/core`, making it easier to get started while maintaining flexibility for advanced scenarios like MFE isolation, testing with mocked services, and multi-tenant configurations.
 
 ## Core Concepts
 
@@ -25,10 +25,21 @@ The architecture deliberately separates two concerns:
    - Can be instantiated multiple times from the same registry
 
 ```typescript
+// Import everything from single package - tree-shakable
+import { 
+  createServiceRegistry,
+  createLogger,           // Generic name for easy swapping
+  createEventBus,
+  authServiceProvider,
+  modalServiceProvider
+} from '@mfe-toolkit/core';
+
 // Registry manages definitions
 const registry = createServiceRegistry();
 registry.register('logger', createLogger('app'));
+registry.register('eventBus', createEventBus());
 registry.registerProvider(authServiceProvider);
+registry.registerProvider(modalServiceProvider);
 
 // Container provides runtime access
 const container = registry.createContainer();
@@ -88,6 +99,9 @@ const logger = container.get('logger');
 Each MFE can receive a scoped container with customized services:
 
 ```typescript
+// All services imported from single package
+import { createLogger, createErrorReporter } from '@mfe-toolkit/core';
+
 // Container application creates scoped containers for each MFE
 const mfeContainer = mainContainer.createScoped({
   // MFE-specific logger with prefixed output
@@ -243,9 +257,12 @@ const uiServicesProvider = composeProviders([
 
 ## Type Safety
 
-The ServiceMap interface enables compile-time type checking:
+The ServiceMap interface enables compile-time type checking. With the single-package approach, MFEs import only types for zero runtime cost:
 
 ```typescript
+// MFEs import only types - zero runtime cost
+import type { Logger, EventBus, ServiceContainer } from '@mfe-toolkit/core';
+
 // Extend ServiceMap via module augmentation
 declare module '@mfe-toolkit/core' {
   interface ServiceMap {
@@ -256,6 +273,12 @@ declare module '@mfe-toolkit/core' {
 // Type-safe access
 const service = container.get('myCustomService'); // Type: MyCustomService | undefined
 const required = container.require('myCustomService'); // Type: MyCustomService (throws if not found)
+
+// MFE usage pattern
+export function mountMFE(element: HTMLElement, container: ServiceContainer) {
+  const logger = container.get('logger');  // Type-safe, no implementation imported
+  logger?.info('MFE mounted');
+}
 ```
 
 ## Benefits
@@ -278,9 +301,11 @@ const required = container.require('myCustomService'); // Type: MyCustomService 
 
 ### 4. Performance
 - Lazy initialization via providers
+- Tree-shakable implementations - only used services get bundled
 - Shared instances where appropriate
 - Lightweight container creation
 - Efficient dependency resolution
+- Zero runtime cost for MFEs (type-only imports)
 
 ### 5. Testability
 - Easy service mocking

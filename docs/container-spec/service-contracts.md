@@ -1,13 +1,14 @@
 # Container Service Contracts
 
-This document defines the service interface contracts that containers and MFEs must follow. Services are defined as interfaces only, with implementations provided by containers.
+This document defines the service interface contracts that containers and MFEs must follow. With the simplified single-package approach, all service interfaces and tree-shakable reference implementations are now available from `@mfe-toolkit/core`, providing a low barrier to entry while maintaining flexibility for custom implementations.
 
 ## Architecture Principles
 
-1. **Interface-Only Contracts**: Service packages define only interfaces, no implementations
-2. **Container Ownership**: Containers own all service implementations
-3. **Dependency Inversion**: MFEs depend on abstractions, not concrete implementations
-4. **Implementation Flexibility**: Containers can swap implementations without affecting MFEs
+1. **Single Package**: All interfaces and tree-shakable implementations in `@mfe-toolkit/core`
+2. **Type-Only Imports for MFEs**: MFEs import only interfaces (zero runtime cost)
+3. **Tree-Shakable Implementations**: Containers get only the implementations they use
+4. **Generic Export Names**: Services exported with generic names (createLogger, createEventBus) for easy swapping
+5. **Implementation Flexibility**: Containers can still provide custom implementations
 
 ## Service Container Interface
 
@@ -84,9 +85,9 @@ Enables publish-subscribe communication between MFEs.
 interface EventBus {
   // Typed event with MFEEventMap
   emit<K extends keyof MFEEventMap>(type: K, data: MFEEventMap[K]): void;
-  // Legacy string event with optional data
+  // String event with optional data
   emit<T = any>(type: string, data?: T): void;
-  // Complete EventPayload object
+  // Complete EventPayload object (unified event format)
   emit<T extends EventPayload>(event: T): void;
 
   // Subscribe to events - returns unsubscribe function
@@ -120,7 +121,7 @@ interface EventBus {
   ): void;
 }
 
-// EventPayload is the standard event format
+// EventPayload is the unified event format (renamed from BaseEvent)
 interface EventPayload<TType = string, TData = unknown> {
   type: TType;
   data: TData;
@@ -173,7 +174,7 @@ Service packages provide interface definitions that extend the base ServiceMap:
 Manages user authentication state and permissions.
 
 ```typescript
-// @mfe-toolkit/service-authentication
+// @mfe-toolkit/core (all services now in core)
 interface AuthService {
   getSession(): Session | null;
   isAuthenticated(): boolean;
@@ -220,7 +221,7 @@ if (auth?.hasPermission('admin.write')) {
 Provides programmatic modal management.
 
 ```typescript
-// @mfe-toolkit/service-modal
+// @mfe-toolkit/core (all services now in core)
 interface ModalService<TConfig = ModalConfig> {
   open(config: TConfig): string;
   close(id?: string): void;
@@ -267,7 +268,7 @@ modal?.close(modalId);
 Shows toast notifications to users.
 
 ```typescript
-// @mfe-toolkit/service-notification
+// @mfe-toolkit/core (all services now in core)
 interface NotificationService {
   show(config: NotificationConfig): string;
   success(title: string, message?: string): string;
@@ -415,15 +416,19 @@ Containers provide implementations for all service interfaces:
 
 ```typescript
 // apps/container-react/src/services/setup.ts
-import { createServiceRegistry } from '@mfe-toolkit/core';
+import { 
+  createServiceRegistry,
+  // Tree-shakable implementations from core
+  createLogger,           // Generic name - uses ConsoleLogger
+  createEventBus,         // Generic name - uses SimpleEventBus
+  createErrorReporter,    // Generic name - uses DefaultErrorReporter
+  modalServiceProvider,   // Service provider for modal
+  notificationServiceProvider,  // Service provider for notification
+  authServiceProvider,    // Service provider for auth (renamed to AuthzService)
+} from '@mfe-toolkit/core';
 
-// Import implementations (container-owned)
-import { ConsoleLogger } from './implementations/logger/console-logger';
-import { PinoLogger } from './implementations/logger/pino-logger';
-import { SimpleEventBus } from './implementations/event-bus/simple-event-bus';
-import { DefaultErrorReporter } from './implementations/error-reporter';
-import { ModalServiceImpl } from './implementations/modal';
-import { NotificationServiceImpl } from './implementations/notification';
+// Custom implementations (optional)
+import { PinoLogger } from './custom/pino-logger';
 
 export async function setupServices() {
   const registry = createServiceRegistry();
@@ -431,14 +436,17 @@ export async function setupServices() {
   // Choose implementations based on environment
   const isProd = process.env.NODE_ENV === 'production';
   
-  // Register implementations
+  // Use tree-shakable implementations from core
   registry.register('logger', 
-    isProd ? new PinoLogger() : new ConsoleLogger()
+    isProd ? new PinoLogger() : createLogger('Container')
   );
-  registry.register('eventBus', new SimpleEventBus());
-  registry.register('errorReporter', new DefaultErrorReporter());
-  registry.register('modal', new ModalServiceImpl());
-  registry.register('notification', new NotificationServiceImpl());
+  registry.register('eventBus', createEventBus());
+  registry.register('errorReporter', createErrorReporter());
+  
+  // Register service providers
+  registry.registerProvider(modalServiceProvider);
+  registry.registerProvider(notificationServiceProvider);
+  registry.registerProvider(authServiceProvider);  // Now AuthzService internally
   
   return registry;
 }
@@ -449,8 +457,8 @@ export async function setupServices() {
 MFEs use services through the container interface:
 
 ```typescript
-// Any MFE
-import type { MFEModule, ServiceContainer } from '@mfe-toolkit/core';
+// Any MFE - import only types (zero runtime cost)
+import type { MFEModule, ServiceContainer, Logger, EventBus } from '@mfe-toolkit/core';
 
 const module: MFEModule = {
   mount: async (element: HTMLElement, container: ServiceContainer) => {
@@ -545,7 +553,7 @@ export function createMockServices() {
 
 1. **Always Check Service Availability**: Use optional chaining or `has()` method
 2. **Handle Missing Services Gracefully**: MFEs should work with reduced functionality
-3. **Use Type Imports**: Import only types from service packages
+3. **Use Type Imports**: Import only types from `@mfe-toolkit/core` (zero runtime cost)
 4. **Document Required Services**: Specify in MFE manifest
 5. **Version Interfaces Carefully**: Breaking interface changes require major version bumps
 

@@ -13,7 +13,7 @@ import {
   modalServiceProvider,
   notificationServiceProvider,
   authServiceProvider,
-  authorizationServiceProvider,
+  authzServiceProvider,
   themeServiceProvider,
   analyticsServiceProvider,
 } from '@mfe-toolkit/core';
@@ -27,11 +27,11 @@ let containerInstance: ServiceContainer | null = null;
 export async function setupServices(): Promise<ServiceRegistry> {
   // Create registry
   const registry = createServiceRegistry();
-  
+
   // Register core services using reference implementations
   registry.register('logger', createLogger('Container'));
   registry.register('eventBus', createEventBus('Container'));
-  
+
   // Register error reporter (new)
   const errorReporter = createErrorReporter(
     {
@@ -42,22 +42,22 @@ export async function setupServices(): Promise<ServiceRegistry> {
     registry.createContainer()
   );
   registry.register('errorReporter', errorReporter);
-  
+
   // Register service packages
   registry.registerProvider(authServiceProvider);
-  registry.registerProvider(authorizationServiceProvider); // Depends on auth
+  registry.registerProvider(authzServiceProvider); // Depends on auth
   registry.registerProvider(modalServiceProvider);
   registry.registerProvider(notificationServiceProvider);
   registry.registerProvider(themeServiceProvider);
-  
+
   // Register optional services
   if (import.meta.env.VITE_ENABLE_ANALYTICS !== 'false') {
     registry.registerProvider(analyticsServiceProvider);
   }
-  
+
   // Initialize all providers
   await registry.initialize();
-  
+
   registryInstance = registry;
   return registry;
 }
@@ -69,11 +69,11 @@ export async function getServiceContainer(): Promise<ServiceContainer> {
   if (containerInstance) {
     return containerInstance;
   }
-  
+
   if (!registryInstance) {
     registryInstance = await setupServices();
   }
-  
+
   containerInstance = registryInstance.createContainer();
   return containerInstance;
 }
@@ -93,7 +93,7 @@ export async function resetServices(): Promise<void> {
     await containerInstance.dispose();
     containerInstance = null;
   }
-  
+
   if (registryInstance) {
     await registryInstance.dispose();
     registryInstance = null;

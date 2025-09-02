@@ -6,7 +6,12 @@ This file provides package-specific guidance to Claude Code when working with pa
 
 ### Published NPM Packages (@mfe-toolkit organization)
 
-1. **@mfe-toolkit/core** - Framework-agnostic types, interfaces, and implementations
+1. **@mfe-toolkit/core** - Complete service architecture with interfaces and tree-shakable implementations
+   - All service interfaces (Logger, EventBus, Modal, Notification, Auth, Theme, etc.)
+   - Tree-shakable reference implementations (only bundled when used)
+   - Service registry and container system
+   - Generic export names for easy implementation swapping
+   - MFEs import only types (zero runtime cost)
 2. **@mfe-toolkit/react** - React-specific components and hooks
 3. **@mfe-toolkit/cli** - CLI tools for scaffolding and managing MFEs
 4. **@mfe-toolkit/state** - Cross-framework state management

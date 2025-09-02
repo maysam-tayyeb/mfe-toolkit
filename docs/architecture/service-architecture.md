@@ -2,7 +2,90 @@
 
 ## Overview
 
-The service architecture provides a clean, type-safe way for MFEs to access container services. This document describes the streamlined architecture that ensures simplicity and maintainability.
+The service architecture provides a clean, type-safe way for MFEs to access container services through a simplified single-package approach. All service interfaces and tree-shakable reference implementations now live in `@mfe-toolkit/core`, providing a low barrier to entry while maintaining flexibility for custom implementations.
+
+## Single-Package Architecture
+
+### Design Principles
+
+1. **Single Package**: Everything in `@mfe-toolkit/core` for simplicity
+2. **Tree-Shakable**: Reference implementations only bundled when used
+3. **Generic Exports**: Use generic names (createLogger, createEventBus) for easy swapping
+4. **Type Safety**: MFEs import only interfaces (zero runtime cost)
+5. **Flexibility**: Containers can still provide custom implementations
+
+### Package Structure
+
+All services are organized within `@mfe-toolkit/core`:
+
+```
+packages/mfe-toolkit-core/src/
+├── services/
+│   ├── types/              # ALL service interfaces
+│   │   ├── logger.ts
+│   │   ├── event-bus.ts
+│   │   ├── error-reporter.ts
+│   │   ├── modal.ts
+│   │   ├── notification.ts
+│   │   ├── authentication.ts
+│   │   ├── authorization.ts
+│   │   ├── theme.ts
+│   │   └── analytics.ts
+│   └── implementations/
+│       ├── base/           # Base infrastructure
+│       │   ├── logger/
+│       │   ├── event-bus/
+│       │   └── error-reporter/
+│       ├── ui/             # UI services
+│       │   ├── modal/
+│       │   └── notification/
+│       ├── auth/           # Auth services
+│       │   ├── authentication/
+│       │   └── authorization/
+│       └── platform/       # Platform services
+│           ├── theme/
+│           └── analytics/
+```
+
+### Import Patterns
+
+#### For Containers (Tree-Shakable Implementations)
+```typescript
+// All services from single package
+import { 
+  createLogger,        // Generic name for easy swapping
+  createEventBus,
+  createErrorReporter,
+  modalServiceProvider,
+  notificationServiceProvider,
+  authServiceProvider,
+  authorizationServiceProvider,
+  themeServiceProvider,
+  analyticsServiceProvider,
+} from '@mfe-toolkit/core';
+
+// Only used implementations get bundled
+const logger = createLogger('Container');
+const eventBus = createEventBus();
+```
+
+#### For MFEs (Type-Only Imports)
+```typescript
+// Import only types - zero runtime cost
+import type { Logger, EventBus, ServiceContainer } from '@mfe-toolkit/core';
+
+// Use services through container
+const logger = container.get('logger');
+```
+
+### Benefits of Single-Package Approach
+
+1. **Low Barrier to Entry**: One package to install (`@mfe-toolkit/core`)
+2. **Simple Imports**: Everything from one place
+3. **Easy Discovery**: All services in one package
+4. **Reduced Complexity**: No need to understand multiple packages
+5. **Tree-Shaking**: Automatic dead code elimination
+6. **Flexibility Maintained**: Containers can still provide custom implementations
 
 ## Architecture Design
 
@@ -220,14 +303,45 @@ export interface MFEModule {
 }
 ```
 
-### Event System Refinements
+### Unified Event System
+The EventBus now uses a unified `EventPayload` type system with intelligent overloads for type safety:
+
+```typescript
+// Type-safe event emission with overloads
+eventBus.emit('mfe:loaded', { mfeId: 'example' });    // Typed event
+eventBus.emit('custom', { data: 'value' });           // String event
+eventBus.emit(Events.mfeLoaded('example'));           // Event factory
+
+// Type constants for consistency
+import { MFEEvents, UserEvents } from '@mfe-toolkit/core';
+console.log(MFEEvents.LOADED);     // 'mfe:loaded'
+console.log(UserEvents.LOGIN);     // 'user:login'
+```
+
+Key changes:
 - Renamed `BaseEvent` to `EventPayload` for better semantic clarity
-- Unified event system with type-safe event factory functions
-- Consistent event type constants through `MFEEvents`, `UserEvents`, etc.
+- Single unified API with intelligent overloads
+- Event factory functions: `Events.mfeLoaded()`, `Events.userLogin()`, etc.
+- Event type constants: `MFEEvents.LOADED`, `UserEvents.LOGIN`, etc.
+- Full backward compatibility maintained
 
 ### Service Naming Consistency
 - Renamed `AuthorizationService` to `AuthzService` for consistency with common naming conventions
-- All services now available from single `@mfe-toolkit/core` package
+- All services now available from single `@mfe-toolkit/core` package with tree-shakable implementations
+
+### Generic Export Names
+Services are exported with generic names to facilitate easy swapping of implementations:
+
+```typescript
+// Generic names in core
+export { createConsoleLogger as createLogger } from './logger/console-logger';
+export { createSimpleEventBus as createEventBus } from './event-bus/simple-event-bus';
+
+// Easy to swap in container
+import { createLogger } from '@mfe-toolkit/core';        // Uses console logger
+// OR
+import { createPinoLogger as createLogger } from './custom';  // Custom implementation
+```
 
 ### Comprehensive Test Coverage
 - Added 100+ tests for modal and notification services
