@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useUI } from '@/contexts/UIContext';
 import { TabGroup } from '@mfe/design-system-react';
-import { RegistryMFELoader } from '@/components/RegistryMFELoader';
+import { MFELoader } from '@/components/MFELoader';
 import { createLogger } from '@mfe-toolkit/core';
 
 const logger = createLogger('ModalPage');
@@ -42,7 +42,7 @@ const MFECard: React.FC<{
         </div>
       </div>
       <div>
-        <RegistryMFELoader name={id} />
+        <MFELoader name={id} />
       </div>
     </div>
   );

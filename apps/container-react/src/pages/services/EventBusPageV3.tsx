@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useUI } from '@/contexts/UIContext';
-import { RegistryMFELoader } from '@/components/RegistryMFELoader';
+import { MFELoader } from '@/components/MFELoader';
 import { EventLog, TabGroup } from '@mfe/design-system-react';
 import { useServices } from '@/contexts/ServiceContext';
 import { createLogger } from '@mfe-toolkit/core';
@@ -1258,7 +1258,7 @@ const MyTradingComponent: React.FC<{ serviceContainer: ServiceContainer }> = ({ 
 
                 {/* Solid.js MFE Playground */}
                 <div className="ds-card">
-                  <RegistryMFELoader name="mfe-event-playground" />
+                  <MFELoader name="mfe-event-playground" />
                 </div>
               </div>
             ),
@@ -1303,7 +1303,7 @@ const MFECard: React.FC<{
         </div>
       </div>
       <div className={`${fullHeight ? 'ds-flex-1 ds-overflow-hidden' : ''}`}>
-        <RegistryMFELoader name={id} />
+        <MFELoader name={id} />
       </div>
     </div>
   );

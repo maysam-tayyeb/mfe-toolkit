@@ -9,7 +9,7 @@ import { ModalPage } from '@/pages/services/ModalPage';
 import { NotificationsPage } from '@/pages/services/NotificationsPage';
 import { useRegistryContext } from '@/contexts/RegistryContext';
 import { initializePlatformMetrics, updatePlatformMetric } from '@/store/platform-metrics';
-import { RegistryMFELoader } from '@/components/RegistryMFELoader';
+import { MFELoader } from '@/components/MFELoader';
 
 // Simple MFE Page component to replace the missing MFEPage from @mfe-toolkit/react
 function MFEPage() {
@@ -24,7 +24,7 @@ function MFEPage() {
   }
 
   return (
-    <RegistryMFELoader
+    <MFELoader
       name={mfeName}
       fallback={
         <div className="flex items-center justify-center h-64">
