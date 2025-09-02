@@ -1,31 +1,28 @@
-import { useRef, useEffect } from 'react';
+import { useMemo } from 'react';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { UIProvider } from '@/contexts/UIContext';
 import { RegistryProvider } from '@/contexts/RegistryContext';
-import { ContextBridge, ContextBridgeRef } from '@/services/context-bridge';
-import { setContextBridge } from '@/services/mfe-services';
+import { ServiceProvider } from '@/contexts/ServiceContext';
 import { AppContent } from './AppContent';
+import { ContextBridge } from '@/services/context-bridge';
+import { createServiceContainer } from '@/services/service-container';
 
 function App() {
-  const contextBridgeRef = useRef<ContextBridgeRef>(null);
-
-  useEffect(() => {
-    // Initialize the context bridge once it's available
-    if (contextBridgeRef.current) {
-      setContextBridge(contextBridgeRef.current);
-    }
-  }, []);
+  // Create service container once on mount
+  const serviceContainer = useMemo(() => createServiceContainer(), []);
 
   return (
-    <AuthProvider>
-      <UIProvider>
-        <ContextBridge ref={contextBridgeRef}>
-          <RegistryProvider>
-            <AppContent />
-          </RegistryProvider>
-        </ContextBridge>
-      </UIProvider>
-    </AuthProvider>
+    <ServiceProvider serviceContainer={serviceContainer}>
+      <AuthProvider>
+        <UIProvider>
+          <ContextBridge>
+            <RegistryProvider>
+              <AppContent />
+            </RegistryProvider>
+          </ContextBridge>
+        </UIProvider>
+      </AuthProvider>
+    </ServiceProvider>
   );
 }
 

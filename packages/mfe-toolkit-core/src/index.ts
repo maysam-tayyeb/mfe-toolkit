@@ -1,39 +1,27 @@
-// Types
-export * from './types';
-export * from './types/events';
-export type { MFEModule } from './types/mfe-module';
-export * from './services/service-container';
+// Core Infrastructure
+// Service Registry
+export * from './registry';
 
-// Services
-export { createLogger } from './services/logger';
-export {
-  createEventBus,
-  createCustomEventBus,
-  EventBusImpl,
-  type EventBusExtended,
-  type EventHandler,
-  type AnyEventHandler,
-  type EventInterceptor,
-  type EventBusOptions,
-  type EventBusStats,
-} from './services/event-bus';
+// MFE Management
 export {
   createMFERegistry,
   MFERegistryService,
   type RegistryConfig,
   type RegistryOptions,
-} from './services/mfe-registry';
-export {
-  ErrorReporter,
-  getErrorReporter,
-  type ErrorReport,
-  type ErrorReporterConfig,
-} from './services/error-reporter';
-export {
   ManifestValidator,
   manifestValidator,
   type ValidationResult,
-} from './services/manifest-validator';
+} from './mfe-management';
 
 // Utilities
 export * from './utils';
+
+// Domain Types (data/configuration types - used by MFEs)
+export * from './domain';
+
+// Service Types (interface definitions - zero runtime cost)
+export * from './services/types';
+
+// Service Implementations (tree-shakable - only used ones get bundled)
+// These are reference implementations that containers can use or replace
+export * from './services/implementations';

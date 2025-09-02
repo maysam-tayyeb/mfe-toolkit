@@ -1,11 +1,10 @@
 import React, { Component, ErrorInfo, ReactNode } from 'react';
-import { MFEServices } from '../types';
-import { getErrorReporter } from '../services/error-reporter';
+import type { ServiceContainer } from '@mfe-toolkit/core';
 
 interface Props {
   children: ReactNode;
   mfeName: string;
-  services?: MFEServices;
+  services?: ServiceContainer;
   fallback?: (error: Error, errorInfo: ErrorInfo, retry: () => void) => ReactNode;
   onError?: (error: Error, errorInfo: ErrorInfo) => void;
 }
@@ -39,18 +38,28 @@ export class MFEErrorBoundary extends Component<Props, State> {
     // Log error to console
     console.error(`MFE Error Boundary caught error in ${mfeName}:`, error, errorInfo);
 
-    // Report error using error reporter
+    // Report error using error reporter from service container
     if (services) {
-      const errorReporter = getErrorReporter({}, services);
-      errorReporter.reportError(mfeName, error, 'runtime-error', {
-        retryCount,
-        componentStack: errorInfo?.componentStack || undefined,
-      });
+      const errorReporter = services.get('errorReporter');
+      if (errorReporter) {
+        errorReporter.reportError(
+          mfeName,
+          error,
+          'runtime-error',
+          {
+            retryCount,
+          },
+          {
+            componentStack: errorInfo?.componentStack || undefined,
+          }
+        );
+      }
     }
 
     // Log to MFE logger service if available
-    if (services?.logger) {
-      services.logger.error(`MFE ${mfeName} crashed: ${error.message}`, {
+    const logger = services?.get('logger');
+    if (logger) {
+      logger.error(`MFE ${mfeName} crashed: ${error.message}`, {
         error,
         errorInfo,
         componentStack: errorInfo.componentStack,
@@ -70,8 +79,9 @@ export class MFEErrorBoundary extends Component<Props, State> {
     const { retryCount } = this.state;
     const { services, mfeName } = this.props;
 
-    if (services?.logger) {
-      services.logger.info(`Retrying MFE ${mfeName} (attempt ${retryCount + 1})`);
+    const logger = services?.get('logger');
+    if (logger) {
+      logger.info(`Retrying MFE ${mfeName} (attempt ${retryCount + 1})`);
     }
 
     this.setState({

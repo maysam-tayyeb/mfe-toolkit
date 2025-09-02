@@ -1,29 +1,30 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { NotificationDemo } from './NotificationDemo';
-import type { MFEModule, MFEServiceContainer } from '@mfe-toolkit/core';
+import { App } from './App';
+import type { MFEModule, ServiceContainer } from '@mfe-toolkit/core';
+import '@mfe-toolkit/core/types';
 
 let root: ReactDOM.Root | null = null;
 
 const module: MFEModule = {
-  metadata: {
-    name: 'mfe-notification-react19',
-    version: '1.0.0',
-    requiredServices: ['notification'],
-    capabilities: ['notification-testing', 'custom-notifications'],
-  },
-
-  mount: async (element: HTMLElement, container: MFEServiceContainer) => {
-    const services = container.getAllServices();
+  mount: async (element: HTMLElement, serviceContainer: ServiceContainer) => {
     root = ReactDOM.createRoot(element);
-    root.render(<NotificationDemo services={services} />);
+    root.render(
+      <React.StrictMode>
+        <App serviceContainer={serviceContainer} />
+      </React.StrictMode>
+    );
+
+    serviceContainer.require('logger').info('React 19 Notification MFE mounted');
   },
 
-  unmount: async (_container: MFEServiceContainer) => {
+  unmount: async (serviceContainer: ServiceContainer) => {
     if (root) {
       root.unmount();
       root = null;
     }
+
+    serviceContainer.require('logger').info('React 19 Notification MFE unmounted');
   },
 };
 

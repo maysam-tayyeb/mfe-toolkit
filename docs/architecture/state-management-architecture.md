@@ -17,37 +17,37 @@ Both systems co-exist and serve different purposes in the architecture.
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                     Container Application                    │
+│                     Container Application                   │
 │                                                             │
-│  ┌─────────────────────────────────────────────────────┐   │
+│  ┌──────────────────────────────────────────────────────┐   │
 │  │                   ContextBridge                      │   │
-│  │  ┌─────────────┐ ┌──────────────┐ ┌──────────────┐ │   │
-│  │  │AuthService  │ │ModalService │ │NotifyService │ │   │
-│  │  │(Container)  │ │(Container UI)│ │(Container UI)│ │   │
-│  │  └─────────────┘ └──────────────┘ └──────────────┘ │   │
+│  │  ┌─────────────┐ ┌──────────────┐ ┌──────────────┐   │   │
+│  │  │AuthService  │ │ModalService  │ │NotifyService │   │   │
+│  │  │(Container)  │ │(Container UI)│ │(Container UI)│   │   │
+│  │  └─────────────┘ └──────────────┘ └──────────────┘   │   │
 │  │                                                      │   │
 │  │  Purpose: Container-provided infrastructure services │   │
-│  │  Lifecycle: Lives as long as container              │   │
-│  │  Access: MFEs call → Container responds             │   │
-│  └─────────────────────────────────────────────────────┘   │
+│  │  Lifecycle: Lives as long as container               │   │
+│  │  Access: MFEs call → Container responds              │   │
+│  └──────────────────────────────────────────────────────┘   │
 └─────────────────────────────────────────────────────────────┘
                               │
                               ↓
 ┌─────────────────────────────────────────────────────────────┐
 │          Universal State Manager (Abstraction Layer)        │
 │                                                             │
-│  ┌─────────────┐ ┌──────────────┐ ┌───────────────────┐   │
-│  │ Cart State  │ │User Prefs    │ │ Product Selection │   │
-│  │(Business)   │ │(Application) │ │ (Shared Data)     │   │
-│  └─────────────┘ └──────────────┘ └───────────────────┘   │
+│  ┌─────────────┐ ┌──────────────┐ ┌───────────────────┐     │
+│  │ Cart State  │ │User Prefs    │ │ Product Selection │     │
+│  │(Business)   │ │(Application) │ │ (Shared Data)     │     │
+│  └─────────────┘ └──────────────┘ └───────────────────┘     │
 │                                                             │
-│  Purpose: Shared application/business state                │
-│  Lifecycle: Can persist across sessions                    │
-│  Access: Any MFE can read/write                           │
-│  Features: Cross-tab sync, persistence, framework-agnostic │
-│  Implementation: Currently Valtio (proxy-based reactivity) │
-│  Abstraction: Vendor-independent interface                 │
-│  Middleware: Extensible with performance monitoring, etc.  │
+│  Purpose: Shared application/business state                 │
+│  Lifecycle: Can persist across sessions                     │
+│  Access: Any MFE can read/write                             │
+│  Features: Cross-tab sync, persistence, framework-agnostic  │
+│  Implementation: Currently Valtio (proxy-based reactivity)  │
+│  Abstraction: Vendor-independent interface                  │
+│  Middleware: Extensible with performance monitoring, etc.   │
 └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -55,7 +55,7 @@ Both systems co-exist and serve different purposes in the architecture.
 
 ### Purpose
 
-The ContextBridge provides MFEs with access to container-specific UI services that cannot be implemented within individual MFEs.
+The ContextBridge is a simple component that syncs React context values to the service container, providing a clean separation between React contexts and MFE services.
 
 ### Services Provided
 
@@ -101,8 +101,52 @@ interface ContainerServices {
 
 ### Implementation
 
+The service architecture uses a direct, simple approach:
+
 ```typescript
-// How MFEs use container services
+// Service Container Implementation
+export class UnifiedServiceContainer {
+  setContextValues(values: ReactContextValues) {
+    this.contextValues = values;
+  }
+  
+  private createAuthService() {
+    return {
+      getSession: () => this.contextValues?.auth.session,
+      isAuthenticated: () => this.contextValues?.auth.session?.isAuthenticated ?? false
+    };
+  }
+}
+```
+
+#### ContextBridge Component
+
+```tsx
+export function ContextBridge({ children }) {
+  const auth = useAuth();
+  const ui = useUI();
+  const serviceContainer = useServices();
+
+  useEffect(() => {
+    // Simply sync React context values to service container
+    serviceContainer.setContextValues({
+      auth: { session: auth.session },
+      ui: {
+        openModal: ui.openModal,
+        closeModal: ui.closeModal,
+        addNotification: ui.addNotification,
+      },
+    });
+  }, [auth.session, ui, serviceContainer]);
+
+  return <>{children}</>;
+}
+```
+
+### How MFEs Use Services (Unchanged)
+
+```typescript
+// MFEs still use the same API
 export default {
   mount: (element, services) => {
     // Show a modal (rendered by container)

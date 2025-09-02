@@ -1,11 +1,11 @@
-import { createEventBus, EventBus } from '@mfe-toolkit/core';
+import { EventBus, createEventBus } from '@mfe-toolkit/core';
 import { incrementEventBusMessages } from '@/store/platform-metrics';
 
 /**
  * Creates an event bus that tracks messages in platform metrics
  */
 export function createPlatformEventBus(): EventBus {
-  const eventBus = createEventBus({ source: 'container' });
+  const eventBus = createEventBus('container');
 
   // Wrap the emit method to track messages
   const originalEmit = eventBus.emit.bind(eventBus);
