@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import type { MFEManifest, ServiceContainer } from '@mfe-toolkit/core';
-import { MFELoader } from '@mfe-toolkit/react';
+import { MFELoader, MFEErrorBoundary } from '@mfe-toolkit/react';
 import { compatibilityChecker } from '@/services/compatibility-checker';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
@@ -81,14 +81,20 @@ export const CompatibleMFELoader: React.FC<CompatibleMFELoaderProps> = ({
         </Alert>
       )}
 
-      <MFELoader
-        name={manifest.name}
-        url={manifest.url}
-        serviceContainer={services}
-        fallback={fallback}
+      <MFEErrorBoundary
+        mfeName={manifest.name}
+        services={services}
         onError={onError}
-        isolate={true}
-      />
+      >
+        <MFELoader
+          name={manifest.name}
+          url={manifest.url}
+          serviceContainer={services}
+          fallback={fallback}
+          onError={onError}
+          isolate={true}
+        />
+      </MFEErrorBoundary>
     </div>
   );
 };

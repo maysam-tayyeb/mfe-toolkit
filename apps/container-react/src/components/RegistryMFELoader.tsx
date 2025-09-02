@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { MFELoader } from '@mfe-toolkit/react';
+import { MFELoader, MFEErrorBoundary } from '@mfe-toolkit/react';
 import { useRegistry } from '@/hooks/useRegistry';
 import { useServices } from '@/contexts/ServiceContext';
 import type { MFEManifest } from '@mfe-toolkit/core';
@@ -56,13 +56,19 @@ export function RegistryMFELoader({ id, fallback, ...props }: RegistryMFELoaderP
   }
 
   return (
-    <MFELoader
-      name={manifest.name}
-      url={manifest.url}
-      serviceContainer={serviceContainer}
-      fallback={fallback}
-      isolate={true}
-      {...props}
-    />
+    <MFEErrorBoundary
+      mfeName={manifest.name}
+      services={serviceContainer}
+      onError={props.onError}
+    >
+      <MFELoader
+        name={manifest.name}
+        url={manifest.url}
+        serviceContainer={serviceContainer}
+        fallback={fallback}
+        isolate={true}
+        {...props}
+      />
+    </MFEErrorBoundary>
   );
 }

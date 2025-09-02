@@ -6,23 +6,26 @@ import { ServiceProvider } from '@/contexts/ServiceContext';
 import { AppContent } from './AppContent';
 import { ContextBridge } from '@/services/context-bridge';
 import { createServiceContainer } from '@/services/service-container';
+import { ErrorBoundary } from '@/components/ErrorBoundary';
 
 function App() {
   // Create service container once on mount
   const serviceContainer = useMemo(() => createServiceContainer(), []);
 
   return (
-    <ServiceProvider serviceContainer={serviceContainer}>
-      <AuthProvider>
-        <UIProvider>
-          <ContextBridge>
-            <RegistryProvider>
-              <AppContent />
-            </RegistryProvider>
-          </ContextBridge>
-        </UIProvider>
-      </AuthProvider>
-    </ServiceProvider>
+    <ErrorBoundary>
+      <ServiceProvider serviceContainer={serviceContainer}>
+        <AuthProvider>
+          <UIProvider>
+            <ContextBridge>
+              <RegistryProvider>
+                <AppContent />
+              </RegistryProvider>
+            </ContextBridge>
+          </UIProvider>
+        </AuthProvider>
+      </ServiceProvider>
+    </ErrorBoundary>
   );
 }
 
