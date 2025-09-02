@@ -10,12 +10,16 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - ✅ **CLI Simplification** - Removed redundant commands, made framework-agnostic
 - ✅ **Auto-Registry Updates** - Create command now adds MFEs to registry automatically
 - ✅ **CLI Test Suite** - Added comprehensive tests (36 tests passing)
-- ✅ **@mfe-toolkit/core Tests** - 75 tests passing with good coverage
+- ✅ **@mfe-toolkit/core Tests** - 75+ tests passing with comprehensive coverage
 - ✅ **Standalone Development** - @mfe-toolkit/dev package for independent MFE development
 - ✅ **Build System** - @mfe-toolkit/build with automatic dependency detection
 - ✅ **Service Architecture Refactoring (Phase 1)** - Core services now use interface/implementation separation
 - ✅ **Service Architecture Refactoring (Phase 2)** - All services consolidated into @mfe-toolkit/core
 - ✅ **Single Package Architecture** - Everything in core, service packages removed completely
+- ✅ **Event System Cleanup** - Renamed BaseEvent to EventPayload for semantic clarity
+- ✅ **MFEModule Simplification** - Removed redundant metadata from interface
+- ✅ **Authorization Service Rename** - AuthorizationService → AuthzService for consistency
+- ✅ **Service Test Coverage** - Added comprehensive tests for modal and notification services
 
 ## Essential Commands
 
@@ -176,17 +180,11 @@ This is a **production-ready microfrontend (MFE) monorepo** using pnpm workspace
    - All MFEs demonstrate framework-agnostic service injection patterns
 
 3. **Shared Packages** (`packages/`)
-   - `@mfe-toolkit/core`: Framework-agnostic types, interfaces, and service registry system
+   - `@mfe-toolkit/core`: Framework-agnostic types, interfaces, service implementations, and registry system
    - `@mfe-toolkit/react`: React-specific components (MFELoader with dual loading strategies, MFEErrorBoundary)
    - `@mfe-toolkit/cli`: Command-line tools for scaffolding and managing MFEs
    - `@mfe-toolkit/state`: Cross-framework state management with persistence and cross-tab sync
    - `@mfe-toolkit/state-middleware-performance`: Performance monitoring middleware
-   - `@mfe-toolkit/service-modal`: Modal service interface and types
-   - `@mfe-toolkit/service-notification`: Notification service interface and types
-   - `@mfe-toolkit/service-authentication`: Auth service interface and types
-   - `@mfe-toolkit/service-authorization`: Authorization service interface and types
-   - `@mfe-toolkit/service-theme`: Theme service interface and types
-   - `@mfe-toolkit/service-analytics`: Analytics service interface and types
    - `@mfe/shared`: Internal shared utilities (private)
    - `@mfe/design-system`: CSS-first design system with 500+ utility classes (private)
    - `@mfe/design-system-react`: React 19 component wrappers for design system (private)
@@ -200,13 +198,13 @@ This is a **production-ready microfrontend (MFE) monorepo** using pnpm workspace
 - **EventBus**: Interface for inter-MFE communication via pub/sub pattern
 - **ErrorReporter**: Interface for error tracking and reporting
 
-#### Extended Services (in separate packages):
-- **Modal** (`@mfe-toolkit/service-modal`): Interface for modal management
-- **Notification** (`@mfe-toolkit/service-notification`): Interface for toast notifications
-- **Authentication** (`@mfe-toolkit/service-authentication`): Interface for auth state
-- **Authorization** (`@mfe-toolkit/service-authorization`): Interface for permissions
-- **Theme** (`@mfe-toolkit/service-theme`): Interface for theme management
-- **Analytics** (`@mfe-toolkit/service-analytics`): Interface for analytics tracking
+#### Extended Services (all in `@mfe-toolkit/core`):
+- **Modal**: Interface for modal management
+- **Notification**: Interface for toast notifications  
+- **Authentication**: Interface for auth state (AuthService)
+- **Authorization**: Interface for permissions (AuthzService)
+- **Theme**: Interface for theme management
+- **Analytics**: Interface for analytics tracking
 
 #### Service Implementation:
 - **Container Ownership**: All service implementations live in the container
@@ -258,11 +256,11 @@ The toolkit is split into several npm packages under the `@mfe-toolkit` organiza
 1. **@mfe-toolkit/core** (`packages/mfe-toolkit-core/`)
    - Framework-agnostic types and interfaces
    - Service registry and container system
-   - Core service interfaces (Logger, EventBus, ErrorReporter)
-   - MFE types and interfaces
+   - Service interfaces AND tree-shakable implementations
+   - MFE types and interfaces (simplified MFEModule without metadata)
    - Manifest validation and migration
    - Common utility functions (generateId, delay, debounce, throttle)
-   - **Note**: Contains only interfaces, no implementations
+   - EventPayload system for type-safe event handling
 
 2. **@mfe-toolkit/react** (`packages/mfe-toolkit-react/`)
    - React-specific components: MFELoader, MFEErrorBoundary, MFEPage
@@ -357,13 +355,6 @@ The toolkit is split into several npm packages under the `@mfe-toolkit` organiza
    import type { MFEModule, ServiceContainer } from '@mfe-toolkit/core';
    
    const module: MFEModule = {
-     metadata: {
-       name: 'mfe-name',
-       version: '1.0.0',
-       requiredServices: ['logger', 'eventBus'],
-       optionalServices: ['modal', 'notification']
-     },
-     
      mount: async (element: HTMLElement, container: ServiceContainer) => {
        // Access services through container
        const logger = container.get('logger');

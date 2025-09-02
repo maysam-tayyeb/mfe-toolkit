@@ -208,6 +208,32 @@ describe('Service Container', () => {
 });
 ```
 
+## Recent Improvements (January 2025)
+
+### Simplified MFEModule Interface
+The `MFEModule` interface has been streamlined by removing the redundant `metadata` field. MFEs now only need to implement `mount` and `unmount` methods:
+
+```typescript
+export interface MFEModule {
+  mount(element: HTMLElement, container: ServiceContainer): void | Promise<void>;
+  unmount(container: ServiceContainer): void | Promise<void>;
+}
+```
+
+### Event System Refinements
+- Renamed `BaseEvent` to `EventPayload` for better semantic clarity
+- Unified event system with type-safe event factory functions
+- Consistent event type constants through `MFEEvents`, `UserEvents`, etc.
+
+### Service Naming Consistency
+- Renamed `AuthorizationService` to `AuthzService` for consistency with common naming conventions
+- All services now available from single `@mfe-toolkit/core` package
+
+### Comprehensive Test Coverage
+- Added 100+ tests for modal and notification services
+- All core services now have comprehensive test suites
+- Improved confidence in service implementations
+
 ## Future Improvements
 
 While the current architecture is much simpler, there are still opportunities for improvement:
