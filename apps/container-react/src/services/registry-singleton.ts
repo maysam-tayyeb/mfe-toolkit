@@ -1,21 +1,14 @@
-import { MFERegistryService } from '@mfe-toolkit/core';
-
-let registryInstance: MFERegistryService | null = null;
+import { getRegistrySingleton as getRegistrySingletonFromReact, resetRegistrySingleton as resetFromReact } from '@mfe-toolkit/react';
+import type { MFERegistryService } from '@mfe-toolkit/core';
 
 export function getRegistrySingleton(): MFERegistryService {
-  if (!registryInstance) {
-    const registryUrl = import.meta.env.VITE_MFE_REGISTRY_URL || '/mfe-registry.json';
-    const environment = import.meta.env.MODE;
-
-    registryInstance = new MFERegistryService({
-      url: registryUrl,
-      cacheDuration: environment === 'production' ? 30 * 60 * 1000 : 5 * 60 * 1000,
-    });
-  }
-
-  return registryInstance;
+  const registryUrl = import.meta.env.VITE_MFE_REGISTRY_URL || '/mfe-registry.json';
+  const environment = import.meta.env.MODE;
+  
+  return getRegistrySingletonFromReact({
+    url: registryUrl,
+    environment,
+  });
 }
 
-export function resetRegistrySingleton(): void {
-  registryInstance = null;
-}
+export const resetRegistrySingleton = resetFromReact;

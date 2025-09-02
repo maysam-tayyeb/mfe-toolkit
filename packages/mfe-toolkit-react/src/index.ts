@@ -1,6 +1,5 @@
 // Components
 export { MFELoader } from './components/MFELoader';
-export { MFEPage } from './components/MFEPage';
 export { MFEErrorBoundary, withMFEErrorBoundary } from './components/MFEErrorBoundary';
 
 // Services
@@ -10,6 +9,8 @@ export {
   useMFEServices,
   useMFEService,
 } from './services/dependency-injection';
+export { getRegistrySingleton, resetRegistrySingleton } from './services/registry-singleton';
+export type { RegistrySingletonConfig } from './services/registry-singleton';
 
 // State Management
 export * from './state/mfe-store-factory';

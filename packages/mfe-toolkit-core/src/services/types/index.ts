@@ -18,7 +18,7 @@ export {
   EventValidators,
 } from './event-bus';
 
-export type { ErrorReporter, ErrorReport } from './error-reporter';
+export type { ErrorReporter, ErrorReport, ErrorSummary } from './error-reporter';
 
 // UI services
 export type { ModalService, BaseModalConfig, ModalStackEntry } from './modal';

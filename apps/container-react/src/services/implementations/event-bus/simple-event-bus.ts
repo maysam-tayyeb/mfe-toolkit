@@ -4,5 +4,8 @@
  */
 
 // Re-export the implementation from core
-export { createSimpleEventBus, SimpleEventBus, EventFlowDebugger } from '@mfe-toolkit/core';
+export { createEventBus, SimpleEventBus, EventFlowDebugger } from '@mfe-toolkit/core';
 export type { EventBus } from '@mfe-toolkit/core';
+
+// Alias for backward compatibility
+export { createEventBus as createSimpleEventBus } from '@mfe-toolkit/core';
