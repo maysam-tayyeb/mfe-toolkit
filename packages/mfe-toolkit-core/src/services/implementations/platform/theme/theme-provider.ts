@@ -8,7 +8,6 @@ import { THEME_SERVICE_KEY } from '../../../../services/types';
 import { ThemeServiceImpl } from './theme-service';
 
 export interface ThemeProviderOptions {
-  defaultTheme?: Theme;
   availableThemes?: Theme[];
 }
 
@@ -16,7 +15,7 @@ export interface ThemeProviderOptions {
  * Create a theme service provider
  */
 export function createThemeProvider(options?: ThemeProviderOptions): ServiceProvider<ThemeService> {
-  const { defaultTheme = 'light', availableThemes = ['light', 'dark'] } = options || {};
+  const { availableThemes = ['light', 'dark'] } = options || {};
 
   return {
     name: THEME_SERVICE_KEY,
@@ -25,7 +24,7 @@ export function createThemeProvider(options?: ThemeProviderOptions): ServiceProv
 
     create(container: ServiceContainer): ThemeService {
       const logger = container.require('logger');
-      const service = new ThemeServiceImpl(defaultTheme, availableThemes);
+      const service = new ThemeServiceImpl(availableThemes, logger);
 
       logger.info('Theme service initialized');
 
@@ -40,6 +39,7 @@ export function createThemeProvider(options?: ThemeProviderOptions): ServiceProv
 
     dispose(): void {
       // Cleanup handled by service
+      // Note: In production, you might want to call service.dispose() here
     },
   };
 }

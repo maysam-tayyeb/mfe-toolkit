@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 // Theme type is now part of the theme service
-import { getThemeService } from '@/services/theme-service';
+import { getThemeService } from '@mfe-toolkit/core';
 import {
   Moon,
   Sun,

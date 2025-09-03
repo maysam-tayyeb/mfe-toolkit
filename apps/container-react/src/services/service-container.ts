@@ -9,167 +9,32 @@ import {
   ServiceInfo,
   createLogger,
   createErrorReporter,
-  type ModalService,
-  type BaseModalConfig,
-  type NotificationService,
-  type NotificationConfig,
+  getThemeService,
   type AuthService,
   type AuthzService,
-  type ResourceAccess,
+  type ModalService,
+  type NotificationService,
+  type BaseModalConfig,
+  type NotificationConfig,
+  type AuthSession,
+  AuthServiceImpl,
+  AuthzServiceImpl,
+  ModalServiceImpl,
+  NotificationServiceImpl,
 } from '@mfe-toolkit/core';
 import { createPlatformEventBus } from './platform-event-bus';
-import { getThemeService } from './theme-service';
-
-// All service types are now in core - no need for separate type augmentation imports
 
 // Context values that will be injected by React
 export interface ReactContextValues {
   auth: {
-    session: {
-      userId: string;
-      username: string;
-      email: string;
-      roles: string[];
-      permissions: string[];
-      isAuthenticated: boolean;
-    } | null;
+    session: AuthSession | null;
+    setSession: (session: AuthSession | null) => void;
   };
   ui: {
-    openModal: (config: BaseModalConfig) => void;
-    closeModal: () => void;
-    addNotification: (config: NotificationConfig) => void;
-  };
-}
-
-/**
- * Creates authentication service that reads from React context values
- */
-function createAuthService(getContextValues: () => ReactContextValues): AuthService {
-  return {
-    getSession: () => {
-      const { auth } = getContextValues();
-      return auth.session;
-    },
-    isAuthenticated: () => {
-      const { auth } = getContextValues();
-      return auth.session?.isAuthenticated ?? false;
-    },
-  };
-}
-
-/**
- * Creates authorization service that reads from React context values
- */
-function createAuthzService(getContextValues: () => ReactContextValues): AuthzService {
-  return {
-    hasPermission: (permission: string) => {
-      const { auth } = getContextValues();
-      return auth.session?.permissions?.includes(permission) ?? false;
-    },
-    hasAnyPermission: (permissions: string[]) => {
-      const { auth } = getContextValues();
-      return permissions.some((p) => auth.session?.permissions?.includes(p)) ?? false;
-    },
-    hasAllPermissions: (permissions: string[]) => {
-      const { auth } = getContextValues();
-      return permissions.every((p) => auth.session?.permissions?.includes(p)) ?? false;
-    },
-    hasRole: (role: string) => {
-      const { auth } = getContextValues();
-      return auth.session?.roles?.includes(role) ?? false;
-    },
-    hasAnyRole: (roles: string[]) => {
-      const { auth } = getContextValues();
-      return roles.some((r) => auth.session?.roles?.includes(r)) ?? false;
-    },
-    hasAllRoles: (roles: string[]) => {
-      const { auth } = getContextValues();
-      return roles.every((r) => auth.session?.roles?.includes(r)) ?? false;
-    },
-    canAccess: (resource: string, action: string) => {
-      const { auth } = getContextValues();
-      const permission = `${resource}:${action}`;
-      return auth.session?.permissions?.includes(permission) ?? false;
-    },
-    canAccessAny: (resources: ResourceAccess[]) => {
-      const { auth } = getContextValues();
-      return (
-        resources.some((r) =>
-          r.actions.some((action) => {
-            const permission = `${r.resource}:${action}`;
-            return auth.session?.permissions?.includes(permission);
-          })
-        ) ?? false
-      );
-    },
-    canAccessAll: (resources: ResourceAccess[]) => {
-      const { auth } = getContextValues();
-      return (
-        resources.every((r) =>
-          r.actions.every((action) => {
-            const permission = `${r.resource}:${action}`;
-            return auth.session?.permissions?.includes(permission);
-          })
-        ) ?? false
-      );
-    },
-    getPermissions: () => {
-      const { auth } = getContextValues();
-      return auth.session?.permissions ?? [];
-    },
-    getRoles: () => {
-      const { auth } = getContextValues();
-      return auth.session?.roles ?? [];
-    },
-  };
-}
-
-/**
- * Creates modal service that calls React context methods
- */
-function createModalService(getContextValues: () => ReactContextValues): ModalService {
-  return {
-    open: (config: BaseModalConfig) => {
-      const { ui } = getContextValues();
-      ui.openModal(config);
-      return `modal-${Date.now()}`;
-    },
-    close: () => {
-      const { ui } = getContextValues();
-      ui.closeModal();
-    },
-  };
-}
-
-// Singleton logger for notification service
-const notificationLogger = createLogger('NotificationService');
-
-/**
- * Creates notification service that calls React context methods
- */
-function createNotificationService(
-  getContextValues: () => ReactContextValues
-): NotificationService {
-  const show = (config: NotificationConfig) => {
-    const { ui } = getContextValues();
-    ui.addNotification(config);
-    return `notification-${Date.now()}`;
-  };
-
-  return {
-    show,
-    success: (title: string, message?: string) => show({ type: 'success', title, message }),
-    error: (title: string, message?: string) => show({ type: 'error', title, message }),
-    warning: (title: string, message?: string) => show({ type: 'warning', title, message }),
-    info: (title: string, message?: string) => show({ type: 'info', title, message }),
-    dismiss: (_id: string) => {
-      // TODO: Implement dismiss functionality in UIContext
-      notificationLogger.warn('NotificationService.dismiss not yet implemented');
-    },
-    dismissAll: () => {
-      // TODO: Implement dismissAll functionality in UIContext
-      notificationLogger.warn('NotificationService.dismissAll not yet implemented');
-    },
+    modals: Array<{ id: string; config: BaseModalConfig }>;
+    setModals: (modals: Array<{ id: string; config: BaseModalConfig }>) => void;
+    notifications: NotificationConfig[];
+    setNotifications: (notifications: NotificationConfig[]) => void;
   };
 }
 
@@ -182,30 +47,83 @@ export class UnifiedServiceContainer implements ServiceContainer {
   private eventBus = createPlatformEventBus();
   private logger = createLogger('ServiceContainer');
   private themeService = getThemeService();
+  private authService: AuthService | null = null;
+  private authzService: AuthzService | null = null;
+  private modalService: ModalService | null = null;
+  private notificationService: NotificationService | null = null;
+
+  /**
+   * Initialize services and set up synchronization with React contexts
+   */
+  initialize() {
+    // Create core service implementations
+    this.authService = new AuthServiceImpl({ persist: true, storageKey: 'mfe-auth-session' });
+    this.authzService = new AuthzServiceImpl({
+      defaultRoles: [],
+      defaultPermissions: [],
+    });
+    this.modalService = new ModalServiceImpl();
+    this.notificationService = new NotificationServiceImpl();
+
+    // Set up bidirectional sync with React contexts when they're available
+    this.setupContextSync();
+  }
 
   /**
    * Update React context values
    */
   setContextValues(values: ReactContextValues) {
     this.contextValues = values;
+    
+    // If services are initialized, sync the current state
+    if (this.authService && values.auth.session) {
+      // Set initial session from context if different
+      const currentSession = this.authService.getSession();
+      if (JSON.stringify(currentSession) !== JSON.stringify(values.auth.session)) {
+        // Use internal method to set session without triggering login flow
+        (this.authService as any).session = values.auth.session;
+      }
+    }
+    
+    // Sync authz service with session roles and permissions
+    if (this.authzService && values.auth.session) {
+      const impl = this.authzService as AuthzServiceImpl;
+      (impl as any).roles = new Set(values.auth.session.roles || []);
+      (impl as any).permissions = new Set(values.auth.session.permissions || []);
+    }
   }
 
   /**
-   * Get current context values with fallback
+   * Set up synchronization between core services and React contexts
    */
-  private getContextValues(): ReactContextValues {
-    if (!this.contextValues) {
-      this.logger.warn('Service accessed before React contexts are initialized');
-      return {
-        auth: { session: null },
-        ui: {
-          openModal: () => this.logger.warn('Modal service not ready'),
-          closeModal: () => this.logger.warn('Modal service not ready'),
-          addNotification: () => this.logger.warn('Notification service not ready'),
-        },
-      };
+  private setupContextSync() {
+    // Sync auth service with React context
+    if (this.authService && this.authService.subscribe) {
+      this.authService.subscribe((session) => {
+        if (this.contextValues?.auth.setSession) {
+          this.contextValues.auth.setSession(session);
+        }
+      });
     }
-    return this.contextValues;
+
+    // Sync modal service with React context
+    if (this.modalService) {
+      (this.modalService as ModalServiceImpl).subscribe((modals) => {
+        if (this.contextValues?.ui.setModals) {
+          const modalArray = modals.map(m => ({ id: m.id, config: m.config }));
+          this.contextValues.ui.setModals(modalArray);
+        }
+      });
+    }
+
+    // Sync notification service with React context
+    if (this.notificationService) {
+      (this.notificationService as NotificationServiceImpl).subscribe((notifications) => {
+        if (this.contextValues?.ui.setNotifications) {
+          this.contextValues.ui.setNotifications(notifications);
+        }
+      });
+    }
   }
 
   /**
@@ -224,19 +142,31 @@ export class UnifiedServiceContainer implements ServiceContainer {
         service = this.logger;
         break;
       case 'auth':
-        service = createAuthService(() => this.getContextValues());
+        if (!this.authService) {
+          this.initialize();
+        }
+        service = this.authService;
         break;
       case 'authz':
-        service = createAuthzService(() => this.getContextValues());
+        if (!this.authzService) {
+          this.initialize();
+        }
+        service = this.authzService;
         break;
       case 'eventBus':
         service = this.eventBus;
         break;
       case 'modal':
-        service = createModalService(() => this.getContextValues());
+        if (!this.modalService) {
+          this.initialize();
+        }
+        service = this.modalService;
         break;
       case 'notification':
-        service = createNotificationService(() => this.getContextValues());
+        if (!this.notificationService) {
+          this.initialize();
+        }
+        service = this.notificationService;
         break;
       case 'theme':
         service = this.themeService;
@@ -330,6 +260,9 @@ export class UnifiedServiceContainer implements ServiceContainer {
 
   createScoped(overrides: Record<string, unknown>): ServiceContainer {
     const scopedContainer = new UnifiedServiceContainer();
+    
+    // Initialize the scoped container
+    scopedContainer.initialize();
 
     // Copy context values
     if (this.contextValues) {
@@ -345,8 +278,23 @@ export class UnifiedServiceContainer implements ServiceContainer {
   }
 
   async dispose(): Promise<void> {
+    // Dispose of services that have cleanup logic
+    if (this.authService && 'dispose' in this.authService) {
+      (this.authService as any).dispose();
+    }
+    if (this.modalService && 'dispose' in this.modalService) {
+      (this.modalService as any).dispose();
+    }
+    if (this.notificationService && 'dispose' in this.notificationService) {
+      (this.notificationService as any).dispose();
+    }
+    
     this.services.clear();
     this.contextValues = null;
+    this.authService = null;
+    this.authzService = null;
+    this.modalService = null;
+    this.notificationService = null;
   }
 }
 
@@ -354,5 +302,7 @@ export class UnifiedServiceContainer implements ServiceContainer {
  * Create and initialize the service container
  */
 export function createServiceContainer(): UnifiedServiceContainer {
-  return new UnifiedServiceContainer();
+  const container = new UnifiedServiceContainer();
+  container.initialize();
+  return container;
 }
