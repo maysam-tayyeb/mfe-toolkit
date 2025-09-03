@@ -3,8 +3,8 @@
  */
 
 import type { ServiceProvider, ServiceContainer } from '../../../../registry/types';
-import type { ModalService, BaseModalConfig } from "../../../../services/types";
-import { MODAL_SERVICE_KEY } from "../../../../services/types";
+import type { ModalService, BaseModalConfig } from '../../../../services/types';
+import { MODAL_SERVICE_KEY } from '../../../../services/types';
 import { createModalService } from './modal-service';
 
 export interface ModalProviderOptions {
@@ -12,7 +12,7 @@ export interface ModalProviderOptions {
    * Default modal configuration
    */
   defaultConfig?: Partial<BaseModalConfig>;
-  
+
   /**
    * Maximum number of modals that can be open at once
    */
@@ -29,45 +29,43 @@ export function createModalProvider<TModalConfig extends BaseModalConfig = BaseM
     name: MODAL_SERVICE_KEY,
     version: '1.0.0',
     dependencies: ['logger'], // Optional dependency for logging
-    
+
     create(container: ServiceContainer): ModalService<TModalConfig> {
-      const logger = container.get('logger');
-      
+      const logger = container.require('logger');
+
       // Create modal service
       const modalService = createModalService<TModalConfig>();
-      
+
       // Add logging if available
-      if (logger) {
-        const originalOpen = modalService.open.bind(modalService);
-        modalService.open = (config) => {
-          logger.debug('Opening modal', { title: config.title });
-          
-          // Check max modals
-          const openModals = modalService.getOpenModals?.() || [];
-          if (options.maxModals && openModals.length >= options.maxModals) {
-            logger.warn(`Maximum number of modals (${options.maxModals}) reached`);
-            throw new Error(`Cannot open more than ${options.maxModals} modals`);
-          }
-          
-          // Apply default config
-          const finalConfig = {
-            ...options.defaultConfig,
-            ...config,
-          } as TModalConfig;
-          
-          return originalOpen(finalConfig);
-        };
-        
-        const originalClose = modalService.close.bind(modalService);
-        modalService.close = (id) => {
-          logger.debug('Closing modal', { id });
-          originalClose(id);
-        };
-      }
-      
+      const originalOpen = modalService.open.bind(modalService);
+      modalService.open = (config) => {
+        logger.debug('Opening modal', { title: config.title });
+
+        // Check max modals
+        const openModals = modalService.getOpenModals?.() || [];
+        if (options.maxModals && openModals.length >= options.maxModals) {
+          logger.warn(`Maximum number of modals (${options.maxModals}) reached`);
+          throw new Error(`Cannot open more than ${options.maxModals} modals`);
+        }
+
+        // Apply default config
+        const finalConfig = {
+          ...options.defaultConfig,
+          ...config,
+        } as TModalConfig;
+
+        return originalOpen(finalConfig);
+      };
+
+      const originalClose = modalService.close.bind(modalService);
+      modalService.close = (id) => {
+        logger.debug('Closing modal', { id });
+        originalClose(id);
+      };
+
       return modalService;
     },
-    
+
     dispose(): void {
       // Cleanup if needed
     },

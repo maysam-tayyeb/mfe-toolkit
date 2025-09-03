@@ -3,8 +3,8 @@
  */
 
 import type { ServiceProvider, ServiceContainer } from '../../../../registry/types';
-import type { NotificationService } from "../../../../services/types";
-import { NOTIFICATION_SERVICE_KEY } from "../../../../services/types";
+import type { NotificationService } from '../../../../services/types';
+import { NOTIFICATION_SERVICE_KEY } from '../../../../services/types';
 import { createNotificationService } from './notification-service';
 
 /**
@@ -17,16 +17,14 @@ export function createNotificationProvider(): ServiceProvider<NotificationServic
     dependencies: ['logger'],
 
     create(container: ServiceContainer): NotificationService {
-      const logger = container.get('logger');
+      const logger = container.require('logger');
       const service = createNotificationService();
 
-      if (logger) {
-        const originalShow = service.show.bind(service);
-        service.show = (config) => {
-          logger.debug(`Showing ${config.type} notification: ${config.title}`);
-          return originalShow(config);
-        };
-      }
+      const originalShow = service.show.bind(service);
+      service.show = (config) => {
+        logger.debug(`Showing ${config.type} notification: ${config.title}`);
+        return originalShow(config);
+      };
 
       return service;
     },

@@ -3,8 +3,8 @@
  */
 
 import type { ServiceProvider, ServiceContainer } from '../../../../registry/types';
-import type { Theme, ThemeService } from "../../../../services/types";
-import { THEME_SERVICE_KEY } from "../../../../services/types";
+import type { Theme, ThemeService } from '../../../../services/types';
+import { THEME_SERVICE_KEY } from '../../../../services/types';
 import { ThemeServiceImpl } from './theme-service';
 
 export interface ThemeProviderOptions {
@@ -17,29 +17,27 @@ export interface ThemeProviderOptions {
  */
 export function createThemeProvider(options?: ThemeProviderOptions): ServiceProvider<ThemeService> {
   const { defaultTheme = 'light', availableThemes = ['light', 'dark'] } = options || {};
-  
+
   return {
     name: THEME_SERVICE_KEY,
     version: '1.0.0',
     dependencies: ['logger'],
-    
+
     create(container: ServiceContainer): ThemeService {
-      const logger = container.get('logger');
+      const logger = container.require('logger');
       const service = new ThemeServiceImpl(defaultTheme, availableThemes);
-      
-      if (logger) {
-        logger.info('Theme service initialized');
-        
-        const originalSetTheme = service.setTheme.bind(service);
-        service.setTheme = (theme) => {
-          logger.info(`Changing theme to: ${theme}`);
-          originalSetTheme(theme);
-        };
-      }
-      
+
+      logger.info('Theme service initialized');
+
+      const originalSetTheme = service.setTheme.bind(service);
+      service.setTheme = (theme) => {
+        logger.info(`Changing theme to: ${theme}`);
+        originalSetTheme(theme);
+      };
+
       return service;
     },
-    
+
     dispose(): void {
       // Cleanup handled by service
     },

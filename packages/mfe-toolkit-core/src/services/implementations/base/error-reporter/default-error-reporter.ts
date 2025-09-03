@@ -3,7 +3,11 @@
  * Reference implementation for error tracking and reporting in MFEs
  */
 
-import type { ErrorReporter, ErrorReport, ErrorSummary } from "../../../../services/types/error-reporter";
+import type {
+  ErrorReporter,
+  ErrorReport,
+  ErrorSummary,
+} from '../../../../services/types/error-reporter';
 import type { ServiceContainer } from '../../../../registry/types';
 
 export interface ErrorReporterConfig {
@@ -94,7 +98,7 @@ export class DefaultErrorReporter implements ErrorReporter {
     }
 
     // Log to MFE logger if available
-    const logger = this.services?.get('logger');
+    const logger = this.services?.require('logger');
     if (logger) {
       logger.error(`MFE Error in ${mfeName}: ${error.message}`, report);
     }
@@ -182,7 +186,7 @@ export class DefaultErrorReporter implements ErrorReporter {
     if (typeof sessionStorage === 'undefined') {
       return 'no-session';
     }
-    
+
     let sessionId = sessionStorage.getItem('mfe-session-id');
     if (!sessionId) {
       sessionId = `session-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`;
