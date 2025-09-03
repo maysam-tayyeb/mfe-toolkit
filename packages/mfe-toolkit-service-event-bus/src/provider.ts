@@ -10,7 +10,7 @@ export const eventBusServiceProvider: ServiceProvider<EventBus> = {
   version: '1.0.0',
 
   create(container: ServiceContainer): EventBus {
-    const logger = container.require('logger');
+    const logger = container.get('logger');
     return createEventBus('container', {
       debug: false,
       maxHistorySize: 100,

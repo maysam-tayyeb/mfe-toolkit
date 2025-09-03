@@ -8,15 +8,18 @@ import {
   ServiceMap,
   ServiceInfo,
   createLogger,
-  createErrorReporter,
   type Logger,
-  type ModalService,
-  type BaseModalConfig,
-  type NotificationService,
-  type NotificationConfig,
-  type AuthService,
-  type AuthzService,
-  type ResourceAccess,
+} from '@mfe-toolkit/core';
+
+// Import service types from their packages
+import type { ModalService, BaseModalConfig } from '@mfe-toolkit/service-modal';
+import type { NotificationService, NotificationConfig } from '@mfe-toolkit/service-notification';
+
+// These types are still in core (need to be extracted too)
+import type { 
+  AuthService,
+  AuthzService,
+  ResourceAccess,
 } from '@mfe-toolkit/core';
 import { createPlatformEventBus } from './platform-event-bus';
 import { getThemeService } from './theme-service';
@@ -265,15 +268,10 @@ export class UnifiedServiceContainer implements ServiceContainer {
       case 'theme':
         service = this.themeService;
         break;
-      case 'errorReporter':
-        service = createErrorReporter(
-          {
-            enableConsoleLog: true,
-            maxErrorsPerSession: 100,
-          },
-          this
-        );
-        break;
+      // case 'errorReporter':
+      //   // TODO: Import from @mfe-toolkit/service-error-reporter once implemented
+      //   service = undefined;
+      //   break;
       default:
         return undefined;
     }

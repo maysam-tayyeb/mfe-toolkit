@@ -1,0 +1,44 @@
+{
+  "name": "@mfe-toolkit/service-notification",
+  "version": "1.0.0",
+  "description": "Toast notification service",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./types": {
+      "types": "./dist/types.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "build:watch": "tsup --watch",
+    "test": "vitest",
+    "test:watch": "vitest --watch",
+    "test:coverage": "vitest --coverage",
+    "clean": "rm -rf dist",
+    "lint": "eslint src --fix",
+    "type-check": "tsc --noEmit"
+  },
+  "peerDependencies": {
+    "@mfe-toolkit/core": "workspace:*"
+  },
+  "devDependencies": {
+    "@mfe-toolkit/core": "workspace:*",
+    "@types/node": "^20.11.5",
+    "tsup": "^8.0.1",
+    "typescript": "^5.3.3",
+    "vitest": "^1.2.1",
+    "@vitest/coverage-v8": "^1.2.1"
+  }
+}

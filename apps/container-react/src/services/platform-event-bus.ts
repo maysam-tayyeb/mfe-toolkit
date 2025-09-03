@@ -1,4 +1,5 @@
-import { EventBus, createEventBus } from '@mfe-toolkit/core';
+import type { EventBus } from '@mfe-toolkit/service-event-bus';
+import { createEventBus } from '@mfe-toolkit/service-event-bus';
 import { incrementEventBusMessages } from '@/store/platform-metrics';
 
 /**

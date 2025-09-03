@@ -18,6 +18,9 @@
   "dependencies": {
     "@mfe-toolkit/core": "workspace:*",
     "@mfe-toolkit/react": "workspace:*",
+    "@mfe-toolkit/service-event-bus": "workspace:*",
+    "@mfe-toolkit/service-modal": "workspace:*",
+    "@mfe-toolkit/service-notification": "workspace:*",
     "@mfe-toolkit/state": "workspace:*",
     "@mfe-toolkit/state-middleware-performance": "workspace:*",
     "@mfe/design-system": "workspace:*",

@@ -5,7 +5,7 @@
  * capabilities for inter-MFE communication.
  */
 
-import { Logger } from '@mfe-toolkit/core';
+import type { Logger } from '@mfe-toolkit/core';
 
 /**
  * Base event payload structure
@@ -122,5 +122,5 @@ export interface EventBusConfig {
   /**
    * Custom logger instance
    */
-  logger: Logger;
+  logger?: Logger;
 }
