@@ -4,6 +4,8 @@
 export const mainTsxTemplate = `import React from 'react';
 import ReactDOM from 'react-dom/client';
 import type { MFEModule, ServiceContainer } from '@mfe-toolkit/core';
+// Import service types only if needed (zero runtime cost)
+// Example: import type { NotificationService } from '@mfe-toolkit/service-notification';
 import { App } from './App';
 
 let root: ReactDOM.Root | null = null;
@@ -17,10 +19,9 @@ const module: MFEModule = {
       </React.StrictMode>
     );
     
+    // Logger is always available in ServiceMap
     const logger = container.get('logger');
-    if (logger) {
-      logger.info('[{{name}}] Mounted successfully with React 18');
-    }
+    logger.info('[{{name}}] Mounted successfully with React 18');
   },
   
   unmount: async (container: ServiceContainer) => {
@@ -30,9 +31,7 @@ const module: MFEModule = {
     }
     
     const logger = container.get('logger');
-    if (logger) {
-      logger.info('[{{name}}] Unmounted successfully');
-    }
+    logger.info('[{{name}}] Unmounted successfully');
   }
 };
 
@@ -40,6 +39,8 @@ export default module;`;
 
 export const appTsxTemplate = `import React, { useState } from 'react';
 import type { ServiceContainer } from '@mfe-toolkit/core';
+// Import service types only if needed
+// Example: import type { EventBus } from '@mfe-toolkit/service-event-bus';
 
 interface AppProps {
   serviceContainer: ServiceContainer;
@@ -50,10 +51,9 @@ export const App: React.FC<AppProps> = ({ serviceContainer }) => {
 
   const handleClick = () => {
     setCount(prev => prev + 1);
+    // Logger is always available
     const logger = serviceContainer.get('logger');
-    if (logger) {
-      logger.info(\`Button clicked! Count: \${count + 1}\`);
-    }
+    logger.info(\`Button clicked! Count: \${count + 1}\`);
   };
 
   return (

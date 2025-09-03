@@ -2,6 +2,8 @@
 // These are imported at build time and bundled into the CLI
 
 export const mainTsTemplate = `import type { MFEModule, ServiceContainer } from '@mfe-toolkit/core';
+// Import service types only if needed (zero runtime cost)
+// Example: import type { EventBus } from '@mfe-toolkit/service-event-bus';
 
 const module: MFEModule = {
   mount: async (element: HTMLElement, container: ServiceContainer) => {
@@ -37,20 +39,20 @@ const module: MFEModule = {
       clickCount++;
       const counterEl = element.querySelector('#counter');
       if (counterEl) counterEl.textContent = String(clickCount);
-      container.get('logger')?.info(\`Button clicked! Count: \${clickCount}\`);
+      
+      // Services are available but should be checked for safety
+      const logger = container.get('logger');
+      logger.info(\`Button clicked! Count: \${clickCount}\`);
     });
     
+    // Logger is always available in ServiceMap
     const logger = container.get('logger');
-    if (logger) {
-      logger.info('[{{name}}] Mounted successfully');
-    }
+    logger.info('[{{name}}] Mounted successfully');
   },
   
   unmount: async (container: ServiceContainer) => {
     const logger = container.get('logger');
-    if (logger) {
-      logger.info('[{{name}}] Unmounted successfully');
-    }
+    logger.info('[{{name}}] Unmounted successfully');
   }
 };
 

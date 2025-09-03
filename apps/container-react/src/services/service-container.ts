@@ -9,6 +9,7 @@ import {
   ServiceInfo,
   createLogger,
   createErrorReporter,
+  type Logger,
   type ModalService,
   type BaseModalConfig,
   type NotificationService,
@@ -19,6 +20,7 @@ import {
 } from '@mfe-toolkit/core';
 import { createPlatformEventBus } from './platform-event-bus';
 import { getThemeService } from './theme-service';
+import { createPinoLogger } from './pino-logger';
 
 // All service types are now in core - no need for separate type augmentation imports
 
@@ -180,8 +182,30 @@ export class UnifiedServiceContainer implements ServiceContainer {
   private services = new Map<string, unknown>();
   private contextValues: ReactContextValues | null = null;
   private eventBus = createPlatformEventBus();
-  private logger = createLogger('ServiceContainer');
+  private logger: Logger;
   private themeService = getThemeService();
+  
+  constructor(options?: { usePinoLogger?: boolean }) {
+    // Demonstrate logger override capability
+    if (options?.usePinoLogger) {
+      // Use Pino logger for structured logging
+      this.logger = createPinoLogger('ServiceContainer', {
+        level: 'debug',
+        transport: process.env.NODE_ENV === 'development' ? {
+          target: 'pino-pretty',
+          options: {
+            colorize: true,
+            translateTime: 'HH:MM:ss',
+            ignore: 'pid,hostname'
+          }
+        } : undefined
+      });
+      this.logger.info('Using Pino logger for enhanced logging capabilities');
+    } else {
+      // Use default console logger
+      this.logger = createLogger('ServiceContainer');
+    }
+  }
 
   /**
    * Update React context values
@@ -352,7 +376,8 @@ export class UnifiedServiceContainer implements ServiceContainer {
 
 /**
  * Create and initialize the service container
+ * @param options Configuration options including logger override
  */
-export function createServiceContainer(): UnifiedServiceContainer {
-  return new UnifiedServiceContainer();
+export function createServiceContainer(options?: { usePinoLogger?: boolean }): UnifiedServiceContainer {
+  return new UnifiedServiceContainer(options);
 }
