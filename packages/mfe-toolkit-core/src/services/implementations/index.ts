@@ -34,7 +34,13 @@ export { AuthzServiceImpl } from './auth/authorization/authorization-service';
 
 // Platform Service Implementations
 export { themeServiceProvider } from './platform/theme/theme-provider';
-export { ThemeServiceImpl } from './platform/theme/theme-service';
+export { 
+  ThemeServiceImpl,
+  createThemeService,
+  getThemeService,
+  configureThemeService,
+  createTheme
+} from './platform/theme/theme-service';
 
 export { analyticsServiceProvider } from './platform/analytics/analytics-provider';
 export { AnalyticsServiceImpl } from './platform/analytics/analytics-service';

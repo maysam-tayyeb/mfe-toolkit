@@ -9,6 +9,7 @@ import {
   ServiceInfo,
   createLogger,
   createErrorReporter,
+  getThemeService,
   type ModalService,
   type BaseModalConfig,
   type NotificationService,
@@ -18,7 +19,6 @@ import {
   type ResourceAccess,
 } from '@mfe-toolkit/core';
 import { createPlatformEventBus } from './platform-event-bus';
-import { getThemeService } from './theme-service';
 
 // All service types are now in core - no need for separate type augmentation imports
 
