@@ -1,9 +1,11 @@
 /**
  * Event Bus Service Types
- * 
+ *
  * Core types for the event bus service that provides pub/sub messaging
  * capabilities for inter-MFE communication.
  */
+
+import { Logger } from '@mfe-toolkit/core';
 
 /**
  * Base event payload structure
@@ -106,24 +108,19 @@ export interface EventBusConfig {
    * Enable debug logging
    */
   debug?: boolean;
-  
+
   /**
    * Maximum event history size
    */
   maxHistorySize?: number;
-  
+
   /**
    * Enable event validation
    */
   enableValidation?: boolean;
-  
+
   /**
    * Custom logger instance
    */
-  logger?: {
-    debug: (message: string, data?: unknown) => void;
-    info: (message: string, data?: unknown) => void;
-    warn: (message: string, data?: unknown) => void;
-    error: (message: string, data?: unknown) => void;
-  };
+  logger: Logger;
 }

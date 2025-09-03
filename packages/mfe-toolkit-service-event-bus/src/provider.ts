@@ -8,18 +8,18 @@ import { createEventBus } from './implementation';
 export const eventBusServiceProvider: ServiceProvider<EventBus> = {
   name: 'eventBus',
   version: '1.0.0',
-  
+
   create(container: ServiceContainer): EventBus {
-    const logger = container.get('logger');
+    const logger = container.require('logger');
     return createEventBus('container', {
       debug: false,
       maxHistorySize: 100,
       enableValidation: process.env.NODE_ENV === 'development',
-      logger: logger || undefined
+      logger: logger,
     });
   },
-  
+
   dispose(): void {
     // EventBus doesn't need explicit cleanup
-  }
+  },
 };

@@ -4,10 +4,9 @@
  */
 
 import type { Logger } from '../services/types/logger';
-import type { EventBus } from '../services/types/event-bus';
 
 // Re-export for backward compatibility
-export type { Logger, EventBus };
+export type { Logger };
 
 /**
  * Service metadata for registry entries
@@ -66,26 +65,16 @@ export interface RegisterOptions {
 
 /**
  * Base service map - extend this interface to add type safety
+ * 
+ * Only includes the core logger service by default.
+ * Other services are added via module augmentation when their packages are imported.
  */
 export interface ServiceMap {
-  // Core services always available
+  // Core service - always available
   logger: Logger;
-  eventBus: EventBus;
-  errorReporter?: import('../services/types/error-reporter').ErrorReporter;
-
-  // UI Services
-  modal?: import('../services/types/modal').ModalService;
-  notification?: import('../services/types/notification').NotificationService;
-
-  // User Services
-  auth?: import('../services/types/authentication').AuthService;
-  authz?: import('../services/types/authorization').AuthzService;
-
-  // Application Services
-  theme?: import('../services/types/theme').ThemeService;
-  analytics?: import('../services/types/analytics').AnalyticsService;
-
-  // Extended by service packages via module augmentation
+  
+  // All other services are added via module augmentation
+  // by their respective packages (@mfe-toolkit/service-*)
 }
 
 /**
